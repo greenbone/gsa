@@ -1508,27 +1508,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="report-summary-sorting-link">
-  <xsl:param name="report"/>
+<xsl:template match="report" mode="sorting-link">
   <xsl:param name="field"/>
   <xsl:param name="order"/>
   <xsl:param name="levels"/>
   <xsl:param name="name"><xsl:value-of select="$field"/></xsl:param>
 
   <xsl:choose>
-    <xsl:when test="$report/sort/field/text() = $field and $report/sort/field/order = $order">
+    <xsl:when test="sort/field/text() = $field and sort/field/order = $order">
       <xsl:value-of select="concat($name, ' ', $order)"/>
     </xsl:when>
     <xsl:otherwise>
-        <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;delta_report_id={$report/delta/report/@id}&amp;delta_states={$report/filters/delta/text()}&amp;sort_field={$field}&amp;sort_order={$order}&amp;max_results={$report/results/@max}&amp;levels={$levels}&amp;notes={$report/filters/notes}&amp;overrides={$report/filters/overrides}&amp;result_hosts_only={$report/filters/result_hosts_only}&amp;autofp={$report/filters/autofp}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={delta/report/@id}&amp;delta_states={filters/delta/text()}&amp;sort_field={$field}&amp;sort_order={$order}&amp;max_results={results/@max}&amp;levels={$levels}&amp;notes={filters/notes}&amp;filterbox={/envelope/params/filterbox}&amp;details={/envelope/params/details}&amp;overrides={filters/overrides}&amp;result_hosts_only={filters/result_hosts_only}&amp;autofp={filters/autofp}&amp;token={/envelope/token}">
         <xsl:value-of select="concat($name, ' ', $order)"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="report-summary-sorting">
-  <xsl:param name="report"/>
+<xsl:template match="report" mode="sorting">
   <xsl:param name="levels"/>
   <table border="0" cellspacing="0" cellpadding="3" width="100%">
     <tr>
@@ -1536,35 +1534,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Sorting:
       </td>
       <td>
-        <xsl:call-template name="report-summary-sorting-link">
-          <xsl:with-param name="report" select="$report"/>
+        <xsl:apply-templates select="." mode="sorting-link">
           <xsl:with-param name="field" select="'port'"/>
           <xsl:with-param name="order" select="'ascending'"/>
           <xsl:with-param name="levels" select="$levels"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
         |
-        <xsl:call-template name="report-summary-sorting-link">
-          <xsl:with-param name="report" select="$report"/>
+        <xsl:apply-templates select="." mode="sorting-link">
           <xsl:with-param name="field" select="'port'"/>
           <xsl:with-param name="order" select="'descending'"/>
           <xsl:with-param name="levels" select="$levels"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
         |
-        <xsl:call-template name="report-summary-sorting-link">
-          <xsl:with-param name="report" select="$report"/>
+        <xsl:apply-templates select="." mode="sorting-link">
           <xsl:with-param name="name" select="'threat'"/>
           <xsl:with-param name="field" select="'type'"/>
           <xsl:with-param name="order" select="'ascending'"/>
           <xsl:with-param name="levels" select="$levels"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
         |
-        <xsl:call-template name="report-summary-sorting-link">
-          <xsl:with-param name="report" select="$report"/>
+        <xsl:apply-templates select="." mode="sorting-link">
           <xsl:with-param name="name" select="'threat'"/>
           <xsl:with-param name="field" select="'type'"/>
           <xsl:with-param name="order" select="'descending'"/>
           <xsl:with-param name="levels" select="$levels"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
       </td>
     </tr>
   </table>
@@ -1615,7 +1609,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" mode="fold-filter-icon">
   <xsl:choose>
     <xsl:when test="/envelope/params/filterbox &gt; 0">
-      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=0&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=0&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Fold filter">
         <img src="/img/fold.png"
              style="vertical-align:middle;margin-left:3px;margin-right:3px;"
@@ -1623,11 +1617,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=1&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Unfold filter">
         <img src="/img/unfold.png"
              style="vertical-align:middle;margin-left:3px;margin-right:3px;"
              alt="Unfold filter" title="Unfold filter"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="show-details-icon">
+  <xsl:choose>
+    <xsl:when test="/envelope/params/details &gt; 0">
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;details=0&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Hide results details">
+        <img src="/img/list.png"
+             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             alt="Hide results details" title="Hide results details"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;details=1&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Show results details">
+        <img src="/img/details.png"
+             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             alt="Show results details" title="Show results details"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -2039,10 +2054,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <p>
-            <xsl:call-template name="report-summary-sorting">
-              <xsl:with-param name="report" select="report"/>
+            <xsl:apply-templates match="report" mode="sorting">
               <xsl:with-param name="levels" select="$levels"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
           </p>
         </xsl:otherwise>
       </xsl:choose>
@@ -2166,6 +2180,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    src="/img/help.png" border="0"/>
             </a>
             <xsl:apply-templates select="." mode="fold-filter-icon"/>
+            <xsl:apply-templates select="." mode="show-details-icon"/>
           </div>
         </form>
       </div>
@@ -2174,7 +2189,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <xsl:apply-templates select="report" mode="details"/>
+          <table class="gbntable" cellspacing="2">
+            <xsl:apply-templates select="report" mode="details"/>
+          </table>
         </xsl:when>
         <xsl:otherwise>
           0 results
@@ -19534,13 +19551,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
-  <tr class="gbntablehead2">
-    <td>Vulnerability</td>
-    <td>Severity</td>
-    <td>Host</td>
-    <td>Location</td>
-    <td>Actions</td>
-  </tr>
+  <xsl:param name="first-row"/>
+  <xsl:if test="$first-row &gt; 0">
+    <tr class="gbntablehead2">
+      <td>Vulnerability</td>
+      <td>Severity</td>
+      <td>Host</td>
+      <td>Location</td>
+      <td>Actions</td>
+    </tr>
+  </xsl:if>
   <tr>
     <td> <!-- Vulnerability -->
       <xsl:if test="delta/text()">
@@ -20115,6 +20135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="show-overrides">0</xsl:param>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
+  <xsl:param name="show-header">1</xsl:param>
 
   <a class="anchor" name="result-{@id}"/>
 
@@ -20124,14 +20145,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="override-buttons" select="$override-buttons"/>
     <xsl:with-param name="result-details" select="$result-details"/>
     <xsl:with-param name="prognostic" select="$prognostic"/>
+    <xsl:with-param name="first-row" select="$show-header"/>
   </xsl:apply-templates>
-  <xsl:apply-templates select="." mode="result-body">
-    <xsl:with-param name="note-buttons" select="$note-buttons"/>
-    <xsl:with-param name="override-buttons" select="$override-buttons"/>
-    <xsl:with-param name="result-details" select="$result-details"/>
-    <xsl:with-param name="result-details" select="$show-overrides"/>
-    <xsl:with-param name="prognostic" select="$prognostic"/>
-  </xsl:apply-templates>
+
+  <xsl:if test="/envelope/params/cmd != 'get_report' or /envelope/params/details &gt; 0">
+    <xsl:apply-templates select="." mode="result-body">
+      <xsl:with-param name="note-buttons" select="$note-buttons"/>
+      <xsl:with-param name="override-buttons" select="$override-buttons"/>
+      <xsl:with-param name="result-details" select="$result-details"/>
+      <xsl:with-param name="result-details" select="$show-overrides"/>
+      <xsl:with-param name="prognostic" select="$prognostic"/>
+    </xsl:apply-templates>
+  </xsl:if>
 </xsl:template>
 
 <!--     GET_RESULT -->
@@ -21761,39 +21786,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="prognostic">
     <xsl:if test="@type='prognostic'">1</xsl:if>
   </xsl:variable>
-  <xsl:variable name="delta">
+
+  <xsl:variable name="on">
     <xsl:choose>
-      <xsl:when test="@type='delta'">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
+      <xsl:when test="$prognostic=1">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:for-each select="host" >
-    <xsl:variable name="current_host" select="ip"/>
-    <xsl:choose>
-      <xsl:when test="$prognostic=1">
-      </xsl:when>
-      <xsl:otherwise>
-        <a name="{$current_host}"></a>
-      </xsl:otherwise>
-    </xsl:choose>
-    <a name="{$current_host}"/>
-    <xsl:variable name="on">
-      <xsl:choose>
-        <xsl:when test="$prognostic=1">0</xsl:when>
-        <xsl:otherwise>1</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-      <table class="gbntable" cellspacing="2">
-        <xsl:for-each select="../results/result[host/text() = $current_host]">
-          <xsl:call-template name="result-detailed">
-            <xsl:with-param name="prognostic" select="$prognostic"/>
-            <xsl:with-param name="details-button" select="$on"/>
-            <xsl:with-param name="note-buttons" select="$on"/>
-            <xsl:with-param name="override-buttons" select="$on"/>
-            <xsl:with-param name="show-overrides" select="$on"/>
-          </xsl:call-template>
-        </xsl:for-each>
-      </table>
+
+  <xsl:for-each select="results/result">
+    <xsl:call-template name="result-detailed">
+      <xsl:with-param name="prognostic" select="$prognostic"/>
+      <xsl:with-param name="details-button" select="$on"/>
+      <xsl:with-param name="note-buttons" select="$on"/>
+      <xsl:with-param name="override-buttons" select="$on"/>
+      <xsl:with-param name="show-overrides" select="$on"/>
+      <xsl:with-param name="show-header" select="position() = 1 or /envelope/params/details = 1"/>
+    </xsl:call-template>
   </xsl:for-each>
 </xsl:template>
 

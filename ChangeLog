@@ -1,5 +1,21 @@
 2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [show-details-icon]): New template.
+	(report [result-header]): Add first-row parameter.
+	(report-summary-sorting-link): Rename template to report [sorting-link].
+	Adjust code accordingly.
+	(report-summary-sorting): Rename template to report [sorting]. Adjust
+	code accordingly.
+	(report [fold-filter-icon]): Fix links.
+	(report [results]): Adjust changed templates calls. Add outer details
+	table for report details.
+	(result [result-detailed]): Add show-header parameter. Check details and
+	cmd parameter for result details outputing.
+	(report [details]): Output all report results in a single table instead
+	of per-host tables.
+
+2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [fold-filter-icon]): New template.
 	(report [filterbox]): Refactor code into fold-filter-icon template.
 	(report [results]): Call fold-filter-icon template. Move down report
