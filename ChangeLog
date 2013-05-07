@@ -1,3 +1,10 @@
+2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [fold-filter-icon]): New template.
+	(report [filterbox]): Refactor code into fold-filter-icon template.
+	(report [results]): Call fold-filter-icon template. Move down report
+	filterbox.
+
 2013-05-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/fold.png, src/html/img/unfold.png: Improved versions

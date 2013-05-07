@@ -1612,25 +1612,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="report" mode="filterbox">
+<xsl:template match="report" mode="fold-filter-icon">
   <xsl:choose>
     <xsl:when test="/envelope/params/filterbox &gt; 0">
-      Fold filtering box:
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=0&amp;token={/envelope/token}"
-         title="Fold filter box">
+         title="Fold filter">
         <img src="/img/fold.png"
-             alt="Fold Filter box" title="Fold Filter box"/>
+             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             alt="Fold filter" title="Fold filter"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      Unfold filtering box:
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=1&amp;token={/envelope/token}"
-         title="Unfold filter box">
+         title="Unfold filter">
         <img src="/img/unfold.png"
-             alt="Unfold filter box" title="Unfold filter box"/>
+             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             alt="Unfold filter" title="Unfold filter"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="filterbox">
 
   <xsl:if test="/envelope/params/filterbox &gt; 0">
     <div style="background-color: #EEEEEE;">
@@ -2044,8 +2047,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
 
-      <xsl:apply-templates select="." mode="filterbox"/>
-
       <div style="background-color: #EEEEEE;">
         <div style="float: right">
           <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
@@ -2164,9 +2165,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                    src="/img/help.png" border="0"/>
             </a>
+            <xsl:apply-templates select="." mode="fold-filter-icon"/>
           </div>
         </form>
       </div>
+
+      <xsl:apply-templates select="." mode="filterbox"/>
 
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
