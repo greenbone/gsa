@@ -14698,16 +14698,28 @@ send_settings_filters (gnutls_session_t *session, params_t *data)
       params_iterator_t iter;
       char *uuid;
       param_t *param;
+      gchar *base64;
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &uuid, &param))
-        if (openvas_server_sendf_xml (session,
-                                         "<modify_setting setting_id=\"%s\">"
-                                         "<value>%s</value>"
-                                         "</modify_setting>",
-                                         uuid,
-                                         param->value ? param->value : ""))
-          return -1;
+        {
+          base64 = param->value ?
+                    g_base64_encode ((guchar*) param->value,
+                                     strlen (param->value))
+                    : g_strdup("");
+          if (openvas_server_sendf_xml (session,
+                                        "<modify_setting setting_id=\"%s\">"
+                                        "<value>%s</value>"
+                                        "</modify_setting>",
+                                        uuid,
+                                        base64))
+            {
+              g_free (base64);
+              return -1;
+            }
+
+          g_free (base64);
+        }
     }
 
   return 0;
@@ -14893,7 +14905,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   filters = params_values (params, "settings_filter:");
   if (send_settings_filters (&session, filters))
     {
-      g_free (max_64);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -14945,7 +14956,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                             "<get_filters/>")
       == -1)
     {
-      g_free (text_64);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
