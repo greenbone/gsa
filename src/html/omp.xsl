@@ -1701,7 +1701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;details=0&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Collapse details of all vulnerabilities">
          <img
-             src="/img/trend_up.png"
+             src="/img/fold.png"
              style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Collapse details of all vulnerabilities"
              title="Collapse details of all vulnerabilities"/>
@@ -1710,7 +1710,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;details=1&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Expand to full details of all vulnerabilities">
-        <img src="/img/trend_down.png"
+        <img src="/img/unfold.png"
              style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Expand to full details of all vulnerabilities"
              title="Expand to full details of all vulnerabilities"/>
