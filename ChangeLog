@@ -1,3 +1,12 @@
+2013-05-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/gsa-style.css: Remove unused actionbar class. Add
+	result_section and result_section_top classes.
+
+	* src/html/omp.xsl (result [result-body]): Style updates. Add div
+	elements with adequate classes around result sections. Adjust html code
+	adequately.
+
 2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (show-details-icon): Rename to result-details-icon.
