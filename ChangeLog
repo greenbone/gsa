@@ -1,3 +1,21 @@
+2013-05-08  Timo Pollmeier  <timo.pollmeier@greenobone.net>
+
+	* src/gsad_omp.c (get_one, get_many, get_nvts, get_task, get_report)
+	(get_result, get_note, get_override): Add distinct tag names on
+	details pages.
+
+	* src/html/help.xsl (contents.html): Add entry for User Tags list.
+	(user-tags.html): New template for User Tags list help on details pages.
+
+	* src/html/omp.xsl (user-tags-window): Add parameter tag_names.
+	Change "Add Tag" alt text of window top icon to "New Tag".
+	Change help reference to new user-tags.html. Add mini form for adding
+	tags.
+	(task [details], cve-details, cpe-details, ovaldef-details)
+	(dfn_cert_adv-details, get_nvts, note [details], override [details])
+	(get_report, result-details): Add tag_names parameter to
+	user-tags-window call.
+
 2013-05-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	(report [hosts], report [ports], report [closed_cves]): Add count of

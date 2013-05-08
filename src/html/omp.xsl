@@ -919,6 +919,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
   <xsl:param name="title" select="concat('User Tags for &quot;',name,'&quot;:')"/>
   <xsl:param name="user_tags" select="user_tags" />
+  <xsl:param name="tag_names" select="../../get_tags_response"/>
 
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -938,28 +939,95 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$resource_subtype != ''">
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="Add tag"
+            title="New tag"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="Add tag"
+            title="New tag"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <!-- TODO: Separate help page -->
-      <a href="/help/tags.html?token={/envelope/token}"
-         title="Help: Tags">
+      <a href="/help/user-tags.html?token={/envelope/token}"
+         title="Help: User Tags list">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <a name="user_tags"/>
+      <xsl:choose>
+        <xsl:when test="count($tag_names/tag) > 0">
+          <div style="margin-bottom: 10px">
+            <form style="display: inline; margin-left: 3px" action="/omp#user_tags" method="post" enctype="multipart/form-data">
+              <label>
+                <span style="margin-right: 5px">
+                  <b>Add tag:</b>
+                </span>
+                <select style="margin-bottom: 0px;" name="tag_name" size="1">
+                  <xsl:for-each select="$tag_names/tag">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="name/text()"/>
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </select>
+              </label>
+              <label>
+                <span style="margin-left: 5px;">
+                  with Value:
+                </span>
+                <input type="text" name="tag_value"/>
+              </label>
+              <input type="image" src="/img/tag.png" alt="Add Tag"
+                    name="Add Tag" value="Add Tag" title="Add Tag"
+                    style="margin-left: 5px" />
+              <input type="hidden" name="comment"/>
+              <input type="hidden" name="active" value="1"/>
+              <input type="hidden" name="caller" value="{/envelope/caller}"/>
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="create_tag"/>
+              <input type="hidden" name="attach_id" value="{$resource_id}"/>
+              <xsl:choose>
+                <xsl:when test="$resource_subtype!=''">
+                  <input type="hidden" name="attach_type" value="{$resource_subtype}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="attach_type" value="{$resource_type}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <input type="hidden" name="attach_id" value="{$resource_id}"/>
+              <input type="hidden" name="next" value="{$next}"/>
+              <xsl:choose>
+                <xsl:when test="$resource_type='nvt'">
+                  <input type="hidden"
+                          name="oid"
+                          value="{$resource_id}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden"
+                          name="{$resource_type}_id"
+                          value="{$resource_id}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:if test="$resource_type='info'">
+                <input type="hidden"
+                      name="details"
+                      value="1"/>
+              </xsl:if>
+              <xsl:if test="$resource_subtype != ''">
+                <input type="hidden"
+                        name="{$resource_type}_type"
+                        value="{$resource_subtype}"/>
+              </xsl:if>
+            </form>
+          </div>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="$user_tags/count != 0">
           <table class="gbntable" cellspacing="2" cellpadding="4">
@@ -2612,6 +2680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'task'"/>
+    <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -13782,6 +13851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
+    <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
     <xsl:with-param name="resource_id"   select="info/@id"/>
     <xsl:with-param name="resource_subtype" select="'cve'"/>
@@ -13921,6 +13991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
+    <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
     <xsl:with-param name="resource_id"   select="info/@id"/>
     <xsl:with-param name="resource_subtype" select="'cpe'"/>
@@ -14147,6 +14218,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
+    <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
     <xsl:with-param name="resource_id"   select="info/@id"/>
     <xsl:with-param name="resource_subtype" select="'ovaldef'"/>
@@ -14282,6 +14354,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
+    <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
     <xsl:with-param name="resource_id"   select="info/@id"/>
     <xsl:with-param name="resource_subtype" select="'dfn_cert_adv'"/>
@@ -14551,6 +14624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="concat('User Tags for &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="commands_response/get_nvts_response/nvt/user_tags"/>
+    <xsl:with-param name="tag_names" select="get_tags_response"/>
     <xsl:with-param name="resource_type" select="'nvt'"/>
     <xsl:with-param name="next" select="'get_nvts'"/>
     <xsl:with-param name="resource_id"   select="commands_response/get_nvts_response/nvt/@oid"/>
@@ -15479,6 +15553,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="'User Tags for this Note: '"/>
+    <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'note'"/>
   </xsl:call-template>
 </xsl:template>
@@ -16531,6 +16606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="'User Tags for this Override: '"/>
+    <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'override'"/>
   </xsl:call-template>
 </xsl:template>
@@ -18849,6 +18925,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="get_reports_response/report/report">
     <xsl:call-template name="user-tags-window">
       <xsl:with-param name="resource_type" select="'report'"/>
+      <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
       <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
     </xsl:call-template>
   </xsl:for-each>
@@ -19524,6 +19601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'result'"/>
+    <xsl:with-param name="tag_names" select="../../../../get_tags_response"/>
     <xsl:with-param name="title" select="'User Tags for this Result:'"/>
   </xsl:call-template>
 </xsl:template>

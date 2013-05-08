@@ -795,6 +795,40 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources");
     }
 
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=%s"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>",
+                            type)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
@@ -1007,6 +1041,44 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
+  /* Get tag names */
+
+  if (params_value (params, "details"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_tags"
+                                " filter=\"attach_type=%s"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>",
+                                g_strcasecmp (type, "info")
+                                  ? type
+                                  : params_value (params, "info_type"))
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting tag names list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_resources");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting tag names list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to receive response from manager daemon.",
+                              "/omp?cmd=get_resources");
+        }
+    }
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   openvas_server_close (socket, session);
@@ -2848,6 +2920,40 @@ get_nvts (credentials_t *credentials, const char *oid,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=nvt"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
   g_string_append (xml, "</get_nvts>");
 
   openvas_server_close (socket, session);
@@ -3153,6 +3259,39 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
+    }
+
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=task"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
     }
 
   g_string_append (xml, "</get_task>");
@@ -10131,6 +10270,39 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_append (xml, "</filters>");
         }
 
+      /* Get tag names */
+
+      if (openvas_server_sendf (&session,
+                                "<get_tags"
+                                " filter=\"attach_type=report"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting tag names list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_resources");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting tag names list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to receive response from manager daemon.",
+                              "/omp?cmd=get_resources");
+        }
+
       g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return g_string_free (xml, FALSE);
@@ -10351,6 +10523,39 @@ get_result (credentials_t *credentials, const char *result_id,
                            "/omp?cmd=get_tasks");
     }
 
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=result"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
@@ -10537,6 +10742,39 @@ get_note (credentials_t *credentials, params_t *params, const char *commands,
                            "An internal error occurred while getting the note. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
+    }
+
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=note"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -11297,6 +11535,39 @@ get_override (credentials_t *credentials, params_t *params, const char *commands
                            "An internal error occurred while getting the override. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
+    }
+
+  /* Get tag names */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " filter=\"attach_type=override"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
     }
 
   /* Cleanup, and return transformed XML. */

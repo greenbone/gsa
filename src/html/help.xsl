@@ -3022,6 +3022,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
             <li> <a href="cvss_calculator.html?token={/envelope/token}">CVSS Calculator</a></li>
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
+            <li> <a href="user-tags.html?token={/envelope/token}">User Tags list</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> Protocol Documentation</li>
               <ul>
@@ -6954,6 +6955,74 @@ Public License instead of this License.
         <xsl:with-param name="type" select="'Tag'"/>
         <xsl:with-param name="showenable" select="1"/>
       </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="user-tags.html">
+  <div class="gb_window_part_center">Help: User Tags list</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TAGS'"/>
+      </xsl:call-template>
+
+      <h1>User Tags</h1>
+      <p>
+       This table provides an overview of all active
+       <a href="glossary.html?token={/envelope/token}#tag">tags</a>
+       attached to a resource.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the tag</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>The value associated with the tag.</td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>The comment of the tag.</td>
+        </tr>
+      </table>
+
+      <h3>New Tag</h3>
+      <p>
+        To create a new tag for the current resource click the
+        new icon <img src="/img/new.png" alt="New Tag" title="New Tag" /> which
+        goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
+        page.
+      </p>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Tag'"/>
+        <xsl:with-param name="showenable" select="1"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noexport" select="1"/>
+      </xsl:call-template>
+
+      <h2>Add Tag</h2>
+      <p>
+        If Tags exist for the current resource or one of same type the
+        &quot;Add Tag&quot; bar will appear above the User Tags list.
+        After selecting a tag name from the drop-down box and entering the
+        value in the text box (optional) a new tag with these properties
+        can be quickly added to the current resource without going to the
+        <a href="new_tag.html?token={/envelope/token}">New Tag</a>
+        page by clicking the &quot;Add Tag&quot; icon
+        <img src="/img/tag.png" alt="Add Tag" title="Add Tag" />.
+      </p>
     </div>
   </div>
 </xsl:template>
