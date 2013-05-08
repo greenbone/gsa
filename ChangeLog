@@ -1,5 +1,9 @@
 2013-05-08  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (get_report): Hide User Tags on Hosts page.
+
+2013-05-08  Timo Pollmeier  <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (result[result-header], result[result-body]): Move
 	result Tags from result-header to result-body.
 

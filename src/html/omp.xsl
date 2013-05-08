@@ -18922,13 +18922,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>
-  <xsl:for-each select="get_reports_response/report/report">
-    <xsl:call-template name="user-tags-window">
-      <xsl:with-param name="resource_type" select="'report'"/>
-      <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
-      <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
-    </xsl:call-template>
-  </xsl:for-each>
+  <xsl:choose>
+    <xsl:when test="/envelope/params/type='assets'"/>
+    <xsl:otherwise>
+      <xsl:for-each select="get_reports_response/report/report">
+        <xsl:call-template name="user-tags-window">
+          <xsl:with-param name="resource_type" select="'report'"/>
+          <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
+          <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_asset">
