@@ -1,5 +1,15 @@
 2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add exporting of roles.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add export commands.
+
+	* src/gsad_omp.c (export_role_omp, export_roles_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (user, user [details]): Link role to Role Details.
 
 2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>

@@ -233,6 +233,10 @@ char * export_port_lists_omp (credentials_t *, params_t *, enum content_type *,
                               char **, gsize *);
 char * import_port_list_omp (credentials_t *, params_t *);
 
+char * export_role_omp (credentials_t *, params_t *, enum content_type *,
+                          char **, gsize *);
+char * export_roles_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
 char * get_role_omp (credentials_t *, params_t *);
 char * get_roles_omp (credentials_t *, params_t *);
 

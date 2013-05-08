@@ -16454,6 +16454,47 @@ get_roles_omp (credentials_t * credentials, params_t *params)
   return get_roles (credentials, params, NULL);
 }
 
+/**
+ * @brief Export a role.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   role_id            UUID of role.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Role XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_role_omp (credentials_t * credentials, params_t *params,
+                 enum content_type * content_type, char **content_disposition,
+                 gsize *content_length)
+{
+  return export_resource ("role", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of roles.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Roles XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_roles_omp (credentials_t * credentials, params_t *params,
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
+{
+  return export_many ("role", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
 
 /* Feeds. */
 
