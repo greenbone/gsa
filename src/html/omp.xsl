@@ -20756,6 +20756,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Hosts
+      <xsl:value-of select="count(report/host)"/>
+      (total: <xsl:value-of select="report/hosts/@total"/>)
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
         <xsl:with-param name="current" select="'hosts'"/>
@@ -20948,6 +20950,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Ports
+      <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+      (total: <xsl:value-of select="report/ports/@total"/>)
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21039,6 +21043,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Closed CVEs
+      <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
+      (total: <xsl:value-of select="report/closed_cves/@total"/>)
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21060,11 +21066,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="current_host" select="ip"/>
           <xsl:variable name="host" select="."/>
           <xsl:variable name="token" select="/envelope/token"/>
-          <xsl:for-each select="str:split(detail[name = 'Closed CVEs']/value, ',')">
+          <xsl:for-each select="detail[name = 'Closed CVE']">
             <tr>
               <td>
                 <xsl:call-template name="get_info_cve_lnk">
-                  <xsl:with-param name="cve" select="."/>
+                  <xsl:with-param name="cve" select="value"/>
                   <xsl:with-param name="gsa_token" select="$token"/>
                 </xsl:call-template>
               </td>
@@ -21072,11 +21078,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="$current_host"/>
               </td>
               <td>
-                <xsl:variable name="cve" select="normalize-space(.)"/>
-                <xsl:variable name="closed_cve"
-                              select="$host/detail[name = 'Closed CVE' and contains(value, $cve)]"/>
-                <a href="omp?cmd=get_nvts&amp;oid={$closed_cve/source/name}&amp;token={$token}">
-                  <xsl:value-of select="$closed_cve/source/description"/>
+                <a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={$token}">
+                  <xsl:value-of select="source/description"/>
                 </a>
               </td>
             </tr>

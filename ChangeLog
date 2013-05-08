@@ -1,5 +1,11 @@
 2013-05-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	(report [hosts], report [ports], report [closed_cves]): Add count of
+	filtered and total number next to page header.
+	(report [closed_cves]): Loop directly over closed cve details.
+
+2013-05-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/gsa-style.css: Remove unused actionbar class. Add
 	result_section and result_section_top classes.
 
