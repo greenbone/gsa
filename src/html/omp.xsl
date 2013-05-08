@@ -23071,7 +23071,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="role"/>
+      <xsl:for-each select="role">
+        <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+        <xsl:if test="position() != last()">, </xsl:if>
+      </xsl:for-each>
     </td>
     <td>
       <xsl:for-each select="groups/group">
@@ -23159,7 +23164,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Role:</td>
-          <td><xsl:value-of select="role"/></td>
+          <td>
+            <xsl:for-each select="role">
+              <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="name"/>
+              </a>
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
+          </td>
         </tr>
         <tr>
           <td>Groups:</td>

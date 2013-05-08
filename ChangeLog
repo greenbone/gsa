@@ -1,5 +1,9 @@
 2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (user, user [details]): Link role to Role Details.
+
+2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add Roles and Role Details pages.
 
 	* src/gsad.c (init_validator): Add roles commands.  Add roles to types.
