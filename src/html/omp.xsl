@@ -20837,7 +20837,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Hosts
+      Report: Hosts 1 -
+      <xsl:value-of select="count(report/host)"/>
+      of
       <xsl:value-of select="count(report/host)"/>
       (total: <xsl:value-of select="report/hosts/@total"/>)
       <xsl:call-template name="report-help-icon"/>
@@ -21031,7 +21033,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Ports
+      Report: Ports 1 -
+      <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+      of
       <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
       (total: <xsl:value-of select="report/ports/@total"/>)
 
@@ -21124,7 +21128,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Closed CVEs
+      Report: Closed CVEs 1 -
+      <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
+      of
       <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
       (total: <xsl:value-of select="report/closed_cves/@total"/>)
 

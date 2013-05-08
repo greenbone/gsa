@@ -1,3 +1,8 @@
+2013-05-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (report): Make range title consistent although static here
+	in order to have a consistent appearance with the results section.
+
 2013-05-08  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (get_report): Hide User Tags on Hosts page.
