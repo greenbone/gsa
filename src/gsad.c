@@ -653,6 +653,8 @@ init_validator ()
                          "|(get_report_formats)"
                          "|(get_report_section)"
                          "|(get_result)"
+                         "|(get_role)"
+                         "|(get_roles)"
                          "|(get_schedule)"
                          "|(get_schedules)"
                          "|(get_slave)"
@@ -841,11 +843,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Schedule|Slave|Tag|Target|Task|User|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|User|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -963,6 +965,7 @@ init_validator ()
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");
+  openvas_validator_alias (validator, "role_id",           "id");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
@@ -2111,6 +2114,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_report_format)
   ELSE (get_report_formats)
   ELSE (get_report_section)
+  ELSE (get_role)
+  ELSE (get_roles)
   ELSE (get_schedule)
   ELSE (get_schedules)
   ELSE (get_slave)

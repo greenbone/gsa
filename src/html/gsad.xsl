@@ -1030,6 +1030,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/modify_tag_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_roles/create_filter_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_schedule/commands_response/delete_schedule_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_schedule/gsad_msg"
@@ -1333,6 +1335,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
       <li><a href="/omp?cmd=get_groups&amp;token={/envelope/token}">Groups</a></li>
+      <li><a href="/omp?cmd=get_roles&amp;token={/envelope/token}">Roles</a></li>
       <li><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
       <li><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
       <li class="last"><a href="/omp?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>
@@ -1597,7 +1600,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="timezone">
 </xsl:template>
 
-<xsl:template match="role">
+<xsl:template match="envelope/role">
 </xsl:template>
 
 <xsl:template match="i18n">

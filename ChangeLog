@@ -1,3 +1,26 @@
+2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Roles and Role Details pages.
+
+	* src/gsad.c (init_validator): Add roles commands.  Add roles to types.
+	Add role_id.
+	(exec_omp_get): Add roles commands.
+
+	* src/gsad_omp.c (next_page): Add new roles pages.
+	(get_role, get_role_omp, get_roles, get_roles_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add create_filter response icon for
+	get_roles page.
+	(html-gsa-navigation): Add Roles menu item.
+	(role): Add envelope to because the standard macros expect the role
+	template to be for the list window row.
+
+	* src/html/omp.xsl (list-window): Skip new icon for roles, for now.
+	(roles, role, role [trash], role [details], html-roles-trash-table)
+	(html-roles-table, get_role, get_roles): New templates.
+
 2013-05-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (report): Use fold/unfold icons for

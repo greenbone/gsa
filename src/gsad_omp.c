@@ -164,6 +164,10 @@ static char *get_report_section (credentials_t *, params_t *, const char *);
 
 char *get_result_page (credentials_t *, params_t *, const char *);
 
+static char *get_role (credentials_t *, params_t *, const char *);
+
+static char *get_roles (credentials_t *, params_t *, const char *);
+
 static char *get_schedule (credentials_t *, params_t *, const char *);
 
 static char *get_schedules (credentials_t *, params_t *, const char *);
@@ -661,6 +665,12 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
+
+  if (strcmp (next, "get_role") == 0)
+    return get_role (credentials, params, response);
+
+  if (strcmp (next, "get_roles") == 0)
+    return get_roles (credentials, params, response);
 
   if (strcmp (next, "get_schedule") == 0)
     return get_schedule (credentials, params, response);
@@ -16379,6 +16389,69 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
   g_string_append (xml, "</get_port_lists>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+
+/* Roles. */
+
+/**
+ * @brief Get one role, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_role (credentials_t * credentials, params_t *params,
+          const char *extra_xml)
+{
+  return get_one ("role", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get one role, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_role_omp (credentials_t * credentials, params_t *params)
+{
+  return get_role (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all roles, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_roles (credentials_t * credentials, params_t *params,
+           const char *extra_xml)
+{
+  return get_many ("role", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all roles, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_roles_omp (credentials_t * credentials, params_t *params)
+{
+  return get_roles (credentials, params, NULL);
 }
 
 

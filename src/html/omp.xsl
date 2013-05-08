@@ -6241,6 +6241,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="wizard-icon"/>
       <xsl:choose>
         <xsl:when test="$type = 'permission'"/>
+        <xsl:when test="$type = 'role'"/>
         <xsl:otherwise>
           <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="New {$cap-type}">
@@ -21912,6 +21913,183 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END REPORT DETAILS -->
+
+<!-- BEGIN ROLES MANAGEMENT -->
+
+<xsl:template match="roles">
+</xsl:template>
+
+<xsl:template match="role">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;role={../roles/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Role'"/>
+        <xsl:with-param name="type" select="'role'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="notrash" select="1"/>
+        <xsl:with-param name="noclone" select="1"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="role" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:value-of select="name"/>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'role'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="role" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Role Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="cap-type" select="'Role'"/>
+        <xsl:with-param name="type" select="'role'"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Users:</td>
+          <td><xsl:value-of select="users/text()"/></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-roles-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="role" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-roles-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'role'"/>
+    <xsl:with-param name="cap-type" select="'Role'"/>
+    <xsl:with-param name="resources-summary" select="roles"/>
+    <xsl:with-param name="resources" select="role"/>
+    <xsl:with-param name="count" select="count (role)"/>
+    <xsl:with-param name="roleed-count" select="role_count/roleed"/>
+    <xsl:with-param name="full-count" select="role_count/text ()"/>
+    <xsl:with-param name="headings" select="'Name|name'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     GET_ROLE -->
+
+<xsl:template match="get_role">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_role_response"/>
+  <xsl:apply-templates select="get_roles_response/role" mode="details"/>
+</xsl:template>
+
+<!--     GET_ROLES -->
+
+<xsl:template match="get_roles">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_role_response"/>
+  <xsl:apply-templates select="create_role_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
+  <!-- The for-each makes the get_roles_response the current node. -->
+  <xsl:for-each select="get_roles_response | commands_response/get_roles_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Roles
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-roles-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END ROLES MANAGEMENT -->
 
 <!-- BEGIN SYSTEM REPORTS MANAGEMENT -->
 
