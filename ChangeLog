@@ -1,4 +1,9 @@
-2013-05-08  Timo Pollmeier  <timo.pollmeier@greenobone.net>
+2013-05-08  Timo Pollmeier  <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (result[result-header], result[result-body]): Move
+	result Tags from result-header to result-body.
+
+2013-05-08  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_one, get_many, get_nvts, get_task, get_report)
 	(get_result, get_note, get_override): Add distinct tag names on

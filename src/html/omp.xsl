@@ -19862,14 +19862,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </td>
   </tr>
-  <xsl:if test="count(user_tags/tag)">
-    <tr>
-      <td colspan="5" class="note_box_box">
-        <b>Result Tags: </b>
-        <xsl:call-template name="user_tag_list"/>
-      </td>
-    </tr>
-  </xsl:if>
 </xsl:template>
 
 <xsl:template match="result" mode="result-body">
@@ -19881,6 +19873,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr>
     <td colspan="5">
+      <!-- Tags -->
+      <xsl:if test="count(user_tags/tag)">
+        <div class="note_box_box">
+          <b>Result Tags: </b>
+          <xsl:call-template name="user_tag_list"/>
+        </div>
+      </xsl:if>
       <!-- Summary -->
       <xsl:if test="gsa:newstyle-nvt (nvt)">
         <div class="result_section_top result_section">
