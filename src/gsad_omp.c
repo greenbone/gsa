@@ -1062,7 +1062,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                 "          rows=-1\""
                                 " names_only=\"1\""
                                 "/>",
-                                g_strcasecmp (type, "info")
+                                strcmp (type, "info")
                                   ? type
                                   : params_value (params, "info_type"))
           == -1)

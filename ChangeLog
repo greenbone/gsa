@@ -1,3 +1,8 @@
+2013-05-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Replace g_strcasecmp call as it is
+	deprecated and gives compiler warning.
+
 2013-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add exporting of roles.
