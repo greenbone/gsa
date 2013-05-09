@@ -22798,6 +22798,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="role" mode="newuser">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template name="new-user-role-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="roles" select="get_roles_response"/>
+  <select name="role_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$roles/role"
+                         mode="newuser"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-user-role-select">
+      <xsl:with-param name="roles" select="$roles"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template name="html-create-user-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -22833,34 +22856,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top">Role</td>
+            <td>Roles (optional)</td>
             <td>
-              <select name="role">
-                <xsl:choose>
-                  <xsl:when test="/envelope/params/role = 'Admin'">
-                    <option value="Admin" selected="1">Admin</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="Admin">Admin</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:choose>
-                  <xsl:when test="not (boolean (/envelope/params/role)) or (/envelope/params/role = 'User')">
-                    <option value="User" selected="1">User</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="User">User</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:choose>
-                  <xsl:when test="/envelope/params/role = 'Observer'">
-                    <option value="Observer" selected="1">Observer</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="Observer">Observer</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </select>
+              <xsl:variable name="roles"
+                            select="get_roles_response/role"/>
+              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']">
+                <select name="{name}">
+                  <xsl:variable name="role_id" select="value"/>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($role_id) &gt; 0">
+                      <option value="0">--</option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="0" selected="1">--</option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:for-each select="$roles">
+                    <xsl:choose>
+                      <xsl:when test="@id = $role_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:for-each>
+              <xsl:variable name="count"
+                            select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
+              <xsl:call-template name="new-user-role-select">
+                <xsl:with-param name="roles" select="get_roles_response"/>
+                <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/roles)">
+                  <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="roles" value="{1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <!-- Force the Create User button to be the default. -->
+              <input style="position: absolute; left: -100%"
+                     type="submit" name="submit" value="Create User"/>
+              <input type="submit" name="submit_plus_role" value="+"/>
             </td>
           </tr>
           <tr class="even">
@@ -22988,10 +23031,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="headings">
       <xsl:choose>
         <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-          <xsl:text>Name|name Role|role Groups|groups Host&#xa0;Access|host_access LDAP&#xa0;Authentication|ldap</xsl:text>
+          <xsl:text>Name|name Roles|role Groups|groups Host&#xa0;Access|host_access LDAP&#xa0;Authentication|ldap</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>Name|name Role|role Groups|groups Host&#xa0;Access|host_access</xsl:text>
+          <xsl:text>Name|name Roles|role Groups|groups Host&#xa0;Access|host_access</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:with-param>
@@ -23158,7 +23201,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Role:</td>
+          <td>Roles:</td>
           <td>
             <xsl:for-each select="role">
               <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">

@@ -968,10 +968,15 @@ init_validator ()
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");
   openvas_validator_alias (validator, "role_id",           "id");
+  openvas_validator_alias (validator, "role_id_optional",  "id_optional");
+  openvas_validator_alias (validator, "role_id_optional:name",  "number");
+  openvas_validator_alias (validator, "role_id_optional:value", "id_optional");
+  openvas_validator_alias (validator, "roles",             "optional_number");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
+  openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "user_id",      "id");
@@ -1134,6 +1139,8 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "alert_id_optional:", strlen ("alert_id_optional:"))
           == 0)
       || (strncmp (name, "group_id_optional:", strlen ("group_id_optional:"))
+          == 0)
+      || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
           == 0))
     {
       param_t *param;

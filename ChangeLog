@@ -1,5 +1,21 @@
 2013-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Enable multiple roles per user.
+
+	* src/gsad.c (init_validator): Add roles rules.
+	(params_append_mhd): Add role_id_optional collection case.
+
+	* src/gsad_omp.c (new_user): Get roles for dropdown.
+	(create_user_omp, save_user_omp): Add role + button handling.  Cater for
+	multiple roles per user.
+
+	* src/html/omp.xsl (role [newuser], new-user-role-select): New
+	templates.
+	(html-create-user-form): Get roles from XML.  Add + button.
+	(html-users-table, user [details]): Make role headings plural.
+
+2013-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Add observer roles to tooltip.
 	(html-users-table): Switch to list-window, so that the filter dialog
 	appears.

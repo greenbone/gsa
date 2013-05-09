@@ -17756,6 +17756,47 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
       g_free (response);
     }
 
+  if (command_enabled (credentials, "GET_ROLES"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_roles/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   g_string_append (xml, "</new_user>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -17948,11 +17989,11 @@ get_users_omp (credentials_t * credentials, params_t *params)
 char *
 create_user_omp (credentials_t * credentials, params_t *params)
 {
-  const char *name, *password, *role, *hosts, *hosts_allow;
+  const char *name, *password, *hosts, *hosts_allow;
   const char *enable_ldap_connect, *submit;
   int ret;
-  params_t *groups;
-  GString *group_elements, *string;
+  params_t *groups, *roles;
+  GString *group_elements, *role_elements, *string;
   gchar *buf, *response, *html;
   entity_t entity;
 
@@ -17973,20 +18014,28 @@ create_user_omp (credentials_t * credentials, params_t *params)
       return new_user_omp (credentials, params);
     }
 
+  submit = params_value (params, "submit_plus_role");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "roles");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "roles", "2");
+      return new_user_omp (credentials, params);
+    }
+
   name = params_value (params, "login");
   password = params_value (params, "password");
-  role = params_value (params, "role");
   hosts = params_value (params, "access_hosts");
   hosts_allow = params_value (params, "hosts_allow");
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
-
-  if (role == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new user. "
-                         "No new user was created. "
-                         "Diagnostics: Role was NULL.",
-                         "/omp?cmd=get_users");
 
   if (name == NULL || password == NULL || hosts == NULL || hosts_allow == NULL)
     return new_user (credentials, params,
@@ -17996,11 +18045,9 @@ create_user_omp (credentials_t * credentials, params_t *params)
 
   string = g_string_new ("<create_user>");
   buf = g_markup_printf_escaped ("<name>%s</name>"
-                                 "<password>%s</password>"
-                                 "<role>%s</role>",
+                                 "<password>%s</password>",
                                  name,
-                                 password,
-                                 role);
+                                 password);
 
   g_string_append (string, buf);
   g_free (buf);
@@ -18023,6 +18070,24 @@ create_user_omp (credentials_t * credentials, params_t *params)
   g_string_append (string, group_elements->str);
   g_string_free (group_elements, TRUE);
   g_string_append (string, "</groups>");
+
+  role_elements = g_string_new ("");
+  roles = params_values (params, "role_id_optional:");
+  if (roles)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, roles);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (role_elements,
+                                  "<role id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+  g_string_append (string, role_elements->str);
+  g_string_free (role_elements, TRUE);
 
   if (strcmp (hosts_allow, "2") && strlen (hosts))
     {
@@ -18230,11 +18295,11 @@ save_user_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response, *buf;
-  const char *user_id, *login, *modify_password, *password, *role;
+  const char *user_id, *login, *modify_password, *password;
   const char *hosts, *hosts_allow, *enable_ldap_connect, *submit;
   entity_t entity;
-  GString *command, *group_elements;
-  params_t *groups;
+  GString *command, *group_elements, *role_elements;
+  params_t *groups, *roles;
 
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
@@ -18253,6 +18318,23 @@ save_user_omp (credentials_t * credentials, params_t *params)
       return edit_user_omp (credentials, params);
     }
 
+  submit = params_value (params, "submit_plus_role");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "roles");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "roles", "2");
+      return edit_user_omp (credentials, params);
+    }
+
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
@@ -18262,14 +18344,12 @@ save_user_omp (credentials_t * credentials, params_t *params)
   login = params_value (params, "login");
   modify_password = params_value (params, "modify_password");
   password = params_value (params, "password");
-  role = params_value (params, "role");
   user_id = params_value (params, "user_id");
 
   CHECK (user_id);
   CHECK (login);
   CHECK (modify_password);
   CHECK (password);
-  CHECK (role);
   CHECK (hosts);
   CHECK (hosts);
   CHECK (hosts_allow);
@@ -18280,12 +18360,10 @@ save_user_omp (credentials_t * credentials, params_t *params)
   buf = g_markup_printf_escaped ("<modify_user>"
                                  "<name>%s</name>"
                                  "<password modify=\"%s\">"
-                                 "%s</password>"
-                                 "<role>%s</role>",
+                                 "%s</password>",
                                  login,
                                  modify_password,
-                                 password,
-                                 role);
+                                 password);
   g_string_append (command, buf);
   g_free (buf);
 
@@ -18325,6 +18403,24 @@ save_user_omp (credentials_t * credentials, params_t *params)
   g_string_append (command, group_elements->str);
   g_string_free (group_elements, TRUE);
   g_string_append (command, "</groups>");
+
+  role_elements = g_string_new ("");
+  roles = params_values (params, "role_id_optional:");
+  if (roles)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, roles);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (role_elements,
+                                  "<role id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+  g_string_append (command, role_elements->str);
+  g_string_free (role_elements, TRUE);
 
   g_string_append (command, "</modify_user>");
 
