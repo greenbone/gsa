@@ -3794,10 +3794,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:otherwise></xsl:otherwise>
                   </xsl:choose>
                 </xsl:variable>
+                <xsl:variable name="observer_roles">
+                  <xsl:choose>
+                    <xsl:when test="count (observers/role) &gt; 0">
+                      <xsl:value-of select="concat ('&#10;Task made visible for Roles: ', gsa:join (observers/role))"/>
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
                 <img src="/img/provide_view.png"
                      border="0"
-                     alt="Task made visible for: {observers/text()}{$observer_groups}"
-                     title="Task made visible for: {observers/text()}{$observer_groups}"/>
+                     alt="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"
+                     title="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -22969,47 +22977,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-users-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Users
-      <a href="/help/users.html?token={/envelope/token}#users"
-         title="Help: Users (Users)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=new_user&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="New User">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_users&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-           title="Export all Users as XML"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
-        </a>
-      </div>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Role</td>
-            <td>Groups</td>
-            <td>Host Access</td>
-            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-              <td>LDAP Authentication</td>
-            </xsl:if>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="user">
-            <xsl:sort select="role"/>
-            <xsl:sort select="name"/>
-          </xsl:apply-templates>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'user'"/>
+    <xsl:with-param name="cap-type" select="'User'"/>
+    <xsl:with-param name="resources-summary" select="users"/>
+    <xsl:with-param name="resources" select="user"/>
+    <xsl:with-param name="count" select="count (user)"/>
+    <xsl:with-param name="filtered-count" select="user_count/filtered"/>
+    <xsl:with-param name="full-count" select="user_count/text ()"/>
+    <xsl:with-param name="headings">
+      <xsl:choose>
+        <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+          <xsl:text>Name|name Role|role Groups|groups Host&#xa0;Access|host_access LDAP&#xa0;Authentication|ldap</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>Name|name Role|role Groups|groups Host&#xa0;Access|host_access</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_USER_RESPONSE -->

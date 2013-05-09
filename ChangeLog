@@ -1,3 +1,9 @@
+2013-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task): Add observer roles to tooltip.
+	(html-users-table): Switch to list-window, so that the filter dialog
+	appears.
+
 2013-05-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [hosts], report [ports])
