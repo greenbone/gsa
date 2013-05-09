@@ -1,5 +1,9 @@
 2013-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (user): Add filter params to delete icon.
+
+2013-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Enable multiple roles per user.
 
 	* src/gsad.c (init_validator): Add roles rules.

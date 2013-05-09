@@ -23167,6 +23167,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="caller" value="{/envelope/caller}"/>
               <input type="hidden" name="cmd" value="delete_user"/>
               <input type="hidden" name="user_id" value="{@id}"/>
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="image" src="/img/delete.png" alt="Delete"
                      name="Delete" value="Delete" title="Delete"/>
             </form>
