@@ -9809,6 +9809,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
+          if (error) *error = 1;
           return g_string_free (xml, FALSE);
         }
       else

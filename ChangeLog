@@ -6,6 +6,10 @@
 
 2013-05-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Set error to 1 in XML report plugin too.
+
+2013-05-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [hosts], report [closed_cves]): Add table
 	rows classes.
 
