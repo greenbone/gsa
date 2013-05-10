@@ -12668,8 +12668,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="cpe_id"/>
   <xsl:variable name="cpe_select">
     <xsl:choose>
-      <xsl:when test="$cpe_id">info_id=<xsl:value-of select="$cpe_id"/></xsl:when>
-      <xsl:otherwise>info_name=<xsl:value-of select="$cpe"/></xsl:otherwise>
+      <xsl:when test="$cpe_id">info_id=<xsl:value-of select="str:encode-uri (str:replace($cpe_id, '&amp;','&amp;amp;'), true())"/></xsl:when>
+      <xsl:otherwise>info_name=<xsl:value-of select="str:encode-uri (str:replace($cpe, '&amp;','&amp;amp;'), true())"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;{$cpe_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
@@ -13926,7 +13926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="info/@id != ''">
           <tr>
             <td>NVD ID:</td>
-            <td><xsl:value-of select="info/@id"/></td>
+            <td><xsl:value-of select="info/cpe/nvd_id"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/modification_time != ''">
