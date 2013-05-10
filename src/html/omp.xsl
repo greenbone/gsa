@@ -6327,7 +6327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </xsl:for-each>
             <xsl:choose>
-              <xsl:when test="contains ($headings, '~')">
+              <xsl:when test="count (str:split ($headings, '~'))">
                 <td width="160" rowspan="2">Actions</td>
               </xsl:when>
               <xsl:otherwise>
