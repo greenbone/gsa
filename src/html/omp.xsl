@@ -20883,7 +20883,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>
           <xsl:variable name="id" select="../@id"/>
-          <tr>
+          <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
               <xsl:value-of select="$current_host"/>
@@ -20976,7 +20976,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:for-each>
-        <tr>
+        <tr class="{gsa:table-row-class(count(report/host) + 1)}">
           <td>Total: <xsl:value-of select="count(report/host_start)"/></td>
           <td></td>
           <td></td>
@@ -21173,7 +21173,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="host" select="."/>
           <xsl:variable name="token" select="/envelope/token"/>
           <xsl:for-each select="detail[name = 'Closed CVE']">
-            <tr>
+            <tr class="{gsa:table-row-class(position())}">
               <td>
                 <xsl:call-template name="get_info_cve_lnk">
                   <xsl:with-param name="cve" select="value"/>
