@@ -19729,7 +19729,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$severity_title"/>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="'0.0'"/>
+            <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+            <xsl:with-param name="title" select="$severity_title"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </td>
