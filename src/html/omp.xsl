@@ -20851,8 +20851,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         1 -
         <xsl:value-of select="count(report/host)"/>
         of
-        <xsl:value-of select="count(report/host)"/>
       </xsl:if>
+      <xsl:value-of select="count(report/host)"/>
       (total: <xsl:value-of select="report/hosts/@total"/>)
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21050,8 +21050,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         1 -
         <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
         of
-        <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
       </xsl:if>
+      <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
       (total: <xsl:value-of select="report/ports/@total"/>)
 
       <xsl:call-template name="report-help-icon"/>
@@ -21148,8 +21148,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         1 -
         <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
         of
-        <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
       </xsl:if>
+      <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
       (total: <xsl:value-of select="report/closed_cves/@total"/>)
 
       <xsl:call-template name="report-help-icon"/>
