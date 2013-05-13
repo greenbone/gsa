@@ -25017,7 +25017,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="uuid" select="'def63b5a-41ef-43f4-b9ef-03ef1665db5d'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CPE Filter']/value"/>
+                                    select="get_settings_response/setting[name='CVE Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
