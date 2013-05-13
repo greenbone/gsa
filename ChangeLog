@@ -1,3 +1,13 @@
+2013-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details], html-edit-task-form): Correct help
+	links.
+
+	* src/html/help.xsl (task_details.html): Remove tasksummary anchor.  Add
+	Import Report section.
+	(config_details.html, config_editor.html): Correct text about task
+	details link.
+
 2013-05-13  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (save_container_task_omp): Add elements for observer

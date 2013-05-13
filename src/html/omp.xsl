@@ -2586,7 +2586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
       <div class="gb_window_part_center">Import Report
-        <a href="/help/reports.html?token={/envelope/token}#import_report" title="Help: Import Report">
+        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="Help: Import Report">
           <img src="/img/help.png"/>
         </a>
       </div>
@@ -2612,7 +2612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Reports for "<xsl:value-of select="name"/>"
-      <a href="/help/reports.html?token={/envelope/token}#reports" title="Help: Reports (Reports)">
+      <a href="/help/task_details.html?token={/envelope/token}#reports" title="Help: Task Details (Reports)">
         <img src="/img/help.png"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
@@ -3717,7 +3717,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
       <div class="gb_window_part_center">Import Report
-        <a href="/help/reports.html?token={/envelope/token}#import_report" title="Help: Import Report">
+        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="Help: Import Report">
           <img src="/img/help.png"/>
         </a>
       </div>
