@@ -7020,8 +7020,8 @@ Public License instead of this License.
         value in the text box (optional) a new tag with these properties
         can be quickly added to the current resource without going to the
         <a href="new_tag.html?token={/envelope/token}">New Tag</a>
-        page by clicking the &quot;Add Tag&quot; icon
-        <img src="/img/tag.png" alt="Add Tag" title="Add Tag" />.
+        page by clicking the new icon
+        <img src="/img/new.png" alt="New Tag" title="New Tag" />.
       </p>
     </div>
   </div>

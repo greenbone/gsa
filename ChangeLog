@@ -1,3 +1,11 @@
+2013-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (user-tags-window): Add spacing before tags window,
+	at least to match spacing on Task Details page.  Capitalise text in
+	tooltip, to match other cases.
+
+	* src/html/help.xsl (user-tags.html): Switch to new icon.
+
 2013-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Match rowspan check for Actions header

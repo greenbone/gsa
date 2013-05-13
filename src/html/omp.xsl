@@ -921,6 +921,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="user_tags" select="user_tags" />
   <xsl:param name="tag_names" select="../../get_tags_response"/>
 
+  <br/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -939,14 +940,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$resource_subtype != ''">
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="New tag"
+            title="New Tag"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="New tag"
+            title="New Tag"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
