@@ -1,5 +1,10 @@
 2013-05-13  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (save_container_task_omp): Add elements for observer
+	groups and groups plus button.
+
+2013-05-13  Timo Pollmeier  <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (edit_my_settings): Select correct setting from
 	get_settings_response for CVE filter.
 

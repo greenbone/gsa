@@ -2657,11 +2657,30 @@ save_task_omp (credentials_t * credentials, params_t *params)
 char *
 save_container_task_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *response, *html;
-  const char *comment, *name, *next, *task_id;
+  gchar *format, *response, *html;
+  const char *submit, *comment, *name, *next, *task_id;
   const char *observers, *in_assets;
+  params_t *groups;
+  GString *group_elements;
   int ret;
   entity_t entity;
+
+  submit = params_value (params, "submit_plus_group");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "groups");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "groups", "2");
+      return edit_task_omp (credentials, params);
+    }
 
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
@@ -2685,22 +2704,42 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   if (next == NULL)
     next = "get_task";
 
+  group_elements = g_string_new ("");
+  groups = params_values (params, "group_id_optional:");
+  if (groups)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, groups);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (group_elements,
+                                  "<group id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+
+
+  format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
+                            "<name>%%s</name>"
+                            "<comment>%%s</comment>"
+                            "<preferences>"
+                            "<preference>"
+                            "<scanner_name>in_assets</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "</preferences>"
+                            "<observers>%%s%s</observers>"
+                            "</modify_task>",
+                            group_elements->str);
+
   response = NULL;
   entity = NULL;
   ret = omp (credentials,
              &response,
              &entity,
-             "<modify_task task_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<preferences>"
-             "<preference>"
-             "<scanner_name>in_assets</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "</preferences>"
-             "<observers>%s</observers>"
-             "</modify_task>",
+             format,
              task_id,
              name,
              comment,
