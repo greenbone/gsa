@@ -1,3 +1,7 @@
+2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_container_task_omp): Free format.
+
 2013-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details], html-edit-task-form): Correct help

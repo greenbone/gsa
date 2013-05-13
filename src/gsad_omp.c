@@ -2745,6 +2745,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
              comment,
              strcmp (in_assets, "0") ? "yes" : "no",
              observers);
+  g_free (format);
   switch (ret)
     {
       case 0:
