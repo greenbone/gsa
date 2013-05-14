@@ -24736,6 +24736,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
+            <td>Roles Filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Roles Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
             <td>Schedules Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -25010,6 +25019,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'Report Format'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Roles Filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'f38e673a-bcd1-11e2-a19a-406186ea4fc5'"/>
+                    <xsl:with-param name="filter-type" select="'Role'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Roles Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
