@@ -18398,11 +18398,10 @@ save_user_omp (credentials_t * credentials, params_t *params)
   /* Modify the user. */
 
   command = g_string_new ("");
-  buf = g_markup_printf_escaped ("<modify_user>"
-                                 "<name>%s</name>"
+  buf = g_markup_printf_escaped ("<modify_user user_id=\"%s\">"
                                  "<password modify=\"%s\">"
                                  "%s</password>",
-                                 login,
+                                 user_id,
                                  modify_password,
                                  password);
   g_string_append (command, buf);
