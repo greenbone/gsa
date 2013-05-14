@@ -18285,6 +18285,47 @@ edit_user (credentials_t * credentials, params_t *params,
       g_free (response);
     }
 
+  if (command_enabled (credentials, "GET_ROLES"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_roles/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   if (extra_xml)
     g_string_append (extra, extra_xml);
   html = edit_resource ("user", credentials, params, extra->str);

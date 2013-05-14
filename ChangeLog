@@ -1,5 +1,12 @@
 2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_user): Get roles for dropdown.
+
+	* src/html/omp.xsl (user [edit]): Get roles from OMP.  Add + button for
+	multiple roles.
+
+2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_user_omp): Use user ID instead of name to
 	identify user in MODIFY_USER.
 

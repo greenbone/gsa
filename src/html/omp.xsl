@@ -23354,27 +23354,96 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top">Role</td>
+            <td>Roles (optional)</td>
             <td>
-              <select name="role">
+              <xsl:variable name="roles"
+                            select="../../../get_roles_response/role"/>
+              <xsl:choose>
+                <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']) &gt; 0">
+                  <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']/value">
+                    <select name="role_id_optional:{position ()}">
+                      <xsl:variable name="role_id" select="text ()"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($role_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$roles">
+                        <xsl:choose>
+                          <xsl:when test="@id = $role_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:for-each select="role">
+                    <select name="role_id_optional:{position ()}">
+                      <xsl:variable name="role_id" select="@id"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($role_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$roles">
+                        <xsl:choose>
+                          <xsl:when test="@id = $role_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:variable name="count">
+                <xsl:variable name="params"
+                              select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
                 <xsl:choose>
-                  <xsl:when test="role='User'">
-                    <option value="Admin">Admin</option>
-                    <option value="User" selected="1">User</option>
-                    <option value="Observer">Observer</option>
-                  </xsl:when>
-                  <xsl:when test="role='Observer'">
-                    <option value="Admin">Admin</option>
-                    <option value="User">User</option>
-                    <option value="Observer" selected="1">Observer</option>
+                  <xsl:when test="$params &gt; 0">
+                    <xsl:value-of select="$params"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="Admin" selected="1">Admin</option>
-                    <option value="User">User</option>
-                    <option value="Observer">Observer</option>
+                    <xsl:value-of select="count (role)"/>
                   </xsl:otherwise>
                 </xsl:choose>
-              </select>
+              </xsl:variable>
+              <xsl:call-template name="new-user-role-select">
+                <xsl:with-param name="roles" select="../../../get_roles_response"/>
+                <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <!-- Force the Save User button to be the default. -->
+              <input style="position: absolute; left: -100%"
+                     type="submit" name="submit" value="Save User"/>
+              <input type="submit" name="submit_plus_role" value="+"/>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/roles)">
+                  <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="roles" value="{$count + 1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
