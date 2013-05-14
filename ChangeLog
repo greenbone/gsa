@@ -1,5 +1,9 @@
 2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_my_settings): Adjust row background for new row.
+
+2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_my_settings, edit_my_settings): Add Roles Filter.
 
 2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
