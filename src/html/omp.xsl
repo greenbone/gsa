@@ -12451,6 +12451,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
+      <td>
+        <xsl:value-of select="cve_refs"/>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="max_cvss != ''">
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="max_cvss"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
       <td rowspan="2">
         <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
           title="OVAL Definition Details" style="margin-left:3px;">
@@ -12459,7 +12474,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
     </tr>
     <tr>
-      <td colspan="5" style="font-size: 80%;">
+      <td colspan="7" style="font-size: 80%;">
         <xsl:choose>
           <xsl:when test="title != ''">
             <xsl:variable name="truncate_length"
@@ -13233,6 +13248,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Modified</xsl:with-param>
                 <xsl:with-param name="name">modified</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">CVEs</xsl:with-param>
+                <xsl:with-param name="name">cves</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Max CVSS</xsl:with-param>
+                <xsl:with-param name="name">max_cvss</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
               </xsl:call-template>
@@ -14078,6 +14109,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>Definition&#160;class:</td>
               <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td>
+            </tr>
+            <tr>
+              <td>Referenced CVEs:</td>
+              <td>
+                <xsl:value-of name="cvss" select="info/ovaldef/cve_refs"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Maximum CVSS:</td>
+              <td>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="info/ovaldef/max_cvss"/>
+                </xsl:call-template>
+              </td>
             </tr>
             <tr>
               <xsl:choose>

@@ -1,3 +1,12 @@
+2013-05-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (info/ovaldef): Add columns CVEs and Max CVSS and
+	adjust title row width accordingly.
+	(html-ovaldef-table): Add column headers CVEs and Max CVSS.
+	(ovaldef-details): Add items "Referenced CVEs" and "Maximum CVSS".
+
+	* src/html/help.xsl (ovaldefs.html): Add columns CVEs and Max CVSS.
+
 2013-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_my_settings): Adjust row background for new row.

@@ -8191,6 +8191,14 @@ Public License instead of this License.
           <td>Modified</td>
           <td>The date the definition was last modified.</td>
         </tr>
+        <tr>
+          <td>CVEs</td>
+          <td>The number of <a href="glossary.html?token={/envelope/token}#cve">CVEs</a> referenced by the definition.</td>
+        </tr>
+        <tr class="odd">
+          <td>Max CVSS</td>
+          <td>The highest CVSS of any CVE that is referenced by the definition.</td>
+        </tr>
       </table>
 
       <a name="actions"></a>
