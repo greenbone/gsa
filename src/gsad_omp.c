@@ -17190,7 +17190,12 @@ create_filter_omp (credentials_t *credentials, params_t *params)
 
     filter_id = entity_attribute (entity, "id");
     if (filter_id && strlen (filter_id))
-      params_add (params, "filt_id", filter_id);
+      {
+        param_t *param;
+        param = params_add (params, "filt_id", filter_id);
+        param->valid = 1;
+        param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+      }
 
     free_entity (entity);
   }
