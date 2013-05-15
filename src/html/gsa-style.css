@@ -734,3 +734,12 @@ text-align:right;
  border-top: 1px solid #CCCCCC;
 }
 
+.result_header_right {
+ border-right: 1px solid #CCCCCC;
+ width: 100%;
+}
+
+.result_header_left {
+ border-left: 1px solid #CCCCCC;
+ width: 100%;
+}

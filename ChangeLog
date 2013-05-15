@@ -13,6 +13,19 @@
 
 2013-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/gsa-style.css: Add css classes result_header_right and
+	result_header_left.
+
+	* src/html/omp.xsl (report [result-pager], report [hosts])
+	(report [ports], report [closed_cves]): Output content elements count
+	consistently across different report sections.
+	(result-header): Add left and right border lines when outputing result
+	details.
+	(result-body): Add space at the end of result details to make separation
+	between different results clearer.
+
+2013-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [hosts], report [ports])
 	(report [closed_cves]): Change count to output "0 - 0" instead of "0"
 	when there are no elements.
