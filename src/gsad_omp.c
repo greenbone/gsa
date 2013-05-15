@@ -10385,16 +10385,6 @@ get_report_omp (credentials_t * credentials, params_t *params,
   return error ? result : xsl_transform_omp (credentials, result);
 }
 
-#define REQUIRE(arg, backurl)                                         \
-  if (arg == NULL)                                                    \
-    return gsad_message (credentials,                                 \
-                         "Internal error", __FUNCTION__, __LINE__,    \
-                         "An internal error occurred."                \
-                         " Diagnostics: Required parameter \""        \
-                         G_STRINGIFY (arg)                            \
-                         "\" was NULL.",                              \
-                         backurl)
-
 /**
  * @brief Get ths hosts for a report, XSL transform the result.
  *
@@ -10415,8 +10405,15 @@ get_report_section (credentials_t * credentials, params_t *params,
   report_section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
 
-  REQUIRE(report_section, "/omp?cmd=get_tasks");
-  REQUIRE(report_id, "/omp?cmd=get_tasks");
+  if (report_section == NULL)
+    report_section = "results";
+
+  if (report_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred."
+                         " Diagnostics: report_id was NULL.",
+                         "/omp?cmd=get_tasks");
 
   if (!strcmp (report_section, "results"))
     return get_report_omp (credentials, params, NULL, NULL, NULL);

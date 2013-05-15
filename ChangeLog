@@ -1,5 +1,11 @@
 2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (REQUIRE): Remove.  Out of use.
+	(get_report_section): Add default for report_section, in case user
+	crafts URL by hand.  Inline REQUIRE, as it is only used here.
+
+2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_filter_omp): Set valid field in filt_id param
 	so that it ends up in the XML, so that the icons on the GET pages have
 	the right filtering in their URLs.
