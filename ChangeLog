@@ -1,3 +1,16 @@
+2013-05-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install new disable / enable icons.
+
+	* src/html/img/disable.png, src/html/img/enable.png: New preliminary
+	icons for disable / enable actions.
+
+	* src/html/omp.xsl (toggle-tag-icon): Change enable and disable
+	icon file names.
+	
+	* src/html/help.xsl (list-window-line-actions):  Change enable and
+	disable icon file names.
+
 2013-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [hosts], report [ports])

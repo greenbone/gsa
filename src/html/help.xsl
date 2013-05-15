@@ -65,10 +65,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Enable / Disable <xsl:value-of select="$type"/></h4>
       <p>
       Pressing the enable icon
-      <img src="/img/start.png" alt="Enable {$type}" title="Enable {$type}" />
+      <img src="/img/enable.png" alt="Enable {$type}" title="Enable {$type}" />
       will set the activity status of the <xsl:value-of select="$type"/> to active
       while pressing the disable button
-      <img src="/img/stop.png" alt="Disable {$type}" title="Disable {$type}" />
+      <img src="/img/disable.png" alt="Disable {$type}" title="Disable {$type}" />
       will set it to inactive.
       </p>
     </xsl:when>

@@ -1160,11 +1160,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="tag_id" value="{$id}"/>
       <xsl:choose>
         <xsl:when test="$enable">
-          <input type="image" src="/img/start.png" alt="Enable Tag"
+          <input type="image" src="/img/enable.png" alt="Enable Tag"
                  name="Enable Tag" value="Enable Tag" title="Enable Tag"/>
         </xsl:when>
         <xsl:otherwise>
-          <input type="image" src="/img/stop.png" alt="Disable Tag"
+          <input type="image" src="/img/disable.png" alt="Disable Tag"
                  name="Disable Tag" value="Disable Tag" title="Disable Tag"/>
         </xsl:otherwise>
       </xsl:choose>
