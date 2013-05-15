@@ -20899,11 +20899,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Hosts
-      <xsl:if test="count(report/host) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/host)"/>
-        of
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="count(report/host) &gt; 0">
+          1 -
+        </xsl:when>
+        <xsl:otherwise>
+          0 -
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="count(report/host)"/>
+      of
       <xsl:value-of select="count(report/host)"/>
       (total: <xsl:value-of select="report/hosts/@total"/>)
       <xsl:call-template name="report-help-icon"/>
@@ -21098,11 +21103,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Ports
-      <xsl:if test="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
-        of
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]) &gt; 0">
+          1 -
+        </xsl:when>
+        <xsl:otherwise>
+          0 -
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+      of
       <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
       (total: <xsl:value-of select="report/ports/@total"/>)
 
@@ -21196,11 +21206,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Closed CVEs
-      <xsl:if test="count(report/host/detail[name = 'Closed CVE']) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
-        of
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="count(report/host/detail[name = 'Closed CVE']) &gt; 0">
+          1 -
+        </xsl:when>
+        <xsl:otherwise>
+          0 -
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
+      of
       <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
       (total: <xsl:value-of select="report/closed_cves/@total"/>)
 
