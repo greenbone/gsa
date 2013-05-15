@@ -4255,10 +4255,10 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
  */
 int
 download_agent_omp (credentials_t * credentials,
-               params_t *params,
-               gsize *result_len,
-               char ** html,
-               char ** filename)
+                    params_t *params,
+                    gsize *result_len,
+                    char ** html,
+                    char ** filename)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -4871,37 +4871,39 @@ send_alert_method_data (gnutls_session_t *session, params_t *data,
       /* Used to check email notice type before sending report formats values */
       notice = 1;
       while (params_iterator_next (&iter, &name, &param))
-          if (strcmp (name, "notice") == 0)
-            {
-              notice = atoi (param->value);
-              break;
-            }
+        if (strcmp (name, "notice") == 0)
+          {
+            notice = atoi (param->value);
+            break;
+          }
 
       if (strcmp (method, "Sourcefire Connector"))
         {
           params_iterator_init (&iter, data);
+
           while (params_iterator_next (&iter, &name, &param))
-        if (((strcmp (method, "HTTP Get") == 0
-              && strcmp (name, "URL") == 0)
-             || (strcmp (method, "verinice Connector") == 0
-              && (strcmp (name, "verinice_server_url") == 0
-                  || strcmp (name, "verinice_server_username") == 0
-                  || strcmp (name, "verinice_server_password") == 0))
-             || (strcmp (method, "Email") == 0
-              && (strcmp (name, "to_address") == 0
-                  || strcmp (name, "from_address") == 0
-                  || strcmp (name, "notice") == 0
-                  || (strcmp (name, "notice_report_format") == 0
-                      && notice == 0)
-                  || (strcmp (name, "notice_attach_format") == 0
-                      && notice == 2)))
-             || (strcmp (method, "syslog") == 0
-              && strcmp (name, "submethod") == 0))
-            && openvas_server_sendf_xml (session,
-                                         "<data><name>%s</name>%s</data>",
-                                         name,
-                                         param->value ? param->value : ""))
-             return -1;
+            if (((strcmp (method, "HTTP Get") == 0
+                  && strcmp (name, "URL") == 0)
+                 || (strcmp (method, "verinice Connector") == 0
+                     && (strcmp (name, "verinice_server_url") == 0
+                         || strcmp (name, "verinice_server_username") == 0
+                         || strcmp (name, "verinice_server_password") == 0))
+                 || (strcmp (method, "Email") == 0
+                     && (strcmp (name, "to_address") == 0
+                         || strcmp (name, "from_address") == 0
+                         || strcmp (name, "notice") == 0
+                         || (strcmp (name, "notice_report_format") == 0
+                             && notice == 0)
+                         || (strcmp (name, "notice_attach_format") == 0
+                             && notice == 2)))
+                 || (strcmp (method, "syslog") == 0
+                     && strcmp (name, "submethod") == 0))
+                && openvas_server_sendf_xml (session,
+                                             "<data><name>%s</name>%s</data>",
+                                             name,
+                                             param->value ? param->value : ""))
+              return -1;
+
           return 0;
         }
 

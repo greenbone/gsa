@@ -1,5 +1,10 @@
 2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (dowload_agent_omp, send_alert_method_data): Clean
+	indenting.
+
+2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (next_page): Pass params instead of oid to get_nvts, so
 	that parameter checking is done.
 	(get_nvts): Replace oid param with params param.  Get OID from params
