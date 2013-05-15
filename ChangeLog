@@ -1,3 +1,11 @@
+2013-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow vulns report section.
+
+	* src/html/omp.xsl (report [section-selector]): Add Vulnerabilities
+	section.
+	(get_report_vulns_response, report [vulns]): New templates.
+
 2013-05-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install new disable / enable icons.
@@ -7,7 +15,7 @@
 
 	* src/html/omp.xsl (toggle-tag-icon): Change enable and disable
 	icon file names.
-	
+
 	* src/html/help.xsl (list-window-line-actions):  Change enable and
 	disable icon file names.
 

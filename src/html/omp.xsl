@@ -20701,6 +20701,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="content" select="'Report: Summary'"/>
           </xsl:call-template>
         </xsl:if>
+        <xsl:if test="$current != 'vulns'">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'vulns'"/>
+            <xsl:with-param name="content" select="'Report: Vulnerabilities'"/>
+          </xsl:call-template>
+        </xsl:if>
         <xsl:if test="$current != 'hosts'">
           <xsl:call-template name="opt">
             <xsl:with-param name="value" select="'hosts'"/>
@@ -21181,6 +21187,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
               </td>
             </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_report_vulns_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="vulns"/>
+</xsl:template>
+
+<xsl:key name="kVulnsHosts" match="report/results/result" use="host"/>
+<xsl:key name="kReportVulns" match="report/results/result" use="nvt/@oid"/>
+<xsl:template match="report" mode="vulns">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report: Vulnerabilities
+      <xsl:if test="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])">
+        1 -
+        <xsl:value-of select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
+        of
+      </xsl:if>
+      <xsl:value-of select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
+      (total: <xsl:value-of select="report/vulns/@total"/>)
+
+      <xsl:call-template name="report-help-icon"/>
+      <xsl:apply-templates select="report" name="section-selector">
+        <xsl:with-param name="current" select="'vulns'"/>
+      </xsl:apply-templates>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'vulns'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+          <col/>
+          <col/>
+          <col/>
+          <col width="100px"/>
+        <tr class="gbntablehead2">
+          <td>Vulnerabilities</td>
+          <td>Occurences</td>
+          <td>Hosts</td>
+          <td>Severity</td>
+        </tr>
+
+        <xsl:for-each select="report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))]">
+          <xsl:variable name="oid" select="nvt/@oid"/>
+          <xsl:variable name="host" select="host"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:call-template name="get_info_nvt_lnk">
+                <xsl:with-param name="nvt" select="nvt/name"/>
+                <xsl:with-param name="oid" select="$oid"/>
+              </xsl:call-template>
+            </td>
+            <td><xsl:value-of select="count(../result[nvt/@oid = $oid])"/></td>
+            <td>
+              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('kVulnsHosts', host))]) + 1"/>
+            </td>
+            <td>
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+                <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+              </xsl:call-template>
+            </td>
+          </tr>
         </xsl:for-each>
       </table>
     </div>
