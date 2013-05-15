@@ -129,7 +129,7 @@ static char *get_notes (credentials_t *, params_t *, const char *);
 
 static char *get_note (credentials_t *, params_t *, const char *, const char *);
 
-static char *get_nvts (credentials_t *credentials, const char *oid,
+static char *get_nvts (credentials_t *credentials, params_t *,
                        const char *commands);
 
 static char *get_overrides (credentials_t *, params_t *, const char *);
@@ -608,7 +608,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_notes (credentials, params, response);
 
   if (strcmp (next, "get_nvts") == 0)
-    return get_nvts (credentials, params_value(params, "oid"), NULL);
+    return get_nvts (credentials, params, NULL);
 
   if (strcmp (next, "get_override") == 0)
     return get_override (credentials, params, NULL, response);
@@ -2902,19 +2902,27 @@ start_task_omp (credentials_t * credentials, params_t *params)
  * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  oid          OID of NVT.
+ * @param[in]  params            Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
  *
  * @return XSL transformed NVT details response or error message.
  */
 static char*
-get_nvts (credentials_t *credentials, const char *oid,
-          const char *commands)
+get_nvts (credentials_t *credentials, params_t *params, const char *commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *oid;
+
+  oid = params_value (params, "oid");
+  if (oid == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting an NVT. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3107,17 +3115,7 @@ get_info_omp (credentials_t * credentials, params_t *params)
 char*
 get_nvts_omp (credentials_t *credentials, params_t *params)
 {
-  const char *oid;
-
-  oid = params_value (params, "oid");
-  if (oid == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an NVT. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  return get_nvts (credentials, oid, NULL);
+  return get_nvts (credentials, params, NULL);
 }
 
 /**

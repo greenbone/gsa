@@ -1,5 +1,13 @@
 2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (next_page): Pass params instead of oid to get_nvts, so
+	that parameter checking is done.
+	(get_nvts): Replace oid param with params param.  Get OID from params
+	and check that it.
+	(get_nvts_omp): Remove OID check and update call.
+
+2013-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (REQUIRE): Remove.  Out of use.
 	(get_report_section): Add default for report_section, in case user
 	crafts URL by hand.  Inline REQUIRE, as it is only used here.
