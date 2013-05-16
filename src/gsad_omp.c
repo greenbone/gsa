@@ -8509,6 +8509,14 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
   config_id = params_value (params, "config_id");
   family = params_value (params, "family");
 
+  if ((config_id == NULL) || (family == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving getting config family. "
+                         "The config has not been saved. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_configs");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -8522,6 +8530,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a config. "
                              "The current list of configs is not available. "
+                             "The config has not been saved. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_configs");
     }
