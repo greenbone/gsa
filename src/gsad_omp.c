@@ -16454,7 +16454,6 @@ export_roles_omp (credentials_t * credentials, params_t *params,
 char *
 get_feed_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In get_feed_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16509,8 +16508,6 @@ get_feed_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("get_feed_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
@@ -16525,7 +16522,6 @@ get_feed_omp (credentials_t * credentials, params_t *params)
 char *
 get_scap_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In get_scap_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16580,8 +16576,6 @@ get_scap_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("get_scap_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
@@ -16596,7 +16590,6 @@ get_scap_omp (credentials_t * credentials, params_t *params)
 char *
 get_cert_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In get_cert_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16651,8 +16644,6 @@ get_cert_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("get_cert_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
@@ -16667,7 +16658,6 @@ get_cert_omp (credentials_t * credentials, params_t *params)
 char *
 sync_feed_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In sync_feed_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16723,8 +16713,6 @@ sync_feed_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("sync_feed_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
@@ -16739,7 +16727,6 @@ sync_feed_omp (credentials_t * credentials, params_t *params)
 char *
 sync_scap_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In sync_scap_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16795,8 +16782,6 @@ sync_scap_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("sync_scap_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
@@ -16811,7 +16796,6 @@ sync_scap_omp (credentials_t * credentials, params_t *params)
 char *
 sync_cert_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In sync_cert_omp\n");
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
@@ -16867,8 +16851,6 @@ sync_cert_omp (credentials_t * credentials, params_t *params)
     }
 
   openvas_server_close (socket, session);
-  tracef ("sync_cert_omp: got text: %s", text);
-  fflush (stderr);
   return xsl_transform_omp (credentials, text);
 }
 
