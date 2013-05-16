@@ -838,7 +838,7 @@ init_validator ()
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_section",
                                     "^(summary|results|hosts|ports"
-                                    "|closed_cves|vulns)$");
+                                    "|closed_cves|vulns|os)$");
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");

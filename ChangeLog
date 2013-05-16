@@ -1,3 +1,11 @@
+2013-05-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow Operating Systems report section.
+
+	* src/html/omp.xsl (report [section-selector]): Add OS section.
+	(report [vulns]): Fix column name.
+	(get_report_os_response, report [os]): New templates.
+
 2013-05-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/disable.png, src/html/img/enable.png: Updated.

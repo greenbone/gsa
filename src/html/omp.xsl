@@ -20719,6 +20719,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="content" select="'Report: Ports'"/>
           </xsl:call-template>
         </xsl:if>
+        <xsl:if test="$current != 'os'">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'os'"/>
+            <xsl:with-param name="content" select="'Report: Operating Systems'"/>
+          </xsl:call-template>
+        </xsl:if>
         <xsl:if test="$current != 'closed_cves'">
           <xsl:call-template name="opt">
             <xsl:with-param name="value" select="'closed_cves'"/>
@@ -21232,7 +21238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <col/>
           <col width="100px"/>
         <tr class="gbntablehead2">
-          <td>Vulnerabilities</td>
+          <td>Vulnerability</td>
           <td>Occurences</td>
           <td>Hosts</td>
           <td>Severity</td>
@@ -21260,6 +21266,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:for-each>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_report_os_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="os"/>
+</xsl:template>
+
+<xsl:key name="kReportOs" match="report/host/detail" use="concat(name, value)"/>
+<xsl:template match="report" mode="os">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report: Operating Systems
+      <xsl:if test="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])">
+        1 -
+        <xsl:value-of select="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+        of
+      </xsl:if>
+      <xsl:value-of select="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+      (total: <xsl:value-of select="report/os/@total"/>)
+
+      <xsl:call-template name="report-help-icon"/>
+      <xsl:apply-templates select="report" name="section-selector">
+        <xsl:with-param name="current" select="'os'"/>
+      </xsl:apply-templates>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'os'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+          <col/>
+          <col/>
+          <col/>
+          <col width="100px"/>
+        <tr class="gbntablehead2">
+          <td>Operating System</td>
+          <td>Icon</td>
+          <td>Hosts</td>
+          <td>Severity</td>
+        </tr>
+
+        <xsl:for-each select="report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
+          <xsl:variable name="host" select="parent::node()"/>
+          <xsl:variable name="name" select="name"/>
+          <xsl:variable name="value" select="value"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:value-of select="value"/>
+            </td>
+            <td>
+              <xsl:call-template name="os-icon">
+                <xsl:with-param name="host" select="$host"/>
+                <xsl:with-param name="current_host" select="$host/ip"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
+            </td>
+            <td>
+            </td>
+          </tr>
+        </xsl:for-each>
+
       </table>
     </div>
   </div>
