@@ -6575,21 +6575,17 @@ create_tag_omp (credentials_t *credentials, params_t *params)
   entity_t entity;
 
   name = params_value (params, "tag_name");
-  CHECK (name)
-
   comment = params_value (params, "comment");
-  CHECK (comment)
-
   value = params_value (params, "tag_value");
-  CHECK (value)
-
   attach_type = params_value (params, "attach_type");
-  CHECK (attach_type)
-
   attach_id = params_value (params, "attach_id");
-  CHECK (attach_id)
-
   active = params_value (params, "active");
+
+  CHECK (name)
+  CHECK (comment)
+  CHECK (value)
+  CHECK (attach_type)
+  CHECK (attach_id)
   CHECK (active)
 
   response = NULL;
@@ -6825,18 +6821,19 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   char* ret;
 
   tag_id = params_value (params, "tag_id");
-  CHECK (tag_id)
   name = params_value (params, "tag_name");
-  CHECK (name)
   comment = params_value (params, "comment");
-  CHECK (comment)
   value = params_value (params, "tag_value");
-  CHECK (value)
   attach_type = params_value (params, "attach_type");
-  CHECK (attach_type)
   attach_id = params_value (params, "attach_id");
-  CHECK (attach_id)
   active = params_value (params, "active");
+
+  CHECK (tag_id)
+  CHECK (name)
+  CHECK (comment)
+  CHECK (value)
+  CHECK (attach_type)
+  CHECK (attach_id)
   CHECK (active)
 
   switch (manager_connect (credentials, &socket, &session, &html))
