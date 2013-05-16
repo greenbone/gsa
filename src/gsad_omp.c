@@ -4036,21 +4036,21 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                              "An internal error occurred while saving a Credential. "
                              "The Credential was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_credentials");
+                             "/omp?cmd=get_lsc_credentials");
       case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_credentials");
+                             "/omp?cmd=get_lsc_credentials");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_credentials");
+                             "/omp?cmd=get_lsc_credentials");
     }
 
   if (omp_success (entity))

@@ -1,5 +1,9 @@
 2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_lsc_credential_omp): Correct cmd in backurls.
+
+2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_target_omp): Call next_page instead of calling
 	handlers manually.
 
