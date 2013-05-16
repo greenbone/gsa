@@ -1,5 +1,12 @@
 2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_port_range_omp, save_port_list)
+	(save_user_omp): Add default next page in case the user crafts the URL
+	by hand.
+	(save_filter_omp): Call next_page instead of calling handlers manually.
+
+2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_slave_omp, save_report_format_omp)
 	(save_group_omp): Add default next page in case the user crafts the URL
 	by hand.

@@ -16013,16 +16013,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a Port Range. "
-                               "The Port Range was, however, created. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_port_lists");
-        }
+        html = get_port_lists (credentials, params, response);
     }
   else
     html = edit_port_list (credentials, params, response);
@@ -16188,18 +16179,16 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *port_list_id, *name, *comment, *next;
+  const char *port_list_id, *name, *comment;
   entity_t entity;
 
   port_list_id = params_value (params, "port_list_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  next = params_value (params, "next");
 
   CHECK (port_list_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
 
   /* Modify the Port List. */
 
@@ -16248,16 +16237,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a Port List. "
-                               "The Port List was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_port_lists");
-        }
+        html = get_port_lists (credentials, params, response);
     }
   else
     html = edit_port_list (credentials, params, response);
@@ -17344,7 +17324,7 @@ save_filter_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *filter_id, *name, *comment, *next, *term, *type;
+  const char *filter_id, *name, *comment, *term, *type;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -17366,14 +17346,12 @@ save_filter_omp (credentials_t * credentials, params_t *params)
   filter_id = params_value (params, "filter_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  next = params_value (params, "next");
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
   CHECK (filter_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
   CHECK (term);
   CHECK (type);
 
@@ -17451,28 +17429,11 @@ save_filter_omp (credentials_t * credentials, params_t *params)
 
   /* Pass response to handler of following page. */
 
-  if (strcmp (params_value (params, "next"), "get_filters") == 0)
-    {
-      html = get_filters (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-
-  if (strcmp (params_value (params, "next"), "get_filter") == 0)
-    {
-      html = get_filter (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_filters (credentials, params, response);
   g_free (response);
-
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a filter. "
-                       "The filter was, however, modified. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_filters");
+  return html;
 }
 
 #undef CHECK
@@ -18529,16 +18490,7 @@ save_user_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a user. "
-                               "The user was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_users");
-        }
+        html = get_users (credentials, params, response);
     }
   else
     html = edit_user (credentials, params, response);
