@@ -21245,6 +21245,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
 
         <xsl:for-each select="report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))]">
+          <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
+
           <xsl:variable name="oid" select="nvt/@oid"/>
           <xsl:variable name="host" select="host"/>
           <tr class="{gsa:table-row-class(position())}">
@@ -21254,7 +21256,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="oid" select="$oid"/>
               </xsl:call-template>
             </td>
-            <td><xsl:value-of select="count(../result[nvt/@oid = $oid])"/></td>
+            <td>
+              <xsl:variable name="filter" select="../../../report/filters/term"/>
+              <a href="/omp?cmd=get_report_section&amp;report_id={../../../report/@id}&amp;report_section=results&amp;filter==&#34;{nvt/@oid}&#34; {$filter}&amp;token={/envelope/token}"
+                 title="Report: Results ({nvt/name})">
+                 <xsl:value-of select="count(../result[nvt/@oid = $oid])"/>
+              </a>
+            </td>
             <td>
               <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('kVulnsHosts', host))]) + 1"/>
             </td>
