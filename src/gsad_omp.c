@@ -12616,13 +12616,12 @@ save_slave_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *slave_id, *name, *comment, *next, *host, *port, *login, *password;
+  const char *slave_id, *name, *comment, *host, *port, *login, *password;
   entity_t entity;
 
   slave_id = params_value (params, "slave_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  next = params_value (params, "next");
   host = params_value (params, "host");
   port = params_value (params, "port");
   login = params_value (params, "login");
@@ -12631,7 +12630,6 @@ save_slave_omp (credentials_t * credentials, params_t *params)
   CHECK (slave_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
   CHECK (host);
   CHECK (port);
   CHECK (login);
@@ -12692,16 +12690,7 @@ save_slave_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a slave. "
-                               "The slave was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_slaves");
-        }
+        html = get_slaves (credentials, params, response);
     }
   else
     html = edit_slave (credentials, params, response);
@@ -13553,19 +13542,17 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
   int ret;
   gchar *html, *response;
   params_t *preferences;
-  const char *report_format_id, *name, *summary, *next, *enable;
+  const char *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
   report_format_id = params_value (params, "report_format_id");
   name = params_value (params, "name");
   summary = params_value (params, "summary");
-  next = params_value (params, "next");
   enable = params_value (params, "enable");
 
   CHECK (report_format_id);
   CHECK (name);
   CHECK (summary);
-  CHECK (next);
   CHECK (enable);
 
   /* Modify the Report Format. */
@@ -13694,16 +13681,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a Report Format. "
-                               "The Report Format was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_report_formats");
-        }
+        html = get_report_formats (credentials, params, response);
     }
   else
     html = edit_report_format (credentials, params, response);
@@ -15595,19 +15573,17 @@ save_group_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *group_id, *name, *comment, *next, *users;
+  const char *group_id, *name, *comment, *users;
   entity_t entity;
 
   group_id = params_value (params, "group_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
-  next = params_value (params, "next");
 
   CHECK (group_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
   CHECK (users);
 
   /* Modify the Group. */
@@ -15659,16 +15635,7 @@ save_group_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a group. "
-                               "The group was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_groups");
-        }
+        html = get_groups (credentials, params, response);
     }
   else
     html = edit_group (credentials, params, response);
