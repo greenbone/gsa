@@ -5298,13 +5298,16 @@ edit_alert (credentials_t * credentials, params_t *params,
   next = params_value (params, "next");
   filter = params_value (params, "filter");
 
-  if (alert_id == NULL || next == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a alert. "
                          "The alert remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_alerts");
+
+  if (next == NULL)
+    next = "get_alerts";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5461,11 +5464,13 @@ save_alert_omp (credentials_t * credentials, params_t *params)
 
   CHECK (name);
   CHECK (alert_id);
-  CHECK (next);
   CHECK (condition);
   CHECK (event);
   CHECK (method);
   CHECK (filter_id);
+
+  if (next == NULL)
+    next = "get_alerts";
 
   /* Modify the alert. */
 
@@ -6077,16 +6082,14 @@ clone_omp (credentials_t *credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *id, *type, *next;
+  const char *id, *type;
   entity_t entity;
 
   id = params_value (params, "id");
   type = params_value (params, "resource_type");
-  next = params_value (params, "next");
 
   CHECK (id);
   CHECK (type);
-  CHECK (next);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6142,6 +6145,13 @@ clone_omp (credentials_t *credentials, params_t *params)
 
   /* Cleanup, and return next page. */
 
+  if (params_given (params, "next") == 0)
+    {
+      gchar *next;
+      next = g_strdup_printf ("get_%ss", type);
+      params_add (params, "next", next);
+      g_free (next);
+    }
   html = next_page (credentials, params, response);
   g_free (response);
   if (html == NULL)
