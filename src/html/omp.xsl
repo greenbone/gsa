@@ -3964,6 +3964,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:report-host-has-os">
+  <xsl:param name="report"/>
+  <xsl:param name="ip"/>
+  <xsl:param name="os"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$report/host[ip = $ip and detail/name = 'best_os_txt' and detail/value = $os]">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
 <xsl:template match="task" mode="trash">
 
   <tr class="{gsa:table-row-class(position())}">
@@ -21341,6 +21353,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
             </td>
             <td>
+              <xsl:apply-templates select="../../../report" mode="os-severity">
+                <xsl:with-param name="os" select="value"/>
+              </xsl:apply-templates>
             </td>
           </tr>
         </xsl:for-each>
@@ -21348,6 +21363,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="report" mode="os-severity">
+  <xsl:param name="os"/>
+  <xsl:variable name="report" select="."/>
+  <xsl:for-each select="results/result[gsa:report-host-has-os($report, host, $os) = 1]">
+    <xsl:sort select="nvt/cvss_base" data-type="number" order="descending"/>
+    <xsl:if test="position() = 1">
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template name="report-help-icon">

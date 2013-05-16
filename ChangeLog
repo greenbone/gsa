@@ -48,6 +48,12 @@
 
 2013-05-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (gsa:report-host-has-os): New function.
+	(report [os]): Add OS Severity bar.
+	(report [os-severity]): New template.
+
+2013-05-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [vulns]): Sort vulnerabilities by threat
 	descendingly and link number of vulnerability occurences to their
 	matching results.
