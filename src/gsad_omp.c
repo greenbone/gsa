@@ -7507,28 +7507,11 @@ save_target_omp (credentials_t * credentials, params_t *params)
 
   /* Pass response to handler of following page. */
 
-  if (strcmp (next, "get_targets") == 0)
-    {
-      html = get_targets (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-
-  if (strcmp (next, "get_target") == 0)
-    {
-      html = get_target (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_targets (credentials, params, response);
   g_free (response);
-
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a target. "
-                       "The target remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_targets");
+  return html;
 }
 
 #undef CHECK

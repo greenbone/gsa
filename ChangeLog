@@ -1,5 +1,10 @@
 2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_target_omp): Call next_page instead of calling
+	handlers manually.
+
+2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_task_omp, save_lsc_credential_omp)
 	(save_agent_omp, toggle_tag_omp): Replace error message with default next
 	page, in case the user crafts the URL by hand.
