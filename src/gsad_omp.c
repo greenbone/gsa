@@ -2626,16 +2626,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a task. "
-                               "The task was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_tasks");
-        }
+        html = get_tasks (credentials, params, response);
     }
   else
     html = edit_task (credentials, params, response);
@@ -3959,7 +3950,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   int ret, change_password;
   gchar *html, *response;
-  const char *lsc_credential_id, *name, *comment, *login, *next, *password;
+  const char *lsc_credential_id, *name, *comment, *login, *password;
   entity_t entity;
 
   lsc_credential_id = params_value (params, "lsc_credential_id");
@@ -3967,12 +3958,10 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
   password = params_value (params, "password");
-  next = params_value (params, "next");
 
   CHECK (lsc_credential_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
   change_password = (params_value (params, "enable") ? 1 : 0);
   if (change_password)
     CHECK (password);
@@ -4068,16 +4057,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a Credential. "
-                               "The Credential was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_credentials");
-        }
+        html = get_lsc_credentials (credentials, params, response);
     }
   else
     html = edit_lsc_credential (credentials, params, response);
@@ -4522,18 +4502,16 @@ save_agent_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *agent_id, *name, *comment, *next;
+  const char *agent_id, *name, *comment;
   entity_t entity;
 
   agent_id = params_value (params, "agent_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  next = params_value (params, "next");
 
   CHECK (agent_id);
   CHECK (name);
   CHECK (comment);
-  CHECK (next);
 
   /* Modify the agent. */
 
@@ -4582,16 +4560,7 @@ save_agent_omp (credentials_t * credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a agent. "
-                               "The agent was, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_agents");
-        }
+        html = get_agents (credentials, params, response);
     }
   else
     html = edit_agent (credentials, params, response);
@@ -7120,18 +7089,10 @@ toggle_tag_omp (credentials_t * credentials, params_t *params)
 
   /* Cleanup, and return transformed XML. */
 
-  if (params_given (params, "next") == 0)
-    {
-      params_add (params, "next", "get_tags");
-    }
   html = next_page (credentials, params, response);
-  g_free (response);
   if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while modifying a tag. "
-                         "Diagnostics: Error in parameter next.",
-                         "/omp?cmd=get_tasks");
+    html = get_tags (credentials, params, response);
+  g_free (response);
   return html;
 }
 
@@ -18711,16 +18672,7 @@ save_auth_omp (credentials_t* credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving the auth settings. "
-                               "The settings were, however, saved. "
-                               "Diagnostics: Error in parameter next.",
-                               "/omp?cmd=get_users");
-        }
+        html = get_users (credentials, params, response);
     }
   else
     html = edit_user (credentials, params, response);
