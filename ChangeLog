@@ -1,3 +1,12 @@
+2013-05-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [filterbox]): Fix Overrides checkbox check.
+	(gsa:report-host-has-os): Check by cpe instead of txt.
+	(os-icon): Add img-style and os-name parameters.
+	(report [os]): Remove Icon column. Add icon in first column.
+	Fix number of Occurences count for hosts with similar details but
+	different best os. Print threat in severity bar.
+
 2013-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_feed_omp, get_scap_omp, get_cert_omp)

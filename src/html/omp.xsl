@@ -1887,20 +1887,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
 
         <div style="padding: 2px;">
-          <xsl:choose>
-            <xsl:when test="report/filters/apply_overrides = 0">
-              <label>
+          <label>
+            <xsl:choose>
+              <xsl:when test="report/filters/overrides = 0">
                 <input type="checkbox" name="overrides" value="1"/>
-                Show Overrides
-              </label>
-            </xsl:when>
-            <xsl:otherwise>
-              <label>
+              </xsl:when>
+              <xsl:otherwise>
                 <input type="checkbox" name="overrides" value="1" checked="1"/>
-                Show Overrides
-              </label>
-            </xsl:otherwise>
-          </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+            Show Overrides
+          </label>
         </div>
 
         <div style="padding: 2px;">
@@ -3970,7 +3967,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="os"/>
   <func:result>
     <xsl:choose>
-      <xsl:when test="$report/host[ip = $ip and detail/name = 'best_os_txt' and detail/value = $os]">1</xsl:when>
+      <xsl:when test="$report/host[ip = $ip and detail/name = 'best_os_cpe' and detail/value = $os]">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </func:result>
@@ -20438,12 +20435,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="os-icon">
   <xsl:param name="host"/>
   <xsl:param name="current_host"/>
+  <xsl:param name="img-style"/>
+  <xsl:param name="os-name"/>
   <!-- Check for detected operating system(s) -->
   <xsl:variable name="best_os_cpe" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
   <xsl:variable name="best_os_txt" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
   <xsl:choose>
     <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-      <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
+      <img style="{$img-style}" src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
+      <xsl:if test="$os-name">
+        <xsl:value-of select="$best_os_txt"/>
+      </xsl:if>
     </xsl:when>
     <xsl:when test="not($best_os_cpe)">
       <!-- nothing detected or matched by our CPE database -->
@@ -20457,7 +20459,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+      <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+      <xsl:if test="$os-name">
+        <xsl:value-of select="$best_os_txt"/>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
       <!-- One system detected: display the corresponding icon and name from our database -->
@@ -20467,10 +20472,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:variable>
       <xsl:choose>
         <xsl:when test="$os_icon">
-            <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+          <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+          <xsl:if test="$os-name">
+            <xsl:value-of select="$img_desc"/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+          <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+          <xsl:if test="$os-name">
+            <xsl:value-of select="$img_desc"/>
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
@@ -21305,12 +21316,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Operating Systems
-      <xsl:if test="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])">
+      <xsl:if test="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])">
         1 -
-        <xsl:value-of select="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+        <xsl:value-of select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
         of
       </xsl:if>
-      <xsl:value-of select="count(report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+      <xsl:value-of select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
       (total: <xsl:value-of select="report/os/@total"/>)
 
       <xsl:call-template name="report-help-icon"/>
@@ -21326,31 +21337,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
-          <col/>
           <col width="100px"/>
         <tr class="gbntablehead2">
           <td>Operating System</td>
-          <td>Icon</td>
           <td>Hosts</td>
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/host/detail[name = 'best_os_txt' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
+        <xsl:for-each select="report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
           <xsl:variable name="host" select="parent::node()"/>
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="value" select="value"/>
           <tr class="{gsa:table-row-class(position())}">
             <td>
-              <xsl:value-of select="value"/>
-            </td>
-            <td>
               <xsl:call-template name="os-icon">
                 <xsl:with-param name="host" select="$host"/>
                 <xsl:with-param name="current_host" select="$host/ip"/>
+                <xsl:with-param name="img-style" select="'margin-right:2px; vertical-align: text-top;'"/>
+                <xsl:with-param name="os-name" select="1"/>
               </xsl:call-template>
             </td>
             <td>
-              <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
+              <xsl:value-of select="count(../../host/detail[name = $name and value = $value])"/>
             </td>
             <td>
               <xsl:apply-templates select="../../../report" mode="os-severity">
@@ -21373,6 +21381,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="position() = 1">
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+        <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:for-each>
