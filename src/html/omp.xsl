@@ -3973,6 +3973,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:host-has-unknown-os">
+  <xsl:param name="report"/>
+  <xsl:param name="ip"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$report/host[ip = $ip and ((detail/name = 'best_os_cpe') = 0)]">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
 <xsl:template match="task" mode="trash">
 
   <tr class="{gsa:table-row-class(position())}">
@@ -21314,15 +21325,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
+
+    <xsl:variable name="unknown_count"
+                  select="count(report/host[(detail/name = 'best_os_cpe') = 0])"/>
+    <xsl:variable name="known_count"
+                  select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+
+    <xsl:variable name="unknown">
+      <xsl:choose>
+        <xsl:when test="$unknown_count &gt; 0">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <div class="gb_window_part_center">
+
       Report: Operating Systems
-      <xsl:if test="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])">
+      <xsl:if test="$known_count + $unknown &gt; 0">
         1 -
-        <xsl:value-of select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+        <xsl:value-of select="$known_count + $unknown"/>
         of
       </xsl:if>
-      <xsl:value-of select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
-      (total: <xsl:value-of select="report/os/@total"/>)
+      <xsl:value-of select="$known_count + $unknown"/>
+
+      (total: <xsl:value-of select="report/os/@total + $unknown"/>)
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21367,6 +21393,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:for-each>
+        <!-- "Unknown" OS if there are any hosts with no OS detected. -->
+        <xsl:if test="$unknown_count">
+          <tr class="{gsa:table-row-class($known_count + 1)}">
+            <td>
+              <img style="margin-left: 2px;" src="/img/os_unknown.png" alt="Unknown" title="Unknown"/>
+              Unknown
+            </td>
+            <td>
+              <xsl:value-of select="$unknown_count"/>
+            </td>
+            <td>
+              <xsl:apply-templates select="report" mode="unknown-os-severity"/>
+            </td>
+          </tr>
+        </xsl:if>
 
       </table>
     </div>
@@ -21385,6 +21426,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:if>
   </xsl:for-each>
+  <xsl:if test="count(results/result[gsa:report-host-has-os($report, host, $os) = 1]) = 0">
+    <xsl:call-template name="severity-bar">
+      <xsl:with-param name="cvss" select="0.0"/>
+      <xsl:with-param name="extra_text" select="'(None)'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="report" mode="unknown-os-severity">
+  <xsl:variable name="report" select="."/>
+  <xsl:for-each select="results/result[gsa:host-has-unknown-os($report, host) = 1]">
+    <xsl:sort select="nvt/cvss_base" data-type="number" order="descending"/>
+    <xsl:if test="position() = 1">
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+        <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:for-each>
+  <xsl:if test="count(results/result[gsa:host-has-unknown-os($report, host) = 1]) = 0">
+    <xsl:call-template name="severity-bar">
+      <xsl:with-param name="cvss" select="0.0"/>
+      <xsl:with-param name="extra_text" select="'(None)'"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="report-help-icon">
