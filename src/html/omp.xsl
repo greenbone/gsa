@@ -20859,6 +20859,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="report-section-pager">
+  <xsl:param name="current"/>
+  <xsl:param name="total"/>
+  <xsl:param name="title"/>
+
+  <xsl:value-of select="concat($title, ' ')"/>
+  <xsl:if test="$current &gt; 0">
+    <xsl:value-of select="concat('1 - ', $current, ' of ')"/>
+  </xsl:if>
+  <xsl:value-of select="$current"/>
+  (total: <xsl:value-of select="$total"/>)
+</xsl:template>
+
 <xsl:template name="host-distance">
   <xsl:param name="host"/>
   <xsl:choose>
@@ -20953,14 +20966,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Hosts
-      <xsl:if test="count(report/host) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/host)"/>
-        of
-      </xsl:if>
-      <xsl:value-of select="count(report/host)"/>
-      (total: <xsl:value-of select="report/hosts/@total"/>)
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host)"/>
+        <xsl:with-param name="total" select="report/hosts/@total"/>
+        <xsl:with-param name="title" select="'Report: Hosts'"/>
+      </xsl:call-template>
+
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
         <xsl:with-param name="current" select="'hosts'"/>
@@ -21152,14 +21163,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Ports
-      <xsl:if test="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
-        of
-      </xsl:if>
-      <xsl:value-of select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
-      (total: <xsl:value-of select="report/ports/@total"/>)
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+        <xsl:with-param name="total" select="report/ports/@total"/>
+        <xsl:with-param name="title" select="'Report: Ports'"/>
+      </xsl:call-template>
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21247,14 +21255,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Vulnerabilities
-      <xsl:if test="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])">
-        1 -
-        <xsl:value-of select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
-        of
-      </xsl:if>
-      <xsl:value-of select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
-      (total: <xsl:value-of select="report/vulns/@total"/>)
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
+        <xsl:with-param name="total" select="report/vulns/@total"/>
+        <xsl:with-param name="title" select="'Report: Vulnerabilities'"/>
+      </xsl:call-template>
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
@@ -21321,35 +21326,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:key name="kReportOs" match="report/host/detail" use="concat(name, value)"/>
 <xsl:template match="report" mode="os">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="report"/>
+  <xsl:variable name="unknown_count"
+                select="count(report/host[(detail/name = 'best_os_cpe') = 0])"/>
+  <xsl:variable name="known_count"
+                select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+  <xsl:variable name="unknown">
+    <xsl:choose>
+      <xsl:when test="$unknown_count &gt; 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-
-    <xsl:variable name="unknown_count"
-                  select="count(report/host[(detail/name = 'best_os_cpe') = 0])"/>
-    <xsl:variable name="known_count"
-                  select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
-
-    <xsl:variable name="unknown">
-      <xsl:choose>
-        <xsl:when test="$unknown_count &gt; 0">1</xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
     <div class="gb_window_part_center">
-
-      Report: Operating Systems
-      <xsl:if test="$known_count + $unknown &gt; 0">
-        1 -
-        <xsl:value-of select="$known_count + $unknown"/>
-        of
-      </xsl:if>
-      <xsl:value-of select="$known_count + $unknown"/>
-
-      (total: <xsl:value-of select="report/os/@total + $unknown"/>)
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="$known_count + $unknown"/>
+        <xsl:with-param name="total" select="report/os/@total + $unknown"/>
+        <xsl:with-param name="title" select="'Report: Operating Systems'"/>
+      </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
         <xsl:with-param name="current" select="'os'"/>
@@ -21470,14 +21466,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Report: Closed CVEs
-      <xsl:if test="count(report/host/detail[name = 'Closed CVE']) &gt; 0">
-        1 -
-        <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
-        of
-      </xsl:if>
-      <xsl:value-of select="count(report/host/detail[name = 'Closed CVE'])"/>
-      (total: <xsl:value-of select="report/closed_cves/@total"/>)
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
+        <xsl:with-param name="total" select="report/closed_cves/@total"/>
+        <xsl:with-param name="title" select="'Report: Closed CVEs'"/>
+      </xsl:call-template>
 
       <xsl:call-template name="report-help-icon"/>
       <xsl:apply-templates select="report" name="section-selector">
