@@ -1,4 +1,4 @@
-2013-05-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2013-05-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report-section-pager): New template.
 	(report [hosts], report [ports], report [vulns], report [os])
