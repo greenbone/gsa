@@ -17176,8 +17176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><xsl:value-of select="gsa:capitalise (subject/type)"/>:</td>
           <td>
-            <!-- Param login is for users until we have users with IDs. -->
-            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/*/@id}&amp;login={subject/*/name}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/*/@id}&amp;token={/envelope/token}"
                title="Details">
               <xsl:value-of select="subject/*/name"/>
             </a>
