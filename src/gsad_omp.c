@@ -15683,6 +15683,168 @@ delete_permission_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_permission XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_permission (credentials_t * credentials, params_t *params,
+                 const char *extra_xml)
+{
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+
+  if (command_enabled (credentials, "GET_USERS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_users/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_groups/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (command_enabled (credentials, "GET_ROLES"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_roles/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = edit_resource ("permission", credentials, params, extra->str);
+  g_string_free (extra, TRUE);
+  return html;
+}
+
+/**
+ * @brief Setup edit_permission XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_permission_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_permission (credentials, params, NULL);
+}
+
+/**
  * @brief Export a permission.
  *
  * @param[in]   credentials          Username and password for authentication.
@@ -15722,6 +15884,133 @@ export_permissions_omp (credentials_t * credentials, params_t *params,
   return export_many ("permission", credentials, params, content_type,
                       content_disposition, content_length);
 }
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                             "Given " G_STRINGIFY (name) " was invalid",       \
+                             "Create Permission");                             \
+      html = edit_permission (credentials, params, msg);                       \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a permission, get all permissions, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_permission_omp (credentials_t * credentials, params_t *params)
+{
+  gchar *html, *response;
+  const char *permission_id, *name, *comment, *resource_id, *resource_type;
+  const char *subject_id, *subject_type;
+  entity_t entity;
+  int ret;
+
+  permission_id = params_value (params, "permission_id");
+  name = params_value (params, "permission");
+  comment = params_value (params, "comment");
+  subject_type = params_value (params, "subject_type");
+  resource_id = params_value (params, "id_or_empty");
+  resource_type = params_value (params, "optional_resource_type");
+
+  CHECK (permission_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (resource_id);
+  CHECK (resource_type);
+  CHECK (subject_type);
+
+  if (strcmp (subject_type, "user") == 0)
+    subject_id = params_value (params, "user_id");
+  else if (strcmp (subject_type, "group") == 0)
+    subject_id = params_value (params, "group_id");
+  else if (strcmp (subject_type, "role") == 0)
+    subject_id = params_value (params, "role_id");
+  else
+    {
+      subject_id = NULL;
+      CHECK (subject_id);
+    }
+
+  /* Create the port range. */
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_permission permission_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "<subject id=\"%s\">"
+             "<type>%s</type>"
+             "</subject>"
+             "<resource id=\"%s\">"
+             "<type>%s</type>"
+             "</resource>"
+             "</modify_permission>",
+             permission_id,
+             name,
+             comment,
+             subject_id,
+             subject_type,
+             resource_id,
+             resource_type);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a permission. "
+                             "The permission was not modified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_permissions");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a permission. "
+                             "It is unclear whether the permission has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_permissions");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a permission. "
+                             "It is unclear whether the permission has been modified or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_permissions");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_permissions (credentials, params, response);
+    }
+  else
+    html = edit_permission (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
 
 
 /* Port lists. */

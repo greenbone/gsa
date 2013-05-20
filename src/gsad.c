@@ -573,6 +573,7 @@ init_validator ()
                          "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
+                         "|(edit_permission)"
                          "|(edit_port_list)"
                          "|(edit_report_format)"
                          "|(edit_schedule)"
@@ -710,6 +711,7 @@ init_validator ()
                          "|(save_my_settings)"
                          "|(save_note)"
                          "|(save_override)"
+                         "|(save_permission)"
                          "|(save_port_list)"
                          "|(save_report_format)"
                          "|(save_schedule)"
@@ -791,6 +793,7 @@ init_validator ()
   openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
@@ -842,6 +845,7 @@ init_validator ()
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
+  openvas_validator_add (validator, "permission",       "^(create|delete|get|modify|create_group|create_target)$");
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
@@ -857,6 +861,7 @@ init_validator ()
   openvas_validator_add (validator, "nvt:name",          "(?s)^.*$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "subject_type",  "^(group|role|user)$");
   openvas_validator_add (validator, "summary",    "^.{0,400}$");
   openvas_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
@@ -975,11 +980,14 @@ init_validator ()
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "subject_id",   "id");
+  openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "user_id",      "id");
+  openvas_validator_alias (validator, "user_id_optional", "id_optional");
   openvas_validator_alias (validator, "users",        "observers");
   openvas_validator_alias (validator, "xml",          "boolean");
 
@@ -1724,6 +1732,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   ELSE (save_note)
   ELSE (save_override)
+  ELSE (save_permission)
   ELSE (save_port_list)
   ELSE (save_report_format)
   ELSE (save_schedule)
@@ -1876,6 +1885,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
+  ELSE (edit_permission)
   ELSE (edit_port_list)
   ELSE (edit_report_format)
   ELSE (edit_schedule)

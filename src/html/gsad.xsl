@@ -482,6 +482,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="modify_permission_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Permission'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_port_list_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -792,6 +800,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_lsc_credential/gsad_msg"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="edit_permission/modify_permission_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="edit_user/modify_user_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_agents/commands_response/verify_agent_response"
@@ -937,6 +947,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_permission/delete_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_permission/modify_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_permissions/modify_permission_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_permissions/delete_permission_response"
                              mode="response-indicator"/>

@@ -17146,7 +17146,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Permission'"/>
         <xsl:with-param name="type" select="'permission'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </td>
   </tr>
@@ -17300,6 +17299,184 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Type|resource/type Resource|resource/type Subject&#xa0;Type|subject/type Subject|subject/name'"/>
   </xsl:call-template>
+</xsl:template>
+
+<!--     EDIT_PERMISSION -->
+
+<xsl:template match="modify_permission_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Permission</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-edit-permission-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Permission
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Permission'"/>
+        <xsl:with-param name="type" select="'permission'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_permissions_response/permission/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_permission"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="permission_id"
+               value="{commands_response/get_permissions_response/permission/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <!-- TODO names must come from OMP. -->
+              <select name="permission">
+                <xsl:variable name="name">
+                  <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
+                </xsl:variable>
+                <xsl:for-each select="str:split ('create_group|create_target|Delete|Get|Modify', '|')">
+                  <xsl:choose>
+                    <xsl:when test="gsa:lower-case (.) = $name">
+                      <option value="{$name}" selected="1"><xsl:value-of select="."/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_permissions_response/permission/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Subject</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'user'">
+                    <input type="radio" name="subject_type" value="user" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="user"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                User
+              </label>
+              <xsl:variable name="user_id"
+                            select="commands_response/get_permissions_response/permission/subject/user/@id"/>
+              <select name="user_id">
+                <xsl:for-each select="get_users_response/user">
+                  <xsl:choose>
+                    <xsl:when test="@id = $user_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'group'">
+                    <input type="radio" name="subject_type" value="group" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="group"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Group
+              </label>
+              <select name="group_id">
+                <xsl:for-each select="get_groups_response/group">
+                  <xsl:choose>
+                    <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/group/@id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Resource Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <xsl:variable name="type">
+                  <xsl:value-of select="commands_response/get_permissions_response/permission/resource/type"/>
+                </xsl:variable>
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Permission|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task', '|')">
+                  <xsl:choose>
+                    <xsl:when test="gsa:lower-case (.) = $type">
+                      <option value="{gsa:lower-case (.)}" selected="1"><xsl:value-of select="."/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Resource ID (optional)</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/*/@id = '0'">
+                  <input type="text" name="id_or_empty"
+                         value=""
+                         size="50"
+                         maxlength="100"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="id_or_empty"
+                         value="{commands_response/get_permissions_response/permission/resource/*/@id}"
+                         size="50"
+                         maxlength="100"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Permission"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_permission">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_permission_response"/>
+  <xsl:call-template name="html-edit-permission-form"/>
 </xsl:template>
 
 <!--     GET_PERMISSIONS -->
