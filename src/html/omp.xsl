@@ -18858,28 +18858,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="gbntablehead2">
               <td rowspan="2">CPE</td>
               <td colspan="4">
+              <div style="float: left; margin-right: 4px;">
                 Prognosis
+              </div>
                 <xsl:variable name="threat"
                               select="detail[name = 'prognosis']/value"/>
-                <xsl:choose>
-                  <xsl:when test="$threat = 'High'">
-                    <img src="/img/high.png" alt="High" title="High"/>
-                  </xsl:when>
-                  <xsl:when test="$threat = 'Medium'">
-                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                  </xsl:when>
-                  <xsl:when test="$threat = 'Low'">
-                    <img src="/img/low.png" alt="Low" title="Low"/>
-                  </xsl:when>
-                  <xsl:when test="$threat = 'Log'">
-                    <img src="/img/log.png" alt="Log" title="Log"/>
-                  </xsl:when>
-                </xsl:choose>
+                <xsl:for-each select="detail[contains(name, '/CVSS')]">
+                  <xsl:sort data-type="number" select="value" order="descending"/>
+                  <xsl:if test="position() = 1">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="value"/>
+                      <xsl:with-param name="extra_text" select="concat (' (', $threat, ')')"/>
+                    </xsl:call-template>
+                  </xsl:if>
+                </xsl:for-each>
               </td>
             </tr>
             <tr class="gbntablehead2">
-              <td style="font-size:10px;">Threat</td>
-              <td style="font-size:10px;width:104px">CVSS</td>
+              <td style="font-size:10px;width:104px">Severity</td>
               <td style="font-size:10px;">CVE</td>
               <td style="font-size:10px;">Threats</td>
             </tr>
@@ -18902,25 +18898,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:variable name="threat"
                                 select="../detail[name = concat ($app, '/threat')]/value"/>
-                  <xsl:choose>
-                    <xsl:when test="$threat = 'High'">
-                      <img src="/img/high.png" alt="High" title="High"/>
-                    </xsl:when>
-                    <xsl:when test="$threat = 'Medium'">
-                      <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                    </xsl:when>
-                    <xsl:when test="$threat = 'Low'">
-                      <img src="/img/low.png" alt="Low" title="Low"/>
-                    </xsl:when>
-                    <xsl:when test="$threat = 'Log'">
-                      <img src="/img/log.png" alt="Log" title="Log"/>
-                    </xsl:when>
-                  </xsl:choose>
-                </td>
-                <td>
                   <xsl:if test="$cvss &gt;= 0.0">
                     <xsl:call-template name="severity-bar">
                       <xsl:with-param name="cvss" select="$cvss"/>
+                      <xsl:with-param name="extra_text" select="concat (' (', $threat, ')')"/>
                     </xsl:call-template>
                   </xsl:if>
                 </td>
