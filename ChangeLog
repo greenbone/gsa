@@ -1,5 +1,9 @@
 2013-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (next_page): Add get_permission.
+
+2013-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (permission [details]): Remove login from subject
 	link, as users have IDs now.
 

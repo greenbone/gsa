@@ -137,6 +137,8 @@ static char *get_overrides (credentials_t *, params_t *, const char *);
 static char *get_override (credentials_t *, params_t *, const char *,
                            const char *);
 
+static char *get_permission (credentials_t *, params_t *, const char *);
+
 static char *get_permissions (credentials_t *, params_t *, const char *);
 
 static char *get_port_list (credentials_t *, params_t *, const char *);
@@ -615,6 +617,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_overrides") == 0)
     return get_overrides (credentials, params, response);
+
+  if (strcmp (next, "get_permission") == 0)
+    return get_permission (credentials, params, response);
 
   if (strcmp (next, "get_permissions") == 0)
     return get_permissions (credentials, params, response);
