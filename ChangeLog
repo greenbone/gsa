@@ -1,3 +1,13 @@
+2013-05-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Make sure gsad is properly linked to libgcrypt.
+
+	* CMakeLists.txt: Add libgcrypt detection and retrieve linker and
+	compiler flags using libgcrypt-config.
+
+	* src/CMakeLists.txt: Use detected flags when compiling and linking
+	the gsad binary.
+
 2013-05-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (host): Merge threat and cvss columns as severity

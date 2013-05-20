@@ -38,7 +38,7 @@ target_link_libraries (gsad_omp "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GL
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base)
+target_link_libraries (gsad gsad_omp gsad_base "${LIBGCRYPT_LDFLAGS}")
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
@@ -88,7 +88,8 @@ add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-                       "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
+  "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS} ${LIBGCRYPT_CFLAGS}")
+
 ## Install
 
 install (TARGETS gsad
