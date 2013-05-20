@@ -21581,8 +21581,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
   <xsl:if test="count(results/result[gsa:report-host-has-os($report, host, $os) = 1]) = 0">
     <xsl:call-template name="severity-bar">
-      <xsl:with-param name="cvss" select="0.0"/>
-      <xsl:with-param name="extra_text" select="'(None)'"/>
+      <xsl:with-param name="extra_text" select="'None'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -21600,8 +21599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
   <xsl:if test="count(results/result[gsa:host-has-unknown-os($report, host) = 1]) = 0">
     <xsl:call-template name="severity-bar">
-      <xsl:with-param name="cvss" select="0.0"/>
-      <xsl:with-param name="extra_text" select="'(None)'"/>
+      <xsl:with-param name="extra_text" select="'None'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>

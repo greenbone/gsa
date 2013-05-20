@@ -1,3 +1,9 @@
+2013-05-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (report [unknown-os-severity], report [os-severity]):
+	Removed CVSS, use just "None". This makes the appearance nicer. Before
+	it is shown as "0(None)".
+
 2013-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (next_page): Add get_permission.
