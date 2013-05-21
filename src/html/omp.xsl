@@ -13805,7 +13805,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <h1>CERT Advisories referencing this CVE</h1>
-              <table class="gbntabl)e" cellspacing="2" cellpadding="4">
+              <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
                   <td>Name</td>
                   <td>Title</td>
@@ -21642,28 +21642,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>CVE</td>
           <td>Host</td>
           <td>NVT</td>
+          <td width="100">NVT Severity</td>
         </tr>
+        <xsl:variable name="report" select="report"/>
         <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>
           <xsl:variable name="host" select="."/>
+          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
           <xsl:variable name="token" select="/envelope/token"/>
           <xsl:for-each select="detail[name = 'Closed CVE']">
-            <tr class="{gsa:table-row-class(position())}">
-              <td>
-                <xsl:call-template name="get_info_cve_lnk">
-                  <xsl:with-param name="cve" select="value"/>
-                  <xsl:with-param name="gsa_token" select="$token"/>
-                </xsl:call-template>
-              </td>
-              <td>
-                <xsl:value-of select="$current_host"/>
-              </td>
-              <td>
-                <a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={$token}">
-                  <xsl:value-of select="source/description"/>
-                </a>
-              </td>
-            </tr>
+            <xsl:variable name="source_name" select="source/name"/>
+            <xsl:variable name="source_desc" select="source/description"/>
+            <xsl:variable name="nvt_cvss" select="extra"/>
+            <xsl:variable name="current_pos" select="position()"/>
+
+            <xsl:for-each select="str:split(value, ', ')">
+              <tr class="{gsa:table-row-class($current_pos + position())}">
+                <td>
+                  <xsl:call-template name="get_info_cve_lnk">
+                    <xsl:with-param name="cve" select="."/>
+                    <xsl:with-param name="gsa_token" select="$token"/>
+                  </xsl:call-template>
+                </td>
+                <td>
+                  <xsl:value-of select="$current_host"/>
+                  <xsl:if test="$hostname">
+                    <xsl:value-of select="concat(' (', $hostname, ')')"/>
+                  </xsl:if>
+                </td>
+                <td>
+                  <a href="omp?cmd=get_nvts&amp;oid={$source_name}&amp;token={$token}">
+                    <xsl:value-of select="$source_desc"/>
+                  </a>
+                </td>
+                <td>
+                  <xsl:variable name="threat" select="gsa:cvss-risk-factor($nvt_cvss)"/>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="$nvt_cvss"/>
+                    <xsl:with-param name="extra_text" select="concat (' (', $threat, ')')"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:for-each>
           </xsl:for-each>
         </xsl:for-each>
       </table>

@@ -1,3 +1,10 @@
+2013-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (cve-details): Fix table class.
+	(report [closed_cves]): Add NVT Severity column. Add hostname to host
+	column when available. Split CVEs provided by the same NVT entry over
+	multiple columns.
+
 2013-05-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* gsad.c (file_content_response): Free result of xsl_transform
