@@ -2637,6 +2637,7 @@ file_content_response (credentials_t *credentials,
                                                 MHD_NO, MHD_YES);
       g_free (path);
       g_free (xml);
+      free (res);
       return response;
     }
 
@@ -3644,6 +3645,7 @@ main (int argc, char **argv)
       g_critical ("%s: %s\n\n", __FUNCTION__, error->message);
       exit (EXIT_FAILURE);
     }
+  g_option_context_free (option_context);
 
   if (print_version)
     {

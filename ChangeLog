@@ -1,3 +1,9 @@
+2013-05-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* gsad.c (file_content_response): Free result of xsl_transform
+	consistently once it is no longer needed.
+	(main): Free GOptionContext after use.
+
 2013-05-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (report [unknown-os-severity], report [os-severity]):
