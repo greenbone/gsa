@@ -16234,7 +16234,7 @@ save_permission_omp (credentials_t * credentials, params_t *params)
       CHECK (subject_id);
     }
 
-  /* Create the port range. */
+  /* Modify the permission. */
 
   response = NULL;
   entity = NULL;

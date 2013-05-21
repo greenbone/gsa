@@ -1,5 +1,9 @@
 2013-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_permission_omp): Correct comment.
+
+2013-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add New Permission page.
 
 	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
