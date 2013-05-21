@@ -20928,6 +20928,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="content" select="'Report: Closed CVEs'"/>
           </xsl:call-template>
         </xsl:if>
+        <xsl:if test="$current != 'errors'">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'errors'"/>
+            <xsl:with-param name="content" select="'Report: Error Messages'"/>
+          </xsl:call-template>
+        </xsl:if>
       </select>
       <input type="image"
              name="Go to Section"
@@ -21804,10 +21810,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </xsl:for-each>
       </table>
-
     </div>
   </div>
+</xsl:template>
 
+<xsl:template match="get_report_errors_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="errors"/>
+</xsl:template>
+
+<xsl:template match="report" mode="errors">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="2"/>
+        <xsl:with-param name="total" select="3"/>
+        <xsl:with-param name="title" select="'Report: Error Messages'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="report-help-icon"/>
+      <xsl:apply-templates select="report" name="section-selector">
+        <xsl:with-param name="current" select="'errors'"/>
+      </xsl:apply-templates>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'errors'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Error Message</td>
+          <td>NVT</td>
+          <td>Host</td>
+          <td>Port</td>
+        </tr>
+        <xsl:for-each select="report/errors/error">
+          <xsl:variable name="host" select="host"/>
+          <xsl:variable name="hostname" select="../../host[ip = $host]/detail[name/text() = 'hostname']/value"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:value-of select="description"/>
+            </td>
+            <td>
+              <a href="omp?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <xsl:value-of select="nvt"/>
+              </a>
+            </td>
+            <td>
+              <xsl:value-of select="$host"/>
+              <xsl:if test="$hostname">
+                <xsl:value-of select="concat(' (', $hostname, ')')"/>
+              </xsl:if>
+            </td>
+            <td>
+              <xsl:value-of select="port"/>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template match="get_report_summary_response">

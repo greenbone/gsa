@@ -1,3 +1,11 @@
+2013-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.c (report [section-selector]): Add Error Messages entry.
+	(get_report_errors_response, report [errors]): New templates.
+
+	* src/gsad.c (init_validator): validate Error Message report_section
+	value.
+
 2013-05-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "apps" to values for report_section.
