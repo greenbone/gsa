@@ -20910,6 +20910,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="content" select="'Report: Ports'"/>
           </xsl:call-template>
         </xsl:if>
+        <xsl:if test="$current != 'apps'">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'apps'"/>
+            <xsl:with-param name="content" select="'Report: Applications'"/>
+          </xsl:call-template>
+        </xsl:if>
         <xsl:if test="$current != 'os'">
           <xsl:call-template name="opt">
             <xsl:with-param name="value" select="'os'"/>
@@ -21602,6 +21608,117 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="extra_text" select="'None'"/>
     </xsl:call-template>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="get_report_apps_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="apps"/>
+</xsl:template>
+
+<xsl:key name="kReportApps" match="report/host/detail" use="concat(name, value)"/>
+<xsl:template match="report" mode="apps">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report: Applications
+      <xsl:if test="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])">
+        1 -
+        <xsl:value-of select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
+        of
+      </xsl:if>
+      <xsl:value-of select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
+      (total: <xsl:value-of select="report/apps/@total"/>)
+
+      <xsl:call-template name="report-help-icon"/>
+      <xsl:apply-templates select="report" name="section-selector">
+        <xsl:with-param name="current" select="'apps'"/>
+      </xsl:apply-templates>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'apps'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+          <col/>
+          <col/>
+          <col/>
+          <col width="100px"/>
+        <tr class="gbntablehead2">
+          <td>Application CPE</td>
+          <td>Hosts</td>
+          <td>Occurences</td>
+          <td>Severity</td>
+        </tr>
+
+        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
+          <xsl:variable name="host" select="parent::node()"/>
+          <xsl:variable name="name" select="name"/>
+          <xsl:variable name="value" select="value"/>
+          <xsl:variable name="inaccurate_hosts" select="count(../../host[detail/name = $name and detail/value = $value and count(detail[name = $value]) = 0])"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:call-template name="get_info_cpe_lnk">
+                <xsl:with-param name="cpe" select="$value"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../host/detail[name = $value]) + $inaccurate_hosts"/>
+              <xsl:if test="$inaccurate_hosts">
+                <abbr title="{$inaccurate_hosts} host(s) without matching CPE detail - number may be inaccurate">*</abbr>
+              </xsl:if>
+            </td>
+            <td>
+              <xsl:apply-templates select="../../../report" mode="app-severity">
+                <xsl:with-param name="app" select="$value"/>
+              </xsl:apply-templates>
+            </td>
+          </tr>
+        </xsl:for-each>
+
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="report" mode="app-severity">
+  <xsl:param name="app"/>
+  <xsl:variable name="report" select="."/>
+  <xsl:variable name="cvss">
+    <xsl:for-each select="$report/results/result[detection/result/details/detail[name='product' and value=$app]]">
+      <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
+      <xsl:if test="position() = 1">
+        <xsl:value-of select="nvt/cvss_base"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:variable name="threat">
+    <xsl:for-each select="$report/results/result[detection/result/details/detail[name='product' and value=$app]]">
+      <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
+      <xsl:if test="position() = 1">
+        <xsl:value-of select="threat"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$cvss!=''">
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="$cvss"/>
+        <xsl:with-param name="extra_text" select="concat(' (', $threat, ')')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="'N/A'"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="report-help-icon">

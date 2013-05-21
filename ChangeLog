@@ -1,3 +1,12 @@
+2013-05-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "apps" to values for report_section.
+
+	* src/html/omp.c (report [section-selector]): Add option for Apps.
+	(get_report_apps_response, report [apps]): New templates for apps
+	detected in a report.
+	(report [app-severity]): New severity bar template for apps.
+
 2013-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (cve-details): Fix table class.
