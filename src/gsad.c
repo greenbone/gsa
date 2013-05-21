@@ -516,6 +516,7 @@ init_validator ()
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
+                         "|(create_permission)"
                          "|(create_port_list)"
                          "|(create_port_range)"
                          "|(create_report)"
@@ -684,6 +685,7 @@ init_validator ()
                          "|(new_lsc_credential)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_permission)"
                          "|(new_port_list)"
                          "|(new_report_format)"
                          "|(new_slave)"
@@ -1648,6 +1650,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_lsc_credential)
+  ELSE (create_permission)
   ELSE (create_port_list)
   ELSE (create_port_range)
   ELSE (create_report)
@@ -2169,6 +2172,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_lsc_credential)
   ELSE (new_note)
   ELSE (new_override)
+  ELSE (new_permission)
   ELSE (new_port_list)
   ELSE (new_report_format)
   ELSE (new_slave)

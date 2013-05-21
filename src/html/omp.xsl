@@ -6267,7 +6267,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:call-template name="wizard-icon"/>
       <xsl:choose>
-        <xsl:when test="$type = 'permission'"/>
         <xsl:when test="$type = 'role'"/>
         <xsl:otherwise>
           <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -17083,6 +17082,123 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- END GROUPS MANAGEMENT -->
 
 <!-- BEGIN PERMISSIONS MANAGEMENT -->
+
+<xsl:template match="create_permission_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Permission</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-create-permission-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      New Permission
+      <a href="/help/new_permission.html?token={/envelope/token}"
+         title="Help: New Permission">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_permissions&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Permissions" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Permissions"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_permission"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <!-- FIX filter?. -->
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <!-- TODO names must come from OMP. -->
+              <select name="permission">
+                <xsl:for-each select="str:split ('create_group|create_target|Delete|Get|Modify', '|')">
+                  <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_permissions_response/permission/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Subject</td>
+            <td>
+              <label>
+                <input type="radio" name="subject_type" value="user" checked="1"/>
+                User
+              </label>
+              <select name="user_id">
+                <xsl:for-each select="get_users_response/user">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+              <br/>
+              <label>
+                <input type="radio" name="subject_type" value="group"/>
+                Group
+              </label>
+              <select name="group_id">
+                <xsl:for-each select="get_groups_response/group">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Resource Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Permission|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task', '|')">
+                  <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Resource ID (optional)</td>
+            <td>
+              <input type="text" name="id_or_empty"
+                     value=""
+                     size="50"
+                     maxlength="100"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Permission"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_permission">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_permission_response"/>
+  <xsl:apply-templates select="commands_response/delete_permission_response"/>
+  <xsl:call-template name="html-create-permission-form"/>
+</xsl:template>
 
 <xsl:template match="delete_permission_response">
   <xsl:call-template name="command_result_dialog">

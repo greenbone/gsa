@@ -1,3 +1,20 @@
+2013-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add New Permission page.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
+	permission creating commands.
+
+	* src/gsad_omp.c (new_permission, new_permission_omp): New functions.
+	(CHECK): New macro.
+	(create_permission_omp): New function.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/omp.xsl (list-window): Enable new icon on Permissions page.
+	(create_permission_response, html-create-permission-form)
+	(new_permission): New templates.
+
 2013-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.c (report [section-selector]): Add Error Messages entry.
