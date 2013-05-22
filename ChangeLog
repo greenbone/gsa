@@ -1,5 +1,17 @@
 2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/gsa-style.css: Add styling for report section list and links.
+
+	* src/html/omp.xsl (report [results], report [hosts], report [ports])
+	(report [vulns], report [os], report [apps], report [vulns])
+	(report [summary], report [errors], report [closed_cves]): Use
+	section-list instead of section-selector.
+	(report [section-selector]): Remove template.
+	(report [section-link], report [section-list]): New templates.
+	(report [apps]): Refactor code to use report-section-pager.
+
+2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [vulns]): Count vuln hosts value based on
 	both host and nvt oid values.
 

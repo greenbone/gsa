@@ -743,3 +743,44 @@ text-align:right;
  border-left: 1px solid #CCCCCC;
  width: 100%;
 }
+
+/* Report section list. */
+
+ul.section_list {
+ margin: 0;
+ padding: 0;
+ list-style: none;
+ z-index: 10;
+}
+
+ul.section_list li {
+ float: left;
+}
+
+li.section_sublist ul {
+ display: none;
+}
+
+ul.section_list li a {
+ display: block;
+ text-decoration: none;
+ color: #ffffff;
+ border-top: 1px solid #ffffff;
+ padding: 5px 15px 5px 15px;
+ background: #3b3b3b;
+ margin-left: 1px;
+ white-space: nowrap;
+}
+
+ul.section_list li.section_sublist a:hover {
+ background: #99CE48;
+}
+
+li:hover ul.section_list {
+ display: block;
+ position: absolute;
+}
+
+li.section_sublist:hover li {
+ float: none;
+}
