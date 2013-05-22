@@ -1,3 +1,8 @@
+2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (create_permission_omp): Remove set but unused
+	users variable.
+
 2013-05-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
