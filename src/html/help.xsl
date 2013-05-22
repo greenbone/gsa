@@ -8275,6 +8275,10 @@ Public License instead of this License.
           <td>The date the advisory was created.</td>
         </tr>
         <tr class="odd">
+          <td>Max CVSS</td>
+          <td>The highest CVSS of any CVE that is referenced by the definition.</td>
+        </tr>
+        <tr>
           <td>CVEs</td>
           <td>The number of CVEs referenced by the advisories</td>
         </tr>

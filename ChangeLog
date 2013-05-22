@@ -1,3 +1,11 @@
+2013-05-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
+	max_cvss column.
+	(dfn_cert_adv-details): Add max_cvss entry.
+
+	* src/html/help.xsl (dfn_cert_advs.html): Add text for max_cvss.
+
 2013-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_permission_omp): Correct comment.

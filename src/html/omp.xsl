@@ -12534,6 +12534,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="max_cvss"/>
+      </xsl:call-template>
+    </td>
+    <td>
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
         title="DFN-CERT Advisory Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -13385,6 +13390,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">cves</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Max CVSS</xsl:with-param>
+                <xsl:with-param name="name">max_cvss</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
               </xsl:call-template>
             </td>
             <td>Actions</td>
@@ -14372,6 +14385,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td valign="top">Advisory&#160;link:</td>
               <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
+            </tr>
+            <tr>
+              <td valign="top">Maximum&#160;CVSS:</td>
+              <td valign="top">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="info/dfn_cert_adv/max_cvss"/>
+                </xsl:call-template>
+              </td>
             </tr>
           </table>
 
