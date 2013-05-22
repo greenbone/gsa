@@ -21552,7 +21552,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="vulns"/>
 </xsl:template>
 
-<xsl:key name="kVulnsHosts" match="report/results/result" use="host"/>
+<xsl:key name="kVulnsHosts" match="report/results/result" use="concat(nvt/@oid, '|', host)"/>
 <xsl:key name="kReportVulns" match="report/results/result" use="nvt/@oid"/>
 <xsl:template match="report" mode="vulns">
   <xsl:apply-templates select="gsad_msg"/>
@@ -21609,7 +21609,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </td>
             <td>
-              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('kVulnsHosts', host))]) + 1"/>
+              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('kVulnsHosts', concat(nvt/@oid, '|' ,host)))]) + 1"/>
             </td>
             <td>
               <xsl:call-template name="severity-bar">

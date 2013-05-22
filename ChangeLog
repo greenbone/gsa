@@ -1,5 +1,10 @@
 2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [vulns]): Count vuln hosts value based on
+	both host and nvt oid values.
+
+2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (create_permission_omp): Remove set but unused
 	users variable.
 
