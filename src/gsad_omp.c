@@ -14733,8 +14733,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text, *status, *max;
-  gchar *text_64, *max_64;
+  const char *text, *status, *max, *severity;
+  gchar *text_64, *max_64, *severity_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
@@ -14942,6 +14942,32 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   g_free (max_64);
+
+  /* Send Severity Class. */
+  severity = params_value (params, "severity_class");
+  severity_64 = (severity
+                 ? g_base64_encode ((guchar*) severity, strlen (severity))
+                 : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            severity_64 ? severity_64 : "")
+      == -1)
+    {
+      g_free (severity_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (severity_64);
 
   if (openvas_server_sendf (&session,
                             "<get_filters/>")

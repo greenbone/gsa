@@ -11,6 +11,17 @@
 
 2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Validate severity_class parameter too.
+
+	* src/gsad_omp.c (save_my_settings_omp): Send severity class value.
+
+	* src/html/omp.xsl (severity-settings-list, severity-settings-name): New
+	templates.
+	(get_my_settings, edit_my_settings): Add row for Severity Class setting.
+	(edit_my_settings): Readjust table rows classes.
+
+2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [hosts], report [ports], report [vulns])
 	(report [os], report [apps], report [closed_cves], report [errors]): Use
 	count element instead of total attribute.
