@@ -1,5 +1,11 @@
 2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [hosts], report [ports], report [vulns])
+	(report [os], report [apps], report [closed_cves], report [errors]): Use
+	count element instead of total attribute.
+
+2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [errors]): Add nvt severity bar.
 
 2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>

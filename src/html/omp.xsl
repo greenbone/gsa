@@ -21277,7 +21277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/host)"/>
-        <xsl:with-param name="total" select="report/hosts/@total"/>
+        <xsl:with-param name="total" select="report/hosts/count"/>
         <xsl:with-param name="title" select="'Report: Hosts'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21475,7 +21475,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
-        <xsl:with-param name="total" select="report/ports/@total"/>
+        <xsl:with-param name="total" select="report/ports/count"/>
         <xsl:with-param name="title" select="'Report: Ports'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21568,7 +21568,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
-        <xsl:with-param name="total" select="report/vulns/@total"/>
+        <xsl:with-param name="total" select="report/vulns/count"/>
         <xsl:with-param name="title" select="'Report: Vulnerabilities'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21655,7 +21655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="$known_count + $unknown"/>
-        <xsl:with-param name="total" select="report/os/@total + $unknown"/>
+        <xsl:with-param name="total" select="report/os/count + $unknown"/>
         <xsl:with-param name="title" select="'Report: Operating Systems'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21776,7 +21776,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
-        <xsl:with-param name="total" select="report/apps/@total"/>
+        <xsl:with-param name="total" select="report/apps/count"/>
         <xsl:with-param name="title" select="'Report: Applications'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21889,7 +21889,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
-        <xsl:with-param name="total" select="report/closed_cves/@total"/>
+        <xsl:with-param name="total" select="report/closed_cves/count"/>
         <xsl:with-param name="title" select="'Report: Closed CVEs'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21970,7 +21970,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/errors/error)"/>
-        <xsl:with-param name="total" select="report/errors/@total"/>
+        <xsl:with-param name="total" select="report/errors/count"/>
         <xsl:with-param name="title" select="'Report: Error Messages'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
