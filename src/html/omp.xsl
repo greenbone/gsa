@@ -21991,6 +21991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>NVT</td>
           <td>Host</td>
           <td>Port</td>
+          <td style="width:100px;">Severity</td>
         </tr>
         <xsl:for-each select="report/errors/error">
           <xsl:variable name="host" select="host"/>
@@ -22001,7 +22002,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <a href="omp?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-                <xsl:value-of select="nvt"/>
+                <xsl:value-of select="nvt/name"/>
               </a>
             </td>
             <td>
@@ -22012,6 +22013,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:value-of select="port"/>
+            </td>
+            <td>
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+                <xsl:with-param name="extra_text" select="concat (' (', nvt/threat, ')')"/>
+              </xsl:call-template>
             </td>
           </tr>
         </xsl:for-each>
