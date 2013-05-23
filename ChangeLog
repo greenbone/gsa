@@ -1,3 +1,8 @@
+2013-05-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [errors]): Use errors total value. Count
+	number of errors in current error set.
+
 2013-05-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/gsa-style.css: Add styling for report section list and links.

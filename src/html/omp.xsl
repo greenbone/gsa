@@ -21969,8 +21969,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="2"/>
-        <xsl:with-param name="total" select="3"/>
+        <xsl:with-param name="current" select="count(report/errors/error)"/>
+        <xsl:with-param name="total" select="report/errors/@total"/>
         <xsl:with-param name="title" select="'Report: Error Messages'"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
