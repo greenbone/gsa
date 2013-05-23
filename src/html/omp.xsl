@@ -21818,7 +21818,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
             </td>
             <td>
-              <xsl:value-of select="count(../../host/detail[name = $value]) + $inaccurate_hosts"/>
+              <a href="/omp?cmd=get_report_section&amp;report_id={$report/@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34;&amp;token={/envelope/token}" title="Report: Results (for App: {$value})">
+                <xsl:value-of select="count(../../host/detail[name = $value]) + $inaccurate_hosts"/>
+              </a>
               <xsl:if test="$inaccurate_hosts">
                 <abbr title="{$inaccurate_hosts} host(s) without matching CPE detail - number may be inaccurate">*</abbr>
               </xsl:if>
