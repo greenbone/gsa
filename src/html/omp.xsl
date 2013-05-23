@@ -18225,6 +18225,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_port_list">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_port_range_response"/>
+  <xsl:apply-templates select="modify_port_list_response"/>
   <xsl:call-template name="html-edit-port-list-form"/>
 </xsl:template>
 
@@ -18232,6 +18234,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
       Create Port Range
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_port_list_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Modify Port list
     </xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>

@@ -1,3 +1,10 @@
+2013-05-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (edit_port_list): Match operation responses.
+	(modify_port_list_response): New template.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply icons for Edit Port List.
+
 2013-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report [apps]): Add filter parameters to result
