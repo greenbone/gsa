@@ -1,5 +1,16 @@
 2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (user_set_severity): New function.
+	(exec_omp_post): Set user severity class after saving omp settings.
+
+	* src/gsad_omp.c (save_my_settings_omp): Add severity parameter.
+
+	* src/gsad_omp.h: Adjust header accordingly.
+
+	* src/html/omp.xsl (severity): New template.
+
+2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (struct user): Add severity variable.
 	(user_add): Add severity class parameter. Set user severity.
 	(exec_omp_post, request_handler): Ditto.

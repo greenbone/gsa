@@ -14730,19 +14730,20 @@ send_settings_filters (gnutls_session_t *session, params_t *data)
  */
 char *
 save_my_settings_omp (credentials_t * credentials, params_t *params,
-                      char **timezone, char **password)
+                      char **timezone, char **password, char **severity)
 {
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text, *status, *max, *severity;
-  gchar *text_64, *max_64, *severity_64;
+  const char *text, *status, *max;
+  gchar *text_64, *max_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
 
   *timezone = NULL;
   *password = NULL;
+  *severity = NULL;
 
   if ((params_value (params, "text") == NULL)
       || (params_value (params, "password") == NULL)
@@ -14946,9 +14947,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   g_free (max_64);
 
   /* Send Severity Class. */
-  severity = params_value (params, "severity_class");
-  severity_64 = (severity
-                 ? g_base64_encode ((guchar*) severity, strlen (severity))
+  text = params_value (params, "severity_class");
+  text_64 = (text
+                 ? g_base64_encode ((guchar*) text, strlen (text))
                  : g_strdup (""));
 
   if (openvas_server_sendf (&session,
@@ -14957,10 +14958,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                             "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
                             "<value>%s</value>"
                             "</modify_setting>",
-                            severity_64 ? severity_64 : "")
+                            text_64 ? text_64 : "")
       == -1)
     {
-      g_free (severity_64);
+      g_free (text_64);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -14969,7 +14970,15 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_my_settings");
     }
-  g_free (severity_64);
+  g_free (text_64);
+
+  status = entity_attribute (entity, "status");
+  if (status && (strlen (status) > 0) && (status[0] == '2'))
+    {
+      g_free (credentials->severity);
+      credentials->severity = g_strdup (strlen (text) ? text : "UTC");
+      *severity = g_strdup (strlen (text) ? text : "UTC");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_filters/>")

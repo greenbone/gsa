@@ -410,6 +410,36 @@ user_set_password (const gchar *name, const gchar *password)
 }
 
 /**
+ * @brief Set severity class of user.
+ *
+ * @param[in]   name      Username.
+ * @param[in]   severity  Severity class.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_severity (const gchar *name, const gchar *severity)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->severity);
+          item->severity = g_strdup (severity);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
  * @brief Release a user_t returned by user_add or user_find.
  *
  * @param[in]  user  User.
@@ -1731,16 +1761,23 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
-      char *timezone, *password;
+      char *timezone, *password, *severity;
       con_info->response = save_my_settings_omp (credentials, con_info->params,
-                                                 &timezone, &password);
+                                                 &timezone, &password,
+                                                 &severity);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->username, timezone);
       if (password)
         /* credentials->password set in save_my_settings_omp before XSLT. */
         user_set_password (credentials->username, password);
+      if (severity)
+        /* credentials->severity set in save_my_settings_omp before XSLT. */
+        user_set_severity (credentials->username, severity);
+
       g_free (timezone);
+      g_free (password);
+      g_free (severity);
     }
   ELSE (save_note)
   ELSE (save_override)
