@@ -1,5 +1,10 @@
 2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (cvss-risk-factor): Apply ranges based on user
+	severity settings.
+
+2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (user_set_severity): New function.
 	(exec_omp_post): Set user severity class after saving omp settings.
 
