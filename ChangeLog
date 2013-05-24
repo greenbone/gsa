@@ -1,3 +1,12 @@
+2013-05-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (report [summary]): Removed third line with filtered
+	results of current page. This does not make sense here anymore because
+	results are not visible on this page. Also, it is rarely used
+	and finally with the new filter features it is possible to limit
+	the number of results already directly via the powerfilter.
+	Simplified the naming of the filtered report.
+
 2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (cvss-risk-factor): Apply ranges based on user
