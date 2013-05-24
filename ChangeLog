@@ -1,3 +1,18 @@
+2013-05-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (struct user): Add severity variable.
+	(user_add): Add severity class parameter. Set user severity.
+	(exec_omp_post, request_handler): Ditto.
+
+	* src/gsad_base.h (struct credentials_t): Add severity variable.
+
+	* src/gsad_omp.c (xsl_transform_omp): Send user severity class within
+	envelope.
+	(authenticate_omp): Add parameter for severity class. Adjust
+	omp_authenticate_info call.
+
+	* src/gsad_omp.h: Adjust authenticate_omp prototype.
+
 2013-05-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (edit_port_list): Match operation responses.

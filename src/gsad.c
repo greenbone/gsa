@@ -212,6 +212,7 @@ struct user
   gchar *password;     ///< Password.
   gchar *role;         ///< Role.
   gchar *timezone;     ///< Timezone.
+  gchar *severity;     ///< Severity class.
   gchar *capabilities; ///< Capabilities.
   time_t time;         ///< Login time.
 };
@@ -234,6 +235,7 @@ static GMutex *mutex = NULL;
  * @param[in]  username      Name of user.
  * @param[in]  password      Password for user.
  * @param[in]  timezone      Timezone of user.
+ * @param[in]  severity      Severity class setting of user.
  * @param[in]  role          Role of user.
  * @param[in]  capabilities  Capabilities of manager.
  *
@@ -241,7 +243,7 @@ static GMutex *mutex = NULL;
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *role, const gchar *capabilities)
+          const gchar *severity, const gchar *role, const gchar *capabilities)
 {
   user_t *user = NULL;
   int index;
@@ -280,6 +282,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->password = g_strdup (password);
       user->role = g_strdup (role);
       user->timezone = g_strdup (timezone);
+      user->severity = g_strdup (severity);
       user->capabilities = g_strdup (capabilities);
       g_ptr_array_add (users, (gpointer) user);
     }
@@ -1410,11 +1413,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           && password)
         {
           int ret;
-          gchar *timezone, *role, *capabilities;
+          gchar *timezone, *role, *capabilities, *severity;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
                                   &timezone,
+                                  &severity,
                                   &capabilities);
           if (ret)
             {
@@ -1449,11 +1453,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               user = user_add (params_value (con_info->params, "login"),
                                password,
                                timezone,
+                               severity,
                                role,
                                capabilities);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
+              g_free (severity);
+              g_free (capabilities);
               g_free (role);
               return 1;
             }
@@ -1607,6 +1614,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->password = strdup (user->password);
   credentials->role = user->role ? strdup (user->role) : NULL;
   credentials->timezone = user->timezone ? strdup (user->timezone) : NULL;
+  credentials->severity = user->severity ? strdup (user->severity) : NULL;
   credentials->capabilities = user->capabilities
                                ? strdup (user->capabilities)
                                : NULL;
@@ -3117,6 +3125,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->password = strdup (user->password);
       credentials->role = strdup (user->role);
       credentials->timezone = strdup (user->timezone);
+      credentials->severity = strdup (user->severity);
       credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);

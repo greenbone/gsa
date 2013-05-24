@@ -246,6 +246,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
                                  "<role>%s</role>"
+                                 "<severity>%s</severity>"
                                  "<i18n>%s</i18n>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
@@ -254,6 +255,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                    ? credentials->timezone : "",
                                  credentials->username,
                                  credentials->role,
+                                 credentials->severity,
                                  credentials->language);
   g_string_append (string, res);
   g_free (res);
@@ -19334,13 +19336,15 @@ wizard_omp (credentials_t *credentials, params_t *params)
  * @param[in]  password      Password.
  * @param[out] role          Role.
  * @param[out] timezone      Timezone.
+ * @param[out] severity      Severity class.
  * @param[out] capabilities  Capabilities of manager.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_omp (const gchar * username, const gchar * password,
-                  gchar **role, gchar **timezone, gchar **capabilities)
+                  gchar **role, gchar **timezone, gchar **severity,
+                  gchar **capabilities)
 {
   gnutls_session_t session;
   int socket;
@@ -19369,7 +19373,8 @@ authenticate_omp (const gchar * username, const gchar * password,
   sleep (20);
 #endif
 
-  auth = omp_authenticate_info (&session, username, password, role, timezone);
+  auth = omp_authenticate_info (&session, username, password, role,
+                                severity, timezone);
   if (auth == 0)
     {
       entity_t entity;

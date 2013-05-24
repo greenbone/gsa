@@ -72,6 +72,7 @@ typedef struct
   char *caller;       ///< Caller URL, for POST relogin.
   char *capabilities; ///< Capabilites of manager.
   char *language;     ///< Accept-Language browser header.
+  char *severity;     ///< Severity class.
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
