@@ -19256,7 +19256,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:if test="position() = 1">
                     <xsl:call-template name="severity-bar">
                       <xsl:with-param name="cvss" select="value"/>
-                      <xsl:with-param name="extra_text" select="concat (' (', $threat, ')')"/>
+                      <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(value), ')')"/>
                     </xsl:call-template>
                   </xsl:if>
                 </xsl:for-each>
@@ -19289,7 +19289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:if test="$cvss &gt;= 0.0">
                     <xsl:call-template name="severity-bar">
                       <xsl:with-param name="cvss" select="$cvss"/>
-                      <xsl:with-param name="extra_text" select="concat (' (', $threat, ')')"/>
+                      <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor($cvss), ')')"/>
                     </xsl:call-template>
                   </xsl:if>
                 </td>
@@ -20158,7 +20158,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="string-length (nvt/cvss_base) &gt; 0">
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-            <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(nvt/cvss_base), ')')"/>
             <xsl:with-param name="title" select="$severity_title"/>
           </xsl:call-template>
         </xsl:when>
@@ -20170,7 +20170,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="'0.0'"/>
-            <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor('0.0'), ')')"/>
             <xsl:with-param name="title" select="$severity_title"/>
           </xsl:call-template>
         </xsl:otherwise>
@@ -21693,7 +21693,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:call-template name="severity-bar">
                 <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-                <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+                <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(nvt/cvss_base), ')')"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -21805,7 +21805,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="position() = 1">
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-        <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(nvt/cvss_base), ')')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:for-each>
@@ -21823,7 +21823,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="position() = 1">
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-        <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(nvt/cvss_base), ')')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:for-each>
@@ -21922,19 +21922,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </xsl:for-each>
   </xsl:variable>
-  <xsl:variable name="threat">
-    <xsl:for-each select="$report/results/result[detection/result/details/detail[name='product' and value=$app]]">
-      <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="threat"/>
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$cvss!=''">
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="$cvss"/>
-        <xsl:with-param name="extra_text" select="concat(' (', $threat, ')')"/>
+        <xsl:with-param name="extra_text" select="concat(' (', gsa:cvss-risk-factor($cvss), ')')"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
@@ -22092,7 +22084,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:call-template name="severity-bar">
                 <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-                <xsl:with-param name="extra_text" select="concat (' (', nvt/threat, ')')"/>
+                <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(nvt/cvss_base), ')')"/>
               </xsl:call-template>
             </td>
           </tr>

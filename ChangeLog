@@ -1,3 +1,11 @@
+2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (host, result [result-header], report [vulns])
+	(report [os-severity], report [unknown-os-severity])
+	(report [app-severity], report [errors]): Use cvss-risk-factor to match
+	the provided cvss' severity level depending on user severity class
+	setting instead of using fixed threat values.
+
 2013-05-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/cpe, src/html/img/cpe/a:apache:http_server.png,
