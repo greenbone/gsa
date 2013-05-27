@@ -328,6 +328,13 @@ install (FILES src/html/img/style/window_dec_a.png
                src/html/img/style/window_dec_c.png
          DESTINATION ${GSA_DATA_DIR}/login/img/style)
 
+install (FILES src/html/img/cpe/a:apache:http_server.png
+               src/html/img/cpe/a:mysql:mysql.png
+               src/html/img/cpe/a:openbsd:openssh.png
+               src/html/img/cpe/a:php:php.png
+               src/html/img/cpe/a:postgresql:postgresql.png
+         DESTINATION ${GSA_DATA_DIR}/login/img/cpe)
+
 install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/key.png src/html/img/p_bar_bg.png
                src/html/img/start_inactive.png src/html/img/alert_sign.png
