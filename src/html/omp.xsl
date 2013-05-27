@@ -21096,67 +21096,91 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" mode="section-list">
   <xsl:param name="title"/>
   <xsl:param name="current"/>
-  <ul class="section_list">
-    <li class="section_sublist">
-      <a href="#"><xsl:value-of select="$title"/></a>
-      <ul class="section_list">
-        <xsl:if test="$current != 'results'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Results'"/>
-            <xsl:with-param name="section" select="'results'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'summary'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Summary'"/>
-            <xsl:with-param name="section" select="'summary'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'vulns'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Vulnerabilities'"/>
-            <xsl:with-param name="section" select="'vulns'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'hosts'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Hosts'"/>
-            <xsl:with-param name="section" select="'hosts'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'ports'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Ports'"/>
-            <xsl:with-param name="section" select="'ports'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'apps'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Applications'"/>
-            <xsl:with-param name="section" select="'apps'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'os'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Operating Systems'"/>
-            <xsl:with-param name="section" select="'os'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'closed_cves'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Closed CVEs'"/>
-            <xsl:with-param name="section" select="'closed_cves'"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="$current != 'errors'">
-          <xsl:apply-templates select="." mode="section-link">
-            <xsl:with-param name="name" select="'Report: Error Messages'"/>
-            <xsl:with-param name="section" select="'errors'"/>
-          </xsl:apply-templates>
-        </xsl:if>
+  <center>
+    <div id="gb_menu">
+      <ul>
+        <li class="first_button">
+          <a href="#"><xsl:value-of select="$title"/></a>
+          <ul>
+            <li class="pointy"></li>
+            <li>
+              <xsl:if test="$current != 'results'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Results'"/>
+                  <xsl:with-param name="section" select="'results'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'summary'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Summary'"/>
+                  <xsl:with-param name="section" select="'summary'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'vulns'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Vulnerabilities'"/>
+                  <xsl:with-param name="section" select="'vulns'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'hosts'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Hosts'"/>
+                  <xsl:with-param name="section" select="'hosts'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'ports'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Ports'"/>
+                  <xsl:with-param name="section" select="'ports'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'apps'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Applications'"/>
+                  <xsl:with-param name="section" select="'apps'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'os'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Operating Systems'"/>
+                  <xsl:with-param name="section" select="'os'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'closed_cves'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Closed CVEs'"/>
+                  <xsl:with-param name="section" select="'closed_cves'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
+              <xsl:if test="$current != 'errors'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Error Messages'"/>
+                  <xsl:with-param name="section" select="'errors'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </li>
-  </ul>
+    </div>
+  </center>
+  <br/>
   <br/>
   <br/>
 </xsl:template>

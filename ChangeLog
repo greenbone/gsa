@@ -1,5 +1,12 @@
 2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [section-list]): Migrate report section menu
+	to use the same style as the gsa navigation menu.
+
+	* src/html/gsa-style.xsl: Remove css styles for report section lists.
+
+2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/help.xsl (severity-settings-name, severity-settings-list):
 	Update severity classes names to match those in documentation.
 
