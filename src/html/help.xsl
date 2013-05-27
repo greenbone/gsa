@@ -4387,22 +4387,50 @@ Public License instead of this License.
 
       <h3>Severity Class</h3>
       <p>
-        The severity class used to represent the CVSS in a colored severity bar.
+        The severity classes split up the CVSS range into 3 ranges: High,
+        Medium and Low. These ranges are used to apply colors for the
+        severity bar in order to easily identy and compare severities of
+	interest.
       </p>
       <p>
         Possible values include:
         <ul>
           <li>
-            <b>OpenVAS Classic:</b> Uses the traditional OpenVAS ratings: [0.0-2.0] Low, [2.1-5.0] Medium, [5.1-10.0] High.
+            <b>NVD Vulnerability Severity Ratings:</b> The National Vulnerability Database (NVD)
+            applies this mapping for their published content. See also http://nvd.nist.gov/cvss.cfm of
+            the National Institute of Standards and Technology (NIST) of the U.S. government.
+            <ul>
+              <li>High: 7.0 - 10.0 </li>
+              <li>Medium: 4.0 - 6.9 </li>
+              <li>Low: 0.0 - 3.9 </li>
+            </ul>
           </li>
           <li>
-            <b>NIST:</b> Uses NVD CVSS v2 vulnerability severity ratings: [0.0-3.9] Low, [4.0-6.9] Medium, [7.0-10.0] High.
+            <b>BSI Schwachstellenampel (Germany):</b> The german Federal Office for
+            Information Security (Bundesamt für Sicherheit in der Informationstechnik, BSI)
+            applies this mapping for their vulnerability traffic lights (german: "Schwachstellenampel").
+            See also this document of BSI in german language:
+            https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/BSI-A-CS_003.pdf 
+            <ul>
+              <li>High: 7.0 - 10.0  ("rot": kritische)</li>
+              <li>Medium: 4.0 - 6.9 ("gelb": geringfügig-kritisch)</li>
+              <li>Low: 0.0 - 3.9 ("grün": nicht kritisch)</li>
+            </ul>
           </li>
           <li>
-            <b>BSI (Germany):</b> Uses the same ratings as NIST.
+            <b>OpenVAS Classic:</b> Applies the traditional OpenVAS ratings:
+            <ul>
+              <li>High: 5.1 - 10.0 </li>
+              <li>Medium: 2.1 - 5.0 </li>
+              <li>Low: 0.0 - 2.0 </li>
+            </ul>
           </li>
           <li>
-            <b>PCI-DSS:</b> Uses the ratings: [0.0-4.2] None, [4.3-10.0] High.
+            <b>PCI-DSS:</b> Applies the following mapping.
+            <ul>
+              <li>High: 4.3 - 10.0 </li>
+              <li>None: 0.0 - 4.2 </li>
+            </ul>
           </li>
         </ul>
       </p>
