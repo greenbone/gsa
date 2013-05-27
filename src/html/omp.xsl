@@ -505,18 +505,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default"/>
   <select style="margin-bottom: 0px;" name="severity_class">
     <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'classic'"/>
-      <xsl:with-param name="content" select="'OpenVAS Classic'"/>
-      <xsl:with-param name="select-value" select="$default"/>
-    </xsl:call-template>
-    <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'nist'"/>
-      <xsl:with-param name="content" select="'NIST'"/>
+      <xsl:with-param name="content" select="'NVD Vulnerability Severity Ratings'"/>
       <xsl:with-param name="select-value" select="$default"/>
     </xsl:call-template>
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'bsi'"/>
-      <xsl:with-param name="content" select="'BSI (Germany)'"/>
+      <xsl:with-param name="content" select="'BSI Schwachstellenampel (Germany)'"/>
+      <xsl:with-param name="select-value" select="$default"/>
+    </xsl:call-template>
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'classic'"/>
+      <xsl:with-param name="content" select="'OpenVAS Classic'"/>
       <xsl:with-param name="select-value" select="$default"/>
     </xsl:call-template>
     <xsl:call-template name="opt">
@@ -530,8 +530,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="severity-settings-name">
   <xsl:param name="type"/>
   <xsl:choose>
-    <xsl:when test="$type = 'nist'">NIST</xsl:when>
-    <xsl:when test="$type = 'bsi'">BSI (Germany)</xsl:when>
+    <xsl:when test="$type = 'nist'">NVD Vulnerability Severity Ratings</xsl:when>
+    <xsl:when test="$type = 'bsi'">BSI Schwachstellenampel (Germany)</xsl:when>
     <xsl:when test="$type = 'classic'">OpenVAS Classic</xsl:when>
     <xsl:when test="$type = 'pci-dss'">PCI-DSS</xsl:when>
   </xsl:choose>
