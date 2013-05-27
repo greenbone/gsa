@@ -4385,6 +4385,28 @@ Public License instead of this License.
         a wizard associated with the listing, then the wizard be hidden.
       </p>
 
+      <h3>Severity Class</h3>
+      <p>
+        The severity class used to represent the CVSS in a colored severity bar.
+      </p>
+      <p>
+        Possible values include:
+        <ul>
+          <li>
+            <b>OpenVAS Classic:</b> Uses the traditional OpenVAS ratings: [0.0-2.0] Low, [2.1-5.0] Medium, [5.1-10.0] High.
+          </li>
+          <li>
+            <b>NIST:</b> Uses NVD CVSS v2 vulnerability severity ratings: [0.0-3.9] Low, [4.0-6.9] Medium, [7.0-10.0] High.
+          </li>
+          <li>
+            <b>BSI (Germany):</b> Uses the same ratings as NIST.
+          </li>
+          <li>
+            <b>PCI-DSS:</b> Uses the ratings: [0.0-4.2] None, [4.3-10.0] High.
+          </li>
+        </ul>
+      </p>
+
       <h3>Resource Filters</h3>
       <p>
         Default filter applied for a particular resource. The dropdown menu will list

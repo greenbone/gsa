@@ -1,5 +1,10 @@
 2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/help.xsl (my_settings.html): Add documentation for Severity
+	class.
+
+2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (host, result [result-header], report [vulns])
 	(report [os-severity], report [unknown-os-severity])
 	(report [app-severity], report [errors]): Use cvss-risk-factor to match
