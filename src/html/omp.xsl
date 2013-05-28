@@ -1708,13 +1708,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:if>
-  <xsl:if test="report/result_count/filtered &gt; 0">
-    <xsl:value-of select="report/results/@start"/> -
-    <xsl:value-of select="$last"/>
-    of
-  </xsl:if>
-  <xsl:value-of select="report/result_count/filtered"/>
-  (total: <xsl:value-of select="report/result_count/text()"/>)
+
+  <xsl:call-template name="report-section-pager">
+    <xsl:with-param name="start" select="report/results/@start"/>
+    <xsl:with-param name="current" select="$last"/>
+    <xsl:with-param name="filtered" select="report/result_count/filtered"/>
+    <xsl:with-param name="total" select="report/result_count/text()"/>
+  </xsl:call-template>
+
   <xsl:if test = "$last &lt; report/result_count/filtered">
     <xsl:choose>
       <xsl:when test="../../delta">
@@ -2147,20 +2148,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="title" select="'Report: Results'"/>
+        <xsl:with-param name="current" select="'results'"/>
+      </xsl:apply-templates>
 
-      Report:
       <xsl:if test="../../delta">Delta</xsl:if>
       <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
-      Results
 
       <xsl:apply-templates select="." mode="results-pager"/>
       <xsl:call-template name="report-help-icon"/>
     </div>
     <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Results'"/>
-        <xsl:with-param name="current" select="'results'"/>
-      </xsl:apply-templates>
 
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
@@ -21097,10 +21096,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title"/>
   <xsl:param name="current"/>
   <center>
-    <div id="gb_menu">
+    <div id="report_section_list">
       <ul>
-        <li class="first_button">
-          <a href="#"><xsl:value-of select="$title"/></a>
+        <li>
+          <a><xsl:value-of select="$title"/></a>
           <ul>
             <li class="pointy"></li>
             <li>
@@ -21188,9 +21187,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </ul>
     </div>
   </center>
-  <br/>
-  <br/>
-  <br/>
 </xsl:template>
 
 <xsl:template match="report" mode="section-filter">
@@ -21274,18 +21270,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="report-section-pager">
+  <xsl:param name="start">1</xsl:param>
   <xsl:param name="current"/>
+  <xsl:param name="filtered"><xsl:value-of select="$current"/></xsl:param>
   <xsl:param name="total"/>
-  <xsl:param name="title"/>
 
-  <xsl:value-of select="concat($title, ' ')"/>
-  <xsl:if test="$current &gt; 0">
-    <xsl:value-of select="concat('1 - ', $current, ' of ')"/>
-  </xsl:if>
-  <xsl:value-of select="$current"/>
-  <xsl:if test="$total != ''"> 
+  <div style="margin-left: 3px; display: inline;">
+    <xsl:if test="$filtered &gt; 0">
+      <xsl:value-of select="concat($start, ' - ', $current, ' of ')"/>
+    </xsl:if>
+    <xsl:value-of select="$filtered"/>
+  <xsl:if test="$total != ''">
     (total: <xsl:value-of select="$total"/>)
   </xsl:if>
+  </div>
 </xsl:template>
 
 <xsl:template name="host-distance">
@@ -21382,19 +21380,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host)"/>
-        <xsl:with-param name="total" select="report/hosts/count"/>
-        <xsl:with-param name="title" select="'Report: Hosts'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Hosts'"/>
         <xsl:with-param name="current" select="'hosts'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host)"/>
+        <xsl:with-param name="total" select="report/hosts/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'hosts'"/>
       </xsl:apply-templates>
@@ -21580,19 +21576,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
-        <xsl:with-param name="total" select="report/ports/count"/>
-        <xsl:with-param name="title" select="'Report: Ports'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Ports'"/>
         <xsl:with-param name="current" select="'ports'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+        <xsl:with-param name="total" select="report/ports/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'ports'"/>
       </xsl:apply-templates>
@@ -21673,19 +21667,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
-        <xsl:with-param name="total" select="report/vulns/count"/>
-        <xsl:with-param name="title" select="'Report: Vulnerabilities'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Vulnerabilities'"/>
         <xsl:with-param name="current" select="'vulns'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
+        <xsl:with-param name="total" select="report/vulns/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'vulns'"/>
       </xsl:apply-templates>
@@ -21760,19 +21752,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="$known_count + $unknown"/>
-        <xsl:with-param name="total" select="report/os/count + $unknown"/>
-        <xsl:with-param name="title" select="'Report: Operating Systems'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Operating Systems'"/>
         <xsl:with-param name="current" select="'os'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="$known_count + $unknown"/>
+        <xsl:with-param name="total" select="report/os/count + $unknown"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'os'"/>
       </xsl:apply-templates>
@@ -21881,19 +21871,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
-        <xsl:with-param name="total" select="report/apps/count"/>
-        <xsl:with-param name="title" select="'Report: Applications'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Applications'"/>
         <xsl:with-param name="current" select="'apps'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
+        <xsl:with-param name="total" select="report/apps/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'apps'"/>
       </xsl:apply-templates>
@@ -21974,7 +21962,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
      title="Help: View Report (View Report)">
-    <img style="vertical-align: text-top;margin-left: 3px" src="/img/help.png"/>
+    <img style="vertical-align: text-top;margin-left: 5px" src="/img/help.png"/>
   </a>
 </xsl:template>
 
@@ -21988,19 +21976,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
-        <xsl:with-param name="total" select="report/closed_cves/count"/>
-        <xsl:with-param name="title" select="'Report: Closed CVEs'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Closed CVEs'"/>
         <xsl:with-param name="current" select="'closed_cves'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
+        <xsl:with-param name="total" select="report/closed_cves/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'closed_cves'"/>
       </xsl:apply-templates>
@@ -22144,19 +22130,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/errors/error)"/>
-        <xsl:with-param name="total" select="report/errors/count"/>
-        <xsl:with-param name="title" select="'Report: Error Messages'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Error Messages'"/>
         <xsl:with-param name="current" select="'errors'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/errors/error)"/>
+        <xsl:with-param name="total" select="report/errors/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'errors'"/>
       </xsl:apply-templates>
@@ -22223,15 +22207,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="@type='prognostic'">
         Prognostic
       </xsl:if>
-      <xsl:value-of select="gsa:i18n('Report: Summary')"/>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
+
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Summary'"/>
         <xsl:with-param name="current" select="'summary'"/>
       </xsl:apply-templates>
 
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">

@@ -1,3 +1,16 @@
+2013-05-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/gsa-style.css: Add style for report_section_list ID.
+
+	* src/html/omp.xsl (results-pager): Refactor code to use
+	report-section-pager.
+	(report [results], report [hosts], report [ports], report [vulns])
+	(report [os], report [apps], report [closed_cves], report [errors])
+	(report [summary]): Update for section-list
+	(report [section-list]): Update code to fit in upper window part.
+	(report-section-pager): Add start and filtered parameters.
+	(report-help-icon): Update style.
+
 2013-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "topology" as valid value for
