@@ -10395,6 +10395,50 @@ get_report_section (credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, result);
+  if (strcmp (params_value (params, "report_section"), "topology") == 0) {
+    int ret;
+    char *response;
+    ret = omp (credentials,
+               &response,
+               NULL,
+               "<get_report_formats />");
+
+    switch (ret)
+      {
+        case 0:
+        case -1:
+          break;
+        case 1:
+          g_string_free (xml, TRUE);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting the "
+                              "result formats list. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks");
+        case 2:
+          g_string_free (xml, TRUE);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting the "
+                              "result formats list. "
+                              "Diagnostics: Failure to receive response from manager daemon.",
+                              "/omp?cmd=get_tasks");
+        default:
+          g_string_free (xml, TRUE);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting the "
+                              "result formats list. "
+                              "Diagnostics: Internal Error.",
+                              "/omp?cmd=get_tasks");
+      }
+
+    g_string_append (xml, response);
+    free (response);
+
+  }
+
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));

@@ -1,3 +1,17 @@
+2013-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "topology" as valid value for
+	"report_section".
+
+	* src/gsad_omp.c (get_report_section): Add report formats to response
+	if report_section param is "topology".
+
+	* src/html/omp.xsl (report [section-list]): Add Topology entry.
+	(report-section-pager): Hide "total:" if param is missing/empty.
+	(get_report_topology_response, report [topology]): New templates to
+	show network topology graph for a report.
+	(report-image): New template to embed a get_report as an image.
+
 2013-05-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [section-list]): Migrate report section menu

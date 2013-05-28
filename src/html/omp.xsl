@@ -21168,6 +21168,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
+              <xsl:if test="$current != 'topology'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="name" select="'Report: Topology'"/>
+                  <xsl:with-param name="section" select="'topology'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
               <xsl:if test="$current != 'errors'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="'Report: Error Messages'"/>
@@ -21275,7 +21283,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:value-of select="concat('1 - ', $current, ' of ')"/>
   </xsl:if>
   <xsl:value-of select="$current"/>
-  (total: <xsl:value-of select="$total"/>)
+  <xsl:if test="$total != ''"> 
+    (total: <xsl:value-of select="$total"/>)
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="host-distance">
@@ -22047,6 +22057,81 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="get_report_topology_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="topology"/>
+</xsl:template>
+
+<xsl:template match="report" mode="topology">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="title" select="'Report: Topology'"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="title" select="'Report: Topology'"/>
+        <xsl:with-param name="current" select="'topology'"/>
+      </xsl:apply-templates>
+
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'topology'"/>
+      </xsl:apply-templates>
+
+      <div style="overflow:auto; max-height:600px;">
+        <xsl:call-template name="report-image">
+          <xsl:with-param name="report" select="$report"/>
+          <xsl:with-param name="extra_filter" select="'levels=hmlgf first=1 rows=-1'"/>
+          <xsl:with-param name="report_format" select="'9e5e5deb-879e-4ecc-8be6-a71cd0875cdd'"/>
+          <xsl:with-param name="available_report_formats" select="../../get_report_formats_response"/>
+          <xsl:with-param name="title" select="'Network topology graph'"/>
+        </xsl:call-template>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="report-image">
+  <xsl:param name="report"/>
+  <xsl:param name="extra_filter"/>
+  <xsl:param name="report_format"/>
+  <xsl:param name="available_report_formats"/>
+  <xsl:param name="style"/>
+  <xsl:param name="title"/>
+
+  <xsl:choose>
+    <xsl:when test="count($available_report_formats/report_format) = 0">
+      <div class="error">
+        ERROR: List of available report formats missing!
+      </div>
+    </xsl:when>
+    <xsl:when test="count($available_report_formats/report_format[@id = $report_format]) = 0">
+      <div class="error">
+        Cannot find report format: <xsl:value-of select="$report_format"/>
+      </div>
+    </xsl:when>
+    <xsl:when test="$available_report_formats/report_format[@id = $report_format]/trust/text() != 'yes'">
+      <div class="error">
+        Report format <xsl:value-of select="$report_format"/> is not trusted.
+      </div>
+    </xsl:when>
+    <xsl:when test="$available_report_formats/report_format[@id = $report_format]/active/text() != 1">
+      <div class="error">
+        Report format <xsl:value-of select="$report_format"/> is not active.
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={$extra_filter} {$report/filters/term}&amp;report_format_id={$report_format}&amp;token={/envelope/token}" style="{$style}" title="{$title}" alt="{$title}"></img>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_report_errors_response">
