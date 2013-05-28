@@ -763,6 +763,13 @@ text-align:right;
  text-decoration: none;
 }
 
+#report_section_list ul li a#section_list_first {
+ height: 18px;
+ background: url('img/style/top_menu_buttons.png');
+ background-position: -130px -10px;
+ padding: 1px;
+}
+
 #report_section_list ul li ul {
  width: 255px;
  z-index: 6;

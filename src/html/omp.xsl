@@ -21099,7 +21099,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div id="report_section_list">
       <ul>
         <li>
-          <a><xsl:value-of select="$title"/></a>
+          <a id="section_list_first"><xsl:value-of select="$title"/></a>
           <ul>
             <li class="pointy"></li>
             <li>
@@ -22057,17 +22057,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="title" select="'Report: Topology'"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
-    </div>
-    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="title" select="'Report: Topology'"/>
         <xsl:with-param name="current" select="'topology'"/>
       </xsl:apply-templates>
-
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'topology'"/>
       </xsl:apply-templates>

@@ -1,5 +1,13 @@
 2013-05-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/gsa-style.css: Add css for section_list_first id.
+
+	* src/html/omp.xsl (report [section-list]): Set first entry as
+	section_list_first.
+	(report [topology): Update for new section-list template.
+
+2013-05-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/gsa-style.css: Add style for report_section_list ID.
 
 	* src/html/omp.xsl (results-pager): Refactor code to use
