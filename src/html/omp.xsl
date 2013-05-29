@@ -1731,25 +1731,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="report" mode="fold-filter-icon">
+<xsl:template name="fold-filter-icon-img">
+  <xsl:param name="fold"/>
   <xsl:choose>
-    <xsl:when test="/envelope/params/filterbox &gt; 0">
-      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=0&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Fold filter">
-        <img src="/img/fold.png"
-             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-             alt="Fold filter" title="Fold filter"/>
-      </a>
+    <xsl:when test="$fold &gt; 0">
+      <img src="/img/fold.png"
+           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+           alt="Fold filter" title="Fold filter"/>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=1&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Unfold filter">
-        <img src="/img/unfold.png"
-             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-             alt="Unfold filter" title="Unfold filter"/>
-      </a>
+      <img src="/img/unfold.png"
+           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+           alt="Unfold filter" title="Unfold filter"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="fold-filter-icon">
+  <xsl:variable name="fold">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/filterbox &gt; 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
+
+  <xsl:variable name="host" select="host/ip"/>
+  <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
+
+  <xsl:variable name="link">
+    <xsl:choose>
+      <xsl:when test="@type='prognostic'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="title">
+    <xsl:choose>
+      <xsl:when test="$filterbox=1">
+        <xsl:value-of select="'Fold filter'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'Unfold filter'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <a href="{$link}"
+     title="$title">
+     <xsl:call-template name="fold-filter-icon-img">
+       <xsl:with-param name="fold" select="$fold"/>
+     </xsl:call-template>
+  </a>
 </xsl:template>
 
 <xsl:template name="result-details-icon-img">
@@ -1783,17 +1820,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="expand" select="($details - 1)*($details - 1)"/>
   <xsl:variable name="link">
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-          <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="@type='prognostic'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
-  <a href="{$link}"
-     title="Collapse details of all vulnerabilities">
+  <xsl:variable name="title">
+    <xsl:choose>
+      <xsl:when test="$expand=1">
+        <xsl:value-of select="'Expand to full details of all vulnerabilities'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'Collapse details of all vulnerabilities'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <a href="{$link}" title="{$title}">
      <xsl:call-template name="result-details-icon-img">
        <xsl:with-param name="details" select="$details"/>
      </xsl:call-template>
@@ -2322,7 +2368,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
                    src="/img/help.png" border="0"/>
             </a>
-            <xsl:apply-templates select="." mode="fold-filter-icon"/>
+            <xsl:apply-templates select="report" mode="fold-filter-icon"/>
           </div>
         </form>
       </div>

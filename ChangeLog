@@ -1,5 +1,14 @@
 2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (fold-filter-icon-img): New template.
+	(report [fold-filter-icon]): Update to correctly support prognostic
+	report type.
+	(report [results-details-icon]): Match title depending on current
+	details mode.
+	(report [results]): Apply fold-filter-icon on child report.
+
+2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (results-details-icon-img): New template.
 	(report [results-details-icon]): Update to correctly support prognostic
 	report type.
