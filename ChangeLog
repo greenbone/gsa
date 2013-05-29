@@ -1,3 +1,10 @@
+2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/gsa-style.css: Update report_section_list style.
+
+	* src/html/omp.xsl (report [section-list]): Add total counts for the
+	report sections list entries.
+
 2013-05-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/gsa-style.css: Add css for section_list_first id.
