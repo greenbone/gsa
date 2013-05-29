@@ -1752,28 +1752,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="report" mode="result-details-icon">
+<xsl:template name="result-details-icon-img">
+  <xsl:param name="details"/>
   <xsl:choose>
-    <xsl:when test="/envelope/params/details &gt; 0">
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;details=0&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Collapse details of all vulnerabilities">
-         <img
-             src="/img/fold.png"
-             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-             alt="Collapse details of all vulnerabilities"
-             title="Collapse details of all vulnerabilities"/>
-      </a>
+    <xsl:when test="$details = 1">
+      <img src="/img/fold.png"
+           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+           alt="Collapse details of all vulnerabilities"
+           title="Collapse details of all vulnerabilities"/>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;details=1&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Expand to full details of all vulnerabilities">
-        <img src="/img/unfold.png"
-             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-             alt="Expand to full details of all vulnerabilities"
-             title="Expand to full details of all vulnerabilities"/>
-      </a>
+      <img src="/img/unfold.png"
+           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+           alt="Expand to full details of all vulnerabilities"
+           title="Expand to full details of all vulnerabilities"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="result-details-icon">
+  <xsl:variable name="details">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/details &gt; 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="host" select="host/ip"/>
+  <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
+
+  <xsl:variable name="expand" select="($details - 1)*($details - 1)"/>
+  <xsl:variable name="link">
+      <xsl:choose>
+        <xsl:when test="@type='prognostic'">
+          <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <a href="{$link}"
+     title="Collapse details of all vulnerabilities">
+     <xsl:call-template name="result-details-icon-img">
+       <xsl:with-param name="details" select="$details"/>
+     </xsl:call-template>
+  </a>
 </xsl:template>
 
 <xsl:template match="report" mode="filterbox">
@@ -2148,13 +2172,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Results'"/>
-        <xsl:with-param name="current" select="'results'"/>
-      </xsl:apply-templates>
-
-      <xsl:if test="../../delta">Delta</xsl:if>
-      <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
+      <xsl:choose>
+        <xsl:when test="../../delta">
+          Delta
+        </xsl:when>
+        <xsl:when test="@type='prognostic'">
+          Report: Prognostic Results
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="report" mode="section-list">
+            <xsl:with-param name="title" select="'Report: Results'"/>
+            <xsl:with-param name="current" select="'results'"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <xsl:apply-templates select="." mode="results-pager"/>
       <xsl:call-template name="report-help-icon"/>

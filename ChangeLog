@@ -1,5 +1,13 @@
 2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (results-details-icon-img): New template.
+	(report [results-details-icon]): Update to correctly support prognostic
+	report type.
+	(report [results]): Add check for report type before calling
+	report section-list.
+
+2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/gsa-style.css: Update report_section_list style.
 
 	* src/html/omp.xsl (report [section-list]): Add total counts for the
