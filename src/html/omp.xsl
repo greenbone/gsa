@@ -2252,7 +2252,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="report" mode="section-list">
-            <xsl:with-param name="title" select="'Report: Results'"/>
             <xsl:with-param name="current" select="'results'"/>
           </xsl:apply-templates>
         </xsl:otherwise>
@@ -4017,6 +4016,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$report/host[ip = $ip and ((detail/name = 'best_os_cpe') = 0)]">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:report-section-title">
+  <xsl:param name="section"/>
+  <xsl:param name="type"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$section = 'results'">Report: Results</xsl:when>
+      <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
+      <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
+      <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
+      <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
+      <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
+      <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
+      <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
+      <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
+      <xsl:when test="$section = 'errors'">Report: Error Messages</xsl:when>
     </xsl:choose>
   </func:result>
 </func:function>
@@ -21068,8 +21086,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report" mode="section-list">
-  <xsl:param name="title"/>
   <xsl:param name="current"/>
+
+  <xsl:variable name="title" select="gsa:report-section-title($current)"/>
   <xsl:variable name="os_count">
     <xsl:choose>
       <xsl:when test="count(report/host[(detail/name = 'best_os_cpe') = 0]) > 0">
@@ -21088,7 +21107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'results'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Results (', result_count/text(), ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('results'), ' (', result_count/text(), ')')"/>
                   <xsl:with-param name="section" select="'results'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21096,7 +21115,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'summary'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="'Report: Summary'"/>
+                  <xsl:with-param name="name" select="gsa:report-section-title('summary')"/>
                   <xsl:with-param name="section" select="'summary'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21104,7 +21123,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'vulns'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Vulnerabilities (', vulns/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('vulns'), ' (', vulns/count, ')')"/>
                   <xsl:with-param name="section" select="'vulns'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21112,7 +21131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'hosts'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Hosts (', hosts/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('hosts'), ' (', hosts/count, ')')"/>
                   <xsl:with-param name="section" select="'hosts'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21120,7 +21139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'ports'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Ports (', ports/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('ports'), ' (', ports/count, ')')"/>
                   <xsl:with-param name="section" select="'ports'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21128,7 +21147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'apps'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Applications (', apps/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('apps'), ' (', apps/count, ')')"/>
                   <xsl:with-param name="section" select="'apps'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21136,7 +21155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'os'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Operating Systems (', $os_count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('os'), ' (', $os_count, ')')"/>
                   <xsl:with-param name="section" select="'os'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21144,7 +21163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'closed_cves'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Closed CVEs (', closed_cves/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('closed_cves'), ' (', closed_cves/count, ')')"/>
                   <xsl:with-param name="section" select="'closed_cves'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21152,7 +21171,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'topology'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="'Report: Topology'"/>
+                  <xsl:with-param name="name" select="gsa:report-section-title('topology')"/>
                   <xsl:with-param name="section" select="'topology'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21160,7 +21179,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$current != 'errors'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat('Report: Error Messages (', errors/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('errors'), ' (', errors/count, ')')"/>
                   <xsl:with-param name="section" select="'errors'"/>
                 </xsl:apply-templates>
               </xsl:if>
@@ -21364,7 +21383,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Hosts'"/>
         <xsl:with-param name="current" select="'hosts'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -21560,7 +21578,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Ports'"/>
         <xsl:with-param name="current" select="'ports'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -21651,7 +21668,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Vulnerabilities'"/>
         <xsl:with-param name="current" select="'vulns'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -21736,7 +21752,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Operating Systems'"/>
         <xsl:with-param name="current" select="'os'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -21855,7 +21870,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Applications'"/>
         <xsl:with-param name="current" select="'apps'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -21960,7 +21974,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Closed CVEs'"/>
         <xsl:with-param name="current" select="'closed_cves'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -22041,7 +22054,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Topology'"/>
         <xsl:with-param name="current" select="'topology'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-help-icon"/>
@@ -22110,7 +22122,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Error Messages'"/>
         <xsl:with-param name="current" select="'errors'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
@@ -22188,7 +22199,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
 
       <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="title" select="'Report: Summary'"/>
         <xsl:with-param name="current" select="'summary'"/>
       </xsl:apply-templates>
 

@@ -1,5 +1,15 @@
 2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (gsa:report-section-title): New function.
+	(report [results], report [summary], report [hosts], report [ports])
+	(report [vulns], report [os], report [errors], report [topology])
+	(report [closed_cves], report [apps]): Remove unneeded title parameter
+	from section-list template call.
+	(report [section-list]): Determine title and section names with
+	report-section-title function call.
+
+2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [filterbox]): Adjust for prognostic reports.
 	Remove dead code and add necessary parameters.
 	(report [result-body]): Refactor code.
