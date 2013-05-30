@@ -1,5 +1,21 @@
 2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_report_section): Add check for report type.
+
+	* src/html/omp.xsl (report [results-filter]): Remove template.
+	(report [section-filter]): Clean code. Add support for prognostic
+	report. Adapt for Report results case.
+	(report [results]): Adequately Call report section-filter instead of
+	removed results-fiter.
+	(gsa:report-section-title): Add prognostic results and summary.
+	(report [section-link): Add type parameter. Output adequate report
+	section link depending on report type.
+	(report [section-link]): Adjust for prognostic report.
+	(get_report_summary_response): Add prognostic report summary.
+	(report [summary]): Adjust for prognostic report.
+
+2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (gsa:report-section-title): New function.
 	(report [results], report [summary], report [hosts], report [ports])
 	(report [vulns], report [os], report [errors], report [topology])

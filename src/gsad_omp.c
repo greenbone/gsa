@@ -10365,17 +10365,18 @@ get_report_section (credentials_t * credentials, params_t *params,
                     const char *extra_xml)
 {
   GString *xml;
-  const char *report_id, *report_section;
+  const char *report_id, *report_section, *type;
   char *result;
   int error = 0;
 
   report_section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
+  type = params_value (params, "type");
 
   if (report_section == NULL)
     report_section = "results";
 
-  if (report_id == NULL)
+  if (report_id == NULL && (type == NULL || strcmp (type, "prognostic")))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred."
