@@ -1,3 +1,11 @@
+2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [filterbox]): Adjust for prognostic reports.
+	Remove dead code and add necessary parameters.
+	(report [result-body]): Refactor code.
+	(report [results-filter]): New template.
+	(result-detailed): Fix result-body template call.
+
 2013-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (fold-filter-icon-img): New template.

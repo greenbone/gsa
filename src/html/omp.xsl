@@ -1434,91 +1434,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{report/hosts/@max}"
                    maxlength="400"/>
           </div>
-<!--
-          <div style="padding: 2px;">
-            <label>
-              <xsl:choose>
-                <xsl:when test="report/filters/result_hosts_only = 0">
-                  <input type="checkbox" name="result_hosts_only" value="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              Only show hosts that have results
-            </label>
-          </div>
-          <div style="padding: 2px;">
-            <label>
-              <xsl:choose>
-                <xsl:when test="report/filters/min_cvss_base = ''">
-                  <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="checkbox" name="apply_min_cvss_base" value="1"
-                         checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              CVSS &gt;=
-            </label>
-            <select name="min_cvss_base">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'10.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'9.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:choose>
-                <xsl:when test="report/filters/min_cvss_base = ''">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'8.0'"/>
-                    <xsl:with-param name="select-value" select="'8.0'"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'8.0'"/>
-                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'7.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'6.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'5.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'4.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'3.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'2.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'1.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'0.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-            </select>
-          </div>
--->
           <div style="padding: 2px;">
             Text phrase:
             <input type="text" name="search_phrase" size="50"
@@ -1850,35 +1765,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="/envelope/params/filterbox &gt; 0">
     <div style="background-color: #EEEEEE;">
-      <xsl:variable name="sort_field">
-        <xsl:value-of select="report/sort/field/text()"/>
-      </xsl:variable>
-      <xsl:variable name="sort_order">
-        <xsl:value-of select="report/sort/field/order"/>
-      </xsl:variable>
       <form action="" method="get">
         <input type="hidden" name="cmd" value="get_report"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
+        <xsl:if test="@type='prognostic'">
+          <input type="hidden" name="type" value="prognostic"/>
+          <input type="hidden" name="host" value="{report/filters/host}"/>
+          <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+          <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+          <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+          <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+          <input type="hidden" name="pos" value="{report/host/detail[name/text() = 'report/pos']/value}"/>
+        </xsl:if>
         <input type="hidden" name="details" value="{/envelope/params/details}"/>
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <xsl:choose>
-          <xsl:when test="@type='prognostic'">
-            <input type="hidden" name="type" value="prognostic"/>
-            <input type="hidden" name="host" value="{report/filters/host}"/>
-            <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-            <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-            <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-            <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-          </xsl:when>
-          <xsl:when test="../../delta">
-            <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-          </xsl:when>
-          <xsl:otherwise>
-          </xsl:otherwise>
-        </xsl:choose>
-        <input type="hidden" name="sort_field" value="{$sort_field}"/>
-        <input type="hidden" name="sort_order" value="{$sort_order}"/>
         <xsl:if test="../../delta">
+          <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
           <div style="float: right;">
             <div style="padding: 2px;">Show delta results:</div>
             <div style="margin-left: 8px;">
@@ -2209,6 +2111,129 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="report" mode="results-filter">
+  <xsl:variable name="levels"
+                select="report/filters/text()"/>
+  <xsl:variable name="apply-overrides"
+                select="report/filters/apply_overrides"/>
+  <div style="background-color: #EEEEEE;">
+    <div style="float: right">
+      <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+        <div style="display: inline; padding: 2px; vertical-align:middle;">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="create_filter"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="comment" value=""/>
+          <input type="hidden" name="term" value="{report/filters/term}"/>
+          <input type="hidden" name="optional_resource_type" value="report"/>
+          <input type="hidden" name="next" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+              <input type="hidden" name="type" value="prognostic"/>
+              <input type="hidden" name="host" value="{report/filters/host}"/>
+              <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+              <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+              <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+              <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+            </xsl:when>
+            <xsl:when test="../../delta">
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+          </xsl:choose>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="text" name="name" value="" size="10"
+                 maxlength="80" style="vertical-align:middle"/>
+          <input type="image"
+                 name="New Filter"
+                 src="/img/new.png"
+                 alt="New Filter"
+                 style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
+        </div>
+      </form>
+      <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+        <div style="display: inline; padding: 2px; vertical-align:middle;">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+          <xsl:if test="@type='prognostic'">
+            <input type="hidden" name="type" value="prognostic"/>
+            <input type="hidden" name="host" value="{report/filters/host}"/>
+            <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+            <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+            <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+            <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+            <input type="hidden" name="pos" value="{report/host/detail[name/text() = 'report/pos']/value}"/>
+          </xsl:if>
+          <xsl:if test="../../delta">
+            <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+          </xsl:if>
+          <select style="margin-bottom: 0px;" name="filt_id">
+            <option value="">--</option>
+            <xsl:variable name="id" select="report/filters/@id"/>
+            <xsl:for-each select="../../filters/get_filters_response/filter">
+              <xsl:choose>
+                <xsl:when test="@id = $id">
+                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </select>
+          <input type="image"
+                 name="Switch Filter"
+                 src="/img/refresh.png"
+                 alt="Switch" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
+          <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+             title="Filters">
+            <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+                 src="/img/list.png" border="0" alt="Filters"/>
+          </a>
+        </div>
+      </form>
+    </div>
+    <form action="" method="get">
+      <input type="hidden" name="cmd" value="get_report"/>
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="report_id" value="{report/@id}"/>
+      <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+      <xsl:if test="@type='prognostic'">
+        <input type="hidden" name="type" value="prognostic"/>
+        <input type="hidden" name="host" value="{report/filters/host}"/>
+        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+        <input type="hidden" name="pos" value="{report/host/detail[name/text() = 'report/pos']/value}"/>
+      </xsl:if>
+      <xsl:if test="../../delta">
+        <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+      </xsl:if>
+      <div style="padding: 2px;">
+        Filter:
+        <input type="text" name="filter" size="57"
+               value="{report/filters/term}"
+               maxlength="1000"/>
+        <input type="image"
+               name="Update Filter"
+               src="/img/refresh.png"
+               alt="Update" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
+        <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+          <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+               src="/img/help.png" border="0"/>
+        </a>
+        <xsl:apply-templates select="report" mode="fold-filter-icon"/>
+      </div>
+    </form>
+  </div>
+</xsl:template>
+
 <xsl:template match="report" mode="results">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
@@ -2249,130 +2274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </p>
         </xsl:otherwise>
       </xsl:choose>
-
-      <div style="background-color: #EEEEEE;">
-        <div style="float: right">
-          <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
-            <div style="display: inline; padding: 2px; vertical-align:middle;">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="create_filter"/>
-              <input type="hidden" name="caller" value="{/envelope/caller}"/>
-              <input type="hidden" name="comment" value=""/>
-              <input type="hidden" name="term" value="{report/filters/term}"/>
-              <input type="hidden" name="optional_resource_type" value="report"/>
-              <input type="hidden" name="next" value="get_report"/>
-              <input type="hidden" name="report_id" value="{report/@id}"/>
-              <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-              <xsl:choose>
-                <xsl:when test="@type='prognostic'">
-                  <input type="hidden" name="type" value="prognostic"/>
-                  <input type="hidden" name="host" value="{report/filters/host}"/>
-                  <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-                  <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-                  <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-                  <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-                </xsl:when>
-                <xsl:when test="../../delta">
-                  <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                </xsl:otherwise>
-              </xsl:choose>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-              <input type="text" name="name" value="" size="10"
-                     maxlength="80" style="vertical-align:middle"/>
-              <input type="image"
-                     name="New Filter"
-                     src="/img/new.png"
-                     alt="New Filter"
-                     style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
-            </div>
-          </form>
-          <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
-            <div style="display: inline; padding: 2px; vertical-align:middle;">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_report"/>
-              <input type="hidden" name="report_id" value="{report/@id}"/>
-              <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-              <xsl:choose>
-                <xsl:when test="@type='prognostic'">
-                  <input type="hidden" name="type" value="prognostic"/>
-                  <input type="hidden" name="host" value="{report/filters/host}"/>
-                  <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-                  <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-                  <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-                  <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-                </xsl:when>
-                <xsl:when test="../../delta">
-                  <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                </xsl:otherwise>
-              </xsl:choose>
-              <select style="margin-bottom: 0px;" name="filt_id">
-                <option value="">--</option>
-                <xsl:variable name="id" select="report/filters/@id"/>
-                <xsl:for-each select="../../filters/get_filters_response/filter">
-                  <xsl:choose>
-                    <xsl:when test="@id = $id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <input type="image"
-                     name="Switch Filter"
-                     src="/img/refresh.png"
-                     alt="Switch" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
-              <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-                 title="Filters">
-                <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-                     src="/img/list.png" border="0" alt="Filters"/>
-              </a>
-            </div>
-          </form>
-        </div>
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="report_id" value="{report/@id}"/>
-          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-          <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-              <input type="hidden" name="type" value="prognostic"/>
-              <input type="hidden" name="host" value="{report/filters/host}"/>
-              <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-              <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-              <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-              <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-            </xsl:when>
-            <xsl:when test="../../delta">
-              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-            </xsl:when>
-            <xsl:otherwise>
-            </xsl:otherwise>
-          </xsl:choose>
-          <div style="padding: 2px;">
-            Filter:
-            <input type="text" name="filter" size="57"
-                   value="{report/filters/term}"
-                   maxlength="1000"/>
-            <input type="image"
-                   name="Update Filter"
-                   src="/img/refresh.png"
-                   alt="Update" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
-            <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
-              <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-                   src="/img/help.png" border="0"/>
-            </a>
-            <xsl:apply-templates select="report" mode="fold-filter-icon"/>
-          </div>
-        </form>
-      </div>
-
+      <xsl:apply-templates select="." mode="results-filter"/>
       <xsl:apply-templates select="." mode="filterbox"/>
       <br/>
 
@@ -20741,53 +20643,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
-      <xsl:choose>
-        <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
-          <a class="anchor" name="overrides-{@id}"/>
-          <xsl:for-each select="overrides/override">
-            <xsl:choose>
-              <xsl:when test="active = 0">
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:call-template name="override-detailed">
-                  <xsl:with-param name="override-buttons">
-                    <xsl:value-of select="$override-buttons"/>
-                  </xsl:with-param>
-                  <xsl:with-param name="delta" select="$delta"/>
-                  <xsl:with-param name="next">
-                    <xsl:choose>
-                      <xsl:when test="$result-details">get_result</xsl:when>
-                      <xsl:otherwise>get_report</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:with-param>
-                </xsl:call-template>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each>
-          <xsl:for-each select="delta/overrides/override">
-            <xsl:choose>
-              <xsl:when test="active = 0">
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:call-template name="override-detailed">
-                  <xsl:with-param name="override-buttons">
-                    <xsl:value-of select="$override-buttons"/>
-                  </xsl:with-param>
-                  <xsl:with-param name="delta" select="2"/>
-                  <xsl:with-param name="next">
-                    <xsl:choose>
-                      <xsl:when test="$result-details">get_result</xsl:when>
-                      <xsl:otherwise>get_report</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:with-param>
-                </xsl:call-template>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:if test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
+        <a class="anchor" name="overrides-{@id}"/>
+        <xsl:for-each select="overrides/override">
+          <xsl:choose>
+            <xsl:when test="active = 0">
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="override-detailed">
+                <xsl:with-param name="override-buttons">
+                  <xsl:value-of select="$override-buttons"/>
+                </xsl:with-param>
+                <xsl:with-param name="delta" select="$delta"/>
+                <xsl:with-param name="next">
+                  <xsl:choose>
+                    <xsl:when test="$result-details">get_result</xsl:when>
+                    <xsl:otherwise>get_report</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+        <xsl:for-each select="delta/overrides/override">
+          <xsl:choose>
+            <xsl:when test="active = 0">
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="override-detailed">
+                <xsl:with-param name="override-buttons">
+                  <xsl:value-of select="$override-buttons"/>
+                </xsl:with-param>
+                <xsl:with-param name="delta" select="2"/>
+                <xsl:with-param name="next">
+                  <xsl:choose>
+                    <xsl:when test="$result-details">get_result</xsl:when>
+                    <xsl:otherwise>get_report</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:if>
     </td>
   </tr>
   <tr>
@@ -20824,7 +20722,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="note-buttons" select="$note-buttons"/>
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
-      <xsl:with-param name="result-details" select="$show-overrides"/>
+      <xsl:with-param name="show-overrides" select="$show-overrides"/>
       <xsl:with-param name="prognostic" select="$prognostic"/>
     </xsl:apply-templates>
   </xsl:if>
