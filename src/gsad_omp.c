@@ -11065,6 +11065,23 @@ new_note_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg, *html;                                                       \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "New Note");                                       \
+      html =  new_note (credentials, params, msg);                             \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
  * @brief Create a note, get report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -11084,6 +11101,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
   entity_t entity;
 
   oid = params_value (params, "oid");
+  CHECK(oid);
 
   if (params_valid (params, "threat"))
     threat = params_value (params, "threat");
@@ -11092,26 +11110,14 @@ create_note_omp (credentials_t *credentials, params_t *params)
     threat = NULL;
   else
     threat = "";
+  CHECK (threat);
 
-  if (params_valid (params, "port"))
-    {
-      port = params_value (params, "port");
-      if (strcmp (port, "--") == 0)
-        {
-          if (params_valid (params, "port_manual"))
-            port = params_value (params, "port_manual");
-          else if (params_given (params, "ports_manual")
-                   && strcmp (params_original_value (params, "port_manual"),
-                              ""))
-            port = NULL;
-          else
-            port = "";
-        }
-    }
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
+  port = params_value (params, "port");
+  if (port == NULL)
     port = "";
+  if (strcmp (port, "--") == 0)
+    port = params_value (params, "port_manual");
+  CHECK (port);
 
   if (params_valid (params, "hosts"))
     {
@@ -11132,6 +11138,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
     hosts = NULL;
   else
     hosts = "";
+  CHECK(hosts);
 
   if (params_valid (params, "note_task_id"))
     {
@@ -11145,23 +11152,8 @@ create_note_omp (credentials_t *credentials, params_t *params)
   else
     task_id = "";
 
-  if (oid == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new note. "
-                         "No new note was created. "
-                         "Diagnostics: OID was NULL.",
-                         "/omp?cmd=get_notes");
-
   active = params_value (params, "active");
-
-  if (threat == NULL || port == NULL || hosts == NULL || active == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new note. "
-                         "No new note was created. "
-                         "Diagnostics: A required parameter was NULL.",
-                         "/omp?cmd=get_notes");
+  CHECK(active);
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -11234,6 +11226,8 @@ create_note_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
+
+#undef CHECK
 
 /**
  * @brief Delete note, get next page, XSL transform the result.
@@ -11860,6 +11854,23 @@ new_override_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg, *html;                                                       \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "New Override");                                   \
+      html =  new_note (credentials, params, msg);                             \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
  * @brief Create an override, get report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -11879,6 +11890,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
   entity_t entity;
 
   oid = params_value (params, "oid");
+  CHECK(oid);
 
   if (params_valid (params, "threat"))
     threat = params_value (params, "threat");
@@ -11887,6 +11899,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
     threat = NULL;
   else
     threat = "";
+  CHECK(threat);
 
   if (params_valid (params, "new_threat"))
     new_threat = params_value (params, "new_threat");
@@ -11895,25 +11908,12 @@ create_override_omp (credentials_t *credentials, params_t *params)
   else
     new_threat = "";
 
-  if (params_valid (params, "port"))
-    {
-      port = params_value (params, "port");
-      if (strcmp (port, "--") == 0)
-        {
-          if (params_valid (params, "port_manual"))
-            port = params_value (params, "port_manual");
-          else if (params_given (params, "ports_manual")
-                   && strcmp (params_original_value (params, "port_manual"),
-                              ""))
-            port = NULL;
-          else
-            port = "";
-        }
-    }
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
+  port = params_value (params, "port");
+  if (port == NULL)
     port = "";
+  if (strcmp (port, "--") == 0)
+    port = params_value (params, "port_manual");
+  CHECK (port);
 
   if (params_valid (params, "hosts"))
     {
@@ -11934,6 +11934,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
     hosts = NULL;
   else
     hosts = "";
+  CHECK(hosts);
 
   if (params_valid (params, "override_task_id"))
     {
@@ -11947,23 +11948,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
   else
     task_id = "";
 
-  if (oid == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new override. "
-                         "No new override was created. "
-                         "Diagnostics: OID was NULL.",
-                         "/omp?cmd=get_overrides");
-
   active = params_value (params, "active");
-
-  if (threat == NULL || port == NULL || hosts == NULL || active == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new override. "
-                         "No new override was created. "
-                         "Diagnostics: A required parameter was NULL.",
-                         "/omp?cmd=get_overrides");
+  CHECK(active);
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -12038,6 +12024,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
+
+#undef CHECK
 
 /**
  * @brief Delete override, get next page, XSL transform the result.

@@ -1,3 +1,11 @@
+2013-05-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate port_manual parameter as a
+	number.
+
+	* src/gsad_omp.c (create_note_omp, create_override_omp): Clean code.
+	Validate parameters accordingly.
+
 2013-05-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_report_section): Add check for report type.
