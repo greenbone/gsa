@@ -3902,12 +3902,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result>
     <xsl:choose>
       <xsl:when test="$section = 'results' and $type = 'prognostic'">Report: Prognostic Results</xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
       <xsl:when test="$section = 'results'">Report: Results</xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
       <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
       <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
       <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
       <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
+      <xsl:when test="$section = 'apps' and $type = 'prognostic'">Report: Prognostic Applications</xsl:when>
       <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
       <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
       <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
@@ -21046,10 +21047,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'apps' and $type != 'prognostic'">
+              <xsl:if test="$current != 'apps'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('apps'), ' (', apps/count, ')')"/>
                   <xsl:with-param name="section" select="'apps'"/>
+                  <xsl:with-param name="type" select="$type"/>
                 </xsl:apply-templates>
               </xsl:if>
             </li>
@@ -21800,6 +21802,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_report_apps_response">
+  <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
+                       mode="prognostic_apps"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="apps"/>
 </xsl:template>
@@ -21838,7 +21842,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
+        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))]">
           <xsl:variable name="host" select="parent::node()"/>
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="value" select="value"/>
@@ -21897,6 +21901,72 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:key name="kReportProgApps" match="report/results/result" use="cve/cpe/@id"/>
+<xsl:template match="report" mode="prognostic_apps">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="current" select="'apps'"/>
+      </xsl:apply-templates>
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))])"/>
+        <xsl:with-param name="total" select="report/apps/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'apps'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+          <col/>
+          <col/>
+          <col/>
+          <col width="100px"/>
+        <tr class="gbntablehead2">
+          <td>Application CPE</td>
+          <td>Hosts</td>
+          <td>Occurences</td>
+          <td>Severity</td>
+        </tr>
+
+        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))]">
+          <xsl:variable name="cpe_id" select="cve/cpe/@id"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:call-template name="get_info_cpe_lnk">
+                <xsl:with-param name="cpe" select="$cpe_id"/>
+                <xsl:with-param name="cpe_id" select="$cpe_id"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../host[detail/name = 'App' and detail/value = $cpe_id])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../result[cve/cpe/@id = $cpe_id])"/>
+            </td>
+            <td>
+              <xsl:for-each select="../result[cve/cpe/@id = $cpe_id]">
+                <xsl:sort data-type="number" select="cve/cvss_base" order="descending"/>
+                <xsl:if test="position() = 1">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="cve/cvss_base"/>
+                  </xsl:call-template>
+                </xsl:if>
+              </xsl:for-each>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template name="report-help-icon">

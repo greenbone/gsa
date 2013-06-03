@@ -1,3 +1,11 @@
+2013-06-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [section-list], gsa:report-section-title):
+	Allow Applications for prognostic reports.
+	(get_report_apps_response): Add call for prognostic_apps template.
+	(report [apps]): Fix typo in used key name.
+	(report [prognostic_apps]): New template.
+
 2013-05-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate port_manual parameter as a
