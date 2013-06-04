@@ -1,5 +1,12 @@
 2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport part of r15748.
+
+	* src/gsad_omp.c (save_task_omp): Prepare command format string
+	beforehand, otherwise XML alerts are escaped.
+
+2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r16551.
 
 	* src/gsad_omp.c (get_task): Get delta report from delta_report_id

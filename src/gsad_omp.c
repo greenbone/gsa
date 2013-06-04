@@ -2209,7 +2209,7 @@ edit_task_omp (credentials_t * credentials, params_t *params)
 char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *html, *response;
+  gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   const char *config_id, *target_id;
@@ -2280,39 +2280,41 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                   param->value ? param->value : "");
     }
 
+  format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
+                            "<name>%%s</name>"
+                            "<comment>%%s</comment>"
+                            "%s"
+                            "<target id=\"%%s\"/>"
+                            "<config id=\"%%s\"/>"
+                            "<schedule id=\"%%s\"/>"
+                            "<slave id=\"%%s\"/>"
+                            "<preferences>"
+                            "<preference>"
+                            "<scanner_name>max_checks</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>max_hosts</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>in_assets</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "</preferences>"
+                            "<observers>%%s</observers>"
+                            "</modify_task>",
+                            alert_element->str);
+
   response = NULL;
   entity = NULL;
   ret = omp (credentials,
              &response,
              &entity,
-             "<modify_task task_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "%s"
-             "<target id=\"%s\"/>"
-             "<config id=\"%s\"/>"
-             "<schedule id=\"%s\"/>"
-             "<slave id=\"%s\"/>"
-             "<preferences>"
-             "<preference>"
-             "<scanner_name>max_checks</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>max_hosts</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>in_assets</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "</preferences>"
-             "<observers>%s</observers>"
-             "</modify_task>",
+             format,
              task_id,
              name,
              comment,
-             alert_element->str,
              target_id,
              config_id,
              schedule_id,
@@ -2321,6 +2323,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
              max_hosts,
              strcmp (in_assets, "0") ? "yes" : "no",
              observers);
+  g_free (format);
 
   g_string_free (alert_element, TRUE);
 
