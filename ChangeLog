@@ -1,3 +1,12 @@
+2013-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [result-pager], report [section-links]): Use
+	full result count for total value.
+	(result [result-header]): Hide empty actions column in prognostic report
+	case.
+	(report [prognostic_apps]): Iterate over apps from results to show only
+	apps that has a higher than zero severity.
+
 2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_alerts): Match delete_alert_response too.
