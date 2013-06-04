@@ -1,5 +1,18 @@
 2013-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [fold-filter-icon], report [filterbox])
+	(report [result-details-icon, host): Use pos value from envelope params
+	rather than returned in host detail.
+	(gsa:report-section-title, report [section-link], report [section-list])
+	(report [section-filter]): Adjust to include report hosts section for
+	prognostic case.
+	(get_report_hosts_response): Handle prognostic report case.
+	(report [prognostic_hosts]): New template.
+	(report [prognostic_apps]): Fix total. Iterate over apps from host
+	details rather than results to include apps with 0 occurences.
+
+2013-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [section-link], report [result-details-icon])
 	(report [fold-filter-icon]): Use host value from params in prognostic
 	case.

@@ -1672,7 +1672,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
 
   <xsl:variable name="host" select="/envelope/params/host"/>
-  <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
+  <xsl:variable name="pos" select="/envelope/params/pos"/>
 
   <xsl:variable name="link">
     <xsl:choose>
@@ -1731,7 +1731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <xsl:variable name="host" select="/envelope/params/host"/>
-  <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
+  <xsl:variable name="pos" select="/envelope/params/pos"/>
 
   <xsl:variable name="expand" select="($details - 1)*($details - 1)"/>
   <xsl:variable name="link">
@@ -1775,7 +1775,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="host_levels" value="{../../host_levels}"/>
           <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
           <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-          <input type="hidden" name="pos" value="{report/host/detail[name/text() = 'report/pos']/value}"/>
+          <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
         </xsl:if>
         <input type="hidden" name="details" value="{/envelope/params/details}"/>
         <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -3905,6 +3905,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$section = 'results'">Report: Results</xsl:when>
       <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
       <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
+      <xsl:when test="$section = 'hosts' and $type = 'prognostic'">Report: Prognostic Hosts</xsl:when>
       <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
       <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
       <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
@@ -18887,7 +18888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
-          <input type="hidden" name="pos" value="{detail[name/text() = 'report/pos']/value}"/>
+          <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
           <input type="hidden" name="host" value="{ip}"/>
           <input type="hidden" name="levels" value="{../../../../levels}"/>
           <input type="hidden" name="search_phrase" value="{../../../../search_phrase}"/>
@@ -20961,7 +20962,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
 
   <xsl:variable name="host" select="/envelope/params/host"/>
-  <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
+  <xsl:variable name="pos" select="/envelope/params/pos"/>
 
   <xsl:variable name="link">
     <xsl:choose>
@@ -21031,10 +21032,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'hosts' and $type != 'prognostic'">
+              <xsl:if test="$current != 'hosts'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="name" select="concat(gsa:report-section-title('hosts'), ' (', hosts/count, ')')"/>
+                  <xsl:with-param name="name" select="concat(gsa:report-section-title('hosts', $type), ' (', hosts/count, ')')"/>
                   <xsl:with-param name="section" select="'hosts'"/>
+                  <xsl:with-param name="type" select="$type"/>
                 </xsl:apply-templates>
               </xsl:if>
             </li>
@@ -21116,7 +21118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="host_levels" value="{../host_levels}"/>
             <input type="hidden" name="host_first_result" value="{../results/@start}"/>
             <input type="hidden" name="host_max_results" value="{../results/@max}"/>
-            <input type="hidden" name="pos" value="{host/detail[name/text() = 'report/pos']/value}"/>
+            <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
           </xsl:if>
           <xsl:if test="../delta">
               <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
@@ -21144,7 +21146,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="host_levels" value="{../host_levels}"/>
             <input type="hidden" name="host_first_result" value="{../results/@start}"/>
             <input type="hidden" name="host_max_results" value="{../results/@max}"/>
-            <input type="hidden" name="pos" value="{host/detail[name/text() = 'report/pos']/value}"/>
+            <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
           </xsl:if>
           <xsl:if test="../delta">
             <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
@@ -21189,7 +21191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="host_levels" value="{../host_levels}"/>
         <input type="hidden" name="host_first_result" value="{../results/@start}"/>
         <input type="hidden" name="host_max_results" value="{../results/@max}"/>
-        <input type="hidden" name="pos" value="{host/detail[name/text() = 'report/pos']/value}"/>
+        <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
       </xsl:if>
       <xsl:if test="../delta">
         <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
@@ -21247,6 +21249,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_report_hosts_response">
+  <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
+                       mode="prognostic_hosts"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="hosts"/>
 </xsl:template>
@@ -21504,6 +21508,73 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </td>
         </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="report" mode="prognostic_hosts">
+  <xsl:apply-templates select="gsad_msg"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="current" select="'hosts'"/>
+      </xsl:apply-templates>
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host)"/>
+        <xsl:with-param name="total" select="report/hosts/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'hosts'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <col/>
+        <col/>
+        <col/>
+        <col width="100px"/>
+        <tr class="gbntablehead2">
+          <td>Host</td>
+          <td>Ports</td>
+          <td>Distance</td>
+          <td>Severity</td>
+        </tr>
+        <xsl:for-each select="report/host" >
+          <xsl:variable name="current_host" select="ip"/>
+          <xsl:variable name="id" select="../@id"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+              <xsl:value-of select="$current_host"/>
+              <xsl:if test="$hostname">
+                <xsl:value-of select="concat(' (', $hostname, ')')"/>
+              </xsl:if>
+            </td>
+            <td>
+              <xsl:value-of select="detail[name = 'port_count']/value"/>
+            </td>
+            <td>
+              <xsl:call-template name="host-distance">
+                <xsl:with-param name="host" select="."/>
+              </xsl:call-template>
+            </td>
+            <td style="text-align:right">
+              <xsl:for-each select="../../results/result[host = $current_host]">
+                <xsl:sort data-type="number" select="cve/cvss_base" order="descending"/>
+                <xsl:if test="position() = 1">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="cve/cvss_base"/>
+                  </xsl:call-template>
+                </xsl:if>
+              </xsl:for-each>
+            </td>
+          </tr>
+        </xsl:for-each>
       </table>
     </div>
   </div>
@@ -21903,7 +21974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:key name="kReportProgApps" match="report/results/result" use="cve/cpe/@id"/>
+<xsl:key name="kReportProgApps" match="report/host/detail" use="value"/>
 <xsl:template match="report" mode="prognostic_apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -21915,7 +21986,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'apps'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))])"/>
+        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportProgApps', value))])"/>
         <xsl:with-param name="total" select="report/apps/count"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21937,8 +22008,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))]">
-          <xsl:variable name="cpe_id" select="cve/cpe/@id"/>
+        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportProgApps', value))]">
+          <xsl:variable name="cpe_id" select="value"/>
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:call-template name="get_info_cpe_lnk">
@@ -21950,10 +22021,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../../host[detail/name = 'App' and detail/value = $cpe_id])"/>
             </td>
             <td>
-              <xsl:value-of select="count(../result[cve/cpe/@id = $cpe_id])"/>
+              <xsl:value-of select="count(../../results/result[cve/cpe/@id = $cpe_id])"/>
             </td>
             <td>
-              <xsl:for-each select="../result[cve/cpe/@id = $cpe_id]">
+              <xsl:for-each select="../../results/result[cve/cpe/@id = $cpe_id]">
                 <xsl:sort data-type="number" select="cve/cvss_base" order="descending"/>
                 <xsl:if test="position() = 1">
                   <xsl:call-template name="severity-bar">
@@ -21961,6 +22032,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </xsl:if>
               </xsl:for-each>
+              <xsl:if test="count(../../results/result[cve/cpe/@id = $cpe_id]) = 0">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="extra_text" select="'None'"/>
+                </xsl:call-template>
+              </xsl:if>
             </td>
           </tr>
         </xsl:for-each>
