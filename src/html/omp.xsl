@@ -3039,7 +3039,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;delta_report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
