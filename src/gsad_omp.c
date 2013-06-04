@@ -2956,8 +2956,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                           "<apply_overrides>%i</apply_overrides>"
                           "<delta>%s</delta>",
                           apply_overrides,
-                          params_value (params, "report_id")
-                           ? params_value (params, "report_id")
+                          params_value (params, "delta_report_id")
+                           ? params_value (params, "delta_report_id")
                            : "");
   if (read_string (&session, &xml))
     {

@@ -1,3 +1,13 @@
+2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r16551.
+
+	* src/gsad_omp.c (get_task): Get delta report from delta_report_id
+	instead of report_id, becase delta_id might be passed by other actions
+	like Delete.
+
+	* src/html/omp.xsl (report): Send delta report in delta_report_id.
+
 2013-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r16307.
