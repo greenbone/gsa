@@ -1671,7 +1671,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
 
-  <xsl:variable name="host" select="host/ip"/>
+  <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
 
   <xsl:variable name="link">
@@ -1730,7 +1730,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="host" select="host/ip"/>
+  <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
 
   <xsl:variable name="expand" select="($details - 1)*($details - 1)"/>
@@ -20960,7 +20960,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="section"/>
   <xsl:param name="type"/>
 
-  <xsl:variable name="host" select="host/ip"/>
+  <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="host/detail[name/text() = 'report/pos']/value"/>
 
   <xsl:variable name="link">

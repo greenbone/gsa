@@ -1,3 +1,9 @@
+2013-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [section-link], report [result-details-icon])
+	(report [fold-filter-icon]): Use host value from params in prognostic
+	case.
+
 2013-06-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [section-list], gsa:report-section-title):
