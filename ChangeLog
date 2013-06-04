@@ -1,5 +1,10 @@
 2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_alerts): Match delete_alert_response too.
+	(describe_cert_response): Correct operation name.
+
+2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_task): Get delta report from delta_report_id
 	instead of report_id, becase delta_id might be passed by other actions
 	like Delete.

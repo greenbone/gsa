@@ -6161,6 +6161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_alerts">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
+  <xsl:apply-templates select="delete_alert_response"/>
   <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="test_alert_response"/>
@@ -24909,7 +24910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Describe SCAP Feed</xsl:with-param>
+        <xsl:with-param name="operation">Describe CERT Feed</xsl:with-param>
         <xsl:with-param name="status">
           <xsl:value-of select="@status"/>
         </xsl:with-param>
