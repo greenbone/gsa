@@ -1,5 +1,11 @@
 2013-06-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [section-link]): Remove name argument. Add
+	count argument. Determine name from section title, type and count.
+	(report [section-list]): Adjust section-link calls adequately.
+
+2013-06-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [fold-filter-icon])
 	(report [result-details-icon): Handle delta report cases.
 	(report [results]): Add report section list for delta reports.
