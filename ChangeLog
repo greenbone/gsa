@@ -1,5 +1,10 @@
 2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (powerfilter.html, view_report.html): Add note about
+	limitations of result powerfilter.
+
+2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport part of r15748.
 
 	* src/gsad_omp.c (save_task_omp): Prepare command format string

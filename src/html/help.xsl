@@ -5293,6 +5293,17 @@ Public License instead of this License.
         spaces in the keywords.
       </p>
 
+      <p>
+        Note: The powerfilter provided for
+        <a href="/help/view_report.html?token={/envelope/token}#result_filtering">Result filtering</a>
+        is a simple version of
+        the standard powerfilter: all keywords in the filter are concatenated to form
+        a single text search phrase.  This includes the keywords "not", "and" and
+        "or".  This was done to preserve backward compatibility with the existing
+        result filtering.  Future releases will switch to the full version of the
+        powerfilter.
+      </p>
+
       <h4>Column Keywords</h4>
       <p>
         A keyword can also be
@@ -6940,6 +6951,15 @@ Public License instead of this License.
         The Result Filtering window shows how the results of the scan have been
         filtered to produce the report.  Modifying any of the values and clicking
         the "Apply" button will update the report.
+      </p>
+
+      <p>
+        The powerfilter in the "Filter" field is a simple version of
+        the standard powerfilter: all keywords in the filter are concatenated to form
+        a single text search phrase.  This includes the keywords "not", "and" and
+        "or".  This was done to preserve backward compatibility with the existing
+        result filtering.  Future releases will switch to the full version of the
+        powerfilter.
       </p>
 
       <h3>Download the filtered report</h3>
