@@ -1673,11 +1673,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="/envelope/params/pos"/>
+  <xsl:variable name="delta" select="delta/report/@id"/>
 
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:when test="@type='delta'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
@@ -1732,12 +1736,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="/envelope/params/pos"/>
+  <xsl:variable name="delta" select="delta/report/@id"/>
 
   <xsl:variable name="expand" select="($details - 1)*($details - 1)"/>
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:when test="@type='delta'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
@@ -2120,17 +2128,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:choose>
-        <xsl:when test="../../delta">
-          Report: Delta Results
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="report" mode="section-list">
-            <xsl:with-param name="current" select="'results'"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="current" select="'results'"/>
+      </xsl:apply-templates>
       <xsl:apply-templates select="." mode="results-pager"/>
       <xsl:call-template name="report-help-icon"/>
     </div>
@@ -3902,8 +3902,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result>
     <xsl:choose>
       <xsl:when test="$section = 'results' and $type = 'prognostic'">Report: Prognostic Results</xsl:when>
+      <xsl:when test="$section = 'results' and $type = 'delta'">Report: Delta Results</xsl:when>
       <xsl:when test="$section = 'results'">Report: Results</xsl:when>
       <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'delta'">Report: Delta Summary</xsl:when>
       <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
       <xsl:when test="$section = 'hosts' and $type = 'prognostic'">Report: Prognostic Hosts</xsl:when>
       <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
@@ -20974,6 +20976,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type = 'prognostic'">
         <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
+      <xsl:when test="$type = 'delta'">
+        <xsl:variable name="delta" select="delta/report/@id"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;report_id=', @id, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
@@ -21029,7 +21035,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'vulns' and $type != 'prognostic'">
+              <xsl:if test="$current != 'vulns' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('vulns'), ' (', vulns/count, ')')"/>
                   <xsl:with-param name="section" select="'vulns'"/>
@@ -21037,7 +21043,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'hosts'">
+              <xsl:if test="$current != 'hosts' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('hosts', $type), ' (', hosts/count, ')')"/>
                   <xsl:with-param name="section" select="'hosts'"/>
@@ -21046,7 +21052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'ports' and $type != 'prognostic'">
+              <xsl:if test="$current != 'ports' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('ports'), ' (', ports/count, ')')"/>
                   <xsl:with-param name="section" select="'ports'"/>
@@ -21054,7 +21060,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'apps'">
+              <xsl:if test="$current != 'apps' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('apps'), ' (', apps/count, ')')"/>
                   <xsl:with-param name="section" select="'apps'"/>
@@ -21063,7 +21069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'os' and $type != 'prognostic'">
+              <xsl:if test="$current != 'os' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('os'), ' (', $os_count, ')')"/>
                   <xsl:with-param name="section" select="'os'"/>
@@ -21071,7 +21077,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'closed_cves' and $type != 'prognostic'">
+              <xsl:if test="$current != 'closed_cves' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('closed_cves'), ' (', closed_cves/count, ')')"/>
                   <xsl:with-param name="section" select="'closed_cves'"/>
@@ -21079,7 +21085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'topology' and $type != 'prognostic'">
+              <xsl:if test="$current != 'topology' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="gsa:report-section-title('topology')"/>
                   <xsl:with-param name="section" select="'topology'"/>
@@ -21087,7 +21093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'errors' and $type != 'prognostic'">
+              <xsl:if test="$current != 'errors' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="name" select="concat(gsa:report-section-title('errors'), ' (', errors/count, ')')"/>
                   <xsl:with-param name="section" select="'errors'"/>
@@ -21125,7 +21131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="host_max_results" value="{../results/@max}"/>
             <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
           </xsl:if>
-          <xsl:if test="../delta">
+          <xsl:if test="@type='delta'">
               <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
           </xsl:if>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -21153,7 +21159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="host_max_results" value="{../results/@max}"/>
             <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
           </xsl:if>
-          <xsl:if test="../delta">
+          <xsl:if test="@type='delta'">
             <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
           </xsl:if>
           <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
@@ -21198,7 +21204,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="host_max_results" value="{../results/@max}"/>
         <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
       </xsl:if>
-      <xsl:if test="../delta">
+      <xsl:if test="@type='delta'">
         <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
       </xsl:if>
       <div style="padding: 2px;">

@@ -1,3 +1,14 @@
+2013-06-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [fold-filter-icon])
+	(report [result-details-icon): Handle delta report cases.
+	(report [results]): Add report section list for delta reports.
+	(gsa:report-section-title): Add section list entries for delta reports.
+	(report [section-link], report [section-list]): Add cases for delta
+	reports.
+	(report [section-filter]): Check for delta report type with report
+	element attribute instead of child element.
+
 2013-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [result-pager], report [section-links]): Use
