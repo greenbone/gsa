@@ -19957,7 +19957,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>Severity</td>
       <td>Host</td>
       <td>Location</td>
-      <xsl:if test="$prognostic = 0">
+      <xsl:if test="$prognostic != 1">
         <td style="width:100px;">Actions</td>
       </xsl:if>
     </tr>
@@ -20086,7 +20086,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:variable name="right_header_class">
       <xsl:if test="$class = -1">result_header_right</xsl:if>
     </xsl:variable>
-    <xsl:if test="$prognostic = 0">
+    <xsl:if test="$prognostic != 1">
       <td><table class="{$right_header_class}"><tr><td>
         <xsl:if test="$details-button = 1">
           <xsl:choose>

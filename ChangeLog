@@ -1,5 +1,10 @@
 2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result [result-header]): Adjust prognostic variable
+	check to work correctly when no value is passed.
+
+2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result [details]): Adjust result linking for delta
 	results. Fix used filter term. Style update.
 
