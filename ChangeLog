@@ -1,3 +1,10 @@
+2013-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Loosen permission validation.
+
+	* src/html/omp.xsl (html-edit-permission-form): Get the names from the
+	help response.  Add a role radio to the subject field.
+
 2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (result [result-header]): Adjust prognostic variable

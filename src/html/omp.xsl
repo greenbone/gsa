@@ -17416,18 +17416,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="165">Name</td>
             <td>
-              <!-- TODO names must come from OMP. -->
               <select name="permission">
                 <xsl:variable name="name">
                   <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
                 </xsl:variable>
-                <xsl:for-each select="str:split ('create_group|create_target|Delete|Get|Modify', '|')">
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command">
                   <xsl:choose>
-                    <xsl:when test="gsa:lower-case (.) = $name">
-                      <option value="{$name}" selected="1"><xsl:value-of select="."/></option>
+                    <xsl:when test="gsa:lower-case (name) = $name">
+                      <option value="{$name}" selected="1"><xsl:value-of select="$name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                      <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:for-each>
@@ -17461,6 +17460,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="get_users_response/user">
                   <xsl:choose>
                     <xsl:when test="@id = $user_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'role'">
+                    <input type="radio" name="subject_type" value="role" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="role"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Role
+              </label>
+              <xsl:variable name="subject_id"
+                            select="commands_response/get_permissions_response/permission/subject/@id"/>
+              <select name="role_id">
+                <xsl:for-each select="get_roles_response/role">
+                  <xsl:choose>
+                    <xsl:when test="@id = $subject_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
