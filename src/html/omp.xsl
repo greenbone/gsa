@@ -19849,13 +19849,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Result Details
-<!--
-       <a href="/help/configure_results.html?token={/envelope/token}#resultdetails"
-         title="Help: Configure Results (Result Details)">
-         <img src="/img/help.png"/>
-       </a>
--->
+      Result Details
       <xsl:if test="$delta=0">
         <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
         <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
@@ -19970,7 +19964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
   <xsl:variable name="class">
     <xsl:choose>
-      <xsl:when test="/envelope/params/details &gt; 0 or /envelope/params/cmd != 'get_report' and /envelope/params/cmd != 'get_report_section'">-1</xsl:when>
+        <xsl:when test="/envelope/params/details &gt; 0 or /envelope/params/result_id or /envelope/params/cmd != 'get_report' and /envelope/params/cmd != 'get_report_section'">-1</xsl:when>
       <xsl:otherwise><xsl:number/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -20005,9 +19999,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="nvt/name"/>
-              </a>
+              <xsl:choose>
+                <xsl:when test="../../@type = 'delta'">
+                  <a href="/omp?cmd=get_report&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="nvt/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="nvt/name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>

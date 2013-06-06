@@ -1,3 +1,8 @@
+2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result [details]): Adjust result linking for delta
+	results. Fix used filter term. Style update.
+
 2013-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (user [details]): Call minor-details, so that UUID
