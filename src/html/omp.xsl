@@ -24081,6 +24081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Login Name:</b></td>

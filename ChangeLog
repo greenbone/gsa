@@ -1,3 +1,8 @@
+2013-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (user [details]): Call minor-details, so that UUID
+	and times appear.
+
 2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [fold-filter-icon]): Use filter value from
