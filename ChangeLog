@@ -1,3 +1,13 @@
+2013-06-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [fold-filter-icon]): Use filter value from
+	returned report response instead of user provided parameter.
+	(report [result-details-icon]): Fix link title. Use report's filter
+	term instead of user provided parameter.
+	(result [result-body]): Add result_section for different lines part in
+	delta report.
+	(report [filterbox]): Remove term. Adjust filter parameter.
+
 2013-06-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [section-link]): Remove name argument. Add

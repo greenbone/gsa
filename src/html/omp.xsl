@@ -1678,13 +1678,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;filterbox=', $filterbox, '&amp;details=', /envelope/params/details, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -1701,7 +1701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <a href="{$link}"
-     title="$title">
+     title="{$title}">
      <xsl:call-template name="fold-filter-icon-img">
        <xsl:with-param name="fold" select="$fold"/>
      </xsl:call-template>
@@ -1742,13 +1742,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', /envelope/params/filter, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -20492,12 +20492,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </table>
               </div>
             </xsl:if>
-            <b>Different Lines</b>
-            <p>
+            <div class="result_section">
+              <b>Different Lines</b>
               <xsl:call-template name="highlight-diff">
                 <xsl:with-param name="string"><xsl:value-of select="delta/diff"/></xsl:with-param>
               </xsl:call-template>
-            </p>
+            </div>
           </xsl:when>
         </xsl:choose>
       </xsl:if>
@@ -21126,7 +21126,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_filter"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
-          <input type="hidden" name="term" value="{filters/term}"/>
           <input type="hidden" name="optional_resource_type" value="report"/>
           <input type="hidden" name="next" value="get_report_section"/>
           <input type="hidden" name="overrides" value="{$apply-overrides}"/>
@@ -21142,7 +21141,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:if test="@type='delta'">
               <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
           </xsl:if>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{filters/term}"/>
           <input type="text" name="name" value="" size="10"
                  maxlength="80" style="vertical-align:middle"/>
           <input type="image"
