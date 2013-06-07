@@ -17081,10 +17081,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="165">Name</td>
             <td>
-              <!-- TODO names must come from OMP. -->
               <select name="permission">
-                <xsl:for-each select="str:split ('create_group|create_target|Delete|Get|Modify', '|')">
-                  <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command">
+                  <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
                 </xsl:for-each>
               </select>
             </td>
@@ -17110,23 +17109,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
               <br/>
               <label>
+                <input type="radio" name="subject_type" value="role"/>
+                Role
+              </label>
+              <select name="role_id">
+                <xsl:for-each select="get_roles_response/role">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+              <br/>
+              <label>
                 <input type="radio" name="subject_type" value="group"/>
                 Group
               </label>
               <select name="group_id">
                 <xsl:for-each select="get_groups_response/group">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Resource Type</td>
-            <td>
-              <select name="optional_resource_type">
-                <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Permission|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task', '|')">
-                  <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
             </td>

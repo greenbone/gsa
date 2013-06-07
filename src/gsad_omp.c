@@ -15949,20 +15949,18 @@ create_permission_omp (credentials_t *credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *resource_id, *resource_type;
+  const char *name, *comment, *resource_id;
   const char *subject_id, *subject_type;
   entity_t entity;
 
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
-  resource_type = params_value (params, "optional_resource_type");
   resource_id = params_value (params, "id_or_empty");
   subject_type = params_value (params, "subject_type");
 
   CHECK (name);
   CHECK (comment);
   CHECK (resource_id);
-  CHECK (resource_type);
   CHECK (subject_type);
 
   if (strcmp (subject_type, "user") == 0)
@@ -15987,13 +15985,12 @@ create_permission_omp (credentials_t *credentials, params_t *params)
              "<create_permission>"
              "<name>%s</name>"
              "<comment>%s</comment>"
-             "<resource id=\"%s\"><type>%s</type></resource>"
+             "<resource id=\"%s\"/>"
              "<subject id=\"%s\"><type>%s</type></subject>"
              "</create_permission>",
              name,
              comment ? comment : "",
              resource_id,
-             resource_type,
              subject_id,
              subject_type);
 

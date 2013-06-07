@@ -1,3 +1,12 @@
+2013-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_permission_omp): Remove RESOURCE/TYPE from
+	CREATE_PERMISSION.
+
+	* src/html/omp.xsl (html-create-permission-form): Get the names from the
+	help response.  Add a role radio to the subject field.  Remove Resource
+	Type field.
+
 2013-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Loosen permission validation.
