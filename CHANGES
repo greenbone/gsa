@@ -1,3 +1,27 @@
+gsa 4.0.1 (2013-06-07)
+
+This is the first maintenance release of the Greenbone Security Assistant (GSA)
+4.0 module for the Open Vulnerability Assessment System release 6 (OpenVAS-6).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes a number of issues which were discovered after the release
+of Greenbone Security Assistant 4.0.0. For details please refer to the list
+below.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell and Michael Wiegand.
+
+Main changes since 4.0.0:
+* A bug which cause targets and scan configs to be lost when editing tasks has
+  been fixed.
+* A number of broken internal links inside the online help have been fixed.
+* A bug which caused alerts to be ignored when creating tasks has been fixed.
+* A bug which selected the delta report functionality when a report was deleted
+  has been fixed.
+* The documentation of the result powerfilter has been improved.
+
+
 gsa 4.0.0 (2013-04-15)
 
 This is the first release of the Greenbone Security Assistant (GSA) 4.0 module

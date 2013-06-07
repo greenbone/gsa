@@ -1,3 +1,9 @@
+2013-06-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 4.0.1 release.
+
+	* CHANGES: Updated.
+
 2013-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (powerfilter.html, view_report.html): Add note about
