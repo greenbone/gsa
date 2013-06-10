@@ -14335,7 +14335,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
 
           <xsl:choose>
-            <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
+            <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:summary) > 0">
               <h2>Summary</h2>
               <p><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/></p>
             </xsl:when>
