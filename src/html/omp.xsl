@@ -21629,7 +21629,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="ports"/>
 </xsl:template>
 
-<xsl:key name="kReportPorts" match="report/ports/port/text()" use="."/>
+<xsl:key name="key_report_ports" match="report/ports/port/text()" use="."/>
 <xsl:template match="report" mode="ports">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -21641,7 +21641,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'ports'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))])"/>
+        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))])"/>
         <xsl:with-param name="total" select="report/ports/count"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21663,7 +21663,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Threat</td>
         </tr>
 
-        <xsl:for-each select="report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]">
+        <xsl:for-each select="report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))]">
           <xsl:sort data-type="number" select="substring-before (../text(), '/')"/>
           <xsl:variable name="port" select="../text()"/>
             <tr class="{gsa:table-row-class(position())}">
@@ -21718,8 +21718,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="vulns"/>
 </xsl:template>
 
-<xsl:key name="kVulnsHosts" match="report/results/result" use="concat(nvt/@oid, '|', host)"/>
-<xsl:key name="kReportVulns" match="report/results/result" use="nvt/@oid"/>
+<xsl:key name="key_vulns_hosts" match="report/results/result" use="concat(nvt/@oid, '|', host)"/>
+<xsl:key name="key_report_vulns" match="report/results/result" use="nvt/@oid"/>
 <xsl:template match="report" mode="vulns">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -21731,7 +21731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'vulns'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))])"/>
+        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))])"/>
         <xsl:with-param name="total" select="report/vulns/count"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21753,7 +21753,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('kReportVulns', nvt/@oid))]">
+        <xsl:for-each select="report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))]">
           <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
 
           <xsl:variable name="oid" select="nvt/@oid"/>
@@ -21773,7 +21773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </td>
             <td>
-              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('kVulnsHosts', concat(nvt/@oid, '|' ,host)))]) + 1"/>
+              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('key_vulns_hosts', concat(nvt/@oid, '|' ,host)))]) + 1"/>
             </td>
             <td>
               <xsl:call-template name="severity-bar">
@@ -21793,13 +21793,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="os"/>
 </xsl:template>
 
-<xsl:key name="kReportOs" match="report/host/detail" use="concat(name, value)"/>
+<xsl:key name="key_report_os" match="report/host/detail" use="concat(name, value)"/>
 <xsl:template match="report" mode="os">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="unknown_count"
                 select="count(report/host[(detail/name = 'best_os_cpe') = 0])"/>
   <xsl:variable name="known_count"
-                select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))])"/>
+                select="count(report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('key_report_os', concat(name, value)))])"/>
   <xsl:variable name="unknown">
     <xsl:choose>
       <xsl:when test="$unknown_count &gt; 0">1</xsl:when>
@@ -21835,7 +21835,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('kReportOs', concat(name, value)))]">
+        <xsl:for-each select="report/host/detail[name = 'best_os_cpe' and generate-id() = generate-id(key('key_report_os', concat(name, value)))]">
           <xsl:variable name="host" select="parent::node()"/>
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="value" select="value"/>
@@ -21923,7 +21923,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="apps"/>
 </xsl:template>
 
-<xsl:key name="kReportApps" match="report/host/detail" use="concat(name, value)"/>
+<xsl:key name="k_report_apps" match="report/host/detail" use="concat(name, value)"/>
 <xsl:template match="report" mode="apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -21935,7 +21935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'apps'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))])"/>
+        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('k_report_apps', concat(name, value)))])"/>
         <xsl:with-param name="total" select="report/apps/count"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -21957,7 +21957,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('kReportApps', concat(name, value)))]">
+        <xsl:for-each select="report/host/detail[name = 'App' and generate-id() = generate-id(key('k_report_apps', concat(name, value)))]">
           <xsl:variable name="host" select="parent::node()"/>
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="value" select="value"/>
@@ -22018,7 +22018,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:key name="kReportProgApps" match="report/results/result" use="cve/cpe/@id"/>
+<xsl:key name="key_prog_apps" match="report/results/result" use="cve/cpe/@id"/>
 <xsl:template match="report" mode="prognostic_apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -22030,7 +22030,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'apps'"/>
       </xsl:apply-templates>
       <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))])"/>
+        <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))])"/>
         <xsl:with-param name="total" select="report/apps/count"/>
       </xsl:call-template>
       <xsl:call-template name="report-help-icon"/>
@@ -22052,7 +22052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity</td>
         </tr>
 
-        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('kReportProgApps', cve/cpe/@id))]">
+        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))]">
           <xsl:variable name="cpe_id" select="cve/cpe/@id"/>
           <tr class="{gsa:table-row-class(position())}">
             <td>

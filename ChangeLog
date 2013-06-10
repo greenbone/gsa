@@ -1,3 +1,9 @@
+2013-06-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl: Rename xslt keys kReportPorts, kVulnsHosts,
+	kReportVulns, kReportOs, kReportApps, kReportProgApps to match common
+	variable naming style.
+
 2013-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_permission_omp): Remove RESOURCE/TYPE from
