@@ -1,3 +1,11 @@
+2013-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_permission_omp): Remove RESOURCE/TYPE from
+	MODIFY_PERMISSION.
+
+	* src/html/omp.xsl (html-edit-permission-form): Remove Resource Type
+	field.  Given by permission name now.
+
 2013-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (dfn_cert_adv-details): Fix condition for displaying

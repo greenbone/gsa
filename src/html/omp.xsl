@@ -17519,27 +17519,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Resource Type</td>
-            <td>
-              <select name="optional_resource_type">
-                <xsl:variable name="type">
-                  <xsl:value-of select="commands_response/get_permissions_response/permission/resource/type"/>
-                </xsl:variable>
-                <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Permission|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task', '|')">
-                  <xsl:choose>
-                    <xsl:when test="gsa:lower-case (.) = $type">
-                      <option value="{gsa:lower-case (.)}" selected="1"><xsl:value-of select="."/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{gsa:lower-case (.)}"><xsl:value-of select="."/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="175">Resource ID (optional)</td>
             <td>
               <xsl:choose>
