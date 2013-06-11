@@ -6855,6 +6855,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
 
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_tags_response | commands_response/get_tags_response">
@@ -6973,6 +6974,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_tag_response"/>
   <xsl:apply-templates select="get_tags_response/tag" mode="details"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
 </xsl:template>
 
 <xsl:template match="tag" mode="details">
@@ -7500,6 +7504,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="modify_tag_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Tag</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_tag_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Delete Tag</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>

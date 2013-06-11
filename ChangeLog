@@ -1,3 +1,14 @@
+2013-06-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Add response indicators for
+	get_trash/delete_tag_response, new_tag/create_tag_response,
+	new_tag/gsad_msg.
+
+	* src/html/omp.xsl (get_tags): Add template call: modify_tag_response.
+	(get_tag): Add template calls: delete_tag_response, modify_tag_response,
+	create_tag_response.
+	(delete_tag_response): New template.
+
 2013-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_permission_omp): Remove RESOURCE/TYPE from
