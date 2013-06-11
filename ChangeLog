@@ -1,5 +1,11 @@
 2013-06-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (ssl_certs_time): New template.
+	(report [ssl_certs]): Correctly format outputted not valid before and
+	not valid after values.
+
+2013-06-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Accept ssl_certs value for
 	report_section parameter.
 

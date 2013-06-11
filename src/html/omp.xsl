@@ -22248,9 +22248,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="ssl_certs"/>
 </xsl:template>
 
-<xsl:template match="get_report_errors_response">
-  <xsl:apply-templates select="get_report/get_reports_response/report"
-                       mode="errors"/>
+<xsl:template name="ssl_certs_time">
+  <xsl:param name="time"/>
+
+  <xsl:value-of select="gsa:date(concat(substring($time, 1, 4), '-', substring($time, 5, 2), '-', substring($time, 7, 5), ':', substring($time, 12, 2), ':', substring($time, 14, 2)))"/>
 </xsl:template>
 
 <xsl:template match="report" mode="ssl_certs">
@@ -22287,6 +22288,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="hostname" select="../../host[ip = $host/ip]/detail[name/text() = 'hostname']/value"/>
           <xsl:variable name="details" select="$host/detail[name=concat('SSLDetails:', $fingerprint)]/value"/>
           <xsl:variable name="port" select="substring-before(value, ':')"/>
+
+          <xsl:variable name="not_before" select="substring-before(substring-after($details, 'notBefore:'), '|')"/>
+          <xsl:variable name="not_after" select="substring-after($details, 'notAfter:')"/>
+
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:value-of select="substring-before(substring-after($details, 'serial:'), '|')"/>
@@ -22295,10 +22300,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="substring-before(substring-after($details, 'hostnames:'), '|')"/>
             </td>
             <td>
-              <xsl:value-of select="substring-before(substring-after($details, 'notBefore:'), '|')"/>
+              <xsl:call-template name="ssl_certs_time">
+                <xsl:with-param name="time" select="$not_before"/>
+              </xsl:call-template>
             </td>
             <td>
-              <xsl:value-of select="substring-after($details, 'notAfter:')"/>
+              <xsl:call-template name="ssl_certs_time">
+                <xsl:with-param name="time" select="$not_after"/>
+              </xsl:call-template>
             </td>
             <td>
               <xsl:value-of select="$host/ip"/>
@@ -22314,6 +22323,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="get_report_errors_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="errors"/>
 </xsl:template>
 
 <xsl:template match="report" mode="errors">
