@@ -14638,6 +14638,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
     </xsl:otherwise>
   </xsl:choose>
+
+  <xsl:if test="/envelope/params/cmd != 'get_config_nvt'">
+    <h2>Preferences</h2>
+    <xsl:for-each select="preferences">
+      <xsl:call-template name="preferences-details">
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="get_notes_response">
