@@ -1,3 +1,13 @@
+2013-06-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Accept ssl_certs value for
+	report_section parameter.
+
+	* src/html/omp.xsl (get_report_ssl_certs_response, report [ssl_certs]):
+	New template.
+	(gsa:report-section-title): Add ssl certificates section title.
+	(report [section-list]): Add ssl certificates report section.
+
 2013-06-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-logo): Add response indicators for

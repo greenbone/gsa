@@ -3916,6 +3916,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
       <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
       <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
+      <xsl:when test="$section = 'ssl_certs'">Report: SSL Certificates</xsl:when>
       <xsl:when test="$section = 'errors'">Report: Error Messages</xsl:when>
     </xsl:choose>
   </func:result>
@@ -21122,6 +21123,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
+              <xsl:if test="$current != 'ssl_certs' and $type != 'prognostic' and $type != 'delta'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="count" select="ssl_certs/count"/>
+                  <xsl:with-param name="section" select="'ssl_certs'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
               <xsl:if test="$current != 'errors' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="errors/count"/>
@@ -22234,9 +22243,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="get_report_ssl_certs_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="ssl_certs"/>
+</xsl:template>
+
 <xsl:template match="get_report_errors_response">
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="errors"/>
+</xsl:template>
+
+<xsl:template match="report" mode="ssl_certs">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="current" select="'ssl_certs'"/>
+      </xsl:apply-templates>
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/host/detail[name='SSLInfo'])"/>
+        <xsl:with-param name="total" select="report/ssl_certs/count"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'ssl_certs'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Serial</td>
+          <td>Domain names</td>
+          <td>Not valid before</td>
+          <td>Not valid after</td>
+          <td>Host</td>
+          <td>Port</td>
+        </tr>
+        <xsl:for-each select="report/host/detail[name='SSLInfo']">
+          <xsl:variable name="fingerprint" select="substring-after(substring-after(value, ':'), ':')"/>
+          <xsl:variable name="host" select="parent::node()"/>
+          <xsl:variable name="hostname" select="../../host[ip = $host/ip]/detail[name/text() = 'hostname']/value"/>
+          <xsl:variable name="details" select="$host/detail[name=concat('SSLDetails:', $fingerprint)]/value"/>
+          <xsl:variable name="port" select="substring-before(value, ':')"/>
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:value-of select="substring-before(substring-after($details, 'serial:'), '|')"/>
+            </td>
+            <td>
+              <xsl:value-of select="substring-before(substring-after($details, 'hostnames:'), '|')"/>
+            </td>
+            <td>
+              <xsl:value-of select="substring-before(substring-after($details, 'notBefore:'), '|')"/>
+            </td>
+            <td>
+              <xsl:value-of select="substring-after($details, 'notAfter:')"/>
+            </td>
+            <td>
+              <xsl:value-of select="$host/ip"/>
+              <xsl:if test="$hostname">
+                <xsl:value-of select="concat(' (', $hostname, ')')"/>
+              </xsl:if>
+            </td>
+            <td>
+              <xsl:value-of select="$port"/>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template match="report" mode="errors">
