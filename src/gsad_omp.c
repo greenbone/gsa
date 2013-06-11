@@ -11116,7 +11116,15 @@ create_note_omp (credentials_t *credentials, params_t *params)
   if (port == NULL)
     port = "";
   if (strcmp (port, "--") == 0)
-    port = params_value (params, "port_manual");
+    {
+      int num = -1;
+
+      port = params_value (params, "port_manual");
+      if (port)
+        num = atoi (port);
+      if (num < 0 || num > 65535)
+        port = NULL;
+    }
   CHECK (port);
 
   if (params_valid (params, "hosts"))
@@ -11912,7 +11920,15 @@ create_override_omp (credentials_t *credentials, params_t *params)
   if (port == NULL)
     port = "";
   if (strcmp (port, "--") == 0)
-    port = params_value (params, "port_manual");
+    {
+      int num = -1;
+
+      port = params_value (params, "port_manual");
+      if (port)
+        num = atoi (port);
+      if (num < 0 || num > 65535)
+        port = NULL;
+    }
   CHECK (port);
 
   if (params_valid (params, "hosts"))
