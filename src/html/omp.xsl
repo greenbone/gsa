@@ -8760,13 +8760,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="name"/></td>
+    <xsl:if test="$config != ''">
+      <td>
+        <xsl:choose>
+          <xsl:when test="type='file' and string-length(value) &gt; 0">
+            <i>File attached.</i>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="value"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </xsl:if>
     <td>
       <xsl:choose>
         <xsl:when test="type='file' and string-length(value) &gt; 0">
           <i>File attached.</i>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="value"/>
+          <xsl:value-of select="default"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -8923,6 +8935,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:value-of select="default"/>
+    </td>
+    <td>
       <xsl:if test="$for_config_details">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}&amp;token={/envelope/token}"
            title="Edit NVT Details" style="margin-left:3px;">
@@ -8973,7 +8988,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td>Value</td>
+        <xsl:if test="$config != ''">
+          <td>Current Value</td>
+        </xsl:if>
+        <td>Default Value</td>
         <td>Actions</td>
       </tr>
 
@@ -8990,6 +9008,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </td>
+        <xsl:if test="$config != ''">
+          <td>default</td>
+        </xsl:if>
         <td></td>
       </tr>
 
@@ -9008,7 +9029,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td>Value</td>
+        <td>New Value</td>
+        <td>Default Value</td>
         <td>Actions</td>
       </tr>
 
@@ -9054,6 +9076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <br/>
         </td>
         <td></td>
+        <td></td>
       </tr>
 
       <xsl:for-each select="preference">
@@ -9063,7 +9086,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
 
       <tr>
-        <td colspan="3" style="text-align:right;">
+        <td colspan="4" style="text-align:right;">
           <input type="submit"
                  name="submit"
                  value="Save Config"
@@ -14638,14 +14661,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
     </xsl:otherwise>
   </xsl:choose>
-
-  <xsl:if test="/envelope/params/cmd != 'get_config_nvt'">
-    <h2>Preferences</h2>
-    <xsl:for-each select="preferences">
-      <xsl:call-template name="preferences-details">
-      </xsl:call-template>
-    </xsl:for-each>
-  </xsl:if>
 </xsl:template>
 
 <xsl:template match="get_notes_response">
@@ -14676,6 +14691,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:apply-templates
         select="commands_response/get_nvts_response/nvt"/>
+      <h2>Preferences</h2>
+      <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
+        <xsl:call-template name="preferences-details">
+        </xsl:call-template>
+      </xsl:for-each>
     </div>
   </div>
 

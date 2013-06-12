@@ -1,3 +1,13 @@
+2013-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (preference_details, preferences-details):
+	Add column "Default value". Rename column "Value" to "Current Value"
+	and hide it if no config is given.
+	(edit-config-preference [edit-details], edit-config-preferences):
+	Add column "Default value". Rename column "Value" to "New Value".
+	(nvt): Removed preferences section, moved to get_nvts.
+	(get_nvts): Add preferences section.
+
 2013-06-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_nvts): Add preferences param to get_nvts command.
