@@ -17217,7 +17217,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="permission">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <div class="float_right">
@@ -17248,9 +17247,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="resource/type"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/id}&amp;token={/envelope/token}"
          title="Details">
-        <xsl:value-of select="resource/*/name"/>
+        <xsl:value-of select="resource/name"/>
       </a>
     </td>
     <td>
@@ -17305,9 +17304,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="gsa:capitalise (resource/type)"/>
             <xsl:text> </xsl:text>
-            <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
                title="Details">
-              <xsl:value-of select="resource/*/name"/>
+              <xsl:value-of select="resource/name"/>
             </a>
           </td>
         </tr>

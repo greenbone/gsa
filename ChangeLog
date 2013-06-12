@@ -1,3 +1,7 @@
+2013-06-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (permission): Get NAME and id directly from RESOURCE.
+
 2013-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (preference_details, preferences-details):
