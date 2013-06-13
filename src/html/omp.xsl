@@ -22302,29 +22302,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
+          <td>DN</td>
           <td>Serial</td>
-          <td>Domain names</td>
           <td>Not valid before</td>
           <td>Not valid after</td>
           <td>Host</td>
           <td>Port</td>
         </tr>
-        <xsl:for-each select="report/host/detail[name='SSLInfo']">
-          <xsl:variable name="fingerprint" select="substring-after(substring-after(value, ':'), ':')"/>
-          <xsl:variable name="host" select="parent::node()"/>
-          <xsl:variable name="hostname" select="../../host[ip = $host/ip]/detail[name/text() = 'hostname']/value"/>
-          <xsl:variable name="details" select="$host/detail[name=concat('SSLDetails:', $fingerprint)]/value"/>
-          <xsl:variable name="port" select="substring-before(value, ':')"/>
+        <xsl:for-each select="report/host/detail[contains(name, 'SSLDetails:')]">
+          <!-- Sort by DN value -->
+          <xsl:sort select="substring-before(substring-after(value, 'issuer:'), '|')"/>
+
+          <xsl:variable name="fingerprint" select="substring-after(name, 'SSLDetails:')"/>
+          <xsl:variable name="details" select="value"/>
+          <xsl:variable name="sslinfo" select="../detail[name='SSLInfo' and contains(value, $fingerprint)]"/>
+          <xsl:variable name="port" select="substring-before($sslinfo/value, ':')"/>
+          <xsl:variable name="dn" select="substring-before(substring-after($details, 'issuer:'), '|')"/>
 
           <xsl:variable name="not_before" select="substring-before(substring-after($details, 'notBefore:'), '|')"/>
           <xsl:variable name="not_after" select="substring-after($details, 'notAfter:')"/>
 
+          <xsl:variable name="host" select="parent::node()"/>
+          <xsl:variable name="hostname" select="../../host[ip = $host/ip]/detail[name/text() = 'hostname']/value"/>
+
           <tr class="{gsa:table-row-class(position())}">
             <td>
-              <xsl:value-of select="substring-before(substring-after($details, 'serial:'), '|')"/>
+              <xsl:value-of select="$dn"/>
             </td>
             <td>
-              <xsl:value-of select="substring-before(substring-after($details, 'hostnames:'), '|')"/>
+              <xsl:value-of select="substring-before(substring-after($details, 'serial:'), '|')"/>
             </td>
             <td>
               <xsl:call-template name="ssl_certs_time">

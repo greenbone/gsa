@@ -1,3 +1,9 @@
+2013-06-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [ssl_certs]): Add DN column. Remove domain
+	names. Extract issuer value instead of hostnames. Sort table rows by
+	DN value. Iterate over host details' SSLDetails instead of SSLInfo.
+
 2013-06-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (permission): Get NAME and id directly from RESOURCE.
