@@ -1017,7 +1017,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <a name="user_tags"/>
+      <xsl:if test="count(//delete_tag_response[@status!=200]|//modify_tag_response[@status!=200]|//create_tag_response[@status!=201]) = 0">
+        <a name="user_tags"/>
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="count($tag_names/tag) > 0">
           <div style="margin-bottom: 10px">
@@ -4029,6 +4031,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_task">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_task_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="commands_response/get_tasks_response/task"
                        mode="details"/>
 </xsl:template>
@@ -4487,6 +4492,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_lsc_credential">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
   <xsl:apply-templates select="commands_response/modify_lsc_credential_response"/>
   <xsl:apply-templates select="get_lsc_credentials_response/lsc_credential"
@@ -4824,6 +4832,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_agent_response"/>
   <xsl:apply-templates select="modify_agent_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_agents_response/agent" mode="details"/>
 </xsl:template>
 
@@ -6156,6 +6167,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:apply-templates select="modify_alert_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_alerts_response/alert" mode="details"/>
 </xsl:template>
 
@@ -6788,7 +6802,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_filter">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_filter_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_filters_response/filter" mode="details"/>
 </xsl:template>
 
@@ -8316,6 +8332,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_target">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_targets_response/target" mode="details"/>
 </xsl:template>
 
@@ -10097,6 +10116,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- GET_CONFIG_RESPONSE -->
 
 <xsl:template match="get_config_response">
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:call-template name="html-config-table"/>
 </xsl:template>
 
@@ -11576,6 +11598,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_schedule_response"/>
   <xsl:apply-templates select="modify_schedule_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_schedules_response/schedule" mode="details"/>
 </xsl:template>
 
@@ -11983,6 +12008,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_slave_response"/>
   <xsl:apply-templates select="modify_slave_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_slaves_response/slave" mode="details"/>
 </xsl:template>
 
@@ -14675,6 +14703,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="commands_response/delete_override_response"/>
   <xsl:apply-templates select="commands_response/modify_note_response"/>
   <xsl:apply-templates select="commands_response/modify_override_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -15665,6 +15696,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_note">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/modify_note_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:choose>
     <xsl:when test="commands_reponse/get_notes_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
@@ -16718,6 +16752,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_override">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/modify_override_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:choose>
     <xsl:when test="commands_reponse/get_overrides_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
@@ -17050,6 +17087,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_group_response"/>
   <xsl:apply-templates select="commands_response/modify_group_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_groups_response/group" mode="details"/>
 </xsl:template>
 
@@ -17384,6 +17424,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_permission">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_permission_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_permissions_response/permission"
                        mode="details"/>
 </xsl:template>
@@ -18250,6 +18293,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_port_range_response"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:apply-templates select="commands_response/delete_port_range_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_port_lists_response/port_list" mode="details"/>
   <xsl:apply-templates select="commands_response/get_port_lists_response/port_list"
                        mode="details"/>
@@ -18816,6 +18862,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_report_format">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_report_formats_response/report_format" mode="details"/>
 </xsl:template>
 
@@ -19289,6 +19338,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>
   <xsl:choose>
@@ -20711,6 +20763,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="commands_response/modify_note_response"/>
   <xsl:apply-templates select="commands_response/modify_override_response"/>
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_results_response"/>
   <xsl:apply-templates select="commands_response/get_results_response"/>
   <xsl:apply-templates select="commands_response/get_reports_response"/>
@@ -24645,6 +24700,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_user_response"/>
   <xsl:apply-templates select="commands_response/modify_user_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_users_response/user" mode="details"/>
 </xsl:template>
 

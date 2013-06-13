@@ -130,7 +130,7 @@ static char *get_notes (credentials_t *, params_t *, const char *);
 static char *get_note (credentials_t *, params_t *, const char *, const char *);
 
 static char *get_nvts (credentials_t *credentials, params_t *,
-                       const char *commands);
+                       const char *, const char *);
 
 static char *get_overrides (credentials_t *, params_t *, const char *);
 
@@ -612,7 +612,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_notes (credentials, params, response);
 
   if (strcmp (next, "get_nvts") == 0)
-    return get_nvts (credentials, params, NULL);
+    return get_nvts (credentials, params, NULL, response);
 
   if (strcmp (next, "get_override") == 0)
     return get_override (credentials, params, NULL, response);
@@ -2902,11 +2902,13 @@ start_task_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params            Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return XSL transformed NVT details response or error message.
  */
 static char*
-get_nvts (credentials_t *credentials, params_t *params, const char *commands)
+get_nvts (credentials_t *credentials, params_t *params, const char *commands,
+          const char *extra_xml)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -2977,6 +2979,9 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  /* Append extra_xml */
+  g_string_append (xml, extra_xml);
 
   /* Get tag names */
 
@@ -3114,7 +3119,7 @@ get_info_omp (credentials_t * credentials, params_t *params)
 char*
 get_nvts_omp (credentials_t *credentials, params_t *params)
 {
-  return get_nvts (credentials, params, NULL);
+  return get_nvts (credentials, params, NULL, NULL);
 }
 
 /**
@@ -6719,15 +6724,15 @@ edit_tag (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
   edit = g_markup_printf_escaped ("<edit_tag>"
                                   "<tag id=\"%s\"/>",
                                   tag_id);
 
   g_string_append (xml, edit);
   g_free (edit);
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   if (read_string (&session, &xml))
     {

@@ -1,3 +1,23 @@
+2013-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsad_omp.c (get_nvts): Add extra_xml parameter and include
+	the extra_xml in the response. Update header accordingly.
+	(next_page): Add response as extra_xml for get_nvts.
+	(get_nvts_omp): Add extra_xml parameter.
+	(edit_tag): Move extra_xml element inside the edit_tag element.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add response indicator for edit_tag
+	and use new ones for get_nvts.
+
+	* src/html/omp.xsl (user-tags-window): Insert anchor user_tags only
+	if a successful tag operation response is found.
+	(get_task, get_lsc_credential, get_agent, get_alert, get_filter)
+	(get_target, get_config_response, get_schedule, get_slave)
+	(get_nvts, get_note, get_override, get_group, get_permission)
+	(get_port_list, get_report_format, get_report, get_result)
+	(get_user): Add delete_tag_response, create_tag_response and
+	modify_tag_response template calls.
+
 2013-06-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [ssl_certs]): Add DN column. Remove domain

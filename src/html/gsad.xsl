@@ -796,6 +796,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/modify_override_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="edit_tag/modify_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="edit_tag/gsad_msg"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="edit_task/gsad_msg"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_lsc_credential/gsad_msg"
@@ -920,11 +924,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_nvts/commands_response/modify_note_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_nvts/commands_response/create_tag_response"
+        <xsl:apply-templates select="get_nvts/delete_tag_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_nvts/commands_response/delete_tag_response"
+        <xsl:apply-templates select="get_nvts/create_tag_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_nvts/commands_response/modify_tag_response"
+        <xsl:apply-templates select="get_nvts/modify_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_nvts/gsad_msg"
                              mode="response-indicator"/>
