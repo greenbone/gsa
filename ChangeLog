@@ -1,3 +1,19 @@
+2013-06-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add download in report SSL Certificate.
+
+	* src/gsad.c (init_validator): Validate download_ssl_cert command and
+	ssl_cert parameter.
+	(exec_omp_get): Handle download_ssl_cert command.
+
+	* src/gsad_omp.c (download_ssl_cert): New function.
+
+	* src/gsad_omp.h: Add download_ssl_cert prototype.
+
+	* src/html/omp.xsl (report [ssl_certs]): Add actions column. Call
+	download ssl cert button.
+	(download_ssl_cert): New template.
+
 2013-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/gsad_omp.c (get_nvts): Add extra_xml parameter and include

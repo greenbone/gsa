@@ -67,6 +67,8 @@ char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
 
 char * get_report_section_omp (credentials_t *, params_t *);
 
+char * download_ssl_cert (credentials_t *, params_t *, gsize *);
+
 char * get_result_omp (credentials_t *, params_t *);
 
 char * new_alert_omp (credentials_t *, params_t *);

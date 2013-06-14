@@ -596,6 +596,7 @@ init_validator ()
                          "|(delete_user)"
                          "|(download_agent)"
                          "|(download_lsc_credential)"
+                         "|(download_ssl_cert)"
                          "|(edit_agent)"
                          "|(edit_alert)"
                          "|(edit_config)"
@@ -892,6 +893,7 @@ init_validator ()
                          "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "nvt:name",          "(?s)^.*$");
@@ -2147,6 +2149,17 @@ exec_omp_get (struct MHD_Connection *connection,
       free (filename);
 
       return html;
+    }
+
+  else if (!strcmp (cmd, "download_ssl_cert"))
+    {
+      *content_type = GSAD_CONTENT_TYPE_APP_KEY;
+      free (*content_disposition);
+      *content_disposition = g_strdup_printf
+                              ("attachment; filename=ssl-cert-%s.pem",
+                               params_value (params, "name"));
+
+      return download_ssl_cert (credentials, params, response_size);
     }
 
   ELSE (get_alert)

@@ -22363,6 +22363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Not valid after</td>
           <td>Host</td>
           <td>Port</td>
+          <td>Actions</td>
         </tr>
         <xsl:for-each select="report/host/detail[contains(name, 'SSLDetails:')]">
           <!-- Sort by DN value -->
@@ -22371,9 +22372,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="fingerprint" select="substring-after(name, 'SSLDetails:')"/>
           <xsl:variable name="details" select="value"/>
           <xsl:variable name="sslinfo" select="../detail[name='SSLInfo' and contains(value, $fingerprint)]"/>
+          <xsl:variable name="cert" select="substring-after(../detail[name = concat('Cert:', $fingerprint)]/value, ':')"/>
           <xsl:variable name="port" select="substring-before($sslinfo/value, ':')"/>
           <xsl:variable name="dn" select="substring-before(substring-after($details, 'issuer:'), '|')"/>
 
+          <xsl:variable name="serial" select="substring-before(substring-after($details, 'serial:'), '|')"/>
           <xsl:variable name="not_before" select="substring-before(substring-after($details, 'notBefore:'), '|')"/>
           <xsl:variable name="not_after" select="substring-after($details, 'notAfter:')"/>
 
@@ -22382,10 +22385,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <tr class="{gsa:table-row-class(position())}">
             <td>
-              <xsl:value-of select="$dn"/>
+              <xsl:value-of select="substring($dn, 1, 50)"/>
             </td>
             <td>
-              <xsl:value-of select="substring-before(substring-after($details, 'serial:'), '|')"/>
+              <xsl:value-of select="$serial"/>
             </td>
             <td>
               <xsl:call-template name="ssl_certs_time">
@@ -22406,11 +22409,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:value-of select="$port"/>
             </td>
+            <td>
+              <xsl:call-template name="download_ssl_cert">
+                <xsl:with-param name="name" select="$serial"/>
+                <xsl:with-param name="cert" select="$cert"/>
+              </xsl:call-template>
+            </td>
           </tr>
         </xsl:for-each>
       </table>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template name="download_ssl_cert">
+  <xsl:param name="name"/>
+  <xsl:param name="cert"/>
+
+  <form action="" method="get">
+    <input type="hidden" name="cmd" value="download_ssl_cert"/>
+    <input type="hidden" name="name" value="{$name}"/>
+    <input type="hidden" name="ssl_cert" value="{str:encode-uri($cert, true ())}"/>
+    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="image" name="submit" value="Download SSL Cert"
+           title="Download SSL Cert" src="/img/download.png" border="0"
+           style="margin-left:3px;" alt="Download SSL Cert"/>
+  </form>
 </xsl:template>
 
 <xsl:template match="get_report_errors_response">

@@ -10466,6 +10466,43 @@ get_report_section_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Get an SSL Certificate.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return SSL Certificate.
+ */
+char *
+download_ssl_cert (credentials_t * credentials, params_t *params,
+                   gsize *response_size)
+{
+  const char *ssl_cert;
+  gchar *cert;
+  char *unescaped;
+
+  ssl_cert = params_value (params, "ssl_cert");
+  if (ssl_cert == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred."
+                         " Diagnostics: ssl_cert was NULL.",
+                         "/omp?cmd=get_reports");
+
+  /* The Base64 comes URI escaped as it may contain special characters. */
+  unescaped = g_uri_unescape_string (ssl_cert, NULL);
+
+  cert = g_strdup_printf ("-----BEGIN CERTIFICATE-----\n"
+                          "%s\n-----END CERTIFICATE-----\n",
+                          unescaped);
+
+  *response_size = strlen (cert);
+
+  g_free (unescaped);
+  return cert;
+}
+
+/**
  * @brief Get one result, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.
