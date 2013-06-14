@@ -1,3 +1,9 @@
+2013-06-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r16187. Patch by Hani Benhabiles.
+
+	* src/gsad_omp.c (save_alert_omp): Don't send next element.
+
 2013-06-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump to 4.0.2.
