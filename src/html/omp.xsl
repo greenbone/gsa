@@ -22385,7 +22385,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <tr class="{gsa:table-row-class(position())}">
             <td>
-              <xsl:value-of select="substring($dn, 1, 50)"/>
+              <xsl:value-of select="$dn"/>
             </td>
             <td>
               <xsl:value-of select="$serial"/>

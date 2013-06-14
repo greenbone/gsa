@@ -1,5 +1,9 @@
 2013-06-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [ssl_certs]): Remove substring call.
+
+2013-06-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add download in report SSL Certificate.
 
 	* src/gsad.c (init_validator): Validate download_ssl_cert command and
