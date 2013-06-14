@@ -926,7 +926,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                 filter = "sort-reverse=created rows=-2";
             }
           else if (strcmp (type, "task"))
-            filter = "rows=-2";
+            filter = "rows=-2 permission=any";
           else
             filter = "apply_overrides=0 rows=-2 permission=any owner=any";
           if (filt_id && strcmp (filt_id, ""))

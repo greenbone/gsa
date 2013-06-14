@@ -1,3 +1,8 @@
+2013-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Enable display of observed resources for
+	all types.
+
 2013-06-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [ssl_certs]): Remove substring call.
