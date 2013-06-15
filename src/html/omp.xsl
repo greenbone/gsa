@@ -8100,6 +8100,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Target'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -16438,6 +16441,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="observers-icon">
+  <xsl:param name="type"/>
+  <div class="float_right">
+    <xsl:choose>
+      <xsl:when test="owner/name=/envelope/login/text()">
+      </xsl:when>
+      <xsl:when test="string-length (owner/name) = 0">
+        <img src="/img/view_other.png"
+             style="margin-left:3px;"
+             border="0"
+             alt="Global {$type}"
+             title="Global {$type}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <img src="/img/view_other.png"
+             style="margin-left:3px;"
+             border="0"
+             alt="{$type} owned by {owner/name}"
+             title="{$type} owned by {owner/name}"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+</xsl:template>
+
 <xsl:template name="override" match="override">
   <xsl:param name="next">get_overrides</xsl:param>
   <xsl:param name="params"/>
@@ -16446,6 +16473,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Override'"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
