@@ -22354,7 +22354,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>CVE</td>
           <td>Hosts</td>
           <td>Occurences</td>
-          <td width="100">NVT Severity</td>
+          <td width="100">Severity</td>
         </tr>
         <xsl:for-each select="report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))]">
           <xsl:sort select="cve" order="descending"/>
