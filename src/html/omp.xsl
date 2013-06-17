@@ -236,14 +236,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:risk-factor-max-cvss">
   <xsl:param name="threat"/>
+  <xsl:param name="type"><xsl:value-of select="/envelope/severity"/></xsl:param>
   <xsl:variable name="cvss">
     <xsl:choose>
-      <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
-      <xsl:when test="gsa:lower-case($threat) = 'low'">2.0</xsl:when>
-      <xsl:when test="gsa:lower-case($threat) = 'medium'">5.0</xsl:when>
-      <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
-      <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
-      <xsl:otherwise>0.0</xsl:otherwise>
+      <xsl:when test="$type = 'classic'">
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">2.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">5.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>0.0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+
+      <xsl:when test="$type = 'pci-dss'">
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>None</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <!-- Default to nist/bsi -->
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">6.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>None</xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <func:result select="$cvss"/>
