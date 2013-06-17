@@ -14604,15 +14604,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </td>
     </tr>
-    <tr>
-      <td>Risk factor:</td>
-      <td><xsl:value-of select="risk_factor"/></td>
-    </tr>
+    <xsl:variable name="token" select="/envelope/token"/>
     <xsl:for-each select="str:split (tags, '|')">
       <xsl:if test="'cvss_base_vector' = substring-before (., '=')">
+        <xsl:variable name="cvss_vector" select="substring-after (., '=')"/>
         <tr>
           <td>CVSS base vector:</td>
-          <td><xsl:value-of select="substring-after (., '=')"/></td>
+          <td>
+            <a href="/omp?cmd=cvss_calculator&amp;cvss_vector={$cvss_vector}&amp;token={$token}">
+              <xsl:value-of select="$cvss_vector"/>
+            </a>
+          </td>
         </tr>
       </xsl:if>
     </xsl:for-each>

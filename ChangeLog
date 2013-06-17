@@ -1,3 +1,8 @@
+2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (nvt): Remove nvt risk factor. Make the base vector
+	link to the cvss calculator.
+
 2013-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install cpe-icons.xml. Install app icons in base
