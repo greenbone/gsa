@@ -1,5 +1,14 @@
 2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Validate cves value for report_section
+	parameter.
+
+	* src/html/omp.xsl (gsa:report-section-title, report [section-list]):
+	Add CVEs section.
+	(get_report_cves_response, report [cves]): New templates.
+
+2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (gsa:risk-factor-max-cvss): Determine max cvss value
 	based also on user set severity class.
 

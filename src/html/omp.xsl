@@ -3943,6 +3943,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$section = 'apps' and $type = 'prognostic'">Report: Prognostic Applications</xsl:when>
       <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
       <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
+      <xsl:when test="$section = 'cves'">Report: CVEs</xsl:when>
       <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
       <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
       <xsl:when test="$section = 'ssl_certs'">Report: SSL Certificates</xsl:when>
@@ -21247,6 +21248,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
+              <xsl:if test="$current != 'cves' and $type != 'prognostic' and $type != 'delta'">
+                <xsl:apply-templates select="." mode="section-link">
+                  <xsl:with-param name="count" select="cves/count"/>
+                  <xsl:with-param name="section" select="'cves'"/>
+                </xsl:apply-templates>
+              </xsl:if>
+            </li>
+            <li>
               <xsl:if test="$current != 'closed_cves' and $type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="closed_cves/count"/>
@@ -22306,6 +22315,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </tr>
             </xsl:for-each>
           </xsl:for-each>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_report_cves_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="cves"/>
+</xsl:template>
+
+<xsl:key name="key_report_cves" match="report/results/result/nvt" use="cve"/>
+<xsl:key name="key_report_cves_hosts" match="report/results/result" use="concat(host, '|', nvt/cve)"/>
+<xsl:template match="report" mode="cves">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:apply-templates select="report" mode="section-list">
+        <xsl:with-param name="current" select="'cves'"/>
+      </xsl:apply-templates>
+      <xsl:call-template name="report-section-pager">
+        <xsl:with-param name="current" select="count(report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))])"/>
+      </xsl:call-template>
+      <xsl:call-template name="report-help-icon"/>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="section-filter">
+        <xsl:with-param name="section" select="'cves'"/>
+      </xsl:apply-templates>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>CVE</td>
+          <td>Hosts</td>
+          <td>Occurences</td>
+          <td width="100">NVT Severity</td>
+        </tr>
+        <xsl:for-each select="report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))]">
+          <xsl:sort select="cve" order="descending"/>
+          <xsl:variable name="cve" select="cve"/>
+          <tr class="position()">
+            <td>
+              <xsl:value-of select="$cve"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../result[nvt/cve = $cve and generate-id() = generate-id(key('key_report_cves_hosts', concat(host, '|', nvt/cve)))])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../../result[nvt/cve = $cve])"/>
+            </td>
+            <td>
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="cvss_base"/>
+              </xsl:call-template>
+            </td>
+          </tr>
         </xsl:for-each>
       </table>
     </div>
