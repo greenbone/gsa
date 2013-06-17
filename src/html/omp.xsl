@@ -4389,6 +4389,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Credential'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -4739,6 +4742,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Agent'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -5805,6 +5811,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Alert'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -6507,6 +6516,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Filter'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -6942,6 +6954,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Tag'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -9971,6 +9986,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Config'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -11355,6 +11373,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Schedule'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -11900,6 +11921,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Slave'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -15464,6 +15488,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Note'"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
@@ -17963,6 +17990,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Port List'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
@@ -18623,6 +18653,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Report Format'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>

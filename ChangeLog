@@ -1,5 +1,10 @@
 2013-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (lsc_credential, agent, alert, filter, tag, config)
+	(schedule, slave, note, port_list, report_format): Add observers icon.
+
+2013-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (permission): Add missing @.
 	(permission [details], permission [trash])
 	(html-edit-permission-form): Access resource info directly under
