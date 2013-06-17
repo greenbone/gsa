@@ -1,3 +1,11 @@
+2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r16625. Patch by Hani Benhabiles.
+
+	* src/gsad_omp.c (create_override, create_note): Validate port value
+	when entered manually. Don't validate values coming from results dialog.
+	Slightly modified original patch for OpenVAS 6.
+
 2013-06-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r16187. Patch by Hani Benhabiles.

@@ -9906,25 +9906,26 @@ create_note_omp (credentials_t *credentials, params_t *params)
   else
     threat = "";
 
-  if (params_valid (params, "port"))
-    {
-      port = params_value (params, "port");
-      if (strcmp (port, "--") == 0)
-        {
-          if (params_valid (params, "port_manual"))
-            port = params_value (params, "port_manual");
-          else if (params_given (params, "ports_manual")
-                   && strcmp (params_original_value (params, "port_manual"),
-                              ""))
-            port = NULL;
-          else
-            port = "";
-        }
-    }
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
+  port = params_value (params, "port");
+  if (port == NULL)
     port = "";
+  if (strcmp (port, "--") == 0)
+    {
+      int num = -1;
+
+      port = params_value (params, "port_manual");
+      if (port)
+        num = atoi (port);
+      if (num < 0 || num > 65535)
+        port = NULL;
+    }
+  if (port == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new note. "
+                         "No new note was created. "
+                         "Diagnostics: Port was NULL.",
+                         "/omp?cmd=get_notes");
 
   if (params_valid (params, "hosts"))
     {
@@ -10678,25 +10679,25 @@ create_override_omp (credentials_t *credentials, params_t *params)
   else
     new_threat = "";
 
-  if (params_valid (params, "port"))
-    {
-      port = params_value (params, "port");
-      if (strcmp (port, "--") == 0)
-        {
-          if (params_valid (params, "port_manual"))
-            port = params_value (params, "port_manual");
-          else if (params_given (params, "ports_manual")
-                   && strcmp (params_original_value (params, "port_manual"),
-                              ""))
-            port = NULL;
-          else
-            port = "";
-        }
-    }
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
+  port = params_value (params, "port");
+  if (port == NULL)
     port = "";
+  if (strcmp (port, "--") == 0)
+    {
+      int num = -1;
+
+      port = params_value (params, "port_manual");
+      if (port)
+        num = atoi (port);
+      if (num < 0 || num > 65535)
+        port = NULL;
+    }
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: Port was NULL.",
+                         "/omp?cmd=get_overrides");
 
   if (params_valid (params, "hosts"))
     {
