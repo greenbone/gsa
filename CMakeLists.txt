@@ -311,6 +311,7 @@ install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
                src/html/help.xsl src/html/omp.xsl
 			   src/html/omp-doc.xsl src/html/rnc.xsl
 			   src/html/os.xml src/html/wizard.xsl
+               src/html/cpe-icons.xml
          DESTINATION ${GSA_DATA_DIR})
 
 install (FILES src/html/login/login.html src/html/gsa-style.css
@@ -327,13 +328,6 @@ install (FILES src/html/img/style/window_dec_a.png
                src/html/img/style/window_dec_b.png
                src/html/img/style/window_dec_c.png
          DESTINATION ${GSA_DATA_DIR}/login/img/style)
-
-install (FILES src/html/img/cpe/a:apache:http_server.png
-               src/html/img/cpe/a:mysql:mysql.png
-               src/html/img/cpe/a:openbsd:openssh.png
-               src/html/img/cpe/a:php:php.png
-               src/html/img/cpe/a:postgresql:postgresql.png
-         DESTINATION ${GSA_DATA_DIR}/login/img/cpe)
 
 install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/key.png src/html/img/p_bar_bg.png
@@ -432,6 +426,14 @@ install (FILES  src/html/img/os_aix.png
                 src/html/img/os_vmware.png
                 src/html/img/os_windows.png
          DESTINATION ${GSA_DATA_DIR}/img)
+
+install (FILES src/html/img/cpe/other.png
+               src/html/img/cpe/a:apache:http_server.png
+               src/html/img/cpe/a:mysql:mysql.png
+               src/html/img/cpe/a:openbsd:openssh.png
+               src/html/img/cpe/a:php:php.png
+               src/html/img/cpe/a:postgresql:postgresql.png
+         DESTINATION ${GSA_DATA_DIR}/img/cpe)
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})

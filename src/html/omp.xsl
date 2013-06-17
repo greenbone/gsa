@@ -12743,20 +12743,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <xsl:param name="cpe_id"/>
+  <xsl:param name="no_icon"/>
+  <xsl:param name="hide_other_icon"/>
   <xsl:variable name="cpe_select">
     <xsl:choose>
       <xsl:when test="$cpe_id">info_id=<xsl:value-of select="str:encode-uri (str:replace($cpe_id, '&amp;','&amp;amp;'), true())"/></xsl:when>
       <xsl:otherwise>info_name=<xsl:value-of select="str:encode-uri (str:replace($cpe, '&amp;','&amp;amp;'), true())"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;{$cpe_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-    title="Details">
-     <xsl:call-template name="wrap" disable-output-escaping="yes">
-      <xsl:with-param name="string" select="$cpe"/>
-      <xsl:with-param name="width" select="'55'"/>
-      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
-    </xsl:call-template>
-  </a>
+  <span style="white-space:nowrap">
+    <xsl:if test="not($no_icon)">
+      <xsl:call-template name="cpe-icon">
+        <xsl:with-param name="cpe" select="$cpe"/>
+        <xsl:with-param name="hide_other" select="$hide_other_icon"/>
+      </xsl:call-template>
+    </xsl:if>
+    <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;{$cpe_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+      title="Details">
+      <xsl:call-template name="wrap" disable-output-escaping="yes">
+        <xsl:with-param name="string" select="$cpe"/>
+        <xsl:with-param name="width" select="'55'"/>
+        <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
+      </xsl:call-template>
+    </a>
+  </span>
 </xsl:template>
 
 <xsl:template name="get_info_cve_lnk">
@@ -13901,7 +13911,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:sort select="text()"/>
 
                   <tr class="{gsa:table-row-class(position())}">
-                    <td><xsl:value-of select="text()"/></td>
+                    <td>
+                      <xsl:call-template name="cpe-icon">
+                        <xsl:with-param name="cpe" select="text()"/>
+                        <xsl:with-param name="hide_other" select="0"/>
+                      </xsl:call-template>
+                      <xsl:value-of select="text()"/>
+                    </td>
                     <td width="100">
                       <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
                         title="Details">
@@ -14011,12 +14027,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <table>
         <tr>
-          <td width="100"><b>Name:</b></td>
-          <td>
-            <b>
-              <xsl:value-of select="info/name"/>
-            </b>
-          </td>
+          <xsl:if test="info/name">
+            <td width="100"><b>Name:</b></td>
+            <td>
+              <b>
+                <xsl:call-template name="cpe-icon">
+                  <xsl:with-param name="cpe" select="info/@id"/>
+                  <xsl:with-param name="hide_other" select="1"/>
+                </xsl:call-template>
+                <xsl:value-of select="info/name"/>
+              </b>
+            </td>
+          </xsl:if>
         </tr>
         <xsl:if test="info/cpe/title">
           <tr>
@@ -20540,6 +20562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr><td>Product:</td><td>
           <xsl:call-template name="get_info_cpe_lnk">
             <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
+            <xsl:with-param name="hide_other_icon" select="1"/>
           </xsl:call-template>
           </td></tr>
           <tr><td>Method:</td><td>
@@ -20908,6 +20931,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="cpe-icon">
+  <xsl:param name="cpe"/>
+  <xsl:param name="hide_other" select="0"/>
+  <xsl:variable name="icon_data" select="document('cpe-icons.xml')/cpe_icon_dict/cpe_entry[contains($cpe, pattern)]"/>
+  <xsl:choose>
+    <xsl:when test="$icon_data != ''">
+      <img src="/img/{$icon_data/icon}" title=""
+           width="16px" height="16px" style="margin-right:3px"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="not($hide_other)">
+        <img src="img/cpe/other.png" title="" width="16px" height="16px" style="margin-right:3px"/>
+      </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

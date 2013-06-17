@@ -1,3 +1,21 @@
+2013-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install cpe-icons.xml. Install app icons in base
+	img directory instead of img/login. Install new img/cpe/other.png.
+
+	* src/html/cpe-icons.xml: New CPE icon dictionary used in
+	src/html/omp.xsl.
+
+	* src/html/omp.xsl (get_info_cpe_lnk): Add CPE icon and options to
+	hide it (no_icon, hide_other_icon).
+	(cve-details): Add CPE icons in Vulnerable Products section.
+	(cpe-details): Add CPE icon in front of name. Hide name field entirely
+	if no name is found.
+	(result [result-body]): Add hide_other_icon to cpe link.
+	(cpe-icon): New template. Adds an icon for a given CPE.
+
+	* src/html/img/other.png: New icon.
+
 2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [cves]): Change NVT Severity column name.
