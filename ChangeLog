@@ -1,3 +1,13 @@
+2013-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r16690.
+
+	* src/gsad.c (import_report_format_omp): Switch to new style so that
+	filtering is preserved.
+
+	* src/html/omp.xsl (html-create-report-format-form)
+	(html-edit-report-format-form): Add missing filter params.
+
 2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r16625. Patch by Hani Benhabiles.

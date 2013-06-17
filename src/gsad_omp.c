@@ -12206,96 +12206,62 @@ edit_report_format_omp (credentials_t * credentials, params_t *params)
 char *
 import_report_format_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml = NULL;
-  int socket;
-  gchar *html;
+  gchar *command, *html, *response;
+  entity_t entity;
+  int ret;
 
-  switch (manager_connect (credentials, &socket, &session, &html))
+  /* Create the report format. */
+
+  response = NULL;
+  entity = NULL;
+  command = g_strdup_printf ("<create_report_format>"
+                             "%s"
+                             "</create_report_format>",
+                             params_value (params, "xml_file"));
+  ret = omp (credentials, &response, &entity, command);
+  g_free (command);
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a report format. "
+                             "The schedule remains the same. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_schedules");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a report format. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_schedules");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
-                             "No new report format was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_report_formats");
-    }
-
-  xml = g_string_new ("<get_report_formats>");
-
-  /* Create the report format. */
-
-  if (openvas_server_sendf (&session,
-                            "<create_report_format>"
-                            "%s"
-                            "</create_report_format>",
-                            params_value (params, "xml_file"))
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a report format. "
-                           "No new report format was created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a report format. "
-                           "It is unclear whether the report format has been created or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  /* Get all the report formats. */
-
-  if (openvas_server_send (&session,
-                           "<get_report_formats"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a report format. "
-                           "The new report format was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a report format. "
-                           "The new report format was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_report_formats");
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_schedules");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_report_formats>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_report_formats (credentials, params, response);
+    }
+  else
+    html = new_report_format (credentials, params, response);
+
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
