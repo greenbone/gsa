@@ -1,3 +1,10 @@
+2013-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (permission): Add missing @.
+	(permission [details], permission [trash])
+	(html-edit-permission-form): Access resource info directly under
+	RESOURCE, now that it is available there.
+
 2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Remove nvt risk factor. Make the base vector

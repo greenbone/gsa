@@ -17369,7 +17369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="resource/type"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
          title="Details">
         <xsl:value-of select="resource/name"/>
       </a>
@@ -17415,9 +17415,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><xsl:value-of select="gsa:capitalise (subject/type)"/>:</td>
           <td>
-            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/*/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
                title="Details">
-              <xsl:value-of select="subject/*/name"/>
+              <xsl:value-of select="subject/name"/>
             </a>
           </td>
         </tr>
@@ -17470,9 +17470,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="resource/type"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
          title="Details">
-        <xsl:value-of select="resource/*/name"/>
+        <xsl:value-of select="resource/name"/>
       </a>
     </td>
     <td>
@@ -17691,7 +17691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="175">Resource ID (optional)</td>
             <td>
               <xsl:choose>
-                <xsl:when test="commands_response/get_permissions_response/permission/resource/*/@id = '0'">
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
                   <input type="text" name="id_or_empty"
                          value=""
                          size="50"
@@ -17699,7 +17699,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="text" name="id_or_empty"
-                         value="{commands_response/get_permissions_response/permission/resource/*/@id}"
+                         value="{commands_response/get_permissions_response/permission/resource/@id}"
                          size="50"
                          maxlength="100"/>
                 </xsl:otherwise>
