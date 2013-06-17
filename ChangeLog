@@ -1,3 +1,11 @@
+2013-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (import_report_format_omp): Switch to new style so that
+	filtering is preserved.
+
+	* src/html/omp.xsl (html-create-report-format-form)
+	(html-edit-report-format-form): Add missing filter params.
+
 2013-06-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate cves value for report_section
