@@ -1,5 +1,16 @@
 2013-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (info/cve): When no CVSS is provided, create severity
+	bar with N/A text.
+	(html-cve-table): Change CVSS to Severity.
+	(cve-details): Make cvss vector link to cvss calculator. Display empty
+	severity bar when no CVSS is provided.
+	(host): Float severity bar to the left.
+
+	* src/html/gsa-style.css: Remove float from progressbar_box class.
+
+2013-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-nvt-table): Rename CVSS column to Severity.
 	Adapt name used for sorting.
 

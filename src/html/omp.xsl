@@ -12354,12 +12354,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <td>
-        <xsl:if test="cvss &gt;= 0.0">
-          <xsl:call-template name="severity-bar">
-            <xsl:with-param name="cvss" select="cvss"/>
-            <xsl:with-param name="scale" select="7"/>
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="cvss &gt;= 0.0">
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="cvss"/>
+              <xsl:with-param name="scale" select="7"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="extra_text" select="'N/A'"/>
+              <xsl:with-param name="scale" select="7"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
       <td rowspan="2">
         <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
@@ -13097,8 +13105,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVSS</xsl:with-param>
-                <xsl:with-param name="name">cvss</xsl:with-param>
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
               </xsl:call-template>
@@ -13784,40 +13792,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td>Base score</td>
                   <td>
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
-                    </xsl:call-template>
-                    (AV:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'ADJACENT_NETWORK'">A</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>/AC:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'LOW'">L</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'MEDIUM'">M</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'HIGH'">H</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>/Au:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'NONE'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'MULTIPLE_INSTANCES'">M</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'SINGLE_INSTANCE'">C</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>/C:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'NONE'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'PARTIAL'">P</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'COMPLETE'">C</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>/I:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'NONE'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'PARTIAL'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'COMPLETE'">N</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>/A:<xsl:choose>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'NONE'">N</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'PARTIAL'">P</xsl:when>
-                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'COMPLETE'">C</xsl:when>
-                      <xsl:otherwise>ERROR</xsl:otherwise>
-                    </xsl:choose>)
+                    <div style="float: left;">
+                      <xsl:call-template name="severity-bar">
+                        <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                      </xsl:call-template>
+                    </div>
+                    <xsl:variable name="vector">
+                      <xsl:text>AV:</xsl:text>
+                      <xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'ADJACENT_NETWORK'">A</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>/AC:<xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'LOW'">L</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'MEDIUM'">M</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'HIGH'">H</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>/Au:<xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'NONE'">N</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'MULTIPLE_INSTANCES'">M</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'SINGLE_INSTANCE'">C</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>/C:<xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'NONE'">N</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'PARTIAL'">P</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'COMPLETE'">C</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>/I:<xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'NONE'">N</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'PARTIAL'">P</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'COMPLETE'">C</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>/A:<xsl:choose>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'NONE'">N</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'PARTIAL'">P</xsl:when>
+                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'COMPLETE'">C</xsl:when>
+                        <xsl:otherwise>ERROR</xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:variable>
+                    (<a href="/omp?cmd=cvss_calculator&amp;cvss_vector={$vector}&amp;token={/envelope/token}">
+                      <xsl:value-of select="$vector"/>
+                    </a>)
                   </td>
                 </tr>
                 <tr>
@@ -13855,7 +13871,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </xsl:when>
             <xsl:otherwise>
-              <h1>CVSS: None</h1>
+              <h1>CVSS:
+                <div style="display: inline-block; vertical-align: middle;">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="'N/A'"/>
+                  </xsl:call-template>
+                </div>
+              </h1>
             </xsl:otherwise>
           </xsl:choose>
 
@@ -19346,10 +19368,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="detail[contains(name, '/CVSS')]">
                   <xsl:sort data-type="number" select="value" order="descending"/>
                   <xsl:if test="position() = 1">
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="value"/>
-                      <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(value), ')')"/>
-                    </xsl:call-template>
+                    <div style="float: left;">
+                      <xsl:call-template name="severity-bar">
+                        <xsl:with-param name="cvss" select="value"/>
+                        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(value), ')')"/>
+                      </xsl:call-template>
+                    </div>
                   </xsl:if>
                 </xsl:for-each>
               </td>
