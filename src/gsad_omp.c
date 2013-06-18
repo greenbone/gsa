@@ -9877,6 +9877,19 @@ new_note_omp (credentials_t *credentials, params_t *params)
   return new_note (credentials, params, NULL);
 }
 
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      char *html;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "New Note");                                       \
+      html = new_note (credentials, params, msg);                              \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
 /**
  * @brief Create a note, get report, XSL transform the result.
  *
@@ -9919,13 +9932,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  if (port == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new note. "
-                         "No new note was created. "
-                         "Diagnostics: Port was NULL.",
-                         "/omp?cmd=get_notes");
+  CHECK(port);
 
   if (params_valid (params, "hosts"))
     {
@@ -10048,6 +10055,8 @@ create_note_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
+
+#undef CHECK
 
 /**
  * @brief Delete note, get next page, XSL transform the result.
@@ -10643,6 +10652,19 @@ new_override_omp (credentials_t *credentials, params_t *params)
   return new_override (credentials, params, NULL);
 }
 
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      char *html;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "New Override");                                   \
+      html = new_override (credentials, params, msg);                          \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
 /**
  * @brief Create an override, get report, XSL transform the result.
  *
@@ -10692,12 +10714,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
       if (num < 0 || num > 65535)
         port = NULL;
     }
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new override. "
-                         "No new override was created. "
-                         "Diagnostics: Port was NULL.",
-                         "/omp?cmd=get_overrides");
+  CHECK(port);
 
   if (params_valid (params, "hosts"))
     {
@@ -10822,6 +10839,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
+
+#undef CHECK
 
 /**
  * @brief Delete override, get next page, XSL transform the result.
