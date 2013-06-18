@@ -13221,8 +13221,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVSS</xsl:with-param>
-                <xsl:with-param name="name">cvss_base</xsl:with-param>
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
               </xsl:call-template>
