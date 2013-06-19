@@ -1,3 +1,15 @@
+2013-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Add permission term to note filter check.
+	Make the check cover overrides too.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add permission term to notes
+	filter so that observed resources are included.  Add overrides filter so
+	that sorting is by NVT instead of name.
+
+	* src/html/omp.xsl (task [details], nvt): Add permission term to filter
+	so that observed resources are included.
+
 2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_report_omp, create_task_omp):

@@ -2475,7 +2475,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Notes:
           </td>
           <td>
-            <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Notes on Task {name}">
               <xsl:value-of select="count (../../get_notes_response/note)"/>
             </a>
@@ -2486,7 +2486,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Overrides:
           </td>
           <td>
-            <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Overrides on Task {name}">
               <xsl:value-of select="count (../../get_overrides_response/override)"/>
             </a>
@@ -14582,7 +14582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr>
       <td>Notes:</td>
       <td>
-        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="Notes on NVT {name}">
           <xsl:value-of select="count (../../get_notes_response/note)"/>
         </a>
@@ -14591,7 +14591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr>
       <td>Overrides:</td>
       <td>
-        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="Overrides on NVT {name}">
           <xsl:value-of select="count (../../get_overrides_response/override)"/>
         </a>

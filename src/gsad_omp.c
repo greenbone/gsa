@@ -935,8 +935,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           else
             filt_id = "-2";
         }
-      else if ((strcmp (filter, "sort=nvt") == 0)
-               && (strcmp (type, "note") == 0))
+      else if ((strcmp (filter, "sort=nvt permission=any") == 0)
+               && ((strcmp (type, "note") == 0)
+                   || (strcmp (type, "override") == 0)))
         filt_id = "-2";
       else if ((strcmp (filter, "apply_overrides=1") == 0)
                && (strcmp (type, "task") == 0))
