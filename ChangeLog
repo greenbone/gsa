@@ -1,3 +1,15 @@
+2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Remove install of pre-generated cpe-icons.xml,
+	run generator script and install generated file instead.
+
+	* cpe-icons.xml: Removed, now generated automatically.
+
+	* tools/cpe-icon-dict-append.in, tools/cpe-icon-dict-prepend.in: New
+	input files for generate-cpe-icon-dict.sh.
+
+	* tools/generate-cpe-icon-dict.sh: New script to generate cpe-icons.xml.
+
 2013-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (info/cve): When no CVSS is provided, create severity

@@ -294,6 +294,14 @@ set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
+## Files generated on installation
+
+add_custom_target (cpe-icon-dict
+                   ALL
+                   COMMENT "Generating CPE icon dictionary"
+                   COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-cpe-icon-dict.sh" --src_path "${CMAKE_SOURCE_DIR}/src/html/img/cpe" > ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
+                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
+
 ## Version
 
 string (REPLACE "
@@ -311,7 +319,6 @@ install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
                src/html/help.xsl src/html/omp.xsl
 			   src/html/omp-doc.xsl src/html/rnc.xsl
 			   src/html/os.xml src/html/wizard.xsl
-               src/html/cpe-icons.xml
          DESTINATION ${GSA_DATA_DIR})
 
 install (FILES src/html/login/login.html src/html/gsa-style.css
@@ -437,6 +444,9 @@ install (FILES src/html/img/cpe/other.png
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
+
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
+         DESTINATION ${GSA_DATA_DIR})
 
 ## Program
 

@@ -1,61 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
-Greenbone Security Assistant
-$
-Description: CPE icon dictionary
-
-Authors:
-Timo Pollmeier <timo.pollmeier@greenbone.net>
-
-Copyright:
-Copyright (C) 2013 Greenbone Networks GmbH
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 2,
-or, at your option, any later version as published by the Free
-Software Foundation
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
--->
-
-<!-- This file has been generated automatically using generate-cpe-icon-dict.sh -->
-<cpe_icon_dict>
-  <!-- manually created overrides -->
- 
-  <!-- generated -->
-  <cpe_entry>
-    <pattern>cpe:/a:apache:http_server</pattern>
-    <icon>cpe/a:apache:http_server.png</icon>
-  </cpe_entry>
-  <cpe_entry>
-    <pattern>cpe:/a:mysql:mysql</pattern>
-    <icon>cpe/a:mysql:mysql.png</icon>
-  </cpe_entry>
-  <cpe_entry>
-    <pattern>cpe:/a:mysql</pattern>
-    <icon>cpe/a:mysql.png</icon>
-  </cpe_entry>
-  <cpe_entry>
-    <pattern>cpe:/a:openbsd:openssh</pattern>
-    <icon>cpe/a:openbsd:openssh.png</icon>
-  </cpe_entry>
-  <cpe_entry>
-    <pattern>cpe:/a:php:php</pattern>
-    <icon>cpe/a:php:php.png</icon>
-  </cpe_entry>
-  <cpe_entry>
-    <pattern>cpe:/a:postgresql:postgresql</pattern>
-    <icon>cpe/a:postgresql:postgresql.png</icon>
-  </cpe_entry>
-  <!-- manually created fallbacks -->
   <!-- OS -->
   <cpe_entry>
     <pattern>cpe:/o:microsoft:windows</pattern>
@@ -170,4 +112,3 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <pattern>cpe:/h:hp:</pattern>
     <icon>os_hp.png</icon>
   </cpe_entry>
-</cpe_icon_dict>
