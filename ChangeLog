@@ -1,5 +1,12 @@
 2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_report_omp, create_task_omp):
+	Prepare commands in extra string to avoid unwanted markup escaping.
+	(create_agent_omp): Remove superfluous curly braces.
+	Prepare command in extra string to avoid unwanted markup escaping.
+
+2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (create_report_omp, create_task_omp, create_agent_omp):
 	Change to new style.
 

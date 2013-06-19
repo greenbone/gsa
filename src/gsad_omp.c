@@ -1919,7 +1919,7 @@ create_report_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   int ret;
-  gchar *html, *response;
+  gchar *command, *html, *response;
   const char *task_id, *name, *comment, *xml_file;
 
   task_id = params_value (params, "task_id");
@@ -1933,29 +1933,29 @@ create_report_omp (credentials_t * credentials, params_t *params)
     return new_task (credentials, "Invalid parameter", params);
 
   if (task_id)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<create_report>"
-               "<task id=\"%s\"/>"
-               "%s"
-               "</create_report>",
-               task_id ? task_id : "0",
-               xml_file ? xml_file : "");
+    command = g_strdup_printf ("<create_report>"
+                               "<task id=\"%s\"/>"
+                               "%s"
+                               "</create_report>",
+                               task_id ? task_id : "0",
+                               xml_file ? xml_file : "");
   else
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<create_report>"
-               "<task>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "</task>"
-               "%s"
-               "</create_report>",
-               name,
-               comment,
-               xml_file);
+    command = g_strdup_printf ("<create_report>"
+                               "<task>"
+                               "<name>%s</name>"
+                                "<comment>%s</comment>"
+                               "</task>"
+                               "%s"
+                               "</create_report>",
+                               name,
+                               comment,
+                               xml_file);
+
+  ret = omp (credentials,
+             &response,
+             &entity,
+             command);
+  g_free (command);
 
   switch (ret)
     {
@@ -2017,7 +2017,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   int ret;
-  gchar *schedule_element, *slave_element;
+  gchar *schedule_element, *slave_element, *command;
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
@@ -2123,45 +2123,48 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
+  command = g_strdup_printf ("<create_task>"
+                             "<config id=\"%s\"/>"
+                             "%s"
+                             "%s"
+                             "%s"
+                             "<target id=\"%s\"/>"
+                             "<name>%s</name>"
+                             "<comment>%s</comment>"
+                             "<preferences>"
+                             "<preference>"
+                             "<scanner_name>max_checks</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "<preference>"
+                             "<scanner_name>max_hosts</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "<preference>"
+                             "<scanner_name>in_assets</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "</preferences>"
+                             "<observers>%s%s</observers>"
+                             "</create_task>",
+                             config_id,
+                             schedule_element,
+                             alert_element->str,
+                             slave_element,
+                             target_id,
+                             name,
+                             comment,
+                             max_checks,
+                             max_hosts,
+                             strcmp (in_assets, "0") ? "yes" : "no",
+                             observers,
+                             group_element->str);
+
   ret = omp (credentials,
              &response,
              &entity,
-             "<create_task>"
-             "<config id=\"%s\"/>"
-             "%s"
-             "%s"
-             "%s"
-             "<target id=\"%s\"/>"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<preferences>"
-             "<preference>"
-             "<scanner_name>max_checks</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>max_hosts</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>in_assets</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "</preferences>"
-             "<observers>%s%s</observers>"
-             "</create_task>",
-             config_id,
-             schedule_element,
-             alert_element->str,
-             slave_element,
-             target_id,
-             name,
-             comment,
-             max_checks,
-             max_hosts,
-             strcmp (in_assets, "0") ? "yes" : "no",
-             observers,
-             group_element->str);
+             command);
+  g_free (command);
 
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
@@ -4057,7 +4060,7 @@ create_agent_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   entity_t entity;
-  gchar *response, *html;
+  gchar *command, *response, *html;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
@@ -4074,9 +4077,8 @@ create_agent_omp (credentials_t * credentials, params_t *params)
   howto_use = params_value (params, "howto_use");
   howto_use_size = params_value_size (params, "howto_use");
 
-  if (name == NULL || comment == NULL) {
+  if (name == NULL || comment == NULL)
     return get_agents (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
-  }
   else
     {
       gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
@@ -4103,28 +4105,31 @@ create_agent_omp (credentials_t * credentials, params_t *params)
                                         howto_use_size)
                      : g_strdup ("");
 
+      command = g_strdup_printf ("<create_agent>"
+                                 "<name>%s</name>"
+                                 "%s%s%s"
+                                 "<installer>"
+                                 "%s"
+                                 "<signature>%s</signature>"
+                                 "<filename>%s</filename>"
+                                 "</installer>"
+                                 "<howto_install>%s</howto_install>"
+                                 "<howto_use>%s</howto_use>"
+                                 "</create_agent>",
+                                 name, comment ? "<comment>" : "",
+                                 comment ? comment : "",
+                                 comment ? "</comment>" : "",
+                                 installer_64,
+                                 installer_sig_64,
+                                 installer_filename ? installer_filename : "",
+                                 howto_install_64,
+                                 howto_use_64);
+
       ret = omp (credentials,
                  &response,
                  &entity,
-                 "<create_agent>"
-                 "<name>%s</name>"
-                 "%s%s%s"
-                 "<installer>"
-                 "%s"
-                 "<signature>%s</signature>"
-                 "<filename>%s</filename>"
-                 "</installer>"
-                 "<howto_install>%s</howto_install>"
-                 "<howto_use>%s</howto_use>"
-                 "</create_agent>",
-                 name, comment ? "<comment>" : "",
-                 comment ? comment : "",
-                 comment ? "</comment>" : "",
-                 installer_64,
-                 installer_sig_64,
-                 installer_filename ? installer_filename : "",
-                 howto_install_64,
-                 howto_use_64);
+                 command);
+      g_free (command);
 
       g_free (installer_64);
       g_free (howto_install_64);
