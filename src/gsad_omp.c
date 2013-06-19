@@ -1918,8 +1918,7 @@ char *
 create_report_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
-  gnutls_session_t session;
-  int socket, ret;
+  int ret;
   gchar *html, *response;
   const char *task_id, *name, *comment, *xml_file;
 
@@ -1933,97 +1932,69 @@ create_report_omp (credentials_t * credentials, params_t *params)
       || (xml_file == NULL))
     return new_task (credentials, "Invalid parameter", params);
 
-  switch (manager_connect (credentials, &socket, &session, &html))
+  if (task_id)
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<create_report>"
+               "<task id=\"%s\"/>"
+               "%s"
+               "</create_report>",
+               task_id ? task_id : "0",
+               xml_file ? xml_file : "");
+  else
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<create_report>"
+               "<task>"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "</task>"
+               "%s"
+               "</create_report>",
+               name,
+               comment,
+               xml_file);
+
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new report. "
+                             "No new report was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new report. "
+                             "It is unclear whether the report has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             task_id
-                              ? "An internal error occurred while creating a new task. "
-                                "The task is not created. "
-                                "Diagnostics: Failure to connect to manager daemon."
-                              : "An internal error occurred while creating a new task. "
-                                "The task is not created. "
-                                "Diagnostics: Failure to connect to manager daemon.",
+                             "An internal error occurred while creating a new report. "
+                             "It is unclear whether the report has been created or not. "
+                             "Diagnostics: Internal Error.",
                              "/omp?cmd=get_tasks");
     }
 
-  if (task_id)
-    ret = openvas_server_sendf (&session,
-                                "<create_report>"
-                                "<task id=\"%s\"/>"
-                                "%s"
-                                "</create_report>",
-                                task_id ? task_id : "0",
-                                xml_file ? xml_file : "");
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response);
+    }
   else
-    ret = openvas_server_sendf (&session,
-                                "<create_report>"
-                                "<task>"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "</task>"
-                                "%s"
-                                "</create_report>",
-                                name,
-                                comment,
-                                xml_file);
-
-  if (ret == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           task_id
-                            ? "An internal error occurred while creating a report. "
-                              "The report is not created. "
-                              "Diagnostics: Failure to connect to manager daemon."
-                            : "An internal error occurred while creating a new task. "
-                              "The task is not created. "
-                              "Diagnostics: Failure to connect to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           task_id
-                            ? "An internal error occurred while creating a report. "
-                              "The report is not created. "
-                              "Diagnostics: Failure to connect to manager daemon."
-                            : "An internal error occurred while creating a new task. "
-                              "The task is not created. "
-                              "Diagnostics: Failure to connect to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
+    html = get_tasks (credentials, params, response);
   free_entity (entity);
-
-  openvas_server_close (socket, session);
-
-  /* Cleanup, and return next page. */
-
-  html = next_page (credentials, params, response);
   g_free (response);
-  if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         task_id
-                          ? "An internal error occurred while creating a report. "
-                            "The report is not created. "
-                            "Diagnostics: Failure to connect to manager daemon."
-                          : "An internal error occurred while creating a new task. "
-                            "The task is not created. "
-                            "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
   return html;
 }
 
@@ -2045,11 +2016,9 @@ char *
 create_task_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
-  gnutls_session_t session;
-  char *text = NULL;
-  int socket, ret;
+  int ret;
   gchar *schedule_element, *slave_element;
-  gchar *html;
+  gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
   const char *in_assets, *submit;
@@ -2112,25 +2081,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (max_hosts);
   CHECK (observers);
 
-  // TODO: Convert to new style that calls "omp", so that XML escaping is done.
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new task. "
-                             "The task is not created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
   if (schedule_id == NULL || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
   else
@@ -2173,76 +2123,89 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
-  ret = openvas_server_sendf (&session,
-                              "<create_task>"
-                              "<config id=\"%s\"/>"
-                              "%s"
-                              "%s"
-                              "%s"
-                              "<target id=\"%s\"/>"
-                              "<name>%s</name>"
-                              "<comment>%s</comment>"
-                              "<preferences>"
-                              "<preference>"
-                              "<scanner_name>max_checks</scanner_name>"
-                              "<value>%s</value>"
-                              "</preference>"
-                              "<preference>"
-                              "<scanner_name>max_hosts</scanner_name>"
-                              "<value>%s</value>"
-                              "</preference>"
-                              "<preference>"
-                              "<scanner_name>in_assets</scanner_name>"
-                              "<value>%s</value>"
-                              "</preference>"
-                              "</preferences>"
-                              "<observers>%s%s</observers>"
-                              "</create_task>",
-                              config_id,
-                              schedule_element,
-                              alert_element->str,
-                              slave_element,
-                              target_id,
-                              name,
-                              comment,
-                              max_checks,
-                              max_hosts,
-                              strcmp (in_assets, "0") ? "yes" : "no",
-                              observers,
-                              group_element->str);
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<create_task>"
+             "<config id=\"%s\"/>"
+             "%s"
+             "%s"
+             "%s"
+             "<target id=\"%s\"/>"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "<preferences>"
+             "<preference>"
+             "<scanner_name>max_checks</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "<preference>"
+             "<scanner_name>max_hosts</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "<preference>"
+             "<scanner_name>in_assets</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "</preferences>"
+             "<observers>%s%s</observers>"
+             "</create_task>",
+             config_id,
+             schedule_element,
+             alert_element->str,
+             slave_element,
+             target_id,
+             name,
+             comment,
+             max_checks,
+             max_hosts,
+             strcmp (in_assets, "0") ? "yes" : "no",
+             observers,
+             group_element->str);
 
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
   g_string_free (group_element, TRUE);
   g_free (slave_element);
 
-  if (ret == -1)
+  switch (ret)
     {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new task. "
-                           "The task is not created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new task. "
+                             "No new task was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
+  if (omp_success (entity))
     {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new task. "
-                           "It is unclear whether the task has been created or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response);
     }
+  else
+    html = new_task (credentials, response, params);
   free_entity (entity);
-
-  openvas_server_close (socket, session);
-  html = get_tasks (credentials, params, text);
-  g_free (text);
+  g_free (response);
   return html;
 }
 
@@ -4092,33 +4055,12 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 char *
 create_agent_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  int socket;
-  GString *xml;
-  gchar *html;
+  int ret;
+  entity_t entity;
+  gchar *response, *html;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
-  char *ret;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new agent. "
-                             "No new agent was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_agents");
-    }
-
-  xml = g_string_new ("");
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -4132,11 +4074,11 @@ create_agent_omp (credentials_t * credentials, params_t *params)
   howto_use = params_value (params, "howto_use");
   howto_use_size = params_value_size (params, "howto_use");
 
-  if (name == NULL || comment == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
+  if (name == NULL || comment == NULL) {
+    return get_agents (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
+  }
   else
     {
-      int ret;
       gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
 
       /* Create the agent. */
@@ -4161,62 +4103,73 @@ create_agent_omp (credentials_t * credentials, params_t *params)
                                         howto_use_size)
                      : g_strdup ("");
 
-      ret = openvas_server_sendf (&session,
-                                  "<create_agent>"
-                                  "<name>%s</name>"
-                                  "%s%s%s"
-                                  "<installer>"
-                                  "%s"
-                                  "<signature>%s</signature>"
-                                  "<filename>%s</filename>"
-                                  "</installer>"
-                                  "<howto_install>%s</howto_install>"
-                                  "<howto_use>%s</howto_use>"
-                                  "</create_agent>",
-                                  name, comment ? "<comment>" : "",
-                                  comment ? comment : "",
-                                  comment ? "</comment>" : "",
-                                  installer_64,
-                                  installer_sig_64,
-                                  installer_filename ? installer_filename : "",
-                                  howto_install_64,
-                                  howto_use_64);
+      ret = omp (credentials,
+                 &response,
+                 &entity,
+                 "<create_agent>"
+                 "<name>%s</name>"
+                 "%s%s%s"
+                 "<installer>"
+                 "%s"
+                 "<signature>%s</signature>"
+                 "<filename>%s</filename>"
+                 "</installer>"
+                 "<howto_install>%s</howto_install>"
+                 "<howto_use>%s</howto_use>"
+                 "</create_agent>",
+                 name, comment ? "<comment>" : "",
+                 comment ? comment : "",
+                 comment ? "</comment>" : "",
+                 installer_64,
+                 installer_sig_64,
+                 installer_filename ? installer_filename : "",
+                 howto_install_64,
+                 howto_use_64);
 
       g_free (installer_64);
       g_free (howto_install_64);
       g_free (howto_use_64);
 
-      if (ret == -1)
+      switch (ret)
         {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new agent. "
-                               "No new agent was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_agents");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new agent. "
-                               "It is unclear whether the agent has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_agents");
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a new agent. "
+                                "No new agent was created. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_agents");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a new agent. "
+                                "It is unclear whether the agent has been created or not. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_agents");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a new agent. "
+                                "It is unclear whether the agent has been created or not. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_agents");
         }
     }
 
-  /* Get all agents. */
-
-  ret = get_agents (credentials, params, xml->str);
-  openvas_server_close (socket, session);
-  g_string_free (xml, TRUE);
-  return ret;
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_agents (credentials, params, response);
+    }
+  else
+    html = get_agents (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
