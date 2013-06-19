@@ -1,5 +1,10 @@
 2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Use abbreviation "S" for
+	"SINGLE_INSTANCE" in CVSS vector.
+
+2013-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* CMakeLists.txt: Remove install of pre-generated cpe-icons.xml,
 	run generator script and install generated file instead.
 
