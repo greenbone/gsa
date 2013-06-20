@@ -1,3 +1,21 @@
+2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-config-family-table): Rename table header
+	"CVSS" to "Severity" and remove centering.
+	(info/cpe, info/nvt, info/cve, info/ovaldef, info/dfn_cert_adv): Resize
+	severity bar and show empty bar with "N/A" for missing severity.
+	(html-cpe-table, html-ovaldef-table, html-dfn_cert_adv-table): Rename
+	table header "Max CVSS" to "Severity", including filter column.
+	(cpe-details): Rename "CVSS" to "Severity" in reported vulnerabilities
+	table header.
+	(ovaldef-details, dfn_cert_adv-details): Rename "Maximum CVSS" to
+	"Severity" and show empty "N/A" bar if no CVSS is available.
+	(nvt): Show empty "N/A" bar if no CVSS is available.
+
+	* src/html/help.xsl (config_editor_nvt_families.html)
+	(config_family_details.html, cpes.html, nvts.html, ovaldefs.html)
+	(dfn_cert_advs.html): Update columns renamed to "Severity".
+
 2013-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Add permission term to note filter check.

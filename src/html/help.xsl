@@ -6512,7 +6512,7 @@ Public License instead of this License.
           <td>Shows the OID of a NVT.</td>
         </tr>
         <tr class="even">
-          <td>CVSS</td>
+          <td>Severity</td>
           <td>Shows the CVSS of a NVT. Most, but not all NVTs have a value.</td>
         </tr>
         <tr class="odd">
@@ -6653,7 +6653,7 @@ Public License instead of this License.
           <td>Shows the OID of a NVT.</td>
         </tr>
         <tr class="even">
-          <td>CVSS</td>
+          <td>Severity</td>
           <td>Shows the CVSS of a NVT. Most, but not all NVTs have a value.</td>
         </tr>
         <tr class="odd">
@@ -7826,7 +7826,7 @@ Public License instead of this License.
           </td>
         </tr>
         <tr>
-          <td>Max CVSS</td>
+          <td>Severity</td>
           <td>The highest CVSS of any CVE that references this product.
           </td>
         </tr>
@@ -7950,7 +7950,7 @@ Public License instead of this License.
           <td>The date when this CVE was first published.</td>
         </tr>
         <tr>
-          <td>CVSS</td>
+          <td>Severity</td>
           <td>The combined score calculated from the metrics of the vulnerability.
             Ranging from 0 to 10. </td>
         </tr>
@@ -8079,7 +8079,7 @@ Public License instead of this License.
           <td>The version of the NVT.</td>
         </tr>
         <tr>
-          <td>CVSS</td>
+          <td>Severity</td>
           <td>
             The combined score calculated from the metrics of the vulnerability.
             Ranging from 0 to 10.
@@ -8189,7 +8189,7 @@ Public License instead of this License.
           <td>The number of <a href="glossary.html?token={/envelope/token}#cve">CVEs</a> referenced by the definition.</td>
         </tr>
         <tr class="odd">
-          <td>Max CVSS</td>
+          <td>Severity</td>
           <td>The highest CVSS of any CVE that is referenced by the definition.</td>
         </tr>
       </table>
@@ -8268,7 +8268,7 @@ Public License instead of this License.
           <td>The date the advisory was created.</td>
         </tr>
         <tr class="odd">
-          <td>Max CVSS</td>
+          <td>Severity</td>
           <td>The highest CVSS of any CVE that is referenced by the definition.</td>
         </tr>
         <tr>

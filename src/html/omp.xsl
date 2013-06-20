@@ -8598,7 +8598,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>Name</td>
         <td>OID</td>
-        <td style="text-align:center;">CVSS</td>
+        <td>Severity</td>
         <td>Timeout</td>
         <td>Prefs</td>
         <xsl:if test="edit">
@@ -12237,9 +12237,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="max_cvss"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="max_cvss &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="max_cvss"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
@@ -12430,9 +12441,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="cvss_base"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="cvss_base &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="cvss_base"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
@@ -12527,13 +12549,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:choose>
-          <xsl:when test="max_cvss != ''">
+          <xsl:when test="max_cvss &gt;= 0.0">
             <xsl:call-template name="severity-bar">
               <xsl:with-param name="cvss" select="max_cvss"/>
+              <xsl:with-param name="scale" select="7"/>
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="extra_text" select="'N/A'"/>
+              <xsl:with-param name="scale" select="7"/>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -12588,9 +12614,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="max_cvss"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="max_cvss &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="max_cvss"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
@@ -12948,8 +12985,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Max CVSS</xsl:with-param>
-                <xsl:with-param name="name">max_cvss</xsl:with-param>
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
               </xsl:call-template>
@@ -13348,8 +13385,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Max CVSS</xsl:with-param>
-                <xsl:with-param name="name">max_cvss</xsl:with-param>
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
               </xsl:call-template>
@@ -13458,8 +13495,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Max CVSS</xsl:with-param>
-                <xsl:with-param name="name">max_cvss</xsl:with-param>
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
               </xsl:call-template>
@@ -14124,7 +14161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>Name</td>
-              <td width="104">CVSS</td>
+              <td width="104">Severity</td>
               <td>Actions</td>
             </tr>
             <xsl:for-each select="info/cpe/cves/cve">
@@ -14237,11 +14274,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
             <tr>
-              <td>Maximum CVSS:</td>
+              <td>Severity:</td>
               <td>
-                <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="cvss" select="info/ovaldef/max_cvss"/>
-                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="info/ovaldef/max_cvss &gt;= 0.0">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="info/ovaldef/max_cvss"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="extra_text" select="'N/A'"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
             </tr>
             <tr>
@@ -14477,11 +14523,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
             </tr>
             <tr>
-              <td valign="top">Maximum&#160;CVSS:</td>
+              <td valign="top">Severity:</td>
               <td valign="top">
-                <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="cvss" select="info/dfn_cert_adv/max_cvss"/>
-                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="info/dfn_cert_adv/max_cvss &gt;= 0.0">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="info/dfn_cert_adv/max_cvss"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="extra_text" select="'N/A'"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
             </tr>
           </table>
@@ -14630,9 +14685,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr>
       <td>CVSS base:</td>
       <td>
-        <xsl:call-template name="severity-bar">
-          <xsl:with-param name="cvss" select="cvss_base"/>
-        </xsl:call-template>
+        <xsl:choose>
+          <xsl:when test="cvss_base &gt;= 0.0">
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="cvss_base"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="extra_text" select="'N/A'"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
     </tr>
     <xsl:variable name="token" select="/envelope/token"/>
