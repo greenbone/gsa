@@ -1,5 +1,12 @@
 2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (cpe-details): Change plain-text CVEs to links
+	to the CVEs' details pages in "Reported vulnerabilites".
+	(cve-details): Change plain-text CPEs to links to the CPEs' details
+	pages in "Vulnerable products".
+
+2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (html-dfn_cert_adv-table): Use correct get_info type
 	in Severity/Max CVSS column.
 

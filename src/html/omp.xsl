@@ -13980,11 +13980,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
                   <tr class="{gsa:table-row-class(position())}">
                     <td>
-                      <xsl:call-template name="cpe-icon">
+                      <xsl:call-template name="get_info_cpe_lnk">
                         <xsl:with-param name="cpe" select="text()"/>
-                        <xsl:with-param name="hide_other" select="0"/>
                       </xsl:call-template>
-                      <xsl:value-of select="text()"/>
                     </td>
                     <td width="100">
                       <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
@@ -14167,7 +14165,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="info/cpe/cves/cve">
 
               <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="cve:entry/@id"/></td>
+                <td>
+                  <xsl:call-template name="get_info_cve_lnk">
+                    <xsl:with-param name="cve" select="cve:entry/@id"/>
+                  </xsl:call-template>
+                </td>
                 <td>
                   <xsl:call-template name="severity-bar">
                     <xsl:with-param name="cvss" select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
