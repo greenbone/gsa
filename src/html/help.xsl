@@ -8269,7 +8269,7 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Severity</td>
-          <td>The highest CVSS of any CVE that is referenced by the definition.</td>
+          <td>The highest CVSS of any CVE that is referenced by the advisory.</td>
         </tr>
         <tr>
           <td>CVEs</td>

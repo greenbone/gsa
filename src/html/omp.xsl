@@ -13498,7 +13498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">Severity</xsl:with-param>
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
               </xsl:call-template>
             </td>
             <td>Actions</td>

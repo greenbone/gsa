@@ -1,5 +1,13 @@
 2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (html-dfn_cert_adv-table): Use correct get_info type
+	in Severity/Max CVSS column.
+
+	* src/html/help.xsl (dfn_cert_advs.html): Replace "definition" with
+	"advisory" in paragraph on severity.
+
+2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (html-config-family-table): Rename table header
 	"CVSS" to "Severity" and remove centering.
 	(info/cpe, info/nvt, info/cve, info/ovaldef, info/dfn_cert_adv): Resize
