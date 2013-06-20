@@ -14142,6 +14142,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="info/cpe/status"/></td>
           </tr>
         </xsl:if>
+        <xsl:if test="info/cpe != ''">
+          <tr>
+            <td>Severity:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="info/cpe/max_cvss &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="info/cpe/max_cvss"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="'N/A'"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
       <xsl:if test="count(info/cpe/title) = 0">
         <p>

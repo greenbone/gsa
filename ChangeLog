@@ -1,5 +1,9 @@
 2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (cpe-details): Add row with (maximum) severity bar.
+
+2013-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (cpe-details): Change plain-text CVEs to links
 	to the CVEs' details pages in "Reported vulnerabilites".
 	(cve-details): Change plain-text CPEs to links to the CPEs' details
