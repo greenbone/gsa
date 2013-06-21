@@ -1,3 +1,7 @@
+2013-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Move "last" to end column.
+
 2013-06-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (init_validator): Add apostrophe to info_id validator.

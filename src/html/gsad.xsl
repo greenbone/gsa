@@ -1352,9 +1352,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SYSTEM_REPORTS']">
-        <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
+        <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
       </xsl:if>
-      <li><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">CVSS Calculator</a></li>
+      <li class="last"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">CVSS Calculator</a></li>
      </ul>
     </li>
     <li>
