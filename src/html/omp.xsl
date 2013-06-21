@@ -14003,11 +14003,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr class="{gsa:table-row-class(position())}">
                     <td>
                       <xsl:call-template name="get_info_cpe_lnk">
-                        <xsl:with-param name="cpe" select="text()"/>
+                        <xsl:with-param name="cpe" select="str:decode-uri(text())"/>
                       </xsl:call-template>
                     </td>
                     <td width="100">
-                      <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
+                      <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={str:decode-uri(text())}&amp;details=1&amp;token={/envelope/token}"
                         title="Details">
                         <img src="/img/details.png"
                           border="0"
@@ -14420,7 +14420,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:when>
                     <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cpe'">
                       <xsl:call-template name="get_info_cpe_lnk">
-                        <xsl:with-param name="cpe" select="./@ref_id"/>
+                        <xsl:with-param name="cpe" select="str:decode-uri(./@ref_id)"/>
                         <xsl:with-param name="gsa_token" select="/envelope/token"/>
                       </xsl:call-template>
                     </xsl:when>

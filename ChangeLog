@@ -1,5 +1,11 @@
 2013-06-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (init_validator): Add apostrophe to info_id validator.
+
+	* src/html/omp.xsl (cve-details, ovaldef-details): Decode CPEs in links.
+
+2013-06-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (info/allinfo, html-allinfo-table): Add severity
 	column.
 
