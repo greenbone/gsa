@@ -12687,6 +12687,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="severity &gt;= 0.0">
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="severity"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="extra_text" select="'N/A'"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
       <td rowspan="2">
         <xsl:choose>
           <xsl:when test="type = 'cve'">
@@ -12734,7 +12748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
     </tr>
     <tr>
-      <td colspan="3" style="font-size: 95%;">
+      <td colspan="4" style="font-size: 95%;">
         <xsl:variable name="truncate_length"
         select="string-length(extra) - string-length(substring-after(substring(extra, 135), ' ')) + 1"/>
         <xsl:value-of select="substring(extra, 0, $truncate_length)"/>
@@ -13603,12 +13617,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
               </xsl:call-template>
             </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Severity</xsl:with-param>
+                <xsl:with-param name="name">severity</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+              </xsl:call-template>
+            </td>
             <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/allinfo"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
             <tr>
-              <td class="footnote" colspan="6">
+              <td class="footnote" colspan="7">
                 (Applied filter:
                 <a class="footnote" href="/omp?cmd=get_info&amp;info_type=allinfo&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
