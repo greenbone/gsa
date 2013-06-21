@@ -1,5 +1,10 @@
 2013-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (get_system_reports_response): Add
+	command_result_dialog for error message.
+
+2013-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Move "last" to end column.
 
 2013-06-21  Timo Pollmeier <timo.pollmeier@greenbone.net>

@@ -23558,6 +23558,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_system_reports_response">
   <xsl:variable name="duration" select="../duration"/>
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Get System Reports</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
