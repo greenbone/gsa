@@ -1,3 +1,13 @@
+2013-06-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/cpe/a:snort:snort.png, src/html/img/cpe/a:sourcefire.png,
+	src/html/img/cpe/a:typo3:typo3.png, src/html/img/cpe/a:google.png,
+	src/html/img/cpe/a:drupal:drupal.png,
+	src/html/img/cpe/a:gnu.png, src/html/img/cpe/a:otrs:otrs.png,
+	src/html/img/cpe/a:wordpress:wordpress.png: New.
+
+	CMakeLists.txt: Install new icons.
+
 2013-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (get_system_reports_response): Add

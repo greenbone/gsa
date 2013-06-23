@@ -436,10 +436,18 @@ install (FILES  src/html/img/os_aix.png
 
 install (FILES src/html/img/cpe/other.png
                src/html/img/cpe/a:apache:http_server.png
+               src/html/img/cpe/a:drupal:drupal.png
+               src/html/img/cpe/a:google.png
+               src/html/img/cpe/a:gnu.png
                src/html/img/cpe/a:mysql:mysql.png
                src/html/img/cpe/a:openbsd:openssh.png
+               src/html/img/cpe/a:otrs:otrs.png
                src/html/img/cpe/a:php:php.png
                src/html/img/cpe/a:postgresql:postgresql.png
+               src/html/img/cpe/a:snort:snort.png
+               src/html/img/cpe/a:sourcefire.png
+               src/html/img/cpe/a:typo3:typo3.png
+               src/html/img/cpe/a:wordpress:wordpress.png
          DESTINATION ${GSA_DATA_DIR}/img/cpe)
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
