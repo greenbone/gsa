@@ -22598,7 +22598,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div style="overflow:auto; max-height:600px;">
         <xsl:call-template name="report-image">
           <xsl:with-param name="report" select="$report"/>
-          <xsl:with-param name="extra_filter" select="'levels=hmlgf first=1 rows=-1'"/>
+          <xsl:with-param name="extra_filter" select="'first=1 rows=-1'"/>
           <xsl:with-param name="report_format" select="'9e5e5deb-879e-4ecc-8be6-a71cd0875cdd'"/>
           <xsl:with-param name="available_report_formats" select="../../get_report_formats_response"/>
           <xsl:with-param name="title" select="'Network topology graph'"/>
