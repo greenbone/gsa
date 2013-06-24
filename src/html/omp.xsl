@@ -20278,17 +20278,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </td>
       <td>
-        <xsl:apply-templates select="../../." mode="result-header">
-          <xsl:with-param name="name" select="'type'"/>
-          <xsl:with-param name="capital-name" select="'Severity'"/>
-        </xsl:apply-templates>
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'type'"/>
+              <xsl:with-param name="capital-name" select="'Severity'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            Severity
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
       <td>Host</td>
       <td>
-        <xsl:apply-templates select="../../." mode="result-header">
-          <xsl:with-param name="name" select="'port'"/>
-          <xsl:with-param name="capital-name" select="'Location'"/>
-        </xsl:apply-templates>
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'port'"/>
+              <xsl:with-param name="capital-name" select="'Location'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            Severity
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
       <xsl:if test="$prognostic != 1">
         <td style="width:100px;">Actions</td>
