@@ -1,3 +1,8 @@
+2013-06-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (user-tags-window): Shorten overly long window
+	titles (> 80 characters).
+
 2013-06-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add delete_trash_group command.

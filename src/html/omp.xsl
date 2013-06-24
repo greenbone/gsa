@@ -1004,13 +1004,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title" select="concat('User Tags for &quot;',name,'&quot;:')"/>
   <xsl:param name="user_tags" select="user_tags" />
   <xsl:param name="tag_names" select="../../get_tags_response"/>
+  <xsl:variable name="title_shortened">
+    <xsl:choose>
+      <xsl:when test="string-length($title) > 80">
+        <xsl:value-of select="substring($title, 0, 80)"/>[...]<xsl:if test="substring($title, string-length($title)-1, 1) = '&quot;'">&quot;</xsl:if>:
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$title"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <br/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:value-of select="$title"/>
+      <xsl:value-of select="$title_shortened"/>
       <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="$user_tags/count != 0">
