@@ -1,5 +1,9 @@
 2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Get Groups background right in Contents.
+
+2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result [result-headers]): Only use sorting links when
 	the expand icon is present.  This keeps the links off pages like Result
 	Details and Add Note.
