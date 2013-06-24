@@ -14028,6 +14028,42 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
         }
     }
 
+  /* Get the groups. */
+
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_groups"
+                                " trash=\"1\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting groups list. "
+                               "The current list of groups is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting groups list. "
+                               "The current list of groups is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_groups");
+        }
+    }
+
   /* Get the filters. */
 
   if (command_enabled (credentials, "GET_FILTERS"))
@@ -15310,6 +15346,20 @@ char *
 new_group_omp (credentials_t *credentials, params_t *params)
 {
   return new_group (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete a group from trash, get all groups, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_group_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("group", credentials, params, 1, get_trash);
 }
 
 /**

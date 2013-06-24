@@ -1,3 +1,14 @@
+2013-06-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add delete_trash_group command.
+	(exec_omp_post): Handle delete_trash_group command.
+
+	* src/gsad_omp.c (get_trash): Get groups too.
+	(delete_trash_group_omp): New function.
+
+	* src/html/omp.xsl (get_trash): Apply delete_group_response. Add table
+	for groups in trash and trash groups content entry.
+
 2013-06-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/cpe/a:snort:snort.png, src/html/img/cpe/a:sourcefire.png,

@@ -23935,6 +23935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:apply-templates select="delete_alert_response"/>
   <xsl:apply-templates select="delete_filter_response"/>
+  <xsl:apply-templates select="delete_group_response"/>
   <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:apply-templates select="delete_note_response"/>
   <xsl:apply-templates select="delete_override_response"/>
@@ -24004,6 +24005,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="even">
             <td><a href="#filters">Filters</a></td>
             <td><xsl:value-of select="count(get_filters_response/filter)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
+          <tr class="even">
+            <td><a href="#groups">Groups</a></td>
+            <td><xsl:value-of select="count(get_groups_response/group)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
@@ -24101,6 +24108,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_filters_response the current node. -->
         <xsl:for-each select="get_filters_response">
           <xsl:call-template name="html-filters-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
+        <a name="groups"></a>
+        <h1>Groups</h1>
+        <!-- The for-each makes the get_groups_response the current node. -->
+        <xsl:for-each select="get_groups_response">
+          <xsl:call-template name="html-groups-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 

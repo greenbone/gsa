@@ -582,6 +582,7 @@ init_validator ()
                          "|(delete_trash_config)"
                          "|(delete_trash_alert)"
                          "|(delete_trash_filter)"
+                         "|(delete_trash_group)"
                          "|(delete_trash_lsc_credential)"
                          "|(delete_trash_note)"
                          "|(delete_trash_override)"
@@ -1727,6 +1728,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_config)
   ELSE (delete_trash_alert)
   ELSE (delete_trash_filter)
+  ELSE (delete_trash_group)
   ELSE (delete_trash_lsc_credential)
   ELSE (delete_trash_note)
   ELSE (delete_trash_override)
