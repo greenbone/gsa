@@ -1606,44 +1606,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="report" mode="sorting">
-  <xsl:param name="levels"/>
-  <table border="0" cellspacing="0" cellpadding="3" width="100%">
-    <tr>
-      <td>
-        Sorting:
-      </td>
-      <td>
-        <xsl:apply-templates select="." mode="sorting-link">
-          <xsl:with-param name="field" select="'port'"/>
-          <xsl:with-param name="order" select="'ascending'"/>
-          <xsl:with-param name="levels" select="$levels"/>
-        </xsl:apply-templates>
-        |
-        <xsl:apply-templates select="." mode="sorting-link">
-          <xsl:with-param name="field" select="'port'"/>
-          <xsl:with-param name="order" select="'descending'"/>
-          <xsl:with-param name="levels" select="$levels"/>
-        </xsl:apply-templates>
-        |
-        <xsl:apply-templates select="." mode="sorting-link">
-          <xsl:with-param name="name" select="'threat'"/>
-          <xsl:with-param name="field" select="'type'"/>
-          <xsl:with-param name="order" select="'ascending'"/>
-          <xsl:with-param name="levels" select="$levels"/>
-        </xsl:apply-templates>
-        |
-        <xsl:apply-templates select="." mode="sorting-link">
-          <xsl:with-param name="name" select="'threat'"/>
-          <xsl:with-param name="field" select="'type'"/>
-          <xsl:with-param name="order" select="'descending'"/>
-          <xsl:with-param name="levels" select="$levels"/>
-        </xsl:apply-templates>
-      </td>
-    </tr>
-  </table>
-</xsl:template>
-
 <xsl:template match="report" mode="results-pager">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
@@ -2174,18 +2136,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="report-help-icon"/>
     </div>
     <div class="gb_window_part_content">
-
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-        </xsl:when>
-        <xsl:otherwise>
-          <p>
-            <xsl:apply-templates match="report" mode="sorting">
-              <xsl:with-param name="levels" select="$levels"/>
-            </xsl:apply-templates>
-          </p>
-        </xsl:otherwise>
-      </xsl:choose>
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'results'"/>
       </xsl:apply-templates>
@@ -20278,7 +20228,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="result" mode="result-header">
+<xsl:template match="report" mode="result-header">
+  <xsl:param name="name" select="'type'"/>
+  <xsl:param name="capital-name" select="'Severity'"/>
+  <xsl:param name="current" select="."/>
+  <xsl:variable name="details">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/details &gt; 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="expand" select="$details"/>
+  <xsl:choose>
+    <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+        <xsl:value-of select="$capital-name"/>
+      </a>
+    </xsl:when>
+    <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort-reverse={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+        <xsl:value-of select="$capital-name"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Starts with some other column. -->
+      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+        <xsl:value-of select="$capital-name"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="result" mode="result-headers">
   <xsl:param name="details-button"/>
   <xsl:param name="note-buttons"/>
   <xsl:param name="override-buttons"/>
@@ -20296,9 +20277,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:if>
       </td>
-      <td>Severity</td>
+      <td>
+        <xsl:apply-templates select="../../." mode="result-header">
+          <xsl:with-param name="name" select="'type'"/>
+          <xsl:with-param name="capital-name" select="'Severity'"/>
+        </xsl:apply-templates>
+      </td>
       <td>Host</td>
-      <td>Location</td>
+      <td>
+        <xsl:apply-templates select="../../." mode="result-header">
+          <xsl:with-param name="name" select="'port'"/>
+          <xsl:with-param name="capital-name" select="'Location'"/>
+        </xsl:apply-templates>
+      </td>
       <xsl:if test="$prognostic != 1">
         <td style="width:100px;">Actions</td>
       </xsl:if>
@@ -20958,7 +20949,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <a class="anchor" name="result-{@id}"/>
 
-  <xsl:apply-templates select="." mode="result-header">
+  <xsl:apply-templates select="." mode="result-headers">
     <xsl:with-param name="details-button" select="$details-button"/>
     <xsl:with-param name="note-buttons" select="$note-buttons"/>
     <xsl:with-param name="override-buttons" select="$override-buttons"/>

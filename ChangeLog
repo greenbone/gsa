@@ -1,3 +1,16 @@
+2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Replace sorting section above filter with sorting via Severity and
+	Location column headings.  Still uses "type" and "port" in the filter.
+
+	* src/html/omp.xsl (report [sorting]): Remove.
+	(report [results]): Remove old sorting control.
+	(report [result-header]): New template.  Prints a header.
+	(result [result-header]): Change mode to result-headers.  Apply new
+	result-header template to produce Severity and Location headers with
+	links.
+	(result-detailed): Update result mode.
+
 2013-06-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (user-tags-window): Shorten overly long window
