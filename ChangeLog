@@ -1,5 +1,10 @@
 2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [result-header]): Add delta and prognostic
+	cases.
+
+2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_trash): Get Groups background right in Contents.
 
 2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>

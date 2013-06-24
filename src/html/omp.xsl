@@ -20239,20 +20239,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="expand" select="$details"/>
+  <xsl:variable name="link-start">
+    <xsl:choose>
+      <xsl:when test="@type='prognostic'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+      </xsl:when>
+      <xsl:when test="@type='delta'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', delta/report/@id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+      <a class="gbntablehead2" href="{$link-start}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
         <xsl:value-of select="$capital-name"/>
       </a>
     </xsl:when>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort-reverse={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+      <a class="gbntablehead2" href="{$link-start}&amp;filter=sort-reverse={$name} first=1 {filters/term}&amp;token={/envelope/token}">
         <xsl:value-of select="$capital-name"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_report&amp;report_id={@id}&amp;host={/envelope/params/host}&amp;pos={/envelope/params/pos}&amp;details={$expand}&amp;filterbox={/envelope/params/filterbox}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
+      <a class="gbntablehead2" href="{$link-start}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
         <xsl:value-of select="$capital-name"/>
       </a>
     </xsl:otherwise>
