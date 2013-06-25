@@ -1,3 +1,9 @@
+2013-06-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result [result-header]): Don't apply
+	cvss-risk-factor as extra text for severity bar when threat of result is
+	Log.
+
 2013-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [result-header]): Add delta and prognostic
