@@ -1,5 +1,10 @@
 2013-06-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (gsa:cvss-risk-factor): Check for None threat first
+	in nist/bsi case.
+
+2013-06-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result [result-header]): Don't apply
 	cvss-risk-factor as extra text for severity bar when threat of result is
 	Log.
