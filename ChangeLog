@@ -1,3 +1,8 @@
+2013-06-26  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Make SVN revision in version string available again
+	for out-of-source build.
+
 2013-06-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (result [result-headers]): Correct column name.
