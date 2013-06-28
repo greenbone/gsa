@@ -929,6 +929,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
             filter = "rows=-2 permission=any";
           else
             filter = "apply_overrides=0 rows=-2 permission=any owner=any";
+
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
             filt_id = "0";
@@ -3109,7 +3110,14 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
       param_t *filt_id, *filter;
       filt_id = params_get (params, "filt_id");
       if (filt_id)
-        filt_id->value = NULL;
+        {
+          filt_id->value = g_strdup ("-2");
+          filt_id->value_size = strlen (filt_id->value);
+          filt_id->valid = 1;
+          filt_id->valid_utf8 = 1;
+        }
+      else
+        params_add (params, "filt_id", "-2");
 
       filter = params_get (params, "filter");
       if (filter && filter->value)

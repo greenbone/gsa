@@ -1,3 +1,9 @@
+2013-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Add a space for clarity.
+	(get_tasks): Set "filt_id" to -2, otherwise this is missed in get_many
+	because we are setting "filter" manually.
+
 2013-06-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Make SVN revision in version string available again
