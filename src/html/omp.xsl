@@ -22053,8 +22053,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{gsa:table-row-class(position())}">
               <td>
                 <xsl:choose>
-                  <xsl:when test="contains($port, ' ')">
+                  <!-- New (IANA) results port values -->
+                  <xsl:when test="contains($port, '(IANA: ')">
                     <xsl:value-of select="substring-before($port, ' ')"/>
+                  </xsl:when>
+                  <!-- Old results port values -->
+                  <xsl:when test="contains($port, '/tcp)') or contains($port, '/udp)')">
+                    <xsl:value-of select="substring-before(substring-after($port, ' ('), '/')"/>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="$port"/>
@@ -22063,8 +22068,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <xsl:choose>
-                  <xsl:when test="contains($port, 'IANA: ')">
+                  <!-- New (IANA) results port values -->
+                  <xsl:when test="contains($port, '(IANA: ')">
                     <xsl:value-of select="substring-before(substring-after($port, 'IANA: '), ')')"/>
+                  </xsl:when>
+                  <!-- Old results port values -->
+                  <xsl:when test="contains($port, '/tcp)') or contains($port, '/udp)')">
+                    <xsl:value-of select="substring-before($port, ' (')"/>
                   </xsl:when>
                   <xsl:otherwise>
                   </xsl:otherwise>
