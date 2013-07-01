@@ -22345,7 +22345,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="host" select="parent::node()"/>
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="value" select="value"/>
-          <xsl:variable name="inaccurate_hosts" select="count(../../host[detail/name = $name and detail/value = $value and count(detail[name = $value]) = 0])"/>
+          <xsl:variable name="no_cpe_detail_hosts" select="count(../../host[detail[name = $name and value = $value] and count(detail[name = $value]) = 0])"/>
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:call-template name="get_info_cpe_lnk">
@@ -22353,14 +22353,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:value-of select="count(../../host[detail/name = $name and detail/value = $value])"/>
+              <xsl:value-of select="count(../../host[detail[name = $name and value = $value]])"/>
             </td>
             <td>
               <a href="/omp?cmd=get_report_section&amp;report_id={$report/@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34; result_hosts_only=1 min_cvss_base= levels=hmlg autofp=0 notes=1 overrides=1 first=1 rows=100&amp;token={/envelope/token}" title="Report: Results (for App: {$value})">
-                <xsl:value-of select="count(../../host/detail[name = $value]) + $inaccurate_hosts"/>
+                <xsl:value-of select="count(../../host/detail[name = $value]) + $no_cpe_detail_hosts"/>
               </a>
-              <xsl:if test="$inaccurate_hosts">
-                <abbr title="{$inaccurate_hosts} host(s) without matching CPE detail - number may be inaccurate">*</abbr>
+              <xsl:if test="$no_cpe_detail_hosts">
+                <abbr title="Includes {$no_cpe_detail_hosts} host(s) where CPE was found in inventory, but number of installations could not be determined">*</abbr>
               </xsl:if>
             </td>
             <td>

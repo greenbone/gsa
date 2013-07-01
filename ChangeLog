@@ -1,3 +1,10 @@
+2013-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* (report [apps]): Rename inaccurate_hosts to no_cpe_detail_hosts
+	and rephrase text for hosts with CPEs in inventory but without matching
+	CPE details. Change matching criteria for hosts so details must have
+	correct name and value at the same time.
+
 2013-07-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump to 5.0+beta2.
