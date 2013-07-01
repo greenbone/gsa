@@ -2413,17 +2413,6 @@ edit_task_omp (credentials_t * credentials, params_t *params)
   return edit_task (credentials, params, NULL);
 }
 
-#define CHECK(name)                                                         \
-  if (name == NULL)                                                         \
-    return gsad_message (credentials,                                       \
-                         "Internal error", __FUNCTION__, __LINE__,          \
-                         "An internal error occurred while saving a task. " \
-                         "The task remains the same. "                      \
-                         "Diagnostics: Required parameter "                 \
-                         G_STRINGIFY (name)                                 \
-                         " was NULL.",                                      \
-                         "/omp?cmd=get_tasks")
-
 /**
  * @brief Save task, get next page, XSL transform the result.
  *
@@ -2482,11 +2471,6 @@ save_task_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-
-  if (comment == NULL || name == NULL)
-    return edit_task (credentials, params,
-                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
-
   in_assets = params_value (params, "in_assets");
   target_id = params_value (params, "target_id");
   config_id = params_value (params, "config_id");
@@ -2496,16 +2480,18 @@ save_task_omp (credentials_t * credentials, params_t *params)
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
 
-  CHECK (target_id);
-  CHECK (config_id);
-  CHECK (schedule_id);
-  CHECK (slave_id);
-  CHECK (next);
-  CHECK (task_id);
-  CHECK (max_checks);
-  CHECK (max_hosts);
-  CHECK (observers);
-  CHECK (in_assets);
+  CHECK_PARAM (name, "Save Task", edit_task);
+  CHECK_PARAM (comment, "Save Task", edit_task);
+  CHECK_PARAM (target_id, "Save Task", edit_task);
+  CHECK_PARAM (config_id, "Save Task", edit_task);
+  CHECK_PARAM (schedule_id, "Save Task", edit_task);
+  CHECK_PARAM (slave_id, "Save Task", edit_task);
+  CHECK_PARAM (next, "Save Task", edit_task);
+  CHECK_PARAM (task_id, "Save Task", edit_task);
+  CHECK_PARAM (max_checks, "Save Task", edit_task);
+  CHECK_PARAM (max_hosts, "Save Task", edit_task);
+  CHECK_PARAM (observers, "Save Task", edit_task);
+  CHECK_PARAM (in_assets, "Save Task", edit_task);
 
   alert_element = g_string_new ("");
   alerts = params_values (params, "alert_id_optional:");
@@ -2628,8 +2614,6 @@ save_task_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Save container task, get next page, XSL transform the result.
@@ -3361,15 +3345,24 @@ get_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
+ * @brief Returns page to create a new LSC Credential.
  *
- * @param[in]  name  Param name.
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
  */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,                         \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Credential")
+static char *
+new_lsc_credential (credentials_t *credentials, params_t *params,
+                    const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_lsc_credential>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_lsc_credential>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
 
 /**
  * @brief Create an LSC credential, get all credentials, XSL transform result.
@@ -3388,6 +3381,29 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *public_key, *private_key;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  login = params_value (params, "credential_login");
+  type = params_value (params, "base");
+  password = params_value (params, "lsc_password");
+  passphrase = params_value (params, "passphrase");
+  public_key = params_value (params, "public_key");
+  private_key = params_value (params, "private_key");
+
+  CHECK_PARAM (name, "Create LSC Credential", new_lsc_credential);
+  CHECK_PARAM (comment, "Create LSC Credential", new_lsc_credential);
+  CHECK_PARAM (login, "Create LSC Credential", new_lsc_credential);
+  CHECK_PARAM (type, "Create LSC Credential", new_lsc_credential);
+
+  if (type && (strcmp (type, "pass") == 0))
+    CHECK_PARAM (password, "Create LSC Credential", new_lsc_credential);
+  if (type && (strcmp (type, "key") == 0))
+    {
+      CHECK_PARAM (passphrase, "Create LSC Credential", new_lsc_credential);
+      CHECK_PARAM (public_key, "Create LSC Credential", new_lsc_credential);
+      CHECK_PARAM (private_key, "Create LSC Credential", new_lsc_credential);
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3408,98 +3424,76 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("<commands_response>");
 
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  login = params_value (params, "credential_login");
-  type = params_value (params, "base");
-  password = params_value (params, "lsc_password");
-  passphrase = params_value (params, "passphrase");
-  public_key = params_value (params, "public_key");
-  private_key = params_value (params, "private_key");
+  {
+    int ret;
 
-  CHECK (name);
-  else CHECK (comment);
-  else CHECK (login);
-  else CHECK (type);
-  else if (type && (strcmp (type, "pass") == 0) && password == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
-  else if (type
-           && (strcmp (type, "key") == 0)
-           && ((passphrase == NULL)
-               || (public_key == NULL)
-               || (private_key == NULL)))
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
-  else
-    {
-      int ret;
+    /* Create the LSC credential. */
 
-      /* Create the LSC credential. */
+    if (type && strcmp (type, "gen") == 0)
+      ret = openvas_server_sendf_xml (&session,
+                                      "<create_lsc_credential>"
+                                      "<name>%s</name>"
+                                      "<comment>%s</comment>"
+                                      "<login>%s</login>"
+                                      "</create_lsc_credential>",
+                                      name,
+                                      comment ? comment : "",
+                                      login);
+    else if (type && strcmp (type, "key") == 0)
+      ret = openvas_server_sendf_xml (&session,
+                                      "<create_lsc_credential>"
+                                      "<name>%s</name>"
+                                      "<comment>%s</comment>"
+                                      "<login>%s</login>"
+                                      "<key>"
+                                      "<public>%s</public>"
+                                      "<private>%s</private>"
+                                      "<phrase>%s</phrase>"
+                                      "</key>"
+                                      "</create_lsc_credential>",
+                                      name,
+                                      comment ? comment : "",
+                                      login,
+                                      public_key ? public_key : "",
+                                      private_key ? private_key : "",
+                                      passphrase ? passphrase : "");
+    else
+      ret = openvas_server_sendf_xml (&session,
+                                      "<create_lsc_credential>"
+                                      "<name>%s</name>"
+                                      "<comment>%s</comment>"
+                                      "<login>%s</login>"
+                                      "<password>%s</password>"
+                                      "</create_lsc_credential>",
+                                      name,
+                                      comment ? comment : "",
+                                      login,
+                                      password ? password : "");
 
-      if (type && strcmp (type, "gen") == 0)
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_lsc_credential>"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<login>%s</login>"
-                                        "</create_lsc_credential>",
-                                        name,
-                                        comment ? comment : "",
-                                        login);
-      else if (type && strcmp (type, "key") == 0)
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_lsc_credential>"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<login>%s</login>"
-                                        "<key>"
-                                        "<public>%s</public>"
-                                        "<private>%s</private>"
-                                        "<phrase>%s</phrase>"
-                                        "</key>"
-                                        "</create_lsc_credential>",
-                                        name,
-                                        comment ? comment : "",
-                                        login,
-                                        public_key ? public_key : "",
-                                        private_key ? private_key : "",
-                                        passphrase ? passphrase : "");
-      else
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_lsc_credential>"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<login>%s</login>"
-                                        "<password>%s</password>"
-                                        "</create_lsc_credential>",
-                                        name,
-                                        comment ? comment : "",
-                                        login,
-                                        password ? password : "");
+    if (ret == -1)
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new credential. "
+                             "No new credential was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+      }
 
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new credential. "
-                               "No new credential was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_lsc_credentials");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new credential. "
-                               "It is unclear whether the credential has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_lsc_credentials");
-        }
-    }
+    if (read_string (&session, &xml))
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new credential. "
+                             "It is unclear whether the credential has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+      }
+  }
 
   /* Get all LSC credentials. */
 
@@ -3536,8 +3530,6 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
-
-#undef CHECK
 
 /**
  * @brief Get one LSC credential, XSL transform the result.
@@ -3868,26 +3860,6 @@ delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- *
- * @return Result of XSL transformation.
- */
-static char *
-new_lsc_credential (credentials_t *credentials, params_t *params,
-                    const char *extra_xml)
-{
-  GString *xml;
-  xml = g_string_new ("<new_lsc_credential>");
-  g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_lsc_credential>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Returns page to create a new LSC Credential.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -3928,23 +3900,6 @@ edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a credential editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Credential");                                \
-      html = edit_lsc_credential (credentials, params, msg);                   \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Save lsc_credential, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
@@ -3966,12 +3921,12 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   login = params_value (params, "credential_login");
   password = params_value (params, "password");
 
-  CHECK (lsc_credential_id);
-  CHECK (name);
-  CHECK (comment);
+  CHECK_PARAM (lsc_credential_id, "Save LSC Credential", edit_lsc_credential);
+  CHECK_PARAM (name, "Save LSC Credential", edit_lsc_credential);
+  CHECK_PARAM (comment, "Save LSC Credential", edit_lsc_credential);
   change_password = (params_value (params, "enable") ? 1 : 0);
   if (change_password)
-    CHECK (password);
+    CHECK_PARAM (password, "Save LSC Credential", edit_lsc_credential);
 
   /* Modify the credential. */
   response = NULL;
@@ -4072,8 +4027,6 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Create an agent, get all agents, XSL transform result.
@@ -4472,23 +4425,6 @@ edit_agent_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check an agent editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Agent");                                     \
-      html = edit_agent (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a agent, get all agents, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -4508,9 +4444,9 @@ save_agent_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK (agent_id);
-  CHECK (name);
-  CHECK (comment);
+  CHECK_PARAM (agent_id, "Save Agent", edit_agent);
+  CHECK_PARAM (name, "Save Agent", edit_agent);
+  CHECK_PARAM (comment, "Save Agent", edit_agent);
 
   /* Modify the agent. */
 
@@ -4567,8 +4503,6 @@ save_agent_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Get one agent, XSL transform the result.
@@ -5366,23 +5300,6 @@ edit_alert_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check an alert editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Alert");                                     \
-      html = edit_alert (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a alert, get all alerts, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -5430,12 +5347,12 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   alert_id = params_value (params, "alert_id");
   filter_id = params_value (params, "filter_id");
 
-  CHECK (name);
-  CHECK (alert_id);
-  CHECK (condition);
-  CHECK (event);
-  CHECK (method);
-  CHECK (filter_id);
+  CHECK_PARAM (name, "Save Alert", edit_alert);
+  CHECK_PARAM (alert_id, "Save Alert", edit_alert);
+  CHECK_PARAM (condition, "Save Alert", edit_alert);
+  CHECK_PARAM (event, "Save Alert", edit_alert);
+  CHECK_PARAM (method, "Save Alert", edit_alert);
+  CHECK_PARAM (filter_id, "Save Alert", edit_alert);
 
   if (next == NULL)
     next = "get_alerts";
@@ -5499,8 +5416,6 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   g_string_free (xml, TRUE);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Test an alert, get all alerts XSL transform the result.
@@ -5798,24 +5713,6 @@ new_target_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      openvas_server_close (socket, session);                                  \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Target");                                  \
-      html = new_target (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -5833,6 +5730,40 @@ create_target_omp (credentials_t * credentials, params_t *params)
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id;
 
+  name = params_value (params, "name");
+  hosts = params_value (params, "hosts");
+  target_locator = params_value (params, "target_locator");
+  target_source = params_value (params, "target_source");
+  comment = params_value (params, "comment");
+  port_list_id = params_value (params, "port_list_id");
+  target_credential = params_value (params, "lsc_credential_id");
+  port = params_value (params, "port");
+  target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  target_id = params_value (params, "target_id");
+
+  CHECK_PARAM (name, "Create Target", new_target);
+  CHECK_PARAM (target_source, "Create Target", new_target)
+  if (hosts == NULL && strcmp (target_source, "manual") == 0)
+    return new_target (credentials, params,
+                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
+  if (strcmp (target_source, "import") == 0 && name == NULL)
+    {
+      gchar *msg;
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
+                            "Given target_locator was invalid",
+                            "Create Target");
+      openvas_server_close (socket, session);
+      html = new_target (credentials, params, msg);
+      g_free (msg);
+      return html;
+    }
+  CHECK_PARAM (comment, "Create Target", new_target);
+  CHECK_PARAM (port_list_id, "Create Target", new_target);
+  CHECK_PARAM (target_credential, "Create Target", new_target);
+  if (strcmp (target_credential, "--"))
+    CHECK_PARAM (port, "Create Target", new_target);
+  CHECK_PARAM (target_smb_credential, "Create Target", new_target);
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -5849,40 +5780,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_targets");
     }
-
-  name = params_value (params, "name");
-  hosts = params_value (params, "hosts");
-  target_locator = params_value (params, "target_locator");
-  target_source = params_value (params, "target_source");
-  comment = params_value (params, "comment");
-  port_list_id = params_value (params, "port_list_id");
-  target_credential = params_value (params, "lsc_credential_id");
-  port = params_value (params, "port");
-  target_smb_credential = params_value (params, "lsc_smb_credential_id");
-  target_id = params_value (params, "target_id");
-
-  CHECK (name);
-  CHECK (target_source)
-  if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    return new_target (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
-  if (strcmp (target_source, "import") == 0 && name == NULL)
-    {
-      gchar *msg;
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given target_locator was invalid",
-                            "Create Target");
-      openvas_server_close (socket, session);
-      html = new_target (credentials, params, msg);
-      g_free (msg);
-      return html;
-    }
-  CHECK (comment);
-  CHECK (port_list_id);
-  CHECK (target_credential);
-  if (strcmp (target_credential, "--"))
-    CHECK (port);
-  CHECK (target_smb_credential);
 
   {
     int ret;
@@ -6018,8 +5915,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Check a param.
@@ -6510,23 +6405,6 @@ new_tag_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
- * @brief Check a tag creation param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "New Tag");                                        \
-      html = new_tag (credentials, params, msg);                               \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a tag, get report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -6538,7 +6416,7 @@ char *
 create_tag_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
-  gchar *response, *html;
+  gchar *response;
   const char *name, *comment, *value, *attach_type, *attach_id, *active;
   entity_t entity;
 
@@ -6549,12 +6427,12 @@ create_tag_omp (credentials_t *credentials, params_t *params)
   attach_id = params_value (params, "attach_id");
   active = params_value (params, "active");
 
-  CHECK (name)
-  CHECK (comment)
-  CHECK (value)
-  CHECK (attach_type)
-  CHECK (attach_id)
-  CHECK (active)
+  CHECK_PARAM (name, "Create Tag", new_tag)
+  CHECK_PARAM (comment, "Create Tag", new_tag)
+  CHECK_PARAM (value, "Create Tag", new_tag)
+  CHECK_PARAM (attach_type, "Create Tag", new_tag)
+  CHECK_PARAM (attach_id, "Create Tag", new_tag)
+  CHECK_PARAM (active, "Create Tag", new_tag)
 
   response = NULL;
   entity = NULL;
@@ -6616,8 +6494,6 @@ create_tag_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
-
-#undef CHECK
 
 /**
  * @brief Delete note, get next page, XSL transform the result.
@@ -6753,23 +6629,6 @@ edit_tag_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a tag editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Tag");                                       \
-      html = edit_tag (credentials, params, msg);                              \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a tag, get all tags, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -6796,13 +6655,13 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   attach_id = params_value (params, "attach_id");
   active = params_value (params, "active");
 
-  CHECK (tag_id)
-  CHECK (name)
-  CHECK (comment)
-  CHECK (value)
-  CHECK (attach_type)
-  CHECK (attach_id)
-  CHECK (active)
+  CHECK_PARAM (tag_id, "Save Tag", edit_tag)
+  CHECK_PARAM (name, "Save Tag", edit_tag)
+  CHECK_PARAM (comment, "Save Tag", edit_tag)
+  CHECK_PARAM (value, "Save Tag", edit_tag)
+  CHECK_PARAM (attach_type, "Save Tag", edit_tag)
+  CHECK_PARAM (attach_id, "Save Tag", edit_tag)
+  CHECK_PARAM (active, "Save Tag", edit_tag)
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6889,8 +6748,6 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   return ret;
 
 }
-
-#undef CHECK
 
 /**
  * @brief Export a tag.
@@ -7287,24 +7144,6 @@ get_targets_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      openvas_server_close (socket, session);                                  \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Modify Target");                                  \
-      html = edit_target (credentials, params, msg);                           \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -7321,6 +7160,36 @@ save_target_omp (credentials_t * credentials, params_t *params)
   const char *name, *next, *hosts, *target_locator, *comment, *port_list_id;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id;
+
+  name = params_value (params, "name");
+  next = params_value (params, "next");
+  hosts = params_value (params, "hosts");
+  target_locator = params_value (params, "target_locator");
+  target_source = params_value (params, "target_source");
+  comment = params_value (params, "comment");
+  port_list_id = params_value (params, "port_list_id");
+  target_credential = params_value (params, "lsc_credential_id");
+  port = params_value (params, "port");
+  target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  target_id = params_value (params, "target_id");
+
+  CHECK_PARAM (name, "Save Target", edit_target);
+  CHECK_PARAM (target_id, "Save Target", edit_target);
+  CHECK_PARAM (target_source, "Save Target", edit_target);
+  CHECK_PARAM (comment, "Save Target", edit_target);
+  CHECK_PARAM (port_list_id, "Save Target", edit_target);
+  CHECK_PARAM (target_credential, "Save Target", edit_target);
+  CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
+
+  if (next == NULL)
+    next = "get_target";
+
+  if (target_credential
+      && strcmp (target_credential, "--")
+      && strcmp (target_credential, "0"))
+    {
+      CHECK_PARAM (port, "Save Target", edit_target);
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7339,24 +7208,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_targets");
     }
 
-  name = params_value (params, "name");
-  next = params_value (params, "next");
-  hosts = params_value (params, "hosts");
-  target_locator = params_value (params, "target_locator");
-  target_source = params_value (params, "target_source");
-  comment = params_value (params, "comment");
-  port_list_id = params_value (params, "port_list_id");
-  target_credential = params_value (params, "lsc_credential_id");
-  port = params_value (params, "port");
-  target_smb_credential = params_value (params, "lsc_smb_credential_id");
-  target_id = params_value (params, "target_id");
-
-  if (next == NULL)
-    next = "get_target";
-
-  CHECK (name);
-  CHECK (target_id);
-  CHECK (target_source);
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
       openvas_server_close (socket, session);
@@ -7374,14 +7225,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
       g_free (msg);
       return html;
     }
-  CHECK (comment);
-  CHECK (port_list_id);
-  CHECK (target_credential);
-  CHECK (target_smb_credential);
-  if (target_credential
-      && strcmp (target_credential, "--")
-      && strcmp (target_credential, "0"))
-    CHECK (port);
 
   {
     int ret;
@@ -7512,8 +7355,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Export a target.
@@ -7984,28 +7825,26 @@ new_config_omp (credentials_t *credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
-edit_config_omp (credentials_t * credentials, params_t *params)
+static char *
+edit_config (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
 {
-  return get_config (credentials, params, NULL, 1);
+  return get_config (credentials, params, extra_xml, 1);
 }
 
 /**
- * @brief Check a param.
+ * @brief Get a config, XSL transform the result.
  *
- * @param[in]  name  Param name.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
  */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Config");                                    \
-      html = new_target (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
+char *
+edit_config_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_config (credentials, params, NULL);
+}
 
 /**
  * @brief Save details of an NVT for a config and return the next page.
@@ -8030,15 +7869,9 @@ save_config_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  if (config_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a config. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
-
-  CHECK (name);
-  CHECK (comment);
+  CHECK_PARAM (config_id, "Save Config", edit_config);
+  CHECK_PARAM (name, "Save Config", edit_config);
+  CHECK_PARAM (comment, "Save Config", edit_config);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -8252,8 +8085,6 @@ save_config_omp (credentials_t * credentials, params_t *params)
     return get_config (credentials, params, NULL, 1);
   return get_config_family (credentials, params, 1);
 }
-
-#undef CHECK
 
 /**
  * @brief Get details of a family for a config, XSL transform the result.
@@ -11094,23 +10925,6 @@ new_note_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg, *html;                                                       \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "New Note");                                       \
-      html =  new_note (credentials, params, msg);                             \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a note, get report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -11130,7 +10944,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
   entity_t entity;
 
   oid = params_value (params, "oid");
-  CHECK(oid);
+  CHECK_PARAM (oid, "Create Note", new_note);
 
   if (params_valid (params, "threat"))
     threat = params_value (params, "threat");
@@ -11139,7 +10953,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
     threat = NULL;
   else
     threat = "";
-  CHECK (threat);
+  CHECK_PARAM (threat, "Create Note", new_note);
 
   port = params_value (params, "port");
   if (port == NULL)
@@ -11154,7 +10968,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK (port);
+  CHECK_PARAM (port, "Create Note", new_note);
 
   if (params_valid (params, "hosts"))
     {
@@ -11175,7 +10989,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
     hosts = NULL;
   else
     hosts = "";
-  CHECK(hosts);
+  CHECK_PARAM (hosts, "Create Note", new_note);
 
   if (params_valid (params, "note_task_id"))
     {
@@ -11190,7 +11004,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK(active);
+  CHECK_PARAM (active, "Create Note", new_note);
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -11263,8 +11077,6 @@ create_note_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
-
-#undef CHECK
 
 /**
  * @brief Delete note, get next page, XSL transform the result.
@@ -11891,23 +11703,6 @@ new_override_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg, *html;                                                       \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "New Override");                                   \
-      html =  new_note (credentials, params, msg);                             \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create an override, get report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -11927,7 +11722,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
   entity_t entity;
 
   oid = params_value (params, "oid");
-  CHECK(oid);
+  CHECK_PARAM (oid, "Create Override", new_override);
 
   if (params_valid (params, "threat"))
     threat = params_value (params, "threat");
@@ -11936,7 +11731,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
     threat = NULL;
   else
     threat = "";
-  CHECK(threat);
+  CHECK_PARAM (threat, "Create Override", new_override);
 
   if (params_valid (params, "new_threat"))
     new_threat = params_value (params, "new_threat");
@@ -11958,7 +11753,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK (port);
+  CHECK_PARAM (port, "Create Override", new_override);
 
   if (params_valid (params, "hosts"))
     {
@@ -11979,7 +11774,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
     hosts = NULL;
   else
     hosts = "";
-  CHECK(hosts);
+  CHECK_PARAM (hosts, "Create Override", new_override);
 
   if (params_valid (params, "override_task_id"))
     {
@@ -11994,7 +11789,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK(active);
+  CHECK_PARAM (active, "Create Override", new_override);
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -12069,8 +11864,6 @@ create_override_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return ret;
 }
-
-#undef CHECK
 
 /**
  * @brief Delete override, get next page, XSL transform the result.
@@ -12616,23 +12409,6 @@ edit_slave_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Slave");                                     \
-      html = edit_slave (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a slave, get all slaves, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -12656,13 +12432,13 @@ save_slave_omp (credentials_t * credentials, params_t *params)
   login = params_value (params, "login");
   password = params_value (params, "password");
 
-  CHECK (slave_id);
-  CHECK (name);
-  CHECK (comment);
-  CHECK (host);
-  CHECK (port);
-  CHECK (login);
-  CHECK (password);
+  CHECK_PARAM (slave_id, "Save Slave", edit_slave);
+  CHECK_PARAM (name, "Save Slave", edit_slave);
+  CHECK_PARAM (comment, "Save Slave", edit_slave);
+  CHECK_PARAM (host, "Save Slave", edit_slave);
+  CHECK_PARAM (port, "Save Slave", edit_slave);
+  CHECK_PARAM (login, "Save Slave", edit_slave);
+  CHECK_PARAM (password, "Save Slave", edit_slave);
 
   /* Modify the slave. */
 
@@ -12727,8 +12503,6 @@ save_slave_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Export a slave.
@@ -13507,23 +13281,6 @@ import_report_format_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Report Format");                             \
-      html = edit_report_format (credentials, params, msg);                    \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Save report_format, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
@@ -13545,10 +13302,10 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
   summary = params_value (params, "summary");
   enable = params_value (params, "enable");
 
-  CHECK (report_format_id);
-  CHECK (name);
-  CHECK (summary);
-  CHECK (enable);
+  CHECK_PARAM (report_format_id, "Save Report Format", edit_report_format);
+  CHECK_PARAM (name, "Save Report Format", edit_report_format);
+  CHECK_PARAM (summary, "Save Report Format", edit_report_format);
+  CHECK_PARAM (enable, "Save Report Format", edit_report_format);
 
   /* Modify the Report Format. */
 
@@ -13684,8 +13441,6 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Verify report format, get report formats, XSL transform the result.

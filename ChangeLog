@@ -1,5 +1,19 @@
 2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (save_task_omp, create_lsc_credential_omp)
+	(save_lsc_creential_omp, save_agent_omp, save_alert_omp)
+	(create_target_omp, create_tag_omp, save_tag_omp, save_target_omp)
+	(save_config_omp, create_note_omp, create_override_omp, save_slave_omp)
+	(save_report_format_omp: Remove associated CHECK macro and use
+	CHECK_PARAM macro instead. Reorganize code so that parameter checking
+	comes before new connection to manager is made.
+	(edit_config): New function
+	(edit_config_omp): Call edit_config.
+
+	* src/html/omp.xsl (get_config_response): Match gsad_msg.
+
+2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (CHECK_PARAM): New macro.
 	(create_group_omp, save_group_omp, create_permission_omp)
 	(save_permission_omp, create_port_list_omp, create_port_range_omp)
