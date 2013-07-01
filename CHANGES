@@ -1,3 +1,35 @@
+gsa 5.0+beta1 (2013-07-01)
+
+This is the first beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release -- in combination with the OpenVAS Manager 5.0+beta1 release --
+enables a number of new features like improved results display, support for
+advanced user and permission management and internationalization.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner and Michael
+Wiegand.
+
+Main changes since 4.0 series:
+* The display of prognostic results has been improved.
+* Support for user, group, role and permission management has been added.
+* The user interface has been updated to match new and changed functionality in
+  OpenVAS Manager.
+* The results display has been updated to support new style NVTs.
+* The required minimum GnuTLS version has increased to 2.8.
+* The required minimum OpenVAS Libraries version has increased to 7.0.0.
+* A CVSS Score calculator has been added.
+* Tag management and support for tags in a number of places has been added.
+* Internationalization support has been added.
+* The handling of bad or missing tokens has been improved.
+* Support for app icons has been added.
+* Support for displaying the network topology natively has been added.
+* Support for displaying gathered SSL certificates has been added.
+* Code cleanup.
+
+
 gsa 4.0+beta5 (2013-02-22)
 
 This is the fifth beta version of the upcoming 4.0 release of the Greenbone

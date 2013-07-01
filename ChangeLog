@@ -1,3 +1,13 @@
+2013-07-01  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 5.0+beta1 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Raise openvas-libraries dependency to 7.0.0.
+
+	* INSTALL: Update dependencies.
+
 2013-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Add a space for clarity.
