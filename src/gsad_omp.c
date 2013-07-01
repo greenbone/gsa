@@ -545,6 +545,25 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
   return 0;
 }
 
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name     Param name.
+ * @param[in]  op_name  Operation name.
+ * @param[in]  ret_func Function to return message.
+ */
+#define CHECK_PARAM(name, op_name, ret_func)                                   \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg, *rethtml;                                                    \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            op_name);                                          \
+      rethtml = ret_func(credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return rethtml;                                                          \
+    }
+
 
 /* Generic page handlers. */
 
@@ -14900,24 +14919,6 @@ delete_group_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      openvas_server_close (socket, session);                                  \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Group");                                   \
-      html = new_group (credentials, params, msg);                             \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a group, get all groups, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -14954,9 +14955,9 @@ create_group_omp (credentials_t *credentials, params_t *params)
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK (name);
-  CHECK (comment);
-  CHECK (users);
+  CHECK_PARAM (name, "Create Group", new_group);
+  CHECK_PARAM (comment, "Create Group", new_group);
+  CHECK_PARAM (users, "Create Group", new_group);
 
   {
     int ret;
@@ -15045,8 +15046,6 @@ create_group_omp (credentials_t *credentials, params_t *params)
   return html;
 }
 
-#undef CHECK
-
 /**
  * @brief Setup edit_group XML, XSL transform the result.
  *
@@ -15119,23 +15118,6 @@ export_groups_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Group");                                     \
-      html = edit_group (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a group, return the next page.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -15156,10 +15138,10 @@ save_group_omp (credentials_t * credentials, params_t *params)
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK (group_id);
-  CHECK (name);
-  CHECK (comment);
-  CHECK (users);
+  CHECK_PARAM (group_id, "Save Group", edit_group);
+  CHECK_PARAM (name, "Save Group", edit_group);
+  CHECK_PARAM (comment, "Save Group", edit_group);
+  CHECK_PARAM (users, "Save Group", edit_group);
 
   /* Modify the Group. */
 
@@ -15218,8 +15200,6 @@ save_group_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 
 /* Permissions. */
@@ -15476,23 +15456,6 @@ new_permission_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                             "Given " G_STRINGIFY (name) " was invalid",       \
-                             "Create Permission");                             \
-      html = new_permission (credentials, params, msg);                        \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a permission, get all permissions, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -15514,10 +15477,10 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   resource_id = params_value (params, "id_or_empty");
   subject_type = params_value (params, "subject_type");
 
-  CHECK (name);
-  CHECK (comment);
-  CHECK (resource_id);
-  CHECK (subject_type);
+  CHECK_PARAM (name, "Create Permission", new_permission);
+  CHECK_PARAM (comment, "Create Permission", new_permission);
+  CHECK_PARAM (resource_id, "Create Permission", new_permission);
+  CHECK_PARAM (subject_type, "Create Permission", new_permission);
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -15526,10 +15489,8 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   else if (strcmp (subject_type, "role") == 0)
     subject_id = params_value (params, "role_id");
   else
-    {
-      subject_id = NULL;
-      CHECK (subject_id);
-    }
+    subject_id = NULL;
+  CHECK_PARAM (subject_id, "Create Permission", new_permission);
 
   /* Create the permission. */
 
@@ -15590,8 +15551,6 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Setup edit_permission XML, XSL transform the result.
@@ -15797,23 +15756,6 @@ export_permissions_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                             "Given " G_STRINGIFY (name) " was invalid",       \
-                             "Create Permission");                             \
-      html = edit_permission (credentials, params, msg);                       \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a permission, get all permissions, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -15836,11 +15778,11 @@ save_permission_omp (credentials_t * credentials, params_t *params)
   subject_type = params_value (params, "subject_type");
   resource_id = params_value (params, "id_or_empty");
 
-  CHECK (permission_id);
-  CHECK (name);
-  CHECK (comment);
-  CHECK (resource_id);
-  CHECK (subject_type);
+  CHECK_PARAM (permission_id, "Save Permission", edit_permission);
+  CHECK_PARAM (name, "Save Permission", edit_permission);
+  CHECK_PARAM (comment, "Save Permission", edit_permission);
+  CHECK_PARAM (resource_id, "Save Permission", edit_permission);
+  CHECK_PARAM (subject_type, "Save Permission", edit_permission);
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -15849,10 +15791,8 @@ save_permission_omp (credentials_t * credentials, params_t *params)
   else if (strcmp (subject_type, "role") == 0)
     subject_id = params_value (params, "role_id");
   else
-    {
-      subject_id = NULL;
-      CHECK (subject_id);
-    }
+    subject_id = NULL;
+  CHECK_PARAM (subject_id, "Save Permission", edit_permission);
 
   /* Modify the permission. */
 
@@ -15916,21 +15856,28 @@ save_permission_omp (credentials_t * credentials, params_t *params)
   return html;
 }
 
-#undef CHECK
-
 
 /* Port lists. */
 
 /**
- * @brief Check a param.
+ * @brief Returns page to create a new Port List.
  *
- * @param[in]  name  Param name.
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
  */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,                         \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Port List")
+static char *
+new_port_list (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_port_list>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_port_list>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
 
 /**
  * @brief Create a port list, get all port lists, XSL transform the result.
@@ -15948,6 +15895,16 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
   int socket;
   gchar *html;
   const char *name, *comment, *port_range, *from_file;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  port_range = params_value (params, "port_range");
+  from_file = params_value (params, "from_file");
+
+  CHECK_PARAM (name, "Create Port List", new_port_list);
+  CHECK_PARAM (comment, "Create Port List", new_port_list);
+  CHECK_PARAM (port_range, "Create Port List", new_port_list);
+  CHECK_PARAM (from_file, "Create Port List", new_port_list);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -15968,57 +15925,47 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("<get_port_lists>");
 
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  port_range = params_value (params, "port_range");
-  from_file = params_value (params, "from_file");
+  {
+    int ret;
 
-  CHECK (name);
-  else CHECK (comment);
-  else CHECK (port_range);
-  else CHECK (from_file);
-  else
-    {
-      int ret;
+    /* Create the port_list. */
 
-      /* Create the port_list. */
+    ret = openvas_server_sendf (&session,
+                                "<create_port_list>"
+                                "<name>%s</name>"
+                                "<port_range>%s</port_range>"
+                                "<comment>%s</comment>"
+                                "</create_port_list>",
+                                name,
+                                strcmp (from_file, "0")
+                                 ? params_value (params, "file")
+                                 : port_range,
+                                comment ? comment : "");
 
-      ret = openvas_server_sendf (&session,
-                                  "<create_port_list>"
-                                  "<name>%s</name>"
-                                  "<port_range>%s</port_range>"
-                                  "<comment>%s</comment>"
-                                  "</create_port_list>",
-                                  name,
-                                  strcmp (from_file, "0")
-                                   ? params_value (params, "file")
-                                   : port_range,
-                                  comment ? comment : "");
+    if (ret == -1)
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new port list. "
+                             "No new port list was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      }
 
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new port list. "
-                               "No new port list was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_port_lists");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new port list. "
-                               "It is unclear whether the port list has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_port_lists");
-        }
-    }
+    if (read_string (&session, &xml))
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new port list. "
+                             "It is unclear whether the port list has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      }
+  }
 
   /* Get all the port lists. */
 
@@ -16057,25 +16004,6 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
-#undef CHECK
-
-/**
- * @brief Check a port range creation param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Port Range");                              \
-      html = edit_port_list (credentials, params, msg);                        \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
 /**
  * @brief Add a range to a port list, XSL transform the result.
  *
@@ -16097,10 +16025,10 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
   end = params_value (params, "port_range_end");
   type = params_value (params, "port_type");
 
-  CHECK (port_list_id);
-  CHECK (start);
-  CHECK (end);
-  CHECK (type);
+  CHECK_PARAM (port_list_id, "Create Port Range", edit_port_list);
+  CHECK_PARAM (start, "Create Port Range", edit_port_list);
+  CHECK_PARAM (end, "Create Port Range", edit_port_list);
+  CHECK_PARAM (type, "Create Port Range", edit_port_list);
 
   /* Create the port range. */
 
@@ -16160,8 +16088,6 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Get one port_list, XSL transform the result.
@@ -16225,26 +16151,6 @@ get_port_lists_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Returns page to create a new Port List.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- *
- * @return Result of XSL transformation.
- */
-static char *
-new_port_list (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
-{
-  GString *xml;
-  xml = g_string_new ("<new_port_list>");
-  g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_port_list>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
  * @brief Return the new Port List page.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -16289,23 +16195,6 @@ edit_port_list_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check a port list editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Port List");                                 \
-      html = edit_port_list (credentials, params, msg);                        \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a port list, get all port list, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -16325,9 +16214,9 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK (port_list_id);
-  CHECK (name);
-  CHECK (comment);
+  CHECK_PARAM (port_list_id, "Save Port List", edit_port_list);
+  CHECK_PARAM (name, "Save Port List", edit_port_list);
+  CHECK_PARAM (comment, "Save Port List", edit_port_list);
 
   /* Modify the Port List. */
 
@@ -16385,7 +16274,6 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
   return html;
 }
 
-#undef CHECK
 /**
  * @brief Delete a port list, get all port lists, XSL transform the result.
  *
@@ -17132,24 +17020,6 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      openvas_server_close (socket, session);                                  \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Filter");                                  \
-      html = new_filter (credentials, params, msg);                            \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Create a filter, get all filters, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -17164,6 +17034,16 @@ create_filter_omp (credentials_t *credentials, params_t *params)
   int socket;
   gchar *html, *response;
   const char *name, *comment, *term, *type, *filter_id;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  term = params_value (params, "term");
+  type = params_value (params, "optional_resource_type");
+
+  CHECK_PARAM (name, "Create Filter", new_filter);
+  CHECK_PARAM (comment, "Create Filter", new_filter);
+  CHECK_PARAM (term, "Create Filter", new_filter);
+  CHECK_PARAM (type, "Create Filter", new_filter);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -17181,16 +17061,6 @@ create_filter_omp (credentials_t *credentials, params_t *params)
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_filters");
     }
-
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
-
-  CHECK (name);
-  CHECK (comment);
-  CHECK (term);
-  CHECK (type);
 
   {
     int ret;
@@ -17289,8 +17159,6 @@ create_filter_omp (credentials_t *credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Delete a filter, get all filters, XSL transform the result.
@@ -17401,23 +17269,6 @@ export_filters_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save Filter");                                    \
-      html = edit_filter (credentials, params, msg);                           \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Returns page to create a new filter.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
@@ -17447,6 +17298,18 @@ save_filter_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response;
   const char *filter_id, *name, *comment, *term, *type;
 
+  filter_id = params_value (params, "filter_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  term = params_value (params, "term");
+  type = params_value (params, "optional_resource_type");
+
+  CHECK_PARAM (filter_id, "Save Filter", edit_filter);
+  CHECK_PARAM (name, "Save Filter", edit_filter);
+  CHECK_PARAM (comment, "Save Filter", edit_filter);
+  CHECK_PARAM (term, "Save Filter", edit_filter);
+  CHECK_PARAM (type, "Save Filter", edit_filter);
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -17463,18 +17326,6 @@ save_filter_omp (credentials_t * credentials, params_t *params)
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_filters");
     }
-
-  filter_id = params_value (params, "filter_id");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
-
-  CHECK (filter_id);
-  CHECK (name);
-  CHECK (comment);
-  CHECK (term);
-  CHECK (type);
 
   {
     int ret;
@@ -17556,8 +17407,6 @@ save_filter_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 
 /* Schedules. */
@@ -18415,23 +18264,6 @@ edit_user_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Check user editing param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg;                                                              \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Save User");                                      \
-      html = edit_user (credentials, params, msg);                             \
-      g_free (msg);                                                            \
-      return html;                                                             \
-    }
-
-/**
  * @brief Modify a user, get all users, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -18495,13 +18327,13 @@ save_user_omp (credentials_t * credentials, params_t *params)
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
 
-  CHECK (user_id);
-  CHECK (login);
-  CHECK (modify_password);
-  CHECK (password);
-  CHECK (hosts);
-  CHECK (hosts);
-  CHECK (hosts_allow);
+  CHECK_PARAM (user_id, "Save User", edit_user);
+  CHECK_PARAM (login, "Save User", edit_user);
+  CHECK_PARAM (modify_password, "Save User", edit_user);
+  CHECK_PARAM (password, "Save User", edit_user);
+  CHECK_PARAM (hosts, "Save User", edit_user);
+  CHECK_PARAM (hosts, "Save User", edit_user);
+  CHECK_PARAM (hosts_allow, "Save User", edit_user);
 
   /* Modify the user. */
 
@@ -18619,8 +18451,6 @@ save_user_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Export a user.

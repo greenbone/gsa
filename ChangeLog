@@ -1,5 +1,15 @@
 2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (CHECK_PARAM): New macro.
+	(create_group_omp, save_group_omp, create_permission_omp)
+	(save_permission_omp, create_port_list_omp, create_port_range_omp)
+	(save_port_list_omp, save_port_range_omp, create_filter_omp)
+	(save_filter_omp, save_user_omp): Refactor code. Remove associated CHECK
+	macros. Use CHECK_PARAM. Reorganize code for certain functions so that
+	parameter checking happens before creating a new connection to manager.
+
+2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/gsad_omp.c (GET_TRASH_RESOURCE): New macro.
 	(get_trash): Refactor and clean code.
 
