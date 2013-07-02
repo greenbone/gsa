@@ -22045,7 +22045,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Port</td>
           <td>IANA</td>
           <td>Hosts</td>
-          <td>Threat</td>
+          <td>Severity</td>
         </tr>
 
         <xsl:for-each select="report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))]">
@@ -22085,21 +22085,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="count(../../port[text() = $port])"/>
               </td>
               <td>
-                <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
-                <xsl:variable name="extra_text">
-                  <xsl:choose>
-                    <xsl:when test="$threat = 'low' or $threat = 'medium' or $threat = 'high' or $threat = 'critical'">
-                      <xsl:value-of select="../threat"/>
-                    </xsl:when>
-                    <xsl:otherwise>None</xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-
-                <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="extra_text" select="$extra_text"/>
-                  <xsl:with-param name="cvss" select="gsa:risk-factor-max-cvss($threat)"/>
-                  <xsl:with-param name="notext" select="'1'"/>
-                </xsl:call-template>
+                <xsl:for-each select="../../port[text() = $port]">
+                  <xsl:sort data-type="number" select="cvss" order="descending"/>
+                  <xsl:if test="position() = 1">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="cvss"/>
+                    </xsl:call-template>
+                  </xsl:if>
+                </xsl:for-each>
               </td>
             </tr>
         </xsl:for-each>
