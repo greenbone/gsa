@@ -727,20 +727,16 @@ text-align:right;
  border-style: solid;
  border-top: 0px;
  border-color: #CCCCCC;
+ background-color: #ECEEEE;
 }
 
 .result_section_top {
  border-top: 1px solid #CCCCCC;
+ background-color: #ECEEEE;
 }
 
-.result_header_right {
- border-right: 1px solid #CCCCCC;
- width: 100%;
-}
-
-.result_header_left {
- border-left: 1px solid #CCCCCC;
- width: 100%;
+.result_header {
+ background-color: #ECEEEE;
 }
 
 /* Report sections menu. */

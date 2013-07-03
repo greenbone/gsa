@@ -2145,7 +2145,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <table class="gbntable" cellspacing="2">
+          <table class="gbntable" cellspacing="1">
             <xsl:apply-templates select="report" mode="details"/>
           </table>
         </xsl:when>
@@ -20330,11 +20330,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise><xsl:number/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <tr class="{gsa:table-row-class($class)}">
-      <xsl:variable name="left_header_class">
-        <xsl:if test="$class = -1">result_header_left</xsl:if>
-      </xsl:variable>
-      <td><table class="{$left_header_class}"><tr><td> <!-- Vulnerability -->
+  <xsl:variable name="header_style">
+    <xsl:choose>
+        <xsl:when test="$class = -1">result_header</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <tr class="{$header_style} {gsa:table-row-class($class)}">
+    <td> <!-- Vulnerability -->
       <xsl:if test="delta/text()">
         <xsl:choose>
           <xsl:when test="delta/text() = 'changed'">[ ~ ] </xsl:when>
@@ -20377,7 +20381,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
-      </td></tr></table>
     </td>
     <td> <!-- Severity -->
       <xsl:variable name="severity_title">
@@ -20454,11 +20457,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <!-- Action Icons -->
-    <xsl:variable name="right_header_class">
-      <xsl:if test="$class = -1">result_header_right</xsl:if>
-    </xsl:variable>
     <xsl:if test="$prognostic != 1">
-      <td><table class="{$right_header_class}"><tr><td>
+      <td>
         <xsl:if test="$details-button = 1">
           <xsl:choose>
             <xsl:when test="delta">
@@ -20577,7 +20577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:if>
           </div>
         </xsl:if>
-      </td></tr></table></td>
+      </td>
     </xsl:if>
   </tr>
 </xsl:template>

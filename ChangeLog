@@ -1,3 +1,16 @@
+2013-07-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/gsa-style.css (result_header, result_section_top): Add
+	background color.
+	(result_section): New class.
+	(result_header_right, result_header_left): Remove.
+
+	* src/html/omp.xsl (report [results]): Reduce cell spacing for results
+	tables.
+	(result [result-headers]): Add check and apply result header class.
+	Remove inner table in result header cells and adjust to display
+	correctly.
+
 2013-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [ports]): Rename Threat to Severity. Update
