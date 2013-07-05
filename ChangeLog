@@ -1,3 +1,14 @@
+2013-07-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "dynamic_severity" as alias for
+	"boolean".
+
+	* src/gsad_omp.c (save_my_settings_omp): Add saving of setting
+	"Dynamic Severity".
+
+	* src/html/omp.xsl (get_my_settings, edit_my_settings): Add the
+	"Dynamic Severity" setting.
+
 2013-07-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (result [result-headers]): Get severity from

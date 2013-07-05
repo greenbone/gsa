@@ -14329,6 +14329,33 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       *severity = g_strdup (strlen (text) ? text : "UTC");
     }
 
+  /* Send Dynamic Severity setting. */
+  text = params_value (params, "dynamic_severity");
+  text_64 = (text
+                 ? g_base64_encode ((guchar*) text, strlen (text))
+                 : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            text_64 ? text_64 : "")
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (text_64);
+
+  /* Get filters */
   if (openvas_server_sendf (&session,
                             "<get_filters/>")
       == -1)

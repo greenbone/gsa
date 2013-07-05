@@ -26154,6 +26154,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
+            <td>Dynamic Severity</td>
+            <td>
+              <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
+              <xsl:choose>
+                <xsl:when test="$dynamic_severity = 0">No</xsl:when>
+                <xsl:when test="$dynamic_severity = 1">Yes</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$dynamic_severity"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr class="even">
             <td>Agents Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26162,7 +26175,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Alerts Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26171,7 +26184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Configs Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26180,7 +26193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Credentials Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26189,7 +26202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Filters Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26198,7 +26211,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Notes Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26207,7 +26220,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Overrides Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26216,7 +26229,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Port Lists Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26225,7 +26238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Reports Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26234,7 +26247,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Report Formats Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26243,7 +26256,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Roles Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26252,7 +26265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Schedules Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26261,7 +26274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Slaves Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26270,7 +26283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Tags Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26279,7 +26292,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Targets Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26288,7 +26301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Tasks Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26297,7 +26310,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>CPE Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26306,7 +26319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>CVE Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26315,7 +26328,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>NVT Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26324,7 +26337,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>OVAL Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26333,7 +26346,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>DFN-CERT Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26342,7 +26355,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>All SecInfo Filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -26426,6 +26439,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="default"
                                     select="get_settings_response/setting[name='Severity Class']/value"/>
                 </xsl:call-template>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Dynamic Severity</td>
+              <td>
+                <xsl:variable name="current_dynamic_severity" select="get_settings_response/setting[name='Dynamic Severity']/value"/>
+                <select name="dynamic_severity" style="width:100px;">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'0'"/>
+                    <xsl:with-param name="content" select="'No'"/>
+                    <xsl:with-param name="select-value" select="$current_dynamic_severity"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'1'"/>
+                    <xsl:with-param name="content" select="'Yes'"/>
+                    <xsl:with-param name="select-value" select="$current_dynamic_severity"/>
+                  </xsl:call-template>
+                </select>
               </td>
               <td></td>
             </tr>

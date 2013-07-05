@@ -945,6 +945,7 @@ init_validator ()
   openvas_validator_alias (validator, "delta_state_same", "boolean");
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
+  openvas_validator_alias (validator, "dynamic_severity", "boolean");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
