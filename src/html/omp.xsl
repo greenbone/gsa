@@ -14861,38 +14861,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVT Details
-      <a href="/help/nvt_details.html?token={/envelope/token}"
-         title="Help: NVT Details">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="NVT" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="NVT"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates
-        select="commands_response/get_nvts_response/nvt"/>
-      <h2>Preferences</h2>
-      <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
-        <xsl:call-template name="preferences-details">
-        </xsl:call-template>
-      </xsl:for-each>
-    </div>
-  </div>
 
-  <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="title" select="concat('User Tags for &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
-    <xsl:with-param name="user_tags" select="commands_response/get_nvts_response/nvt/user_tags"/>
-    <xsl:with-param name="tag_names" select="get_tags_response"/>
-    <xsl:with-param name="resource_type" select="'nvt'"/>
-    <xsl:with-param name="next" select="'get_nvts'"/>
-    <xsl:with-param name="resource_id"   select="commands_response/get_nvts_response/nvt/@oid"/>
-  </xsl:call-template>
+  <xsl:variable select="commands_response/get_nvts_response" name="nvts_response"/>
+  <xsl:choose>
+      <xsl:when test="substring($nvts_response/@status, 1, 1) = '4' or substring($nvts_response/@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get NVTs
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="$nvts_response/@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="$nvts_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="gb_window">
+        <div class="gb_window_part_left"></div>
+        <div class="gb_window_part_right"></div>
+        <div class="gb_window_part_center">NVT Details
+          <a href="/help/nvt_details.html?token={/envelope/token}"
+             title="Help: NVT Details">
+            <img src="/img/help.png"/>
+          </a>
+          <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            title="NVT" style="margin-left:3px;">
+            <img src="/img/list.png" border="0" alt="NVT"/>
+          </a>
+        </div>
+        <div class="gb_window_part_content">
+          <xsl:apply-templates
+            select="commands_response/get_nvts_response/nvt"/>
+          <h2>Preferences</h2>
+          <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
+            <xsl:call-template name="preferences-details">
+            </xsl:call-template>
+          </xsl:for-each>
+        </div>
+      </div>
+
+      <xsl:call-template name="user-tags-window">
+        <xsl:with-param name="title" select="concat('User Tags for &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
+        <xsl:with-param name="user_tags" select="commands_response/get_nvts_response/nvt/user_tags"/>
+        <xsl:with-param name="tag_names" select="get_tags_response"/>
+        <xsl:with-param name="resource_type" select="'nvt'"/>
+        <xsl:with-param name="next" select="'get_nvts'"/>
+        <xsl:with-param name="resource_id"   select="commands_response/get_nvts_response/nvt/@oid"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- END NVT DETAILS -->
