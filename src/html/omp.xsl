@@ -1298,7 +1298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (task)"/>
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Threat|threat Trend|trend'"/>
+    <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Severity|severity Trend|trend'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -2544,7 +2544,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
             <td rowspan="2">Report</td>
-            <td rowspan="2">Threat</td>
+            <td rowspan="2">Severity</td>
             <td colspan="5">Scan Results</td>
             <td rowspan="2">Actions</td>
           </tr>
@@ -2977,6 +2977,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="severity"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
+      </xsl:call-template>
+<!-- TODO: Remove completely after migration 
       <xsl:choose>
         <xsl:when test="result_count/hole &gt; 0">
           <img src="/img/high_big.png"
@@ -2999,6 +3004,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                alt="None"/>
         </xsl:otherwise>
       </xsl:choose>
+-->
     </td>
     <td class="threat_info_table">
       <xsl:value-of select="result_count/hole"/>
@@ -3066,6 +3072,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- LAST_REPORT -->
 <xsl:template match="last_report">
+  <xsl:call-template name="severity-bar">
+    <xsl:with-param name="cvss" select="report/severity"/>
+    <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(report/severity), ')')"/>
+  </xsl:call-template>
+<!-- TODO: Remove completely after migration of old results
   <xsl:choose>
     <xsl:when test="report/result_count/hole &gt; 0">
       <img src="/img/high_big.png"
@@ -3092,6 +3103,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
+-->
 </xsl:template>
 
 <xsl:template name="html-edit-task-form">
