@@ -1,5 +1,10 @@
 2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (CHECK_PARAM): Name variable more consistently.  Line
+	up indenting.  Add space after function name.
+
+2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_trash): Add space after functions.  Remove
 	comments because it's pretty obvious what's happening.
 

@@ -555,13 +555,13 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
 #define CHECK_PARAM(name, op_name, ret_func)                                   \
   if (name == NULL)                                                            \
     {                                                                          \
-      gchar *msg, *rethtml;                                                    \
+      gchar *msg, *ret_html;                                                   \
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                            "Given " G_STRINGIFY (name) " was invalid",        \
-                            op_name);                                          \
-      rethtml = ret_func(credentials, params, msg);                            \
+                             "Given " G_STRINGIFY (name) " was invalid",       \
+                             op_name);                                         \
+      ret_html = ret_func (credentials, params, msg);                          \
       g_free (msg);                                                            \
-      return rethtml;                                                          \
+      return ret_html;                                                         \
     }
 
 
