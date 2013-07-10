@@ -5348,6 +5348,7 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   filter_id = params_value (params, "filter_id");
 
   CHECK_PARAM (name, "Save Alert", edit_alert);
+  CHECK_PARAM (comment, "Save Alert", edit_alert);
   CHECK_PARAM (alert_id, "Save Alert", edit_alert);
   CHECK_PARAM (condition, "Save Alert", edit_alert);
   CHECK_PARAM (event, "Save Alert", edit_alert);
@@ -5367,13 +5368,11 @@ save_alert_omp (credentials_t * credentials, params_t *params)
                             "<modify_alert alert_id=\"%s\">"
                             "<name>%s</name>"
                             "<filter id=\"%s\"/>"
-                            "%s%s%s",
+                            "<comment>%s</comment>",
                             alert_id,
                             name,
                             filter_id,
-                            comment ? "<comment>" : "",
-                            comment ? comment : "",
-                            comment ? "</comment>" : "")
+                            comment ? comment : "")
       || openvas_server_sendf (&session, "<event>%s", event)
       || send_alert_event_data (&session, event_data, event)
       || openvas_server_send (&session, "</event>")
