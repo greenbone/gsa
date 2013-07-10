@@ -16685,7 +16685,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="new_threat"/>
+      <xsl:choose>
+        <xsl:when test="number(new_severity) &lt;= 0">
+          <xsl:value-of select="new_threat"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="new_severity"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(new_severity), ')')"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
@@ -16870,9 +16880,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><b>New Threat:</b></td>
+          <td><b>New Severity:</b></td>
           <td>
-            <xsl:value-of select="new_threat"/>
+            <xsl:choose>
+              <xsl:when test="number(new_severity) &lt;= 0">
+                <xsl:value-of select="new_threat"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="new_severity"/>
+                  <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(new_severity), ')')"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
         <tr>
@@ -16948,7 +16968,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="headings" select="'NVT|nvt From|from To|to Text|text Active|active'"/>
+    <xsl:with-param name="headings" select="'NVT|nvt From|from To|new_severity Text|text Active|active'"/>
   </xsl:call-template>
 </xsl:template>
 

@@ -1,3 +1,9 @@
+2013-07-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (override [override], override [details]): Use
+	bar for new_severity if it is > 0.0 instead of new_threat.
+	(html-overrides-table): Use new_severity for sorting by "To" column.
+
 2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Add close paren.
