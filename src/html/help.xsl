@@ -4410,7 +4410,7 @@ Public License instead of this License.
             Information Security (Bundesamt für Sicherheit in der Informationstechnik, BSI)
             applies this mapping for their vulnerability traffic lights (german: "Schwachstellenampel").
             See also this document of BSI in german language:
-            https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/BSI-A-CS_003.pdf 
+            https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/BSI-A-CS_003.pdf
             <ul>
               <li>High: 7.0 - 10.0  ("rot": kritische)</li>
               <li>Medium: 4.0 - 6.9 ("gelb": geringfügig-kritisch)</li>
@@ -5739,6 +5739,19 @@ Public License instead of this License.
       </ul>
       <ul>
         <li>
+          regexp 10.128.[0-9]+.[0-9]+
+          <ul>
+            <li>
+              Include any item that has an IP style string starting "10.128."
+              anywhere in the text of any column.  This matches 10.128.84.1
+              and 10.128.98.2, for example.  This is how to filter with a
+              regular expression.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
           name=Localhost
           <ul>
             <li>
@@ -5753,6 +5766,17 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "local" anywhere in the name.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          name:^Local
+          <ul>
+            <li>
+              Include any item who's name starts with "Local".  This how to
+              filter by column with a regular expression.
             </li>
           </ul>
         </li>
@@ -5875,10 +5899,17 @@ Public License instead of this License.
       <h4>Column Keywords</h4>
       <p>
         A keyword can also be
-        prefixed with a column using one of the special characters =, ~, &lt;
-        and &gt;.  For example "name=Localhost".  In the case of the = relation the
-        keyword is case sensitive; for other relations the keyword is case
-        insensitive as usual.
+        prefixed with a column using one of the special characters:
+        <ul style="list-style: none;">
+          <li><b style="margin-right: 10px"><code>=</code></b> equals</li>
+          <li><b style="margin-right: 10px"><code>~</code></b> contains</li>
+          <li><b style="margin-right: 10px"><code>&lt;</code></b> is less than</li>
+          <li><b style="margin-right: 10px"><code>&gt;</code></b> is greater than</li>
+          <li><b style="margin-right: 10px"><code>:</code></b> matches the regular expression</li>
+        </ul>
+        For example "name=Localhost".  In the case of the = and :
+        relations the keyword is case sensitive; for other relations the keyword
+        is case insensitive as usual.
       </p>
       <p>
         To search for one of the special characters, enclose the term in
@@ -5915,6 +5946,10 @@ Public License instead of this License.
         The keyword "<b>not</b>" inverts the sense of the following keyword.
       </p>
       <p>
+        The keyword "<b>regexp</b>" makes the following keyword a regular
+        expression.  The keyword "<b>re</b>" is shorthand for "regexp".
+      </p>
+      <p>
         The column keyword "<b>rows</b>" determines the maximum number of rows
         in the resulting table.  For example "rows=10" selects at most 10 rows.
         A value of -1 selects all row, while -2 uses the
@@ -5943,7 +5978,7 @@ Public License instead of this License.
         use any other string delimiter.<br/>
         When both name and value are given, the tags must match both. If only
         the name is given, the tag can have any value, including none.<br/>
-        The "tag" keyword supports the = and ~ relations. &gt; and &lt; will
+        The "tag" keyword supports the =, ~ and : relations. &gt; and &lt; will
         behave the same as =.
       </p>
 
