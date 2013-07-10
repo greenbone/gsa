@@ -1,3 +1,9 @@
+2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r16932.
+
+	* src/gsad_omp.c (save_alert_omp): Check that comment is valid.
+
 2013-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (create_override, create_note): Use friendlier error
