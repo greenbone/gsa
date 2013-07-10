@@ -1,5 +1,10 @@
 2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_trash): Add space after functions.  Remove
+	comments because it's pretty obvious what's happening.
+
+2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_alert_omp): Check that comment is valid.
 
 2013-07-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
@@ -77,7 +82,7 @@
 
 2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
-	* src/html/gsad_omp.c (GET_TRASH_RESOURCE): New macro.
+	* src/gsad_omp.c (GET_TRASH_RESOURCE): New macro.
 	(get_trash): Refactor and clean code.
 
 2013-07-01  Hani Benhabiles <hani.benhabiles@greenbone.net>

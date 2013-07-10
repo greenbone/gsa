@@ -13699,55 +13699,39 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  /* Get the agents. */
-  GET_TRASH_RESOURCE("GET_AGENTS", "get_agents", "agents");
+  GET_TRASH_RESOURCE ("GET_AGENTS", "get_agents", "agents");
 
-  /* Get the configs. */
-  GET_TRASH_RESOURCE("GET_CONFIGS", "get_configs", "configs");
+  GET_TRASH_RESOURCE ("GET_CONFIGS", "get_configs", "configs");
 
-  /* Get the credentials. */
-  GET_TRASH_RESOURCE("GET_LSC_CREDENTIALS", "get_lsc_credentials",
-                     "credentails");
+  GET_TRASH_RESOURCE ("GET_LSC_CREDENTIALS", "get_lsc_credentials",
+                      "credentails");
 
-  /* Get the alerts. */
-  GET_TRASH_RESOURCE("GET_ALERTS", "get_alerts", "alerts");
+  GET_TRASH_RESOURCE ("GET_ALERTS", "get_alerts", "alerts");
 
-  /* Get the groups. */
-  GET_TRASH_RESOURCE("GET_GROUPS", "get_groups", "groups");
+  GET_TRASH_RESOURCE ("GET_GROUPS", "get_groups", "groups");
 
-  /* Get the filters. */
-  GET_TRASH_RESOURCE("GET_FILTERS", "get_filters", "filters");
+  GET_TRASH_RESOURCE ("GET_FILTERS", "get_filters", "filters");
 
-  /* Get the notes. */
-  GET_TRASH_RESOURCE("GET_NOTES", "get_notes", "notes");
+  GET_TRASH_RESOURCE ("GET_NOTES", "get_notes", "notes");
 
-  /* Get the overrides. */
-  GET_TRASH_RESOURCE("GET_OVERRIDES", "get_overrides", "overrides");
+  GET_TRASH_RESOURCE ("GET_OVERRIDES", "get_overrides", "overrides");
 
-  /* Get the permissions. */
-  GET_TRASH_RESOURCE("GET_PERMISSIONS", "get_permissions", "permissions");
+  GET_TRASH_RESOURCE ("GET_PERMISSIONS", "get_permissions", "permissions");
 
-  /* Get the port lists. */
-  GET_TRASH_RESOURCE("GET_PORT_LISTS", "get_port_lists", "port lists");
+  GET_TRASH_RESOURCE ("GET_PORT_LISTS", "get_port_lists", "port lists");
 
-  /* Get the report formats. */
-  GET_TRASH_RESOURCE("GET_REPORT_FORMATS", "get_report_formats",
-                     "report formats");
+  GET_TRASH_RESOURCE ("GET_REPORT_FORMATS", "get_report_formats",
+                      "report formats");
 
-  /* Get the schedules. */
-  GET_TRASH_RESOURCE("GET_SCHEDULES", "get_schedules", "schedules");
+  GET_TRASH_RESOURCE ("GET_SCHEDULES", "get_schedules", "schedules");
 
-  /* Get the slaves. */
-  GET_TRASH_RESOURCE("GET_SLAVES", "get_slaves", "slaves");
+  GET_TRASH_RESOURCE ("GET_SLAVES", "get_slaves", "slaves");
 
-  /* Get the tags. */
-  GET_TRASH_RESOURCE("GET_TAGS", "get_tags", "tags");
+  GET_TRASH_RESOURCE ("GET_TAGS", "get_tags", "tags");
 
-  /* Get the targets. */
-  GET_TRASH_RESOURCE("GET_TARGETS", "get_targets", "targets");
+  GET_TRASH_RESOURCE ("GET_TARGETS", "get_targets", "targets");
 
-  /* Get the tasks. */
-  GET_TRASH_RESOURCE("GET_TASKS", "get_tasks", "tasks");
+  GET_TRASH_RESOURCE ("GET_TASKS", "get_tasks", "tasks");
 
   /* Cleanup, and return transformed XML. */
 
