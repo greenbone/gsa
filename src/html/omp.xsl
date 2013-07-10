@@ -2981,7 +2981,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cvss" select="severity"/>
         <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
       </xsl:call-template>
-<!-- TODO: Remove completely after migration 
+<!-- TODO: Remove completely after migration
       <xsl:choose>
         <xsl:when test="result_count/hole &gt; 0">
           <img src="/img/high_big.png"
@@ -24123,7 +24123,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
           <tr class="odd">
-            <td><a href="#overrides">Overides</a></td>
+            <td><a href="#overrides">Overrides</a></td>
             <td><xsl:value-of select="count(get_overrides_response/override)"/></td>
           </tr>
         </xsl:if>
