@@ -1,3 +1,14 @@
+2013-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "severity" and alias "new_severity",
+	based on "min_cvss_base" but also accepting integer values.
+
+	* src/html/gsad_omp.c (create_override_omp): Add command parameter
+	"new_severity".
+
+	* src/html/omp.xml (html-create-override-form): Add "New Severity"
+	input.
+
 2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report): Flush trailing whitespace.
