@@ -20379,7 +20379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$collapse-details-button &gt; 0">
             <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'port'"/>
+              <xsl:with-param name="name" select="'location'"/>
               <xsl:with-param name="capital-name" select="'Location'"/>
             </xsl:apply-templates>
           </xsl:when>
