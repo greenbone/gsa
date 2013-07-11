@@ -1,5 +1,13 @@
 2013-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/gsad_omp.c (save_override_omp): Add command parameter
+	"new_severity".
+
+	* src/html/omp.xml (html-edit-override-form): Add "New Severity"
+	input.
+
+2013-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (init_validator): Add "severity" and alias "new_severity",
 	based on "min_cvss_base" but also accepting integer values.
 

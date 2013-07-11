@@ -16531,6 +16531,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
+              <b>New Severity</b>
+            </td>
+            <td>
+              <input type="text" name="new_severity" value="{get_overrides_response/override/new_severity}" size="5"
+                     maxlength="4"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
               Task
             </td>
             <td>

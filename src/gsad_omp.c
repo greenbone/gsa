@@ -12010,7 +12010,8 @@ save_override_omp (credentials_t * credentials, params_t *params)
 {
   gchar *response;
   entity_t entity;
-  const char *override_id, *text, *hosts, *port, *threat, *new_threat;
+  const char *override_id, *text, *hosts, *port;
+  const char *threat, *new_threat, *new_severity;
   const char *override_task_id, *override_result_id, *active, *days;
   char *ret;
 
@@ -12036,6 +12037,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
   threat = params_value (params, "threat");
   new_threat = params_value (params, "new_threat");
+  new_severity = params_value (params, "new_severity");
   override_task_id = params_value (params, "override_task_id");
   override_result_id = params_value (params, "override_result_id");
 
@@ -12056,6 +12058,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
       || port == NULL
       || threat == NULL
       || new_threat == NULL
+      || new_severity == NULL
       || days == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
@@ -12075,6 +12078,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
                "<port>%s</port>"
                "<threat>%s</threat>"
                "<new_threat>%s</new_threat>"
+               "<new_severity>%s</new_severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
                "<result id=\"%s\"/>"
@@ -12087,6 +12091,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
                port ? port : "",
                threat ? threat : "",
                new_threat,
+               new_severity,
                text ? text : "",
                override_task_id,
                override_result_id))
