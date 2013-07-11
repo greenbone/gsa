@@ -1,5 +1,10 @@
 2013-07-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result [result-headers]): Use "severity" as the sort
+	field instead of type, to match the header name.
+
+2013-07-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result [result-headers]): Use "location" as the sort
 	field instead of port, to match the header name.
 
