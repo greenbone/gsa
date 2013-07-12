@@ -19941,7 +19941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="threat"/>
         </xsl:otherwise>
       </xsl:choose>
-      to <xsl:value-of select="new_threat"/></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
+      to <xsl:value-of select="new_threat"/><xsl:if test="new_severity != ''">: <xsl:value-of select="new_severity"/></xsl:if></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
