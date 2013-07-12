@@ -1,3 +1,8 @@
+2013-07-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Use "severity" instead of "type" as sort
+	field.
+
 2013-07-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xml (override-detailed): Add new severity score to

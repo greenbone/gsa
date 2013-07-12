@@ -9381,10 +9381,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     report_id,
                                     esc_first_result,
                                     esc_max_results,
-                                    sort_field ? sort_field : "type",
+                                    sort_field ? sort_field : "severity",
                                     sort_order
                                      ? sort_order
                                      : ((sort_field == NULL
+                                         || strcmp (sort_field, "severity") == 0
                                          || strcmp (sort_field, "type") == 0)
                                         ? "descending"
                                         : "ascending"),
@@ -9560,11 +9561,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                  : "a994b278-1f62-11e1-96ac-406186ea4fc5",
                                 first_result,
                                 max_results,
-                                sort_field ? sort_field : "type",
+                                sort_field ? sort_field : "severity",
                                 sort_order
                                  ? sort_order
                                  : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0)
+                                     || strcmp (sort_field, "type") == 0
+                                     || strcmp (sort_field, "severity") == 0)
                                     ? "descending"
                                     : "ascending"),
                                 levels->str,
