@@ -1940,7 +1940,8 @@ create_report_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   int ret;
-  gchar *command, *html, *response;
+  gchar *xml_file_escaped, *command, *html, *response;
+  gchar **xml_file_array;
   const char *task_id, *name, *comment, *xml_file;
 
   task_id = params_value (params, "task_id");
@@ -1953,13 +1954,20 @@ create_report_omp (credentials_t * credentials, params_t *params)
       || (xml_file == NULL))
     return new_task (credentials, "Invalid parameter", params);
 
+  xml_file_array = g_strsplit (xml_file, "%", -1);
+  if (xml_file_array != NULL && xml_file_array[0] != NULL)
+    xml_file_escaped = g_strjoinv ("%%", xml_file_array);
+  else
+    xml_file_escaped = g_strdup (xml_file);
+  g_strfreev (xml_file_array);
+
   if (task_id)
     command = g_strdup_printf ("<create_report>"
                                "<task id=\"%s\"/>"
                                "%s"
                                "</create_report>",
                                task_id ? task_id : "0",
-                               xml_file ? xml_file : "");
+                               xml_file_escaped ? xml_file_escaped : "");
   else
     command = g_strdup_printf ("<create_report>"
                                "<task>"
@@ -1970,7 +1978,8 @@ create_report_omp (credentials_t * credentials, params_t *params)
                                "</create_report>",
                                name,
                                comment,
-                               xml_file);
+                               xml_file_escaped);
+  g_free (xml_file_escaped);
 
   ret = omp (credentials,
              &response,

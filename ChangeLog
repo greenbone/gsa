@@ -1,3 +1,9 @@
+2013-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_report_omp): replace "%" with "%%" in imported
+	report XML to avoid misinterpretation as format placeholders by
+	g_markup_vprintf_escaped in omp function.
+
 2013-07-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Use "severity" instead of "type" as sort
