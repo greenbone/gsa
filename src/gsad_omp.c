@@ -2055,6 +2055,17 @@ create_task_omp (credentials_t * credentials, params_t *params)
   params_t *alerts, *groups;
   GString *alert_element, *group_element;
 
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  config_id = params_value (params, "config_id");
+  target_id = params_value (params, "target_id");
+  slave_id = params_value (params, "slave_id_optional");
+  schedule_id = params_value (params, "schedule_id_optional");
+  in_assets = params_value (params, "in_assets");
+  max_checks = params_value (params, "max_checks");
+  max_hosts = params_value (params, "max_hosts");
+  observers = params_value (params, "observers");
+
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -2069,6 +2080,18 @@ create_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "alerts", "2");
+
+      CHECK (name);
+      CHECK (comment);
+      CHECK (config_id);
+      CHECK (target_id);
+      CHECK (slave_id);
+      CHECK (schedule_id);
+      CHECK (in_assets);
+      CHECK (max_checks);
+      CHECK (max_hosts);
+      CHECK (observers);
+
       return new_task_omp (credentials, params);
     }
 
@@ -2086,19 +2109,20 @@ create_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
+
+      CHECK (name);
+      CHECK (comment);
+      CHECK (config_id);
+      CHECK (target_id);
+      CHECK (slave_id);
+      CHECK (schedule_id);
+      CHECK (in_assets);
+      CHECK (max_checks);
+      CHECK (max_hosts);
+      CHECK (observers);
+
       return new_task_omp (credentials, params);
     }
-
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  config_id = params_value (params, "config_id");
-  target_id = params_value (params, "target_id");
-  slave_id = params_value (params, "slave_id_optional");
-  schedule_id = params_value (params, "schedule_id_optional");
-  in_assets = params_value (params, "in_assets");
-  max_checks = params_value (params, "max_checks");
-  max_hosts = params_value (params, "max_hosts");
-  observers = params_value (params, "observers");
 
   CHECK (name);
   CHECK (comment);
@@ -2442,6 +2466,19 @@ save_task_omp (credentials_t * credentials, params_t *params)
   GString *alert_element, *group_elements;
   entity_t entity;
 
+  comment = params_value (params, "comment");
+  name = params_value (params, "name");
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  in_assets = params_value (params, "in_assets");
+  target_id = params_value (params, "target_id");
+  config_id = params_value (params, "config_id");
+  schedule_id = params_value (params, "schedule_id");
+  slave_id = params_value (params, "slave_id");
+  max_checks = params_value (params, "max_checks");
+  max_hosts = params_value (params, "max_hosts");
+  observers = params_value (params, "observers");
+
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -2456,6 +2493,20 @@ save_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "alerts", "2");
+
+      CHECK_PARAM (name, "Edit Task", edit_task);
+      CHECK_PARAM (comment, "Edit Task", edit_task);
+      CHECK_PARAM (target_id, "Edit Task", edit_task);
+      CHECK_PARAM (config_id, "Edit Task", edit_task);
+      CHECK_PARAM (schedule_id, "Edit Task", edit_task);
+      CHECK_PARAM (slave_id, "Edit Task", edit_task);
+      CHECK_PARAM (next, "Edit Task", edit_task);
+      CHECK_PARAM (task_id, "Edit Task", edit_task);
+      CHECK_PARAM (max_checks, "Edit Task", edit_task);
+      CHECK_PARAM (max_hosts, "Edit Task", edit_task);
+      CHECK_PARAM (observers, "Edit Task", edit_task);
+      CHECK_PARAM (in_assets, "Edit Task", edit_task);
+
       return edit_task_omp (credentials, params);
     }
 
@@ -2473,21 +2524,22 @@ save_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
+
+      CHECK_PARAM (name, "Edit Task", edit_task);
+      CHECK_PARAM (comment, "Edit Task", edit_task);
+      CHECK_PARAM (target_id, "Edit Task", edit_task);
+      CHECK_PARAM (config_id, "Edit Task", edit_task);
+      CHECK_PARAM (schedule_id, "Edit Task", edit_task);
+      CHECK_PARAM (slave_id, "Edit Task", edit_task);
+      CHECK_PARAM (next, "Edit Task", edit_task);
+      CHECK_PARAM (task_id, "Edit Task", edit_task);
+      CHECK_PARAM (max_checks, "Edit Task", edit_task);
+      CHECK_PARAM (max_hosts, "Edit Task", edit_task);
+      CHECK_PARAM (observers, "Edit Task", edit_task);
+      CHECK_PARAM (in_assets, "Edit Task", edit_task);
+
       return edit_task_omp (credentials, params);
     }
-
-  comment = params_value (params, "comment");
-  name = params_value (params, "name");
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  in_assets = params_value (params, "in_assets");
-  target_id = params_value (params, "target_id");
-  config_id = params_value (params, "config_id");
-  schedule_id = params_value (params, "schedule_id");
-  slave_id = params_value (params, "slave_id");
-  max_checks = params_value (params, "max_checks");
-  max_hosts = params_value (params, "max_hosts");
-  observers = params_value (params, "observers");
 
   CHECK_PARAM (name, "Save Task", edit_task);
   CHECK_PARAM (comment, "Save Task", edit_task);
@@ -2643,6 +2695,13 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   int ret;
   entity_t entity;
 
+  comment = params_value (params, "comment");
+  in_assets = params_value (params, "in_assets");
+  name = params_value (params, "name");
+  next = params_value (params, "next");
+  task_id = params_value (params, "task_id");
+  observers = params_value (params, "observers");
+
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -2657,15 +2716,13 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
+
+      if (comment == NULL || name == NULL || observers == NULL)
+        return edit_task (credentials, params,
+                          GSAD_MESSAGE_INVALID_PARAM ("Edit Task"));
+
       return edit_task_omp (credentials, params);
     }
-
-  comment = params_value (params, "comment");
-  in_assets = params_value (params, "in_assets");
-  name = params_value (params, "name");
-  next = params_value (params, "next");
-  task_id = params_value (params, "task_id");
-  observers = params_value (params, "observers");
 
   if (comment == NULL || name == NULL || observers == NULL)
     return edit_task (credentials, params,
@@ -17745,6 +17802,12 @@ create_user_omp (credentials_t * credentials, params_t *params)
   gchar *buf, *response, *html;
   entity_t entity;
 
+  name = params_value (params, "login");
+  password = params_value (params, "password");
+  hosts = params_value (params, "access_hosts");
+  hosts_allow = params_value (params, "hosts_allow");
+  enable_ldap_connect = params_value (params, "enable_ldap_connect");
+
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -17759,6 +17822,12 @@ create_user_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
+
+      if (name == NULL || password == NULL || hosts == NULL
+          || hosts_allow == NULL)
+        return new_user (credentials, params,
+                         GSAD_MESSAGE_INVALID_PARAM ("New User"));
+
       return new_user_omp (credentials, params);
     }
 
@@ -17776,14 +17845,14 @@ create_user_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "roles", "2");
+
+      if (name == NULL || password == NULL || hosts == NULL
+          || hosts_allow == NULL)
+        return new_user (credentials, params,
+                         GSAD_MESSAGE_INVALID_PARAM ("New User"));
+
       return new_user_omp (credentials, params);
     }
-
-  name = params_value (params, "login");
-  password = params_value (params, "password");
-  hosts = params_value (params, "access_hosts");
-  hosts_allow = params_value (params, "hosts_allow");
-  enable_ldap_connect = params_value (params, "enable_ldap_connect");
 
   if (name == NULL || password == NULL || hosts == NULL || hosts_allow == NULL)
     return new_user (credentials, params,
@@ -18073,6 +18142,17 @@ save_user_omp (credentials_t * credentials, params_t *params)
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
 
+  enable_ldap_connect = params_value (params, "enable_ldap_connect");
+  /* List of hosts user has/lacks access rights. */
+  hosts = params_value (params, "access_hosts");
+  /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
+   * access. */
+  hosts_allow = params_value (params, "hosts_allow");
+  login = params_value (params, "login");
+  modify_password = params_value (params, "modify_password");
+  password = params_value (params, "password");
+  user_id = params_value (params, "user_id");
+
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -18087,6 +18167,15 @@ save_user_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
+
+      CHECK_PARAM (user_id, "Edit User", edit_user);
+      CHECK_PARAM (login, "Edit User", edit_user);
+      CHECK_PARAM (modify_password, "Edit User", edit_user);
+      CHECK_PARAM (password, "Edit User", edit_user);
+      CHECK_PARAM (hosts, "Edit User", edit_user);
+      CHECK_PARAM (hosts, "Edit User", edit_user);
+      CHECK_PARAM (hosts_allow, "Edit User", edit_user);
+
       return edit_user_omp (credentials, params);
     }
 
@@ -18104,19 +18193,17 @@ save_user_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "roles", "2");
+
+      CHECK_PARAM (user_id, "Edit User", edit_user);
+      CHECK_PARAM (login, "Edit User", edit_user);
+      CHECK_PARAM (modify_password, "Edit User", edit_user);
+      CHECK_PARAM (password, "Edit User", edit_user);
+      CHECK_PARAM (hosts, "Edit User", edit_user);
+      CHECK_PARAM (hosts, "Edit User", edit_user);
+      CHECK_PARAM (hosts_allow, "Edit User", edit_user);
+
       return edit_user_omp (credentials, params);
     }
-
-  enable_ldap_connect = params_value (params, "enable_ldap_connect");
-  /* List of hosts user has/lacks access rights. */
-  hosts = params_value (params, "access_hosts");
-  /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
-   * access. */
-  hosts_allow = params_value (params, "hosts_allow");
-  login = params_value (params, "login");
-  modify_password = params_value (params, "modify_password");
-  password = params_value (params, "password");
-  user_id = params_value (params, "user_id");
 
   CHECK_PARAM (user_id, "Save User", edit_user);
   CHECK_PARAM (login, "Save User", edit_user);

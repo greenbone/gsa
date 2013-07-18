@@ -1,3 +1,10 @@
+2013-07-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp)
+	(save_container_task_omp, create_user_omp, save_user_omp): Also check
+	params inside "+" button cases, so that the error message shows up when
+	there are param errors.
+
 2013-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_report_omp): replace "%" with "%%" in imported
