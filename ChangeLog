@@ -1,5 +1,11 @@
 2013-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport small part of r16206.
+
+	* src/gsad_omp.c (save_container_task_omp): Remove old sort params.
+
+2013-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport relevant parts of r17038.
 
 	* src/gsad_omp.c (create_task_omp, save_task_omp): Also check params

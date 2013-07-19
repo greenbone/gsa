@@ -2408,7 +2408,7 @@ char *
 save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *response, *html;
-  const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
+  const char *comment, *name, *next, *task_id;
   const char *observers, *in_assets;
   int ret;
   entity_t entity;
@@ -2417,8 +2417,6 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   next = params_value (params, "next");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
   task_id = params_value (params, "task_id");
   observers = params_value (params, "observers");
 
@@ -2426,8 +2424,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
     return edit_task (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
-  if (next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL || in_assets == NULL)
+  if (next == NULL || task_id == NULL || in_assets == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
