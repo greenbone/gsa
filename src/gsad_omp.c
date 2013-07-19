@@ -1864,6 +1864,17 @@ create_task_omp (credentials_t * credentials, params_t *params)
   params_t *alerts;
   GString *alert_element;
 
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  config_id = params_value (params, "config_id");
+  target_id = params_value (params, "target_id");
+  slave_id = params_value (params, "slave_id_optional");
+  schedule_id = params_value (params, "schedule_id_optional");
+  in_assets = params_value (params, "in_assets");
+  max_checks = params_value (params, "max_checks");
+  max_hosts = params_value (params, "max_hosts");
+  observers = params_value (params, "observers");
+
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -1878,19 +1889,20 @@ create_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "alerts", "2");
+
+      CHECK (name);
+      CHECK (comment);
+      CHECK (config_id);
+      CHECK (target_id);
+      CHECK (slave_id);
+      CHECK (schedule_id);
+      CHECK (in_assets);
+      CHECK (max_checks);
+      CHECK (max_hosts);
+      CHECK (observers);
+
       return new_task_omp (credentials, params);
     }
-
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  config_id = params_value (params, "config_id");
-  target_id = params_value (params, "target_id");
-  slave_id = params_value (params, "slave_id_optional");
-  schedule_id = params_value (params, "schedule_id_optional");
-  in_assets = params_value (params, "in_assets");
-  max_checks = params_value (params, "max_checks");
-  max_hosts = params_value (params, "max_hosts");
-  observers = params_value (params, "observers");
 
   CHECK (name);
   CHECK (comment);
@@ -2218,31 +2230,10 @@ save_task_omp (credentials_t * credentials, params_t *params)
   GString *alert_element;
   entity_t entity;
 
-  submit = params_value (params, "submit_plus");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "alerts");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "alerts", "2");
-      return edit_task_omp (credentials, params);
-    }
-
   comment = params_value (params, "comment");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-
-  if (comment == NULL || name == NULL)
-    return edit_task (credentials, params,
-                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   in_assets = params_value (params, "in_assets");
   target_id = params_value (params, "target_id");
@@ -2263,6 +2254,32 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK (max_hosts);
   CHECK (observers);
   CHECK (in_assets);
+
+  submit = params_value (params, "submit_plus");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "alerts");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "alerts", "2");
+
+      if (comment == NULL || name == NULL)
+        return edit_task (credentials, params,
+                          GSAD_MESSAGE_INVALID_PARAM ("Edit Task"));
+
+      return edit_task_omp (credentials, params);
+    }
+
+  if (comment == NULL || name == NULL)
+    return edit_task (credentials, params,
+                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   alert_element = g_string_new ("");
   alerts = params_values (params, "alert_id_optional:");

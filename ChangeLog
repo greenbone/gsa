@@ -1,3 +1,11 @@
+2013-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport relevant parts of r17038.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Also check params
+	inside "+" button cases, so that the error message shows up when there
+	are param errors.
+
 2013-07-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r16932.
