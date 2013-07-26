@@ -20463,10 +20463,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="original_threat">
             <xsl:choose>
-              <xsl:when test="threat = original_threat">
+              <xsl:when test="severity = original_severity">
                 <xsl:value-of select="threat"/>
               </xsl:when>
-              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_threat"/></b>)</xsl:otherwise>
+              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_threat"/>: <xsl:value-of select="original_severity"/></b>)</xsl:otherwise>
             </xsl:choose>
           </xsl:when>
         </xsl:choose>
@@ -20477,7 +20477,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="extra_text">
             <xsl:choose>
               <xsl:when test="threat != 'Log'">
-                <xsl:value-of select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
+                <xsl:value-of select="concat (' (', threat, ')')"/>
               </xsl:when>
               <xsl:otherwise> (Log)</xsl:otherwise>
             </xsl:choose>
