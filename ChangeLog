@@ -1,5 +1,9 @@
 2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-schedule-form): Add filtering params.
+
+2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (group [auth]): Add filter params so filtering is
 	preserved on next page.
 
