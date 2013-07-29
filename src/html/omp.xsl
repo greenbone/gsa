@@ -24905,6 +24905,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="save_user"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125"><b>Login Name:</b></td>
