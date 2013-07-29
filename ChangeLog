@@ -1,5 +1,9 @@
 2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Apply trashcan indicator icons.
+
+2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_schedule_omp): Switch to new style so that
 	get_schedule is used for the next page, otherwise the filter bar is
 	completely empty.
