@@ -1,5 +1,12 @@
 2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_users): Apply create_filter_response for error
+	dialog.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply indicator icon.
+
+2013-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_task): Match operation responses, for error
 	messages.
 

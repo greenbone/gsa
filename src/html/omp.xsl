@@ -25210,6 +25210,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- If any describe_auth was found, match it here -->
   <xsl:call-template name="describe_auth_response" mode="show"/>
   <xsl:apply-templates select="delete_user_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_user_response"/>
   <xsl:apply-templates select="modify_user_response"/>
   <!-- The for-each makes the get_users_response the current node. -->
