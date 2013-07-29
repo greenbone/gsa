@@ -25273,6 +25273,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="save_auth"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="next" value="get_users"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <!-- group name is e.g. of method:ldap -->
           <input type="hidden" name="group" value="{@name}"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
