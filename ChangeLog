@@ -1,3 +1,7 @@
+2013-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add parentheses to comment chars.
+
 2013-07-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Fix regexp for severity. Add
