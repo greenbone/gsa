@@ -1,3 +1,9 @@
+2013-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r17276.
+
+	* src/gsad.c (init_validator): Add parentheses to comment chars.
+
 2013-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport small part of r16206.
