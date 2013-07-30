@@ -11782,7 +11782,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
   gchar *response;
-  const char *oid, *threat, *new_threat, *new_severity, *port, *hosts;
+  const char *oid, *threat, *custom_severity, *new_severity, *port, *hosts;
   const char *text, *task_id, *override_result_id;
   /* For get_report. */
   const char *active, *days;
@@ -11800,20 +11800,33 @@ create_override_omp (credentials_t *credentials, params_t *params)
     threat = "";
   CHECK_PARAM (threat, "Create Override", new_override);
 
-  if (params_valid (params, "new_threat"))
-    new_threat = params_value (params, "new_threat");
-  else if (strcmp (params_original_value (params, "new_threat"), ""))
-    new_threat = NULL;
-  else
-    new_threat = "";
+  custom_severity = params_value (params, "custom_severity");
+  CHECK_PARAM (custom_severity, "Create Override", new_override);
 
-  if (params_valid (params, "new_severity"))
-    new_severity = params_value (params, "new_severity");
-  else if (strcmp (params_original_value (params, "new_severity"), ""))
-    new_severity = NULL;
+  if (custom_severity != NULL && strcmp (custom_severity, "0"))
+    {
+      if (params_valid (params, "new_severity"))
+        new_severity = params_value (params, "new_severity");
+      else if (params_original_value (params, "new_severity") == NULL
+               || strcmp (params_original_value (params, "new_severity"), ""))
+        new_severity = NULL;
+      else
+        new_severity = "";
+      CHECK_PARAM (new_severity, "Create Override", new_override);
+    }
   else
-    new_severity = "";
-  CHECK_PARAM (new_severity, "Create Override", new_override);
+    {
+      if (params_valid (params, "new_severity_from_list"))
+        new_severity = params_value (params, "new_severity_from_list");
+      else if (params_original_value (params, "new_severity_from_list") == NULL
+               || strcmp (params_original_value (params,
+                                                 "new_severity_from_list"),
+                          ""))
+        new_severity = NULL;
+      else
+        new_severity = "";
+      CHECK_PARAM (new_severity, "Create Override", new_override);
+    }
 
   port = params_value (params, "port");
   if (port == NULL)
@@ -11884,7 +11897,6 @@ create_override_omp (credentials_t *credentials, params_t *params)
                "<hosts>%s</hosts>"
                "<port>%s</port>"
                "<threat>%s</threat>"
-               "<new_threat>%s</new_threat>"
                "<new_severity>%s</new_severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
@@ -11897,7 +11909,6 @@ create_override_omp (credentials_t *credentials, params_t *params)
                hosts,
                port,
                threat,
-               new_threat,
                new_severity,
                text ? text : "",
                task_id,
@@ -12079,7 +12090,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
   gchar *response;
   entity_t entity;
   const char *override_id, *text, *hosts, *port;
-  const char *threat, *new_threat, *new_severity;
+  const char *threat, *custom_severity, *new_severity;
   const char *override_task_id, *override_result_id, *active, *days;
   char *ret;
 
@@ -12104,8 +12115,12 @@ save_override_omp (credentials_t * credentials, params_t *params)
     port = "";
 
   threat = params_value (params, "threat");
-  new_threat = params_value (params, "new_threat");
-  new_severity = params_value (params, "new_severity");
+  custom_severity = params_value (params, "custom_severity");
+  if (custom_severity && strcmp (custom_severity, "0") != 0)
+    new_severity = params_value (params, "new_severity");
+  else
+    new_severity = params_value (params, "new_severity_from_list");
+
   override_task_id = params_value (params, "override_task_id");
   override_result_id = params_value (params, "override_result_id");
 
@@ -12125,7 +12140,6 @@ save_override_omp (credentials_t * credentials, params_t *params)
       || hosts == NULL
       || port == NULL
       || threat == NULL
-      || new_threat == NULL
       || new_severity == NULL
       || days == NULL)
     return gsad_message (credentials,
@@ -12145,7 +12159,6 @@ save_override_omp (credentials_t * credentials, params_t *params)
                "<hosts>%s</hosts>"
                "<port>%s</port>"
                "<threat>%s</threat>"
-               "<new_threat>%s</new_threat>"
                "<new_severity>%s</new_severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
@@ -12158,7 +12171,6 @@ save_override_omp (credentials_t * credentials, params_t *params)
                hosts ? hosts : "",
                port ? port : "",
                threat ? threat : "",
-               new_threat,
                new_severity,
                text ? text : "",
                override_task_id,

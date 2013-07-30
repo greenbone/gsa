@@ -924,8 +924,9 @@ init_validator ()
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "severity", "^(|10.0|[0-9].[0-9]|10|[0-9])$");
+  openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
   openvas_validator_add (validator, "severity_class", "^(classic|nist|bsi|pci\\-dss)$");
+  openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
@@ -939,6 +940,7 @@ init_validator ()
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "custom_severity", "boolean");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");
@@ -989,7 +991,8 @@ init_validator ()
                            "lsc_credential_id");
   openvas_validator_alias (validator, "method_data:to_address:", "email");
   openvas_validator_alias (validator, "method_data:from_address:", "email");
-  openvas_validator_alias (validator, "new_severity", "severity");
+  openvas_validator_alias (validator, "new_severity", "severity_optional");
+  openvas_validator_alias (validator, "new_severity_from_list", "severity_optional");
   openvas_validator_alias (validator, "new_threat",   "threat");
   openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "next_id",      "info_id");

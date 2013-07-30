@@ -16147,25 +16147,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              <b>New Threat</b>
-            </td>
-            <td>
-              <select name="new_threat">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-                <option value="Log">Log</option>
-                <option value="False Positive" selected="1">False Positive</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="125">
               <b>New Severity</b>
             </td>
             <td>
-              <input type="text" name="new_severity" value="" size="5"
-                     maxlength="4"/>
+              <input type="radio" name="custom_severity" value="0" checked="1"/>
+              <select name="new_severity_from_list">
+                <option value="10.0">High (10.0)</option>
+                <option value="5.0">Medium (5.0)</option>
+                <option value="2.0">Low (2.0)</option>
+                <option value="0.0">Log</option>
+                <option value="-1.0" selected="1">False Positive</option>
+              </select>
+              <label>
+                <input type="radio" name="custom_severity" value="1"/>
+                Other:
+              </label>
+              <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
             </td>
           </tr>
           <tr>
@@ -16503,50 +16500,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              <b>New Threat</b>
-            </td>
-            <td>
-              <select name="new_threat">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'High'"/>
-                  <xsl:with-param
-                    name="select-value"
-                    select="get_overrides_response/override/new_threat"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'Medium'"/>
-                  <xsl:with-param
-                    name="select-value"
-                    select="get_overrides_response/override/new_threat"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'Low'"/>
-                  <xsl:with-param
-                    name="select-value"
-                    select="get_overrides_response/override/new_threat"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'Log'"/>
-                  <xsl:with-param
-                    name="select-value"
-                    select="get_overrides_response/override/new_threat"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'False Positive'"/>
-                  <xsl:with-param
-                    name="select-value"
-                    select="get_overrides_response/override/new_threat"/>
-                </xsl:call-template>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="125">
               <b>New Severity</b>
             </td>
             <td>
-              <input type="text" name="new_severity" value="{get_overrides_response/override/new_severity}" size="5"
-                     maxlength="4"/>
+              <xsl:variable name="use_custom_severity" select="get_overrides_response/override/new_severity != 10.0 and get_overrides_response/override/new_severity != 5.0 and get_overrides_response/override/new_severity != 2.0 and get_overrides_response/override/new_severity != 0.0 and get_overrides_response/override/new_severity != -1.0"/>
+              <xsl:choose>
+                <xsl:when test="$use_custom_severity">
+                  <input type="radio" name="custom_severity" value="0"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="custom_severity" value="0" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <select name="new_severity_from_list">
+                <xsl:choose>
+                  <xsl:when test="$use_custom_severity">
+                    <option selected="1">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option>--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="content" select="'High (10.0)'"/>
+                  <xsl:with-param name="value" select="'10.0'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_severity"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="content" select="'Medium (5.0)'"/>
+                  <xsl:with-param name="value" select="'5.0'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_severity"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="content" select="'Low (2.0)'"/>
+                  <xsl:with-param name="value" select="'2.0'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_severity"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="content" select="'Log'"/>
+                  <xsl:with-param name="value" select="'0.0'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_severity"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="content" select="'False Positive'"/>
+                  <xsl:with-param name="value" select="'-1.0'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_severity"/>
+                </xsl:call-template>
+              </select>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$use_custom_severity">
+                    <input type="radio" name="custom_severity" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="custom_severity" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Other:
+              </label>
+              <xsl:choose>
+                <xsl:when test="$use_custom_severity">
+                  <input type="text" name="new_severity" value="{get_overrides_response/override/new_severity}" size="5" maxlength="4"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
