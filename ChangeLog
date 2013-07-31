@@ -1,3 +1,8 @@
+2013-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (html-edit-permission-form): Access subject info directly
+	under SUBJECT, now that it is available there.
+
 2013-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add parentheses to comment chars.

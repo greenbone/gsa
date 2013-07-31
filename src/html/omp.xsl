@@ -17834,7 +17834,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 User
               </label>
               <xsl:variable name="user_id"
-                            select="commands_response/get_permissions_response/permission/subject/user/@id"/>
+                            select="commands_response/get_permissions_response/permission/subject/@id"/>
               <select name="user_id">
                 <xsl:for-each select="get_users_response/user">
                   <xsl:choose>
@@ -17888,7 +17888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="group_id">
                 <xsl:for-each select="get_groups_response/group">
                   <xsl:choose>
-                    <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/group/@id">
+                    <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/@id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
