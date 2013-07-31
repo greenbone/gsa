@@ -1,5 +1,11 @@
 2013-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_info_response): Add case for all errors except
+	for the database missing one, otherwise a permission error looks like
+	one of the database is missing.
+
+2013-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (html-edit-permission-form): Access subject info directly
 	under SUBJECT, now that it is available there.
 

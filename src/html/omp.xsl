@@ -13631,6 +13631,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_info_response">
   <xsl:choose>
+    <xsl:when test="(substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5') and not (contains (@status_text, 'GET_INFO requires the'))">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get SecInfo
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
