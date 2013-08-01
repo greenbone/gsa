@@ -944,6 +944,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               else
                 filter = "sort-reverse=created rows=-2";
             }
+          else if (strcmp (type, "user") == 0)
+            filter = "sort=role rows=-2 permission=any";
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any";
           else

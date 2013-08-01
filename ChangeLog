@@ -1,3 +1,7 @@
+2013-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): By default sort users by role.
+
 2013-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_info_response): Add case for all errors except
