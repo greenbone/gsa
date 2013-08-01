@@ -14273,9 +14273,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td><b>ID:</b></td>
+            <td>ID:</td>
             <td>
-              <b><xsl:value-of select="info/@id"/></b>
+              <xsl:value-of select="info/@id"/>
             </td>
           </tr>
           <tr>
@@ -14528,9 +14528,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td><b>ID:</b></td>
+            <td>ID:</td>
             <td>
-              <b><xsl:value-of select="info/name"/></b>
+              <xsl:value-of select="info/name"/>
             </td>
           </tr>
           <tr>
