@@ -1,5 +1,10 @@
 2013-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-gsa-logo): Add indicator icon on Overrides page
+	for New Override.
+
+2013-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (ovaldef-details, dfn_cert_adv-details): Remove bold
 	from minor details ID so that they match the other pages.
 
