@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
       version="1.0"
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      xmlns:gsa="http://openvas.org"
+      extension-element-prefixes="gsa">
      <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -107,6 +109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noedit">
     </xsl:when>
     <xsl:otherwise>
+      <a name="edit_{gsa:type-string ($type)}"></a>
       <h4>Edit <xsl:value-of select="$type"/></h4>
       <p>
        Pressing the "Edit <xsl:value-of select="$type"/>" icon

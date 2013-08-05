@@ -3,7 +3,7 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:str="http://exslt.org/strings"
-    xmlns:func = "http://exslt.org/functions"
+    xmlns:func="http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
     xmlns:vuln="http://scap.nist.gov/schema/vulnerability/0.4"
     xmlns:cpe-lang="http://cpe.mitre.org/language/2.0"
@@ -23,7 +23,7 @@
     xsi:schemaLocation="http://scap.nist.gov/schema/configuration/0.1 http://nvd.nist.gov/schema/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.3 http://nvd.nist.gov/schema/scap-core_0.3.xsd http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exslt="http://exslt.org/common"
-    extension-element-prefixes="str func date exslt">
+    extension-element-prefixes="str func date exslt gsa">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -290,6 +290,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="$color"/>
 </func:function>
 
+<func:function name="gsa:type-string">
+  <xsl:param name="type"/>
+  <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <!-- Currently only a very simple formatting method to produce
@@ -479,7 +484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="cap-type"/>
   <xsl:param name="id"/>
 
-  <a href="/help/{$type}s.html?token={/envelope/token}#edit{$type}" title="Help: Edit {$cap-type}">
+  <a href="/help/{$type}s.html?token={/envelope/token}#edit_{$type}" title="Help: Edit {$cap-type}">
     <img src="/img/help.png"/>
   </a>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"

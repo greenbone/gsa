@@ -1,5 +1,19 @@
 2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make the help icons on the Edit pages land in the right place.
+
+	* src/html/gsad.xsl: Add gsa to element prefixes so that imported files
+	can use each other's functions.
+
+	* src/html/help.xsl: Add gsa namespace.
+	(list-window-line-actions): Add anchor for links from Edit pages.
+
+	* src/html/omp.xsl: Add gsa to element prefixes.
+	(sa:type-string): New function.
+	(edit-header-icons): Add underscore to anchor name, for consistency.
+
+2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (resource_action): Remove task specific parameter name.
 
 2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>

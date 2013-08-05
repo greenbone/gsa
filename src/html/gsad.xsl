@@ -4,7 +4,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:func = "http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
-    extension-element-prefixes="func">
+    extension-element-prefixes="func gsa">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
