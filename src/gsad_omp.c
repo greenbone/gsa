@@ -1556,22 +1556,33 @@ char *
 resource_action (credentials_t *credentials, params_t *params, const char *type,
                  const char *action)
 {
-  gchar *html, *response;
-  const char *task_id;
+  gchar *html, *response, *param_name;
+  const char *resource_id;
   int ret;
   entity_t entity;
 
-  task_id = params_value (params, "task_id");
+  assert (type);
 
-  if (task_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while performing an action. "
-                         "The resource remains the same. "
-                         "Diagnostics: Required parameter "
-                         G_STRINGIFY (name)
-                         " was NULL.",
-                         "/omp?cmd=get_tasks");
+  param_name = g_strdup_printf ("%s_id", type);
+  resource_id = params_value (params, param_name);
+
+  if (resource_id == NULL)
+    {
+      gchar *message;
+      message = g_strdup_printf
+                 ("An internal error occurred while performing an action. "
+                  "The resource remains the same. "
+                  "Diagnostics: Required parameter %s was NULL.",
+                  param_name);
+      g_free (param_name);
+      html = gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           message,
+                           "/omp?cmd=get_tasks");
+      g_free (message);
+      return html;
+    }
+  g_free (param_name);
 
   response = NULL;
   entity = NULL;
@@ -1580,7 +1591,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
              action,
              type,
              type,
-             task_id);
+             resource_id);
   switch (ret)
     {
       case 0:

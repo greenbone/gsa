@@ -1,5 +1,9 @@
 2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (resource_action): Remove task specific parameter name.
+
+2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_slave, new_slave_omp): Move up in file.
 	(create_slave_omp): Switch to new style, so that next page is New Slave
 	on error.
