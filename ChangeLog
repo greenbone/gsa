@@ -1,8 +1,16 @@
+2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (new_slave, new_slave_omp): Move up in file.
+	(create_slave_omp): Switch to new style, so that next page is New Slave
+	on error.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply indicator icon on New Slave.
+
 2013-08-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "Alarm" to valid threat values.
 
-2013-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+2013-08-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-gsa-logo): Add indicator icon on Overrides page
 	for New Override.

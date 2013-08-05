@@ -12221,6 +12221,40 @@ save_override_omp (credentials_t * credentials, params_t *params)
 /* Slaves */
 
 /**
+ * @brief Returns page to create a new slave.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_slave (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_slave>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_slave>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new slave page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_slave_omp (credentials_t *credentials, params_t *params)
+{
+  return new_slave (credentials, params, NULL);
+}
+
+/**
  * @brief Create a slave, get all slaves, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -12231,30 +12265,10 @@ save_override_omp (credentials_t * credentials, params_t *params)
 char *
 create_slave_omp (credentials_t *credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml;
-  int socket;
-  gchar *html;
+  int ret;
+  gchar *html, *command, *response;
   const char *name, *comment, *host, *port, *login, *password;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new slave. "
-                             "No new slave was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_slaves");
-    }
-
-  xml = g_string_new ("<get_slaves>");
+  entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -12263,107 +12277,83 @@ create_slave_omp (credentials_t *credentials, params_t *params)
   login = params_value (params, "login");
   password = params_value (params, "password");
 
-  if (name == NULL || comment == NULL || host == NULL || port == NULL
-      || login == NULL || password == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Slave"));
+  CHECK_PARAM (name, "Create Slave", new_slave);
+  CHECK_PARAM (comment, "Create Slave", new_slave);
+  CHECK_PARAM (host, "Create Slave", new_slave);
+  CHECK_PARAM (port, "Create Slave", new_slave);
+  CHECK_PARAM (login, "Create Slave", new_slave);
+  CHECK_PARAM (password, "Create Slave", new_slave);
+
+  if (comment)
+    command = g_strdup_printf ("<create_slave>"
+                               "<name>%s</name>"
+                               "<comment>%s</comment>"
+                               "<host>%s</host>"
+                               "<port>%s</port>"
+                               "<login>%s</login>"
+                               "<password>%s</password>"
+                               "</create_slave>",
+                               name,
+                               comment,
+                               host,
+                               port,
+                               login,
+                               password);
   else
+    command = g_strdup_printf ("<create_slave>"
+                               "<name>%s</name>"
+                               "<host>%s</host>"
+                               "<port>%s</port>"
+                               "<login>%s</login>"
+                               "<password>%s</password>"
+                               "</create_slave>",
+                               name,
+                               host,
+                               port,
+                               login,
+                               password);
+
+  ret = omp (credentials, &response, &entity, command);
+  g_free (command);
+  switch (ret)
     {
-      int ret;
-
-      /* Create the slave. */
-
-      if (comment)
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_slave>"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<host>%s</host>"
-                                        "<port>%s</port>"
-                                        "<login>%s</login>"
-                                        "<password>%s</password>"
-                                        "</create_slave>",
-                                        name,
-                                        comment,
-                                        host,
-                                        port,
-                                        login,
-                                        password);
-      else
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_slave>"
-                                        "<name>%s</name>"
-                                        "<host>%s</host>"
-                                        "<port>%s</port>"
-                                        "<login>%s</login>"
-                                        "<password>%s</password>"
-                                        "</create_slave>",
-                                        name,
-                                        host,
-                                        port,
-                                        login,
-                                        password);
-
-
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new slave. "
-                               "No new slave was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_slaves");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new slave. "
-                               "It is unclear whether the slave has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_slaves");
-        }
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new slave. "
+                             "No new slave was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_slaves");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new slave. "
+                             "It is unclear whether the slave has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_slaves");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new slave. "
+                             "It is unclear whether the slave has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_slaves");
     }
 
-  /* Get all the slaves. */
-
-  if (openvas_server_send (&session,
-                           "<get_slaves"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
+  if (omp_success (entity))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new slave. "
-                           "A new slave was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_slaves");
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_slaves (credentials, params, response);
     }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new slave. "
-                           "A new slave was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_slaves");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_slaves>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  else
+    html = new_slave (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
@@ -12438,40 +12428,6 @@ char *
 get_slave_omp (credentials_t * credentials, params_t *params)
 {
   return get_slave (credentials, params, NULL);
-}
-
-/**
- * @brief Returns page to create a new slave.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- *
- * @return Result of XSL transformation.
- */
-static char *
-new_slave (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
-{
-  GString *xml;
-  xml = g_string_new ("<new_slave>");
-  g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_slave>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Return the new slave page.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-new_slave_omp (credentials_t *credentials, params_t *params)
-{
-  return new_slave (credentials, params, NULL);
 }
 
 /**

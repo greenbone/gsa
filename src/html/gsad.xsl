@@ -1236,6 +1236,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_group/create_group_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="new_slave/create_slave_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="new_tag/create_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_tag/gsad_msg"
