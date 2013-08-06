@@ -179,6 +179,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </p>
 </xsl:template>
 
+<xsl:template name="sorting">
+  <a name="sorting"></a>
+  <h3>Sorting</h3>
+  <p>
+    The sorting of the table can be changed by clicking on a column heading.
+    The current sort column appears as a keyword in the powerfilter, like
+    "sort=name" or "sort-reverse=name".
+  </p>
+</xsl:template>
+
 <xsl:template name="hosts_note">
   <p>
     Note on <b>Hosts</b>:
@@ -621,6 +631,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Agent'"/>
@@ -783,6 +794,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Credential'"/>
@@ -1209,6 +1221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Alert'"/>
@@ -1420,6 +1433,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Port List'"/>
@@ -1766,6 +1780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Report Format'"/>
@@ -1982,6 +1997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Scan Config'"/>
@@ -2215,6 +2231,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Schedule'"/>
@@ -2437,6 +2454,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Slave'"/>
@@ -3492,6 +3510,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Filter'"/>
@@ -4285,6 +4304,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Group'"/>
@@ -5414,6 +5434,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
       <h4>Extra Columns</h4>
       <p>
         Additionally, the Notes table can be filtered by certain fields that
@@ -5643,6 +5664,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
       <h4>Extra Columns</h4>
       <p>
         Additionally, the Overrides table can be filtered by certain fields that
@@ -6986,6 +7008,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Tag'"/>
@@ -7141,6 +7164,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Target'"/>
@@ -7447,15 +7471,8 @@ Public License instead of this License.
         </tr>
       </table>
 
-      <a name="sorting"></a>
-      <h3>Sorting</h3>
-      <p>
-       The table can be sorted either by the Task name or by the Status column.
-       Therefore click on the descending <img src="/img/descending.png" alt="Sort descending" title="Sort descending" />
-       or ascending <img src="/img/ascending.png" alt="Sort ascending" title="Sort ascending" /> icon.
-       The icon of the current choice will appear greyed out <img src="/img/ascending_inactive.png" alt="Current sort ascending" title="Current sort ascending" />, <img src="/img/descending_inactive.png" alt="Current sort descending" title="Current sort descending" />.
-       The list will be updated immediately.
-      </p>
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="autorefresh"></a>
       <h3>Auto-refresh</h3>
@@ -7885,6 +7902,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>
@@ -8016,6 +8034,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>
@@ -8137,6 +8156,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>
@@ -8242,6 +8262,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>
@@ -8347,6 +8368,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>
@@ -8437,6 +8459,7 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
 
       <a name="secinfo_missing"></a>
       <h2>Warning: SecInfo Database Missing</h2>

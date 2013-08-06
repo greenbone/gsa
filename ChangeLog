@@ -1,3 +1,9 @@
+2013-08-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (sorting): New template.  Call alongside all calls
+	to template "filtering".
+	(tasks.html): Remove old sorting section.
+
 2013-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/gsa-style.css (#small_inline_form select)
@@ -26,7 +32,7 @@
 	(list-window-line-actions): Add anchor for links from Edit pages.
 
 	* src/html/omp.xsl: Add gsa to element prefixes.
-	(sa:type-string): New function.
+	(gsa:type-string): New function.
 	(edit-header-icons): Add underscore to anchor name, for consistency.
 
 2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
