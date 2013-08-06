@@ -667,6 +667,7 @@ table.odd {
 
 #small_inline_form select, #small_inline_form input {
  font-size: 10px;
+ vertical-align: top;
 }
 
 #small_inline_form form {

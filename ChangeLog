@@ -1,5 +1,10 @@
 2013-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/gsa-style.css (#small_inline_form select)
+	(#small_inline_form input): Set vertical-align property to top.
+
+2013-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Remove "New Task" menu item.
 
 	* src/html/help.xsl (contents.html): Remove entry for "New Task" menu
