@@ -1,3 +1,15 @@
+2013-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Remove "New Task" menu item.
+
+	* src/html/help.xsl (contents.html): Remove entry for "New Task" menu
+	item.
+
+	* src/html/wizard.xsl (quick-first-scan-wizard): Add short instructions
+	how to create a new task.
+
+	* src/html/po/de.xml: Add German translation of new wizard text.
+
 2013-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make the help icons on the Edit pages land in the right place.

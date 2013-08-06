@@ -151,5 +151,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>and review the results collected so far.</id>
     <str>springen</str>
   </msg>
+  <msg>
+    <id>By clicking the New Task icon</id>
+    <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
+  </msg>
+  <msg>
+    <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon.</id>
+    <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt.</str>
+  </msg>
 
 </i18n>

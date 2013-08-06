@@ -1285,11 +1285,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n('Tasks')"/>
             </a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-        <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">
-              <xsl:value-of select="gsa:i18n('New Task')"/>
-            </a></li>
-      </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
         <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt permission=any&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Notes')"/>

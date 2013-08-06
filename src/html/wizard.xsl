@@ -128,6 +128,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:text> </xsl:text>
           <xsl:value-of select="gsa:i18n('and review the results collected so far.')"/>
         </p>
+        <p>
+          <xsl:value-of select="gsa:i18n('By clicking the New Task icon')"/>
+          <xsl:text> </xsl:text>
+          (<img src="img/new.png"/>)
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon.')"/>
+        </p>
       </td>
     </tr>
   </table>
