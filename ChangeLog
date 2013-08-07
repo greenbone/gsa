@@ -1,3 +1,16 @@
+2013-08-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add expanded filter controls to GET pages.
+
+	* src/gsad.c (init_validator): Add build_filter.
+
+	* src/gsad_omp.c (get_many): If build_filter flag is given then contruct
+	filter from other params.
+	(get_tasks): Skip filter hacking when build_filter is given.
+
+	* src/html/omp.xsl (filter-rest): New template.
+	(filter-window-part): Add expanded filter controls.
+
 2013-08-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (trend_meter): Use the terms "severity" and

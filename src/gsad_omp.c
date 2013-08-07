@@ -891,7 +891,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   GString *type_many; /* The plural form of type */
   gnutls_session_t session;
   int socket;
-  gchar *html, *request;
+  gchar *html, *request, *built_filter;
   const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
 
   filt_id = params_value (params, "filt_id");
@@ -930,14 +930,43 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
+  built_filter = NULL;
   if (filt_id == NULL
       || (strcmp (filt_id, "") == 0)
       || (strcmp (filt_id, "--") == 0))
     {
       if (filter == NULL || (strcmp (filter, "") == 0))
         {
-          if (strcmp (type, "info") == 0
-              && params_value (params, "info_type"))
+          if (params_value (params, "build_filter"))
+            {
+              gchar *task;
+              const char *search_phrase;
+
+              if (strcmp (type, "task"))
+                task = NULL;
+              else
+                {
+                  const char *overrides;
+                  overrides = params_value (params, "overrides");
+                  task = g_strdup_printf ("apply_overrides=%i ",
+                                          overrides
+                                          && strcmp (overrides, "0"));
+                }
+
+              search_phrase = params_value (params, "search_phrase");
+              built_filter = g_strdup_printf ("%s%s%s%s%s%s%s %s",
+                                              task ? task : "",
+                                              first ? "first=" : "",
+                                              first ? first : "",
+                                              first ? " " : "",
+                                              max ? "rows=" : "",
+                                              max ? max : "",
+                                              max ? " " : "",
+                                              search_phrase);
+              g_free (task);
+            }
+          else if (strcmp (type, "info") == 0
+                   && params_value (params, "info_type"))
             {
               if (strcmp (params_value (params, "info_type"), "cve") == 0)
                 filter = "sort-reverse=published rows=-2";
@@ -978,11 +1007,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                     " sort_order=\"%s\"",
                                     type_many->str,
                                     filt_id ? filt_id : "0",
-                                    filter ? filter : "",
+                                    built_filter
+                                     ? built_filter
+                                     : (filter ? filter : ""),
                                     first ? first : "1",
                                     max ? max : "-2",
                                     sort_field ? sort_field : "name",
                                     sort_order ? sort_order : "ascending");
+  g_free (built_filter);
   if (openvas_server_sendf (&session, "%s %s/>", request,
                             extra_attribs ? extra_attribs : "")
       == -1)
@@ -3189,34 +3221,47 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
   overrides = params_value (params, "overrides");
   if (overrides)
     {
-      param_t *filt_id, *filter;
+      param_t *filt_id, *build_filter;
+      const char *new_filt_id;
+
+      build_filter = params_get (params, "build_filter");
+
+      if (build_filter)
+        new_filt_id = "";
+      else
+        new_filt_id = "-2";
+
       filt_id = params_get (params, "filt_id");
       if (filt_id)
         {
-          filt_id->value = g_strdup ("-2");
+          filt_id->value = g_strdup (new_filt_id);
           filt_id->value_size = strlen (filt_id->value);
           filt_id->valid = 1;
           filt_id->valid_utf8 = 1;
         }
       else
-        params_add (params, "filt_id", "-2");
+        params_add (params, "filt_id", new_filt_id);
 
-      filter = params_get (params, "filter");
-      if (filter && filter->value)
+      if (build_filter == NULL)
         {
-          gchar *old;
-          old = filter->value;
-          filter->value = g_strdup_printf ("apply_overrides=%s %s",
-                                           overrides,
-                                           old);
-          g_free (old);
+          param_t *filter;
+          filter = params_get (params, "filter");
+          if (filter && filter->value)
+            {
+              gchar *old;
+              old = filter->value;
+              filter->value = g_strdup_printf ("apply_overrides=%s %s",
+                                               overrides,
+                                               old);
+              g_free (old);
+            }
+          else if (strcmp (overrides, "0"))
+            params_add (params, "filter",
+                        "apply_overrides=1 rows=-2 permission=any owner=any");
+          else
+            params_add (params, "filter",
+                        "apply_overrides=0 rows=-2 permission=any owner=any");
         }
-      else if (strcmp (overrides, "0"))
-        params_add (params, "filter",
-                    "apply_overrides=1 rows=-2 permission=any owner=any");
-      else
-        params_add (params, "filter",
-                    "apply_overrides=0 rows=-2 permission=any owner=any");
     }
 
   return get_many ("task", credentials, params, extra_xml, NULL);

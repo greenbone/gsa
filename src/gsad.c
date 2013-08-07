@@ -939,7 +939,8 @@ init_validator ()
   openvas_validator_alias (validator, "alerts",     "optional_number");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
-  openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "base",            "name");
+  openvas_validator_alias (validator, "build_filter",    "boolean");
   openvas_validator_alias (validator, "custom_severity", "boolean");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");

@@ -355,6 +355,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="filter-rest">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first']">
+    <xsl:value-of select="column"/>
+    <xsl:value-of select="relation"/>
+    <xsl:value-of select="value"/>
+    <xsl:text> </xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template name="filter-window-part">
   <xsl:param name="type"/>
   <xsl:param name="list"/>
@@ -436,6 +445,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                  src="/img/help.png" border="0"/>
           </a>
+        </div>
+      </form>
+      <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+        <input type="hidden" name="build_filter" value="1"/>
+        <xsl:for-each select="exslt:node-set($extra_params)/param">
+          <input type="hidden" name="{name}" value="{value}"/>
+        </xsl:for-each>
+        <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
+          <div style="padding: 2px;">
+            <xsl:variable name="apply_overrides"
+                          select="filters/keywords/keyword[column='apply_overrides']/value"/>
+            <label>
+              <xsl:choose>
+                <xsl:when test="$apply_overrides = 0">
+                  <input type="checkbox" name="overrides" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="overrides" value="1"
+                         checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              Apply overrides
+            </label>
+          </div>
+        </xsl:if>
+        <xsl:if test="filters/keywords/keyword[column='first']">
+          <div style="padding: 2px;">
+            First result:
+            <input type="text" name="first" size="5"
+                   value="{filters/keywords/keyword[column='first']/value}"
+                   maxlength="400"/>
+          </div>
+        </xsl:if>
+        <xsl:if test="filters/keywords/keyword[column='rows']">
+          <div style="padding: 2px;">
+            Results per page:
+            <input type="text" name="max" size="5"
+                   value="{filters/keywords/keyword[column='rows']/value}"
+                   maxlength="400"/>
+          </div>
+        </xsl:if>
+<!--
+        <div style="padding: 2px;">
+          Sort by:
+          <input type="text" name="sort_field" size="5"
+                 value="{filters/keywords/keyword[column='sort']/value}"
+                 maxlength="400"/>
+        </div>
+-->
+        <div style="float: right; margin-right: 5px">
+          <input type="submit" value="Apply" title="Apply"/>
+        </div>
+        <div style="padding: 2px;">
+          The rest:
+          <xsl:variable name="rest">
+            <xsl:call-template name="filter-rest"/>
+          </xsl:variable>
+          <input type="text" name="search_phrase" size="50"
+                 value="{$rest}"
+                 maxlength="400"/>
         </div>
       </form>
     </div>
