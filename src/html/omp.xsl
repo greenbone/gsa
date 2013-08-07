@@ -2609,24 +2609,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="trend_meter">
   <xsl:choose>
     <xsl:when test="trend = 'up'">
-      <img src="/img/trend_up.png" alt="Threat level increased"
-           title="Threat level increased"/>
+      <img src="/img/trend_up.png" alt="Severity increased"
+           title="Severity increased"/>
     </xsl:when>
     <xsl:when test="trend = 'down'">
-      <img src="/img/trend_down.png" alt="Threat level decreased"
-           title="Threat level decreased"/>
+      <img src="/img/trend_down.png" alt="Severity decreased"
+           title="Severity decreased"/>
     </xsl:when>
     <xsl:when test="trend = 'more'">
-      <img src="/img/trend_more.png" alt="Threat count increased"
-           title="Threat count increased"/>
+      <img src="/img/trend_more.png" alt="Vulnerability count increased"
+           title="Vulnerability count increased"/>
     </xsl:when>
     <xsl:when test="trend = 'less'">
-      <img src="/img/trend_less.png" alt="Threat count decreased"
-           title="Threat count decreased"/>
+      <img src="/img/trend_less.png" alt="Vulnerability count decreased"
+           title="Vulnerability count decreased"/>
     </xsl:when>
     <xsl:when test="trend = 'same'">
-      <img src="/img/trend_nochange.png" alt="Threat did not change"
-           title="The threat did not change"/>
+      <img src="/img/trend_nochange.png" alt="Vulnerabilities did not change"
+           title="Vulnerabilities did not change"/>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>

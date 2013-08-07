@@ -7425,45 +7425,47 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Trend</td>
-          <td>Describes the change of threat between the newest
+          <td>Describes the change of vulnerabilities between the newest
               report and the report before the newest:
             <br />
             <table>
               <tr>
                 <td valign="top"><img src="/img/trend_up.png" /></td>
                 <td>
-                  Threat level increased: In the newest report at least one NVT for at least one
-                  target host reported a higher severity level than any NVT reported
-                  in the report before the newest one.
+                  Severity increased: In the newest report at
+                  least one NVT for at least one target host reported a higher
+                  severity score than any NVT reported in the report before
+                  the newest one.
                 </td>
               </tr><tr>
                 <td valign="top"><img src="/img/trend_more.png" /></td>
                 <td>
-                  Threat number increased: The threat level of the last report
-                  and the report before the
-                  last report is the same. But the newest report contains more
-                  security issues of this threat level than the report before.
+                  Vulnerability count increased: The maximum severity reported
+                  in the last report and the report before the last report is
+                  the same. However, the newest report contains more security
+                  issues of this severity level than the report before.
                 </td>
               </tr><tr>
                 <td valign="top"><img src="/img/trend_nochange.png" /></td>
                 <td>
-                  Threat did not change: The number of High, Medium, Low and Log
-                  reports of the newest report and the one before are identical.
+                  Vulnerabilities did not change: The maximum severity and the
+                  severity levels of the results in the newest report and the
+                  one before are identical.
                 </td>
               </tr><tr>
                 <td valign="top"><img src="/img/trend_less.png" /></td>
                 <td>
-                  Threat number decreased: The threat level of the last
-                  report and the report before the
-                  last report is the same. But the newest report contains less
-                  of the security issues of this threat level than the report before.
+                  Vulnerability count decreased: The maximum severity reported
+                  in the last report and the report before the last report is
+                  the same. However, the newest report contains less security
+                  issues of this severity level than the report before.
                 </td>
               </tr><tr>
                 <td valign="top"><img src="/img/trend_down.png" /></td>
                 <td>
-                  Threat level decreased: In the newest report at no NVT for at any
-                  target host reported a severity level as high as the severity
-                  level of the report before the newest one.
+                  Severity decreased: In the newest report the highest reported
+                  severity score is lower than the one reported in the report
+                  before the newest one.
                 </td>
               </tr>
             </table>
