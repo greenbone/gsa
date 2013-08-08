@@ -3878,15 +3878,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td style="font-size:10px;">
-          <xsl:choose>
-            <xsl:when test="last_report/report/@id = first_report/report/@id">
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
-                <xsl:call-template name="short_timestamp_first"/>
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
+          <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
+            <xsl:call-template name="short_timestamp_first"/>
+          </a>
         </td>
         <td style="font-size:10px;">
           <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">

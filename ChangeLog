@@ -1,5 +1,11 @@
 2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Display the first report even when it is the
+	same as the last report, so that it is clear that the columns are sorted
+	correctly when sorting by First.
+
+2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-part): Clear any selected filter in
 	the expanded filtering form.
 
