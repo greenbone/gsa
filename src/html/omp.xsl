@@ -445,70 +445,95 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                  src="/img/help.png" border="0"/>
           </a>
-        </div>
-      </form>
-      <form action="" method="get">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-        <input type="hidden" name="build_filter" value="1"/>
-        <xsl:for-each select="exslt:node-set($extra_params)/param">
-          <input type="hidden" name="{name}" value="{value}"/>
-        </xsl:for-each>
-        <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
-          <div style="padding: 2px;">
-            <xsl:variable name="apply_overrides"
-                          select="filters/keywords/keyword[column='apply_overrides']/value"/>
-            <label>
-              <xsl:choose>
-                <xsl:when test="$apply_overrides = 0">
-                  <input type="checkbox" name="overrides" value="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="checkbox" name="overrides" value="1"
-                         checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              Apply overrides
-            </label>
-          </div>
-        </xsl:if>
-        <xsl:if test="filters/keywords/keyword[column='first']">
-          <div style="padding: 2px;">
-            First result:
-            <input type="text" name="first" size="5"
-                   value="{filters/keywords/keyword[column='first']/value}"
-                   maxlength="400"/>
-          </div>
-        </xsl:if>
-        <xsl:if test="filters/keywords/keyword[column='rows']">
-          <div style="padding: 2px;">
-            Results per page:
-            <input type="text" name="max" size="5"
-                   value="{filters/keywords/keyword[column='rows']/value}"
-                   maxlength="400"/>
-          </div>
-        </xsl:if>
-<!--
-        <div style="padding: 2px;">
-          Sort by:
-          <input type="text" name="sort_field" size="5"
-                 value="{filters/keywords/keyword[column='sort']/value}"
-                 maxlength="400"/>
-        </div>
--->
-        <div style="float: right; margin-right: 5px">
-          <input type="submit" value="Apply" title="Apply"/>
-        </div>
-        <div style="padding: 2px;">
-          The rest:
-          <xsl:variable name="rest">
-            <xsl:call-template name="filter-rest"/>
+          <xsl:variable name="fold">
+            <xsl:choose>
+              <xsl:when test="/envelope/params/filterbox &gt; 0">1</xsl:when>
+              <xsl:otherwise>0</xsl:otherwise>
+            </xsl:choose>
           </xsl:variable>
-          <input type="text" name="search_phrase" size="50"
-                 value="{$rest}"
-                 maxlength="400"/>
+          <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
+          <xsl:variable name="title">
+            <xsl:choose>
+              <xsl:when test="$filterbox=1">
+                <xsl:value-of select="'Fold filter'"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'Unfold filter'"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <a href="/omp?cmd=get_{$type}s&amp;filterbox={$filterbox}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
+             title="">
+             <xsl:call-template name="fold-filter-icon-img">
+               <xsl:with-param name="fold" select="$fold"/>
+             </xsl:call-template>
+          </a>
         </div>
       </form>
+      <xsl:if test="/envelope/params/filterbox &gt; 0">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+          <input type="hidden" name="build_filter" value="1"/>
+          <xsl:for-each select="exslt:node-set($extra_params)/param">
+            <input type="hidden" name="{name}" value="{value}"/>
+          </xsl:for-each>
+          <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
+            <div style="padding: 2px;">
+              <xsl:variable name="apply_overrides"
+                            select="filters/keywords/keyword[column='apply_overrides']/value"/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$apply_overrides = 0">
+                    <input type="checkbox" name="overrides" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="overrides" value="1"
+                           checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Apply overrides
+              </label>
+            </div>
+          </xsl:if>
+          <xsl:if test="filters/keywords/keyword[column='first']">
+            <div style="padding: 2px;">
+              First result:
+              <input type="text" name="first" size="5"
+                     value="{filters/keywords/keyword[column='first']/value}"
+                     maxlength="400"/>
+            </div>
+          </xsl:if>
+          <xsl:if test="filters/keywords/keyword[column='rows']">
+            <div style="padding: 2px;">
+              Results per page:
+              <input type="text" name="max" size="5"
+                     value="{filters/keywords/keyword[column='rows']/value}"
+                     maxlength="400"/>
+            </div>
+          </xsl:if>
+  <!--
+          <div style="padding: 2px;">
+            Sort by:
+            <input type="text" name="sort_field" size="5"
+                   value="{filters/keywords/keyword[column='sort']/value}"
+                   maxlength="400"/>
+          </div>
+  -->
+          <div style="float: right; margin-right: 5px">
+            <input type="submit" value="Apply" title="Apply"/>
+          </div>
+          <div style="padding: 2px;">
+            The rest:
+            <xsl:variable name="rest">
+              <xsl:call-template name="filter-rest"/>
+            </xsl:variable>
+            <input type="text" name="search_phrase" size="50"
+                   value="{$rest}"
+                   maxlength="400"/>
+          </div>
+        </form>
+      </xsl:if>
     </div>
   </div>
 </xsl:template>

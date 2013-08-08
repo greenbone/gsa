@@ -1,3 +1,8 @@
+2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-part): Add fold icon.  Make expanded
+	section depend on filterbox param.
+
 2013-08-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [section-filter]): Fix filter creation form's
