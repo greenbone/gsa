@@ -21759,9 +21759,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:if test="@type='delta'">
               <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
           </xsl:if>
-          <input type="hidden" name="filter" value="{filters/term}"/>
           <input type="text" name="name" value="" size="10"
                  maxlength="80" style="vertical-align:middle"/>
+          <input type="hidden" name="comment" value=""/>
+          <input type="hidden" name="term" value="{filters/term}"/>
+          <input type="hidden" name="report_id" value="{@id}"/>
           <input type="image"
                  name="New Filter"
                  src="/img/new.png"
