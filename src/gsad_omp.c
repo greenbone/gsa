@@ -935,7 +935,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       || (strcmp (filt_id, "") == 0)
       || (strcmp (filt_id, "--") == 0))
     {
-      if (filter == NULL || (strcmp (filter, "") == 0))
+      if (params_value (params, "build_filter")
+          || filter == NULL
+          || (strcmp (filter, "") == 0))
         {
           if (params_value (params, "build_filter"))
             {
@@ -954,15 +956,21 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                 }
 
               search_phrase = params_value (params, "search_phrase");
-              built_filter = g_strdup_printf ("%s%s%s%s%s%s%s %s",
-                                              task ? task : "",
-                                              first ? "first=" : "",
-                                              first ? first : "",
-                                              first ? " " : "",
-                                              max ? "rows=" : "",
-                                              max ? max : "",
-                                              max ? " " : "",
-                                              search_phrase);
+              built_filter = g_strdup_printf
+                              ("%s%s%s%s%s%s%s%s%s%s%s",
+                               task ? task : "",
+                               first ? "first=" : "",
+                               first ? first : "",
+                               first ? " " : "",
+                               max ? "rows=" : "",
+                               max ? max : "",
+                               max ? " " : "",
+                               (filter && search_phrase) ? " " : "",
+                               filter ? filter : "",
+                               search_phrase ? " " : "",
+                               search_phrase
+                                ? search_phrase
+                                : "");
               g_free (task);
             }
           else if (strcmp (type, "info") == 0

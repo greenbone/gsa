@@ -355,10 +355,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="filter-rest">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first']">
+<xsl:template name="filter-simple">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first'][column = '']">
     <xsl:value-of select="column"/>
-    <xsl:value-of select="relation"/>
+    <xsl:choose>
+      <xsl:when test="column = ''">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="relation"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="value"/>
+    <xsl:text> </xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="filter-rest">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first'][column != '']">
+    <xsl:value-of select="column"/>
+    <xsl:choose>
+      <xsl:when test="column = ''">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="relation"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:value-of select="value"/>
     <xsl:text> </xsl:text>
   </xsl:for-each>
@@ -462,8 +483,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <a href="/omp?cmd=get_{$type}s&amp;filterbox={$filterbox}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
-             title="">
+          <xsl:variable name="extras">
+            <xsl:for-each select="exslt:node-set($extra_params)/param">
+              <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
+            </xsl:for-each>
+          </xsl:variable>
+          <a href="/omp?cmd=get_{gsa:type-many($type)}{$extras}&amp;filterbox={$filterbox}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
+             title="$title">
              <xsl:call-template name="fold-filter-icon-img">
                <xsl:with-param name="fold" select="$fold"/>
              </xsl:call-template>
@@ -521,15 +547,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    maxlength="400"/>
           </div>
   -->
+          <div style="padding: 2px;">
+            Simple search terms:
+            <xsl:variable name="simple">
+              <xsl:call-template name="filter-simple"/>
+            </xsl:variable>
+            <input type="text" name="search_phrase" size="50"
+                   value="{$simple}"
+                   maxlength="400"/>
+          </div>
           <div style="float: right; margin-right: 5px">
             <input type="submit" value="Apply" title="Apply"/>
           </div>
           <div style="padding: 2px;">
-            The rest:
+            Additional filter commands:
             <xsl:variable name="rest">
               <xsl:call-template name="filter-rest"/>
             </xsl:variable>
-            <input type="text" name="search_phrase" size="50"
+            <input type="text" name="filter" size="50"
                    value="{$rest}"
                    maxlength="400"/>
           </div>
