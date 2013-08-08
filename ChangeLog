@@ -1,5 +1,10 @@
 2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (filter-window-part): Clear any selected filter in
+	the expanded filtering form.
+
+2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-part): Add fold icon.  Make expanded
 	section depend on filterbox param.
 

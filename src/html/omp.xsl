@@ -475,6 +475,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
           <input type="hidden" name="build_filter" value="1"/>
+          <input type="hidden" name="filt_id" value="--"/>
           <xsl:for-each select="exslt:node-set($extra_params)/param">
             <input type="hidden" name="{name}" value="{value}"/>
           </xsl:for-each>
