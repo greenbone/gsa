@@ -290,6 +290,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="$color"/>
 </func:function>
 
+<func:function name="gsa:column-filter-name">
+  <xsl:param name="type"/>
+  <func:result select="str:replace (gsa:lower-case ($type), '&#xa0;', '_')"/>
+</func:function>
+
 <func:function name="gsa:type-string">
   <xsl:param name="type"/>
   <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
@@ -356,7 +361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-simple">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first'][column = '']">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse'][column = '']">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -371,7 +376,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-rest">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first'][column != '']">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse'][column != '']">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -389,6 +394,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="list"/>
   <xsl:param name="extra_params"/>
+  <xsl:param name="headings"/>
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
       <div style="float: right">
@@ -539,14 +545,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="400"/>
             </div>
           </xsl:if>
-  <!--
-          <div style="padding: 2px;">
-            Sort by:
-            <input type="text" name="sort_field" size="5"
-                   value="{filters/keywords/keyword[column='sort']/value}"
-                   maxlength="400"/>
-          </div>
-  -->
+          <xsl:if test="$headings">
+            <div style="padding: 2px;">
+              Sort by:
+              <xsl:variable name="sort" select="sort/field/text ()"/>
+              <select style="margin-bottom: 0px;" name="sort_field" size="1">
+                <xsl:for-each select="str:split ($headings, ' ')">
+                  <xsl:variable name="parts" select="str:split (., '~')"/>
+                  <xsl:choose>
+                    <xsl:when test="(count ($parts) = 1) and (gsa:column-filter-name (substring-before ($parts[1], '|')) = $sort)">
+                      <option value="{gsa:column-filter-name (substring-before ($parts[1], '|'))}"
+                              selected="1">
+                        <xsl:value-of select="substring-before ($parts[1], '|')"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:when test="count ($parts) = 1">
+                      <option value="{gsa:column-filter-name (substring-before ($parts[1], '|'))}">
+                        <xsl:value-of select="substring-before ($parts[1], '|')"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:for-each select="$parts[1]/following-sibling::*">
+                        <xsl:choose>
+                          <xsl:when test="(count ($parts) = 1) and (gsa:column-filter-name (substring-before (., '|')) = $sort)">
+                            <option value="{gsa:column-filter-name (substring-before (., '|'))}"
+                                    selected="1">
+                              <xsl:value-of select="substring-before (., '|')"/>
+                            </option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{gsa:column-filter-name (substring-before (., '|'))}">
+                              <xsl:value-of select="substring-before (., '|')"/>
+                            </option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <xsl:variable name="order" select="sort/field/order"/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$order = 'ascending'">
+                    <input type="radio" name="sort_order" value="ascending" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="sort_order" value="ascending"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Ascending
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$order = 'descending'">
+                    <input type="radio" name="sort_order" value="descending" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="sort_order" value="descending"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Descending
+              </label>
+            </div>
+          </xsl:if>
           <div style="padding: 2px;">
             Simple search terms:
             <xsl:variable name="simple">
@@ -6419,6 +6481,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="$type"/>
       <xsl:with-param name="list" select="$resources-summary"/>
+      <xsl:with-param name="headings" select="$headings"/>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -9991,6 +10054,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'config'"/>
       <xsl:with-param name="list" select="configs"/>
+      <!-- TODO Hack. -->
+      <xsl:with-param name="headings" select="'Name|name Families&#xa0;Total|hack NVTs&#xa0;Total|hack Families&#xa0;Trend|hack NVTs&#xa0;Trend|hack'"/>
     </xsl:call-template>
 
     <div class="gb_window_part_content_no_pad">
@@ -13075,6 +13140,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>CPE</value>
           </param>
         </xsl:with-param>
+        <xsl:with-param name="headings" select="'Name|name Title|title Modified|modified CVEs|cves Severity|severity'"/>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -13185,6 +13251,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>CVE</value>
           </param>
         </xsl:with-param>
+        <xsl:with-param name="headings" select="'Name|name Vector|vector Complexity|complexity Authentication|authentication Confidentiality&#xa0;Impact|confidentiality_impact Integrity&#xa0;Impact|integrity_impact Availability&#xa0;Impact|availability_impact Published|published Severity|severity'"/>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -13326,6 +13393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <value>NVT</value>
         </param>
       </xsl:with-param>
+      <xsl:with-param name="headings" select="'Name|name Family|family Created|created Modified|modified Version|version CVE|cve Severity|severity'"/>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="cpes">
@@ -13451,6 +13519,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>OVALDEF</value>
           </param>
         </xsl:with-param>
+        <xsl:with-param name="headings" select="'Name|name Version|version Status|status Class|class Created|created CVEs|cves Severity|severity'"/>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -13585,6 +13654,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>DFN_CERT_ADV</value>
           </param>
         </xsl:with-param>
+        <xsl:with-param name="headings" select="'Name|name Title|title Created|created CVEs|cves Severity|severity'"/>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -13695,6 +13765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>allinfo</value>
           </param>
         </xsl:with-param>
+        <xsl:with-param name="headings" select="'Name|name Type|type Created|created Modified|modified'"/>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -18222,6 +18293,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'port_list'"/>
       <xsl:with-param name="list" select="port_lists"/>
+      <!-- TODO Missing top row. -->
+      <xsl:with-param name="headings" select="'Name|name Total|total TCP|tcp UDP|udp'"/>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">

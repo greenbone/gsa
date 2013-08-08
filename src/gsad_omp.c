@@ -957,7 +957,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
               search_phrase = params_value (params, "search_phrase");
               built_filter = g_strdup_printf
-                              ("%s%s%s%s%s%s%s%s%s%s%s",
+                              ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
                                task ? task : "",
                                first ? "first=" : "",
                                first ? first : "",
@@ -965,6 +965,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                max ? "rows=" : "",
                                max ? max : "",
                                max ? " " : "",
+                               sort_field
+                                ? ((sort_order && strcmp (sort_order,
+                                                          "ascending"))
+                                    ? "sort-reverse="
+                                    : "sort=")
+                                : "",
+                               sort_field ? sort_field : "",
+                               sort_field ? " " : "",
                                (filter && search_phrase) ? " " : "",
                                filter ? filter : "",
                                search_phrase ? " " : "",

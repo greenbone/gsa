@@ -1,5 +1,16 @@
 2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Include sort elements when building filter.
+
+	* src/html/omp.xsl (gsa:column-filter-name): New template.
+	(filter-simple, filter-rest): Exclude sort columns.
+	(filter-window-part): Add headings arg.  Use for sort field.
+	(list-window, html-configs-table, html-cpe-table, html-cve-table)
+	(html-nvt-table, html-ovaldef-table, html-dfn_cert_adv-table)
+	(html-allinfo-table, html-port-lists-table): Pass in column headings.
+
+2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Separate simple search terms and more
 	complex filter terms when building the filter.
 
