@@ -6457,24 +6457,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="get_{$type}s"/>
           <input type="hidden" name="filter" value="{filters/term}"/>
           <xsl:call-template name="auto-refresh"/>
-          <xsl:if test="$type = 'task'">
-            <select style="margin-bottom: 0px;" name="overrides" size="1">
-              <xsl:choose>
-                <xsl:when test="$apply-overrides = 0">
-                  <option value="0" selected="1">&#8730;No overrides</option>
-                  <option value="1" >Apply overrides</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="0">No overrides</option>
-                  <option value="1" selected="1">&#8730;Apply overrides</option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </select>
-          </xsl:if>
           <input type="image"
                  name="Update"
                  src="/img/refresh.png"
                  alt="Update" style="margin-left:3px;margin-right:3px;"/>
+          <xsl:if test="$type = 'task'">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <input type="hidden" name="overrides" value="1"/>
+                <input type="image"
+                       name="No Overrides"
+                       src="/img/overrides_disabled.png"
+                       alt="No Overrides"
+                       value="No Overrides"
+                       title="No Overrides"
+                       style="margin-left:3px;margin-right:3px;"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="overrides" value="0"/>
+                <input type="image"
+                       name="Overrides are Applied"
+                       src="/img/overrides_enabled.png"
+                       alt="Overrides are Applied"
+                       value="Overrides are Applied"
+                       title="Overrides are Applied"
+                       style="margin-left:3px;margin-right:3px;"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
         </form>
       </div>
     </div>

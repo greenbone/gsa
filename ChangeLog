@@ -1,3 +1,11 @@
+2013-08-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (list-window): Replace override dropdown with image
+	in header form.
+
+	* src/html/img/overrides_disabled.png,
+	src/html/img/overrides_enabled.png: New files.
+
 2013-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Include sort elements when building filter.
