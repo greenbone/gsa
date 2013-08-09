@@ -392,6 +392,8 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/unfold.png
                src/html/img/enable.png
                src/html/img/disable.png
+               src/html/img/overrides_disabled.png
+               src/html/img/overrides_enabled.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
