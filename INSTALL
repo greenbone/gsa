@@ -2,7 +2,7 @@ INSTALLATION INSTRUCTIONS FOR GREENBONE SECURITY ASSISTANT
 ==========================================================
 
 Please note: The reference system used by most of the developers is Debian
-GNU/Linux 'Squeeze' 6.0. The build might fail on any other system. Also it is
+GNU/Linux 'Wheezy' 7. The build might fail on any other system. Also it is
 necessary to install dependent development packages.
 
 
@@ -28,8 +28,9 @@ Prerequisites for building documentation:
 * Doxygen
 * xmltoman (optional, for building man page)
 
-Install prerequisites on Debian GNU/Linux 'Squeeze' 6.0:
+Install prerequisites on Debian GNU/Linux:
 # apt-get install libmicrohttpd-dev libxml2-dev libxslt1-dev
+
 
 Compiling Greenbone Security Assistant
 --------------------------------------
