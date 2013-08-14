@@ -4823,17 +4823,17 @@ Public License instead of this License.
           <td></td>
         </tr>
         <tr class="odd">
-          <td>Threat</td>
+          <td>Severity</td>
           <td>yes</td>
           <td>--</td>
           <td>Radio button</td>
           <td></td>
         </tr>
         <tr class="odd">
-          <td>New Threat</td>
+          <td>New Severity</td>
           <td>yes</td>
           <td>--</td>
-          <td>Radio button</td>
+          <td>Predefined value from list or valid severity (CVSS) score</td>
           <td></td>
         </tr>
         <tr class="even">
@@ -5633,11 +5633,11 @@ Public License instead of this License.
         </tr>
         <tr class="even">
           <td>From</td>
-          <td>The original threat for which this override applies.</td>
+          <td>The original severity level for which this override applies.</td>
         </tr>
         <tr class="odd">
           <td>To</td>
-          <td>The new threat that is assigned to the report item if the override
+          <td>The new severity that is assigned to the report item if the override
               is applied.</td>
         </tr>
         <tr class="even">

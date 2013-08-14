@@ -1,3 +1,12 @@
+2013-08-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-create-override-form, html-edit-override-form)
+	(override [details]): Rename "Threat" sections to "Severity", label
+	"Alarm" severity level as "> 0.0" and use "Alarm" type when creating
+	overrides for overrides with severity > 0.0.
+
+	* src/html/help.xsl (new_override.html): Describe new Severity elements.
+
 2013-08-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Install the recently added icons.

@@ -16331,7 +16331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              Threat
+              Severity
             </td>
             <td>
               <xsl:choose>
@@ -16341,8 +16341,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="{threat}" checked="1"/>
-                    <xsl:value-of select="threat"/>
+                    <xsl:choose>
+                      <xsl:when test="threat = 'High' or threat = 'Medium' or threat = 'Low'">
+                        <input type="radio" name="threat" value="Alarm" checked="1"/>
+                        &gt; 0.0
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="threat" value="{threat}" checked="1"/>
+                        <xsl:value-of select="threat"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
@@ -16351,16 +16359,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="High"/>
-                    High
-                  </label>
-                  <label>
-                    <input type="radio" name="threat" value="Medium"/>
-                    Medium
-                  </label>
-                  <label>
-                    <input type="radio" name="threat" value="Low"/>
-                    Low
+                    <input type="radio" name="threat" value="Alarm"/>
+                    &gt; 0.0
                   </label>
                   <label>
                     <input type="radio" name="threat" value="Log"/>
@@ -16698,7 +16698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              Threat
+              Severity
             </td>
             <td>
               <xsl:choose>
@@ -16715,9 +16715,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="{get_overrides_response/override/threat}"
-                           checked="1"/>
-                    <xsl:value-of select="get_overrides_response/override/threat"/>
+                    <xsl:choose>
+                      <xsl:when test="get_overrides_response/override/severity &gt; 0.0">
+                        <input type="radio" name="threat" value="Alarm" checked="1"/>
+                        &gt; 0.0
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="threat" value="{get_overrides_response/override/threat}" checked="1"/>
+                        <xsl:value-of select="get_overrides_response/override/threat"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </label>
                 </xsl:otherwise>
               </xsl:choose>
@@ -17150,9 +17157,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Threat:</td>
+          <td>Severity:</td>
           <td>
             <xsl:choose>
+              <xsl:when test="threat = 'Alarm'">
+                &gt; <xsl:value-of select="format-number((severity) - 0.1, '0.0')"/>
+              </xsl:when>
               <xsl:when test="string-length(threat) &gt; 0">
                 <xsl:value-of select="threat"/>
               </xsl:when>
@@ -20204,11 +20214,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="string-length(threat) = 0">
           Any
         </xsl:when>
+        <xsl:when test="number(severity) &gt; 0.0">
+          Severity &gt; 0.0
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="threat"/>
         </xsl:otherwise>
       </xsl:choose>
-      to <xsl:value-of select="new_threat"/><xsl:if test="new_severity != ''">: <xsl:value-of select="new_severity"/></xsl:if></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
+      to <xsl:value-of select="new_threat"/><xsl:if test="number(new_severity) &gt; 0.0">: <xsl:value-of select="new_severity"/></xsl:if></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
