@@ -1,3 +1,8 @@
+2013-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Use current overrides value
+	for Full report download, instead of always applying overrides.
+
 2013-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r17276.

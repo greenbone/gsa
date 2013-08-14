@@ -1513,7 +1513,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="first_result" value="1"/>
                     <input type="hidden" name="max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
                     <input type="hidden" name="notes" value="1"/>
-                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="hidden" name="overrides" value="{$apply-overrides}"/>
                     <input type="hidden" name="result_hosts_only" value="1"/>
                     <input type="hidden" name="levels" value="hmlgf"/>
                     <input type="hidden" name="autofp"
