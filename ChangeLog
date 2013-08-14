@@ -1,5 +1,13 @@
 2013-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r17421.
+
+	* src/gsad_base.c (FAIL_HTML): New define.
+	(xsl_transform): Return fail page HTML on error, instead of NULL.
+	Callers assume this happens, which led to segfaults on error.
+
+2013-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Use current overrides value
 	for Full report download, instead of always applying overrides.
 
