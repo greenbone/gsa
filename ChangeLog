@@ -1,3 +1,9 @@
+2013-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_base.c (FAIL_HTML): New define.
+	(xsl_transform): Return fail page HTML on error, instead of NULL.
+	Callers assume this happens, which led to segfaults on error.
+
 2013-08-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-create-override-form, html-edit-override-form)

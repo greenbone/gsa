@@ -102,13 +102,23 @@ ctime_r_strip_newline (time_t *time, char *string)
 }
 
 /**
+ * @brief HTML returned when XSL transform fails.
+ */
+#define FAIL_HTML                                                       \
+ "<html>"                                                               \
+ "<body>"                                                               \
+ "An internal server error has occurred during XSL transformation."     \
+ "</body>"                                                              \
+ "</html>"
+
+/**
  * @brief XSL Transformation.
  *
  * Does the transformation from XML to HTML applying omp.xsl.
  *
  * @param[in]  xml_text  The XML text to tranform.
  *
- * @return HTML output from XSL transformation, or NULL on error.
+ * @return HTML output from XSL transformation.
  */
 char *
 xsl_transform (const char *xml_text)
@@ -129,7 +139,7 @@ xsl_transform (const char *xml_text)
   if (cur == NULL)
     {
       g_warning ("Failed to parse stylesheet " XSL_PATH);
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
@@ -137,7 +147,7 @@ xsl_transform (const char *xml_text)
     {
       g_warning ("Failed to parse stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   res = xsltApplyStylesheet (cur, doc, NULL);
@@ -145,7 +155,7 @@ xsl_transform (const char *xml_text)
     {
       g_warning ("Failed to apply stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
@@ -154,7 +164,7 @@ xsl_transform (const char *xml_text)
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
       xmlFreeDoc (doc);
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   xsltFreeStylesheet (cur);
@@ -180,7 +190,7 @@ xsl_transform (const char *xml_text)
   if (content_fd == -1)
     {
       g_warning ("%s: mkstemp: %s\n", __FUNCTION__, strerror (errno));
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   /* Copy text to temporary file. */
@@ -195,7 +205,7 @@ xsl_transform (const char *xml_text)
       g_error_free (error);
       unlink (content_file);
       close (content_fd);
-      return NULL;
+      return g_strdup (FAIL_HTML);
     }
 
   /* Run xsltproc on the temporary file. */
@@ -246,7 +256,7 @@ xsl_transform (const char *xml_text)
     return standard_out;
 
   g_free (standard_out);
-  return NULL;
+  return g_strdup (FAIL_HTML);
 #endif
 }
 
