@@ -1,3 +1,8 @@
+2013-08-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Use only the specified type for
+	get_filters command.
+
 2013-08-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* INSTALL: Updated reference system from Debian 6 to 7.
