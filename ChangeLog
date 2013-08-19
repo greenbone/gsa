@@ -1,5 +1,11 @@
 2013-08-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Revert change for get_filters command to
+	also get filters with no types as manager correctly handles this case
+	now.
+
+2013-08-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Use only the specified type for
 	get_filters command.
 
