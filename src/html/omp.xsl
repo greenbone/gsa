@@ -3165,7 +3165,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+         title="View details of Task Report {@id}"
+         style="margin-left:3px;">
+        <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
+      </a>
       <xsl:choose>
         <xsl:when test="$container=1 and scan_run_status='Running'">
           <xsl:text>Uploading</xsl:text>
@@ -3241,11 +3245,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
-         title="Details"
-         style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
       <xsl:choose>
         <xsl:when test="$observed or scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
           <img src="/img/delete_inactive.png"
@@ -21522,11 +21521,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="current_host" select="ip"/>
       <tr>
         <td>
-          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-          <xsl:value-of select="$current_host"/>
-          <xsl:if test="$hostname">
-            <xsl:value-of select="concat(' (', $hostname, ')')"/>
-          </xsl:if>
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
+            title="View details of Host {ip}" style="margin-left:3px;">
+            <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+            <xsl:value-of select="$current_host"/>
+            <xsl:if test="$hostname">
+              <xsl:value-of select="concat(' (', $hostname, ')')"/>
+            </xsl:if>
+          </a>
         </td>
         <td>
           <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
@@ -21588,10 +21590,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:variable name="threat"
                         select="detail[name = 'prognosis']/value"/>
-          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
-             title="Host Details" style="margin-left:3px;">
-            <img src="/img/details.png" border="0" alt="Details"/>
-          </a>
           <xsl:choose>
             <xsl:when test="(count (detail[name = 'App']) = 0) or (string-length ($threat) = 0)">
               <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"

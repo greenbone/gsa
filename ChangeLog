@@ -1,5 +1,10 @@
 2013-08-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [report], report [assets]): Remove details
+	icon. Make first column values clickable, linking to details page.
+
+2013-08-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Revert change for get_filters command to
 	also get filters with no types as manager correctly handles this case
 	now.
