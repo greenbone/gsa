@@ -6589,16 +6589,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="cap-type"/>
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
+  <xsl:param name="nonew"/>
   <xsl:param name="noexport"/>
 
   <a href="/help/{$type}_details.html?token={/envelope/token}"
     title="Help: {$cap-type} Details">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
-     title="New {$cap-type}">
-    <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-  </a>
+  <xsl:choose>
+    <xsl:when test="$nonew"/>
+    <xsl:otherwise>
+      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+         title="New {$cap-type}">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="{$cap-type}s" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
@@ -17879,7 +17885,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td>Type</td>
+        <td>Resource Type</td>
         <td>Resource</td>
         <td>Subject Type</td>
         <td>Subject</td>
@@ -17899,7 +17905,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (permission)"/>
     <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Type|resource/type Resource|resource/type Subject&#xa0;Type|subject/type Subject|subject/name'"/>
+    <xsl:with-param name="headings" select="'Name|name Resource&#xa0;Type|type Resource|_resource Subject&#xa0;Type|subject_type Subject|_subject'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -23762,6 +23768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
         <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="nonew" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">

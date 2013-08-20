@@ -1,5 +1,18 @@
 2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/help.xsl (permissions.html, new_permission.html)
+	(permission_details.html, roles.html, role_details.html): New templates.
+	(contents.html): Add permissions and roles help pages links.
+
+	* src/html/omp.xsl (details-header-icons): Add nonew parameter to
+	disable new resource button.
+	(html-permissions-table, html-permissions-table-trash): Fix column
+	names.
+	(role [details]): Add nonew parameter to details-header-icons template
+	call.
+
+2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (list-window-line-actions): Add notrashcan parameter
 	to disable move to trashcan action help. Remove Details action help.
 

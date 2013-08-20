@@ -2871,6 +2871,307 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="permissions.html">
+  <div class="gb_window_part_center">Help: Permissions
+    <a href="/omp?cmd=get_permissions&amp;token={/envelope/token}"
+       title="Permissions" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Permissions"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_PERMISSIONS'"/>
+      </xsl:call-template>
+
+      <h1>Permissions</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#permission">Permissions</a>.
+       The complete contents of the permission entries
+       are shown (name, comment, resource type, resource, subject type, subject).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the permission and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Resource Type</td>
+          <td>Type of resource if one was provided.</td>
+        </tr>
+        <tr class="odd">
+          <td>Resource</td>
+          <td>Name of resource on which permission applies.</td>
+        </tr>
+        <tr class="even">
+          <td>Subject Type</td>
+          <td>Type of subject on whom the permission applies: User, Role or
+              Group.</td>
+        </tr>
+        <tr class="odd">
+          <td>Subject</td>
+          <td>Subject on whom the permission applies.</td>
+        </tr>
+      </table>
+
+      <h3>New Permission</h3>
+      <p>
+        To create a new permission click the
+        new icon <img src="/img/new.png" alt="New Permission" title="New Permission" /> which
+        goes to the <a href="new_permission.html?token={/envelope/token}">New Permission</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of permissions as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Permission'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_permission.html">
+  <div class="gb_window_part_center">Help: New Permission
+    <a href="/omp?cmd=new_permission&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_PERMISSION'"/>
+      </xsl:call-template>
+
+      <h1>New Permission</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#permission">Permission</a>,
+        the dialog offers these entries.
+        Hit the button "Create Permission" to submit the new permission.
+        The Permissions page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>create_task</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>Permissions for tier1 users</td>
+        </tr>
+        <tr class="odd">
+          <td>Subject</td>
+          <td>Yes</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>
+            User: User1
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Resource ID</td>
+          <td>no</td>
+          <td>--</td>
+          <td>UUID</td>
+          <td>03c8aa9e-a062-4e32-bf8d-cd02d76902ec</td>
+        </tr>
+      </table>
+
+      <h4>Permissions</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Permissions" title="Permissions"/>
+       will switch to the permissions page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="permission_details.html">
+  <div class="gb_window_part_center">Help: Permission Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_PERMISSIONS'"/>
+      </xsl:call-template>
+
+      <h1>Permission Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#permission">Permission</a>.
+        This includes the name, comment, resource type, subject name and type
+        and resource name and type.
+      </p>
+
+      <h4>New Permission</h4>
+      <p>
+        To create a new permission click the
+        new icon <img src="/img/new.png" alt="New Permission" title="New Permission" /> which
+        goes to the <a href="new_permission.html?token={/envelope/token}">New Permission</a>
+        page.
+      </p>
+
+      <h4>Permissions</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Permissions" title="Permissions"/>
+       will switch to the permissions page.
+      </p>
+
+      <h4>Edit Permission</h4>
+      <p>
+       Pressing the "Edit Permission" icon
+       <img src="/img/edit.png" alt="Edit Permission" title="Edit Permission"/>
+       will switch to an overview of the configuration for this permission and
+       allows editing the permission's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the permission as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="roles.html">
+  <div class="gb_window_part_center">Help: Roles
+    <a href="/omp?cmd=get_roles&amp;token={/envelope/token}"
+       title="Roles" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Roles"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ROLES'"/>
+      </xsl:call-template>
+
+      <h1>Roles</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#role">Roles</a>.
+        A summary of the role entries is shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the role and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+      </table>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of roles as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Role'"/>
+        <xsl:with-param name="notrashcan" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="noclone" select="1"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="role_details.html">
+  <div class="gb_window_part_center">Help: Role Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ROLES'"/>
+      </xsl:call-template>
+
+      <h1>Roles Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#role">Role</a>.
+        This includes the Name, creation time, modification time,
+        comment and users.
+      </p>
+
+      <h4>Roles</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Roles" title="Roles"/>
+        will switch to the roles page.
+      </p>
+
+      <h4>Export Roles</h4>
+      <p>
+        Export the role as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="contents.html">
   <div class="gb_window_part_center">Help: Contents</div>
   <div class="gb_window_part_content">
@@ -2980,6 +3281,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_schedule.html?token={/envelope/token}">New Schedule</a></li>
                 <li> <a href="schedule_details.html?token={/envelope/token}">Schedule Details</a></li>
               </ul>
+            <li> <a href="permissions.html?token={/envelope/token}">Permissions</a></li>
+              <ul>
+                <li> <a href="new_permission.html?token={/envelope/token}">New Permission</a></li>
+                <li> <a href="permission_details.html?token={/envelope/token}">Permission Details</a></li>
+              </ul>
             <li> <a href="port_lists.html?token={/envelope/token}">Port Lists</a></li>
               <ul>
                 <li> <a href="new_port_list.html?token={/envelope/token}">New Port List</a></li>
@@ -3007,6 +3313,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="new_group.html?token={/envelope/token}">New Group</a></li>
                 <li> <a href="group_details.html?token={/envelope/token}">Group Details</a></li>
+              </ul>
+            <li> <a href="roles.html?token={/envelope/token}">Roles</a></li>
+              <ul>
+                <li> <a href="role_details.html?token={/envelope/token}">Role Details</a></li>
               </ul>
             <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
             <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
