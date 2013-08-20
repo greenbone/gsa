@@ -12866,10 +12866,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </tr>
     <tr>
       <td colspan="4" style="font-size: 95%;">
-        <xsl:variable name="truncate_length"
-        select="string-length(extra) - string-length(substring-after(substring(extra, 135), ' ')) + 1"/>
-        <xsl:value-of select="substring(extra, 0, $truncate_length)"/>
-        <xsl:if test="string-length(extra) >= $truncate_length"><i><abbr title="[...] {substring(extra, $truncate_length, string-length(extra))}">[...]</abbr></i></xsl:if>
+        <xsl:variable name="summary">
+          <xsl:choose>
+            <xsl:when test="contains(extra, 'summary=')">
+              <xsl:for-each select="str:split (extra, '|')">
+                <xsl:if test="'summary' = substring-before (., '=')">
+                  <xsl:value-of select="substring-after (., '=')"/><br />
+                </xsl:if>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+             <xsl:value-of select="extra"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="truncate_length" select="string-length($summary) - string-length(substring-after(substring($summary, 135), ' ')) + 1"/>
+        <xsl:value-of select="substring($summary, 0, $truncate_length)"/>
+        <xsl:if test="string-length($summary) >= $truncate_length"><i><abbr title="[...] {substring(extra, $truncate_length, string-length($summary))}">[...]</abbr></i></xsl:if>
       </td>
     </tr>
   </tbody>
