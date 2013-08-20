@@ -1,5 +1,15 @@
 2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (list-window-line-actions): Add notrashcan parameter
+	to disable move to trashcan action help. Remove Details action help.
+
+	* src/html/help.xsl (hosts.html, agents.html, lsc_credentials.html)
+	(report_formats.html, users.html, tasks.html, cpes.html, cves.html)
+	(nvts.html, ovaldefs.html, dfn_cert_advs.html, allinfo.thml): Update
+	help documentation.
+
+2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (list-window-line-icons, info/cpe, info/cve)
 	(info/nvt, info/ovaldef, info/dfn_cert_adv, info/allinfo): Remove
 	details button.
