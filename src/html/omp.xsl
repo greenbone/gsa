@@ -3927,7 +3927,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}"
+               title="View details of Task {name}">
               <xsl:value-of select="name"/>
             </a>
           </b>
@@ -4563,7 +4564,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Credential'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Credential {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -4916,7 +4918,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Agent'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Agent {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -5985,7 +5988,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Alert'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Alert {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -6707,7 +6711,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Filter'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Filter {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -7145,7 +7150,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Tag'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}"
+           title="View Details of Tag {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -8334,7 +8340,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Target'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
+           title="View Details of Target {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -10164,7 +10171,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Config'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Scan Config {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -11554,7 +11562,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Schedule'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Schedule {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -12102,7 +12111,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Slave'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Slave {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -12571,7 +12581,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="get_info_nvt_lnk">
           <xsl:with-param name="nvt" select="../name"/>
           <xsl:with-param name="oid" select="@oid"/>
-          <xsl:with-param name="tooltip" select="concat (summary, ' (OID: ', @oid, ')')"/>
         </xsl:call-template>
       </b>
     </td>
@@ -12957,7 +12966,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:if>
     <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;{$cpe_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-      title="Details">
+       title="View Details of CPE {$cpe}">
       <xsl:call-template name="wrap" disable-output-escaping="yes">
         <xsl:with-param name="string" select="$cpe"/>
         <xsl:with-param name="width" select="'55'"/>
@@ -12980,7 +12989,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;{$cve_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-         title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
+         title="View Details of CVE {$cve}"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;{$cve_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
@@ -12993,15 +13002,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="nvt"/>
   <xsl:param name="oid"/>
   <xsl:param name="gsa_token"/>
-  <xsl:param name="tooltip"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
       <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
+         title="View Details of NVT {$oid}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
-         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
+         title="View Details of NVT {$oid}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -13016,7 +13024,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;{$ovaldef_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
-    title="Details">
+     title="View Details of OVALDEF {$ovaldef}">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$ovaldef"/>
       <xsl:with-param name="width" select="'55'"/>
@@ -13035,7 +13043,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;{$dfn_cert_adv_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
-    title="Details">
+     title="View Details of DFN CERT Advisory {$dfn_cert_adv}">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$dfn_cert_adv"/>
       <xsl:with-param name="width" select="'55'"/>
@@ -17296,7 +17304,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
-        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;group={../groups/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;group={../groups/term}&amp;token={/envelope/token}"
+           title="View Details of Group {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -17734,7 +17743,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </div>
       <b>
-        <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={../filters/term}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={../filters/term}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}"
+           title="View Details of Permission {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -18349,7 +18359,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Port List'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of Port List {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -19012,7 +19023,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Report Format'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="View Details of Report Format {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -23706,7 +23718,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;role={../roles/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;role={../roles/term}&amp;token={/envelope/token}"
+           title="View Details of Role {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -24883,7 +24896,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
-        <a href="/omp?cmd=get_user&amp;user_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_user&amp;user_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="View Details of User {name}">
           <xsl:value-of select="name"/>
         </a>
       </b>

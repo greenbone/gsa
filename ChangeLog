@@ -1,5 +1,15 @@
 2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (user, group, role, target, port_list)
+	(lsc_credential, config, alert, tag, filter, schedule, report_format)
+	(slave, agent, permission, get_info_cpe_lnk, get_info_cve_lnk)
+	(get_info_ovaldef_lnk, get_info_dfn_cert_adv_lnk): Add tooltip for view
+	resource details links.
+	(get_info_nvt_lnk): Remove tooltip parameter. Fix tooltip.
+	(info/nvt): Adjust get_info_nvt_lnk call.
+
+2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (info/allinfo): Extract summary tag from extra info
 	for new style nvts.
 
