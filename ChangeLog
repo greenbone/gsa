@@ -1,5 +1,11 @@
 2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (note, override, html-notes-table)
+	(html-overrides-table): Add link to resource details page with tooltip
+	ontext values. Move text to first column.
+
+2013-08-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (user, group, role, target, port_list)
 	(lsc_credential, config, alert, tag, filter, schedule, report_format)
 	(slave, agent, permission, get_info_cpe_lnk, get_info_cve_lnk)

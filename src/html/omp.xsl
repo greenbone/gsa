@@ -15771,10 +15771,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <xsl:variable name="max" select="70"/>
       <xsl:call-template name="observers-icon">
         <xsl:with-param name="type" select="'Note'"/>
       </xsl:call-template>
+      <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
+         title="View Details of Note {@id}">
+        <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
+        <xsl:choose>
+          <xsl:when test="text/@excerpt = 1">
+              <xsl:value-of select="text/text()"/>...
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="text/text()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </td>
+    <td>
+      <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
@@ -15784,17 +15798,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt/name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
-      <xsl:choose>
-        <xsl:when test="text/@excerpt = 1">
-          <xsl:value-of select="text/text()"/>...
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="text/text()"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -16042,7 +16045,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (note)"/>
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
     <xsl:with-param name="full-count" select="note_count/text ()"/>
-    <xsl:with-param name="headings" select="'NVT|nvt Text|text Active|active'"/>
+    <xsl:with-param name="headings" select="'Text|text NVT|nvt Active|active'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -16889,6 +16892,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
+         title="View Details of Override {@id}">
+        <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
+        <xsl:choose>
+          <xsl:when test="text/@excerpt = 1">
+            <xsl:value-of select="text/text()"/>...
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="text/text()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </td>
+    <td>
       <xsl:variable name="max" select="70"/>
       <xsl:call-template name="observers-icon">
         <xsl:with-param name="type" select="'Override'"/>
@@ -16925,17 +16942,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="cvss" select="new_severity"/>
             <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(new_severity), ')')"/>
           </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
-      <xsl:choose>
-        <xsl:when test="text/@excerpt = 1">
-          <xsl:value-of select="text/text()"/>...
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="text/text()"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -17202,7 +17208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="headings" select="'NVT|nvt From|from To|new_severity Text|text Active|active'"/>
+    <xsl:with-param name="headings" select="'Text|text NVT|nvt From|from To|new_severity Active|active'"/>
   </xsl:call-template>
 </xsl:template>
 
