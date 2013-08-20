@@ -1537,6 +1537,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
   </div>
 </xsl:template>
+
 <func:function name="gsa:build-levels">
   <xsl:param name="filters"></xsl:param>
   <func:result>
@@ -2761,7 +2762,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <xsl:variable name="container" select="target/@id='' and status='Running'"/>
-          <xsl:for-each select="reports/report">
+          <xsl:for-each select="../../get_reports_response/report/report">
             <xsl:call-template name="report">
               <xsl:with-param name="container" select="$container"/>
               <xsl:with-param name="observed" select="$observed"/>
@@ -3158,10 +3159,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" name="report">
   <xsl:param name="container">0</xsl:param>
   <xsl:param name="observed">0</xsl:param>
+  <xsl:param name="apply_overrides" select="../../../../apply_overrides"/>
+  <xsl:param name="delta" select="../../../../delta"/>
+  <xsl:param name="task_id" select="../../../get_tasks_response/task/@id"/>
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
          title="View details of Task Report {@id}"
          style="margin-left:3px;">
         <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
@@ -3177,8 +3181,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="severity"/>
-        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
+        <xsl:with-param name="cvss" select="severity/full"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity/full), ')')"/>
       </xsl:call-template>
 <!-- TODO: Remove completely after migration
       <xsl:choose>
@@ -3206,35 +3210,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="result_count/hole"/>
+      <xsl:value-of select="result_count/hole/full"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="result_count/warning"/>
+      <xsl:value-of select="result_count/warning/full"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="result_count/info"/>
+      <xsl:value-of select="result_count/info/full"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="result_count/log"/>
+      <xsl:value-of select="result_count/log/full"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="result_count/false_positive"/>
+      <xsl:value-of select="result_count/false_positive/full"/>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="../../../../../delta = @id">
+        <xsl:when test="$delta = @id">
           <img src="/img/delta_inactive.png" border="0" alt="Compare"
                style="margin-left:3px;"/>
         </xsl:when>
-        <xsl:when test="string-length (../../../../../delta) &gt; 0">
-          <a href="/omp?cmd=get_report&amp;report_id={../../../../../delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+        <xsl:when test="string-length ($delta) &gt; 0">
+          <a href="/omp?cmd=get_report&amp;report_id={$delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta_second.png" border="0" alt="Compare"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;delta_report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
@@ -3253,7 +3257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="type">report</xsl:with-param>
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
-              <input type="hidden" name="task_id" value="{../../@id}"/>
+              <input type="hidden" name="task_id" value="{$task_id}"/>
               <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
               <input type="hidden" name="next" value="get_task"/>
             </xsl:with-param>

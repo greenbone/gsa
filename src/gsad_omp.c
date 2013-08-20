@@ -3375,10 +3375,15 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " task_id=\"%s\""
                             " actions=\"g\""
                             " filter=\"apply_overrides=%i\""
-                            " details=\"1\" />"
+                            " details=\"1\"/>"
+                            "<get_reports"
+                            " report_filter=\"task_id=%s apply_overrides=%i\""
+                            " details=\"0\"/>"
                             "%s%s%s"
                             "%s%s%s"
                             "</commands>",
+                            task_id,
+                            apply_overrides,
                             task_id,
                             apply_overrides,
                             notes
