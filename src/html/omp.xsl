@@ -797,10 +797,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
-     title="{$cap-type} Details" style="margin-left:3px;">
-    <img src="/img/details.png" border="0" alt="Details"/>
-  </a>
   <xsl:choose>
     <xsl:when test="$noedit">
     </xsl:when>
@@ -12442,12 +12438,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-        title="CPE Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-    </td>
   </tr>
 </xsl:template>
 
@@ -12555,12 +12545,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
-      <td rowspan="2">
-        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="CVE Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </td>
     </tr>
     <tr>
       <td colspan="8" style="font-size: 80%;">
@@ -12645,12 +12629,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-    </td>
-    <td>
-      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
-        title="NVT Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -12753,12 +12731,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
-      <td rowspan="2">
-        <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="OVAL Definition Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </td>
     </tr>
     <tr>
       <td colspan="7" style="font-size: 80%;">
@@ -12818,12 +12790,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-    </td>
-    <td>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-        title="DFN-CERT Advisory Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -12889,51 +12855,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="extra_text" select="'N/A'"/>
             </xsl:call-template>
           </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <td rowspan="2">
-        <xsl:choose>
-          <xsl:when test="type = 'cve'">
-            <xsl:call-template name="get_info_allinfo_action">
-              <xsl:with-param name="info_name" select="../name"/>
-              <xsl:with-param name="info_id" select="../@id"/>
-              <xsl:with-param name="name" select="'CVE'"/>
-              <xsl:with-param name="type" select="'cve'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="type = 'cpe'">
-            <xsl:call-template name="get_info_allinfo_action">
-              <xsl:with-param name="info_name" select="../name"/>
-              <xsl:with-param name="info_id" select="../@id"/>
-              <xsl:with-param name="name" select="'CPE'"/>
-              <xsl:with-param name="type" select="'cpe'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="type = 'ovaldef'">
-            <xsl:call-template name="get_info_allinfo_action">
-              <xsl:with-param name="info_name" select="../name"/>
-              <xsl:with-param name="info_id" select="../@id"/>
-              <xsl:with-param name="name" select="'OVAL Definition'"/>
-              <xsl:with-param name="type" select="'ovaldef'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="type = 'dfn_cert_adv'">
-            <xsl:call-template name="get_info_allinfo_action">
-              <xsl:with-param name="info_name" select="../name"/>
-              <xsl:with-param name="info_id" select="../@id"/>
-              <xsl:with-param name="name" select="'DFN-CERT Advisory'"/>
-              <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="type = 'nvt'">
-            <a href="?cmd=get_nvts&amp;oid={../@id}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-               title="NVT Details">
-              <img src="/img/details.png"
-                border="0"
-                alt="NVT Details"
-                style="margin-left:3px;"/>
-            </a>
-          </xsl:when>
         </xsl:choose>
       </td>
     </tr>
@@ -13196,7 +13117,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/cpe"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
@@ -13339,7 +13259,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/cve"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
@@ -13464,7 +13383,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/nvt"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
@@ -13599,7 +13517,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/ovaldef"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
@@ -13710,7 +13627,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/dfn_cert_adv"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
@@ -13821,7 +13737,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
               </xsl:call-template>
             </td>
-            <td>Actions</td>
           </tr>
           <xsl:apply-templates select="info/allinfo"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
