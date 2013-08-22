@@ -4695,6 +4695,7 @@ Public License instead of this License.
         a wizard associated with the listing, then the wizard be hidden.
       </p>
 
+      <a name="severity_class"/>
       <h3>Severity Class</h3>
       <p>
         The severity classes split up the CVSS range into 3 ranges: High,
@@ -6365,37 +6366,59 @@ Public License instead of this License.
               was created.</td>
         </tr>
         <tr>
-          <td>Threat</td>
-          <td>Threat level of the report. These levels
-            can occur:
+          <td>Severity</td>
+          <td>Highest severity of the report. The bar will be colored
+              according to the severity level defined by the current <a href="/help/my_settings.html?token={/envelope/token}#severity_class">Severity Class</a>:
             <br />
             <table>
               <tr>
-                <td valign="top"><img src="/img/high_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'8.0'"/>
+                    <xsl:with-param name="extra_text" select="' (High)'"/>
+                    <xsl:with-param name="title" select="'High'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  High: At least one NVT reported severity "High" for at least one
-                  target host in the report.
+                  A red bar is shown if the maximum severity is in the
+                  'High' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/medium_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'5.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Medium)'"/>
+                    <xsl:with-param name="title" select="'Medium'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  Medium: Severity "High" does not occur in the
-                  report. At least one NVT reported severity "Medium"
-                  for at least one target host in the report.
+                  A yellow bar is shown if the maximum severity is in the
+                  'Medium' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/low_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'2.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Low)'"/>
+                    <xsl:with-param name="title" select="'Low'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  Low: Neither severity "High" nor "Medium" occurs in the report.
-                  At least one NVT reported severity "Low" for at
-                  least one target host in the report.
+                  A blue bar is shown if the maximum severity is in the
+                  'Low' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/none_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'0.0'"/>
+                    <xsl:with-param name="extra_text" select="' (None)'"/>
+                    <xsl:with-param name="title" select="'None'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  None: The report does not contain a single severe finding. This could
-                  also mean that the scan was interrupted or failed, especially if
-                  even no log information occur in the report.
+                  An empty bar is shown if no vulnerabilities were detected.
+                  Perhaps some NVT created a log information, so the report
+                  is not necessarily empty.
                 </td>
               </tr>
             </table>
@@ -7677,35 +7700,59 @@ Public License instead of this License.
           <td>Date when the newest report was created.</td>
         </tr>
         <tr>
-          <td>Threat</td>
-          <td>Threat level of the newest report. These levels can occur:
+          <td>Severity</td>
+          <td>Highest severity of the newest report. The bar will be colored
+              according to the severity level defined by the current <a href="/help/my_settings.html?token={/envelope/token}#severity_class">Severity Class</a>:
             <br />
             <table>
               <tr>
-                <td valign="top"><img src="/img/high_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'8.0'"/>
+                    <xsl:with-param name="extra_text" select="' (High)'"/>
+                    <xsl:with-param name="title" select="'High'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  High: At least one NVT reported severity "High" for at least one
-                  target host in the newest report.
+                  A red bar is shown if the maximum severity is in the
+                  'High' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/medium_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'5.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Medium)'"/>
+                    <xsl:with-param name="title" select="'Medium'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  Medium: Severity "High" does not occur in the newest
-                  report. At least one NVT reported severity "Medium"
-                  for at least one target host in the newest report.
+                  A yellow bar is shown if the maximum severity is in the
+                  'Medium' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/low_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'2.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Low)'"/>
+                    <xsl:with-param name="title" select="'Low'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  Low: Neither severity "High" nor "Medium" occurs in the newest report.
-                  At least one NVT reported severity "Low" for at
-                  least one target host in the newest report.
+                  A blue bar is shown if the maximum severity is in the
+                  'Low' range.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/none_big.png" /></td>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'0.0'"/>
+                    <xsl:with-param name="extra_text" select="' (None)'"/>
+                    <xsl:with-param name="title" select="'None'"/>
+                  </xsl:call-template>
+                </td>
                 <td>
-                  None: No security threat occurs in the newest report. Perhaps
-                  some NVT created a log information, so the report is not necessarily empty.
+                  An empty bar is shown if no vulnerabilities were detected.
+                  Perhaps some NVT created a log information, so the report
+                  is not necessarily empty.
                 </td>
               </tr>
             </table>
