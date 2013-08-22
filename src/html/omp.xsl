@@ -3184,30 +3184,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cvss" select="severity/full"/>
         <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity/full), ')')"/>
       </xsl:call-template>
-<!-- TODO: Remove completely after migration
-      <xsl:choose>
-        <xsl:when test="result_count/hole &gt; 0">
-          <img src="/img/high_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
-               alt="High"/>
-        </xsl:when>
-        <xsl:when test="result_count/warning &gt; 0">
-          <img src="/img/medium_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
-               alt="Medium"/>
-        </xsl:when>
-        <xsl:when test="result_count/info &gt; 0">
-          <img src="/img/low_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
-               alt="Low"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/none_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
-               alt="None"/>
-        </xsl:otherwise>
-      </xsl:choose>
--->
     </td>
     <td class="threat_info_table">
       <xsl:value-of select="result_count/hole/full"/>
@@ -3274,34 +3250,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="cvss" select="report/severity"/>
     <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(report/severity), ')')"/>
   </xsl:call-template>
-<!-- TODO: Remove completely after migration of old results
-  <xsl:choose>
-    <xsl:when test="report/result_count/hole &gt; 0">
-      <img src="/img/high_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
-           alt="High"/>
-    </xsl:when>
-    <xsl:when test="report/result_count/warning &gt; 0">
-      <img src="/img/medium_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
-           alt="Medium"/>
-    </xsl:when>
-    <xsl:when test="report/result_count/info &gt; 0">
-      <img src="/img/low_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
-           alt="Low"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="../status!='Running'">
-          <img src="/img/none_big.png"
-               title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
-               alt="None"/>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
--->
 </xsl:template>
 
 <xsl:template name="html-edit-task-form">

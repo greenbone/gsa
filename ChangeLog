@@ -1,3 +1,8 @@
+2013-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (report, last_report): Remove commented out code
+	for result count based threat icon.
+
 2013-08-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (check_modify_config): Remove unused function and line
