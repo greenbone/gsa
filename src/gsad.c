@@ -3269,7 +3269,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        duration,
                                        slave_id,
                                        &content_type,
-                                       &content_disposition,
                                        &res_len);
           if (res == NULL)
             {

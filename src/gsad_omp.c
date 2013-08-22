@@ -386,14 +386,11 @@ member1 (params_t *params, const char *string)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  session      Session with manager.
- * @param[in]  function     Function for error message.
- * @param[in]  line         Line number for error message.
  *
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
-check_modify_config (credentials_t *credentials, gnutls_session_t *session,
-                     const char *function, int line)
+check_modify_config (credentials_t *credentials, gnutls_session_t *session)
 {
   entity_t entity;
   const char *status_text;
@@ -8055,7 +8052,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  ret = check_modify_config (credentials, &session);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -8104,8 +8101,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
             }
           g_free (value);
 
-          ret = check_modify_config (credentials, &session, __FUNCTION__,
-                                     __LINE__);
+          ret = check_modify_config (credentials, &session);
           if (ret)
             {
               openvas_server_close (socket, session);
@@ -8213,7 +8209,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  ret = check_modify_config (credentials, &session);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -8510,7 +8506,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  ret = check_modify_config (credentials, &session);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -8854,8 +8850,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
             }
           g_free (value);
 
-          modify_config_ret = check_modify_config (credentials, &session,
-                                                   __FUNCTION__, __LINE__);
+          modify_config_ret = check_modify_config (credentials, &session);
           if (modify_config_ret)
             {
               openvas_server_close (socket, session);
@@ -10468,26 +10463,14 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one result, XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  result_id     Result UUID.
- * @param[in]  task_id       Result task UUID.
+ * @param[in]  credentials      Username and password for authentication.
+ * @param[in]  result_id        Result UUID.
+ * @param[in]  task_id          Result task UUID.
  * @param[in]  apply_overrides  Whether to apply overrides.
- * @param[in]  commands      Extra commands to run before the others.
- * @param[in]  report_id     ID of report.
- * @param[in]  first_result  First result.
- * @param[in]  max_results   Max results.
- * @param[in]  levels        Levels.
- * @param[in]  search_phrase      Search phrase.
- * @param[in]  autofp             Auto FP filter flag.
- * @param[in]  notes              Notes filter flag.
- * @param[in]  overrides          Overrides filter flag.
- * @param[in]  min_cvss_base      Min CVSS base.
- * @param[in]  result_hosts_only  Result hosts only filter flag.
- * @param[in]  sort_field         Sort field.
- * @param[in]  sort_order         Sort order.
- * @param[in]  delta_report_id    ID of delta report.
- * @param[in]  delta_states       Delta states.
- * @param[in]  extra_xml          Extra XML to insert inside page element.
+ * @param[in]  commands         Extra commands to run before the others.
+ * @param[in]  report_id        ID of report.
+ * @param[in]  autofp           Auto FP filter flag.
+ * @param[in]  extra_xml        Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
@@ -10495,13 +10478,7 @@ static char *
 get_result (credentials_t *credentials, const char *result_id,
             const char *task_id, const char *task_name,
             const char *apply_overrides, const char *commands,
-            const char *report_id, const char *first_result,
-            const char *max_results, const char *levels,
-            const char *search_phrase, const char *autofp,
-            const char *notes, const char *overrides,
-            const char *min_cvss_base, const char *result_hosts_only,
-            const char *sort_field, const char *sort_order,
-            const char *delta_report_id, const char *delta_states,
+            const char *report_id, const char *autofp,
             const char *extra_xml)
 {
   GString *xml;
@@ -10647,19 +10624,7 @@ get_result_omp (credentials_t *credentials, params_t *params)
                      params_value (params, "apply_overrides"),
                      NULL,
                      params_value (params, "report_id"),
-                     params_value (params, "first_result"),
-                     params_value (params, "max_results"),
-                     params_value (params, "levels"),
-                     params_value (params, "search_phrase"),
                      params_value (params, "autofp"),
-                     params_value (params, "notes"),
-                     params_value (params, "overrides"),
-                     params_value (params, "min_cvss_base"),
-                     params_value (params, "result_hosts_only"),
-                     params_value (params, "sort_field"),
-                     params_value (params, "sort_order"),
-                     params_value (params, "delta_report_id"),
-                     params_value (params, "delta_states"),
                      NULL);
 }
 
@@ -10683,19 +10648,7 @@ get_result_page (credentials_t *credentials, params_t *params,
                      params_value (params, "apply_overrides"),
                      NULL,
                      params_value (params, "report_id"),
-                     params_value (params, "first_result"),
-                     params_value (params, "max_results"),
-                     params_value (params, "levels"),
-                     params_value (params, "search_phrase"),
                      params_value (params, "autofp"),
-                     params_value (params, "notes"),
-                     params_value (params, "overrides"),
-                     params_value (params, "min_cvss_base"),
-                     params_value (params, "result_hosts_only"),
-                     params_value (params, "sort_field"),
-                     params_value (params, "sort_order"),
-                     params_value (params, "delta_report_id"),
-                     params_value (params, "delta_states"),
                      extra_xml);
 
 }
@@ -13056,7 +13009,7 @@ char *
 get_system_report_omp (credentials_t *credentials, const char *url,
                        const char *duration, const char *slave_id,
                        enum content_type *content_type,
-                       char **content_disposition, gsize *content_length)
+                       gsize *content_length)
 {
   entity_t entity;
   entity_t report_entity;

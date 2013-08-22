@@ -1,3 +1,19 @@
+2013-08-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (check_modify_config): Remove unused function and line
+	parameters.
+	(save_config_omp, save_config_family_omp, save_config_nvt_omp): Adjust
+	check_modify_config call.
+	(get_result): Remove unused first_results, max_results, levels,
+	search_phrase, notes, overrides, min_cvss_base, results_hosts_only,
+	sort_field, sort_order, delta_report_id, delta_states parameters.
+	(get_result_omp, get_result_page): Adjust get_result call.
+	(get_system_report_omp): Remove unused content_disposition parameter.
+
+	* src/gsad_omp.h: Adjust headers accordingly.
+
+	* src/gsad.c (request_handler): Adjust get_system_report_omp call.
+
 2013-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (my_settings.html): Add severity_class anchor.
