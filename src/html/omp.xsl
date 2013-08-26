@@ -2735,6 +2735,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="filtered-count" select="report_count/filtered"/>
       <xsl:with-param name="full-count" select="report_count/text ()"/>
       <xsl:with-param name="headings" select="'Name|name Severity|severity Scan&#xa0;Results~high.png|high~medium.png|medium~low.png|low~log.png|log~false_positive.png|false_positive'"/>
+      <xsl:with-param name="default-filter" select="concat ('apply_overrides=1 task_id=', $task_id)"/>
       <xsl:with-param name="extra_params">
         <param>
           <name>task_id</name>
@@ -6360,6 +6361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filtered-count"/>
   <xsl:param name="full-count"/>
   <xsl:param name="headings"/>
+  <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="extra_params_string">
     <xsl:for-each select="exslt:node-set($extra_params)/param">
@@ -6397,7 +6399,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
          title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>

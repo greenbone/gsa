@@ -1,5 +1,11 @@
 2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details]): Pass default filter to list-window
+	to preserve task_id in filter of list button.
+	(list-window): Add default filter arg.
+
+2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): Use image names in headings.
 	(list-window): Add missing extra_params to column-name calls.
 	(column-name): If the heading is an image name, use the image instead
