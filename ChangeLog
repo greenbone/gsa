@@ -1,3 +1,28 @@
+2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add filtering of reports on the Task Details page.
+
+	* src/gsad.c (init_validator): Add get_reports to commands.  Add task
+	filter params.
+	(exec_omp_get): Make get_reports an alias for get_task.
+
+	* src/gsad_omp.c (get_task): Remove original_overrides hack.  Build
+	filter if requested.  Use the given filter for get_reports instead of
+	a fixed filter, and add a result filter.
+
+	* src/html/omp.xsl (filter-window-part): Skip the new and named filter
+	controls for reports.
+	(task [details]): Pass the separate task filter to details-header-icons
+	else the report filter is used.  Use list-window to produce the reports
+	window.
+	(report): Use boolean and and integer for the observed check.
+	(task): For the details link, pass the task filter and filt_id in
+	special params, and use the filter param to specify an initial filtering
+	for the reports.
+	(list-window): Add and extra_params arg and add it to all links.  Skip
+	export and refresh controls for reports.
+	(details-header-icons): Add filter params so caller can specify them.
+
 2013-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (result-cvss-risk-factor): New function.
@@ -37,6 +62,14 @@
 	* src/html/help.xsl (my_settings.html): Add severity_class anchor.
 	(task_details.html, tasks.html): Replace threat icons with severity
 	bars and update text accordingly.
+
+2013-08-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Add filter with apply_overrides to
+	GET_REPORTS, so that overrides are applied to results too.
+
+	* src/html/omp.xsl (report): Use the filtered instead of the full counts
+	because
 
 2013-08-20  Matthew Mundell <matthew.mundell@greenbone.net>
 

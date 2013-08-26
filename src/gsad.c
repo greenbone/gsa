@@ -688,6 +688,7 @@ init_validator ()
                          "|(get_port_lists)"
                          "|(get_protocol_doc)"
                          "|(get_report)"
+                         "|(get_reports)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
                          "|(get_report_section)"
@@ -1031,6 +1032,8 @@ init_validator ()
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
+  openvas_validator_alias (validator, "task_filter",  "filter");
+  openvas_validator_alias (validator, "task_filt_id", "filt_id");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "user_id",      "id");
@@ -1934,6 +1937,9 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (get_task)
+  /* get_reports is a synonym for get_task. */
+  else if (!strcmp (cmd, G_STRINGIFY (get_reports)))
+    return get_task_omp (credentials, params);
   ELSE (get_tasks)
   ELSE (edit_agent)
   ELSE (edit_alert)

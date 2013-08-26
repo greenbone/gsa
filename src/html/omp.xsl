@@ -414,62 +414,67 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="headings"/>
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
-      <div style="float: right">
-        <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
-          <div style="display: inline; padding: 2px; vertical-align:middle;">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="create_filter"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
-            <input type="hidden" name="comment" value=""/>
-            <input type="hidden" name="term" value="{filters/term}"/>
-            <input type="hidden" name="optional_resource_type" value="{$type}"/>
-            <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-            <xsl:for-each select="exslt:node-set($extra_params)/param">
-              <input type="hidden" name="{name}" value="{value}"/>
-            </xsl:for-each>
-            <input type="text" name="name" value="" size="10"
-                   maxlength="80" style="vertical-align:middle"/>
-            <input type="image"
-                   name="New Filter"
-                   src="/img/new.png"
-                   alt="New Filter"
-                   style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+      <xsl:choose>
+        <xsl:when test="$type = 'report'"/>
+        <xsl:otherwise>
+          <div style="float: right">
+            <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+              <div style="display: inline; padding: 2px; vertical-align:middle;">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="create_filter"/>
+                <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                <input type="hidden" name="comment" value=""/>
+                <input type="hidden" name="term" value="{filters/term}"/>
+                <input type="hidden" name="optional_resource_type" value="{$type}"/>
+                <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
+                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                <xsl:for-each select="exslt:node-set($extra_params)/param">
+                  <input type="hidden" name="{name}" value="{value}"/>
+                </xsl:for-each>
+                <input type="text" name="name" value="" size="10"
+                       maxlength="80" style="vertical-align:middle"/>
+                <input type="image"
+                       name="New Filter"
+                       src="/img/new.png"
+                       alt="New Filter"
+                       style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+              </div>
+            </form>
+            <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+              <div style="display: inline; padding: 2px; vertical-align:middle;">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+                <xsl:for-each select="exslt:node-set($extra_params)/param">
+                  <input type="hidden" name="{name}" value="{value}"/>
+                </xsl:for-each>
+                <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
+                  <option value="--">--</option>
+                  <xsl:variable name="id" select="filters/@id"/>
+                  <xsl:for-each select="../filters/get_filters_response/filter">
+                    <xsl:choose>
+                      <xsl:when test="@id = $id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <input type="image"
+                       name="Switch Filter"
+                       src="/img/refresh.png"
+                       alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+                   title="Filters">
+                  <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                       src="/img/list.png" border="0" alt="Filters"/>
+                </a>
+              </div>
+            </form>
           </div>
-        </form>
-        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
-          <div style="display: inline; padding: 2px; vertical-align:middle;">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-            <xsl:for-each select="exslt:node-set($extra_params)/param">
-              <input type="hidden" name="{name}" value="{value}"/>
-            </xsl:for-each>
-            <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
-              <option value="--">--</option>
-              <xsl:variable name="id" select="filters/@id"/>
-              <xsl:for-each select="../filters/get_filters_response/filter">
-                <xsl:choose>
-                  <xsl:when test="@id = $id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-            <input type="image"
-                   name="Switch Filter"
-                   src="/img/refresh.png"
-                   alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-            <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-               title="Filters">
-              <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                   src="/img/list.png" border="0" alt="Filters"/>
-            </a>
-          </div>
-        </form>
-      </div>
+        </xsl:otherwise>
+      </xsl:choose>
       <form action="" method="get">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
@@ -2504,6 +2509,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Task'"/>
         <xsl:with-param name="type" select="'task'"/>
+        <xsl:with-param name="filter" select="/envelope/params/task_filter"/>
+        <xsl:with-param name="filt_id" select="/envelope/params/task_filt_id"/>
       </xsl:call-template>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:call-template name="task-icons">
@@ -2717,78 +2724,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </xsl:if>
   <br/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      Reports for "<xsl:value-of select="name"/>"
-      <a href="/help/task_details.html?token={/envelope/token}#reports" title="Help: Task Details (Reports)">
-        <img src="/img/help.png"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_task"/>
-          <input type="hidden" name="task_id" value="{@id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="original_overrides" value="{$apply-overrides}"/>
-          <select style="margin-bottom: 0px;" name="overrides" size="1">
-            <xsl:choose>
-              <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">&#8730;No overrides</option>
-                <option value="1" >Apply overrides</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">No overrides</option>
-                <option value="1" selected="1">&#8730;Apply overrides</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
-          <input type="image"
-                 name="Update"
-                 src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
-        </form>
-      </div>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="reports">
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td rowspan="2">Report</td>
-            <td rowspan="2">Severity</td>
-            <td colspan="5">Scan Results</td>
-            <td rowspan="2">Actions</td>
-          </tr>
-          <tr class="gbntablehead2">
-            <td class="threat_info_table_h">
-              <img src="/img/high.png" alt="High" title="High"/>
-            </td>
-            <td class="threat_info_table_h">
-              <img src="/img/medium.png" alt="Medium" title="Medium"/>
-            </td>
-            <td class="threat_info_table_h">
-              <img src="/img/low.png" alt="Low" title="Low"/>
-            </td>
-            <td class="threat_info_table_h">
-              <img src="/img/log.png" alt="Log" title="Log"/>
-            </td>
-            <td class="threat_info_table_h">
-              <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
-            </td>
-          </tr>
-          <xsl:variable name="container" select="target/@id='' and status='Running'"/>
-          <xsl:for-each select="../../get_reports_response/report/report">
-            <xsl:call-template name="report">
-              <xsl:with-param name="container" select="$container"/>
-              <xsl:with-param name="observed" select="$observed"/>
-            </xsl:call-template>
-          </xsl:for-each>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:variable name="task_id" select="@id"/>
+  <xsl:for-each select="../../get_reports_response">
+    <xsl:call-template name="list-window">
+      <xsl:with-param name="type" select="'report'"/>
+      <xsl:with-param name="cap-type" select="'Report'"/>
+      <xsl:with-param name="resources-summary" select="reports"/>
+      <xsl:with-param name="resources" select="report/report"/>
+      <xsl:with-param name="count" select="count (report)"/>
+      <xsl:with-param name="filtered-count" select="report_count/filtered"/>
+      <xsl:with-param name="full-count" select="report_count/text ()"/>
+      <xsl:with-param name="headings" select="'Name|name Severity|severity Scan&#xa0;Results~High|high~Medium|medium~Low|low~Log|log~FP|fp'"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>task_id</name>
+          <value><xsl:value-of select="$task_id"/></value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:for-each>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'task'"/>
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
@@ -3175,7 +3129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- REPORT -->
 <xsl:template match="report" name="report">
   <xsl:param name="container">0</xsl:param>
-  <xsl:param name="observed">0</xsl:param>
+  <xsl:param name="observed" select="0"/>
   <xsl:param name="apply_overrides" select="../../../../apply_overrides"/>
   <xsl:param name="delta" select="../../../../delta"/>
   <xsl:param name="task_id" select="../../../get_tasks_response/task/@id"/>
@@ -3251,7 +3205,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
-        <xsl:when test="$observed or scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
+        <xsl:when test="boolean ($observed) or scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
@@ -3920,7 +3874,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter=apply_overrides={../apply_overrides} task_id={@id}&amp;task_filter={str:encode-uri (../filters/term, true ())}&amp;task_filt_id={../filters/@id}&amp;token={/envelope/token}"
                title="View details of Task {name}">
               <xsl:value-of select="name"/>
             </a>
@@ -6406,6 +6360,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filtered-count"/>
   <xsl:param name="full-count"/>
   <xsl:param name="headings"/>
+  <xsl:param name="extra_params"/>
+  <xsl:param name="extra_params_string">
+    <xsl:for-each select="exslt:node-set($extra_params)/param">
+      <xsl:text>&amp;</xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="value"/>
+    </xsl:for-each>
+  </xsl:param>
   <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -6417,6 +6380,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="count" select="$count"/>
         <xsl:with-param name="filtered_count" select="$filtered-count"/>
         <xsl:with-param name="full_count" select="$full-count"/>
+        <xsl:with-param name="extra_params" select="$extra_params_string"/>
       </xsl:call-template>
       <a href="/help/{$type}s.html?token={/envelope/token}"
          title="Help: {$cap-type}s">
@@ -6425,65 +6389,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="wizard-icon"/>
       <xsl:choose>
         <xsl:when test="$type = 'role'"/>
+        <xsl:when test="$type = 'report'"/>
         <xsl:otherwise>
-          <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="New {$cap-type}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_{$type}s&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
          title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_{$type}s&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-           title="Export {$filtered-count} filtered {$cap-type}s as XML"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
-        </a>
-      </div>
-      <div id="small_inline_form" style="margin-left:40px; display: inline">
-        <form method="get" action="">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_{$type}s"/>
-          <input type="hidden" name="filter" value="{filters/term}"/>
-          <xsl:call-template name="auto-refresh"/>
-          <input type="image"
-                 name="Update"
-                 src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
-          <xsl:if test="$type = 'task'">
-            <xsl:choose>
-              <xsl:when test="$apply-overrides = 0">
-                <input type="hidden" name="overrides" value="1"/>
-                <input type="image"
-                       name="No Overrides"
-                       src="/img/overrides_disabled.png"
-                       alt="No Overrides"
-                       value="No Overrides"
-                       title="No Overrides"
-                       style="margin-left:3px;margin-right:3px;"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="overrides" value="0"/>
-                <input type="image"
-                       name="Overrides are Applied"
-                       src="/img/overrides_enabled.png"
-                       alt="Overrides are Applied"
-                       value="Overrides are Applied"
-                       title="Overrides are Applied"
-                       style="margin-left:3px;margin-right:3px;"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:if>
-        </form>
-      </div>
+      <xsl:choose>
+        <xsl:when test="$type = 'report'"/>
+        <xsl:otherwise>
+          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+            <a href="/omp?cmd=export_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
+               title="Export {$filtered-count} filtered {$cap-type}s as XML"
+               style="margin-left:3px;">
+              <img src="/img/download.png" border="0" alt="Export XML"/>
+            </a>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="$type = 'report'"/>
+        <xsl:otherwise>
+          <div id="small_inline_form" style="margin-left:40px; display: inline">
+            <form method="get" action="">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_{$type}s"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <xsl:call-template name="auto-refresh"/>
+              <input type="image"
+                     name="Update"
+                     src="/img/refresh.png"
+                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
+              <xsl:if test="$type = 'task'">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="image"
+                           name="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="No Overrides"
+                           value="No Overrides"
+                           title="No Overrides"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="0"/>
+                    <input type="image"
+                           name="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="Overrides are Applied"
+                           value="Overrides are Applied"
+                           title="Overrides are Applied"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </form>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="$type"/>
       <xsl:with-param name="list" select="$resources-summary"/>
       <xsl:with-param name="headings" select="$headings"/>
+      <xsl:with-param name="extra_params" select="$extra_params"/>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -6502,6 +6478,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="type" select="$type"/>
                       <xsl:with-param name="current" select="$current"/>
                       <xsl:with-param name="token" select="$token"/>
+                      <xsl:with-param name="extra_params" select="$extra_params_string"/>
                     </xsl:call-template>
                   </td>
                 </xsl:when>
@@ -6550,7 +6527,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="7">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -6588,6 +6565,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="noedit"/>
   <xsl:param name="nonew"/>
   <xsl:param name="noexport"/>
+  <xsl:param name="filter" select="/envelope/params/filter"/>
+  <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
 
   <a href="/help/{$type}_details.html?token={/envelope/token}"
     title="Help: {$cap-type} Details">
@@ -6596,13 +6575,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$nonew"/>
     <xsl:otherwise>
-      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
      title="{$cap-type}s" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
   </a>
@@ -6613,8 +6592,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="id" select="@id"/>
           <xsl:with-param name="params">
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="hidden" name="filter" value="{$filter}"/>
+            <input type="hidden" name="filt_id" value="{$filt_id}"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:when>
@@ -6633,7 +6612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
              title="Edit {$cap-type}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -6645,7 +6624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
          title="Export {$cap-type} XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>

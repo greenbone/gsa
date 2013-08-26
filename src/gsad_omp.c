@@ -3309,8 +3309,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
   GString *xml = NULL;
   gnutls_session_t session;
   int socket, notes, get_overrides, apply_overrides;
-  gchar *html;
-  const char *task_id, *overrides, *original_overrides;
+  const char *overrides, *filter, *task_id;
+  gchar *html, *built_filter;
 
   task_id = params_value (params, "task_id");
   if (task_id == NULL)
@@ -3321,30 +3321,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "/omp?cmd=get_tasks");
 
   overrides = params_value (params, "overrides");
-  original_overrides = params_value (params, "original_overrides");
-  if (overrides && original_overrides && strcmp (overrides, original_overrides))
-    {
-      param_t *filt_id, *filter;
-      filt_id = params_get (params, "filt_id");
-      if (filt_id)
-        filt_id->value = NULL;
-
-      filter = params_get (params, "filter");
-      if (filter && filter->value)
-        {
-          gchar *old;
-          old = filter->value;
-          filter->value = g_strdup_printf ("apply_overrides=%s %s",
-                                           overrides,
-                                           old);
-          g_free (old);
-        }
-      else if (strcmp (overrides, "0"))
-        params_add (params, "filter", "apply_overrides=1");
-      else
-        params_add (params, "filter", "apply_overrides=0");
-    }
-
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -3364,6 +3340,67 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                              "/omp?cmd=get_tasks");
     }
 
+  filter = params_value (params, "filter");
+
+  built_filter = NULL;
+  if (params_value (params, "build_filter")
+      || filter == NULL
+      || (strcmp (filter, "") == 0))
+    {
+      // FIX share w get_many
+      const char *type = "task";
+      const char *first, *max, *sort_order, *sort_field;
+
+      first = params_value (params, "first");
+      max = params_value (params, "max");
+      sort_field = params_value (params, "sort_field");
+      sort_order = params_value (params, "sort_order");
+      if (params_value (params, "build_filter"))
+        {
+          gchar *task;
+          const char *search_phrase;
+
+          if (strcmp (type, "task"))
+            task = NULL;
+          else
+            {
+              const char *overrides;
+              overrides = params_value (params, "overrides");
+              task = g_strdup_printf ("apply_overrides=%i ",
+                                      overrides
+                                      && strcmp (overrides, "0"));
+            }
+
+          search_phrase = params_value (params, "search_phrase");
+          built_filter = g_strdup_printf
+                          ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+                           task ? task : "",
+                           first ? "first=" : "",
+                           first ? first : "",
+                           first ? " " : "",
+                           max ? "rows=" : "",
+                           max ? max : "",
+                           max ? " " : "",
+                           sort_field
+                            ? ((sort_order && strcmp (sort_order,
+                                                      "ascending"))
+                                ? "sort-reverse="
+                                : "sort=")
+                            : "",
+                           sort_field ? sort_field : "",
+                           sort_field ? " " : "",
+                           (filter && search_phrase) ? " " : "",
+                           filter ? filter : "",
+                           search_phrase ? " " : "",
+                           search_phrase
+                            ? search_phrase
+                            : "");
+          g_free (task);
+        }
+      else
+        filter = "apply_overrides=0 rows=-2 permission=any owner=any";
+    }
+
   notes = command_enabled (credentials, "GET_NOTES");
   get_overrides = command_enabled (credentials, "GET_OVERRIDES");
   if (openvas_server_sendf (&session,
@@ -3374,14 +3411,18 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " filter=\"apply_overrides=%i\""
                             " details=\"1\"/>"
                             "<get_reports"
-                            " report_filter=\"task_id=%s apply_overrides=%i\""
+                            " report_filter=\"%s\""
+                            /* Result filter. */
+                            " filter=\"apply_overrides=%i\""
                             " details=\"0\"/>"
                             "%s%s%s"
                             "%s%s%s"
                             "</commands>",
                             task_id,
                             apply_overrides,
-                            task_id,
+                            built_filter
+                             ? built_filter
+                             : (filter ? filter : ""),
                             apply_overrides,
                             notes
                              ? "<get_notes"
@@ -3400,6 +3441,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             task_id)
       == -1)
     {
+      g_free (built_filter);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3408,6 +3450,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+  g_free (built_filter);
 
   xml = g_string_new ("<get_task>");
 
