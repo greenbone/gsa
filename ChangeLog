@@ -1,5 +1,12 @@
 2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details]): Use image names in headings.
+	(list-window): Add missing extra_params to column-name calls.
+	(column-name): If the heading is an image name, use the image instead
+	of text.
+
+2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add filtering of reports on the Task Details page.
 
 	* src/gsad.c (init_validator): Add get_reports to commands.  Add task

@@ -2734,7 +2734,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="count" select="count (report)"/>
       <xsl:with-param name="filtered-count" select="report_count/filtered"/>
       <xsl:with-param name="full-count" select="report_count/text ()"/>
-      <xsl:with-param name="headings" select="'Name|name Severity|severity Scan&#xa0;Results~High|high~Medium|medium~Low|low~Log|log~FP|fp'"/>
+      <xsl:with-param name="headings" select="'Name|name Severity|severity Scan&#xa0;Results~high.png|high~medium.png|medium~low.png|low~log.png|log~false_positive.png|false_positive'"/>
       <xsl:with-param name="extra_params">
         <param>
           <name>task_id</name>
@@ -6515,6 +6515,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:with-param name="type" select="$type"/>
                         <xsl:with-param name="current" select="$current"/>
                         <xsl:with-param name="token" select="$token"/>
+                        <xsl:with-param name="extra_params" select="$extra_params_string"/>
                       </xsl:call-template>
                     </td>
                   </xsl:for-each>
@@ -8245,16 +8246,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="current" select="."/>
   <xsl:param name="extra_params"/>
   <xsl:param name="token" select="/envelope/token"/>
+  <xsl:variable name="heading">
+    <xsl:choose>
+      <xsl:when test="contains ($head, '.png')">
+        <img src="/img/{$head}"
+             alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
+             title="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$head"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:when>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
