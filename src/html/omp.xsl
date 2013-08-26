@@ -235,6 +235,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="$threat"/>
 </func:function>
 
+<func:function name="gsa:result-cvss-risk-factor">
+  <xsl:param name="cvss_score"/>
+  <xsl:variable name="threat">
+    <xsl:choose>
+      <xsl:when test="$cvss_score &gt; 0.0">
+        <xsl:value-of select="gsa:cvss-risk-factor($cvss_score)"/>
+      </xsl:when>
+      <xsl:when test="$cvss_score = 0.0">Log</xsl:when>
+      <xsl:when test="$cvss_score = -1.0">False Positive</xsl:when>
+      <xsl:when test="$cvss_score = -2.0">Debug</xsl:when>
+      <xsl:when test="$cvss_score = -3.0">Error</xsl:when>
+      <xsl:otherwise>N/A</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <func:result select="$threat"/>
+</func:function>
+
 <func:function name="gsa:risk-factor-max-cvss">
   <xsl:param name="threat"/>
   <xsl:param name="type"><xsl:value-of select="/envelope/severity"/></xsl:param>
@@ -3180,10 +3197,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="severity/full"/>
-        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity/full), ')')"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="severity/full &lt; 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="''"/>
+            <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity/full)"/>
+            <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity/full)"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="severity/full"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity/full), ')')"/>
+            <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity/full)"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td class="threat_info_table">
       <xsl:value-of select="result_count/hole/full"/>
@@ -3246,10 +3275,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- LAST_REPORT -->
 <xsl:template match="last_report">
-  <xsl:call-template name="severity-bar">
-    <xsl:with-param name="cvss" select="report/severity"/>
-    <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(report/severity), ')')"/>
-  </xsl:call-template>
+  <xsl:choose>
+    <xsl:when test="report/severity &lt; 0.0">
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="''"/>
+        <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (report/severity)"/>
+        <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (report/severity)"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="report/severity"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (report/severity), ')')"/>
+        <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (report/severity)"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="html-edit-task-form">
@@ -16879,20 +16920,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="string-length(threat) = 0">
           Any
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="number(severity) &lt;= 0.0">
           <xsl:value-of select="threat"/>
+        </xsl:when>
+        <xsl:otherwise>
+          &gt; <xsl:value-of select="format-number((severity) - 0.1, '0.0')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="number(new_severity) &lt;= 0">
-          <xsl:value-of select="new_threat"/>
+        <xsl:when test="number(new_severity) &lt; 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="''"/>
+            <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (new_severity)"/>
+            <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (new_severity)"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="new_severity"/>
-            <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(new_severity), ')')"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (new_severity), ')')"/>
+            <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (new_severity)"/>
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
@@ -17075,13 +17124,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b>New Severity:</b></td>
           <td>
             <xsl:choose>
-              <xsl:when test="number(new_severity) &lt;= 0">
-                <xsl:value-of select="new_threat"/>
+              <xsl:when test="string-length(threat) = 0">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="''"/>
+                  <xsl:with-param name="extra_text" select="'Any'"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="number(severity) &lt; 0.0">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="''"/>
+                  <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
+                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                </xsl:call-template>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="cvss" select="new_severity"/>
-                  <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(new_severity), ')')"/>
+                  <xsl:with-param name="cvss" select="severity"/>
+                  <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
                 </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
@@ -20659,15 +20719,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="string-length (severity) &gt; 0">
           <xsl:variable name="extra_text">
             <xsl:choose>
-              <xsl:when test="threat != 'Log'">
-                <xsl:value-of select="concat (' (', threat, ')')"/>
+              <xsl:when test="threat != '' and severity &gt;= 0.0">
+                <xsl:value-of select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+              </xsl:when>
+              <xsl:when test="threat != ''">
+                <xsl:value-of select="threat"/>
               </xsl:when>
               <xsl:otherwise> (Log)</xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
 
+          <xsl:variable name="severity">
+            <xsl:choose>
+              <xsl:when test="severity &gt;= 0.0">
+                <xsl:value-of select="severity"/>
+              </xsl:when>
+              <xsl:otherwise></xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
           <xsl:call-template name="severity-bar">
-            <xsl:with-param name="cvss" select="severity"/>
+            <xsl:with-param name="cvss" select="$severity"/>
             <xsl:with-param name="extra_text" select="$extra_text"/>
             <xsl:with-param name="title" select="$severity_title"/>
           </xsl:call-template>
@@ -22426,10 +22498,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('key_vulns_hosts', concat(nvt/@oid, '|' ,host)))]) + 1"/>
             </td>
             <td>
-              <xsl:call-template name="severity-bar">
-                <xsl:with-param name="cvss" select="severity"/>
-                <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="severity &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="severity"/>
+                    <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="''"/>
+                    <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
+                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
         </xsl:for-each>
@@ -22535,10 +22619,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="results/result[gsa:report-host-has-os($report, host, $os) = 1]">
     <xsl:sort select="severity" data-type="number" order="descending"/>
     <xsl:if test="position() = 1">
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="severity"/>
-        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="severity &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="severity"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="''"/>
+            <xsl:with-param name="extra_text" select="threat"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:for-each>
   <xsl:if test="count(results/result[gsa:report-host-has-os($report, host, $os) = 1]) = 0">
@@ -22553,10 +22647,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="results/result[gsa:host-has-unknown-os($report, host) = 1]">
     <xsl:sort select="nvt/cvss_base" data-type="number" order="descending"/>
     <xsl:if test="position() = 1">
-      <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="severity"/>
-        <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="severity &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="severity"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="''"/>
+            <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:for-each>
   <xsl:if test="count(results/result[gsa:host-has-unknown-os($report, host) = 1]) = 0">
@@ -22654,10 +22758,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:for-each>
   </xsl:variable>
   <xsl:choose>
-    <xsl:when test="$cvss!=''">
+    <xsl:when test="$cvss &gt;= 0.0">
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="$cvss"/>
-        <xsl:with-param name="extra_text" select="concat(' (', gsa:cvss-risk-factor($cvss), ')')"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor ($cvss), ')')"/>
+        <xsl:with-param name="title" select="gsa:result-cvss-risk-factor ($cvss)"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$cvss != ''">
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="''"/>
+        <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor ($cvss)"/>
+        <xsl:with-param name="title" select="gsa:result-cvss-risk-factor ($cvss)"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
@@ -23113,10 +23225,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="port"/>
             </td>
             <td>
-              <xsl:call-template name="severity-bar">
-                <xsl:with-param name="cvss" select="severity"/>
-                <xsl:with-param name="extra_text" select="concat (' (', gsa:cvss-risk-factor(severity), ')')"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="severity &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="severity"/>
+                    <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
+                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="''"/>
+                    <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
+                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
         </xsl:for-each>

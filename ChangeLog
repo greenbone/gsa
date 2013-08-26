@@ -1,3 +1,16 @@
+2013-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (result-cvss-risk-factor): New function.
+	(report, last_report): Hide severity score if it is negative and show
+	level as in "threat" element in severity bar tooltip.
+	(override [override], override [details]): Show CVSS instead of threat
+	if it is Alarm, hide severity score if it is negative, use new function
+	for severity bar tooltip.
+	(result [result-headers], report [vulns], report [os-severity])
+	(report [unknown-os-severity], report [app-severity], report [errors]):
+	Hide severity if it is negative, use new function for level and adjust
+	severity bar tooltip.
+
 2013-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report, last_report): Remove commented out code
