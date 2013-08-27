@@ -389,16 +389,20 @@ create_user_oap (credentials_t * credentials, params_t *params)
  * @param[in]  credentials      Username and password for authentication
  * @param[in]  name             User name.
  * @param[in]  params           Request parameters.
+ * @param[out] password_return  Password.  Caller must free.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_user_oap (credentials_t * credentials, params_t *params)
+save_user_oap (credentials_t * credentials, params_t *params,
+               char **password_return)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html;
+
+  *password_return = NULL;
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -427,6 +431,7 @@ save_user_oap (credentials_t * credentials, params_t *params)
       int ret;
       const gchar *name, *modify_password, *password, *role, *hosts;
       const gchar *hosts_allow, *enable_ldap_connect;
+      entity_t entity;
 
       name = params_value (params, "login");
       modify_password = params_value (params, "modify_password");
@@ -491,10 +496,12 @@ save_user_oap (credentials_t * credentials, params_t *params)
                                "/oap?cmd=get_users");
         }
 
-      if (read_string (&session, &xml))
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          free_entity (entity);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a user. "
@@ -502,6 +509,21 @@ save_user_oap (credentials_t * credentials, params_t *params)
                                "Diagnostics: Failure to receive response from administrator daemon.",
                                "/oap?cmd=get_users");
         }
+
+      if (strcmp (modify_password, "0")
+          && (strcmp (name, credentials->username) == 0))
+        {
+          const char *status;
+          status = entity_attribute (entity, "status");
+          if (status && (strlen (status) > 0) && (status[0] == '2'))
+            {
+              g_free (credentials->password);
+              credentials->password = g_strdup (password);
+              *password_return = g_strdup (password);
+            }
+        }
+
+      free_entity (entity);
     }
   else
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Save User"));

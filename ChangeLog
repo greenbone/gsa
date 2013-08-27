@@ -1,3 +1,14 @@
+2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r17498.
+
+	* src/gsad.c (exec_omp_post): Set the password after save_user_oap, if
+	it changed.
+
+	* src/gsad_oap.c (save_user_oap): Add password return arg.
+
+	* src/gsad_oap.h: Update header accordingly.
+
 2013-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r17421.
