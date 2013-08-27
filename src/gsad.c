@@ -1805,7 +1805,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_target)
   ELSE (save_task)
   ELSE (save_container_task)
-  ELSE (save_user)
+  else if (!strcmp (cmd, "save_user"))
+    {
+      char *password;
+      con_info->response = save_user_omp (credentials, con_info->params,
+                                          &password);
+      if (password)
+        /* credentials->password set in save_user_omp before XSLT. */
+        user_set_password (credentials->username, password);
+
+      g_free (password);
+    }
   ELSE (start_task)
   ELSE (stop_task)
   ELSE (sync_feed)

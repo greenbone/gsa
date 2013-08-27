@@ -18115,11 +18115,13 @@ edit_user_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] password_return  Password.  Caller must free.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_user_omp (credentials_t * credentials, params_t *params)
+save_user_omp (credentials_t * credentials, params_t *params,
+               char **password_return)
 {
   int ret;
   gchar *html, *response, *buf;
@@ -18128,6 +18130,8 @@ save_user_omp (credentials_t * credentials, params_t *params)
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
+
+  *password_return = NULL;
 
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
   /* List of hosts user has/lacks access rights. */
@@ -18279,6 +18283,19 @@ save_user_omp (credentials_t * credentials, params_t *params)
   switch (ret)
     {
       case 0:
+        if (strcmp (modify_password, "0")
+            && (strcmp (login, credentials->username) == 0))
+          {
+            const char *status;
+            status = entity_attribute (entity, "status");
+            if (status && (strlen (status) > 0) && (status[0] == '2'))
+              {
+                g_free (credentials->password);
+                credentials->password = g_strdup (password);
+                *password_return = g_strdup (password);
+              }
+          }
+        break;
       case -1:
         break;
       case 1:

@@ -316,7 +316,7 @@ char * export_users_omp (credentials_t *, params_t *, enum content_type *,
 char * get_user_omp (credentials_t *, params_t *);
 char * get_users_omp (credentials_t *, params_t *);
 char * new_user_omp (credentials_t *, params_t *);
-char * save_user_omp (credentials_t *, params_t *);
+char * save_user_omp (credentials_t *, params_t *, char **);
 char * save_auth_omp (credentials_t *, params_t *);
 
 char * run_wizard_omp (credentials_t *, params_t *);
