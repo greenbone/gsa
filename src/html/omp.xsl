@@ -17214,7 +17214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="headings" select="'Text|text NVT|nvt From|from To|new_severity Active|active'"/>
+    <xsl:with-param name="headings" select="'Text|text NVT|nvt From|severity To|new_severity Active|active'"/>
   </xsl:call-template>
 </xsl:template>
 

@@ -1,3 +1,8 @@
+2013-08-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-overrides-table): Sort table column "From"
+	using DB column "severity".
+
 2013-08-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details]): Pass default filter to list-window
