@@ -2741,6 +2741,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <name>task_id</name>
           <value><xsl:value-of select="$task_id"/></value>
         </param>
+        <param>
+          <name>task_filter</name>
+          <value><xsl:value-of select="/envelope/params/task_filter"/></value>
+        </param>
+        <param>
+          <name>task_filt_id</name>
+          <value><xsl:value-of select="/envelope/params/task_filt_id"/></value>
+        </param>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:for-each>
@@ -3198,7 +3206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_task&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={/envelope/params/task_filter}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
@@ -3220,6 +3228,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="task_id" value="{$task_id}"/>
               <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
               <input type="hidden" name="next" value="get_task"/>
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="hidden" name="task_filter" value="{/envelope/params/task_filter}"/>
+              <input type="hidden" name="task_filt_id" value="{/envelope/params/task_filt_id}"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -3875,7 +3887,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter=apply_overrides={../apply_overrides} task_id={@id}&amp;task_filter={str:encode-uri (../filters/term, true ())}&amp;task_filt_id={../filters/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;task_filter={str:encode-uri (../filters/term, true ())}&amp;task_filt_id={../filters/@id}&amp;token={/envelope/token}"
                title="View details of Task {name}">
               <xsl:value-of select="name"/>
             </a>

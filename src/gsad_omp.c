@@ -3321,7 +3321,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "/omp?cmd=get_tasks");
 
   overrides = params_value (params, "overrides");
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3398,7 +3398,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
           g_free (task);
         }
       else
-        filter = "apply_overrides=0 rows=-2 permission=any owner=any";
+        built_filter = g_strdup_printf ("apply_overrides=%i task_id=%s",
+                                        apply_overrides,
+                                        task_id);
     }
 
   notes = command_enabled (credentials, "GET_NOTES");

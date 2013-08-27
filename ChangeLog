@@ -1,3 +1,14 @@
+2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Default apply_overrides to 1 like
+	everywhere.  Get the default filter from the params in the case filter
+	where the filter is missing.
+
+	* src/html/omp.xsl (task [details]): Add special task filters to
+	list-window extra_params.
+	(report): Add filter params to compare and delete icons.
+	(task): Remove filter param as get_task now has a default for this.
+
 2013-08-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (new_override, create_override, save_override_omp):
