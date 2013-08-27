@@ -3414,8 +3414,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " details=\"1\"/>"
                             "<get_reports"
                             " report_filter=\"%s\""
-                            /* Result filter. */
-                            " filter=\"apply_overrides=%i\""
                             " details=\"0\"/>"
                             "%s%s%s"
                             "%s%s%s"
@@ -3425,7 +3423,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             built_filter
                              ? built_filter
                              : (filter ? filter : ""),
-                            apply_overrides,
                             notes
                              ? "<get_notes"
                                " sort_field=\"notes_nvt_name, notes.text\""

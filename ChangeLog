@@ -1,5 +1,14 @@
 2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_task): Remove the result filter, now that Manager
+	overrides this when a report filter is given.  This way the result
+	filtering has the same apply_overrides value as the reports filtering.
+
+	* src/html/omp.xsl (task): Add back the filter param to the details link
+	using the apply_override value from the current task filter.
+
+2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_task): Default apply_overrides to 1 like
 	everywhere.  Get the default filter from the params in the case filter
 	where the filter is missing.

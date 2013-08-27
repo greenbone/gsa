@@ -3887,7 +3887,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;task_filter={str:encode-uri (../filters/term, true ())}&amp;task_filt_id={../filters/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;task_filter={str:encode-uri (../filters/term, true ())}&amp;task_filt_id={../filters/@id}&amp;filter=apply_overrides={../filters/keywords/keyword[column='apply_overrides']/value} task_id={@id}&amp;token={/envelope/token}"
                title="View details of Task {name}">
               <xsl:value-of select="name"/>
             </a>
@@ -16663,7 +16663,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="get_overrides_response/override/severity &gt; 0.0"> 
+                      <xsl:when test="get_overrides_response/override/severity &gt; 0.0">
                         <input type="radio" name="severity" value="{get_overrides_response/override/severity}" checked="1"/>
                         &gt; <xsl:value-of select="format-number((get_overrides_response/override/severity) - 0.1, '0.0')"/>
                       </xsl:when>
