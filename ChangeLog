@@ -1,3 +1,10 @@
+2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): Drop elements from Severity and
+	Scan Result in list-window headings, to prevent them from being links.
+	(column-name): When the heading element is empty then just put the text,
+	without the link.
+
 2013-08-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-overrides-table): Sort table column "From"

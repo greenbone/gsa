@@ -2734,7 +2734,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="count" select="count (report)"/>
       <xsl:with-param name="filtered-count" select="report_count/filtered"/>
       <xsl:with-param name="full-count" select="report_count/text ()"/>
-      <xsl:with-param name="headings" select="'Name|name Severity|severity Scan&#xa0;Results~high.png|high~medium.png|medium~low.png|low~log.png|log~false_positive.png|false_positive'"/>
+      <xsl:with-param name="headings" select="'Name|name Severity| Scan&#xa0;Results~high.png|~medium.png|~low.png|~log.png|~false_positive.png|'"/>
       <xsl:with-param name="default-filter" select="concat ('apply_overrides=1 task_id=', $task_id)"/>
       <xsl:with-param name="extra_params">
         <param>
@@ -8267,8 +8267,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
       <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:when>
-    <xsl:otherwise>
+    <xsl:when test="$name = ''">
       <!-- Starts with some other column. -->
+      <xsl:copy-of select="$heading"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Starts with some other column.  Include sorting link. -->
       <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:otherwise>
   </xsl:choose>
