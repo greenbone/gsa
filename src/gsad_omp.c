@@ -11652,7 +11652,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *oid, *hosts, *port, *threat, *task_id, *task_name, *result_id;
+  const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
@@ -11673,7 +11673,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   task_name = params_value (params, "name");
-  threat = params_value (params, "threat");
+  severity = params_value (params, "severity");
   result_hosts_only = params_value (params, "result_hosts_only");
   min_cvss_base = params_value (params, "min_cvss_base");
 
@@ -11768,7 +11768,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
                      "<nvt id=\"%s\"/>"
                      "<hosts>%s</hosts>"
                      "<port>%s</port>"
-                     "<threat>%s</threat>"
+                     "<severity>%s</severity>"
                      "<task id=\"%s\">"
                      "<name>%s</name>"
                      "</task>"
@@ -11790,7 +11790,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
                      oid,
                      hosts,
                      port,
-                     threat,
+                     severity,
                      task_id,
                      task_name,
                      result_id,
@@ -11857,7 +11857,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
   gchar *response;
-  const char *oid, *threat, *custom_severity, *new_severity, *port, *hosts;
+  const char *oid, *severity, *custom_severity, *new_severity, *port, *hosts;
   const char *text, *task_id, *override_result_id;
   /* For get_report. */
   const char *active, *days;
@@ -11866,14 +11866,14 @@ create_override_omp (credentials_t *credentials, params_t *params)
   oid = params_value (params, "oid");
   CHECK_PARAM (oid, "Create Override", new_override);
 
-  if (params_valid (params, "threat"))
-    threat = params_value (params, "threat");
-  else if (params_given (params, "threat")
-           && strcmp (params_original_value (params, "threat"), ""))
-    threat = NULL;
+  if (params_valid (params, "severity"))
+    severity = params_value (params, "severity");
+  else if (params_given (params, "severity")
+           && strcmp (params_original_value (params, "severity"), ""))
+    severity = NULL;
   else
-    threat = "";
-  CHECK_PARAM (threat, "Create Override", new_override);
+    severity = "";
+  CHECK_PARAM (severity, "Create Override", new_override);
 
   custom_severity = params_value (params, "custom_severity");
   CHECK_PARAM (custom_severity, "Create Override", new_override);
@@ -11971,7 +11971,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                "<nvt oid=\"%s\"/>"
                "<hosts>%s</hosts>"
                "<port>%s</port>"
-               "<threat>%s</threat>"
+               "<severity>%s</severity>"
                "<new_severity>%s</new_severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
@@ -11983,7 +11983,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                oid,
                hosts,
                port,
-               threat,
+               severity,
                new_severity,
                text ? text : "",
                task_id,
@@ -12165,7 +12165,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
   gchar *response;
   entity_t entity;
   const char *override_id, *text, *hosts, *port;
-  const char *threat, *custom_severity, *new_severity;
+  const char *severity, *custom_severity, *new_severity;
   const char *override_task_id, *override_result_id, *active, *days;
   char *ret;
 
@@ -12189,7 +12189,13 @@ save_override_omp (credentials_t * credentials, params_t *params)
   else
     port = "";
 
-  threat = params_value (params, "threat");
+  if (params_valid (params, "severity"))
+    severity = params_value (params, "severity");
+  else if (strcmp (params_original_value (params, "severity"), ""))
+    severity = NULL;
+  else
+    severity = "";
+
   custom_severity = params_value (params, "custom_severity");
   if (custom_severity && strcmp (custom_severity, "0") != 0)
     new_severity = params_value (params, "new_severity");
@@ -12214,7 +12220,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
       || text == NULL
       || hosts == NULL
       || port == NULL
-      || threat == NULL
+      || severity == NULL
       || new_severity == NULL
       || days == NULL)
     return gsad_message (credentials,
@@ -12233,7 +12239,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
                "<active>%s</active>"
                "<hosts>%s</hosts>"
                "<port>%s</port>"
-               "<threat>%s</threat>"
+               "<severity>%s</severity>"
                "<new_severity>%s</new_severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
@@ -12245,7 +12251,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
                 : (days ? days : "-1"),
                hosts ? hosts : "",
                port ? port : "",
-               threat ? threat : "",
+               severity ? severity : "",
                new_severity,
                text ? text : "",
                override_task_id,

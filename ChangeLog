@@ -1,3 +1,13 @@
+2013-08-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (new_override, create_override, save_override_omp):
+	Replace threat with severity.
+
+	* src/html/omp.xsl (html-create-override-form, html-edit-override-form)
+	(override [override]): Replace threat with severity.
+	(result [result-headers]): Use severity when creating new a override
+	instead of threat.
+
 2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details]): Drop elements from Severity and
