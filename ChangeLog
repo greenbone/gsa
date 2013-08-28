@@ -1,3 +1,12 @@
+2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Add indicator for
+	modify_note_response and modify_override_response on their respective
+	edit pages.
+
+	* src/html/omp.xsl (new_note): Apply template for modify_note_response.
+	(new_override): Apply template for modify_override_response.
+
 2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Set the password after save_user_omp, if

@@ -818,6 +818,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_lsc_credential/gsad_msg"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="edit_note/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="edit_override/modify_override_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="edit_permission/modify_permission_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_port_list/create_port_range_response"
