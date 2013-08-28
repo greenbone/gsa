@@ -16335,9 +16335,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <input type="radio" name="custom_severity" value="0" checked="1"/>
               <select name="new_severity_from_list">
-                <option value="10.0">High (10.0)</option>
-                <option value="5.0">Medium (5.0)</option>
-                <option value="2.0">Low (2.0)</option>
+                <option value="10.0">10.0 (High)</option>
+                <option value="5.0">5.0 (Medium)</option>
+                <option value="2.0">2.0 (Low)</option>
                 <option value="0.0">Log</option>
                 <option value="-1.0" selected="1">False Positive</option>
               </select>
@@ -16712,21 +16712,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="content" select="'High (10.0)'"/>
+                  <xsl:with-param name="content" select="'10.0 (High)'"/>
                   <xsl:with-param name="value" select="'10.0'"/>
                   <xsl:with-param
                     name="select-value"
                     select="get_overrides_response/override/new_severity"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="content" select="'Medium (5.0)'"/>
+                  <xsl:with-param name="content" select="'5.0 (Medium)'"/>
                   <xsl:with-param name="value" select="'5.0'"/>
                   <xsl:with-param
                     name="select-value"
                     select="get_overrides_response/override/new_severity"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="content" select="'Low (2.0)'"/>
+                  <xsl:with-param name="content" select="'2.0 (Low)'"/>
                   <xsl:with-param name="value" select="'2.0'"/>
                   <xsl:with-param
                     name="select-value"
@@ -20206,7 +20206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="threat"/>
         </xsl:otherwise>
       </xsl:choose>
-      to <xsl:value-of select="new_threat"/><xsl:if test="number(new_severity) &gt; 0.0">: <xsl:value-of select="new_severity"/></xsl:if></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
+      to <xsl:if test="number(new_severity) &gt; 0.0"><xsl:value-of select="new_severity"/>: </xsl:if> <xsl:value-of select="gsa:result-cvss-risk-factor(new_severity)"/></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>

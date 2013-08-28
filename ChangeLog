@@ -1,5 +1,12 @@
 2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-override-form): Swap severity number and
+	level text in dropdown text.
+	(override-detailed): Swap severity number and level text in
+	"Overridden from [...] to [...]" text.
+
+2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (new_note, create_note_omp, edit_note, save_note_omp):
 	Replace threat with severity.
 
