@@ -1,5 +1,14 @@
 2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (new_note, create_note_omp, edit_note, save_note_omp):
+	Replace threat with severity.
+
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(note [details]): Replace threat with severity.
+	(result [result-headers]): Pass severity to new_note instead of threat.
+
+2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Add indicator for
 	modify_note_response and modify_override_response on their respective
 	edit pages.

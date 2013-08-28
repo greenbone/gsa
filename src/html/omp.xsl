@@ -15282,39 +15282,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              Threat
+              Severity
             </td>
             <td>
               <xsl:choose>
                 <xsl:when test="result/@id">
                   <label>
-                    <input type="radio" name="threat" value=""/>
+                    <input type="radio" name="severity" value=""/>
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="{threat}" checked="1"/>
-                    <xsl:value-of select="threat"/>
+                    <xsl:choose>
+                      <xsl:when test="severity &gt; 0.0">
+                        <input type="radio" name="severity" value="0.1" checked="1"/>
+                        &gt; 0.0
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="severity" value="{severity}" checked="1"/>
+                        <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
                   <label>
-                    <input type="radio" name="threat" value="" checked="1"/>
+                    <input type="radio" name="severity" value="" checked="1"/>
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="High"/>
-                    High
+                    <input type="radio" name="severity" value="0.1"/>
+                    &gt; 0.0
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="Medium"/>
-                    Medium
-                  </label>
-                  <label>
-                    <input type="radio" name="threat" value="Low"/>
-                    Low
-                  </label>
-                  <label>
-                    <input type="radio" name="threat" value="Log"/>
+                    <input type="radio" name="severity" value="0.0"/>
                     Log
                   </label>
                 </xsl:otherwise>
@@ -15635,26 +15635,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              Threat
+              Severity
             </td>
             <td>
               <xsl:choose>
-                <xsl:when test="string-length (get_notes_response/note/threat) = 0">
+                <xsl:when test="string-length (get_notes_response/note/severity) = 0">
                   <label>
-                    <input type="radio" name="threat" value="" checked="1"
+                    <input type="radio" name="severity" value="" checked="1"
                            readonly="1"/>
                     Any
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
                   <label>
-                    <input type="radio" name="threat" value=""/>
+                    <input type="radio" name="severity" value=""/>
                     Any
                   </label>
                   <label>
-                    <input type="radio" name="threat" value="{get_notes_response/note/threat}"
-                           checked="1"/>
-                    <xsl:value-of select="get_notes_response/note/threat"/>
+                    <xsl:choose>
+                      <xsl:when test="get_notes_response/note/severity &gt; 0.0">
+                        <input type="radio" name="severity" value="0.1" checked="1"/>
+                        &gt; 0.0
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="severity" value="{get_notes_response/note/severity}" checked="1"/>
+                        <xsl:value-of select="gsa:result-cvss-risk-factor (get_notes_response/note/severity)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </label>
                 </xsl:otherwise>
               </xsl:choose>
@@ -15964,11 +15971,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Threat:</td>
+          <td>Severity:</td>
           <td>
             <xsl:choose>
-              <xsl:when test="string-length(threat) &gt; 0">
-                <xsl:value-of select="threat"/>
+              <xsl:when test="severity &lt;= 0">
+                <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/>
+              </xsl:when>
+              <xsl:when test="string-length(severity) &gt; 0">
+                &gt; <xsl:value-of select="format-number(severity - 0.1, '0.0')"/>
               </xsl:when>
               <xsl:otherwise>
                 Any
@@ -20834,8 +20844,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
-              <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+              <xsl:when test="$result-details and string-length (original_severity)">
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
@@ -20846,14 +20856,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
               </xsl:when>
-              <xsl:when test="original_threat and string-length (original_threat)">
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+              <xsl:when test="string-length (original_severity)">
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>

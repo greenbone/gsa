@@ -10875,7 +10875,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *oid, *hosts, *port, *threat, *task_id, *task_name, *result_id;
+  const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
@@ -10896,7 +10896,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   task_name = params_value (params, "name");
-  threat = params_value (params, "threat");
+  severity = params_value (params, "severity");
   result_hosts_only = params_value (params, "result_hosts_only");
   min_cvss_base = params_value (params, "min_cvss_base");
 
@@ -10989,7 +10989,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
                      "<nvt id=\"%s\"/>"
                      "<hosts>%s</hosts>"
                      "<port>%s</port>"
-                     "<threat>%s</threat>"
+                     "<severity>%s</severity>"
                      "<task id=\"%s\">"
                      "<name>%s</name>"
                      "</task>"
@@ -11011,7 +11011,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
                      oid,
                      hosts,
                      port,
-                     threat,
+                     severity,
                      task_id,
                      task_name,
                      result_id,
@@ -11078,7 +11078,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
   gchar *response;
-  const char *oid, *threat, *port, *hosts;
+  const char *oid, *severity, *port, *hosts;
   const char *text, *task_id, *note_result_id;
   /* For get_report. */
   const char *active, *days;
@@ -11087,14 +11087,14 @@ create_note_omp (credentials_t *credentials, params_t *params)
   oid = params_value (params, "oid");
   CHECK_PARAM (oid, "Create Note", new_note);
 
-  if (params_valid (params, "threat"))
-    threat = params_value (params, "threat");
-  else if (params_given (params, "threat")
-           && strcmp (params_original_value (params, "threat"), ""))
-    threat = NULL;
+  if (params_valid (params, "severity"))
+    severity = params_value (params, "severity");
+  else if (params_given (params, "severity")
+           && strcmp (params_original_value (params, "severity"), ""))
+    severity = NULL;
   else
-    threat = "";
-  CHECK_PARAM (threat, "Create Note", new_note);
+    severity = "";
+  CHECK_PARAM (severity, "Create Note", new_note);
 
   port = params_value (params, "port");
   if (port == NULL)
@@ -11164,7 +11164,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                "<nvt oid=\"%s\"/>"
                "<hosts>%s</hosts>"
                "<port>%s</port>"
-               "<threat>%s</threat>"
+               "<severity>%s</severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
                "<result id=\"%s\"/>"
@@ -11175,7 +11175,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                oid,
                hosts,
                port,
-               threat,
+               severity,
                text ? text : "",
                task_id,
                note_result_id))
@@ -11354,7 +11354,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
 {
   gchar *response;
   entity_t entity;
-  const char *note_id, *text, *hosts, *port, *threat, *note_task_id;
+  const char *note_id, *text, *hosts, *port, *severity, *note_task_id;
   const char *note_result_id, *active, *days;
   char *ret;
 
@@ -11378,7 +11378,13 @@ save_note_omp (credentials_t * credentials, params_t *params)
   else
     port = "";
 
-  threat = params_value (params, "threat");
+  if (params_valid (params, "severity"))
+    severity = params_value (params, "severity");
+  else if (strcmp (params_original_value (params, "severity"), ""))
+    severity = NULL;
+  else
+    severity = "";
+
   note_task_id = params_value (params, "note_task_id");
   note_result_id = params_value (params, "note_result_id");
 
@@ -11397,7 +11403,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
       || text == NULL
       || hosts == NULL
       || port == NULL
-      || threat == NULL
+      || severity == NULL
       || days == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
@@ -11415,7 +11421,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
                "<active>%s</active>"
                "<hosts>%s</hosts>"
                "<port>%s</port>"
-               "<threat>%s</threat>"
+               "<severity>%s</severity>"
                "<text>%s</text>"
                "<task id=\"%s\"/>"
                "<result id=\"%s\"/>"
@@ -11426,7 +11432,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
                 : (days ? days : "-1"),
                hosts ? hosts : "",
                port ? port : "",
-               threat ? threat : "",
+               severity ? severity : "",
                text ? text : "",
                note_task_id,
                note_result_id))
