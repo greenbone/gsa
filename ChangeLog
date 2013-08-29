@@ -1,3 +1,12 @@
+2013-08-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport relevant part of r17454. Patch by Hani Benhabiles.
+	Fix NOSUMMARY tooltip for NVTs list.
+
+	* src/html/omp.xsl (get_info_nvt_lnk): Remove tooltip parameter. Fix
+	tooltip.
+	(info/nvt): Adjust get_info_nvt_lnk call.
+
 2013-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r17498.

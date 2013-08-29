@@ -11852,7 +11852,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="get_info_nvt_lnk">
           <xsl:with-param name="nvt" select="../name"/>
           <xsl:with-param name="oid" select="@oid"/>
-          <xsl:with-param name="tooltip" select="concat (summary, ' (OID: ', @oid, ')')"/>
         </xsl:call-template>
       </b>
     </td>
@@ -12079,15 +12078,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="nvt"/>
   <xsl:param name="oid"/>
   <xsl:param name="gsa_token"/>
-  <xsl:param name="tooltip"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
       <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
+         title="View Details of NVT {$oid}"><xsl:value-of select="normalize-space($nvt)"/></a>
+
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
-         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
+         title="View Details of NVT {$oid}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
