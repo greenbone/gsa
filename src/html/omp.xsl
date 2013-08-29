@@ -10060,6 +10060,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
             </td>
           </tr>
+          <tr class="odd">
+            <td valign="top" width="125">Timezone (optional)</td>
+            <td>
+              <input type="text"
+                     name="timezone"
+                     value="{commands_response/get_schedules_response/schedule/timezone}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
           <tr class="even">
             <td valign="top" width="125">Period (optional)</td>
             <td>

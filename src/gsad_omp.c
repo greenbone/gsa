@@ -11699,7 +11699,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
   struct tm *now_broken;
   gchar *html;
   const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
-  const char *period, *period_unit, *duration, *duration_unit;
+  const char *period, *period_unit, *duration, *duration_unit, *timezone;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11751,10 +11751,12 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
   period = params_value (params, "period");
   period_unit = params_value (params, "period_unit");
   year = params_value (params, "year");
+  timezone = params_value (params, "timezone");
 
   if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
       || duration == NULL || duration_unit == NULL || month == NULL
-      || period == NULL || period_unit == NULL || year == NULL)
+      || period == NULL || period_unit == NULL || year == NULL
+      || timezone == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
   else
     {
@@ -11781,6 +11783,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
                                   "<unit>%s</unit>"
                                   "%s"
                                   "</duration>"
+                                  "<timezone>%s</timezone>"
                                   "</create_schedule>",
                                   name,
                                   comment ? "<comment>" : "",
@@ -11798,7 +11801,8 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
                                   (strcmp (duration_unit, "")
                                     ? duration_unit
                                     : "second"),
-                                  duration);
+                                  duration,
+                                  timezone);
 
       if (ret == -1)
         {
