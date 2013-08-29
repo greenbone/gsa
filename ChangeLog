@@ -1,3 +1,13 @@
+2013-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (override [details], override-detailed): Calculate
+	threat level from severity and new threat level from new_severity.
+	(result [result-headers]): Calculate threat and new threat level from
+	corresponding severity elements. Show N/A for missing severity.
+	Use severity to determine parameters for new override links.
+	(report [os-severity]): Calculate threat and new threat level from
+	corresponding severity elements.
+
 2013-08-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-override-form): Swap severity number and

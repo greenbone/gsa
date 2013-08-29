@@ -17130,11 +17130,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Severity:</td>
           <td>
             <xsl:choose>
-              <xsl:when test="threat = 'Alarm'">
+              <xsl:when test="severity &gt; 0.0">
                 &gt; <xsl:value-of select="format-number((severity) - 0.1, '0.0')"/>
               </xsl:when>
-              <xsl:when test="string-length(threat) &gt; 0">
-                <xsl:value-of select="threat"/>
+              <xsl:when test="string-length(severity) &gt; 0">
+                <xsl:value-of select="gsa:result-cvss-risk-factor(severity)"/>
               </xsl:when>
               <xsl:otherwise>
                 Any
@@ -17146,24 +17146,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b>New Severity:</b></td>
           <td>
             <xsl:choose>
-              <xsl:when test="string-length(threat) = 0">
+              <xsl:when test="string-length(new_severity) = 0">
                 <xsl:call-template name="severity-bar">
                   <xsl:with-param name="cvss" select="''"/>
                   <xsl:with-param name="extra_text" select="'Any'"/>
                 </xsl:call-template>
               </xsl:when>
-              <xsl:when test="number(severity) &lt; 0.0">
+              <xsl:when test="number(new_severity) &lt; 0.0">
                 <xsl:call-template name="severity-bar">
                   <xsl:with-param name="cvss" select="''"/>
-                  <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
-                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (new_severity)"/>
+                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (new_severity)"/>
                 </xsl:call-template>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="cvss" select="severity"/>
-                  <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
-                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
+                  <xsl:with-param name="cvss" select="new_severity"/>
+                  <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (new_severity), ')')"/>
+                  <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (new_severity)"/>
                 </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
@@ -20196,14 +20196,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <b>
       Override from
       <xsl:choose>
-        <xsl:when test="string-length(threat) = 0">
+        <xsl:when test="string-length(severity) = 0">
           Any
         </xsl:when>
         <xsl:when test="number(severity) &gt; 0.0">
           Severity &gt; 0.0
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="threat"/>
+          <xsl:value-of select="gsa:result-cvss-risk-factor(severity)"/>
         </xsl:otherwise>
       </xsl:choose>
       to <xsl:if test="number(new_severity) &gt; 0.0"><xsl:value-of select="new_severity"/>: </xsl:if> <xsl:value-of select="gsa:result-cvss-risk-factor(new_severity)"/></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
@@ -20726,12 +20726,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
         </xsl:choose>
         <xsl:choose>
-          <xsl:when test="original_threat">
+          <xsl:when test="original_severity">
             <xsl:choose>
               <xsl:when test="severity = original_severity">
-                <xsl:value-of select="threat"/>
+                <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/>
               </xsl:when>
-              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_threat"/>: <xsl:value-of select="original_severity"/></b>)</xsl:otherwise>
+              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_severity"/><xsl:if test="original_severity &gt; 0.0">: <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/></xsl:if></b>)</xsl:otherwise>
             </xsl:choose>
           </xsl:when>
         </xsl:choose>
@@ -20741,13 +20741,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="string-length (severity) &gt; 0">
           <xsl:variable name="extra_text">
             <xsl:choose>
-              <xsl:when test="threat != '' and severity &gt;= 0.0">
+              <xsl:when test="severity &gt;= 0.0">
                 <xsl:value-of select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
               </xsl:when>
-              <xsl:when test="threat != ''">
-                <xsl:value-of select="threat"/>
+              <xsl:when test="severity != ''">
+                <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/>
               </xsl:when>
-              <xsl:otherwise> (Log)</xsl:otherwise>
+              <xsl:otherwise>N/A</xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
 
@@ -20876,7 +20876,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
-              <xsl:when test="$result-details and original_threat and string-length (original_threat)">
+              <xsl:when test="$result-details and string-length (original_severity)">
                 <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
@@ -20888,7 +20888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
                 </a>
               </xsl:when>
-              <xsl:when test="original_threat and string-length (original_threat)">
+              <xsl:when test="string-length (original_severity)">
                 <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
@@ -22651,7 +22651,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="''"/>
-            <xsl:with-param name="extra_text" select="threat"/>
+            <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
