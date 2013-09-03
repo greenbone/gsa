@@ -7,7 +7,7 @@
 	src/html/img/none_big.png: Delete. Obsoleted by HTML labels and
 	severity bars.
 
-	CMakeLists.txt: Remove installation of obsolete threat level images.
+	* CMakeLists.txt: Remove installation of obsolete threat level images.
 
 2013-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
