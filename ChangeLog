@@ -1,5 +1,16 @@
 2013-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/img/high.png, src/html/img/high_big.png,
+	src/html/img/false_positive.png, src/html/img/log.png
+	src/html/img/low.png, src/html/img/low_big.png,
+	src/html/img/medium.png, src/html/img/medium_big.png,
+	src/html/img/none_big.png: Delete. Obsoleted by HTML labels and
+	severity bars.
+
+	CMakeLists.txt: Remove installation of obsolete threat level images.
+
+2013-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Replace threat/severity level images with HTML/CSS styled text boxes.
 
 	* src/html/gsa-style.css (div.label_high, div.label_medium)

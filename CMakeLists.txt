@@ -344,30 +344,28 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/ascending_inactive.png src/html/img/download.png
                src/html/img/list.png src/html/img/p_bar_error.png
                src/html/img/stop_inactive.png src/html/img/ascending.png
-               src/html/img/edit_inactive.png src/html/img/log.png
+               src/html/img/edit_inactive.png
                src/html/img/p_bar_new.png src/html/img/stop.png
                src/html/img/edit.png
-               src/html/img/low_big.png src/html/img/p_bar.png
+               src/html/img/p_bar.png
                src/html/img/bullet2.png src/html/img/exe.png
-               src/html/img/low.png src/html/img/p_bar_request.png
+               src/html/img/p_bar_request.png
                src/html/img/trend_down.png src/html/img/bullet.png
-               src/html/img/medium_big.png
                src/html/img/refresh.png src/html/img/trend_less.png
                src/html/img/deb.png src/html/img/gsa_splash.png
-               src/html/img/medium.png src/html/img/resume_inactive.png
+               src/html/img/resume_inactive.png
                src/html/img/trend_more.png src/html/img/delete_inactive.png
                src/html/img/help.png src/html/img/new_note.png
                src/html/img/resume.png src/html/img/trend_nochange.png
-               src/html/img/delete_note.png src/html/img/high_big.png
+               src/html/img/delete_note.png
                src/html/img/new.png src/html/img/rpm.png
                src/html/img/trend_up.png src/html/img/delete.png
-               src/html/img/high.png src/html/img/none_big.png
                src/html/img/scheduled_inactive.png
                src/html/img/descending_inactive.png
                src/html/img/note.png
                src/html/img/scheduled.png src/html/img/pause.png
                src/html/img/override.png src/html/img/new_override.png
-               src/html/img/pause_inactive.png src/html/img/false_positive.png
+               src/html/img/pause_inactive.png
                src/html/img/trashcan.png src/html/img/trashcan_inactive.png
                src/html/img/indicator_js.png
                src/html/img/restore.png src/html/img/restore_inactive.png
