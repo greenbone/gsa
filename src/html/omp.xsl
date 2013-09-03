@@ -1560,6 +1560,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="severity-label">
+  <xsl:param name="level"/>
+  <xsl:param name="font-size" select="'9'"/>
+  <xsl:param name="width" select="floor($font-size * 6.0)"/>
+  <xsl:choose>
+    <xsl:when test="$level = 'High'">
+      <div class="label_high" style="font-size:{$font-size}px; min-width:{$width}px">High</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Medium'">
+      <div class="label_medium" style="font-size:{$font-size}px; min-width:{$width}px">Medium</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Low'">
+      <div class="label_low" style="font-size:{$font-size}px; min-width:{$width}px">Low</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Log'">
+      <div class="label_log" style="font-size:{$font-size}px; min-width:{$width}px">Log</div>
+    </xsl:when>
+    <xsl:when test="$level = 'False Positive' or $level = 'False&#xa0;Positive'">
+      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px">False Pos.</div>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px"><xsl:value-of select="$level"/></div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <func:function name="gsa:build-levels">
   <xsl:param name="filters"></xsl:param>
   <func:result>
@@ -1716,7 +1742,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <input type="checkbox" name="level_high" value="1"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <img src="/img/high.png" alt="High" title="High"/>
+                    <xsl:call-template name="severity-label">
+                      <xsl:with-param name="level" select="'High'"/>
+                    </xsl:call-template>
                   </label>
                 </td>
                 <td class="threat_info_table_h">
@@ -1730,7 +1758,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <input type="checkbox" name="level_medium" value="1"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                    <xsl:call-template name="severity-label">
+                      <xsl:with-param name="level" select="'Medium'"/>
+                    </xsl:call-template>
                   </label>
                 </td>
                 <td class="threat_info_table_h">
@@ -1744,7 +1774,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <input type="checkbox" name="level_low" value="1"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <img src="/img/low.png" alt="Low" title="Low"/>
+                    <xsl:call-template name="severity-label">
+                      <xsl:with-param name="level" select="'Low'"/>
+                    </xsl:call-template>
                   </label>
                 </td>
               </tr>
@@ -2268,7 +2300,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="checkbox" name="level_high" value="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <img src="/img/high.png" alt="High" title="High"/>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'High'"/>
+                  </xsl:call-template>
                 </label>
               </td>
               <td class="threat_info_table_h">
@@ -2282,7 +2316,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="checkbox" name="level_medium" value="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Medium'"/>
+                  </xsl:call-template>
                 </label>
               </td>
               <td class="threat_info_table_h">
@@ -2296,7 +2332,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="checkbox" name="level_low" value="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <img src="/img/low.png" alt="Low" title="Low"/>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Low'"/>
+                  </xsl:call-template>
                 </label>
               </td>
               <td class="threat_info_table_h">
@@ -2310,7 +2348,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="checkbox" name="level_log" value="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <img src="/img/log.png" alt="Log" title="Log"/>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Log'"/>
+                  </xsl:call-template>
                 </label>
               </td>
               <td class="threat_info_table_h">
@@ -2328,7 +2368,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              value="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'False Positive'"/>
+                  </xsl:call-template>
                 </label>
               </td>
             </tr>
@@ -2734,7 +2776,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="count" select="count (report)"/>
       <xsl:with-param name="filtered-count" select="report_count/filtered"/>
       <xsl:with-param name="full-count" select="report_count/text ()"/>
-      <xsl:with-param name="headings" select="'Name|name Severity| Scan&#xa0;Results~high.png|~medium.png|~low.png|~log.png|~false_positive.png|'"/>
+      <xsl:with-param name="headings" select="'Name|name Severity| Scan&#xa0;Results~High|~Medium|~Low|~Log|~False&#xa0;Positive|'"/>
       <xsl:with-param name="default-filter" select="concat ('apply_overrides=1 task_id=', $task_id)"/>
       <xsl:with-param name="extra_params">
         <param>
@@ -8266,6 +8308,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/{$head}"
              alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
              title="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"/>
+      </xsl:when>
+      <xsl:when test="$head = 'High' or $head = 'Medium' or $head = 'Low' or $head = 'Log' or $head = 'False&#xa0;Positive'">
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="translate($head, '_', ' ')"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$head"/>
@@ -19589,19 +19636,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><img src="/img/high.png" alt="High" title="High"/>:</td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'High'"/>
+            </xsl:call-template>:
+          </td>
           <td>
             <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
           </td>
         </tr>
         <tr>
-          <td><img src="/img/medium.png" alt="Medium" title="Medium"/>:</td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Medium'"/>
+            </xsl:call-template>:
+          </td>
           <td>
             <xsl:value-of select="detail[name/text() = 'report/result_count/medium']/value"/>
           </td>
         </tr>
         <tr>
-          <td><img src="/img/low.png" alt="Low" title="Low"/>:</td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Low'"/>
+            </xsl:call-template>
+          </td>
           <td>
             <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
           </td>
@@ -21503,9 +21562,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>IP</td>
-      <td><img src="/img/high.png" alt="High" title="High"/></td>
-      <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
-      <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'High'"/>
+        </xsl:call-template>
+      </td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'Medium'"/>
+        </xsl:call-template>
+      </td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'Low'"/>
+        </xsl:call-template>
+      </td>
       <td>Last Report</td>
       <td>OS</td>
       <td>Ports</td>
@@ -21569,16 +21640,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         select="detail[name = 'prognosis']/value"/>
           <xsl:choose>
             <xsl:when test="$threat = 'High'">
-              <img src="/img/high.png" alt="High" title="High"/>
+              <xsl:call-template name="severity-label">
+                <xsl:with-param name="level" select="'High'"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$threat = 'Medium'">
-              <img src="/img/medium.png" alt="Medium" title="Medium"/>
+              <xsl:call-template name="severity-label">
+                <xsl:with-param name="level" select="'Medium'"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$threat = 'Low'">
-              <img src="/img/low.png" alt="Low" title="Low"/>
+              <xsl:call-template name="severity-label">
+                <xsl:with-param name="level" select="'Low'"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$threat = 'Log'">
-              <img src="/img/log.png" alt="Log" title="Log"/>
+              <xsl:call-template name="severity-label">
+                <xsl:with-param name="level" select="'Log'"/>
+              </xsl:call-template>
             </xsl:when>
           </xsl:choose>
         </td>
@@ -21623,9 +21702,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>IP</td>
-      <td><img src="/img/high.png" alt="High" title="High"/></td>
-      <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
-      <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'High'"/>
+        </xsl:call-template>
+      </td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'Medium'"/>
+        </xsl:call-template>
+      </td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'Low'"/>
+        </xsl:call-template>
+      </td>
       <td>Current Report</td>
       <td>OS</td>
       <td>Ports</td>
@@ -22139,11 +22230,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Distance</td>
           <td>Start</td>
           <td>End</td>
-          <td><img src="/img/high.png" alt="High" title="High"/></td>
-          <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
-          <td><img src="/img/low.png" alt="Low" title="Low"/></td>
-          <td><img src="/img/log.png" alt="Log" title="Log"/></td>
-          <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'High'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Medium'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Low'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Log'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'False Positive'"/>
+            </xsl:call-template>
+          </td>
           <td>Total</td>
         </tr>
         <xsl:for-each select="report/host" >
@@ -23471,11 +23582,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td></td>
-          <td><img src="/img/high.png" alt="High" title="High"/></td>
-          <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
-          <td><img src="/img/low.png" alt="Low" title="Low"/></td>
-          <td><img src="/img/log.png" alt="Log" title="Log"/></td>
-          <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'High'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Medium'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Low'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Log'"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'False Positive'"/>
+            </xsl:call-template>
+          </td>
           <td>Total</td>
           <xsl:choose>
             <xsl:when test="@type='prognostic'">

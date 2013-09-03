@@ -1,3 +1,21 @@
+2013-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Replace threat/severity level images with HTML/CSS styled text boxes.
+
+	* src/html/gsa-style.css (div.label_high, div.label_medium)
+	(div.label_low, div.label_log, div.label_none): New class styles.
+
+	* src/html/omp.xsl (severity-label): New template.
+	(assets, report [filterbox], task [details], host, report [assets])
+	(get_reports_response/report/report [report-assets], report [hosts])
+	(report [summary]): Replace threat/severity level images with
+	severity-label template.
+	(column-name): Apply severity-label template when the column label is
+	a severity level.
+
+	* src/html/help.xsl (hosts.html, task_details.html): Replace
+	threat/severity level images with severity-label template.
+
 2013-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (override [details], override-detailed): Calculate

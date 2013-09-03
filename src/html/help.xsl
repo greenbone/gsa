@@ -364,19 +364,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td valign="top"><img src="/img/high.png" /></td>
+          <td valign="top">
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'High'"/>
+            </xsl:call-template>
+          </td>
           <td>
             Number of high results on most recent report.
           </td>
         </tr>
         <tr class="odd">
-          <td valign="top"><img src="/img/medium.png" /></td>
+          <td valign="top">
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Medium'"/>
+            </xsl:call-template>
+          </td>
           <td>
             Number of medium results on most recent report.
           </td>
         </tr>
         <tr>
-          <td valign="top"><img src="/img/low.png" /></td>
+          <td valign="top">
+            <xsl:call-template name="severity-label">
+              <xsl:with-param name="level" select="'Low'"/>
+            </xsl:call-template>
+          </td>
           <td>
             Number of low results on most recent report.
           </td>
@@ -6430,18 +6442,46 @@ Public License instead of this License.
             of occurrences for each severity level.
             <br />
             <table>
-              <tr><td valign="top"><img src="/img/high.png" alt="High" title="High" /></td><td>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'High'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
                   The number of issues of severity "High" found during the scan.
-              </td></tr>
-              <tr><td valign="top"><img src="/img/medium.png" alt="Medium" title="Medium" /></td><td>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Medium'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
                   The number of issues of severity "Medium" found during the scan.
-              </td></tr>
-              <tr><td valign="top"><img src="/img/low.png" alt="Low" title="Low" /></td><td>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Low'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
                   The number of issues of severity "Low" found during the scan.
-              </td></tr>
-              <tr><td valign="top"><img src="/img/log.png" alt="Log" title="Log" /></td><td>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Log'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
                   The number of log-entries that occurred during the scan.
-              </td></tr>
+                </td>
+              </tr>
             </table>
           </td>
         </tr>

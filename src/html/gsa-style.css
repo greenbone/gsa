@@ -179,6 +179,63 @@ div.None {
  background-color: #FFEEEE;
 }
 
+/* BEGIN severity level labels */
+
+div.label_high {
+ text-align: center;
+ font-weight: normal;
+ font-style: normal;
+ background-color: #FF4444;
+ color: black;
+ padding: 0px;
+ border: 1px outset #FF4444;
+ display:inline-block;
+}
+
+div.label_medium {
+ text-align: center;
+ font-weight: normal;
+ font-style: normal;
+ background-color: #FFA500;
+ color: black;
+ padding: 0px;
+ border: 1px outset #FFA500;
+ display:inline-block;
+}
+
+div.label_low {
+ text-align: center;
+ font-weight: normal;
+ font-style: normal;
+ background-color: #87CEFA;
+ color: black;
+ padding: 0px;
+ border: 1px outset #87CEFA;
+ display:inline-block;
+}
+
+div.label_log {
+ text-align: center;
+ font-weight: normal;
+ font-style: normal;
+ background-color: #CCCCCC;
+ color: black;
+ padding: 0px;
+ border: 1px outset #CCCCCC;
+ display:inline-block;
+}
+
+div.label_none {
+ text-align: center;
+ font-weight: normal;
+ font-style: normal;
+ background-color: #F8F8F8;
+ color: black;
+ padding: 0px;
+ border: 1px outset #F8F8F8;
+ display:inline-block;
+}
+
 /* BEGIN Greenbone Progress Bar */
 
 .progressbar_box {
