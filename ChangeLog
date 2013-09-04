@@ -1,3 +1,10 @@
+2013-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-tasks-table, task): Remove column "First".
+	Make "Severity" heading no longer a sub-column of "Reports". Add
+	tooltips for entries in columns "Total" and "Last". Use standard font
+	size for these columns.
+
 2013-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/img/high.png, src/html/img/high_big.png,

@@ -1515,7 +1515,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (task)"/>
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Severity|severity Trend|trend'"/>
+    <xsl:with-param name="headings" select="'Name|name Status|status Reports~Total|total~Last|last Severity|severity Trend|trend'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -3961,10 +3961,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:with-param>
           </xsl:call-template>
         </td>
-        <td style="text-align:right;font-size:10px;">
+        <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}" title="View list of all reports for Task {name}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -3972,13 +3972,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </td>
-        <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
-            <xsl:call-template name="short_timestamp_first"/>
-          </a>
-        </td>
-        <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
+        <td>
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="View last report for Task {name}">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
