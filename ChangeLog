@@ -1,5 +1,13 @@
 2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Add default filter for reports which sorts
+	reverse by date.
+
+	* src/html/omp.xsl (task): In report count link correct overrides
+	element and sort reverse by date.
+
+2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Move the Task Details report lists to a new page, Reports.
 
 	* src/gsad.c (exec_omp_get): Make get_reports a regular commands.

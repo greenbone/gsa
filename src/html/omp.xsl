@@ -4023,7 +4023,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={../apply-overrides}&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="View list of all reports for Task {name}">
                <xsl:value-of select="report_count/finished"/>
               </a>

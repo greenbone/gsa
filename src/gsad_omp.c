@@ -997,6 +997,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
             }
           else if (strcmp (type, "user") == 0)
             filter = "sort=role rows=-2 permission=any";
+          else if (strcmp (type, "report") == 0)
+            filter = "apply_overrides=1 rows=-2"
+                     " permission=any sort-reverse=name";
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any";
           else
