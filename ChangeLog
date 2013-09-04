@@ -1,5 +1,17 @@
 2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add debug param which can be added to display params and XML.
+
+	* src/gsad.c (init_validator): Add debug.
+
+	* src/html/gsad.xsl (print-node): New template.
+	(html-footer): Print params and XML if debug given.
+
+	* src/html/omp.xsl (gsa:token): New template.
+	(task): Use gsa:token for token.
+
+2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Add default filter for reports which sorts
 	reverse by date.
 

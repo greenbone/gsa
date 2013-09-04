@@ -61,6 +61,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- XPATH FUNCTIONS -->
 
+<func:function name="gsa:token">
+  <xsl:choose>
+    <xsl:when test="string-length (/envelope/params/debug) = 0">
+      <func:result select="concat ('&amp;token=', /envelope/token)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="concat ('&amp;token=', /envelope/token, '&amp;debug=', /envelope/params/debug)"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <func:function name="gsa:capitalise">
   <xsl:param name="string"/>
   <func:result select="concat (gsa:upper-case (substring ($string, 1, 1)), substring ($string, 2))"/>
@@ -3988,7 +3999,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}{gsa:token ()}"
                title="View details of Task {name}">
               <xsl:value-of select="name"/>
             </a>

@@ -943,6 +943,7 @@ init_validator ()
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
   openvas_validator_alias (validator, "custom_severity", "boolean");
+  openvas_validator_alias (validator, "debug",           "boolean");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");

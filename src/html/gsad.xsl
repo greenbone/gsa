@@ -1269,11 +1269,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <br clear="all"/>
 </xsl:template>
 
+<xsl:template name="print-node">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="indent" select="0"/>
+  <div style="margin-left: {$indent * 25}px">
+    &lt;<xsl:value-of select="name ($node)"/> ... &gt;
+  </div>
+  <div style="margin-left: {$indent * 50}px">
+    <xsl:value-of select="normalize-space ($node/text())"/>
+  </div>
+  <xsl:for-each select="*">
+    <xsl:call-template name="print-node">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="indent" select="$indent + 1"/>
+    </xsl:call-template>
+  </xsl:for-each>
+  <div style="margin-left: {$indent * 25}px">
+    &lt;/<xsl:value-of select="name ($node)"/>&gt;
+  </div>
+</xsl:template>
+
 <xsl:template name="html-footer">
   <div class="gsa_footer">
     Greenbone Security Assistant (GSA) Copyright 2009-2013 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>
   </div>
+  <xsl:choose>
+    <xsl:when test="/envelope/params/debug = '1'">
+      <div style="text-align: left">
+        <b>Params:</b>
+        <br/>
+        <xsl:for-each select="/envelope/params/*">
+          <xsl:value-of select="name ()"/>:
+          <xsl:value-of select="text ()"/>
+          <br/>
+        </xsl:for-each>
+        <br/>
+        <b>XML:</b>
+        <xsl:call-template name="print-node">
+          <xsl:with-param name="node" select="/"/>
+        </xsl:call-template>
+      </div>
+    </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="html-gsa-navigation">
