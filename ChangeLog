@@ -1,3 +1,34 @@
+2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Move the Task Details report lists to a new page, Reports.
+
+	* src/gsad.c (exec_omp_get): Make get_reports a regular commands.
+
+	* src/gsad_omp.c (next_page): Add get_reports.
+	(get_many): Add task_id to the built filter, if there is one.
+	Explicitly ask for 0 details.  Prefix report_ on the filter if the
+	type is reports, otherwise the fitler applies to the report results.
+	(get_task): Remove filter building and GET_REPORTS call.
+	(get_reports, get_reports_omp): New functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add Reports under Tasks in
+	Scan Management.
+
+	* src/html/omp.xsl (filter-rest): Exclude task_id too.
+	(filter-window-part): Add Task field if task_id is present.
+	(task [details]): Add refresh forms.  Add links and last report to
+	Reports field.  Remove report list window.
+	(short_timestamp_last): Check last instead of first.
+	(report): Get delta from envelope.  Add task column.  Grey delta when
+	showing all tasks.  Make the icons return to Reports page.
+	(task): Adjust details link for new page.  Link report count to new
+	Reports page.
+	(list-window): Get overrides from filters so it works for reports too.
+	Put refresh controls on Reports page too, including override control.
+	(html-reports-table, get_reports): New template.
+
 2013-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-tasks-table, task): Remove column "First".

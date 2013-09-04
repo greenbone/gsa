@@ -164,6 +164,8 @@ static char *get_report_formats (credentials_t *, params_t *, const char *);
 
 static char *get_report_section (credentials_t *, params_t *, const char *);
 
+static char *get_reports (credentials_t *, params_t *, const char *);
+
 char *get_result_page (credentials_t *, params_t *, const char *);
 
 static char *get_role (credentials_t *, params_t *, const char *);
@@ -686,6 +688,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_report_section") == 0)
     return get_report_section (credentials, params, response);
 
+  if (strcmp (next, "get_reports") == 0)
+    return get_reports (credentials, params, response);
+
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
 
@@ -939,7 +944,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           if (params_value (params, "build_filter"))
             {
               gchar *task;
-              const char *search_phrase;
+              const char *search_phrase, *task_id;
 
               if (strcmp (type, "task"))
                 task = NULL;
@@ -953,9 +958,13 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                 }
 
               search_phrase = params_value (params, "search_phrase");
+              task_id = params_value (params, "task_id");
               built_filter = g_strdup_printf
-                              ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+                              ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
                                task ? task : "",
+                               task_id ? "task_id=" : "",
+                               task_id ? task_id : "",
+                               task_id ? " " : "",
                                first ? "first=" : "",
                                first ? first : "",
                                first ? " " : "",
@@ -1011,15 +1020,17 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   /* Get the list. */
 
   request = g_markup_printf_escaped("<get_%s"
+                                    " details=\"0\""
                                     " actions=\"g\""
                                     " filt_id=\"%s\""
-                                    " filter=\"%s\""
+                                    " %sfilter=\"%s\""
                                     " first=\"%s\""
                                     " max=\"%s\""
                                     " sort_field=\"%s\""
                                     " sort_order=\"%s\"",
                                     type_many->str,
                                     filt_id ? filt_id : "0",
+                                    strcmp (type, "report") ? "" : "report_",
                                     built_filter
                                      ? built_filter
                                      : (filter ? filter : ""),
@@ -3309,8 +3320,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
   GString *xml = NULL;
   gnutls_session_t session;
   int socket, notes, get_overrides, apply_overrides;
-  const char *overrides, *filter, *task_id;
-  gchar *html, *built_filter;
+  const char *overrides, *task_id;
+  gchar *html;
 
   task_id = params_value (params, "task_id");
   if (task_id == NULL)
@@ -3340,69 +3351,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                              "/omp?cmd=get_tasks");
     }
 
-  filter = params_value (params, "filter");
-
-  built_filter = NULL;
-  if (params_value (params, "build_filter")
-      || filter == NULL
-      || (strcmp (filter, "") == 0))
-    {
-      // FIX share w get_many
-      const char *type = "task";
-      const char *first, *max, *sort_order, *sort_field;
-
-      first = params_value (params, "first");
-      max = params_value (params, "max");
-      sort_field = params_value (params, "sort_field");
-      sort_order = params_value (params, "sort_order");
-      if (params_value (params, "build_filter"))
-        {
-          gchar *task;
-          const char *search_phrase;
-
-          if (strcmp (type, "task"))
-            task = NULL;
-          else
-            {
-              const char *overrides;
-              overrides = params_value (params, "overrides");
-              task = g_strdup_printf ("apply_overrides=%i ",
-                                      overrides
-                                      && strcmp (overrides, "0"));
-            }
-
-          search_phrase = params_value (params, "search_phrase");
-          built_filter = g_strdup_printf
-                          ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-                           task ? task : "",
-                           first ? "first=" : "",
-                           first ? first : "",
-                           first ? " " : "",
-                           max ? "rows=" : "",
-                           max ? max : "",
-                           max ? " " : "",
-                           sort_field
-                            ? ((sort_order && strcmp (sort_order,
-                                                      "ascending"))
-                                ? "sort-reverse="
-                                : "sort=")
-                            : "",
-                           sort_field ? sort_field : "",
-                           sort_field ? " " : "",
-                           (filter && search_phrase) ? " " : "",
-                           filter ? filter : "",
-                           search_phrase ? " " : "",
-                           search_phrase
-                            ? search_phrase
-                            : "");
-          g_free (task);
-        }
-      else
-        built_filter = g_strdup_printf ("apply_overrides=%i task_id=%s",
-                                        apply_overrides,
-                                        task_id);
-    }
-
   notes = command_enabled (credentials, "GET_NOTES");
   get_overrides = command_enabled (credentials, "GET_OVERRIDES");
   if (openvas_server_sendf (&session,
@@ -3412,17 +3360,11 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " actions=\"g\""
                             " filter=\"apply_overrides=%i\""
                             " details=\"1\"/>"
-                            "<get_reports"
-                            " report_filter=\"%s\""
-                            " details=\"0\"/>"
                             "%s%s%s"
                             "%s%s%s"
                             "</commands>",
                             task_id,
                             apply_overrides,
-                            built_filter
-                             ? built_filter
-                             : (filter ? filter : ""),
                             notes
                              ? "<get_notes"
                                " sort_field=\"notes_nvt_name, notes.text\""
@@ -3440,7 +3382,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             task_id)
       == -1)
     {
-      g_free (built_filter);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3449,7 +3390,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
-  g_free (built_filter);
 
   xml = g_string_new ("<get_task>");
 
@@ -10359,7 +10299,83 @@ get_report_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Get ths hosts for a report, XSL transform the result.
+ * @brief Get all reports, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_reports (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "GET_TASKS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity,
+                   "<get_tasks details=\"0\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the reports. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_tasks");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the reports. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_tasks");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the reports. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_tasks");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = get_many ("report", credentials, params, extra->str, NULL);
+  g_string_free (extra, TRUE);
+  return html;
+}
+
+/**
+ * @brief Get all reports, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_reports_omp (credentials_t * credentials, params_t *params)
+{
+  return get_reports (credentials, params, NULL);
+}
+
+/**
+ * @brief Get the hosts for a report, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.

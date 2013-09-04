@@ -64,6 +64,7 @@ char * export_tasks_omp (credentials_t *, params_t *, enum content_type *,
 
 char * delete_report_omp (credentials_t *, params_t *);
 char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
+char * get_reports_omp (credentials_t *, params_t *);
 
 char * get_report_section_omp (credentials_t *, params_t *);
 

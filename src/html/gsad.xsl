@@ -1289,6 +1289,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n('Tasks')"/>
             </a></li>
       </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORTS']">
+        <li class="indent"><a href="/omp?cmd=get_reports&amp;token={/envelope/token}">Reports</a></li>
+      </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
         <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt permission=any&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Notes')"/>

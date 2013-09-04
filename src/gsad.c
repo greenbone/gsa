@@ -1947,9 +1947,6 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (get_task)
-  /* get_reports is a synonym for get_task. */
-  else if (!strcmp (cmd, G_STRINGIFY (get_reports)))
-    return get_task_omp (credentials, params);
   ELSE (get_tasks)
   ELSE (edit_agent)
   ELSE (edit_alert)
@@ -2225,6 +2222,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return ret;
     }
 
+  ELSE (get_reports)
   ELSE (get_result)
   ELSE (get_report_format)
   ELSE (get_report_formats)
