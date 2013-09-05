@@ -1273,7 +1273,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="node" select="."/>
   <xsl:param name="indent" select="0"/>
   <div style="margin-left: {$indent * 25}px">
-    &lt;<xsl:value-of select="name ($node)"/> ... &gt;
+    <xsl:text>&lt;</xsl:text>
+    <xsl:value-of select="name ($node)"/>
+    <xsl:for-each select="@*">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="name (.)"/>
+      <xsl:text>="</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>"</xsl:text>
+    </xsl:for-each>
+    <xsl:text>&gt;</xsl:text>
   </div>
   <div style="margin-left: {$indent * 50}px">
     <xsl:value-of select="normalize-space ($node/text())"/>

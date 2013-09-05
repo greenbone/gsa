@@ -1,5 +1,9 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (print-node): Print attributes too.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch to "result" from "report" for report result filter type and
 	setting.
 
