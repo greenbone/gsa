@@ -1025,13 +1025,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   request = g_markup_printf_escaped("<get_%s"
                                     " details=\"0\""
                                     " actions=\"g\""
-                                    " filt_id=\"%s\""
+                                    " %sfilt_id=\"%s\""
                                     " %sfilter=\"%s\""
                                     " first=\"%s\""
                                     " max=\"%s\""
                                     " sort_field=\"%s\""
                                     " sort_order=\"%s\"",
                                     type_many->str,
+                                    strcmp (type, "report") ? "" : "report_",
                                     filt_id ? filt_id : "0",
                                     strcmp (type, "report") ? "" : "report_",
                                     built_filter

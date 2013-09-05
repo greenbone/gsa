@@ -1,3 +1,11 @@
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-part): Show named filter controls for
+	reports too.
+
+	* src/gsad_omp.c (get_many): Prepend "report_" to "filt_id" in OMP for
+	reports, otherwise the filter is applied to the results.
+
 2013-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add debug param which can be added to display params and XML.

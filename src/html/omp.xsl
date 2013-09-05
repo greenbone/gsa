@@ -426,7 +426,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
       <xsl:choose>
-        <xsl:when test="$type = 'report'"/>
+        <xsl:when test="0"/>
         <xsl:otherwise>
           <div style="float: right">
             <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
