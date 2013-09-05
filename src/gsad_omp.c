@@ -10208,7 +10208,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           if (openvas_server_sendf_xml (&session,
                                         "<get_filters"
-                                        " filter=\"type=report\"/>")
+                                        " filter=\"type=result\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
