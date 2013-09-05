@@ -1,5 +1,10 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_section): Remove shadowing declaration.
+	Clean up indenting.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Add Reports page indicator icons.
 
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
