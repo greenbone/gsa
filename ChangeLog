@@ -1,5 +1,11 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_section): Call get_report directly, in
+	order to pass in extra_xml, so the indicator icon and error message
+	works.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): In count links sort reverse by
 	date.
 	(report): Order the element report name elements like it is done in the

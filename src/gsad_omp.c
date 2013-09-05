@@ -10410,7 +10410,15 @@ get_report_section (credentials_t * credentials, params_t *params,
                          "/omp?cmd=get_tasks");
 
   if (!strcmp (report_section, "results"))
-    return get_report_omp (credentials, params, NULL, NULL, NULL);
+    {
+      char *result;
+      int error = 0;
+
+      result = get_report (credentials, params, NULL, NULL, NULL, NULL,
+                           extra_xml, &error);
+
+      return error ? result : xsl_transform_omp (credentials, result);
+    }
 
   result = get_report (credentials, params, NULL, NULL, NULL,
                        NULL, NULL, &error);
