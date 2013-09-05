@@ -2728,12 +2728,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Reports:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={$apply-overrides}&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
             (Finished:
-             <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides}&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
@@ -3250,17 +3250,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
-         title="View details of Task Report {@id}"
-         style="margin-left:3px;">
-        <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
-      </a>
+      <b>
+        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+           title="View details of Task Report {@id}">
+          <xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="$container=1 and scan_run_status='Running'">
-          <xsl:text>Uploading</xsl:text>
+          <br/><xsl:text>Uploading</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="scan_run_status"/>
+          <br/><xsl:value-of select="scan_run_status"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>

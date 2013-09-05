@@ -1,5 +1,13 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details]): In count links sort reverse by
+	date.
+	(report): Order the element report name elements like it is done in the
+	other tables.  In particular, remove the margin style so that the status
+	is flush under the name, like the comment is in other tables.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (print-node): Print attributes too.
 
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
