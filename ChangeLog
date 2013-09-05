@@ -1,5 +1,10 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Remove indent from Report in
+	menu.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-part): Show named filter controls for
 	reports too.
 
