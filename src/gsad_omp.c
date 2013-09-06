@@ -3233,6 +3233,58 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Toggle overrides.
+ *
+ * @param[in]  params     Request parameters.
+ * @param[in]  overrides  New overrides value.
+ */
+static void
+params_toggle_overrides (params_t *params, const char *overrides)
+{
+  param_t *filt_id, *build_filter;
+  const char *new_filt_id;
+
+  build_filter = params_get (params, "build_filter");
+
+  if (build_filter)
+    new_filt_id = "";
+  else
+    new_filt_id = "-2";
+
+  filt_id = params_get (params, "filt_id");
+  if (filt_id)
+    {
+      filt_id->value = g_strdup (new_filt_id);
+      filt_id->value_size = strlen (filt_id->value);
+      filt_id->valid = 1;
+      filt_id->valid_utf8 = 1;
+    }
+  else
+    params_add (params, "filt_id", new_filt_id);
+
+  if (build_filter == NULL)
+    {
+      param_t *filter;
+      filter = params_get (params, "filter");
+      if (filter && filter->value)
+        {
+          gchar *old;
+          old = filter->value;
+          filter->value = g_strdup_printf ("apply_overrides=%s %s",
+                                           overrides,
+                                           old);
+          g_free (old);
+        }
+      else if (strcmp (overrides, "0"))
+        params_add (params, "filter",
+                    "apply_overrides=1 rows=-2 permission=any owner=any");
+      else
+        params_add (params, "filter",
+                    "apply_overrides=0 rows=-2 permission=any owner=any");
+    }
+}
+
+/**
  * @brief Get all tasks, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
@@ -3248,49 +3300,8 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   overrides = params_value (params, "overrides");
   if (overrides)
-    {
-      param_t *filt_id, *build_filter;
-      const char *new_filt_id;
-
-      build_filter = params_get (params, "build_filter");
-
-      if (build_filter)
-        new_filt_id = "";
-      else
-        new_filt_id = "-2";
-
-      filt_id = params_get (params, "filt_id");
-      if (filt_id)
-        {
-          filt_id->value = g_strdup (new_filt_id);
-          filt_id->value_size = strlen (filt_id->value);
-          filt_id->valid = 1;
-          filt_id->valid_utf8 = 1;
-        }
-      else
-        params_add (params, "filt_id", new_filt_id);
-
-      if (build_filter == NULL)
-        {
-          param_t *filter;
-          filter = params_get (params, "filter");
-          if (filter && filter->value)
-            {
-              gchar *old;
-              old = filter->value;
-              filter->value = g_strdup_printf ("apply_overrides=%s %s",
-                                               overrides,
-                                               old);
-              g_free (old);
-            }
-          else if (strcmp (overrides, "0"))
-            params_add (params, "filter",
-                        "apply_overrides=1 rows=-2 permission=any owner=any");
-          else
-            params_add (params, "filter",
-                        "apply_overrides=0 rows=-2 permission=any owner=any");
-        }
-    }
+    /* User toggled overrides.  Set the overrides value in the filter. */
+    params_toggle_overrides (params, overrides);
 
   return get_many ("task", credentials, params, extra_xml, NULL);
 }
@@ -10317,6 +10328,12 @@ get_reports (credentials_t * credentials, params_t *params,
 {
   gchar *html;
   GString *extra;
+  const char *overrides;
+
+  overrides = params_value (params, "overrides");
+  if (overrides)
+    /* User toggled overrides.  Set the overrides value in the filter. */
+    params_toggle_overrides (params, overrides);
 
   extra = g_string_new ("");
   if (command_enabled (credentials, "GET_TASKS"))

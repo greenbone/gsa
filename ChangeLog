@@ -1,5 +1,11 @@
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (params_toggle_overrides): New function.
+	(get_tasks): Toggle overrides with params_toggle_overrides.
+	(get_reports): Toggle overrides like get_tasks does.
+
+2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report_section): Remove shadowing declaration.
 	Clean up indenting.
 
