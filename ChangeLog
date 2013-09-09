@@ -1,3 +1,19 @@
+2013-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make the links to the reports of a task use the default filter, but with
+	the task.
+
+	* src/gsad.c (init_validator): Add replace_task_id.
+
+	* src/gsad_omp.c (get_many): Add filter_replace to OMP GET command.
+
+	* src/html/omp.xsl (filter-window-part): Pass filter in filter selection
+	form, so that the replace has access to the task_id.
+	(task [details], task): Add replace_task_id and filt_id args to report
+	links, so that current task is used and so that default filter is used.
+	(html-reports-table): Add replace_task_id, so that it is passed around
+	in the table links.
+
 2013-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (params_toggle_overrides): New function.

@@ -895,11 +895,13 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   int socket;
   gchar *html, *request, *built_filter;
   const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
+  const char *replace_task_id;
 
   filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
+  replace_task_id = params_value (params, "replace_task_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
@@ -1027,6 +1029,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                     " actions=\"g\""
                                     " %sfilt_id=\"%s\""
                                     " %sfilter=\"%s\""
+                                    " filter_replace=\"%s\""
                                     " first=\"%s\""
                                     " max=\"%s\""
                                     " sort_field=\"%s\""
@@ -1038,6 +1041,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                     built_filter
                                      ? built_filter
                                      : (filter ? filter : ""),
+                                    replace_task_id ? "task_id" : "",
                                     first ? first : "1",
                                     max ? max : "-2",
                                     sort_field ? sort_field : "name",

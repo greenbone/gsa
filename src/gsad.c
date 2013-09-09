@@ -1021,6 +1021,7 @@ init_validator ()
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");
+  openvas_validator_alias (validator, "replace_task_id",   "boolean");
   openvas_validator_alias (validator, "role_id",           "id");
   openvas_validator_alias (validator, "role_id_optional",  "id_optional");
   openvas_validator_alias (validator, "role_id_optional:name",  "number");

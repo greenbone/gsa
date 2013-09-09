@@ -458,6 +458,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="exslt:node-set($extra_params)/param">
                   <input type="hidden" name="{name}" value="{value}"/>
                 </xsl:for-each>
+                <!-- Pass filter term too, for GET_REPORTS filter_replace. -->
+                <input type="hidden" name="filter" value="{filters/term}"/>
                 <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
                   <option value="--">--</option>
                   <xsl:variable name="id" select="filters/@id"/>
@@ -2728,12 +2730,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Reports:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
             (Finished:
-             <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
@@ -4035,7 +4037,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="View list of all reports for Task {name}">
                <xsl:value-of select="report_count/finished"/>
               </a>
@@ -20042,6 +20044,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <param>
         <name>task_filt_id</name>
         <value><xsl:value-of select="/envelope/params/task_filt_id"/></value>
+      </param>
+      <param>
+        <name>replace_task_id</name>
+        <value><xsl:value-of select="/envelope/params/replace_task_id"/></value>
       </param>
     </xsl:with-param>
   </xsl:call-template>
