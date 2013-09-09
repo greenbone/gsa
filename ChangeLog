@@ -1,5 +1,11 @@
 2013-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (get_many): Indent OMP printf with a space.  Move details
+	flag out of printf and make it only present for reports, because some
+	types link SecInfo rely on the default to work properly.
+
+2013-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make the links to the reports of a task use the default filter, but with
 	the task.
 

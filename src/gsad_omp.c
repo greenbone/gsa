@@ -1024,30 +1024,32 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get the list. */
 
-  request = g_markup_printf_escaped("<get_%s"
-                                    " details=\"0\""
-                                    " actions=\"g\""
-                                    " %sfilt_id=\"%s\""
-                                    " %sfilter=\"%s\""
-                                    " filter_replace=\"%s\""
-                                    " first=\"%s\""
-                                    " max=\"%s\""
-                                    " sort_field=\"%s\""
-                                    " sort_order=\"%s\"",
-                                    type_many->str,
-                                    strcmp (type, "report") ? "" : "report_",
-                                    filt_id ? filt_id : "0",
-                                    strcmp (type, "report") ? "" : "report_",
-                                    built_filter
-                                     ? built_filter
-                                     : (filter ? filter : ""),
-                                    replace_task_id ? "task_id" : "",
-                                    first ? first : "1",
-                                    max ? max : "-2",
-                                    sort_field ? sort_field : "name",
-                                    sort_order ? sort_order : "ascending");
+  request = g_markup_printf_escaped (" actions=\"g\""
+                                     " %sfilt_id=\"%s\""
+                                     " %sfilter=\"%s\""
+                                     " filter_replace=\"%s\""
+                                     " first=\"%s\""
+                                     " max=\"%s\""
+                                     " sort_field=\"%s\""
+                                     " sort_order=\"%s\"",
+                                     strcmp (type, "report") ? "" : "report_",
+                                     filt_id ? filt_id : "0",
+                                     strcmp (type, "report") ? "" : "report_",
+                                     built_filter
+                                      ? built_filter
+                                      : (filter ? filter : ""),
+                                     replace_task_id ? "task_id" : "",
+                                     first ? first : "1",
+                                     max ? max : "-2",
+                                     sort_field ? sort_field : "name",
+                                     sort_order ? sort_order : "ascending");
+
   g_free (built_filter);
-  if (openvas_server_sendf (&session, "%s %s/>", request,
+  if (openvas_server_sendf (&session,
+                            "<get_%s%s%s %s/>",
+                            type_many->str,
+                            strcmp (type, "report") ? "" : " details=\"0\"",
+                            request,
                             extra_attribs ? extra_attribs : "")
       == -1)
     {
