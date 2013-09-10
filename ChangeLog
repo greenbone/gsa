@@ -1,5 +1,10 @@
 2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details], report, task, permission): Encode
+	filters for URL.
+
+2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (gsad_init, gsad_cleanup): Remove void for consistency.
 
 2013-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>

@@ -2730,12 +2730,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Reports:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
             (Finished:
-             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
@@ -3268,7 +3268,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={/envelope/params/task_filter}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
          title="View details of Task {task/@id}"
          style="margin-left:3px;">
         <xsl:value-of select="task/name"/>
@@ -3321,7 +3321,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={/envelope/params/task_filter}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
@@ -4037,7 +4037,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={/envelope/params/filter}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="View list of all reports for Task {name}">
                <xsl:value-of select="report_count/finished"/>
               </a>
@@ -17900,7 +17900,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </div>
       <b>
-        <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={../filters/term}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}"
            title="View Details of Permission {name}">
           <xsl:value-of select="name"/>
         </a>
