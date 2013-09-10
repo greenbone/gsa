@@ -1,5 +1,9 @@
 2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_result_page): Make static like others.
+
+2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window): Separate the refresh icon and the
 	overrides icon into two forms, otherwise clicking on refresh toggles
 	the overrides.

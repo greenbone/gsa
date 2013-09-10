@@ -166,7 +166,7 @@ static char *get_report_section (credentials_t *, params_t *, const char *);
 
 static char *get_reports (credentials_t *, params_t *, const char *);
 
-char *get_result_page (credentials_t *, params_t *, const char *);
+static char *get_result_page (credentials_t *, params_t *, const char *);
 
 static char *get_role (credentials_t *, params_t *, const char *);
 
@@ -10730,7 +10730,7 @@ get_result_omp (credentials_t *credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_result_page (credentials_t *credentials, params_t *params,
                  const char *extra_xml)
 {
