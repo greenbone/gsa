@@ -3509,7 +3509,7 @@ my_gnutls_log_func (int level, const char *text)
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
 int
-gsad_init (void)
+gsad_init ()
 {
   tracef ("Initializing the Greenbone Security Assistant...\n");
 
@@ -3587,7 +3587,7 @@ gsad_init (void)
  * and remove the pidfile.
  */
 void
-gsad_cleanup (void)
+gsad_cleanup ()
 {
   if (redirect_pid) kill (redirect_pid, SIGTERM);
 
