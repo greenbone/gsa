@@ -6555,6 +6555,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:if test="$type = 'task' or $type = 'report'">
                 <xsl:choose>
                   <xsl:when test="$apply-overrides = 0">
+                    <input type="hidden" name="overrides" value="0"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </form>
+            <form method="get" action="">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_{$type}s"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <xsl:if test="$type = 'task' or $type = 'report'">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">
                     <input type="hidden" name="overrides" value="1"/>
                     <input type="image"
                            name="No Overrides"

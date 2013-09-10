@@ -1,5 +1,11 @@
 2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Separate the refresh icon and the
+	overrides icon into two forms, otherwise clicking on refresh toggles
+	the overrides.
+
+2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details], report, task, permission): Encode
 	filters for URL.
 
