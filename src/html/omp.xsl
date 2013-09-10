@@ -20918,7 +20918,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="severity = original_severity">
                 <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/>
               </xsl:when>
-              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_severity"/><xsl:if test="original_severity &gt; 0.0">: <xsl:value-of select="gsa:result-cvss-risk-factor (severity)"/></xsl:if></b>)</xsl:otherwise>
+              <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_severity"/><xsl:if test="original_severity &gt; 0.0">: <xsl:value-of select="gsa:result-cvss-risk-factor (original_severity)"/></xsl:if></b>)</xsl:otherwise>
             </xsl:choose>
           </xsl:when>
         </xsl:choose>

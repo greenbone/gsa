@@ -1,3 +1,8 @@
+2013-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/omp.c (result-headers): Show original severity level in tooltip
+	of severity bar.
+
 2013-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (get_many): Indent OMP printf with a space.  Move details
