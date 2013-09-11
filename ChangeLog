@@ -1,5 +1,11 @@
 2013-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Default report sorting to date.
+
+	* src/html/omp.xsl (html-reports-table): Use date as filter column too.
+
+2013-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-reports-table): Rename Name to Date.
 
 2013-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
