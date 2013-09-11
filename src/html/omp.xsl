@@ -20049,7 +20049,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (report)"/>
     <xsl:with-param name="filtered-count" select="report_count/filtered"/>
     <xsl:with-param name="full-count" select="report_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Task|task Severity| Scan&#xa0;Results~High|~Medium|~Low|~Log|~False&#xa0;Positive|'"/>
+    <xsl:with-param name="headings" select="'Date|name Task|task Severity| Scan&#xa0;Results~High|~Medium|~Low|~Log|~False&#xa0;Positive|'"/>
     <xsl:with-param name="default-filter" select="'apply_overrides=1'"/>
     <xsl:with-param name="extra_params">
       <param>
