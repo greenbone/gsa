@@ -27470,6 +27470,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li><a href="#type_details">Data Type Details</a></li>
           <li><a href="#element_details">Element Details</a></li>
           <li><a href="#command_details">Command Details</a></li>
+          <li>
+            <a href="#changes">
+              Compatibility Changes in Version
+              <xsl:value-of select="version"/>
+            </a>
+          </li>
         </ol>
 
         <xsl:call-template name="type-summary"/>
@@ -27479,7 +27485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="type-details"/>
         <xsl:call-template name="element-details"/>
         <xsl:call-template name="command-details"/>
-
+        <xsl:call-template name="changes"/>
       </div>
     </div>
   </div>

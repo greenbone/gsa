@@ -647,6 +647,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:apply-templates select="command"/>
   </xsl:template>
 
+  <!-- Changes. -->
+
+  <xsl:template match="change">
+    <xsl:param name="index">8.<xsl:value-of select="position()"/></xsl:param>
+    <div>
+      <div>
+        <h3>
+          <xsl:value-of select="$index"/>
+          Change in <tt><xsl:value-of select="command"/></tt>
+        </h3>
+      </div>
+
+      <p>In short: <xsl:value-of select="normalize-space(summary)"/>.</p>
+
+      <xsl:apply-templates select="description"/>
+    </div>
+  </xsl:template>
+
+  <xsl:template name="changes">
+    <h2 id="changes">
+      8 Compatibility Changes in Version <xsl:value-of select="version"/>
+    </h2>
+    <xsl:apply-templates select="change"/>
+  </xsl:template>
+
   <!-- Root. -->
 
   <xsl:template match="protocol">

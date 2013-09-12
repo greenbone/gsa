@@ -1,3 +1,9 @@
+2013-09-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp-doc.xsl (change, changes): New templates.
+
+	* src/html/omp.xsl (protocol): Add Compatbility Changes section.
+
 2013-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Default report sorting to date.
