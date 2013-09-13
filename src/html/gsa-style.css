@@ -185,10 +185,10 @@ div.label_high {
  text-align: center;
  font-weight: normal;
  font-style: normal;
- background-color: #FF4444;
- color: black;
+ background: #C83814 url('img/p_bar_error.png') repeat-x;
+ color: white;
  padding: 0px;
- border: 1px outset #FF4444;
+ border: 1px outset #C83814;
  display:inline-block;
 }
 
@@ -196,10 +196,10 @@ div.label_medium {
  text-align: center;
  font-weight: normal;
  font-style: normal;
- background-color: #FFA500;
- color: black;
+ background: #F0A519 url('img/p_bar_request.png') repeat-x;
+ color: white;
  padding: 0px;
- border: 1px outset #FFA500;
+ border: 1px outset #F0A519;
  display:inline-block;
 }
 
@@ -207,10 +207,10 @@ div.label_low {
  text-align: center;
  font-weight: normal;
  font-style: normal;
- background-color: #87CEFA;
- color: black;
+ background: #4F91C7 url('img/p_bar_done.png') repeat-x;
+ color: white;
  padding: 0px;
- border: 1px outset #87CEFA;
+ border: 1px outset #4F91C7;
  display:inline-block;
 }
 
@@ -218,10 +218,10 @@ div.label_log {
  text-align: center;
  font-weight: normal;
  font-style: normal;
- background-color: #CCCCCC;
- color: black;
+ background: #595959 url('img/p_bar_bg.png') repeat-x;
+ color: white;
  padding: 0px;
- border: 1px outset #CCCCCC;
+ border: 1px outset #191919;
  display:inline-block;
 }
 
@@ -229,10 +229,10 @@ div.label_none {
  text-align: center;
  font-weight: normal;
  font-style: normal;
- background-color: #F8F8F8;
- color: black;
+ background: #595959 url('img/p_bar_bg.png') repeat-x;
+ color: white;
  padding: 0px;
- border: 1px outset #F8F8F8;
+ border: 1px outset #191919;
  display:inline-block;
 }
 

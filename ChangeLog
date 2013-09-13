@@ -1,3 +1,9 @@
+2013-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsa-style.css (div.label_high, div.label_medium)
+	(div.label_low, div.label_log, div.label_none): Use same background
+	colors and gradients as severity bars.
+
 2013-09-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp-doc.xsl (change, changes): New templates.
