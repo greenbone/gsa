@@ -1,5 +1,11 @@
 2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (preference-details): Select the config, else only
+	the default is displayed on the Scan Config Details page.
+	(preferences [scanner]): Add default column.
+
+2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Add overlay div to each of
 	the top menu buttons.
 

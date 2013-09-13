@@ -9135,7 +9135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="preference-details" match="preference" mode="details">
-  <xsl:param name="config"></xsl:param>
+  <xsl:param name="config" select=".."/>
 
   <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="name"/></td>
@@ -9481,7 +9481,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td>Value</td>
+        <td>Current Value</td>
+        <td>Default Value</td>
         <td>Actions</td>
       </tr>
       <xsl:apply-templates
