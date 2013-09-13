@@ -1,3 +1,13 @@
+2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add overlay div to each of
+	the top menu buttons.
+
+	* src/html/gsa-style.css: Add rules for the menu to overlay a green
+	version of the first menu item when the mouse hovers over the top of the
+	menu.  This is a hint that clicking the top button will select the first
+	item on the menu.
+
 2013-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/gsa-style.css (div.label_high, div.label_medium)
