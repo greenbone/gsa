@@ -1439,13 +1439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
-        <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
-      </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
-        <li><a href="/omp?cmd=get_tags&amp;token={/envelope/token}">Tags</a></li>
-      </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
-        <li><a href="/omp?cmd=get_filters&amp;token={/envelope/token}">Filters</a></li>
+        <li class="section_start"><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
         <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
@@ -1458,6 +1452,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
         <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+        <li class="section_start"><a href="/omp?cmd=get_filters&amp;token={/envelope/token}">Filters</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+        <li><a href="/omp?cmd=get_tags&amp;token={/envelope/token}">Tags</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
         <li class="last"><a href="/omp?cmd=get_permissions&amp;token={/envelope/token}">Permissions</a></li>

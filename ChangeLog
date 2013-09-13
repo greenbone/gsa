@@ -1,5 +1,12 @@
 2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css (#gb_menu li.section_start): New rule.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Group items in Configuration
+	menu more logically, separating groups with lines.
+
+2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preference-details): Select the config, else only
 	the default is displayed on the Scan Config Details page.
 	(preferences [scanner]): Add default column.

@@ -549,6 +549,10 @@ table.odd {
  border-radius: 0px 0px 8px 8px;
 }
 
+#gb_menu li.section_start {
+ border-top: 1px solid #b0b0b0;
+}
+
 #gb_menu ul li ul a {
  background: none;
  line-height: 22px;
