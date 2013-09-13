@@ -1,5 +1,10 @@
 2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (contents.html): Remove Settings.
+	(settings.html): Remove.  Settings were removed with Administrator.
+
+2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsa-style.css (#gb_menu li.section_start): New rule.
 
 	* src/html/gsad.xsl (html-gsa-navigation): Group items in Configuration

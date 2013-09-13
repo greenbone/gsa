@@ -3333,7 +3333,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
             <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
             <li> <a href="cert_management.html?token={/envelope/token}">CERT Feed Management</a></li>
-            <li> <a href="settings.html?token={/envelope/token}">Settings</a></li>
           </ul>
           <li> Miscellaneous</li>
           <ul>
@@ -7142,26 +7141,6 @@ Public License instead of this License.
           <td>The value for the NVT Preference in the given Scan Configuration.</td>
         </tr>
       </table>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="settings.html">
-  <div class="gb_window_part_center">Help: Settings</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_settings&amp;token={/envelope/token}">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <h1>Settings</h1>
-      <p>
-       The management of settings is only accessible for users that own the
-       "Administrator" role.
-      </p>
-      <p>
-       This dialog allows you to view the current settings of your installation.
-      </p>
     </div>
   </div>
 </xsl:template>
