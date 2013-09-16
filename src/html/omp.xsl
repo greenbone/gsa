@@ -59,6 +59,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+<!-- GLOBAL VARIABLES -->
+
+<xsl:variable name="icon-width" select="19"/>
+<xsl:variable name="trash-actions-width" select="3 + (2 * $icon-width)"/>
+
 <!-- XPATH FUNCTIONS -->
 
 <func:function name="gsa:token">
@@ -6637,10 +6642,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
             <xsl:choose>
               <xsl:when test="count (str:split ($headings, '~'))">
-                <td width="{3 + $icon-count * 19}" rowspan="2">Actions</td>
+                <td width="{3 + $icon-count * $icon-width}" rowspan="2">Actions</td>
               </xsl:when>
               <xsl:otherwise>
-                <td width="{3 + $icon-count * 19}">Actions</td>
+                <td width="{3 + $icon-count * $icon-width}">Actions</td>
               </xsl:otherwise>
             </xsl:choose>
           </tr>
@@ -6966,7 +6971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Name</td>
         <td>Term</td>
         <td>Type</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="filter" mode="trash"/>
     </table>
@@ -16213,7 +16218,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>NVT</td>
         <td>Text</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="note" mode="trash"/>
     </table>
@@ -17397,7 +17402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>NVT</td>
         <td>Text</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="override" mode="trash"/>
     </table>
@@ -17586,7 +17591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="group" mode="trash"/>
     </table>
@@ -18098,7 +18103,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Resource</td>
         <td>Subject Type</td>
         <td>Subject</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="permission" mode="trash"/>
     </table>
@@ -24217,7 +24222,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="role" mode="trash"/>
     </table>
@@ -24504,7 +24509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>Name</td>
         <td>Trust</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="agent" mode="trash"/>
     </table>
@@ -24518,7 +24523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td rowspan="2">Name</td>
         <td colspan="2">Families</td>
         <td colspan="2">NVTs</td>
-        <td width="100" rowspan="2">Actions</td>
+        <td width="{$trash-actions-width}" rowspan="2">Actions</td>
       </tr>
       <tr class="gbntablehead2">
         <td width="1" style="font-size:10px;">Total</td>
@@ -24540,7 +24545,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Condition</td>
         <td>Method</td>
         <td>Filter</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="alert" mode="trash"/>
     </table>
@@ -24554,7 +24559,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Name</td>
         <td>Login</td>
         <td>Comment</td>
-        <td width="135">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="lsc_credential" mode="trash"/>
     </table>
@@ -24566,7 +24571,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="port_list" mode="trash"/>
     </table>
@@ -24582,7 +24587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Content Type</td>
         <td>Trust (last verified)</td>
         <td>Active</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="report_format" mode="trash"/>
     </table>
@@ -24598,7 +24603,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Next Run</td>
         <td>Period</td>
         <td>Duration</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="schedule" mode="trash"/>
     </table>
@@ -24613,7 +24618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Host</td>
         <td>Port</td>
         <td>Login</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="slave" mode="trash"/>
     </table>
@@ -24628,7 +24633,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Value</td>
         <td>Attach type</td>
         <td>Attach ID</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="tag" mode="trash"/>
     </table>
@@ -24645,7 +24650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Port List</td>
         <td>SSH Credential</td>
         <td>SMB Credential</td>
-        <td width="100">Actions</td>
+        <td width="{$trash-actions-width}">Actions</td>
       </tr>
       <xsl:apply-templates select="target" mode="trash"/>
     </table>
@@ -24661,7 +24666,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td colspan="3">Reports</td>
         <td rowspan="2">Threat</td>
         <td rowspan="2">Trend</td>
-        <td width="115" rowspan="2">Actions</td>
+        <td width="{$trash-actions-width}" rowspan="2">Actions</td>
       </tr>
       <tr class="gbntablehead2">
         <td width="1" style="font-size:10px;">Total</td>

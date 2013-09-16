@@ -1,4 +1,10 @@
-2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+2013-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (icon-width, trash-actions-width): New variables.
+	Use in all trash tables for Actions columns.
+	(list-window): Use icon-width.
+
+2013-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Add icon-count arg, which governs the
 	width of the Actions column.  Update all callers with counts.
