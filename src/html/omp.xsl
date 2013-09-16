@@ -1545,6 +1545,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="full-count" select="task_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Status|status Reports~Total|total~Last|last Severity|severity Trend|trend'"/>
+    <xsl:with-param name="icon-count" select="7"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -4461,6 +4462,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="lsc_credential_count/filtered"/>
     <xsl:with-param name="full-count" select="lsc_credential_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Login|login'"/>
+    <xsl:with-param name="icon-count" select="8"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -4875,6 +4877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
     <xsl:with-param name="full-count" select="agent_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Trust|trust'"/>
+    <xsl:with-param name="icon-count" select="6"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -5512,6 +5515,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="alert_count/filtered"/>
     <xsl:with-param name="full-count" select="alert_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Event|event Condition|condition Method|method Filter|filter'"/>
+    <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -6484,6 +6488,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filtered-count"/>
   <xsl:param name="full-count"/>
   <xsl:param name="headings"/>
+  <xsl:param name="icon-count" select="8"/>
   <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="extra_params_string">
@@ -6632,10 +6637,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
             <xsl:choose>
               <xsl:when test="count (str:split ($headings, '~'))">
-                <td width="160" rowspan="2">Actions</td>
+                <td width="{3 + $icon-count * 19}" rowspan="2">Actions</td>
               </xsl:when>
               <xsl:otherwise>
-                <td width="160">Actions</td>
+                <td width="{3 + $icon-count * 19}">Actions</td>
               </xsl:otherwise>
             </xsl:choose>
           </tr>
@@ -6978,6 +6983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="filter_count/filtered"/>
     <xsl:with-param name="full-count" select="filter_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Term|term Type|type'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -7253,6 +7259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="tag_count/filtered"/>
     <xsl:with-param name="full-count" select="tag_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Value|value Active|active Attach&#xa0;Type|attach_type Attach&#xa0;Name|attach_name Modified|modified'"/>
+    <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -8432,6 +8439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="target_count/filtered"/>
     <xsl:with-param name="full-count" select="target_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Hosts|hosts IPs|ips Port&#xa0;List|port_list SSH&#xa0;Credential|ssh_credential SMB&#xa0;Credential|smb_credential'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -10993,6 +11001,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="schedule_count/filtered"/>
     <xsl:with-param name="full-count" select="schedule_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name First&#xa0;Run|first_run Next&#xa0;Run|next_run Period|period Duration|duration'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -12103,6 +12112,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
     <xsl:with-param name="full-count" select="slave_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Host|host Port|port Login|login'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -16193,6 +16203,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
     <xsl:with-param name="full-count" select="note_count/text ()"/>
     <xsl:with-param name="headings" select="'Text|text NVT|nvt Active|active'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17376,6 +17387,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
     <xsl:with-param name="headings" select="'Text|text NVT|nvt From|severity To|new_severity Active|active'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17591,6 +17603,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="grouped-count" select="group_count/grouped"/>
     <xsl:with-param name="full-count" select="group_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -18102,6 +18115,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Resource&#xa0;Type|type Resource|_resource Subject&#xa0;Type|subject_type Subject|_subject'"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -18987,6 +19001,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="report_format_count/filtered"/>
     <xsl:with-param name="full-count" select="report_format_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Extension|extension Content&#xa0;Type|content_type Trust&#xa0;(Last&#xa0;Verified)|trust Active|active'"/>
+    <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -20066,6 +20081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <value><xsl:value-of select="/envelope/params/replace_task_id"/></value>
       </param>
     </xsl:with-param>
+    <xsl:with-param name="icon-count" select="2"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -24218,6 +24234,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="roleed-count" select="role_count/roleed"/>
     <xsl:with-param name="full-count" select="role_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name'"/>
+    <xsl:with-param name="icon-count" select="1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -25216,6 +25233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:with-param>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 

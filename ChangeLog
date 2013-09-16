@@ -1,5 +1,10 @@
 2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Add icon-count arg, which governs the
+	width of the Actions column.  Update all callers with counts.
+
+2013-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Remove Settings.
 	(settings.html): Remove.  Settings were removed with Administrator.
 
