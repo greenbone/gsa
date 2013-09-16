@@ -8086,6 +8086,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           </tr>
           <tr>
+            <td valign="top" width="175">Exclude Hosts</td>
+            <td>
+              <input type="text" name="exclude_hosts" value="" size="30"
+                      maxlength="2000"/>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="175">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
@@ -8281,6 +8288,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </xsl:otherwise>
           </xsl:choose>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Exclude Hosts</td>
+            <td>
+              <input type="text" name="exclude_hosts" value="" size="30"
+                      maxlength="2000"/>
+            </td>
           </tr>
           <tr>
             <td valign="top" width="175">Comment (optional)</td>
@@ -8650,6 +8664,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Hosts:</td>
           <td><xsl:value-of select="hosts"/></td>
+        </tr>
+        <tr>
+          <td>Exclude Hosts:</td>
+          <td><xsl:value-of select="exclude_hosts"/></td>
         </tr>
         <tr>
           <td>Maximum number of hosts:</td>

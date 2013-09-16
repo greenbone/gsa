@@ -1,3 +1,14 @@
+2013-09-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate exclude_hosts parameter.
+
+	* src/gsad_omp.c (create_target_omp, save_target_omp): Send targets
+	exclude_hosts parameter too.
+
+	* src/html/omp.xsl (html-create-target-form, html-edit-target-form): Add
+	exclude hosts input field.
+	(target [details]): Output exclude hosts value too.
+
 2013-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:actions-width): New function.

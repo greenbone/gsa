@@ -5870,12 +5870,13 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *hosts, *target_locator, *comment, *port_list_id;
+  const char *name, *hosts, *exclude_hosts, *target_locator, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *target_id;
+  const char *target_id, *port_list_id;
 
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
+  exclude_hosts = params_value (params, "exclude_hosts");
   target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
   comment = params_value (params, "comment");
@@ -5976,6 +5977,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                 "<create_target>"
                                 "<name>%s</name>"
                                 "<hosts>%s</hosts>"
+                                "<exclude_hosts>%s</exclude_hosts>"
                                 "<port_list id=\"%s\"/>"
                                 "%s%s%s%s"
                                 "</create_target>",
@@ -5985,6 +5987,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                        ? params_value (params, "file")
                                        : hosts)
                                   : "",
+                                exclude_hosts ? exclude_hosts : "",
                                 port_list_id,
                                 comment_element,
                                 source_element,
@@ -7301,15 +7304,16 @@ save_target_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *next, *hosts, *target_locator, *comment, *port_list_id;
+  const char *name, *next, *hosts, *target_locator, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *target_id;
+  const char *target_id, *port_list_id;
 
   name = params_value (params, "name");
   next = params_value (params, "next");
   hosts = params_value (params, "hosts");
   target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
+  exclude_hosts = params_value (params, "exclude_hosts");
   comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
   target_credential = params_value (params, "lsc_credential_id");
@@ -7421,6 +7425,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                 "<modify_target target_id=\"%s\">"
                                 "<name>%s</name>"
                                 "<hosts>%s</hosts>"
+                                "<exclude_hosts>%s</exclude_hosts>"
                                 "<port_list id=\"%s\"/>"
                                 "%s%s%s%s"
                                 "</modify_target>",
@@ -7431,6 +7436,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                        ? params_value (params, "file")
                                        : hosts)
                                   : "",
+                                exclude_hosts ? exclude_hosts : "",
                                 port_list_id,
                                 comment_element,
                                 source_element,
