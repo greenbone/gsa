@@ -1,5 +1,13 @@
 2013-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:actions-width): New function.
+	(list-window): Use gsa:actions-width.
+	(user-tags-window, preferences, html-configs-table)
+	(html-port-lists-table, result [result-headers], report [assets])
+	(report [ssl-certs]): Specify Actions width in icons.
+
+2013-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (icon-width, trash-actions-width): New variables.
 	Use in all trash tables for Actions columns.
 	(list-window): Use icon-width.

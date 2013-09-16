@@ -66,6 +66,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- XPATH FUNCTIONS -->
 
+<func:function name="gsa:actions-width">
+  <xsl:param name="icon-count"/>
+  <func:result select="3 + ($icon-count * $icon-width)"/>
+</func:function>
+
 <func:function name="gsa:token">
   <xsl:choose>
     <xsl:when test="string-length (/envelope/params/debug) = 0">
@@ -1384,7 +1389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Name</td>
               <td>Value</td>
               <td>Comment</td>
-              <td>Actions</td>
+              <td width="{gsa:actions-width (4)}">Actions</td>
             </tr>
             <xsl:apply-templates select="$user_tags/tag" mode="for_resource">
               <xsl:with-param name="resource_type" select="$resource_type"/>
@@ -6642,10 +6647,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
             <xsl:choose>
               <xsl:when test="count (str:split ($headings, '~'))">
-                <td width="{3 + $icon-count * $icon-width}" rowspan="2">Actions</td>
+                <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
               </xsl:when>
               <xsl:otherwise>
-                <td width="{3 + $icon-count * $icon-width}">Actions</td>
+                <td width="{gsa:actions-width ($icon-count)}">Actions</td>
               </xsl:otherwise>
             </xsl:choose>
           </tr>
@@ -9361,7 +9366,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>NVT</td>
         <td>Name</td>
         <td>Value</td>
-        <td width="60">Actions</td>
+        <td width="{gsa:actions-width (1)}">Actions</td>
       </tr>
       <xsl:for-each select="preference[string-length(./nvt)&gt;0]">
         <xsl:call-template name="preference">
@@ -10238,7 +10243,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td colspan="2">Families</td>
             <td colspan="2">NVTs</td>
-            <td width="100" rowspan="2">Actions</td>
+            <td width="{gsa:actions-width (4)}" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
             <td width="1" style="font-size:10px;">
@@ -18463,7 +18468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td colspan="3">Port Counts</td>
-            <td width="115" rowspan="2">Actions</td>
+            <td  width="{gsa:actions-width (4)}" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
             <td width="1" style="font-size:10px;">
@@ -20878,7 +20883,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <xsl:if test="$prognostic != 1">
-        <td style="width:100px;">Actions</td>
+        <td width="{gsa:actions-width (3)}">Actions</td>
       </xsl:if>
     </tr>
   </xsl:if>
@@ -21749,7 +21754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>Distance</td>
       <td>Prognosis</td>
       <td>Reports</td>
-      <td>Actions</td>
+      <td width="{gsa:actions-width (1)}">Actions</td>
     </tr>
     <xsl:for-each select="host">
       <xsl:variable name="current_host" select="ip"/>
@@ -23394,7 +23399,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Not valid after</td>
           <td>Host</td>
           <td>Port</td>
-          <td>Actions</td>
+          <td width="{gsa:actions-width (1)}">Actions</td>
         </tr>
         <xsl:for-each select="report/host/detail[contains(name, 'SSLDetails:')]">
           <!-- Sort by DN value -->
