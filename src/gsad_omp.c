@@ -5873,10 +5873,13 @@ create_target_omp (credentials_t * credentials, params_t *params)
   const char *name, *hosts, *exclude_hosts, *target_locator, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id, *port_list_id;
+  const char *reverse_lookup_only, *reverse_lookup_unify;
 
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
+  reverse_lookup_only = params_value (params, "reverse_lookup_only");
+  reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
   target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
   comment = params_value (params, "comment");
@@ -5978,6 +5981,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                 "<name>%s</name>"
                                 "<hosts>%s</hosts>"
                                 "<exclude_hosts>%s</exclude_hosts>"
+                                "<reverse_lookup_only>%s</reverse_lookup_only>"
+                                "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                                 "<port_list id=\"%s\"/>"
                                 "%s%s%s%s"
                                 "</create_target>",
@@ -5988,6 +5993,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                        : hosts)
                                   : "",
                                 exclude_hosts ? exclude_hosts : "",
+                                reverse_lookup_only ? reverse_lookup_only : "0",
+                                reverse_lookup_unify ? reverse_lookup_unify : "0",
                                 port_list_id,
                                 comment_element,
                                 source_element,
@@ -7307,13 +7314,16 @@ save_target_omp (credentials_t * credentials, params_t *params)
   const char *name, *next, *hosts, *target_locator, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id, *port_list_id;
+  const char *reverse_lookup_only, *reverse_lookup_unify;
 
   name = params_value (params, "name");
   next = params_value (params, "next");
   hosts = params_value (params, "hosts");
+  exclude_hosts = params_value (params, "exclude_hosts");
+  reverse_lookup_only = params_value (params, "reverse_lookup_only");
+  reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
   target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
-  exclude_hosts = params_value (params, "exclude_hosts");
   comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
   target_credential = params_value (params, "lsc_credential_id");
@@ -7426,6 +7436,8 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                 "<name>%s</name>"
                                 "<hosts>%s</hosts>"
                                 "<exclude_hosts>%s</exclude_hosts>"
+                                "<reverse_lookup_only>%s</reverse_lookup_only>"
+                                "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                                 "<port_list id=\"%s\"/>"
                                 "%s%s%s%s"
                                 "</modify_target>",
@@ -7437,6 +7449,8 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                        : hosts)
                                   : "",
                                 exclude_hosts ? exclude_hosts : "",
+                                reverse_lookup_only ? reverse_lookup_only : "0",
+                                reverse_lookup_unify ? reverse_lookup_unify : "0",
                                 port_list_id,
                                 comment_element,
                                 source_element,

@@ -8093,6 +8093,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="175">Reverse Lookup Only</td>
+            <td>
+              <label>
+                <input type="radio" name="reverse_lookup_only" value="1"/>Yes
+              </label>
+              <label>
+                <input type="radio" name="reverse_lookup_only" value="0"
+                       checked="1"/>No
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Reverse Lookup Unify</td>
+            <td>
+              <label>
+                <input type="radio" name="reverse_lookup_unify" value="1"/>Yes
+              </label>
+              <label>
+                <input type="radio" name="reverse_lookup_unify" value="0"
+                       checked="1"/>No
+              </label>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="175">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
@@ -8292,8 +8316,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="175">Exclude Hosts</td>
             <td>
-              <input type="text" name="exclude_hosts" value="" size="30"
-                      maxlength="2000"/>
+              <input type="text" name="exclude_hosts"
+                     value="{commands_response/get_targets_response/target/exclude_hosts}"
+                     size="30" maxlength="2000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Reverse Lookup Only</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
+                    <input type="radio" name="reverse_lookup_only" value="1" checked="1"/>Yes
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="reverse_lookup_only" value="1"/>Yes
+                  </xsl:otherwise>
+                </xsl:choose>
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
+                    <input type="radio" name="reverse_lookup_only" value="0" checked="1"/>No
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="reverse_lookup_only" value="0"/>No
+                  </xsl:otherwise>
+                </xsl:choose>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Reverse Lookup Unify</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
+                    <input type="radio" name="reverse_lookup_unify" value="1" checked="1"/>Yes
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="reverse_lookup_unify" value="1"/>Yes
+                  </xsl:otherwise>
+                </xsl:choose>
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
+                    <input type="radio" name="reverse_lookup_unify" value="0" checked="1"/>No
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="reverse_lookup_unify" value="0"/>No
+                  </xsl:otherwise>
+                </xsl:choose>
+              </label>
             </td>
           </tr>
           <tr>
@@ -8668,6 +8743,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Exclude Hosts:</td>
           <td><xsl:value-of select="exclude_hosts"/></td>
+        </tr>
+        <tr>
+          <td>Reverse Lookup Only:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="reverse_lookup_only = 1">Yes</xsl:when>
+              <xsl:otherwise>No</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Reverse Lookup Unify:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="reverse_lookup_unify = 1">Yes</xsl:when>
+              <xsl:otherwise>No</xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td>Maximum number of hosts:</td>
