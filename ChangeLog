@@ -1,3 +1,9 @@
+2013-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report): Move status to dedicated column, using
+	status bar instead of text.
+	(html-reports-table): Add Status column.
+
 2013-09-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-reports-table): Add sorting by severity column.

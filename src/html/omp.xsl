@@ -3269,14 +3269,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/>
         </a>
       </b>
-      <xsl:choose>
-        <xsl:when test="$container=1 and scan_run_status='Running'">
-          <br/><xsl:text>Uploading</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <br/><xsl:value-of select="scan_run_status"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="status_bar">
+        <xsl:with-param name="status">
+          <xsl:choose>
+            <xsl:when test="task/target/@id='' and scan_run_status='Running'">
+              <xsl:text>Uploading</xsl:text>
+            </xsl:when>
+            <xsl:when test="task/target/@id=''">
+              <xsl:text>Container</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="scan_run_status"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+        <xsl:with-param name="progress">
+          <xsl:value-of select="task/progress/text()"/>
+        </xsl:with-param>
+      </xsl:call-template>
     </td>
     <td>
       <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
@@ -20186,7 +20198,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (report)"/>
     <xsl:with-param name="filtered-count" select="report_count/filtered"/>
     <xsl:with-param name="full-count" select="report_count/text ()"/>
-    <xsl:with-param name="headings" select="'Date|date Task|task Severity|severity Scan&#xa0;Results~High|~Medium|~Low|~Log|~False&#xa0;Positive|'"/>
+    <xsl:with-param name="headings" select="'Date|date Status|status Task|task Severity|severity Scan&#xa0;Results~High|~Medium|~Low|~Log|~False&#xa0;Positive|'"/>
     <xsl:with-param name="default-filter" select="'apply_overrides=1'"/>
     <xsl:with-param name="extra_params">
       <param>
