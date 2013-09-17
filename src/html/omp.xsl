@@ -3290,7 +3290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </td>
-    <td>
+    <td style="max-width: 100px; overflow: hidden;">
       <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
          title="View details of Task {task/@id}"
          style="margin-left:3px;">

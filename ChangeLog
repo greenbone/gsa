@@ -1,5 +1,10 @@
 2013-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report): Restrict the Task column width, to prevent
+	the Date column from getting too small.
+
+2013-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report): Move status to dedicated column, using
 	status bar instead of text.
 	(html-reports-table): Add Status column.
