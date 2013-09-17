@@ -1,3 +1,7 @@
+2013-09-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-reports-table): Add sorting by severity column.
+
 2013-09-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate reverse_lookup_only and
