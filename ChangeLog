@@ -1,5 +1,10 @@
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-reports-table): Add sorting to default-filter,
+	else name is used.
+
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preferences [edit-scanner-details]): Adjust colspan
 	for new column.
 
