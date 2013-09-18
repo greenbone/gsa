@@ -1,5 +1,10 @@
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (preferences [edit-scanner-details]): Add Default
+	column to match what's in table.
+
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_alert): Get report formats and filters here
 	instead of in new_alert_omp, because they're always needed on the New
 	Alert, however it was reached.
