@@ -5787,6 +5787,371 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="reports.html">
+  <div class="gb_window_part_center">Help: Reports</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_reports&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_REPORTS'"/>
+      </xsl:call-template>
+
+      <a name="reports"></a>
+      <h1>Reports</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#report">reports</a> and summarizes
+       the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td width="150px">Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Date</td>
+          <td>
+            Shows the date the report was created.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Status</td>
+          <td>The status of a report is one of these:
+            <br/>
+            <table>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Running">
+                    <div class="progressbar_bar" style="width:42px;"></div>
+                    <div class="progressbar_text">42 %</div>
+                   </div>
+                </td>
+                <td>
+                  An active scan for this report is running and has completed 42%.
+                  The percentage refers
+                  to the number of hosts multiplied with the number of NVTs. Thus,
+                  it may not correspond perfectly with the duration of the scan.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Requested</div>
+                  </div>
+                </td>
+                <td>
+                  This task has just been started and prepares to delegate the scan
+                  to the scan engine.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Delete Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Delete Requested</div>
+                  </div>
+                </td>
+                <td>
+                  The user has recently deleted the task. Currently the manager
+                  server cleans up the database which might take some time because
+                  any reports associated with this task will be removed as well.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Stop Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Stop Requested</div>
+                  </div>
+                </td>
+                <td>
+                  The user has recently stopped the scan. Currently the manager
+                  server has submitted this command to the scanner, but the scanner
+                  has not yet cleanly stopped the scan.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Stopped">
+                    <div class="progressbar_bar_request" style="width:15px;"></div>
+                    <div class="progressbar_text">
+                      Stopped at <xsl:value-of select="15"/> %
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  The scan was stopped by the user.  The scan was
+                  15% complete when it stopped.  Also, this status is set in cases
+                  where the scan was stopped due to other arbitrary circumstances
+                  such as power outage.  The report will remain stopped even if the
+                  scanner or manager server is restarted, for example on reboot.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Pause Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Pause Requested</div>
+                  </div>
+                </td>
+                <td>
+                  The user has recently paused the scan. The manager
+                  server has submitted this command to the scanner, but the scanner
+                  has not yet cleanly paused the scan.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Paused">
+                    <div class="progressbar_bar_request" style="width:82px;"></div>
+                    <div class="progressbar_text">
+                      Paused at <xsl:value-of select="82"/> %
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  The scan was paused by the user.   The scan was
+                  82% complete when it was paused.
+                  The report will change to stopped if the scanner or manager
+                  server is restarted, for example on reboot.
+                  The scan service remains stand-by active and will not release any memory.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Internal Error">
+                    <div class="progressbar_bar_error" style="width:100px;"></div>
+                    <div class="progressbar_text">Internal Error</div>
+                  </div>
+                </td>
+                <td>
+                  The scan resulted in an error.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Done">
+                    <div class="progressbar_bar_done" style="width:100px;"></div>
+                    <div class="progressbar_text">Done</div>
+                  </div>
+                </td>
+                <td>
+                  The report returned successfully from a scan and produced a report. The
+                  report is complete with regard to targets and scan configuration
+                  of the report.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <div class="progressbar_box" title="Container">
+                    <div class="progressbar_bar_done" style="width:100px;"></div>
+                    <div class="progressbar_text">Container</div>
+                  </div>
+                </td>
+                <td>
+                  The report is part of a container task.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Task</td>
+          <td>The report's task.</td>
+        </tr>
+        <tr class="even">
+          <td>Severity</td>
+          <td>
+            Severity of the report. The bar will be colored
+            according to the severity level defined by the current
+            <a href="/help/my_settings.html?token={/envelope/token}#severity_class">Severity Class</a>:
+            <br/>
+            <table>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'8.0'"/>
+                    <xsl:with-param name="extra_text" select="' (High)'"/>
+                    <xsl:with-param name="title" select="'High'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
+                  A red bar is shown if the maximum severity is in the
+                  'High' range.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'5.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Medium)'"/>
+                    <xsl:with-param name="title" select="'Medium'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
+                  A yellow bar is shown if the maximum severity is in the
+                  'Medium' range.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'2.0'"/>
+                    <xsl:with-param name="extra_text" select="' (Low)'"/>
+                    <xsl:with-param name="title" select="'Low'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
+                  A blue bar is shown if the maximum severity is in the
+                  'Low' range.
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="'0.0'"/>
+                    <xsl:with-param name="extra_text" select="' (None)'"/>
+                    <xsl:with-param name="title" select="'None'"/>
+                  </xsl:call-template>
+                </td>
+                <td>
+                  An empty bar is shown if no vulnerabilities were detected.
+                  Perhaps some NVT created a log information, so the report
+                  is not necessarily empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Results: High</td>
+          <td>The number of High results.</td>
+        </tr>
+        <tr class="even">
+          <td>Scan Results: Medium</td>
+          <td>The number of Medium results.</td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Results: Low</td>
+          <td>The number of Low results.</td>
+        </tr>
+        <tr class="even">
+          <td>Scan Results: Log</td>
+          <td>The number of Log results.</td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Results: False Pos.</td>
+          <td>The number of False Positive results.</td>
+        </tr>
+      </table>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <a name="overrides"></a>
+      <h3>Overrides</h3>
+      <p>
+        By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
+      </p>
+      <p>
+        The overrides icon
+        indicates whether overrides are applied
+        <img src="/img/overrides_enabled.png" alt="Overrides are Applied" title="Overrides are Applied" />
+        or not
+        <img src="/img/overrides_disabled.png" alt="No Overrides" title="No Overrides" />.
+        Clicking the icon toggles overrides.
+        In the table view, threat, threat numbers and trend might change
+        when switching this selection.
+      </p>
+      <p>
+        Note that leaving this page will reset the overrides selection to apply overrides.
+      </p>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delta</h4>
+      <p>
+        Pressing the delta icon
+        <img src="/img/delta.png" alt="Compare" title="Compare"/> will
+        select the report for comparison.
+      </p>
+
+      <p>
+        Once a report is selected for comparison, the greyed out delta icon
+        <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
+        indicates that the report has been selected.
+      </p>
+
+      <p>
+        Pressing the second delta icon
+        <img src="/img/delta_second.png" alt="Compare" title="Compare" /> will
+        produce a comparison between the report and the previously selected one.
+      </p>
+
+      <p>
+        The delta icon is only available when the filtering specifies a single
+        task.  For multiple tasks the greyed out delta icon is shown.
+      </p>
+
+      <h4>Delete Report</h4>
+      <p>
+        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+        remove the report immediately. The list of reports will be updated.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="trashcan.html">
+  <div class="gb_window_part_center">Help: Trashcan</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Trashcan</h1>
+      <p>
+        This page lists all resources that are currently in the trashcan.
+        The listing is grouped by resource type.
+        There is a summary table at the top of the page with item counts
+        and links into the groups.
+      </p>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete</h4>
+      <p>
+       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       remove the resource entirely from the system, immediately.  The
+       trashcan will be updated.  The icon will be greyed out
+       <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />
+       when some other resource in the trashcan depends on the resource.
+      </p>
+
+      <h4>Restore</h4>
+      <p>
+       Pressing the restore icon
+       <img src="/img/restore.png" alt="Restore" title="Restore" />
+       will move the resource out of the trashcan and back into normal
+       operation.  The trashcan will be updated.  The icon will be greyed out
+       <img src="/img/restore_inactive.png" alt="Restore" title="Restore" />
+       when the resource depends on some other resource that
+       is in the trashcan.
+      </p>
+
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="cvss_calculator.html">
   <div class="gb_window_part_center">Help: CVSS Calculator
       <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">
