@@ -202,16 +202,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               (e.g. <tt>192.168.13.0/24</tt>)</li>
           <li>an IPv6 address
               (e.g. <tt>fe80::222:64ff:fe76:4cea</tt>).</li>
+          <li>an IPv6 address range in long format
+              (e.g. <tt>::12:fe5:fb50-::12:fe6:100</tt>)</li>
+          <li>an IPv6 address range in short format
+              (e.g. <tt>::12:fe5:fb50-fb80</tt>)</li>
+          <li>an IPv6 address range in CIDR notation
+              (e.g. <tt>fe80::222:64ff:fe76:4cea/120</tt>)</li>
         </ul>
         These options can be mixed (e.g.
-        <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
+        <tt>192.168.13.1, myhost2.domain, fe80::222:64ff:fe76:4cea,
+            192.168.13.0/24</tt>).
       </li>
       <li>
-        The netmask in CIDR notation is limited to 20 (4095 hosts).
-      </li>
-      <li>
-        The Scanner currently expects IPv6 addresses to name a single host,
-        and always uses a netmask of 128 for IPv6 addresses.
+        The netmask in CIDR notation is limited to 20 for IPv4
+        and 116 for IPv6 (4095 hosts).
       </li>
     </ul>
   </p>
@@ -5316,6 +5320,27 @@ Public License instead of this License.
           <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
         </tr>
         <tr class="even">
+          <td>Exclude Hosts</td>
+          <td>--</td>
+          <td>200</td>
+          <td>Same as Hosts.</td>
+          <td><tt>192.168.1.23, 192.168.1.125, webbackup.mycompany.tld</tt></td>
+        </tr>
+        <tr class="odd">
+          <td>Reverse Lookup Only</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Yes (Scan only hosts that reverse-lookup.)</td>
+        </tr>
+        <tr class="odd">
+          <td>Reverse Lookup Unify</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Yes (Deduplicate hosts based on reverse-lookup value.)</td>
+        </tr>
+        <tr class="even">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
@@ -7585,10 +7610,11 @@ Public License instead of this License.
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#target">Target</a>.
-        This includes the name, comment and the maximum number of hosts to scan.
-        If credentials are associated with the target, their names can be seen. A click
-        on a credential name will show more information about the associated
-        credential.
+        This includes the name, comment, hosts, exclude hosts and the maximum
+        number of hosts to scan.
+        If credentials are associated with the target, their names can be seen.
+        A click on a credential name will show more information about the
+        associated credential.
       </p>
 
       <h4>New Target</h4>
@@ -7825,8 +7851,11 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>IPs</td>
-          <td>The total number of IPs that results from the
-              hosts specification.</td>
+          <td>The total number of IPs that results from the hosts specification
+              hosts exclusion.
+              This is a max-value estimate as it doesn't take into account
+              scan-time features like resolving excluded hostnames and options
+              like reverse lookup only and unify.</td>
         </tr>
         <tr class="even">
           <td>Port List</td>

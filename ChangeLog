@@ -1,3 +1,9 @@
+2013-09-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/help.xsl (hosts_note): Update documentation for IPv6 ranges.
+	(new_target.html, target_details.html, targets.html): Update to document
+	Targets' new options.
+
 2013-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl: Make spacing at end of single tags consistent.
