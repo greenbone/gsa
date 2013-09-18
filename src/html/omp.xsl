@@ -5492,7 +5492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="145">Report Filter (optional)</td>
+            <td valign="top" width="145">Report Result Filter (optional)</td>
             <td colspan="2">
               <select name="filter_id">
                 <option value="0">--</option>

@@ -1,5 +1,13 @@
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_alert_omp): Change type in GET_FILTERS, to match
+	recent type rename.
+
+	* src/html/omp.xsl (html-create-alert-form): Rename field to try match
+	filter type.
+
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_alert, new_alert_omp): Move up in file.
 	(create_alert_omp): On error stay on the New Alert page, instead of
 	returning to the Alerts page.
