@@ -1,5 +1,10 @@
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (preferences [edit-scanner-details]): Adjust colspan
+	for new column.
+
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preferences [edit-scanner-details]): Add Default
 	column to match what's in table.
 

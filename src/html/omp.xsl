@@ -9646,7 +9646,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         select="preference[string-length(nvt)=0]"
         mode="edit-details"/>
       <tr>
-        <td colspan="3" style="text-align:right;">
+        <td colspan="4" style="text-align:right;">
           <input type="submit"
                  name="submit"
                  value="Save Config"
