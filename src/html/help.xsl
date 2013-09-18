@@ -5813,10 +5813,14 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="reports.html">
-  <div class="gb_window_part_center">Help: Reports</div>
+  <div class="gb_window_part_center">Help: Reports
+    <a href="/omp?cmd=get_reports&amp;overrides=1&amp;token={/envelope/token}"
+       title="Reports" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Reports"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_reports&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7899,10 +7903,14 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="tasks.html">
-  <div class="gb_window_part_center">Help: Tasks</div>
+  <div class="gb_window_part_center">Help: Tasks
+    <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
