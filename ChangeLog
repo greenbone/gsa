@@ -1,3 +1,9 @@
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (new_alert, new_alert_omp): Move up in file.
+	(create_alert_omp): On error stay on the New Alert page, instead of
+	returning to the Alerts page.
+
 2013-09-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (hosts_note): Update documentation for IPv6 ranges.

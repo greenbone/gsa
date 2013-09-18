@@ -4826,6 +4826,116 @@ export_agents_omp (credentials_t * credentials, params_t *params,
                       content_disposition, content_length);
 }
 
+/**
+ * @brief Returns page to create a new alert.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_alert>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_alert>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new alert.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_alert_omp (credentials_t *credentials, params_t *params)
+{
+  GString *extra_xml;
+  int ret;
+  entity_t entity;
+  gchar *response;
+
+  /* Get Report Formats. */
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, "<get_report_formats/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for new alert. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for new alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for new alert. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+  extra_xml = g_string_new (response);
+  g_free (response);
+  free_entity (entity);
+
+  /* Get Report Filters. */
+  ret = omp (credentials, &response, &entity,
+             "<get_filters filter=\"type=report\"/>");
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Filters for new alert. "
+                             "The task was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Filters for new alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Filters for new alert. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+  g_string_append (extra_xml, response);
+  g_free (response);
+  free_entity (entity);
+
+  return new_alert (credentials, params, g_string_free (extra_xml, FALSE));
+}
+
 char *
 get_alerts (credentials_t *, params_t *, const char *);
 
@@ -5003,29 +5113,9 @@ char *
 create_alert_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
-  GString *xml;
   int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *name, *comment, *condition, *event, *method, *filter_id;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new target. "
-                             "No new target was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
-
-  xml = g_string_new ("");
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -5036,12 +5126,31 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 
   if (name == NULL || comment == NULL || condition == NULL || event == NULL
       || method == NULL || filter_id == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Alert"));
+    return new_alert (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Alert"));
   else
     {
       params_t *method_data, *event_data, *condition_data;
+      entity_t entity;
+      const char *status;
 
       /* Create the alert. */
+
+      switch (manager_connect (credentials, &socket, &session, &html))
+        {
+          case 0:
+            break;
+          case -1:
+            if (html)
+              return html;
+            /* Fall through. */
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while creating a new target. "
+                                 "No new target was created. "
+                                 "Diagnostics: Failure to connect to manager daemon.",
+                                 "/omp?cmd=get_targets");
+        }
 
       method_data = params_values (params, "method_data:");
       event_data = params_values (params, "event_data:");
@@ -5069,7 +5178,6 @@ create_alert_omp (credentials_t * credentials, params_t *params)
                                   "</condition>"
                                   "</create_alert>"))
         {
-          g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -5079,9 +5187,9 @@ create_alert_omp (credentials_t * credentials, params_t *params)
                                "/omp?cmd=get_alerts");
         }
 
-      if (read_string (&session, &xml))
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
         {
-          g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -5090,13 +5198,40 @@ create_alert_omp (credentials_t * credentials, params_t *params)
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_alerts");
         }
+      openvas_server_close (socket, session);
+
+      status = entity_attribute (entity, "status");
+      if ((status == NULL)
+          || (strlen (status) == 0))
+        {
+          free_entity (entity);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new alert. "
+                               "It is unclear whether the alert has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_alerts");
+        }
+
+      if (status[0] != '2')
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = new_alert (credentials, params, response);
+          g_free (response);
+          free_entity (entity);
+          return html;
+        }
+
+      free_entity (entity);
     }
 
   /* Cleanup, and return transformed XML. */
 
-  html = get_alerts (credentials, params, xml->str);
-  openvas_server_close (socket, session);
-  g_string_free (xml, TRUE);
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_alerts (credentials, params, response);
+  g_free (response);
   return html;
 }
 
@@ -5210,116 +5345,6 @@ char *
 get_alerts_omp (credentials_t * credentials, params_t *params)
 {
   return get_alerts (credentials, params, NULL);
-}
-
-/**
- * @brief Returns page to create a new alert.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- *
- * @return Result of XSL transformation.
- */
-static char *
-new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
-{
-  GString *xml;
-  xml = g_string_new ("<new_alert>");
-  g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_alert>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Returns page to create a new alert.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-new_alert_omp (credentials_t *credentials, params_t *params)
-{
-  GString *extra_xml;
-  int ret;
-  entity_t entity;
-  gchar *response;
-
-  /* Get Report Formats. */
-  response = NULL;
-  entity = NULL;
-  ret = omp (credentials, &response, &entity, "<get_report_formats/>");
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for new alert. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts");
-      case 2:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for new alert. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts");
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for new alert. "
-                             "It is unclear whether the task has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts");
-    }
-  extra_xml = g_string_new (response);
-  g_free (response);
-  free_entity (entity);
-
-  /* Get Report Filters. */
-  ret = omp (credentials, &response, &entity,
-             "<get_filters filter=\"type=report\"/>");
-
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Filters for new alert. "
-                             "The task was not saved. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts");
-      case 2:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Filters for new alert. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts");
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Filters for new alert. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts");
-    }
-  g_string_append (extra_xml, response);
-  g_free (response);
-  free_entity (entity);
-
-  return new_alert (credentials, params, g_string_free (extra_xml, FALSE));
 }
 
 /**
