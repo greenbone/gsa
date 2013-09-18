@@ -1,5 +1,12 @@
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_alert): Get report formats and filters here
+	instead of in new_alert_omp, because they're always needed on the New
+	Alert, however it was reached.
+	(new_alert_omp): Remove OMP calls.
+
+2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_alert_omp): Change type in GET_FILTERS, to match
 	recent type rename.
 

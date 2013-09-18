@@ -4839,27 +4839,12 @@ static char *
 new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
-  xml = g_string_new ("<new_alert>");
-  g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_alert>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Returns page to create a new alert.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-new_alert_omp (credentials_t *credentials, params_t *params)
-{
-  GString *extra_xml;
   int ret;
   entity_t entity;
   gchar *response;
+
+  xml = g_string_new ("<new_alert>");
+  g_string_append (xml, extra_xml);
 
   /* Get Report Formats. */
   response = NULL;
@@ -4893,7 +4878,7 @@ new_alert_omp (credentials_t *credentials, params_t *params)
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts");
     }
-  extra_xml = g_string_new (response);
+  g_string_append (xml, response);
   g_free (response);
   free_entity (entity);
 
@@ -4929,11 +4914,26 @@ new_alert_omp (credentials_t *credentials, params_t *params)
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts");
     }
-  g_string_append (extra_xml, response);
+  g_string_append (xml, response);
   g_free (response);
   free_entity (entity);
 
-  return new_alert (credentials, params, g_string_free (extra_xml, FALSE));
+  g_string_append (xml, "</new_alert>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new alert.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_alert_omp (credentials_t *credentials, params_t *params)
+{
+  return new_alert (credentials, params, NULL);
 }
 
 char *
