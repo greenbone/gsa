@@ -2706,6 +2706,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Hosts ordering:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="hosts_ordering = 'sequential'">Sequential</xsl:when>
+              <xsl:when test="hosts_ordering = 'random'">Random</xsl:when>
+              <xsl:when test="hosts_ordering = 'reverse'">Reverse</xsl:when>
+              <xsl:otherwise>N/A</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
           <td>Slave:</td>
           <td>
             <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
@@ -3550,6 +3561,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </tr>
                 </xsl:otherwise>
               </xsl:choose>
+              <tr>
+                <td>Order for target hosts</td>
+                <td>
+                  <xsl:variable name="hosts_ordering"
+                                select="commands_response/get_tasks_response/task/hosts_ordering"/>
+                  <select name="hosts_ordering">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="content" select="'Sequential'"/>
+                      <xsl:with-param name="value" select="'sequential'"/>
+                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="content" select="'Random'"/>
+                      <xsl:with-param name="value" select="'random'"/>
+                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="content" select="'Reverse'"/>
+                      <xsl:with-param name="value" select="'reverse'"/>
+                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
+                    </xsl:call-template>
+                  </select>
+                </td>
+              </tr>
               <tr>
                 <td>Alerts (optional)</td>
                 <td>
@@ -26637,6 +26672,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Order for target hosts</td>
+          <td>
+            <select name="hosts_ordering">
+              <option value="sequential" selected="1">Sequential</option>
+              <option value="random">Random</option>
+              <option value="reverse">Reverse</option>
             </select>
           </td>
         </tr>

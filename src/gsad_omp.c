@@ -2130,7 +2130,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
-  const char *in_assets, *submit;
+  const char *in_assets, *submit, *hosts_ordering;
   params_t *alerts, *groups;
   GString *alert_element, *group_element;
 
@@ -2138,6 +2138,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   comment = params_value (params, "comment");
   config_id = params_value (params, "config_id");
   target_id = params_value (params, "target_id");
+  hosts_ordering = params_value (params, "hosts_ordering");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
   in_assets = params_value (params, "in_assets");
@@ -2207,6 +2208,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (comment);
   CHECK (config_id);
   CHECK (target_id);
+  CHECK (hosts_ordering);
   CHECK (slave_id);
   CHECK (schedule_id);
   CHECK (in_assets);
@@ -2262,6 +2264,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              "%s"
                              "%s"
                              "<target id=\"%s\"/>"
+                             "<hosts_ordering>%s</hosts_ordering>"
                              "<name>%s</name>"
                              "<comment>%s</comment>"
                              "<preferences>"
@@ -2285,6 +2288,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              alert_element->str,
                              slave_element,
                              target_id,
+                             hosts_ordering,
                              name,
                              comment,
                              max_checks,
@@ -2539,7 +2543,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
-  const char *config_id, *target_id;
+  const char *config_id, *target_id, *hosts_ordering;
   int ret;
   params_t *alerts, *groups;
   GString *alert_element, *group_elements;
@@ -2551,6 +2555,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   next = params_value (params, "next");
   in_assets = params_value (params, "in_assets");
   target_id = params_value (params, "target_id");
+  hosts_ordering = params_value (params, "hosts_ordering");
   config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
@@ -2623,6 +2628,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (name, "Save Task", edit_task);
   CHECK_PARAM (comment, "Save Task", edit_task);
   CHECK_PARAM (target_id, "Save Task", edit_task);
+  CHECK_PARAM (hosts_ordering, "Save Task", edit_task);
   CHECK_PARAM (config_id, "Save Task", edit_task);
   CHECK_PARAM (schedule_id, "Save Task", edit_task);
   CHECK_PARAM (slave_id, "Save Task", edit_task);
@@ -2669,6 +2675,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
                             "<comment>%%s</comment>"
+                            "<hosts_ordering>%s</hosts_ordering>"
                             "%s"
                             "<target id=\"%%s\"/>"
                             "<config id=\"%%s\"/>"
@@ -2690,6 +2697,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "</preferences>"
                             "<observers>%%s%s</observers>"
                             "</modify_task>",
+                            hosts_ordering,
                             alert_element->str,
                             group_elements->str);
   response = NULL;
