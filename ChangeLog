@@ -9,6 +9,11 @@
 	multi-choice options.
 	(task [details]): Output hosts ordering value.
 
+2013-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-reports-table): Add column names for sorting
+	by severity level counts.
+
 2013-09-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (reports.html, tasks.html): Replace "Jump to dialog"
