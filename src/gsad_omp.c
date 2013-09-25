@@ -11030,7 +11030,12 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
     {
       xml = g_string_new ("");
 
-      xml_string_append (xml, "<new_note>");
+      xml_string_append (xml,
+                         "<new_note>"
+                         "<nvt id=\"%s\"/>"
+                         "<next>%s</next>",
+                         oid ? oid : "0",
+                         next ? next : "");
 
       if (extra_xml)
         g_string_append (xml, extra_xml);
@@ -11812,7 +11817,12 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
     {
       xml = g_string_new ("");
 
-      xml_string_append (xml, "<new_override>");
+      xml_string_append (xml,
+                         "<new_override>"
+                         "<nvt id=\"%s\"/>"
+                         "<next>%s</next>",
+                         oid ? oid : "0",
+                         next ? next : "");
 
       if (extra_xml)
         g_string_append (xml, extra_xml);

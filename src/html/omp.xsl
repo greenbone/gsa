@@ -15394,6 +15394,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="NVT" style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="NVT"/>
           </a>
+          <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Add Note" style="margin-left:3px;">
+            <img src="/img/new_note.png" border="0" alt="Add Note"/>
+          </a>
+          <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Add Override" style="margin-left:3px;">
+            <img src="/img/new_override.png" border="0" alt="Add Override"/>
+          </a>
         </div>
         <div class="gb_window_part_content">
           <xsl:apply-templates
@@ -15500,7 +15508,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="center" width="125"><b>NVT OID</b></td>
                 <td>
-                  <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                  <xsl:choose>
+                    <xsl:when test="nvt/@id = '0'">
+                      <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="text" name="oid" size="30" maxlength="80" value="{nvt/@id}"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
             </xsl:otherwise>
@@ -16508,7 +16523,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="center" width="125"><b>NVT OID</b></td>
                 <td>
-                  <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                  <xsl:choose>
+                    <xsl:when test="nvt/@id = '0'">
+                      <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="text" name="oid" size="30" maxlength="80" value="{nvt/@id}"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
             </xsl:otherwise>

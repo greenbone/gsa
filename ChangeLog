@@ -1,3 +1,19 @@
+2013-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add new note and override buttons on the New Note page.
+
+	* src/gsad_omp.c (new_note, new_override): Add NVT and NEXT to XML in
+	simple case.
+
+	* src/html/omp.xsl (get_nvts): Add new note and override buttons.
+	(html-create-note-form, html-create-override-form): In the simple case
+	if the NVT ID was given then use it in the NVT field.
+
+2013-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-reports-table): Add column names for sorting
+	by severity level counts.
+
 2013-09-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate hosts_ordering parameter.
@@ -8,11 +24,6 @@
 	* src/html/omp.xsl (new_task, html-edit-task-form): Add hosts ordering
 	multi-choice options.
 	(task [details]): Output hosts ordering value.
-
-2013-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
-
-	* src/html/omp.xsl (html-reports-table): Add column names for sorting
-	by severity level counts.
 
 2013-09-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
@@ -38,7 +49,7 @@
 
 	* src/gsad_omp.c (new_alert): Get report formats and filters here
 	instead of in new_alert_omp, because they're always needed on the New
-	Alert, however it was reached.
+	Alert page, however it was reached.
 	(new_alert_omp): Remove OMP calls.
 
 2013-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
@@ -668,7 +679,7 @@
 	complex filter terms when building the filter.
 
 	* src/html/omp.xsl (filter-simple): New template.
-	(filter-rest): Only include complex terms.  Oly add relation when
+	(filter-rest): Only include complex terms.  Only add relation when
 	there's a column.
 	(filter-window-part): For filter expand icon include extra params and
 	get the type with type-many, so that SecInfo works.  Separate simple
