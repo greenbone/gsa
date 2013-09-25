@@ -1,3 +1,15 @@
+2013-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r17769.  Add new note and override buttons on the New Note
+	page.
+
+	* src/gsad_omp.c (new_note, new_override): Add NVT and NEXT to XML in
+	simple case.
+
+	* src/html/omp.xsl (get_nvts): Add new note and override buttons.
+	(html-create-note-form, html-create-override-form): In the simple case
+	if the NVT ID was given then use it in the NVT field.
+
 2013-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r15954.
