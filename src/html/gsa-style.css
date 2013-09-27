@@ -362,6 +362,10 @@ table.odd {
  background-color: #EEEEEE;
 }
 
+td p {
+ margin-top: 0;
+}
+
 /* END Greenbone Tables */
 
 /* BEGIN Window decorations */

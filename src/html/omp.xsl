@@ -15168,7 +15168,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Summary</h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'summary' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="substring-after (., '=')"/>
+          </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
@@ -15181,7 +15183,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Affected Software/OS</h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'affected' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="substring-after (., '=')"/>
+          </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
@@ -15230,7 +15234,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <h2>Vulnerability Insight</h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'insight' = substring-before (., '=')">
-            <xsl:value-of select="substring-after (., '=')"/><br />
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="substring-after (., '=')"/>
+            </xsl:call-template>
           </xsl:if>
         </xsl:for-each>
       </xsl:if>
@@ -15244,7 +15250,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Vulnerability Detection Method</h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'vuldetect' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="substring-after (., '=')"/>
+          </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
@@ -15258,7 +15266,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <h2>Impact</h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'impact' = substring-before (., '=')">
-            <xsl:value-of select="substring-after (., '=')"/><br />
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="substring-after (., '=')"/>
+            </xsl:call-template>
           </xsl:if>
         </xsl:for-each>
       </xsl:if>
@@ -15273,7 +15283,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <h2>Solution</h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'solution' = substring-before (., '=')">
-            <xsl:value-of select="substring-after (., '=')"/><br />
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="substring-after (., '=')"/>
+            </xsl:call-template>
           </xsl:if>
         </xsl:for-each>
       </xsl:if>
@@ -15293,7 +15305,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution',substring-before (., '=')))">
           <tr>
             <td valign="top"><xsl:value-of select="substring-before (., '=')"/>:</td>
-            <td><xsl:value-of select="substring-after (., '=')"/></td>
+            <td>
+              <xsl:call-template name="structured-text">
+                <xsl:with-param name="string" select="substring-after (., '=')"/>
+              </xsl:call-template>
+            </td>
           </tr>
         </xsl:if>
       </xsl:for-each>

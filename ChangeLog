@@ -1,3 +1,9 @@
+2013-09-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsa-style.css (td p): New rule.
+
+	* src/html/omp.xsl (nvt): Apply structured-text template to script tags.
+
 2013-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add new note and override buttons on the New Note page.
