@@ -6629,6 +6629,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_{$type}s"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
+              <input type="hidden"
+                     name="refresh_interval"
+                     value="{/envelope/autorefresh/@interval}"/>
               <xsl:if test="$type = 'task' or $type = 'report'">
                 <xsl:choose>
                   <xsl:when test="$apply-overrides = 0">
