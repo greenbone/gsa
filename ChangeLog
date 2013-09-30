@@ -1,5 +1,9 @@
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Add Low and Log to levels default.
+
+2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window): Add missing refresh param to override
 	icon form.
 
