@@ -1,5 +1,10 @@
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (filter-window-part, report [section-filter]): Make
+	filter input slightly shorter, to stop the icons from wrapping.
+
+2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-part): Add missing braces around
 	Xpath.
 
