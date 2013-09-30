@@ -2061,6 +2061,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
 </xsl:template>
 
+<xsl:template name="result-overrides-icon-img">
+  <xsl:param name="overrides"/>
+  <xsl:choose>
+    <xsl:when test="$overrides = 1">
+      <img src="/img/overrides_enabled.png"
+           alt="Overrides are Applied"
+           value="Overrides are Applied"
+           title="Overrides are Applied"
+           style="margin-left:3px;margin-right:3px;"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/overrides_disabled.png"
+           alt="No Overrides"
+           value="No Overrides"
+           title="No Overrides"
+           style="margin-left:3px;margin-right:3px;"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="result-overrides-icon">
+  <xsl:variable name="details">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/details &gt; 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="overrides">
+    <xsl:choose>
+      <xsl:when test="filters/apply_overrides = 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="host" select="/envelope/params/host"/>
+  <xsl:variable name="pos" select="/envelope/params/pos"/>
+  <xsl:variable name="delta" select="delta/report/@id"/>
+
+  <xsl:variable name="link">
+    <xsl:choose>
+      <xsl:when test="@type='prognostic'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:when test="@type='delta'">
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="title">
+    <xsl:choose>
+      <xsl:when test="$overrides='1'">
+        <xsl:value-of select="'Overrides are Applied'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'No Overrides'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <a href="{$link}" title="{$title}">
+    <xsl:call-template name="result-overrides-icon-img">
+      <xsl:with-param name="overrides" select="$overrides"/>
+    </xsl:call-template>
+  </a>
+</xsl:template>
+
 <xsl:template match="report" mode="filterbox">
 
   <xsl:if test="/envelope/params/filterbox &gt; 0">
@@ -21064,6 +21132,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="name" select="'severity'"/>
               <xsl:with-param name="capital-name" select="'Severity'"/>
             </xsl:apply-templates>
+            <div class="float_right">
+              <xsl:apply-templates select="../../." mode="result-overrides-icon"/>
+            </div>
           </xsl:when>
           <xsl:otherwise>
             Severity

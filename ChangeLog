@@ -1,5 +1,11 @@
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result-overrides-icon-img)
+	(report [result-overrides-icon]): New templates.
+	(result [result-headers]): Add overrides icon in Severity column.
+
+2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [all]): Call report-icons instead of
 	report-help-icons.
 	(report-icons): New template.
