@@ -540,7 +540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
           </xsl:variable>
           <a href="/omp?cmd=get_{gsa:type-many($type)}{$extras}&amp;filterbox={$filterbox}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
-             title="$title">
+             title="{$title}">
              <xsl:call-template name="fold-filter-icon-img">
                <xsl:with-param name="fold" select="$fold"/>
              </xsl:call-template>
