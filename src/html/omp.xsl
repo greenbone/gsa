@@ -2434,7 +2434,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="'results'"/>
       </xsl:apply-templates>
       <xsl:apply-templates select="." mode="results-pager"/>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'results'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -22593,7 +22595,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/host)"/>
         <xsl:with-param name="total" select="report/hosts/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'hosts'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -22801,7 +22805,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/host)"/>
         <xsl:with-param name="total" select="report/hosts/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'hosts'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -22875,7 +22881,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))])"/>
         <xsl:with-param name="total" select="report/ports/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'ports'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -22968,7 +22976,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))])"/>
         <xsl:with-param name="total" select="report/vulns/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'vulns'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23064,7 +23074,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="$known_count + $unknown"/>
         <xsl:with-param name="total" select="report/os/count + $unknown"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'os'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23204,7 +23216,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('k_report_apps', concat(name, value)))])"/>
         <xsl:with-param name="total" select="report/apps/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'apps'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23307,7 +23321,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))])"/>
         <xsl:with-param name="total" select="report/apps/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'apps'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23361,7 +23377,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
      title="Help: View Report (View Report)">
-    <img style="vertical-align: text-top;margin-left: 5px" src="/img/help.png"/>
+    <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/help.png"/>
+  </a>
+</xsl:template>
+
+<xsl:template name="report-icons">
+  <xsl:param name="section"/>
+  <xsl:call-template name="report-help-icon"/>
+  <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;report_id={@id}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+     title="Return to default filter view">
+    <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/list.png"/>
   </a>
 </xsl:template>
 
@@ -23382,7 +23407,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
         <xsl:with-param name="total" select="report/closed_cves/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'closed_cves'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23461,7 +23488,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="report-section-pager">
         <xsl:with-param name="current" select="count(report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))])"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'cves'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23515,7 +23544,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="current" select="'topology'"/>
       </xsl:apply-templates>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'topology'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23593,7 +23624,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/host/detail[name='SSLInfo'])"/>
         <xsl:with-param name="total" select="report/ssl_certs/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'ssl_certs'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23700,7 +23733,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="current" select="count(report/errors/error)"/>
         <xsl:with-param name="total" select="report/errors/count"/>
       </xsl:call-template>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'errors'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
@@ -23780,7 +23815,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-list">
         <xsl:with-param name="current" select="'summary'"/>
       </xsl:apply-templates>
-      <xsl:call-template name="report-help-icon"/>
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="'summary'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:choose>
