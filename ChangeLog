@@ -1,5 +1,9 @@
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [section-list]): Add Task Details item.
+
+2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Add Low and Log to levels default.
 
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
