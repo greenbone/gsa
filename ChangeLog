@@ -1,5 +1,12 @@
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css (#report_section_list [.last]): New rule.
+
+	* src/html/omp.xsl (report [section-list]): Skip Task Details link for
+	prognostic reports.
+
+2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [section-list]): Add Task Details item.
 
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
