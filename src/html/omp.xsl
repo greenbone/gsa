@@ -2694,6 +2694,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden"
+                 name="refresh_interval"
+                 value="{/envelope/autorefresh/@interval}"/>
           <xsl:choose>
             <xsl:when test="$apply-overrides = 0">
               <input type="hidden" name="overrides" value="1"/>
