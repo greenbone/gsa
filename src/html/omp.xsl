@@ -59,12 +59,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+
 <!-- BEGIN GLOBAL VARIABLES -->
 
 <xsl:variable name="icon-width" select="19"/>
 <xsl:variable name="trash-actions-width" select="3 + (2 * $icon-width)"/>
 
-<!-- END GLOBAL VARIABLES -->
 
 <!-- BEGIN XPATH FUNCTIONS -->
 
@@ -466,7 +466,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
-<!-- END XPATH FUNCTIONS -->
 
 <!-- BEGIN NAMED TEMPLATES -->
 
@@ -1461,7 +1460,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END NAMED TEMPLATES -->
 
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
@@ -1749,7 +1747,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END GENERAL TAGS VIEWS -->
 
 <!-- BEGIN REPORTS MANAGEMENT -->
 
@@ -2621,7 +2618,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!-- END REPORTS MANAGEMENT -->
 
 <!-- BEGIN TASKS MANAGEMENT -->
 
@@ -3242,7 +3238,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<!-- END TASKS TEMPLATES -->
 
 <!-- BEGIN GENERIC MANAGEMENT -->
 
@@ -3572,7 +3567,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates/>
 </xsl:template>
 
-<!-- END GENERIC MANAGEMENT -->
 
 <!-- BEGIN TASKS MANAGEMENT -->
 
@@ -5200,7 +5194,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- END TASKS MANAGEMENT -->
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
 
@@ -5669,7 +5662,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="lsc_credential" mode="select"/>
 </xsl:template>
 
-<!-- END LSC_CREDENTIALS MANAGEMENT -->
 
 <!-- BEGIN AGENTS MANAGEMENT -->
 
@@ -6027,7 +6019,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="agent" mode="select"/>
 </xsl:template>
 
-<!-- END AGENTS MANAGEMENT -->
 
 <!-- BEGIN ALERTS MANAGEMENT -->
 
@@ -7351,7 +7342,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END ALERTS MANAGEMENT -->
 
 <!-- BEGIN FILTERS MANAGEMENT -->
 
@@ -7761,7 +7751,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END FILTERS MANAGEMENT -->
 
 <!-- BEGIN TAGS MANAGEMENT -->
 
@@ -8472,7 +8461,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_tags_response"/>
 
-<!-- END TAGS MANAGEMENT -->
 
 <!-- BEGIN TARGET LOCATORS MANAGEMENT -->
 
@@ -8480,7 +8468,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <option value="{name}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
-<!-- END TARGET LOCATORS MANAGEMENT -->
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
@@ -9451,7 +9438,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END TARGETS MANAGEMENT -->
 
 <!-- BEGIN CONFIGS MANAGEMENT -->
 
@@ -11211,7 +11197,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-config-nvt-table"/>
 </xsl:template>
 
-<!-- END CONFIGS MANAGEMENT -->
 
 <!-- BEGIN SCHEDULES MANAGEMENT -->
 
@@ -12719,7 +12704,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END SCHEDULES MANAGEMENT -->
 
 <!-- BEGIN SLAVES MANAGEMENT -->
 
@@ -13134,7 +13118,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END SLAVES MANAGEMENT -->
 
 <!-- BEGIN GET RAW INFO -->
 
@@ -15642,7 +15625,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- END GET RAW INFO MANAGEMENT -->
 
 <!-- BEGIN NVT DETAILS -->
 
@@ -15976,7 +15958,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<!-- END NVT DETAILS -->
 
 <!-- BEGIN NOTES MANAGEMENT -->
 
@@ -16991,7 +16972,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END NOTES MANAGEMENT -->
 
 <!-- BEGIN OVERRIDES MANAGEMENT -->
 
@@ -18182,7 +18162,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END OVERRIDES MANAGEMENT -->
 
 <!-- BEGIN GROUPS MANAGEMENT -->
 
@@ -18521,7 +18500,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END GROUPS MANAGEMENT -->
 
 <!-- BEGIN PERMISSIONS MANAGEMENT -->
 
@@ -19071,7 +19049,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END PERMISSIONS MANAGEMENT -->
 
 <!-- BEGIN PORT_LISTS MANAGEMENT -->
 
@@ -19728,7 +19705,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-import-port-list-form"/>
 </xsl:template>
 
-<!-- END PORT_LISTS MANAGEMENT -->
 
 <!-- BEGIN REPORT FORMATS MANAGEMENT -->
 
@@ -20325,7 +20301,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END REPORT FORMATS MANAGEMENT -->
 
 <!-- BEGIN REPORT DETAILS -->
 
@@ -24884,7 +24859,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END REPORT DETAILS -->
 
 <!-- BEGIN ROLES MANAGEMENT -->
 
@@ -25064,7 +25038,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END ROLES MANAGEMENT -->
 
 <!-- BEGIN SYSTEM REPORTS MANAGEMENT -->
 
@@ -25254,7 +25227,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<!-- END SYSTEM REPORTS MANAGEMENT -->
 
 <!-- BEGIN TRASH MANAGEMENT -->
 
@@ -25754,7 +25726,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!-- END TRASH MANAGEMENT -->
 
 <!-- BEGIN USERS MANAGEMENT -->
 
@@ -26764,9 +26735,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="auth"/>
 </xsl:template>
 
-<!-- END AUTHENTICATION DESCRIPTION -->
 
-<!-- END USERS MANAGEMENT -->
 
 <!-- BEGIN FEED MANAGEMENT -->
 
@@ -26894,7 +26863,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- END FEED MANAGEMENT -->
 
 <!-- BEGIN SCAP FEED MANAGEMENT -->
 
@@ -27022,7 +26990,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- END SCAP MANAGEMENT -->
 
 <!-- BEGIN CERT FEED MANAGEMENT -->
 
@@ -27150,7 +27117,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- END CERT FEED MANAGEMENT -->
 
 <!-- BEGIN MY SETTINGS MANAGEMENT -->
 
@@ -27802,7 +27768,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_settings_response"/>
 
-<!-- END MY SETTINGS MANAGEMENT -->
 
 <!-- BEGIN PROTOCOL DOC MANAGEMENT -->
 
@@ -28091,7 +28056,5 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
 </xsl:template>
-
-<!-- END PROTOCOL DOC MANAGEMENT -->
 
 </xsl:stylesheet>

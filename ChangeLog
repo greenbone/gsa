@@ -1,5 +1,10 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Remove END comments now that everything is in a
+	section with a BEGIN.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Add section headers for templates at end of file.
 	(commands_response): Move up into Generic section.
 	(new-task-alert-select, new-task-group-select, new-task): Move up into
