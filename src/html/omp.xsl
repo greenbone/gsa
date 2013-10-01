@@ -3330,38 +3330,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:if>
             </form>
-            <form method="get" action="">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_{$type}s"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <input type="hidden"
-                     name="refresh_interval"
-                     value="{/envelope/autorefresh/@interval}"/>
-              <xsl:if test="$type = 'task' or $type = 'report'">
-                <xsl:choose>
-                  <xsl:when test="$apply-overrides = 0">
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="image"
-                           name="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="No Overrides"
-                           value="No Overrides"
-                           title="No Overrides"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="0"/>
-                    <input type="image"
-                           name="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="Overrides are Applied"
-                           value="Overrides are Applied"
-                           title="Overrides are Applied"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </form>
           </div>
         </xsl:otherwise>
       </xsl:choose>
@@ -3392,6 +3360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:choose>
                   </xsl:variable>
                   <td rowspan="2">
+                    <xsl:copy-of select="html/before/*"/>
                     <xsl:call-template name="column-name">
                       <xsl:with-param name="head" select="name"/>
                       <xsl:with-param name="name" select="$field"/>
@@ -3400,6 +3369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="token" select="$token"/>
                       <xsl:with-param name="extra_params" select="$extra_params_string"/>
                     </xsl:call-template>
+                    <xsl:copy-of select="html/after/*"/>
                   </td>
                 </xsl:when>
                 <xsl:otherwise>
@@ -3431,6 +3401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:choose>
                     </xsl:variable>
                     <td style="font-size:10px;">
+                      <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
                         <xsl:with-param name="head" select="name"/>
                         <xsl:with-param name="name" select="$field"/>
@@ -3439,6 +3410,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:with-param name="token" select="$token"/>
                         <xsl:with-param name="extra_params" select="$extra_params_string"/>
                       </xsl:call-template>
+                      <xsl:copy-of select="html/after/*"/>
                     </td>
                   </xsl:for-each>
                 </xsl:otherwise>
@@ -5218,6 +5190,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Severity</name>
+        <html>
+          <before>
+            <div style="float: right; display: inline">
+              <form method="get" action="">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_tasks"/>
+                <input type="hidden" name="filter" value="{filters/term}"/>
+                <input type="hidden"
+                       name="refresh_interval"
+                       value="{/envelope/autorefresh/@interval}"/>
+                <xsl:choose>
+                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="image"
+                           name="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="No Overrides"
+                           value="No Overrides"
+                           title="No Overrides"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="0"/>
+                    <input type="image"
+                           name="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="Overrides are Applied"
+                           value="Overrides are Applied"
+                           title="Overrides are Applied"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </form>
+            </div>
+          </before>
+        </html>
       </column>
       <column>
         <name>Trend</name>
@@ -21150,6 +21158,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Severity</name>
+        <html>
+          <before>
+            <div style="float: right; display: inline">
+              <form method="get" action="">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_reports"/>
+                <input type="hidden" name="filter" value="{filters/term}"/>
+                <input type="hidden"
+                       name="refresh_interval"
+                       value="{/envelope/autorefresh/@interval}"/>
+                <xsl:choose>
+                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="image"
+                           name="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="No Overrides"
+                           value="No Overrides"
+                           title="No Overrides"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="0"/>
+                    <input type="image"
+                           name="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="Overrides are Applied"
+                           value="Overrides are Applied"
+                           title="Overrides are Applied"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </form>
+            </div>
+          </before>
+        </html>
       </column>
       <column>
         <name>Scan Results</name>

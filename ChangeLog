@@ -1,8 +1,15 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Remove overrides icons.  Allow before
+	and after html for column headings.
+	(html-tasks-table, html-reports-table): Add overrides icon in Severity
+	heading.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (gsa:column-filter-name): Replace ' ' too.
 	(filter-window-part, list-window): Replace text format argument headings
-	with node format argument columns.
+	with node format argument columns.  Update all callers.
 
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
