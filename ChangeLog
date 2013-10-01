@@ -1,5 +1,11 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:column-filter-name): Replace ' ' too.
+	(filter-window-part, list-window): Replace text format argument headings
+	with node format argument columns.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Remove END comments now that everything is in a
 	section with a BEGIN.
 

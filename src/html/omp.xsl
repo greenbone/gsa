@@ -357,7 +357,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:column-filter-name">
   <xsl:param name="type"/>
-  <func:result select="str:replace (gsa:lower-case ($type), '&#xa0;', '_')"/>
+  <func:result select="str:replace (str:replace (gsa:lower-case ($type), '&#xa0;', '_'), ' ', '_')"/>
 </func:function>
 
 <func:function name="gsa:type-string">
@@ -561,7 +561,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="list"/>
   <xsl:param name="extra_params"/>
-  <xsl:param name="headings"/>
+  <xsl:param name="columns"/>
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
       <xsl:choose>
@@ -735,37 +735,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="400"/>
             </div>
           </xsl:if>
-          <xsl:if test="$headings">
+          <xsl:if test="exslt:node-set ($columns)">
             <div style="padding: 2px;">
               Sort by:
               <xsl:variable name="sort" select="sort/field/text ()"/>
               <select style="margin-bottom: 0px;" name="sort_field" size="1">
-                <xsl:for-each select="str:split ($headings, ' ')">
-                  <xsl:variable name="parts" select="str:split (., '~')"/>
+                <xsl:for-each select="exslt:node-set ($columns)/column">
+                  <xsl:variable name="single" select="count (column) = 0"/>
                   <xsl:choose>
-                    <xsl:when test="(count ($parts) = 1) and (gsa:column-filter-name (substring-before ($parts[1], '|')) = $sort)">
-                      <option value="{gsa:column-filter-name (substring-before ($parts[1], '|'))}"
+                    <xsl:when test="($single) and (gsa:column-filter-name (name) = $sort)">
+                      <option value="{gsa:column-filter-name (name)}"
                               selected="1">
-                        <xsl:value-of select="substring-before ($parts[1], '|')"/>
+                        <xsl:value-of select="name"/>
                       </option>
                     </xsl:when>
-                    <xsl:when test="count ($parts) = 1">
-                      <option value="{gsa:column-filter-name (substring-before ($parts[1], '|'))}">
-                        <xsl:value-of select="substring-before ($parts[1], '|')"/>
+                    <xsl:when test="$single">
+                      <option value="{gsa:column-filter-name (name)}">
+                        <xsl:value-of select="name"/>
                       </option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:for-each select="$parts[1]/following-sibling::*">
+                      <xsl:for-each select="column">
                         <xsl:choose>
-                          <xsl:when test="(count ($parts) = 1) and (gsa:column-filter-name (substring-before (., '|')) = $sort)">
-                            <option value="{gsa:column-filter-name (substring-before (., '|'))}"
+                          <xsl:when test="($single) and (gsa:column-filter-name (name) = $sort)">
+                            <option value="{gsa:column-filter-name (name)}"
                                     selected="1">
-                              <xsl:value-of select="substring-before (., '|')"/>
+                              <xsl:value-of select="name"/>
                             </option>
                           </xsl:when>
                           <xsl:otherwise>
-                            <option value="{gsa:column-filter-name (substring-before (., '|'))}">
-                              <xsl:value-of select="substring-before (., '|')"/>
+                            <option value="{gsa:column-filter-name (name)}">
+                              <xsl:value-of select="name"/>
                             </option>
                           </xsl:otherwise>
                         </xsl:choose>
@@ -3249,7 +3249,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="count"/>
   <xsl:param name="filtered-count"/>
   <xsl:param name="full-count"/>
-  <xsl:param name="headings"/>
+  <xsl:param name="columns"/>
   <xsl:param name="icon-count" select="8"/>
   <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
@@ -3369,7 +3369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="$type"/>
       <xsl:with-param name="list" select="$resources-summary"/>
-      <xsl:with-param name="headings" select="$headings"/>
+      <xsl:with-param name="columns" select="$columns"/>
       <xsl:with-param name="extra_params" select="$extra_params"/>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
@@ -3378,14 +3378,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <xsl:variable name="current" select="."/>
             <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="str:split ($headings, ' ')">
-              <xsl:variable name="parts" select="str:split (., '~')"/>
+            <xsl:for-each select="exslt:node-set ($columns)/column">
               <xsl:choose>
-                <xsl:when test="count ($parts) = 1">
+                <xsl:when test="count (column) = 0">
+                  <xsl:variable name="field">
+                    <xsl:choose>
+                      <xsl:when test="field">
+                        <xsl:value-of select="field"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="gsa:column-filter-name (name)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
                   <td rowspan="2">
                     <xsl:call-template name="column-name">
-                      <xsl:with-param name="head" select="substring-before ($parts[1], '|')"/>
-                      <xsl:with-param name="name" select="substring-after ($parts[1], '|')"/>
+                      <xsl:with-param name="head" select="name"/>
+                      <xsl:with-param name="name" select="$field"/>
                       <xsl:with-param name="type" select="$type"/>
                       <xsl:with-param name="current" select="$current"/>
                       <xsl:with-param name="token" select="$token"/>
@@ -3394,35 +3403,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                 </xsl:when>
                 <xsl:otherwise>
-                  <td colspan="{count ($parts) - 1}">
-                    <xsl:value-of select="$parts[1]"/>
+                  <td colspan="{count (column)}">
+                    <xsl:value-of select="name"/>
                   </td>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
-            <xsl:choose>
-              <xsl:when test="count (str:split ($headings, '~'))">
-                <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td width="{gsa:actions-width ($icon-count)}">Actions</td>
-              </xsl:otherwise>
-            </xsl:choose>
+            <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
             <xsl:variable name="current" select="."/>
             <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="str:split ($headings, ' ')">
-              <xsl:variable name="parts" select="str:split (., '~')"/>
+            <xsl:for-each select="exslt:node-set ($columns)/column">
               <xsl:choose>
-                <xsl:when test="count ($parts) = 1">
+                <xsl:when test="count (column) = 0">
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:for-each select="$parts[1]/following-sibling::*">
+                  <xsl:for-each select="column">
+                    <xsl:variable name="field">
+                      <xsl:choose>
+                        <xsl:when test="field">
+                          <xsl:value-of select="field"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="gsa:column-filter-name (name)"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:variable>
                     <td style="font-size:10px;">
                       <xsl:call-template name="column-name">
-                        <xsl:with-param name="head" select="substring-before (., '|')"/>
-                        <xsl:with-param name="name" select="substring-after (., '|')"/>
+                        <xsl:with-param name="head" select="name"/>
+                        <xsl:with-param name="name" select="$field"/>
                         <xsl:with-param name="type" select="$type"/>
                         <xsl:with-param name="current" select="$current"/>
                         <xsl:with-param name="token" select="$token"/>
@@ -5189,7 +5200,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (task)"/>
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Status|status Reports~Total|total~Last|last Severity|severity Trend|trend'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Status</name>
+      </column>
+      <column>
+        <name>Reports</name>
+        <column>
+          <name>Total</name>
+        </column>
+        <column>
+          <name>Last</name>
+        </column>
+      </column>
+      <column>
+        <name>Severity</name>
+      </column>
+      <column>
+        <name>Trend</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="7"/>
   </xsl:call-template>
 </xsl:template>
@@ -5330,7 +5363,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (lsc_credential)"/>
     <xsl:with-param name="filtered-count" select="lsc_credential_count/filtered"/>
     <xsl:with-param name="full-count" select="lsc_credential_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Login|login'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Login</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="8"/>
   </xsl:call-template>
 </xsl:template>
@@ -5744,7 +5784,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (agent)"/>
     <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
     <xsl:with-param name="full-count" select="agent_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Trust|trust'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Trust</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="6"/>
   </xsl:call-template>
 </xsl:template>
@@ -6381,7 +6428,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (alert)"/>
     <xsl:with-param name="filtered-count" select="alert_count/filtered"/>
     <xsl:with-param name="full-count" select="alert_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Event|event Condition|condition Method|method Filter|filter'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Event</name>
+      </column>
+      <column>
+        <name>Condition</name>
+      </column>
+      <column>
+        <name>Method</name>
+      </column>
+      <column>
+        <name>Filter</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
@@ -7544,7 +7607,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (filter)"/>
     <xsl:with-param name="filtered-count" select="filter_count/filtered"/>
     <xsl:with-param name="full-count" select="filter_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Term|term Type|type'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Term</name>
+      </column>
+      <column>
+        <name>Type</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -7818,7 +7891,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (tag)"/>
     <xsl:with-param name="filtered-count" select="tag_count/filtered"/>
     <xsl:with-param name="full-count" select="tag_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Value|value Active|active Attach&#xa0;Type|attach_type Attach&#xa0;Name|attach_name Modified|modified'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Value</name>
+      </column>
+      <column>
+        <name>Active</name>
+      </column>
+      <column>
+        <name>Attach Type</name>
+      </column>
+      <column>
+        <name>Attach Name</name>
+      </column>
+      <column>
+        <name>Modified</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
@@ -9047,7 +9139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
              title="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"/>
       </xsl:when>
-      <xsl:when test="$head = 'High' or $head = 'Medium' or $head = 'Low' or $head = 'Log' or $head = 'False&#xa0;Positive'">
+      <xsl:when test="$head = 'High' or $head = 'Medium' or $head = 'Low' or $head = 'Log' or $head = 'False Positive'">
         <xsl:call-template name="severity-label">
           <xsl:with-param name="level" select="translate($head, '_', ' ')"/>
         </xsl:call-template>
@@ -9084,7 +9176,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (target)"/>
     <xsl:with-param name="filtered-count" select="target_count/filtered"/>
     <xsl:with-param name="full-count" select="target_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Hosts|hosts IPs|ips Port&#xa0;List|port_list SSH&#xa0;Credential|ssh_credential SMB&#xa0;Credential|smb_credential'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Hosts</name>
+      </column>
+      <column>
+        <name>IPs</name>
+      </column>
+      <column>
+        <name>Port List</name>
+      </column>
+      <column>
+        <name>SSH Credential</name>
+      </column>
+      <column>
+        <name>SMB Credential</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -10904,7 +11015,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="type" select="'config'"/>
       <xsl:with-param name="list" select="configs"/>
       <!-- TODO Hack. -->
-      <xsl:with-param name="headings" select="'Name|name Families&#xa0;Total|hack NVTs&#xa0;Total|hack Families&#xa0;Trend|hack NVTs&#xa0;Trend|hack'"/>
+      <xsl:with-param name="columns">
+        <column>
+          <name>Name</name>
+        </column>
+        <column>
+          <name>Families Total</name>
+        </column>
+        <column>
+          <name>NVTs Total</name>
+        </column>
+        <column>
+          <name>Families Trend</name>
+        </column>
+        <column>
+          <name>NVTs Trend</name>
+        </column>
+        <column>
+          <name></name>
+        </column>
+      </xsl:with-param>
     </xsl:call-template>
 
     <div class="gb_window_part_content_no_pad">
@@ -11686,7 +11816,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (schedule)"/>
     <xsl:with-param name="filtered-count" select="schedule_count/filtered"/>
     <xsl:with-param name="full-count" select="schedule_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name First&#xa0;Run|first_run Next&#xa0;Run|next_run Period|period Duration|duration'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>First Run</name>
+      </column>
+      <column>
+        <name>Next Run</name>
+      </column>
+      <column>
+        <name>Period</name>
+      </column>
+      <column>
+        <name>Duration</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -12796,7 +12942,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (slave)"/>
     <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
     <xsl:with-param name="full-count" select="slave_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Host|host Port|port Login|login'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Host</name>
+      </column>
+      <column>
+        <name>Port</name>
+      </column>
+      <column>
+        <name>Login</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -13927,7 +14086,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>CPE</value>
           </param>
         </xsl:with-param>
-        <xsl:with-param name="headings" select="'Name|name Title|title Modified|modified CVEs|cves Severity|severity'"/>
+        <xsl:with-param name="columns">
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Title</name>
+          </column>
+          <column>
+            <name>Modified</name>
+          </column>
+          <column>
+            <name>CVEs</name>
+          </column>
+          <column>
+            <name>Severity</name>
+          </column>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -14037,7 +14212,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>CVE</value>
           </param>
         </xsl:with-param>
-        <xsl:with-param name="headings" select="'Name|name Vector|vector Complexity|complexity Authentication|authentication Confidentiality&#xa0;Impact|confidentiality_impact Integrity&#xa0;Impact|integrity_impact Availability&#xa0;Impact|availability_impact Published|published Severity|severity'"/>
+        <xsl:with-param name="columns">
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Vector</name>
+          </column>
+          <column>
+            <name>Complexity</name>
+          </column>
+          <column>
+            <name>Authentication</name>
+          </column>
+          <column>
+            <name>Confidentitality Impact</name>
+          </column>
+          <column>
+            <name>Integrity Impact</name>
+          </column>
+          <column>
+            <name>Availability Impact</name>
+          </column>
+          <column>
+            <name>Published</name>
+          </column>
+          <column>
+            <name>Severity</name>
+          </column>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -14178,7 +14381,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <value>NVT</value>
         </param>
       </xsl:with-param>
-      <xsl:with-param name="headings" select="'Name|name Family|family Created|created Modified|modified Version|version CVE|cve Severity|severity'"/>
+      <xsl:with-param name="columns">
+        <column>
+          <name>Name</name>
+        </column>
+        <column>
+          <name>Family</name>
+        </column>
+        <column>
+          <name>Created</name>
+        </column>
+        <column>
+          <name>Modified</name>
+        </column>
+        <column>
+          <name>Version</name>
+        </column>
+        <column>
+          <name>CVE</name>
+        </column>
+        <column>
+          <name>Severity</name>
+        </column>
+      </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="cpes">
@@ -14303,7 +14528,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>OVALDEF</value>
           </param>
         </xsl:with-param>
-        <xsl:with-param name="headings" select="'Name|name Version|version Status|status Class|class Created|created CVEs|cves Severity|severity'"/>
+        <xsl:with-param name="columns">
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Version</name>
+          </column>
+          <column>
+            <name>Status</name>
+          </column>
+          <column>
+            <name>Class</name>
+          </column>
+          <column>
+            <name>Created</name>
+          </column>
+          <column>
+            <name>CVEs</name>
+          </column>
+          <column>
+            <name>Severity</name>
+          </column>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -14437,7 +14684,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>DFN_CERT_ADV</value>
           </param>
         </xsl:with-param>
-        <xsl:with-param name="headings" select="'Name|name Title|title Created|created CVEs|cves Severity|severity'"/>
+        <xsl:with-param name="columns">
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Title</name>
+          </column>
+          <column>
+            <name>Created</name>
+          </column>
+          <column>
+            <name>CVEs</name>
+          </column>
+          <column>
+            <name>Severity</name>
+          </column>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -14547,7 +14810,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value>allinfo</value>
           </param>
         </xsl:with-param>
-        <xsl:with-param name="headings" select="'Name|name Type|type Created|created Modified|modified'"/>
+        <xsl:with-param name="columns">
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Type</name>
+          </column>
+          <column>
+            <name>Created</name>
+          </column>
+          <column>
+            <name>Modified</name>
+          </column>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <div class="gb_window_part_content_no_pad">
@@ -16917,7 +17193,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (note)"/>
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
     <xsl:with-param name="full-count" select="note_count/text ()"/>
-    <xsl:with-param name="headings" select="'Text|text NVT|nvt Active|active'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Text</name>
+      </column>
+      <column>
+        <name>NVT</name>
+      </column>
+      <column>
+        <name>Active</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -18107,7 +18393,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="headings" select="'Text|text NVT|nvt From|severity To|new_severity Active|active'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Text</name>
+      </column>
+      <column>
+        <name>NVT</name>
+      </column>
+      <column>
+        <name>From</name>
+        <field>severity</field>
+      </column>
+      <column>
+        <name>To</name>
+        <field>new_severity</field>
+      </column>
+      <column>
+        <name>Active</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -18322,7 +18626,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (group)"/>
     <xsl:with-param name="grouped-count" select="group_count/grouped"/>
     <xsl:with-param name="full-count" select="group_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -18833,7 +19141,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (permission)"/>
     <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Resource&#xa0;Type|type Resource|_resource Subject&#xa0;Type|subject_type Subject|_subject'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Resource Type</name>
+        <field>type</field>
+      </column>
+      <column>
+        <name>Resource</name>
+        <field>_resource</field>
+      </column>
+      <column>
+        <name>Subject Type</name>
+      </column>
+      <column>
+        <name>Subject</name>
+        <field>_subject</field>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -19162,7 +19489,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="type" select="'port_list'"/>
       <xsl:with-param name="list" select="port_lists"/>
       <!-- TODO Missing top row. -->
-      <xsl:with-param name="headings" select="'Name|name Total|total TCP|tcp UDP|udp'"/>
+      <xsl:with-param name="columns">
+        <column>
+          <name>Name</name>
+        </column>
+        <column>
+          <name>Total</name>
+        </column>
+        <column>
+          <name>TCP</name>
+        </column>
+        <column>
+          <name>UDP</name>
+        </column>
+      </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -19717,7 +20057,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (report_format)"/>
     <xsl:with-param name="filtered-count" select="report_format_count/filtered"/>
     <xsl:with-param name="full-count" select="report_format_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Extension|extension Content&#xa0;Type|content_type Trust&#xa0;(Last&#xa0;Verified)|trust Active|active'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Extension</name>
+      </column>
+      <column>
+        <name>Content Type</name>
+      </column>
+      <column>
+        <name>Trust (Last Verified)</name>
+        <field>trust</field>
+      </column>
+      <column>
+        <name>Active</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
@@ -20781,7 +21138,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (report)"/>
     <xsl:with-param name="filtered-count" select="report_count/filtered"/>
     <xsl:with-param name="full-count" select="report_count/text ()"/>
-    <xsl:with-param name="headings" select="'Date|date Status|status Task|task Severity|severity Scan&#xa0;Results~High|high~Medium|medium~Low|low~Log|log~False&#xa0;Positive|false_positive'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Date</name>
+      </column>
+      <column>
+        <name>Status</name>
+      </column>
+      <column>
+        <name>Task</name>
+      </column>
+      <column>
+        <name>Severity</name>
+      </column>
+      <column>
+        <name>Scan Results</name>
+        <column>
+          <name>High</name>
+        </column>
+        <column>
+          <name>Medium</name>
+        </column>
+        <column>
+          <name>Low</name>
+        </column>
+        <column>
+          <name>Log</name>
+        </column>
+        <column>
+          <name>False Positive</name>
+        </column>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
     <xsl:with-param name="extra_params">
       <param>
@@ -24995,7 +25383,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (role)"/>
     <xsl:with-param name="roleed-count" select="role_count/roleed"/>
     <xsl:with-param name="full-count" select="role_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name'"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+    </xsl:with-param>
     <xsl:with-param name="icon-count" select="1"/>
   </xsl:call-template>
 </xsl:template>
@@ -25982,13 +26374,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (user)"/>
     <xsl:with-param name="filtered-count" select="user_count/filtered"/>
     <xsl:with-param name="full-count" select="user_count/text ()"/>
-    <xsl:with-param name="headings">
+    <xsl:with-param name="columns">
       <xsl:choose>
         <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-          <xsl:text>Name|name Roles|role Groups|groups Host&#xa0;Access|host_access LDAP&#xa0;Authentication|ldap</xsl:text>
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Roles</name>
+            <field>role</field>
+          </column>
+          <column>
+            <name>Groups</name>
+          </column>
+          <column>
+            <name>Host Access</name>
+          </column>
+          <column>
+            <name>LDAP Authentication</name>
+            <field>ldap</field>
+          </column>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>Name|name Roles|role Groups|groups Host&#xa0;Access|host_access</xsl:text>
+          <column>
+            <name>Name</name>
+          </column>
+          <column>
+            <name>Roles</name>
+            <field>role</field>
+          </column>
+          <column>
+            <name>Groups</name>
+          </column>
+          <column>
+            <name>Host Access</name>
+          </column>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:with-param>
