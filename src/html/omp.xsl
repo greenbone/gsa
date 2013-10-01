@@ -3568,6 +3568,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="commands_response">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <!-- END GENERIC MANAGEMENT -->
 
 <!-- BEGIN TASKS MANAGEMENT -->
@@ -3737,7 +3741,423 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!-- NEW_TASK -->
+
+<xsl:template name="new-task-alert-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="alerts" select="get_alerts_response"/>
+  <select name="alert_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$alerts/alert"
+                         mode="newtask"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-task-alert-select">
+      <xsl:with-param name="alerts" select="$alerts"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="new-task-group-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="groups" select="get_groups_response"/>
+  <select name="group_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$groups/group"
+                         mode="newtask"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-task-group-select">
+      <xsl:with-param name="groups" select="$groups"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="task_count">
+</xsl:template>
+
+<xsl:template match="new_task">
+  <xsl:apply-templates select="gsad_msg"/>
+
+  <div class="gb_window_part_left"></div>
+  <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">New Task
+    <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="Wizard">
+      <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="create_task"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+      </xsl:if>
+      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+         <td valign="top" width="135">Name</td>
+         <td>
+           <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
+                  maxlength="80"/>
+         </td>
+        </tr>
+        <tr>
+          <td valign="top">Comment (optional)</td>
+          <td>
+            <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Scan Config</td>
+          <td>
+            <select name="config_id">
+              <xsl:variable name="config_id">
+                <xsl:value-of select="/envelope/params/config_id"/>
+              </xsl:variable>
+              <!-- Skip the "empty" config. -->
+              <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea']">
+                <xsl:choose>
+                  <xsl:when test="@id = $config_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Scan Targets</td>
+          <td>
+            <select name="target_id">
+              <xsl:variable name="target_id">
+                <xsl:value-of select="/envelope/params/target_id"/>
+              </xsl:variable>
+              <xsl:for-each select="get_targets_response/target">
+                <xsl:choose>
+                  <xsl:when test="@id = $target_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Order for target hosts</td>
+          <td>
+            <select name="hosts_ordering">
+              <option value="sequential" selected="1">Sequential</option>
+              <option value="random">Random</option>
+              <option value="reverse">Reverse</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Alerts (optional)</td>
+          <td>
+            <xsl:variable name="alerts"
+                          select="get_alerts_response/alert"/>
+            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']">
+              <select name="{name}">
+                <xsl:variable name="alert_id" select="value"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($alert_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$alerts">
+                  <xsl:choose>
+                    <xsl:when test="@id = $alert_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+            </xsl:for-each>
+            <xsl:variable name="count"
+                          select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
+            <xsl:call-template name="new-task-alert-select">
+              <xsl:with-param name="alerts" select="get_alerts_response"/>
+              <xsl:with-param name="count" select="/envelope/params/alerts - $count"/>
+              <xsl:with-param name="position" select="$count + 1"/>
+            </xsl:call-template>
+
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/alerts)">
+                <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="alerts" value="{1}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <!-- Force the Create Task button to be the default. -->
+            <input style="position: absolute; left: -100%"
+                   type="submit" name="submit" value="Create Task"/>
+            <input type="submit" name="submit_plus" value="+"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Schedule (optional)</td>
+          <td>
+            <select name="schedule_id_optional">
+              <xsl:variable name="schedule_id"
+                            select="/envelope/params/schedule_id_optional"/>
+              <xsl:choose>
+                <xsl:when test="string-length ($schedule_id) &gt; 0">
+                  <option value="--">--</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="--" selected="1">--</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:for-each select="get_schedules_response/schedule">
+                <xsl:choose>
+                  <xsl:when test="@id = $schedule_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Slave (optional)</td>
+          <td>
+            <select name="slave_id_optional">
+              <xsl:variable name="slave_id">
+                <xsl:value-of select="/envelope/params/slave_id_optional"/>
+              </xsl:variable>
+              <xsl:choose>
+                <xsl:when test="string-length ($slave_id) &gt; 0">
+                  <option value="--">--</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="--" selected="1">--</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:for-each select="get_slaves_response/slave">
+                <xsl:choose>
+                  <xsl:when test="@id = $slave_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Observers (optional)</td>
+          <td>
+            <input type="text" name="observers" size="30" maxlength="400"
+                   value="{gsa:param-or ('observers', '')}"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Observer Groups (optional)</td>
+          <td>
+            <xsl:variable name="groups"
+                          select="get_groups_response/group"/>
+            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
+              <select name="{name}">
+                <xsl:variable name="group_id" select="value"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($group_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$groups">
+                  <xsl:choose>
+                    <xsl:when test="@id = $group_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+            </xsl:for-each>
+            <xsl:variable name="count"
+                          select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+            <xsl:call-template name="new-task-group-select">
+              <xsl:with-param name="groups" select="get_groups_response"/>
+              <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+              <xsl:with-param name="position" select="$count + 1"/>
+            </xsl:call-template>
+
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/groups)">
+                <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="groups" value="{1}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <input type="submit" name="submit_plus_group" value="+"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Add results to Asset Management</td>
+          <td>
+            <xsl:variable name="yes" select="/envelope/params/in_assets"/>
+            <label>
+              <xsl:choose>
+                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
+                  <input type="radio" name="in_assets" value="1" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                 <input type="radio" name="in_assets" value="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              yes
+            </label>
+            <label>
+              <xsl:choose>
+                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
+                  <input type="radio" name="in_assets" value="0"/>
+                </xsl:when>
+                <xsl:otherwise>
+                 <input type="radio" name="in_assets" value="0" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              no
+            </label>
+          </td>
+        </tr>
+      </table>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <xsl:choose>
+          <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+          </xsl:when>
+          <xsl:otherwise>
+            <h2>Scan Intensity</h2>
+            <tr>
+              <td valign="top" width="320">
+                Maximum concurrently executed NVTs per host
+              </td>
+              <td>
+                <input type="text"
+                       name="max_checks"
+                       value="{gsa:param-or ('max_checks', '4')}"
+                       size="10"
+                       maxlength="10"/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Maximum concurrently scanned hosts
+              </td>
+              <td>
+                <input type="text"
+                       name="max_hosts"
+                       value="{gsa:param-or ('max_hosts', '20')}"
+                       size="10"
+                       maxlength="10"/>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="Create Task"/>
+          </td>
+        </tr>
+      </table>
+      <br/>
+    </form>
+  </div>
+
+  <div class="gb_window_part_left"></div>
+  <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">New Container Task
+    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="create_report"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="next" value="get_tasks"/>
+      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+      </xsl:if>
+      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+         <td valign="top" width="125">Name</td>
+         <td>
+           <input type="text" name="name" value="unnamed" size="30"
+                  maxlength="80"/>
+         </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125">Comment (optional)</td>
+          <td>
+            <input type="text" name="comment" size="30" maxlength="400"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Report</td>
+          <td><input type="file" name="xml_file" size="30"/></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="Create Task"/>
+          </td>
+        </tr>
+      </table>
+      <br/>
+    </form>
+  </div>
 </xsl:template>
 
 <!-- LAST_REPORT -->
@@ -8679,6 +9099,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="target_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Hosts|hosts IPs|ips Port&#xa0;List|port_list SSH&#xa0;Credential|ssh_credential SMB&#xa0;Credential|smb_credential'"/>
     <xsl:with-param name="icon-count" select="4"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     NEW_TARGET -->
+
+<xsl:template match="new_target">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="create_target_response"/>
+  <xsl:call-template name="html-create-target-form">
+    <xsl:with-param
+      name="lsc-credentials"
+      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="target-sources"
+      select="get_target_locators_response | commands_response/get_target_locators_response"/>
+    <xsl:with-param
+      name="port-lists"
+      select="get_port_lists_response | commands_response/get_port_lists_response"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -26713,442 +27152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END CERT FEED MANAGEMENT -->
 
-<!-- NEW_TARGET -->
-
-<xsl:template match="new_target">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_target_response"/>
-  <xsl:apply-templates select="create_target_response"/>
-  <xsl:call-template name="html-create-target-form">
-    <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
-    <xsl:with-param
-      name="target-sources"
-      select="get_target_locators_response | commands_response/get_target_locators_response"/>
-    <xsl:with-param
-      name="port-lists"
-      select="get_port_lists_response | commands_response/get_port_lists_response"/>
-  </xsl:call-template>
-</xsl:template>
-
-<!-- NEW_TASK -->
-
-<xsl:template name="new-task-alert-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="alerts" select="get_alerts_response"/>
-  <select name="alert_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$alerts/alert"
-                         mode="newtask"/>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-task-alert-select">
-      <xsl:with-param name="alerts" select="$alerts"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template name="new-task-group-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="groups" select="get_groups_response"/>
-  <select name="group_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$groups/group"
-                         mode="newtask"/>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-task-group-select">
-      <xsl:with-param name="groups" select="$groups"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template match="new_task">
-  <xsl:apply-templates select="gsad_msg"/>
-
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">New Task
-    <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
-      <img src="/img/help.png"/>
-    </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Wizard">
-      <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Tasks" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tasks"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
-    <form action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="cmd" value="create_task"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
-        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-      </xsl:if>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-         <td valign="top" width="135">Name</td>
-         <td>
-           <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
-                  maxlength="80"/>
-         </td>
-        </tr>
-        <tr>
-          <td valign="top">Comment (optional)</td>
-          <td>
-            <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
-          </td>
-        </tr>
-        <tr>
-          <td valign="top">Scan Config</td>
-          <td>
-            <select name="config_id">
-              <xsl:variable name="config_id">
-                <xsl:value-of select="/envelope/params/config_id"/>
-              </xsl:variable>
-              <!-- Skip the "empty" config. -->
-              <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea']">
-                <xsl:choose>
-                  <xsl:when test="@id = $config_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Scan Targets</td>
-          <td>
-            <select name="target_id">
-              <xsl:variable name="target_id">
-                <xsl:value-of select="/envelope/params/target_id"/>
-              </xsl:variable>
-              <xsl:for-each select="get_targets_response/target">
-                <xsl:choose>
-                  <xsl:when test="@id = $target_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Order for target hosts</td>
-          <td>
-            <select name="hosts_ordering">
-              <option value="sequential" selected="1">Sequential</option>
-              <option value="random">Random</option>
-              <option value="reverse">Reverse</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Alerts (optional)</td>
-          <td>
-            <xsl:variable name="alerts"
-                          select="get_alerts_response/alert"/>
-            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']">
-              <select name="{name}">
-                <xsl:variable name="alert_id" select="value"/>
-                <xsl:choose>
-                  <xsl:when test="string-length ($alert_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="$alerts">
-                  <xsl:choose>
-                    <xsl:when test="@id = $alert_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-            </xsl:for-each>
-            <xsl:variable name="count"
-                          select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
-            <xsl:call-template name="new-task-alert-select">
-              <xsl:with-param name="alerts" select="get_alerts_response"/>
-              <xsl:with-param name="count" select="/envelope/params/alerts - $count"/>
-              <xsl:with-param name="position" select="$count + 1"/>
-            </xsl:call-template>
-
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/alerts)">
-                <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="alerts" value="{1}"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <!-- Force the Create Task button to be the default. -->
-            <input style="position: absolute; left: -100%"
-                   type="submit" name="submit" value="Create Task"/>
-            <input type="submit" name="submit_plus" value="+"/>
-          </td>
-        </tr>
-        <tr>
-          <td>Schedule (optional)</td>
-          <td>
-            <select name="schedule_id_optional">
-              <xsl:variable name="schedule_id"
-                            select="/envelope/params/schedule_id_optional"/>
-              <xsl:choose>
-                <xsl:when test="string-length ($schedule_id) &gt; 0">
-                  <option value="--">--</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="--" selected="1">--</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:for-each select="get_schedules_response/schedule">
-                <xsl:choose>
-                  <xsl:when test="@id = $schedule_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Slave (optional)</td>
-          <td>
-            <select name="slave_id_optional">
-              <xsl:variable name="slave_id">
-                <xsl:value-of select="/envelope/params/slave_id_optional"/>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="string-length ($slave_id) &gt; 0">
-                  <option value="--">--</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="--" selected="1">--</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:for-each select="get_slaves_response/slave">
-                <xsl:choose>
-                  <xsl:when test="@id = $slave_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Observers (optional)</td>
-          <td>
-            <input type="text" name="observers" size="30" maxlength="400"
-                   value="{gsa:param-or ('observers', '')}"/>
-          </td>
-        </tr>
-        <tr>
-          <td>Observer Groups (optional)</td>
-          <td>
-            <xsl:variable name="groups"
-                          select="get_groups_response/group"/>
-            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
-              <select name="{name}">
-                <xsl:variable name="group_id" select="value"/>
-                <xsl:choose>
-                  <xsl:when test="string-length ($group_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="$groups">
-                  <xsl:choose>
-                    <xsl:when test="@id = $group_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-            </xsl:for-each>
-            <xsl:variable name="count"
-                          select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
-            <xsl:call-template name="new-task-group-select">
-              <xsl:with-param name="groups" select="get_groups_response"/>
-              <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
-              <xsl:with-param name="position" select="$count + 1"/>
-            </xsl:call-template>
-
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/groups)">
-                <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="groups" value="{1}"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <input type="submit" name="submit_plus_group" value="+"/>
-          </td>
-        </tr>
-        <tr>
-          <td>Add results to Asset Management</td>
-          <td>
-            <xsl:variable name="yes" select="/envelope/params/in_assets"/>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                  <input type="radio" name="in_assets" value="1" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                 <input type="radio" name="in_assets" value="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              yes
-            </label>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                  <input type="radio" name="in_assets" value="0"/>
-                </xsl:when>
-                <xsl:otherwise>
-                 <input type="radio" name="in_assets" value="0" checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              no
-            </label>
-          </td>
-        </tr>
-      </table>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <xsl:choose>
-          <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
-          </xsl:when>
-          <xsl:otherwise>
-            <h2>Scan Intensity</h2>
-            <tr>
-              <td valign="top" width="320">
-                Maximum concurrently executed NVTs per host
-              </td>
-              <td>
-                <input type="text"
-                       name="max_checks"
-                       value="{gsa:param-or ('max_checks', '4')}"
-                       size="10"
-                       maxlength="10"/>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Maximum concurrently scanned hosts
-              </td>
-              <td>
-                <input type="text"
-                       name="max_hosts"
-                       value="{gsa:param-or ('max_hosts', '20')}"
-                       size="10"
-                       maxlength="10"/>
-              </td>
-            </tr>
-          </xsl:otherwise>
-        </xsl:choose>
-        <tr>
-          <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="Create Task"/>
-          </td>
-        </tr>
-      </table>
-      <br/>
-    </form>
-  </div>
-
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">New Container Task
-    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
-      <img src="/img/help.png"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Tasks" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tasks"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
-    <form action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="cmd" value="create_report"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="next" value="get_tasks"/>
-      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
-        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-      </xsl:if>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-         <td valign="top" width="125">Name</td>
-         <td>
-           <input type="text" name="name" value="unnamed" size="30"
-                  maxlength="80"/>
-         </td>
-        </tr>
-        <tr>
-          <td valign="top" width="125">Comment (optional)</td>
-          <td>
-            <input type="text" name="comment" size="30" maxlength="400"/>
-          </td>
-        </tr>
-        <tr>
-          <td valign="top">Report</td>
-          <td><input type="file" name="xml_file" size="30"/></td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="Create Task"/>
-          </td>
-        </tr>
-      </table>
-      <br/>
-    </form>
-  </div>
-</xsl:template>
-
-<!-- MY SETTINGS -->
+<!-- BEGIN MY SETTINGS MANAGEMENT -->
 
 <xsl:template match="modify_setting_response">
   <xsl:call-template name="command_result_dialog">
@@ -27798,7 +27802,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_settings_response"/>
 
-<!-- PROTOCOL DOC -->
+<!-- END MY SETTINGS MANAGEMENT -->
+
+<!-- BEGIN PROTOCOL DOC MANAGEMENT -->
 
 <xsl:include href="omp-doc.xsl"/>
 
@@ -28086,10 +28092,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!-- COMMANDS_RESPONSE -->
-
-<xsl:template match="commands_response">
-  <xsl:apply-templates/>
-</xsl:template>
+<!-- END PROTOCOL DOC MANAGEMENT -->
 
 </xsl:stylesheet>

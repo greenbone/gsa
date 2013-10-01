@@ -1,5 +1,13 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Add section headers for templates at end of file.
+	(commands_response): Move up into Generic section.
+	(new-task-alert-select, new-task-group-select, new-task): Move up into
+	Tasks section.
+	(new_target): Move up into Targets section.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Add Raw Info end comment.
 	(gsa:build-levels, gsa:join, gsa:alert-in-trash)
 	(gsa:table-row-class, gsa:date-diff, gsa:report-host-has-os)
