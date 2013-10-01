@@ -1,5 +1,11 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Make header comment more regular.  Move Generic
+	Management section up in file so that it comes before most of its
+	users.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): Add refresh param to override form.
 
 2013-09-30  Matthew Mundell <matthew.mundell@greenbone.net>

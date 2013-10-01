@@ -59,12 +59,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<!-- GLOBAL VARIABLES -->
+<!-- BEGIN GLOBAL VARIABLES -->
 
 <xsl:variable name="icon-width" select="19"/>
 <xsl:variable name="trash-actions-width" select="3 + (2 * $icon-width)"/>
 
-<!-- XPATH FUNCTIONS -->
+<!-- END GLOBAL VARIABLES -->
+
+<!-- BEGIN XPATH FUNCTIONS -->
 
 <func:function name="gsa:actions-width">
   <xsl:param name="icon-count"/>
@@ -338,7 +340,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
 </func:function>
 
-<!-- NAMED TEMPLATES -->
+<!-- END XPATH FUNCTIONS -->
+
+<!-- BEGIN NAMED TEMPLATES -->
 
 <!-- Currently only a very simple formatting method to produce
      nice HTML from a structured text:
@@ -1251,7 +1255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </xsl:template>
 
-<!-- General tags views -->
+<!-- BEGIN GENERAL TAGS VIEWS -->
 
 <xsl:template name="user-tags-window">
   <xsl:param name="resource_type"/>
@@ -1537,7 +1541,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<!-- END General tags views -->
+<!-- END GENERAL TAGS VIEWS -->
 
 <xsl:template match="sort">
 </xsl:template>
@@ -3146,6 +3150,315 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END NAMED TEMPLATES -->
 
+<!-- BEGIN GENERIC MANAGEMENT -->
+
+<xsl:template name="list-window">
+  <xsl:param name="type"/>
+  <xsl:param name="cap-type"/>
+  <xsl:param name="resources-summary"/>
+  <xsl:param name="resources"/>
+  <xsl:param name="count"/>
+  <xsl:param name="filtered-count"/>
+  <xsl:param name="full-count"/>
+  <xsl:param name="headings"/>
+  <xsl:param name="icon-count" select="8"/>
+  <xsl:param name="default-filter"/>
+  <xsl:param name="extra_params"/>
+  <xsl:param name="extra_params_string">
+    <xsl:for-each select="exslt:node-set($extra_params)/param">
+      <xsl:text>&amp;</xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="value"/>
+    </xsl:for-each>
+  </xsl:param>
+  <xsl:variable name="apply-overrides"
+                select="filters/keywords/keyword[column='apply_overrides']/value"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="$cap-type"/>s
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="$type"/>
+        <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="count" select="$count"/>
+        <xsl:with-param name="filtered_count" select="$filtered-count"/>
+        <xsl:with-param name="full_count" select="$full-count"/>
+        <xsl:with-param name="extra_params" select="$extra_params_string"/>
+      </xsl:call-template>
+      <a href="/help/{$type}s.html?token={/envelope/token}"
+         title="Help: {$cap-type}s">
+        <img src="/img/help.png"/>
+      </a>
+      <xsl:call-template name="wizard-icon"/>
+      <xsl:choose>
+        <xsl:when test="$type = 'role'"/>
+        <xsl:when test="$type = 'report'"/>
+        <xsl:otherwise>
+          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="New {$cap-type}">
+            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="$type = 'report'"/>
+        <xsl:otherwise>
+          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+            <a href="/omp?cmd=export_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
+               title="Export {$filtered-count} filtered {$cap-type}s as XML"
+               style="margin-left:3px;">
+              <img src="/img/download.png" border="0" alt="Export XML"/>
+            </a>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="0"/>
+        <xsl:otherwise>
+          <div id="small_inline_form" style="margin-left:40px; display: inline">
+            <form method="get" action="">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_{$type}s"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <xsl:call-template name="auto-refresh"/>
+              <input type="image"
+                     name="Update"
+                     src="/img/refresh.png"
+                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
+              <xsl:if test="$type = 'task' or $type = 'report'">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">
+                    <input type="hidden" name="overrides" value="0"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </form>
+            <form method="get" action="">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_{$type}s"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <input type="hidden"
+                     name="refresh_interval"
+                     value="{/envelope/autorefresh/@interval}"/>
+              <xsl:if test="$type = 'task' or $type = 'report'">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="image"
+                           name="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="No Overrides"
+                           value="No Overrides"
+                           title="No Overrides"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="0"/>
+                    <input type="image"
+                           name="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="Overrides are Applied"
+                           value="Overrides are Applied"
+                           title="Overrides are Applied"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </form>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="list" select="$resources-summary"/>
+      <xsl:with-param name="headings" select="$headings"/>
+      <xsl:with-param name="extra_params" select="$extra_params"/>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="str:split ($headings, ' ')">
+              <xsl:variable name="parts" select="str:split (., '~')"/>
+              <xsl:choose>
+                <xsl:when test="count ($parts) = 1">
+                  <td rowspan="2">
+                    <xsl:call-template name="column-name">
+                      <xsl:with-param name="head" select="substring-before ($parts[1], '|')"/>
+                      <xsl:with-param name="name" select="substring-after ($parts[1], '|')"/>
+                      <xsl:with-param name="type" select="$type"/>
+                      <xsl:with-param name="current" select="$current"/>
+                      <xsl:with-param name="token" select="$token"/>
+                      <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                    </xsl:call-template>
+                  </td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <td colspan="{count ($parts) - 1}">
+                    <xsl:value-of select="$parts[1]"/>
+                  </td>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+            <xsl:choose>
+              <xsl:when test="count (str:split ($headings, '~'))">
+                <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td width="{gsa:actions-width ($icon-count)}">Actions</td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="str:split ($headings, ' ')">
+              <xsl:variable name="parts" select="str:split (., '~')"/>
+              <xsl:choose>
+                <xsl:when test="count ($parts) = 1">
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:for-each select="$parts[1]/following-sibling::*">
+                    <td style="font-size:10px;">
+                      <xsl:call-template name="column-name">
+                        <xsl:with-param name="head" select="substring-before (., '|')"/>
+                        <xsl:with-param name="name" select="substring-after (., '|')"/>
+                        <xsl:with-param name="type" select="$type"/>
+                        <xsl:with-param name="current" select="$current"/>
+                        <xsl:with-param name="token" select="$token"/>
+                        <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                      </xsl:call-template>
+                    </td>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </tr>
+          <xsl:apply-templates select="$resources"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="7">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+        <xsl:call-template name="wizard"/>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="minor-details">
+  <div class="float_right" style="font-size: 10px;">
+    <table style="font-size: 10px;">
+      <tr>
+        <td>ID:</td>
+        <td><xsl:value-of select="@id"/></td>
+      </tr>
+      <tr>
+        <td>Created:</td>
+        <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
+      </tr>
+      <tr>
+        <td>Last Modified:</td>
+        <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
+      </tr>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="details-header-icons">
+  <xsl:param name="cap-type"/>
+  <xsl:param name="type"/>
+  <xsl:param name="noedit"/>
+  <xsl:param name="nonew"/>
+  <xsl:param name="noexport"/>
+  <xsl:param name="filter" select="/envelope/params/filter"/>
+  <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
+
+  <a href="/help/{$type}_details.html?token={/envelope/token}"
+    title="Help: {$cap-type} Details">
+    <img src="/img/help.png"/>
+  </a>
+  <xsl:choose>
+    <xsl:when test="$nonew"/>
+    <xsl:otherwise>
+      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+         title="New {$cap-type}">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+     title="{$cap-type}s" style="margin-left:3px;">
+    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
+  </a>
+  <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+    <xsl:choose>
+      <xsl:when test="writable!='0' and in_use='0'">
+        <xsl:call-template name="trashcan-icon">
+          <xsl:with-param name="type" select="$type"/>
+          <xsl:with-param name="id" select="@id"/>
+          <xsl:with-param name="params">
+            <input type="hidden" name="filter" value="{$filter}"/>
+            <input type="hidden" name="filt_id" value="{$filt_id}"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+             style="margin-left:3px;"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noedit">
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="writable='0'">
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+             title="Edit {$cap-type}">
+            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noexport">
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+         title="Export {$cap-type} XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+  </div>
+</xsl:template>
+
+<!-- END GENERIC MANAGEMENT -->
+
 <xsl:template match="message">
   <div class="message">
     <xsl:apply-templates/>
@@ -3328,6 +3641,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!-- BEGIN TASKS MANAGEMENT -->
+
 <xsl:template match="task_count">
 </xsl:template>
 
@@ -3338,6 +3653,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- REPORT -->
+
 <xsl:template match="report" name="report">
   <xsl:param name="container">0</xsl:param>
   <xsl:param name="observed" select="0"/>
@@ -3463,6 +3779,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- LAST_REPORT -->
+
 <xsl:template match="last_report">
   <xsl:choose>
     <xsl:when test="report/severity &lt; 0.0">
@@ -4455,6 +4772,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
 </xsl:template>
+
+<!-- END TASKS MANAGEMENT -->
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
 
@@ -6606,313 +6925,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END ALERTS MANAGEMENT -->
-
-<!-- BEGIN GENERIC MANAGEMENT -->
-
-<xsl:template name="list-window">
-  <xsl:param name="type"/>
-  <xsl:param name="cap-type"/>
-  <xsl:param name="resources-summary"/>
-  <xsl:param name="resources"/>
-  <xsl:param name="count"/>
-  <xsl:param name="filtered-count"/>
-  <xsl:param name="full-count"/>
-  <xsl:param name="headings"/>
-  <xsl:param name="icon-count" select="8"/>
-  <xsl:param name="default-filter"/>
-  <xsl:param name="extra_params"/>
-  <xsl:param name="extra_params_string">
-    <xsl:for-each select="exslt:node-set($extra_params)/param">
-      <xsl:text>&amp;</xsl:text>
-      <xsl:value-of select="name"/>
-      <xsl:text>=</xsl:text>
-      <xsl:value-of select="value"/>
-    </xsl:for-each>
-  </xsl:param>
-  <xsl:variable name="apply-overrides"
-                select="filters/keywords/keyword[column='apply_overrides']/value"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="$cap-type"/>s
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="$type"/>
-        <xsl:with-param name="list" select="$resources-summary"/>
-        <xsl:with-param name="count" select="$count"/>
-        <xsl:with-param name="filtered_count" select="$filtered-count"/>
-        <xsl:with-param name="full_count" select="$full-count"/>
-        <xsl:with-param name="extra_params" select="$extra_params_string"/>
-      </xsl:call-template>
-      <a href="/help/{$type}s.html?token={/envelope/token}"
-         title="Help: {$cap-type}s">
-        <img src="/img/help.png"/>
-      </a>
-      <xsl:call-template name="wizard-icon"/>
-      <xsl:choose>
-        <xsl:when test="$type = 'role'"/>
-        <xsl:when test="$type = 'report'"/>
-        <xsl:otherwise>
-          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="New {$cap-type}">
-            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-      <xsl:choose>
-        <xsl:when test="$type = 'report'"/>
-        <xsl:otherwise>
-          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=export_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-               title="Export {$filtered-count} filtered {$cap-type}s as XML"
-               style="margin-left:3px;">
-              <img src="/img/download.png" border="0" alt="Export XML"/>
-            </a>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="0"/>
-        <xsl:otherwise>
-          <div id="small_inline_form" style="margin-left:40px; display: inline">
-            <form method="get" action="">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_{$type}s"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <xsl:call-template name="auto-refresh"/>
-              <input type="image"
-                     name="Update"
-                     src="/img/refresh.png"
-                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
-              <xsl:if test="$type = 'task' or $type = 'report'">
-                <xsl:choose>
-                  <xsl:when test="$apply-overrides = 0">
-                    <input type="hidden" name="overrides" value="0"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </form>
-            <form method="get" action="">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_{$type}s"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <input type="hidden"
-                     name="refresh_interval"
-                     value="{/envelope/autorefresh/@interval}"/>
-              <xsl:if test="$type = 'task' or $type = 'report'">
-                <xsl:choose>
-                  <xsl:when test="$apply-overrides = 0">
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="image"
-                           name="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="No Overrides"
-                           value="No Overrides"
-                           title="No Overrides"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="0"/>
-                    <input type="image"
-                           name="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="Overrides are Applied"
-                           value="Overrides are Applied"
-                           title="Overrides are Applied"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </form>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="list" select="$resources-summary"/>
-      <xsl:with-param name="headings" select="$headings"/>
-      <xsl:with-param name="extra_params" select="$extra_params"/>
-    </xsl:call-template>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <xsl:variable name="current" select="."/>
-            <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="str:split ($headings, ' ')">
-              <xsl:variable name="parts" select="str:split (., '~')"/>
-              <xsl:choose>
-                <xsl:when test="count ($parts) = 1">
-                  <td rowspan="2">
-                    <xsl:call-template name="column-name">
-                      <xsl:with-param name="head" select="substring-before ($parts[1], '|')"/>
-                      <xsl:with-param name="name" select="substring-after ($parts[1], '|')"/>
-                      <xsl:with-param name="type" select="$type"/>
-                      <xsl:with-param name="current" select="$current"/>
-                      <xsl:with-param name="token" select="$token"/>
-                      <xsl:with-param name="extra_params" select="$extra_params_string"/>
-                    </xsl:call-template>
-                  </td>
-                </xsl:when>
-                <xsl:otherwise>
-                  <td colspan="{count ($parts) - 1}">
-                    <xsl:value-of select="$parts[1]"/>
-                  </td>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-            <xsl:choose>
-              <xsl:when test="count (str:split ($headings, '~'))">
-                <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td width="{gsa:actions-width ($icon-count)}">Actions</td>
-              </xsl:otherwise>
-            </xsl:choose>
-          </tr>
-          <tr class="gbntablehead2">
-            <xsl:variable name="current" select="."/>
-            <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="str:split ($headings, ' ')">
-              <xsl:variable name="parts" select="str:split (., '~')"/>
-              <xsl:choose>
-                <xsl:when test="count ($parts) = 1">
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:for-each select="$parts[1]/following-sibling::*">
-                    <td style="font-size:10px;">
-                      <xsl:call-template name="column-name">
-                        <xsl:with-param name="head" select="substring-before (., '|')"/>
-                        <xsl:with-param name="name" select="substring-after (., '|')"/>
-                        <xsl:with-param name="type" select="$type"/>
-                        <xsl:with-param name="current" select="$current"/>
-                        <xsl:with-param name="token" select="$token"/>
-                        <xsl:with-param name="extra_params" select="$extra_params_string"/>
-                      </xsl:call-template>
-                    </td>
-                  </xsl:for-each>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </tr>
-          <xsl:apply-templates select="$resources"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="7">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-        <xsl:call-template name="wizard"/>
-      </div>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template name="minor-details">
-  <div class="float_right" style="font-size: 10px;">
-    <table style="font-size: 10px;">
-      <tr>
-        <td>ID:</td>
-        <td><xsl:value-of select="@id"/></td>
-      </tr>
-      <tr>
-        <td>Created:</td>
-        <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
-      </tr>
-      <tr>
-        <td>Last Modified:</td>
-        <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
-      </tr>
-    </table>
-  </div>
-</xsl:template>
-
-<xsl:template name="details-header-icons">
-  <xsl:param name="cap-type"/>
-  <xsl:param name="type"/>
-  <xsl:param name="noedit"/>
-  <xsl:param name="nonew"/>
-  <xsl:param name="noexport"/>
-  <xsl:param name="filter" select="/envelope/params/filter"/>
-  <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
-
-  <a href="/help/{$type}_details.html?token={/envelope/token}"
-    title="Help: {$cap-type} Details">
-    <img src="/img/help.png"/>
-  </a>
-  <xsl:choose>
-    <xsl:when test="$nonew"/>
-    <xsl:otherwise>
-      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
-         title="New {$cap-type}">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-     title="{$cap-type}s" style="margin-left:3px;">
-    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
-  </a>
-  <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-    <xsl:choose>
-      <xsl:when test="writable!='0' and in_use='0'">
-        <xsl:call-template name="trashcan-icon">
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:with-param name="id" select="@id"/>
-          <xsl:with-param name="params">
-            <input type="hidden" name="filter" value="{$filter}"/>
-            <input type="hidden" name="filt_id" value="{$filt_id}"/>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
-             style="margin-left:3px;"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="$noedit">
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="writable='0'">
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-             title="Edit {$cap-type}">
-            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="$noexport">
-    </xsl:when>
-    <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-         title="Export {$cap-type} XML"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export XML"/>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
-  </div>
-</xsl:template>
 
 <!-- BEGIN FILTERS MANAGEMENT -->
 
