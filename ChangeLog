@@ -1,5 +1,18 @@
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Add Raw Info end comment.
+	(gsa:build-levels, gsa:join, gsa:alert-in-trash)
+	(gsa:table-row-class, gsa:date-diff, gsa:report-host-has-os)
+	(gsa:host-has-unknown-os, gsa:report-section-title): Move up into
+	function section.
+	(severity-bar, severity-label, build-levels): Move up to separate Tags
+	Views into their own section.
+	(html-task-table): Move down into tasks section, making Reports and
+	Tasks sections separate from the Named Templates section.
+	(gsad_msg): Move up for same reason.
+
+2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Make header comment more regular.  Move Generic
 	Management section up in file so that it comes before most of its
 	users.

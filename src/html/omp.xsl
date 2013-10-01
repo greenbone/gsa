@@ -68,6 +68,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN XPATH FUNCTIONS -->
 
+<func:function name="gsa:build-levels">
+  <xsl:param name="filters"></xsl:param>
+  <func:result>
+    <xsl:for-each select="$filters/filter">
+      <xsl:choose>
+        <xsl:when test="text()='High'">h</xsl:when>
+        <xsl:when test="text()='Medium'">m</xsl:when>
+        <xsl:when test="text()='Low'">l</xsl:when>
+        <xsl:when test="text()='Log'">g</xsl:when>
+        <xsl:when test="text()='False Positive'">f</xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:join">
+  <xsl:param name="nodes"/>
+  <func:result>
+    <xsl:for-each select="$nodes">
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
 <func:function name="gsa:actions-width">
   <xsl:param name="icon-count"/>
   <func:result select="3 + ($icon-count * $icon-width)"/>
@@ -338,6 +363,107 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:type-string">
   <xsl:param name="type"/>
   <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
+</func:function>
+
+<func:function name="gsa:alert-in-trash">
+  <xsl:for-each select="alert">
+    <xsl:if test="trash/text() != '0'">
+      <func:result>1</func:result>
+    </xsl:if>
+  </xsl:for-each>
+  <func:result>0</func:result>
+</func:function>
+
+<func:function name="gsa:table-row-class">
+  <xsl:param name="position"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$position &lt; 0"></xsl:when>
+      <xsl:when test="$position mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:date-diff">
+  <xsl:param name="start"/>
+  <xsl:param name="end"/>
+
+  <xsl:variable name="difference" select="date:difference ($start, $end)"/>
+  <xsl:variable name="fromepoch"
+                select="date:add ('1970-01-01T00:00:00Z', $difference)"/>
+  <xsl:variable name="seconds"
+                select="date:second-in-minute($fromepoch)"/>
+  <xsl:variable name="minutes"
+                select="date:minute-in-hour($fromepoch)"/>
+  <xsl:variable name="hours"
+                select="date:hour-in-day($fromepoch)"/>
+  <xsl:variable name="days"
+                select="date:day-in-year($fromepoch) - 1"/>
+  <func:result>
+      <xsl:if test="$days">
+          <xsl:value-of select="concat ($days, ' days ')"/>
+      </xsl:if>
+      <xsl:if test="$hours">
+          <xsl:value-of select="concat ($hours, ' hours ')"/>
+      </xsl:if>
+      <xsl:if test="$minutes">
+          <xsl:value-of select="concat ($minutes, ' minutes ')"/>
+      </xsl:if>
+      <xsl:if test="$seconds">
+          <xsl:value-of select="concat ($seconds, ' seconds')"/>
+      </xsl:if>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:report-host-has-os">
+  <xsl:param name="report"/>
+  <xsl:param name="ip"/>
+  <xsl:param name="os"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$report/host[ip = $ip and detail/name = 'best_os_cpe' and detail/value = $os]">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:host-has-unknown-os">
+  <xsl:param name="report"/>
+  <xsl:param name="ip"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$report/host[ip = $ip and ((detail/name = 'best_os_cpe') = 0)]">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:report-section-title">
+  <xsl:param name="section"/>
+  <xsl:param name="type"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$section = 'results' and $type = 'prognostic'">Report: Prognostic Results</xsl:when>
+      <xsl:when test="$section = 'results' and $type = 'delta'">Report: Delta Results</xsl:when>
+      <xsl:when test="$section = 'results'">Report: Results</xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'delta'">Report: Delta Summary</xsl:when>
+      <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
+      <xsl:when test="$section = 'hosts' and $type = 'prognostic'">Report: Prognostic Hosts</xsl:when>
+      <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
+      <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
+      <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
+      <xsl:when test="$section = 'apps' and $type = 'prognostic'">Report: Prognostic Applications</xsl:when>
+      <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
+      <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
+      <xsl:when test="$section = 'cves'">Report: CVEs</xsl:when>
+      <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
+      <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
+      <xsl:when test="$section = 'ssl_certs'">Report: SSL Certificates</xsl:when>
+      <xsl:when test="$section = 'errors'">Report: Error Messages</xsl:when>
+    </xsl:choose>
+  </func:result>
 </func:function>
 
 <!-- END XPATH FUNCTIONS -->
@@ -1255,6 +1381,88 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </xsl:template>
 
+<xsl:template name="severity-bar">
+  <xsl:param name="extra_text"></xsl:param>
+  <xsl:param name="notext"></xsl:param>
+  <xsl:param name="cvss"></xsl:param>
+  <xsl:param name="threat"><xsl:value-of select="gsa:cvss-risk-factor($cvss)"/></xsl:param>
+  <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
+  <xsl:param name="scale">10</xsl:param>
+
+  <xsl:variable name="fill">
+    <xsl:value-of select="number($cvss) * $scale"/>
+  </xsl:variable>
+  <xsl:variable name="width"><xsl:value-of select="10 * $scale"/></xsl:variable>
+  <div class="progressbar_box" title="{$title}" style="width:{$width}px;">
+    <xsl:choose>
+      <xsl:when test="$threat = 'None'">
+        <div class="progressbar_bar_done" style="width:0px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Log'">
+        <div class="progressbar_bar_done" style="width:0px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Low'">
+        <div class="progressbar_bar_done" style="width:{$fill}px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Medium'">
+        <div class="progressbar_bar_request" style="width:{$fill}px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'High'">
+        <div class="progressbar_bar_error" style="width:{$fill}px;"></div>
+      </xsl:when>
+    </xsl:choose>
+      <div class="progressbar_text">
+        <xsl:if test="not($notext)">
+          <xsl:value-of select="$cvss"/>
+        </xsl:if>
+        <xsl:if test="$extra_text">
+          <xsl:value-of select="$extra_text"/>
+        </xsl:if>
+      </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="severity-label">
+  <xsl:param name="level"/>
+  <xsl:param name="font-size" select="'9'"/>
+  <xsl:param name="width" select="floor($font-size * 6.0)"/>
+  <xsl:choose>
+    <xsl:when test="$level = 'High'">
+      <div class="label_high" style="font-size:{$font-size}px; min-width:{$width}px">High</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Medium'">
+      <div class="label_medium" style="font-size:{$font-size}px; min-width:{$width}px">Medium</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Low'">
+      <div class="label_low" style="font-size:{$font-size}px; min-width:{$width}px">Low</div>
+    </xsl:when>
+    <xsl:when test="$level = 'Log'">
+      <div class="label_log" style="font-size:{$font-size}px; min-width:{$width}px">Log</div>
+    </xsl:when>
+    <xsl:when test="$level = 'False Positive' or $level = 'False&#xa0;Positive'">
+      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px">False Pos.</div>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px"><xsl:value-of select="$level"/></div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="build-levels">
+  <xsl:param name="filters"></xsl:param>
+  <xsl:for-each select="$filters">
+    <xsl:choose>
+      <xsl:when test="text()='High'">h</xsl:when>
+      <xsl:when test="text()='Medium'">m</xsl:when>
+      <xsl:when test="text()='Low'">l</xsl:when>
+      <xsl:when test="text()='Log'">g</xsl:when>
+      <xsl:when test="text()='False Positive'">f</xsl:when>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END NAMED TEMPLATES -->
+
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
 <xsl:template name="user-tags-window">
@@ -1543,129 +1751,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END GENERAL TAGS VIEWS -->
 
+<!-- BEGIN REPORTS MANAGEMENT -->
+
 <xsl:template match="sort">
 </xsl:template>
 
 <xsl:template match="apply_overrides">
-</xsl:template>
-
-<xsl:template name="html-tasks-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'task'"/>
-    <xsl:with-param name="cap-type" select="'Task'"/>
-    <xsl:with-param name="resources-summary" select="tasks"/>
-    <xsl:with-param name="resources" select="task"/>
-    <xsl:with-param name="count" select="count (task)"/>
-    <xsl:with-param name="filtered-count" select="task_count/filtered"/>
-    <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Status|status Reports~Total|total~Last|last Severity|severity Trend|trend'"/>
-    <xsl:with-param name="icon-count" select="7"/>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="severity-bar">
-  <xsl:param name="extra_text"></xsl:param>
-  <xsl:param name="notext"></xsl:param>
-  <xsl:param name="cvss"></xsl:param>
-  <xsl:param name="threat"><xsl:value-of select="gsa:cvss-risk-factor($cvss)"/></xsl:param>
-  <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
-  <xsl:param name="scale">10</xsl:param>
-
-  <xsl:variable name="fill">
-    <xsl:value-of select="number($cvss) * $scale"/>
-  </xsl:variable>
-  <xsl:variable name="width"><xsl:value-of select="10 * $scale"/></xsl:variable>
-  <div class="progressbar_box" title="{$title}" style="width:{$width}px;">
-    <xsl:choose>
-      <xsl:when test="$threat = 'None'">
-        <div class="progressbar_bar_done" style="width:0px;"></div>
-      </xsl:when>
-      <xsl:when test="$threat = 'Log'">
-        <div class="progressbar_bar_done" style="width:0px;"></div>
-      </xsl:when>
-      <xsl:when test="$threat = 'Low'">
-        <div class="progressbar_bar_done" style="width:{$fill}px;"></div>
-      </xsl:when>
-      <xsl:when test="$threat = 'Medium'">
-        <div class="progressbar_bar_request" style="width:{$fill}px;"></div>
-      </xsl:when>
-      <xsl:when test="$threat = 'High'">
-        <div class="progressbar_bar_error" style="width:{$fill}px;"></div>
-      </xsl:when>
-    </xsl:choose>
-      <div class="progressbar_text">
-        <xsl:if test="not($notext)">
-          <xsl:value-of select="$cvss"/>
-        </xsl:if>
-        <xsl:if test="$extra_text">
-          <xsl:value-of select="$extra_text"/>
-        </xsl:if>
-      </div>
-  </div>
-</xsl:template>
-
-<xsl:template name="severity-label">
-  <xsl:param name="level"/>
-  <xsl:param name="font-size" select="'9'"/>
-  <xsl:param name="width" select="floor($font-size * 6.0)"/>
-  <xsl:choose>
-    <xsl:when test="$level = 'High'">
-      <div class="label_high" style="font-size:{$font-size}px; min-width:{$width}px">High</div>
-    </xsl:when>
-    <xsl:when test="$level = 'Medium'">
-      <div class="label_medium" style="font-size:{$font-size}px; min-width:{$width}px">Medium</div>
-    </xsl:when>
-    <xsl:when test="$level = 'Low'">
-      <div class="label_low" style="font-size:{$font-size}px; min-width:{$width}px">Low</div>
-    </xsl:when>
-    <xsl:when test="$level = 'Log'">
-      <div class="label_log" style="font-size:{$font-size}px; min-width:{$width}px">Log</div>
-    </xsl:when>
-    <xsl:when test="$level = 'False Positive' or $level = 'False&#xa0;Positive'">
-      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px">False Pos.</div>
-    </xsl:when>
-    <xsl:otherwise>
-      <div class="label_none" style="font-size:{$font-size}px; min-width:{$width}px"><xsl:value-of select="$level"/></div>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<func:function name="gsa:build-levels">
-  <xsl:param name="filters"></xsl:param>
-  <func:result>
-    <xsl:for-each select="$filters/filter">
-      <xsl:choose>
-        <xsl:when test="text()='High'">h</xsl:when>
-        <xsl:when test="text()='Medium'">m</xsl:when>
-        <xsl:when test="text()='Low'">l</xsl:when>
-        <xsl:when test="text()='Log'">g</xsl:when>
-        <xsl:when test="text()='False Positive'">f</xsl:when>
-      </xsl:choose>
-    </xsl:for-each>
-  </func:result>
-</func:function>
-
-<func:function name="gsa:join">
-  <xsl:param name="nodes"/>
-  <func:result>
-    <xsl:for-each select="$nodes">
-      <xsl:value-of select="name"/>
-      <xsl:text> </xsl:text>
-    </xsl:for-each>
-  </func:result>
-</func:function>
-
-<xsl:template name="build-levels">
-  <xsl:param name="filters"></xsl:param>
-  <xsl:for-each select="$filters">
-    <xsl:choose>
-      <xsl:when test="text()='High'">h</xsl:when>
-      <xsl:when test="text()='Medium'">m</xsl:when>
-      <xsl:when test="text()='Low'">l</xsl:when>
-      <xsl:when test="text()='Log'">g</xsl:when>
-      <xsl:when test="text()='False Positive'">f</xsl:when>
-    </xsl:choose>
-  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="all">
@@ -2134,7 +2225,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report" mode="filterbox">
-
   <xsl:if test="/envelope/params/filterbox &gt; 0">
     <div style="background-color: #EEEEEE;">
       <form action="" method="get">
@@ -2530,6 +2620,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
 </xsl:template>
+
+<!-- END REPORTS MANAGEMENT -->
+
+<!-- BEGIN TASKS MANAGEMENT -->
 
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
@@ -3148,7 +3242,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<!-- END NAMED TEMPLATES -->
+<!-- END TASKS TEMPLATES -->
 
 <!-- BEGIN GENERIC MANAGEMENT -->
 
@@ -3457,7 +3551,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="gsad_msg">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      <xsl:value-of select="@operation"/>
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+    <xsl:with-param name="details">
+      <xsl:value-of select="text()"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- END GENERIC MANAGEMENT -->
+
+<!-- BEGIN TASKS MANAGEMENT -->
 
 <xsl:template match="message">
   <div class="message">
@@ -3502,23 +3615,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <xsl:apply-templates/>
   </div>
-</xsl:template>
-
-<xsl:template match="gsad_msg">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">
-      <xsl:value-of select="@operation"/>
-    </xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-    <xsl:with-param name="details">
-      <xsl:value-of select="text()"/>
-    </xsl:with-param>
-  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="create_report_response">
@@ -3640,8 +3736,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
-
-<!-- BEGIN TASKS MANAGEMENT -->
 
 <xsl:template match="task_count">
 </xsl:template>
@@ -4532,107 +4626,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<func:function name="gsa:alert-in-trash">
-  <xsl:for-each select="alert">
-    <xsl:if test="trash/text() != '0'">
-      <func:result>1</func:result>
-    </xsl:if>
-  </xsl:for-each>
-  <func:result>0</func:result>
-</func:function>
-
-<func:function name="gsa:table-row-class">
-  <xsl:param name="position"/>
-  <func:result>
-    <xsl:choose>
-      <xsl:when test="$position &lt; 0"></xsl:when>
-      <xsl:when test="$position mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </func:result>
-</func:function>
-
-<func:function name="gsa:date-diff">
-  <xsl:param name="start"/>
-  <xsl:param name="end"/>
-
-  <xsl:variable name="difference" select="date:difference ($start, $end)"/>
-  <xsl:variable name="fromepoch"
-                select="date:add ('1970-01-01T00:00:00Z', $difference)"/>
-  <xsl:variable name="seconds"
-                select="date:second-in-minute($fromepoch)"/>
-  <xsl:variable name="minutes"
-                select="date:minute-in-hour($fromepoch)"/>
-  <xsl:variable name="hours"
-                select="date:hour-in-day($fromepoch)"/>
-  <xsl:variable name="days"
-                select="date:day-in-year($fromepoch) - 1"/>
-  <func:result>
-      <xsl:if test="$days">
-          <xsl:value-of select="concat ($days, ' days ')"/>
-      </xsl:if>
-      <xsl:if test="$hours">
-          <xsl:value-of select="concat ($hours, ' hours ')"/>
-      </xsl:if>
-      <xsl:if test="$minutes">
-          <xsl:value-of select="concat ($minutes, ' minutes ')"/>
-      </xsl:if>
-      <xsl:if test="$seconds">
-          <xsl:value-of select="concat ($seconds, ' seconds')"/>
-      </xsl:if>
-  </func:result>
-</func:function>
-
-<func:function name="gsa:report-host-has-os">
-  <xsl:param name="report"/>
-  <xsl:param name="ip"/>
-  <xsl:param name="os"/>
-  <func:result>
-    <xsl:choose>
-      <xsl:when test="$report/host[ip = $ip and detail/name = 'best_os_cpe' and detail/value = $os]">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </func:result>
-</func:function>
-
-<func:function name="gsa:host-has-unknown-os">
-  <xsl:param name="report"/>
-  <xsl:param name="ip"/>
-  <func:result>
-    <xsl:choose>
-      <xsl:when test="$report/host[ip = $ip and ((detail/name = 'best_os_cpe') = 0)]">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </func:result>
-</func:function>
-
-<func:function name="gsa:report-section-title">
-  <xsl:param name="section"/>
-  <xsl:param name="type"/>
-  <func:result>
-    <xsl:choose>
-      <xsl:when test="$section = 'results' and $type = 'prognostic'">Report: Prognostic Results</xsl:when>
-      <xsl:when test="$section = 'results' and $type = 'delta'">Report: Delta Results</xsl:when>
-      <xsl:when test="$section = 'results'">Report: Results</xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'delta'">Report: Delta Summary</xsl:when>
-      <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
-      <xsl:when test="$section = 'hosts' and $type = 'prognostic'">Report: Prognostic Hosts</xsl:when>
-      <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
-      <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
-      <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
-      <xsl:when test="$section = 'apps' and $type = 'prognostic'">Report: Prognostic Applications</xsl:when>
-      <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
-      <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
-      <xsl:when test="$section = 'cves'">Report: CVEs</xsl:when>
-      <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
-      <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
-      <xsl:when test="$section = 'ssl_certs'">Report: SSL Certificates</xsl:when>
-      <xsl:when test="$section = 'errors'">Report: Error Messages</xsl:when>
-    </xsl:choose>
-  </func:result>
-</func:function>
-
 <xsl:template match="task" mode="trash">
 
   <tr class="{gsa:table-row-class(position())}">
@@ -4771,6 +4764,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
+</xsl:template>
+
+<xsl:template name="html-tasks-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'task'"/>
+    <xsl:with-param name="cap-type" select="'Task'"/>
+    <xsl:with-param name="resources-summary" select="tasks"/>
+    <xsl:with-param name="resources" select="task"/>
+    <xsl:with-param name="count" select="count (task)"/>
+    <xsl:with-param name="filtered-count" select="task_count/filtered"/>
+    <xsl:with-param name="full-count" select="task_count/text ()"/>
+    <xsl:with-param name="headings" select="'Name|name Status|status Reports~Total|total~Last|last Severity|severity Trend|trend'"/>
+    <xsl:with-param name="icon-count" select="7"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!-- END TASKS MANAGEMENT -->
@@ -7336,7 +7343,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END FILTERS MANAGEMENT -->
 
-
 <!-- BEGIN TAGS MANAGEMENT -->
 
 <xsl:template name="tagged_resource_link">
@@ -8047,7 +8053,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_tags_response"/>
 
 <!-- END TAGS MANAGEMENT -->
-
 
 <!-- BEGIN TARGET LOCATORS MANAGEMENT -->
 
@@ -15197,6 +15202,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resource_subtype" select="'dfn_cert_adv'"/>
   </xsl:call-template>
 </xsl:template>
+
+<!-- END GET RAW INFO MANAGEMENT -->
 
 <!-- BEGIN NVT DETAILS -->
 
