@@ -2941,6 +2941,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="report">
               <xsl:with-param name="container" select="$container"/>
               <xsl:with-param name="observed" select="$observed"/>
+              <xsl:with-param name="overrides">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">0</xsl:when>
+                  <xsl:otherwise>1</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -3326,6 +3332,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" name="report">
   <xsl:param name="container">0</xsl:param>
   <xsl:param name="observed">0</xsl:param>
+  <xsl:param name="overrides" select="../../../../../apply_overrides"/>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -3390,21 +3397,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:when test="string-length (../../../../../delta) &gt; 0">
-          <a href="/omp?cmd=get_report&amp;report_id={../../../../../delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;report_id={../../../../../delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta_second.png" border="0" alt="Compare"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;delta_report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;delta_report_id={@id}&amp;overrides={$overrides}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>

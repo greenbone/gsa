@@ -1,3 +1,11 @@
+2013-10-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): Pass overrides state into report
+	template, so that the Actions icons use the same value as the overrides
+	control in the heading.
+	(report): Add overrides param.  Use it instead of looking in report XML
+	when given.
+
 2013-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r17769.  Add new note and override buttons on the New Note
