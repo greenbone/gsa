@@ -809,7 +809,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           else if (strcmp (type, "task"))
             filter = "rows=-2";
           else
-            filter = "apply_overrides=0 rows=-2";
+            filter = "apply_overrides=1 rows=-2";
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
             filt_id = "0";
@@ -2073,7 +2073,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
   overrides = params_value (params, "overrides");
   alerts = params_value (params, "alerts");
 
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
   if (task_id == NULL || next == NULL)
     return gsad_message (credentials,
