@@ -1333,7 +1333,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    <ul>
     <li class="first_button">
      <a class="top_button"
-        href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">
+        href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
        Scan Management
        <div class="first_button_overlay">
          <ul class="first_button_overlay">
@@ -1347,7 +1347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-        <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">
+        <li><a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Tasks')"/>
             </a></li>
       </xsl:if>

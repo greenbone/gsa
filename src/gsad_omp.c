@@ -1005,7 +1005,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any";
           else
-            filter = "apply_overrides=0 rows=-2 permission=any owner=any";
+            filter = "apply_overrides=1 rows=-2 permission=any owner=any";
 
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
@@ -2394,7 +2394,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
   alerts = params_value (params, "alerts");
   groups = params_value (params, "groups");
 
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
   if (task_id == NULL)
     return gsad_message (credentials,

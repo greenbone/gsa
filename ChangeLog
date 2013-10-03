@@ -1,3 +1,20 @@
+2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Ensure the overrides state is preserved across actions on the Tasks
+	page.
+
+	* src/gsad_omp.c (get_many): Make the default task filter apply
+	overrides, to prevent having to specify the default via the extra
+	"overrides" param.
+	(edit_task): Default overrides to 1, like everywhere.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Removed extra overide param
+	from Tasks page links, now that the default matches the requirement.
+
+	* src/html/omp.xsl (html-edit-task-form): Remove the overrides param
+	from the form entirely, because it is always available, either via the
+	default or in the filter.
+
 2013-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Remove overrides icons.  Allow before
