@@ -965,7 +965,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="notrash"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type, 's')"/>
-  <xsl:param name="extra-params-details"/>
 
   <xsl:choose>
     <xsl:when test="$notrash">

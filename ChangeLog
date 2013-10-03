@@ -1,5 +1,10 @@
 2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window-line-icons): Remove param that was for
+	the details icon.
+
+2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Remove more redundant get_tasks override params.
 
 	* src/html/omp.xsl (html-edit-task-form): Replace overrides param with
@@ -11,7 +16,7 @@
 	overrides param from get_tasks URL, now that the default is the required
 	value.
 
-	* src/html/omp.xsl (html-edit-task-form): Remove the overrides param
+	* src/html/help.xsl (tasks.html): Remove overrides param from URL.
 
 2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
