@@ -7904,7 +7904,7 @@ Public License instead of this License.
 
 <xsl:template mode="help" match="tasks.html">
   <div class="gb_window_part_center">Help: Tasks
-    <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>

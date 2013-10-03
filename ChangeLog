@@ -1,5 +1,20 @@
 2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Remove more redundant get_tasks override params.
+
+	* src/html/omp.xsl (html-edit-task-form): Replace overrides param with
+	filter params in Add Report form.
+	(task): Remove extra override param from icons call, now that the
+	default and filters cover this.
+
+	* src/html/gsad.xsl (html-gsa-logo, error_dialog, login_page): Remove
+	overrides param from get_tasks URL, now that the default is the required
+	value.
+
+	* src/html/omp.xsl (html-edit-task-form): Remove the overrides param
+
+2013-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Ensure the overrides state is preserved across actions on the Tasks
 	page.
 

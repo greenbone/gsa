@@ -705,7 +705,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="time"/>
   <div style="text-align:left;">
     <div class="logo_l">
-      <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}" title="Greenbone Security Assistant">
+      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>
@@ -1574,7 +1574,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="error_dialog">
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
-  <xsl:param name="backurl">/omp?cmd=get_tasks&amp;overrides=1</xsl:param>
+  <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <xsl:param name="token"></xsl:param>
   <center>
     <div class="envelope" style="width:500px;">
@@ -1737,7 +1737,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
               <xsl:when test="string-length(url) = 0">
-                <input type="hidden" name="text" value="/omp?cmd=get_tasks&amp;overrides=1" />
+                <input type="hidden" name="text" value="/omp?cmd=get_tasks" />
               </xsl:when>
               <xsl:otherwise>
                 <input type="hidden" name="text" value="{url}" />
