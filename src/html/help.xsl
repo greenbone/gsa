@@ -6392,7 +6392,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>

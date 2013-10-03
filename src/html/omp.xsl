@@ -3910,7 +3910,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="next" value="{next}"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
-          <input type="hidden" name="overrides" value="{apply_overrides}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="file" name="xml_file" size="30"/>
         </form>
       </div>
@@ -4075,7 +4076,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="cap-type" select="'Task'"/>
             <xsl:with-param name="type" select="'task'"/>
             <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="extra-params-details" select="concat ('&amp;overrides=', ../apply_overrides)"/>
           </xsl:call-template>
         </td>
       </tr>
