@@ -143,7 +143,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>In fact, you must not lean back.
           As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the details icon</id>
+          you can already jump into the scan report via the link in the name column</id>
     <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
             über 1% liegt kann man bereits in die Details des Scan-Berichts</str>
   </msg>
@@ -156,8 +156,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
   </msg>
   <msg>
-    <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon.</id>
-    <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt.</str>
+    <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon</id>
+    <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt</str>
   </msg>
 
 </i18n>

@@ -1,6 +1,14 @@
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (result [result-headers]): Remove details-button arg
+	* src/html/wizard.xsl (quick-first-scan-wizard): Make the icons links.
+	Remove the details icons.  Add a New Target icon.
+
+	* src/html/po.xsl: Update wizard text to match.
+
+2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (result [result-headers]): Move note and override
+	presence icons into Vulnerability column.
 
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 

@@ -81,7 +81,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n('objects. You can call me with this
           icon')"/>
           <xsl:text> </xsl:text>
-          <img src="img/wizard.png"/>
+          <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Wizard">
+            <img src="img/wizard.png"/>
+          </a>
           <xsl:text> </xsl:text>
           <xsl:value-of select="gsa:i18n('any time later on.')"/>
         </p>
@@ -90,7 +93,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           on functionality, please try the integrated help system. It is
           always available as a context sensitive link as icon')"/>
           <xsl:text> </xsl:text>
-          <img src="img/help.png"/>.
+          <a href="/help/contents.html?token={/envelope/token}"
+             title="Help: Contents">
+            <img src="/img/help.png"/>
+          </a>.
         </p>
       </td>
       <td valign="top"><img src="img/enchantress.png"/></td>
@@ -122,18 +128,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <p>
           <xsl:value-of select="gsa:i18n('In fact, you must not lean back.
           As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the details icon')"/>
-          <xsl:text> </xsl:text>
-          (<img src="img/details.png"/>)
+          you can already jump into the scan report via the link in the Reports Total column')"/>
           <xsl:text> </xsl:text>
           <xsl:value-of select="gsa:i18n('and review the results collected so far.')"/>
         </p>
         <p>
           <xsl:value-of select="gsa:i18n('By clicking the New Task icon')"/>
           <xsl:text> </xsl:text>
-          (<img src="img/new.png"/>)
+          <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            title="New Task">
+            <img src="/img/new.png" border="0"/>
+          </a>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon.')"/>
+          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon')"/>
+          <xsl:text> </xsl:text>
+          <a href="/omp?cmd=new_target&amp;token={/envelope/token}"
+            title="New Target">
+            <img src="/img/new.png" border="0"/>
+          </a>
+          <xsl:text>.</xsl:text>
         </p>
       </td>
     </tr>
