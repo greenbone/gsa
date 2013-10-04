@@ -2182,7 +2182,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="overrides">
     <xsl:choose>
-      <xsl:when test="filters/apply_overrides = 0">1</xsl:when>
+      <xsl:when test="filters/apply_overrides = 0">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="link-overrides">
+    <xsl:choose>
+      <xsl:when test="$overrides = 0">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -2193,13 +2199,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
