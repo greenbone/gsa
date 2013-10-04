@@ -23215,24 +23215,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li class="pointy"></li>
             <li>
-              <xsl:if test="$current != 'results'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="result_count/full"/>
-                  <xsl:with-param name="section" select="'results'"/>
-                  <xsl:with-param name="type" select="$type"/>
-                </xsl:apply-templates>
-              </xsl:if>
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="result_count/full"/>
+                <xsl:with-param name="section" select="'results'"/>
+                <xsl:with-param name="type" select="$type"/>
+              </xsl:apply-templates>
             </li>
             <li>
-              <xsl:if test="$current != 'summary'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="section" select="'summary'"/>
-                  <xsl:with-param name="type" select="$type"/>
-                </xsl:apply-templates>
-              </xsl:if>
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="section" select="'summary'"/>
+                <xsl:with-param name="type" select="$type"/>
+              </xsl:apply-templates>
             </li>
             <li>
-              <xsl:if test="$current != 'vulns' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="vulns/count"/>
                   <xsl:with-param name="section" select="'vulns'"/>
@@ -23240,7 +23236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'hosts' and $type != 'delta'">
+              <xsl:if test="$type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="hosts/count"/>
                   <xsl:with-param name="section" select="'hosts'"/>
@@ -23249,7 +23245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'ports' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="ports/count"/>
                   <xsl:with-param name="section" select="'ports'"/>
@@ -23257,7 +23253,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'apps' and $type != 'delta'">
+              <xsl:if test="$type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="apps/count"/>
                   <xsl:with-param name="section" select="'apps'"/>
@@ -23266,7 +23262,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'os' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="$os_count"/>
                   <xsl:with-param name="section" select="'os'"/>
@@ -23274,7 +23270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'cves' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="cves/count"/>
                   <xsl:with-param name="section" select="'cves'"/>
@@ -23282,7 +23278,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'closed_cves' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="closed_cves/count"/>
                   <xsl:with-param name="section" select="'closed_cves'"/>
@@ -23290,14 +23286,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'topology' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="section" select="'topology'"/>
                 </xsl:apply-templates>
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'ssl_certs' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="ssl_certs/count"/>
                   <xsl:with-param name="section" select="'ssl_certs'"/>
@@ -23305,7 +23301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <xsl:if test="$current != 'errors' and $type != 'prognostic' and $type != 'delta'">
+              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="errors/count"/>
                   <xsl:with-param name="section" select="'errors'"/>
