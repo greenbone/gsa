@@ -16548,7 +16548,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2">
             <xsl:for-each select="get_results_response/results/result">
               <xsl:call-template name="result-detailed">
-                <xsl:with-param name="details-button">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
               </xsl:call-template>
@@ -16891,7 +16890,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2">
             <xsl:for-each select="get_notes_response/note/result">
               <xsl:call-template name="result-detailed">
-                <xsl:with-param name="details-button">0</xsl:with-param>
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
               </xsl:call-template>
@@ -17592,7 +17590,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2">
             <xsl:for-each select="get_results_response/results/result">
               <xsl:call-template name="result-detailed">
-                <xsl:with-param name="details-button">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
               </xsl:call-template>
@@ -18009,7 +18006,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2">
             <xsl:for-each select="get_overrides_response/override/result">
               <xsl:call-template name="result-detailed">
-                <xsl:with-param name="details-button">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
               </xsl:call-template>
@@ -21952,7 +21948,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
       <table class="gbntable" cellspacing="2">
         <xsl:call-template name="result-detailed">
-          <xsl:with-param name="details-button">0</xsl:with-param>
           <xsl:with-param name="note-buttons">1</xsl:with-param>
           <xsl:with-param name="override-buttons">1</xsl:with-param>
           <xsl:with-param name="show-overrides">1</xsl:with-param>
@@ -22021,7 +22016,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="result" mode="result-headers">
-  <xsl:param name="details-button"/>
   <xsl:param name="note-buttons"/>
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
@@ -22220,40 +22214,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- Action Icons -->
     <xsl:if test="$prognostic != 1">
       <td>
-        <xsl:if test="$details-button = 1">
-          <xsl:choose>
-            <xsl:when test="delta">
-              <div class="float_left">
-                <form class="float_left">
-                  <input type="hidden" name="token" value="{/envelope/token}"/>
-                  <input type="hidden" name="cmd" value="get_report"/>
-                  <input type="hidden" name="report_id" value="{../../../report/@id}"/>
-                  <input type="hidden" name="result_id" value="{@id}"/>
-                  <input type="hidden" name="delta_report_id" value="{../../../report/delta/report/@id}"/>
-                  <input type="hidden" name="task_id" value="{../../task/@id}"/>
-                  <input type="hidden" name="overrides" value="{../../filters/apply_overrides}"/>
-                  <input type="hidden" name="apply_overrides" value="{../../filters/apply_overrides}"/>
-                  <input type="hidden" name="autofp" value="{../../filters/autofp}"/>
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="report_result_id" value="{@id}"/>
-                  <input type="image"
-                         name="Details"
-                         src="/img/details.png"
-                         alt="Details" style="margin-left:3px;margin-right:3px;"/>
-                </form>
-              </div>
-            </xsl:when>
-            <xsl:otherwise>
-              <div class="float_left">
-                <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
-                   title="Result Details" style="margin-left:3px;">
-                  <img src="/img/details.png" border="0" alt="Details"/>
-                </a>
-              </div>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
         <xsl:if test="$note-buttons = 1">
           <div class="float_left">
             <xsl:choose>
@@ -22744,7 +22704,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="result-detailed" match="result" mode="detailed">
-  <xsl:param name="details-button">1</xsl:param>
   <xsl:param name="note-buttons">1</xsl:param>
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="show-overrides">0</xsl:param>
@@ -22758,7 +22717,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a class="anchor" name="result-{@id}"/>
 
   <xsl:apply-templates select="." mode="result-headers">
-    <xsl:with-param name="details-button" select="$details-button"/>
     <xsl:with-param name="note-buttons" select="$note-buttons"/>
     <xsl:with-param name="override-buttons" select="$override-buttons"/>
     <xsl:with-param name="result-details" select="$result-details"/>
@@ -25334,7 +25292,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="results/result">
     <xsl:call-template name="result-detailed">
       <xsl:with-param name="prognostic" select="$prognostic"/>
-      <xsl:with-param name="details-button" select="$on"/>
       <xsl:with-param name="note-buttons" select="$on"/>
       <xsl:with-param name="override-buttons" select="$on"/>
       <xsl:with-param name="show-overrides" select="$on"/>
