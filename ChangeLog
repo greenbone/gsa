@@ -1,3 +1,16 @@
+2013-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install src/html/img/style/dropdown_arrow.png and
+	src/html/img/style/highlight_green.png.
+
+	* src/html/gsa-style.css: Replace background of id section_list_first
+	with a small downward arrow. Change background when mouse is hovering
+	over the menu.
+
+	* src/html/img/style/dropdown_arrow.png: New image file.
+
+	* src/html/img/style/highlight_green.png: New image file.
+
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [result-overrides-icon]): Separate the value

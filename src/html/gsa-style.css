@@ -888,12 +888,15 @@ text-align:right;
 
 #report_section_list ul li a#section_list_first {
  height: 20px;
- background: url('img/style/top_menu_buttons.png');
- background-position: -130px -10px;
+ background: url('img/style/dropdown_arrow.png') no-repeat left center;
  padding-right: 2px;
- padding-left: 2px;
+ padding-left: 14px;
  margin-bottom: 4px;
- margin-top: -1px;
+ margin-top: 0px;
+}
+
+#report_section_list:hover ul li a#section_list_first {
+  background: url('img/style/dropdown_arrow.png') no-repeat left center, url('img/style/highlight_green.png') repeat-x left center;
 }
 
 #report_section_list ul li ul {
