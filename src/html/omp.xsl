@@ -22082,6 +22082,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <tr class="{$header_style} {gsa:table-row-class($class)}">
     <td> <!-- Vulnerability -->
+      <div class="float_right">
+        <xsl:if test="$note-buttons = 1">
+          <div class="float_left">
+            <xsl:if test="count(notes/note) &gt; 0">
+              <xsl:choose>
+                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                  <a href="#notes-{@id}"
+                     title="Notes" style="margin-left:3px;">
+                    <img src="/img/note.png" border="0" alt="Notes"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/note.png" border="0" style="margin-left:3px;"
+                       alt="Notes"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
+          </div>
+        </xsl:if>
+        <xsl:if test="$override-buttons = 1">
+          <div class="float_left">
+            <xsl:if test="count(overrides/override) &gt; 0">
+              <xsl:choose>
+                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                  <a href="#overrides-{@id}"
+                     title="Overrides" style="margin-left:3px;">
+                    <img src="/img/override.png" border="0" alt="Overrides"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/override.png" style="margin-left:3px;"
+                       border="0" alt="Overrides"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
+          </div>
+        </xsl:if>
+      </div>
       <xsl:if test="delta/text()">
         <xsl:choose>
           <xsl:when test="delta/text() = 'changed'">[ ~ ] </xsl:when>
@@ -22276,26 +22314,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
               </xsl:otherwise>
             </xsl:choose>
-          </div>
-        </xsl:if>
-        <xsl:if test="$note-buttons = 1">
-          <div class="float_left">
-            <xsl:if test="count(notes/note) &gt; 0">
-              <a href="#notes-{@id}"
-                 title="Notes" style="margin-left:3px;">
-                <img src="/img/note.png" border="0" alt="Notes"/>
-              </a>
-            </xsl:if>
-          </div>
-        </xsl:if>
-        <xsl:if test="$override-buttons = 1">
-          <div class="float_left">
-            <xsl:if test="count(overrides/override) &gt; 0">
-              <a href="#overrides-{@id}"
-                 title="Overrides" style="margin-left:3px;">
-                <img src="/img/override.png" border="0" alt="Overrides"/>
-              </a>
-            </xsl:if>
           </div>
         </xsl:if>
       </td>
