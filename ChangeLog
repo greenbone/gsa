@@ -1,3 +1,15 @@
+2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* CMakeLists.txt: Install green arrow image.
+
+	* src/html/gsa-style.css (report_section_list:hover): Switch to a single
+	green arrow as background.
+
+	* src/html/omp.xsl (report [section-list]): Remove pointy list item,
+	because it makes the area too cluttered and covers some of the text.
+
+	* src/html/img/style/dropdown_arrow_green.png: New file.
+
 2013-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install src/html/img/style/dropdown_arrow.png and

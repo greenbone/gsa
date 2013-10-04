@@ -23219,7 +23219,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li>
           <a id="section_list_first"><xsl:value-of select="$title"/></a>
           <ul>
-            <li class="pointy"></li>
             <li>
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="result_count/full"/>

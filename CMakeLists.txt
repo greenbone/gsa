@@ -404,6 +404,7 @@ install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
                src/html/img/style/top_menu_buttons.png
                src/html/img/style/menu_pointy.png
                src/html/img/style/dropdown_arrow.png
+               src/html/img/style/dropdown_arrow_green.png
                src/html/img/style/highlight_green.png
          DESTINATION ${GSA_DATA_DIR}/img/style)
 
