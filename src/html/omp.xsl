@@ -2607,13 +2607,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="section" select="'results'"/>
       </xsl:apply-templates>
       <xsl:apply-templates select="." mode="filterbox"/>
-      <br/>
-
+    </div>
+    <div class="gb_window_part_content_no_pad">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <table class="gbntable" cellspacing="1">
-            <xsl:apply-templates select="report" mode="details"/>
-          </table>
+          <div id="reports">
+            <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+              <xsl:apply-templates select="report" mode="details"/>
+            </table>
+          </div>
         </xsl:when>
         <xsl:otherwise>
           0 results
@@ -23580,8 +23582,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'hosts'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>Host</td>
           <td>OS</td>
@@ -23790,8 +23793,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'hosts'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <col/>
         <col/>
         <col/>
@@ -23866,8 +23870,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'ports'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <col/>
           <col/>
           <col/>
@@ -23961,8 +23966,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'vulns'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <col/>
           <col/>
           <col/>
@@ -24059,8 +24065,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'os'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <col/>
           <col/>
           <col width="100px"/>
@@ -24201,8 +24208,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'apps'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <col/>
           <col/>
           <col/>
@@ -24306,8 +24314,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'apps'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <col/>
           <col/>
           <col/>
@@ -24392,8 +24401,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'closed_cves'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>CVE</td>
           <td>Host</td>
@@ -24473,8 +24483,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'cves'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>CVE</td>
           <td>Hosts</td>
@@ -24529,7 +24540,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'topology'"/>
       </xsl:apply-templates>
-
+    </div>
+    <div class="gb_window_part_content_no_pad">
       <div style="overflow:auto; max-height:600px;">
         <xsl:call-template name="report-image">
           <xsl:with-param name="report" select="$report"/>
@@ -24609,8 +24621,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'ssl_certs'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>DN</td>
           <td>Serial</td>
@@ -24718,8 +24731,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'errors'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>Error Message</td>
           <td>NVT</td>
@@ -24967,12 +24981,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </table>
-
+    </div>
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'summary'"/>
       </xsl:apply-templates>
-
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td></td>
           <td>

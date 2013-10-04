@@ -1,5 +1,10 @@
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report): Match filter box and table to other list
+	windows.
+
+2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/img/style/dropdown_arrow_green.png: Actually commit file.
 
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
