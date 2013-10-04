@@ -1,5 +1,9 @@
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/img/style/dropdown_arrow_green.png: Actually commit file.
+
+2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* CMakeLists.txt: Install green arrow image.
 
 	* src/html/gsa-style.css (report_section_list:hover): Switch to a single
