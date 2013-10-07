@@ -16322,7 +16322,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="/omp#result-{result/@id}"
+      <form action="/omp#notes-{result/@id}"
             method="post"
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -16351,6 +16351,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <!-- get_report params. -->
             <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
             <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+            <input type="hidden" name="details" value="{/envelope/params/details}"/>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -16641,7 +16642,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="fragment">
         <xsl:choose>
           <xsl:when test="/envelope/params/next = 'get_report'">
-            <xsl:value-of select="concat ('#result-', /envelope/params/report_result_id)"/>
+            <xsl:value-of select="concat ('#notes-', /envelope/params/report_result_id)"/>
           </xsl:when>
         </xsl:choose>
       </xsl:variable>
@@ -16661,6 +16662,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
         <input type="hidden" name="delta_report_id" value="{/envelope/params/delta_report_id}"/>
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+        <input type="hidden" name="details" value="{/envelope/params/details}"/>
 
         <!-- get_nvts param. -->
         <input type="hidden" name="oid" value="{/envelope/params/oid}"/>
@@ -17344,7 +17346,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="/omp#result-{result/@id}"
+      <form action="/omp#overrides-{result/@id}"
             method="post"
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -17373,6 +17375,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <!-- get_report params. -->
             <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
             <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+            <input type="hidden" name="details" value="{/envelope/params/details}"/>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -17683,7 +17686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="fragment">
         <xsl:choose>
           <xsl:when test="/envelope/params/next = 'get_report'">
-            <xsl:value-of select="concat ('#result-', /envelope/params/report_result_id)"/>
+            <xsl:value-of select="concat ('#overrides-', /envelope/params/report_result_id)"/>
           </xsl:when>
         </xsl:choose>
       </xsl:variable>
@@ -17703,6 +17706,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
         <input type="hidden" name="delta_report_id" value="{/envelope/params/delta_report_id}"/>
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+        <input type="hidden" name="details" value="{/envelope/params/details}"/>
 
         <!-- get_nvts param. -->
         <input type="hidden" name="oid" value="{/envelope/params/oid}"/>
@@ -21446,10 +21450,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'note'"/>
             <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="fragment" select="concat ('#result-', ../../@id)"/>
+            <xsl:with-param name="fragment" select="concat ('#notes-', ../../@id)"/>
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="hidden" name="details" value="{/envelope/params/details}"/>
               <xsl:choose>
                 <xsl:when test="$next='get_result'">
                   <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
@@ -21518,42 +21523,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -21561,7 +21566,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="hidden" name="cmd" value="clone"/>
@@ -21572,6 +21577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
             <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
             <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+            <input type="hidden" name="details" value="{/envelope/params/details}"/>
             <input type="image" src="/img/clone.png" alt="Clone Note"
                    name="Clone" value="Clone" title="Clone"/>
 
@@ -21687,10 +21693,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'override'"/>
             <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="fragment" select="concat ('#result-', ../../@id)"/>
+            <xsl:with-param name="fragment" select="concat ('#overrides-', ../../@id)"/>
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="hidden" name="details" value="{/envelope/params/details}"/>
               <xsl:choose>
                 <xsl:when test="$next='get_result'">
                   <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
@@ -21759,42 +21766,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -21802,7 +21809,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="hidden" name="cmd" value="clone"/>
@@ -21813,6 +21820,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
             <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
             <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+            <input type="hidden" name="details" value="{/envelope/params/details}"/>
             <input type="image" src="/img/clone.png" alt="Clone Override"
                    name="Clone" value="Clone" title="Clone"/>
 
@@ -22307,25 +22315,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Note" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="Add Note"/>
                 </a>
@@ -22339,25 +22347,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="Add Override" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="Add Override"/>
                 </a>
@@ -23370,6 +23378,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="optional_resource_type" value="result"/>
           <input type="hidden" name="next" value="get_report_section"/>
           <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+          <input type="hidden" name="details" value="{/envelope/params/details}"/>
           <xsl:if test="@type='prognostic'">
             <input type="hidden" name="type" value="prognostic"/>
             <input type="hidden" name="host" value="{filters/host}"/>
@@ -23400,6 +23409,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="report_section" value="{$section}"/>
           <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+          <input type="hidden" name="details" value="{/envelope/params/details}"/>
           <xsl:if test="@type='prognostic'">
             <input type="hidden" name="type" value="prognostic"/>
             <input type="hidden" name="host" value="{filters/host}"/>
@@ -23445,6 +23455,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="report_id" value="{@id}"/>
       <input type="hidden" name="report_section" value="{$section}"/>
       <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+      <input type="hidden" name="details" value="{/envelope/params/details}"/>
       <xsl:if test="@type='prognostic'">
         <input type="hidden" name="type" value="prognostic"/>
         <input type="hidden" name="host" value="{filters/host}"/>
