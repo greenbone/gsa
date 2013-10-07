@@ -3382,11 +3382,33 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   task_id = params_value (params, "task_id");
   if (task_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a task. "
-                         "Diagnostics: Required parameter task_id was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      entity_t entity;
+
+      /* Check for an ID in a CREATE_TASK response in extra_xml. */
+
+      if ((parse_entity (extra_xml, &entity) == 0)
+          && (strcmp (entity_name (entity), "create_task_response") == 0))
+        {
+          param_t *param;
+
+          param = params_add (params, "task_id", entity_attribute (entity, "id"));
+          param->valid = 1;
+          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+          task_id = params_value (params, "task_id");
+          assert (task_id);
+          free_entity (entity);
+        }
+      else
+        {
+          free_entity (entity);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a task. "
+                               "Diagnostics: Required parameter task_id was NULL.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
 
   overrides = params_value (params, "overrides");
   apply_overrides = overrides ? strcmp (overrides, "0") : 1;

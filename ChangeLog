@@ -1,3 +1,8 @@
+2013-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Check for ID like in get_one, until
+	get_task is converted to use get_one.
+
 2013-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
