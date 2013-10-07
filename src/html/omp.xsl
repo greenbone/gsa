@@ -3822,6 +3822,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="next" value="get_task"/>
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
       </xsl:if>
@@ -5300,6 +5301,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_lsc_credential"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_lsc_credential"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -5768,6 +5772,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_agent"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_agent"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -6133,6 +6140,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_alert"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_alert"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="145">Name</td>
@@ -7686,6 +7696,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_filter"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_filter"/>
         <input type="hidden" name="filter_id" value="{/envelope/params/filter_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -8652,6 +8663,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_target"/>
         <input type="hidden" name="target_id" value="{target/@id}"/>
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
@@ -9623,6 +9635,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_config"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_config"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -11414,6 +11429,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -12923,6 +12939,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_slave"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_slave"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name
@@ -18703,6 +18722,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_group"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_group"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="group_id" value="{/envelope/params/group_id}"/>
         <input type="hidden" name="group" value="{/envelope/params/group}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -19446,6 +19468,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_port_list"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_port_list"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name
@@ -26305,6 +26330,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_user"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_user"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125">Login Name</td>

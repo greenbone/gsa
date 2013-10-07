@@ -1,3 +1,16 @@
+2013-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one): Look for an ID in a CREATE response in
+	extra_xml if the ID param is missing.
+
+	* src/html/omp.xsl (new_task, html-create-lsc-credential-form)
+	(html-create-agent-form, html-create-alert-form)
+	(html-create-filter-form, html-create-target-form)
+	(html-create-config-form, html-create-schedule-form)
+	(html-create-slave-form, html-create-group-form,
+	(html-create-port-list-form, html-create-user-form): Add next param with
+	Details page.  Add filter args if required.
+
 2013-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report [summary]): Add report ID at the top right

@@ -752,11 +752,39 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   sort_order = params_value (params, "sort_order");
 
   if (id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a resource. "
-                         "Diagnostics: Required ID parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      entity_t entity;
+      gchar *name;
+
+      /* Check for an ID in a CREATE response in extra_xml. */
+
+      name = g_strdup_printf ("create_%s_response", type);
+      if ((parse_entity (extra_xml, &entity) == 0)
+          && (strcmp (entity_name (entity), name) == 0))
+        {
+          param_t *param;
+
+          g_free (name);
+          name = g_strdup_printf ("%s_id", type);
+          param = params_add (params, name, entity_attribute (entity, "id"));
+          param->valid = 1;
+          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+          id = params_value (params, name);
+          assert (id);
+          g_free (name);
+          free_entity (entity);
+        }
+      else
+        {
+          g_free (name);
+          free_entity (entity);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a resource. "
+                               "Diagnostics: Required ID parameter was NULL.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
