@@ -1,3 +1,17 @@
+2013-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Move indicators for tag actions
+	from get_report to get_report_summary_response.
+
+	* src/html/omp.xsl (user-tags-window, tag [for_resource])
+	(html-create-tag-form, html-edit-tag-form): Add new
+	parameter for report_section.
+	(get_report): Remove user tags window and tag-related response message
+	boxes. Moved to get_report_summary_response.
+	(get_report_summary_response): Add user tags window and tag-related
+	response message boxes, moved from get_report. Remove test for report
+	type.
+
 2013-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/wizard.xsl (quick-first-scan-wizard): Make the icons links.

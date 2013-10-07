@@ -1020,12 +1020,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/modify_override_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_report/create_tag_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_report/delete_tag_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_report/modify_tag_response"
-                             mode="response-indicator"/>
         <xsl:apply-templates select="get_reports/create_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_reports/delete_report_response"
@@ -1053,6 +1047,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_report_format/modify_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_formats/verify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_summary_response/create_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_summary_response/delete_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_summary_response/modify_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/commands_response/create_note_response"
                              mode="response-indicator"/>

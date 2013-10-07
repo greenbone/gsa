@@ -1467,6 +1467,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_subtype"/>
   <xsl:param name="resource_id" select="@id"/>
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
+  <xsl:param name="report_section" select="''"/>
   <xsl:param name="title" select="concat('User Tags for &quot;',name,'&quot;:')"/>
   <xsl:param name="user_tags" select="user_tags" />
   <xsl:param name="tag_names" select="../../get_tags_response"/>
@@ -1498,6 +1499,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
+          <xsl:when test="$report_section != ''">
+            <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+            title="New Tag"
+            style="margin-left:3px;">
+              <img src="/img/new.png" border="0" alt="Add tag"/>
+            </a>
+          </xsl:when>
           <xsl:when test="$resource_subtype != ''">
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="New Tag"
@@ -1586,6 +1594,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         name="{$resource_type}_type"
                         value="{$resource_subtype}"/>
               </xsl:if>
+              <xsl:if test="$report_section != ''">
+                <input type="hidden"
+                        name="report_section"
+                        value="{$report_section}"/>
+              </xsl:if>
             </form>
           </div>
         </xsl:when>
@@ -1605,6 +1618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="resource_subtype" select="$resource_subtype"/>
               <xsl:with-param name="resource_id"   select="$resource_id"/>
               <xsl:with-param name="next" select="$next"/>
+              <xsl:with-param name="report_section" select="$report_section"/>
             </xsl:apply-templates>
           </table>
         </xsl:when>
@@ -1619,6 +1633,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_subtype"/>
   <xsl:param name="resource_id"/>
   <xsl:param name="next"/>
+  <xsl:param name="report_section" select="''"/>
 
   <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="name"/></td>
@@ -1651,6 +1666,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    name="details"
                    value="1"/>
           </xsl:if>
+          <xsl:if test="$report_section != ''">
+            <input type="hidden"
+                    name="report_section"
+                    value="{$report_section}"/>
+          </xsl:if>
         </xsl:with-param>
         <xsl:with-param name="fragment" select="'#user_tags'"/>
       </xsl:call-template>
@@ -1680,6 +1700,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    name="details"
                    value="1"/>
           </xsl:if>
+          <xsl:if test="$report_section != ''">
+            <input type="hidden"
+                    name="report_section"
+                    value="{$report_section}"/>
+          </xsl:if>
         </xsl:with-param>
         <xsl:with-param name="fragment" select="'#user_tags'"/>
       </xsl:call-template>
@@ -1690,6 +1715,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
 
       <xsl:choose>
+        <xsl:when test="$report_section != ''">
+          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+          title="Edit Tag">
+            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
         <xsl:when test="$resource_subtype!=''">
           <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
               title="Edit Tag">
@@ -8303,6 +8334,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{/envelope/params/next_subtype}"/>
           </xsl:if>
         </xsl:if>
+        <xsl:if test="/envelope/params/report_section">
+          <input type="hidden" name="report_section" value="{/envelope/params/report_section}"/>
+        </xsl:if>
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{/envelope/params/start}"/>
         <input type="hidden" name="max" value="{/envelope/params/max}"/>
@@ -8450,6 +8484,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    name="{/envelope/params/next_type}_type"
                    value="{/envelope/params/next_subtype}"/>
           </xsl:if>
+        </xsl:if>
+        <xsl:if test="/envelope/params/report_section != ''">
+          <input type="hidden"
+                  name="report_section"
+                  value="{/envelope/params/report_section}"/>
         </xsl:if>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
@@ -21147,23 +21186,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_tag_response"/>
-  <xsl:apply-templates select="create_tag_response"/>
-  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>
-  <xsl:choose>
-    <xsl:when test="/envelope/params/type='assets'"/>
-    <xsl:otherwise>
-      <xsl:for-each select="get_reports_response/report/report">
-        <xsl:call-template name="user-tags-window">
-          <xsl:with-param name="resource_type" select="'report'"/>
-          <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
-          <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
-        </xsl:call-template>
-      </xsl:for-each>
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_asset">
@@ -24764,10 +24788,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_report_summary_response">
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
                        mode="summary"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="summary"/>
+  <xsl:for-each select="get_report/get_reports_response/report/report">
+    <xsl:call-template name="user-tags-window">
+      <xsl:with-param name="resource_type" select="'report'"/>
+      <xsl:with-param name="next" select="'get_report_section'"/>
+      <xsl:with-param name="report_section" select="'summary'"/>
+      <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
+      <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
+    </xsl:call-template>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="report" mode="summary">
