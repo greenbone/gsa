@@ -1,5 +1,10 @@
 2013-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (report [summary]): Add report ID at the top right
+	for non-prognostic reports.
+
+2013-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Move indicators for tag actions
 	from get_report to get_report_summary_response.
 
