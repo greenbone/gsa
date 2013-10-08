@@ -17413,6 +17413,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
+      <h1>Host Identification</h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Identifier</td>
+          <td>Value</td>
+        </tr>
+        <tr>
+          <td>Scanned IP</td>
+          <td><xsl:value-of select="ip"/></td>
+        </tr>
+        <xsl:if test="count (detail[name = 'DNS-via-TargetDefinition']) > 0">
+          <tr>
+            <td>Hostname (target definition)</td>
+            <td><xsl:value-of select="detail[name = 'DNS-via-TargetDefinition']/value"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="count (detail[name = 'DNS-via-ReverseLookup']) > 0">
+          <tr>
+            <td>Hostname (reverse lookup)</td>
+            <td><xsl:value-of select="detail[name = 'DNS-via-ReverseLookup']/value"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="count (detail[name = 'DNS-via-WMI-FQDNS']) > 0">
+          <tr>
+            <td>Hostname (WMI, Standalone)</td>
+            <td><xsl:value-of select="detail[name = 'DNS-via-WMI-FQDNS']/value"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="count (detail[name = 'DNS-via-WMI-DNS']) > 0">
+          <tr>
+            <td>Hostname (WMI, Domain)</td>
+            <td><xsl:value-of select="detail[name = 'DNS-via-WMI-DNS']/value"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="count (detail[name = 'MAC']) > 0">
+          <tr>
+            <td>MAC</td>
+            <td><xsl:value-of select="detail[name = 'MAC']/value"/></td>
+          </tr>
+        </xsl:if>
+      </table>
       <xsl:choose>
         <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0 and count (detail[name = 'MAC']) = 0 and count (detail[name = 'NIC']) = 0 and count (detail[name = 'MAC-Ifaces']) = 0">
           <h1>Hardware: Information not available</h1>
