@@ -127,15 +127,14 @@ static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
 
 static char *get_notes (credentials_t *, params_t *, const char *);
 
-static char *get_note (credentials_t *, params_t *, const char *, const char *);
+static char *get_note (credentials_t *, params_t *, const char *);
 
 static char *get_nvts (credentials_t *credentials, params_t *,
                        const char *, const char *);
 
 static char *get_overrides (credentials_t *, params_t *, const char *);
 
-static char *get_override (credentials_t *, params_t *, const char *,
-                           const char *);
+static char *get_override (credentials_t *, params_t *, const char *);
 
 static char *get_permission (credentials_t *, params_t *, const char *);
 
@@ -624,7 +623,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_lsc_credentials (credentials, params, response);
 
   if (strcmp (next, "get_note") == 0)
-    return get_note (credentials, params, NULL, response);
+    return get_note (credentials, params, response);
 
   if (strcmp (next, "get_notes") == 0)
     return get_notes (credentials, params, response);
@@ -633,7 +632,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_nvts (credentials, params, NULL, response);
 
   if (strcmp (next, "get_override") == 0)
-    return get_override (credentials, params, NULL, response);
+    return get_override (credentials, params, response);
 
   if (strcmp (next, "get_overrides") == 0)
     return get_overrides (credentials, params, response);
@@ -3625,7 +3624,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_lsc_credentials");
     }
 
-  xml = g_string_new ("<commands_response>");
+  xml = g_string_new ("");
 
   {
     int ret;
@@ -3698,40 +3697,14 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
       }
   }
 
-  /* Get all LSC credentials. */
-
-  if (openvas_server_send (&session,
-                           "<get_lsc_credentials"
-                           " sort_field=\"name\" sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while listing credentials. "
-                           "The credential has, however, been created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while listing credentials. "
-                           "The credential has, however, been created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</commands_response>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  html = next_page (credentials, params, xml->str);
+  if (html == NULL)
+    html = get_lsc_credentials (credentials, params, xml->str);
+  g_string_free (xml, TRUE);
+  return html;
 }
 
 /**
@@ -5778,7 +5751,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *filter, *first, *max, *target_id;
+  const char *filter, *first, *max;
 
   filter = params_value (params, "filter");
   if (filter == NULL)
@@ -5791,14 +5764,6 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
   max = params_value (params, "max");
   if (max == NULL)
     max = "";
-
-  target_id = params_value (params, "target_id");
-  if (target_id == NULL && params_given (params, "target_id"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a credential. "
-                         "Diagnostics: Error in parameter target_id.",
-                         "/omp?cmd=get_targets");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5912,12 +5877,10 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
                                  "<targets start=\"%s\" max=\"%s\"/>"
-                                 "<target id=\"%s\"/>"
                                  "</new_target>",
                                  filter,
                                  first,
-                                 max,
-                                 target_id ? target_id : "0");
+                                 max);
   g_string_append (xml, end);
   g_free (end);
 
@@ -5955,7 +5918,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response;
   const char *name, *hosts, *exclude_hosts, *target_locator, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *target_id, *port_list_id;
+  const char *port_list_id;
   const char *reverse_lookup_only, *reverse_lookup_unify;
 
   name = params_value (params, "name");
@@ -5970,7 +5933,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
-  target_id = params_value (params, "target_id");
 
   CHECK_PARAM (name, "Create Target", new_target);
   CHECK_PARAM (target_source, "Create Target", new_target)
@@ -6134,21 +6096,15 @@ create_target_omp (credentials_t * credentials, params_t *params)
         return html;
       }
 
-    if (target_id && strcmp (target_id, "0"))
-      {
-        gchar *ret;
-        openvas_server_close (socket, session);
-        ret = get_target (credentials, params, response);
-        g_free (response);
-        free_entity (entity);
-        return ret;
-      }
-
     free_entity (entity);
   }
 
+  /* Cleanup, and return transformed XML. */
+
   openvas_server_close (socket, session);
-  html = get_targets (credentials, params, response);
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_targets (credentials, params, response);
   g_free (response);
   return html;
 }
@@ -7657,7 +7613,7 @@ char *
 create_config_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
-  GString *xml = NULL;
+  GString *xml;
   int socket;
   gchar *html;
   const char *name, *comment, *base;
@@ -7679,7 +7635,7 @@ create_config_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_configs");
     }
 
-  xml = g_string_new ("<commands_response>");
+  xml = g_string_new ("");
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -7726,41 +7682,14 @@ create_config_omp (credentials_t * credentials, params_t *params)
         }
     }
 
-  /* Get all the configs. */
-
-  if (openvas_server_send (&session,
-                           "<get_configs"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new config. "
-                           "The new config was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new config. "
-                           "The new config was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</commands_response>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  html = next_page (credentials, params, xml->str);
+  if (html == NULL)
+    html = get_configs (credentials, params, xml->str);
+  g_string_free (xml, TRUE);
+  return html;
 }
 
 /**
@@ -7919,11 +7848,33 @@ get_config (credentials_t * credentials, params_t *params,
   config_id = params_value (params, "config_id");
 
   if (config_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a config. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
+    {
+      entity_t entity;
+
+      /* Check for an ID in a CREATE_CONFIG response in extra_xml. */
+
+      if ((parse_entity (extra_xml, &entity) == 0)
+          && (strcmp (entity_name (entity), "create_config_response") == 0))
+        {
+          param_t *param;
+
+          param = params_add (params, "config_id", entity_attribute (entity, "id"));
+          param->valid = 1;
+          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+          config_id = params_value (params, "config_id");
+          assert (config_id);
+          free_entity (entity);
+        }
+      else
+        {
+          free_entity (entity);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a config. "
+                               "Diagnostics: Required parameter config_id was NULL.",
+                               "/omp?cmd=get_configs");
+        }
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10882,121 +10833,14 @@ get_notes_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  commands     Extra commands to run before the others.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_note (credentials_t *credentials, params_t *params, const char *commands,
-          const char *extra_xml)
+get_note (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *note_id;
-
-  note_id = params_value (params, "note_id");
-  if (note_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a note. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_notes");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the note. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_note>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the note. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_notes"
-                            " note_id=\"%s\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            note_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the note. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the note. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get tag names */
-
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"attach_type=note"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_note>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_one ("note", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -11010,7 +10854,7 @@ get_note (credentials_t *credentials, params_t *params, const char *commands,
 char *
 get_note_omp (credentials_t *credentials, params_t *params)
 {
-  return get_note (credentials, params, NULL, NULL);
+  return get_note (credentials, params, NULL);
 }
 
 /**
@@ -11669,121 +11513,15 @@ get_overrides_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  commands     Extra commands to run before the others.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_override (credentials_t *credentials, params_t *params, const char *commands,
+get_override (credentials_t *credentials, params_t *params,
               const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *override_id;
-
-  override_id = params_value (params, "override_id");
-  if (override_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a override. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_overrides");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the override. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_override>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the override. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_overrides"
-                            " override_id=\"%s\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            override_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the override. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the override. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get tag names */
-
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"attach_type=override"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_override>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_one ("override", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -11797,7 +11535,7 @@ get_override (credentials_t *credentials, params_t *params, const char *commands
 char *
 get_override_omp (credentials_t *credentials, params_t *params)
 {
-  return get_override (credentials, params, NULL, NULL);
+  return get_override (credentials, params, NULL);
 }
 
 /**
@@ -15896,10 +15634,10 @@ char *
 create_port_list_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
-  GString *xml;
   int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *name, *comment, *port_range, *from_file;
+  entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -15928,8 +15666,6 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_port_lists");
     }
 
-  xml = g_string_new ("<get_port_lists>");
-
   {
     int ret;
 
@@ -15949,7 +15685,6 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 
     if (ret == -1)
       {
-        g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -15959,9 +15694,8 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_port_lists");
       }
 
-    if (read_string (&session, &xml))
+    if (read_entity_and_text (&session, &entity, &response))
       {
-        g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -15972,41 +15706,14 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
       }
   }
 
-  /* Get all the port lists. */
-
-  if (openvas_server_send (&session,
-                           "<get_port_lists"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new port list. "
-                           "A new port list was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new port list. "
-                           "A new port list was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_port_lists>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_port_lists (credentials, params, response);
+  g_free (response);
+  return html;
 }
 
 /**

@@ -3322,7 +3322,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$type = 'role'"/>
         <xsl:when test="$type = 'report'"/>
         <xsl:otherwise>
-          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="New {$cap-type}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -3508,7 +3508,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$nonew"/>
     <xsl:otherwise>
-      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -5724,8 +5724,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_lsc_credential">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_lsc_credential_response"/>
   <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
   <xsl:apply-templates select="commands_response/modify_lsc_credential_response"/>
@@ -8664,7 +8665,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_target"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="next" value="get_target"/>
-        <input type="hidden" name="target_id" value="{target/@id}"/>
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
@@ -11375,8 +11375,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_config_response">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_config_response"/>
   <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
   <xsl:call-template name="html-config-table"/>
 </xsl:template>
@@ -17293,12 +17294,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_note">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/modify_note_response"/>
+  <xsl:apply-templates select="modify_note_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
   <xsl:choose>
-    <xsl:when test="commands_reponse/get_notes_response/@status = '500'">
+    <xsl:when test="get_notes_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
         <xsl:with-param name="operation">
           Get Note
@@ -17307,12 +17308,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="500"/>
         </xsl:with-param>
         <xsl:with-param name="msg">
-          <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
+          <xsl:value-of select="get_notes_response/@status_text"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="commands_response/get_notes_response/note" mode="details"/>
+      <xsl:apply-templates select="get_notes_response/note" mode="details"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -18501,12 +18502,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_override">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/modify_override_response"/>
+  <xsl:apply-templates select="modify_override_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
   <xsl:choose>
-    <xsl:when test="commands_reponse/get_overrides_response/@status = '500'">
+    <xsl:when test="get_overrides_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
         <xsl:with-param name="operation">
           Get Override
@@ -18515,12 +18516,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="500"/>
         </xsl:with-param>
         <xsl:with-param name="msg">
-          <xsl:value-of select="commands_response/get_overrides_response/@status_text"/>
+          <xsl:value-of select="get_overrides_response/@status_text"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="commands_response/get_overrides_response/override" mode="details"/>
+      <xsl:apply-templates select="get_overrides_response/override" mode="details"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

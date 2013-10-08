@@ -1,3 +1,27 @@
+2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make the Details page follow the New page, in general.
+
+	* src/gsad_omp.c (create_lsc_credential_omp): Use next_page.
+	(new_target): Remove target_id handling, now that the next page is the
+	Details of the created target.
+	(create_target_omp, create_config_omp): Use next_page.
+	(get_config): Check for ID in response, in case previous page was New
+	Target.
+	(get_note, get_override): Switch to get_one.  Drop commands arg.  Update
+	callers.
+	(create_port_list_omp): Use next_page.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add indicator icons for Create on
+	Details pages.
+
+	* src/html/omp.xsl (list-window, details-header-icon): Add next to New
+	icon.
+	(get_lsc_credentials, get_config_response): Match create response.
+	(html-create-target-form): Remove target_id, now that the next page is
+	Details for the new target.
+	(get_note, get_override): Adjust paths for get_one.
+
 2013-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Check for ID like in get_one, until
