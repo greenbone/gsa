@@ -7435,6 +7435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_alert">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:apply-templates select="modify_alert_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
@@ -20176,6 +20177,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_report_format"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">

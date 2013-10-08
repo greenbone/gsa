@@ -5246,11 +5246,9 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 
       if (status[0] != '2')
         {
-          html = next_page (credentials, params, response);
-          if (html == NULL)
-            html = new_alert (credentials, params, response);
-          g_free (response);
           free_entity (entity);
+          html = new_alert (credentials, params, response);
+          g_free (response);
           return html;
         }
 

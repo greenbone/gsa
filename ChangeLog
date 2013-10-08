@@ -2,6 +2,19 @@
 
 	Make the Details page follow the New page, in general.
 
+	* src/gsad_omp.c (create_alert_omp): On error serve New Alert instead of
+	next page.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add indicator icons for Create on
+	Details pages.
+
+	* src/html/omp.xsl (get_alert): Match create_alert_response.
+	(html-create-report-format-form): Add next param.
+
+2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make the Details page follow the New page, in general.
+
 	* src/gsad_omp.c (create_lsc_credential_omp): Use next_page.
 	(new_target): Remove target_id handling, now that the next page is the
 	Details of the created target.
