@@ -1,5 +1,10 @@
 2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (assets): Use arrow icons instead of text arrows in
+	page control.
+
+2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make the Details page follow the New page, in general.
 
 	* src/gsad_omp.c (create_group_omp): On error serve New Group instead of
