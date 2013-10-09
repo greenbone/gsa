@@ -18847,6 +18847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_group_response"/>
   <xsl:apply-templates select="commands_response/modify_group_response"/>
+  <xsl:apply-templates select="create_group_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>

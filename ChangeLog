@@ -2,6 +2,21 @@
 
 	Make the Details page follow the New page, in general.
 
+	* src/gsad_omp.c (create_group_omp): On error serve New Group instead of
+	next page.  Remove group_id check, now that it always goes to Details
+	next.
+	(get_user): Append extra_xml before DESCRIBE_AUTH response, so that
+	get_one ID parsing works.
+
+	* src/html/gsad.xsl (create_permission_response): New template.
+	(html-gsa-logo): Add indicator icons for Create on Details pages.
+
+	* src/html/omp.xsl (get_group): Match create_group_response.
+
+2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make the Details page follow the New page, in general.
+
 	* src/gsad_omp.c (create_alert_omp): On error serve New Alert instead of
 	next page.
 

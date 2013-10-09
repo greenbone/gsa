@@ -14673,7 +14673,7 @@ create_group_omp (credentials_t *credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *comment, *users, *group_id;
+  const char *name, *comment, *users;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -14739,12 +14739,12 @@ create_group_omp (credentials_t *credentials, params_t *params)
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_groups");
       }
+    openvas_server_close (socket, session);
 
     status = entity_attribute (entity, "status");
     if ((status == NULL)
         || (strlen (status) == 0))
       {
-        openvas_server_close (socket, session);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new group. "
@@ -14755,24 +14755,10 @@ create_group_omp (credentials_t *credentials, params_t *params)
 
     if (status[0] != '2')
       {
-        openvas_server_close (socket, session);
-        html = next_page (credentials, params, response);
-        if (html == NULL)
-          html = new_group (credentials, params, response);
-        g_free (response);
         free_entity (entity);
+        html = new_group (credentials, params, response);
+        g_free (response);
         return html;
-      }
-
-    group_id = params_value (params, "group_id");
-    if (group_id && strcmp (group_id, "0"))
-      {
-        gchar *ret;
-        openvas_server_close (socket, session);
-        ret = get_group (credentials, params, response);
-        g_free (response);
-        free_entity (entity);
-        return ret;
       }
 
     free_entity (entity);
@@ -17512,6 +17498,8 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
   GString *extra;
 
   extra = g_string_new ("");
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
   if (command_enabled (credentials, "DESCRIBE_AUTH"))
     {
       gchar *response;
@@ -17549,8 +17537,6 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
       free_entity (entity);
       g_free (response);
     }
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
   html = get_one ("user", credentials, params, extra->str, NULL);
   g_string_free (extra, TRUE);
   return html;
