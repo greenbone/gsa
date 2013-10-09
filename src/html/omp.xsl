@@ -5561,7 +5561,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:with-param name="select-value" select="$condition/data/text()"/>
                       </xsl:call-template>
                       <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Meduim'"/>
+                        <xsl:with-param name="value" select="'Medium'"/>
                         <xsl:with-param name="select-value" select="$condition/data/text()"/>
                       </xsl:call-template>
                       <xsl:call-template name="opt">
