@@ -1,3 +1,12 @@
+2013-10-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (send_alert_condition_data): Change (threat) level
+	to severity.
+
+	* src/html/omp.xsl (html-create-alert-form, html-edit-alert-form)
+	(alert, alert [trash]): Use severity instead of threat level in
+	conditions.
+
 2013-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets): Use arrow icons instead of text arrows in

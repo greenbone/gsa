@@ -5022,9 +5022,9 @@ send_alert_condition_data (gnutls_session_t *session, params_t *data,
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
-        if (((strcmp (condition, "Threat level at least") == 0
-              && strcmp (name, "level") == 0)
-             || (strcmp (condition, "Threat level changed") == 0
+        if (((strcmp (condition, "Severity at least") == 0
+              && strcmp (name, "severity") == 0)
+             || (strcmp (condition, "Severity changed") == 0
               && strcmp (name, "direction") == 0))
             && openvas_server_sendf_xml (session,
                                          "<data><name>%s</name>%s</data>",

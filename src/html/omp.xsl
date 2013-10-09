@@ -6197,22 +6197,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td colspan="2" valign="top">
                     <label>
-                      <input type="radio" name="condition" value="Threat level at least"/>
-                      Threat level is at least
+                      <input type="radio" name="condition" value="Severity at least"/>
+                      Severity is at least
                     </label>
-                    <select name="condition_data:level">
-                      <option value="High" selected="1">High</option>
-                      <option value="Medium">Medium</option>
-                      <option value="Low">Low</option>
-                      <option value="Log">Log</option>
-                    </select>
+                    <input name="condition_data:severity" value="0.1" size="5"/>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
                     <label>
-                      <input type="radio" name="condition" value="Threat level changed"/>
-                      Threat level
+                      <input type="radio" name="condition" value="Severity changed"/>
+                      Severity level
                     </label>
                     <select name="condition_data:direction">
                       <option value="changed" selected="1">changed</option>
@@ -6634,37 +6629,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td colspan="2" valign="top">
                     <xsl:call-template name="radio-button">
-                      <xsl:with-param name="value" select="'Threat level at least'"/>
+                      <xsl:with-param name="value" select="'Severity at least'"/>
                       <xsl:with-param name="select-value" select="$condition/text()"/>
                       <xsl:with-param name="name" select="'condition'"/>
                     </xsl:call-template>
-                    <select name="condition_data:level">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'High'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Meduim'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Low'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Log'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                      </xsl:call-template>
-                    </select>
+                    <xsl:text> </xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="$condition/text() = 'Severity at least'">
+                        <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input name="condition_data:severity" value="0.1" size="5"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'condition'"/>
-                      <xsl:with-param name="value" select="'Threat level changed'"/>
+                      <xsl:with-param name="value" select="'Severity changed'"/>
                       <xsl:with-param name="select-value" select="$condition/text()"/>
-                      <xsl:with-param name="text" select="'Threat level'"/>
+                      <xsl:with-param name="text" select="'Severity'"/>
                     </xsl:call-template>
                     <select name="condition_data:direction">
                       <xsl:call-template name="opt">
@@ -7070,10 +7056,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="condition/text()"/>
       <xsl:choose>
-        <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="condition/data[name='level']/text()"/>)
+        <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='severity']/text()"/>)
         </xsl:when>
-        <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+        <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
           <br/>(<xsl:value-of select="condition/data[name='direction']/text()"/>)
         </xsl:when>
       </xsl:choose>
@@ -7137,10 +7123,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="condition/text()"/>
       <xsl:choose>
-        <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="condition/data[name='level']/text()"/>)
+        <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='severity']/text()"/>)
         </xsl:when>
-        <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+        <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
           <br/>(<xsl:value-of select="condition/data[name='direction']/text()"/>)
         </xsl:when>
       </xsl:choose>
@@ -7229,10 +7215,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="condition/text()"/>
             <xsl:choose>
-              <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
-                (<xsl:value-of select="condition/data[name='level']/text()"/>)
+              <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
+                (<xsl:value-of select="condition/data[name='severity']/text()"/>)
               </xsl:when>
-              <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+              <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
                 (<xsl:value-of select="condition/data[name='direction']/text()"/>)
               </xsl:when>
             </xsl:choose>
