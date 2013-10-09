@@ -23186,6 +23186,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="section"/>
   <xsl:param name="type"/>
   <xsl:param name="count"/>
+  <xsl:param name="class" select="'section_sublist'"/>
 
   <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="/envelope/params/pos"/>
@@ -23215,7 +23216,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <li class="section_sublist">
+  <li class="{$class}">
     <a href="{$link}"><xsl:value-of select="$name"/></a>
   </li>
 </xsl:template>
@@ -23288,6 +23289,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="count" select="apps/count"/>
                   <xsl:with-param name="section" select="'apps'"/>
                   <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="class">
+                    <xsl:choose>
+                      <xsl:when test="$type = 'prognostic'">last</xsl:when>
+                      <xsl:otherwise>section_sublist</xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
                 </xsl:apply-templates>
               </xsl:if>
             </li>

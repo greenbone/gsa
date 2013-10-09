@@ -1,3 +1,9 @@
+2013-10-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report [section-link]): Add class arg.
+	(report [section-list]): Pass class in apps case, so that the highlight
+	is rounded for prognostic reports.
+
 2013-10-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (send_alert_condition_data): Change (threat) level
