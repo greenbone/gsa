@@ -28035,7 +28035,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="text" name="max" size="40" maxlength="800"
                        value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
               </td>
-              <td></td>
             </tr>
             <tr>
               <td>Wizard Rows</td>
@@ -28043,7 +28042,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="text" name="max_results" size="40" maxlength="800"
                        value="{get_settings_response/setting[name='Wizard Rows']/value}"/>
               </td>
-              <td></td>
             </tr>
             <tr>
               <td>Severity Class</td>
@@ -28053,7 +28051,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                     select="get_settings_response/setting[name='Severity Class']/value"/>
                 </xsl:call-template>
               </td>
-              <td></td>
             </tr>
             <tr>
               <td>Dynamic Severity</td>
@@ -28072,7 +28069,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </select>
               </td>
-              <td></td>
             </tr>
             <tr>
               <td>Agents Filter</td>
