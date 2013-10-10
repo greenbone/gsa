@@ -16592,7 +16592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <table class="gbntable" cellspacing="2">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <xsl:for-each select="get_results_response/results/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -16935,7 +16935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <table class="gbntable" cellspacing="2">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <xsl:for-each select="get_notes_response/note/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
@@ -17636,7 +17636,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <table class="gbntable" cellspacing="2">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <xsl:for-each select="get_results_response/results/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -18053,7 +18053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <table class="gbntable" cellspacing="2">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <xsl:for-each select="get_overrides_response/override/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -21993,7 +21993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <table class="gbntable" cellspacing="2">
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <xsl:call-template name="result-detailed">
           <xsl:with-param name="note-buttons">1</xsl:with-param>
           <xsl:with-param name="override-buttons">1</xsl:with-param>

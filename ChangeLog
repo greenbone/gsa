@@ -1,3 +1,10 @@
+2013-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(html-create-override-form, html-edit-override-form, result-details):
+	Add cellpadding and border attributes to table of result details to
+	make spacing consistent with report results page.
+
 2013-10-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [section-link]): Add class arg.
