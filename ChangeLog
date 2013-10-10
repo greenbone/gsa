@@ -1,3 +1,8 @@
+2013-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (result-headers): Show overrides icon only for
+	active overrides.
+
 2013-10-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/wizard.xsl (quick-first-scan-wizard): Remove the second

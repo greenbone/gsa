@@ -22150,7 +22150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
           <div class="float_left">
-            <xsl:if test="count(overrides/override) &gt; 0">
+            <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
               <xsl:choose>
                 <xsl:when test="$result-details or /envelope/params/details &gt; 0">
                   <a href="#overrides-{@id}"
