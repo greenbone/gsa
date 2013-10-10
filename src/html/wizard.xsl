@@ -140,13 +140,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/new.png" border="0"/>
           </a>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon')"/>
-          <xsl:text> </xsl:text>
-          <a href="/omp?cmd=new_target&amp;token={/envelope/token}"
-            title="New Target">
-            <img src="/img/new.png" border="0"/>
-          </a>
-          <xsl:text>.</xsl:text>
+          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.')"/>
         </p>
       </td>
     </tr>
