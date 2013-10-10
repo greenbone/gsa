@@ -1,3 +1,8 @@
+2013-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (note-detailed, override-detailed): Set position
+	of buttons to 3 pixels away from bottom right corner.
+
 2013-10-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (edit_my_settings): Remove extra TDs that were
