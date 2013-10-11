@@ -8791,10 +8791,10 @@ Public License instead of this License.
       <h1>NVT Details</h1>
       <p>
         A page that provides detailed information about a NVT.
-        This includes creation and modification dates, the
-        description, CVSS information, lists of references (CVEs, Bugtraq IDs,
-        CERT advisories referencing CVEs of this NVT, other references) and
-        links to notes and overrides on the NVT.
+        This includes creation and modification dates, summary, vulnerability
+        insight, solution etc,. CVSS information, lists of references (CVEs,
+        Bugtraq IDs, CERT advisories referencing CVEs of
+        this NVT, other references) and links to notes and overrides on the NVT.
       </p>
       <p>
         Clicking on a CVE name will go to the CVE Details page and clicking on

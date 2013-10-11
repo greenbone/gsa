@@ -1,3 +1,9 @@
+2013-10-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (nvt): Remove nvt description handling code.
+
+	* src/html/help.xsl (nvt_details.html): Update help documentation.
+
 2013-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (result-headers): Show overrides icon only for
