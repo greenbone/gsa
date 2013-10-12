@@ -1,3 +1,21 @@
+2013-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use omp and omp_success functions in all create handlers, so that the
+	Create pages all go back to the New page when the OMP command fails.
+
+	* src/gsad_omp.c (create_report_omp, create_lsc_credential_omp): Use omp
+	function.
+	(new_agent, new_agent_omp): Move up in file.
+	(create_agent_omp): On failure go back to New page.
+	(send_alert_event_data, send_alert_condition_data)
+	(send_alert_method_data): Remove.
+	(append_alert_event_data, append_alert_condition_data)
+	(append_alert_method_data): New functions.
+	(create_alert_omp, save_alert_omp, create_target_omp): Use omp function.
+	(new_config, new_config_omp): Move up in file.
+	(create_config_omp, create_group_omp, create_port_list_omp)
+	(create_filter_omp): Use omp function.
+
 2013-10-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Remove nvt description handling code.
