@@ -1,5 +1,9 @@
 2013-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details]): Remove overrides icon.
+
+2013-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Use omp and omp_success functions in all create handlers, so that the
 	Create pages all go back to the New page when the OMP command fails.
 

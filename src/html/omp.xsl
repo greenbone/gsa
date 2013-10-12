@@ -2820,38 +2820,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </form>
-        <form method="get" action="">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_task"/>
-          <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden"
-                 name="refresh_interval"
-                 value="{/envelope/autorefresh/@interval}"/>
-          <xsl:choose>
-            <xsl:when test="$apply-overrides = 0">
-              <input type="hidden" name="overrides" value="1"/>
-              <input type="image"
-                     name="No Overrides"
-                     src="/img/overrides_disabled.png"
-                     alt="No Overrides"
-                     value="No Overrides"
-                     title="No Overrides"
-                     style="margin-left:3px;margin-right:3px;"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="hidden" name="overrides" value="0"/>
-              <input type="image"
-                     name="Overrides are Applied"
-                     src="/img/overrides_enabled.png"
-                     alt="Overrides are Applied"
-                     value="Overrides are Applied"
-                     title="Overrides are Applied"
-                     style="margin-left:3px;margin-right:3px;"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </form>
       </div>
     </div>
     <div class="gb_window_part_content">
