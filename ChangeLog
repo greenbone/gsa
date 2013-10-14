@@ -1,3 +1,21 @@
+2013-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Alterable Tasks.
+
+	* CMakeLists.txt: Install alterable PNG.
+
+	* src/gsad.c (init_validator): Add alterable.
+
+	* src/gsad_omp.c (clone_omp): Send alterable if given.
+
+	* src/html/omp.xsl (task [details]): Add alterable indicator in header.
+	(html-edit-task-form): Add alterable clone icon in header.  Allow config
+	and target editing if alterable.
+	(task): Add alterable indicator.  Add margin to observer indicator.
+	Skip trend for alterable tasks.
+
+	* src/html/img/alterable.png: New file.
+
 2013-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details]): Remove overrides icon.

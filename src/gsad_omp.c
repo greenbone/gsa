@@ -6061,11 +6061,12 @@ clone_omp (credentials_t *credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *id, *type;
+  const char *id, *type, *alterable;
   entity_t entity;
 
   id = params_value (params, "id");
   type = params_value (params, "resource_type");
+  alterable = params_value (params, "alterable");
 
   CHECK (id);
   CHECK (type);
@@ -6089,14 +6090,35 @@ clone_omp (credentials_t *credentials, params_t *params)
 
   /* Clone the resource. */
 
-  if (openvas_server_sendf (&session,
-                            "<create_%s>"
-                            "<copy>%s</copy>"
-                            "</create_%s>",
-                            type,
-                            id,
-                            type)
-      == -1)
+  if (alterable && strcmp (alterable, "0"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<create_%s>"
+                                "<copy>%s</copy>"
+                                "<alterable>1</alterable>"
+                                "</create_%s>",
+                                type,
+                                id,
+                                type)
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while cloning a resource. "
+                               "The resource was not cloned. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
+  else if (openvas_server_sendf (&session,
+                                 "<create_%s>"
+                                 "<copy>%s</copy>"
+                                 "</create_%s>",
+                                 type,
+                                 id,
+                                 type)
+           == -1)
     {
       openvas_server_close (socket, session);
       return gsad_message (credentials,

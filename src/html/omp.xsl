@@ -2794,6 +2794,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Task'"/>
         <xsl:with-param name="type" select="'task'"/>
       </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="alterable = 0">
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/alterable.png"
+               style="margin-left:0px;"
+               border="0"
+               alt="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
+               title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:call-template name="task-icons">
           <xsl:with-param name="next" select="'get_task'"/>
@@ -4308,6 +4319,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id"
                         select="commands_response/get_tasks_response/task/@id"/>
       </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+        </xsl:when>
+        <xsl:when test="commands_response/get_tasks_response/task/alterable = 0">
+          <form style="display: inline; font-size: 0px;" action="/omp" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="cmd" value="clone"/>
+            <input type="hidden" name="resource_type" value="task"/>
+            <input type="hidden" name="next" value="get_task"/>
+            <input type="hidden" name="id" value="{commands_response/get_tasks_response/task/@id}"/>
+            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="hidden" name="alterable" value="1"/>
+            <input type="image" src="/img/alterable.png" alt="Make an Alterable clone of this Task"
+                   name="Make an Alterable clone of this Task"
+                   value="Make an Alterable clone of this Task"
+                   title="Make an Alterable clone of this Task"/>
+          </form>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -4349,7 +4383,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <xsl:choose>
-                <xsl:when test="commands_response/get_tasks_response/task/status = 'New'">
+                <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
                   <tr>
                     <td valign="top">Scan Config</td>
                     <td>
@@ -4897,6 +4931,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <div class="float_right">
             <xsl:choose>
+              <xsl:when test="alterable = 0">
+              </xsl:when>
+              <xsl:otherwise>
+                <img src="/img/alterable.png"
+                     style="margin-left:3px;"
+                     border="0"
+                     alt="Task is alterable"
+                     title="Task is alterable"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
               <xsl:when test="string-length(slave/@id) &gt; 0">
                 <img src="/img/sensor.png"
                      style="margin-left:3px;"
@@ -4926,6 +4971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:variable>
                 <img src="/img/provide_view.png"
+                     style="margin-left:3px;"
                      border="0"
                      alt="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"
                      title="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"/>
@@ -5008,9 +5054,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="target/@id=''">
             </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="alterable = 0">
               <!-- Trend -->
               <xsl:call-template name="trend_meter"/>
+            </xsl:when>
+            <xsl:otherwise>
             </xsl:otherwise>
           </xsl:choose>
         </td>
