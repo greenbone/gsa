@@ -1,5 +1,24 @@
 2013-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make Result Details window heading more like others.
+
+	* src/gsad.c (init_validator): Add export_result to commands
+	(exec_omp_get): Handle export_result.
+
+	* src/gsad_omp.c (export_resource): Add special case for result
+	location.
+	(export_result_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/help.xsl (contents.html): Add Result Details item.
+	(result_details.html): New template.
+
+	* src/html/omp.xsl (result-details): Add help and export icons.  Move
+	report link to header icon.  Add ID minor field.
+
+2013-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add Alterable Tasks.
 
 	* CMakeLists.txt: Install alterable PNG.

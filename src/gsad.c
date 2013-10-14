@@ -644,6 +644,7 @@ init_validator ()
                          "|(export_preference_file)"
                          "|(export_report_format)"
                          "|(export_report_formats)"
+                         "|(export_result)"
                          "|(export_role)"
                          "|(export_roles)"
                          "|(export_schedule)"
@@ -2100,6 +2101,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_report_formats"))
     return export_report_formats_omp (credentials, params, content_type,
                                       content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_result"))
+    return export_result_omp (credentials, params, content_type,
+                              content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_role"))
     return export_role_omp (credentials, params, content_type,

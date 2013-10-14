@@ -21939,6 +21939,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Result Details
+      <a href="/help/result_details.html?token={/envelope/token}"
+        title="Help: Result Details">
+        <img src="/img/help.png"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="$delta=0">
+          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+             style="margin-left:3px;">
+            <img src="/img/list.png" border="0" alt="Report"/>
+          </a>
+          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+            <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Export Result XML"
+               style="margin-left:3px;">
+              <img src="/img/download.png" border="0" alt="Export XML"/>
+            </a>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+             style="margin-left:3px;">
+            <img src="/img/list.png" border="0" alt="Report"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="$delta=0">
         <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
         <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
@@ -21979,15 +22004,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <xsl:choose>
-          <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{$report_result_id}">Report</a>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}">Report</a>
-          </xsl:otherwise>
-        </xsl:choose>
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td>ID:</td>
+            <td><xsl:value-of select="@id"/></td>
+          </tr>
+        </table>
       </div>
       <table>
         <tr>

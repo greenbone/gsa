@@ -1408,7 +1408,14 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks");
     }
 
-  resource_entity = entity_child (entity, type);
+  if (strcmp (type, "result"))
+    resource_entity = entity_child (entity, type);
+  else
+    {
+      resource_entity = entity_child (entity, "results");
+      if (resource_entity)
+        resource_entity = entity_child (resource_entity, "result");
+    }
   if (resource_entity == NULL)
     {
       free (content);
@@ -10535,6 +10542,27 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 
   g_free (unescaped);
   return cert;
+}
+
+/**
+ * @brief Export a result.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Result XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_result_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_resource ("result", credentials, params, content_type,
+                          content_disposition, content_length);
 }
 
 /**

@@ -3210,6 +3210,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
                 <li> <a href="task_details.html?token={/envelope/token}">Task Details and Reports</a></li>
                 <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
+                  <ul>
+                    <li> <a href="result_details.html?token={/envelope/token}">Result Details</a></li>
+                  </ul>
               </ul>
             <li> <a href="notes.html?token={/envelope/token}">Notes</a> </li>
               <ul>
@@ -8402,6 +8405,45 @@ Public License instead of this License.
        is in the trashcan.
       </p>
 
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="result_details.html">
+  <div class="gb_window_part_center">Help: Result Details
+    <a href="/omp?cmd=get_result&amp;result_id=cb291ec0-1b0d-11df-8aa1-002264764cea&amp;token={/envelope/token}">
+      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_RESULTS'"/>
+      </xsl:call-template>
+
+      <h1>Result Details</h1>
+      <p>
+        Provides detailed information about a Result.
+        This includes the vulnerability, severity, host, location and any
+        notes or overrides.
+      </p>
+
+      <h4>Report</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Report" title="Report"/>
+       will switch to the report page.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the result as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+      </p>
     </div>
   </div>
 </xsl:template>
