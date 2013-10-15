@@ -1,3 +1,8 @@
+2013-10-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (html-users-table): Use database field with same
+	name for sorting "Roles" column.
+
 2013-10-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make remaining Details window headings like others.

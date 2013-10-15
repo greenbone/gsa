@@ -26552,7 +26552,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </column>
           <column>
             <name>Roles</name>
-            <field>role</field>
           </column>
           <column>
             <name>Groups</name>
@@ -26571,7 +26570,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </column>
           <column>
             <name>Roles</name>
-            <field>role</field>
           </column>
           <column>
             <name>Groups</name>
