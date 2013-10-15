@@ -1,5 +1,15 @@
 2013-10-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make remaining Details window headings like others.
+
+	* src/html/omp.xsl (tag [details]): Remove name heading to match other
+	Details pages.  It's already in the name field.
+	(get_nvts): Move page specific header icons slight to the right, as in
+	other pages.
+	(host): Move back link to list icon.
+
+2013-10-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make Config window headings more like others.
 
 	* src/html/omp.xsl (html-config-family-table): Drop Details from edit

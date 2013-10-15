@@ -8076,10 +8076,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="minor-details"/>
-      <h1>
-        <xsl:value-of select="name"/>
-        <xsl:if test="value != ''">=<xsl:value-of select="value"/></xsl:if>
-      </h1>
       <table>
         <tr>
           <td><b>Name:</b></td>
@@ -16253,14 +16249,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="NVT" style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="NVT"/>
           </a>
-          <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Add Note" style="margin-left:3px;">
-            <img src="/img/new_note.png" border="0" alt="Add Note"/>
-          </a>
-          <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Add Override" style="margin-left:3px;">
-            <img src="/img/new_override.png" border="0" alt="Add Override"/>
-          </a>
+          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+            <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Add Note" style="margin-left:3px;">
+              <img src="/img/new_note.png" border="0" alt="Add Note"/>
+            </a>
+            <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Add Override" style="margin-left:3px;">
+              <img src="/img/new_override.png" border="0" alt="Add Override"/>
+            </a>
+          </div>
         </div>
         <div class="gb_window_part_content">
           <xsl:apply-templates
@@ -20774,6 +20772,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Hosts (Host Details)">
          <img src="/img/help.png"/>
        </a>
+       <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
+          style="margin-left:3px;">
+         <img src="/img/list.png" border="0" alt="Report"/>
+       </a>
       <xsl:choose>
         <xsl:when test="../@scap_loaded = 0">
           <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
@@ -20820,9 +20822,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
-      <div class="float_right">
-        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
-      </div>
       <table>
         <tr>
           <td><b>Host:</b></td>
