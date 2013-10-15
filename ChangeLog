@@ -1,3 +1,16 @@
+2013-10-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make Config window headings more like others.
+
+	* src/html/omp.xsl (html-config-family-table): Drop Details from edit
+	page name, as on Config page.  Move back link to list icon in header.
+	Bold Family field.  Remove extra TD causing small empty column on right.
+	(html-config-nvt-table): Drop Details from edit page name.  Move back
+	link to icon.  Move Config field down to others.  Remove top Family
+	field because there is one below.  Remove heading that duplicates window
+	title.  Remove Details heading to match other pages.
+	(nvt): Add Config field.
+
 2013-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make Result Details window heading more like others.

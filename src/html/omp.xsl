@@ -9747,7 +9747,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">
     <xsl:choose>
       <xsl:when test="edit">
-        Edit Scan Config Family Details
+        Edit Scan Config Family
         <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
            title="Help: Scan Configs (Edit Scan Config Family Details)">
           <img src="/img/help.png"/>
@@ -9761,31 +9761,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="edit">
+        <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
+           title="Scan Config"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="Scan Config"/>
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
+           title="Scan Config"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="Scan Config"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
   <div class="gb_window_part_content">
-    <div class="float_right">
-      <xsl:choose>
-        <xsl:when test="edit">
-          <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-            Config Details
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-            Config Details
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-    <br/>
-
     <xsl:variable name="config_id" select="config/@id"/>
     <xsl:variable name="config_name" select="config/name"/>
     <xsl:variable name="family" select="config/family"/>
 
     <table>
     <tr><td>Config:</td><td><xsl:value-of select="$config_name"/></td></tr>
-    <tr><td>Family:</td><td><xsl:value-of select="$family"/></td></tr>
+    <tr><td><b>Family:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
     </table>
 
     <xsl:choose>
@@ -9950,7 +9950,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Total:
               <xsl:value-of select="count(get_nvts_response/nvt)"/>
             </td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -10393,13 +10392,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     CONFIG NVTS -->
 
 <xsl:template name="html-config-nvt-table">
+ <xsl:variable name="family">
+   <xsl:value-of select="get_nvts_response/nvt/family"/>
+ </xsl:variable>
  <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">
     <xsl:choose>
       <xsl:when test="edit">
-        Edit Scan Config NVT Details
+        Edit Scan Config NVT
         <a href="/help/config_editor_nvt.html?token={/envelope/token}"
            title="Help: Scan Configs (Edit Scan Config NVT Details)">
           <img src="/img/help.png"/>
@@ -10413,43 +10415,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:otherwise>
     </xsl:choose>
-  </div>
-  <div class="gb_window_part_content">
-    <xsl:variable name="family">
-      <xsl:value-of select="get_nvts_response/nvt/family"/>
-    </xsl:variable>
-    <div class="float_right">
-      <xsl:choose>
-        <xsl:when test="edit">
-          <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
-            Config Family Details
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
-            Config Family Details
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-    <br/>
-
-    <table>
-    <tr><td>Config:</td><td><xsl:value-of select="config/name"/></td></tr>
-    <tr><td>Family:</td><td><xsl:value-of select="$family"/></td></tr>
-    </table>
-
     <xsl:choose>
       <xsl:when test="edit">
-        <h1>Edit Network Vulnerability Test</h1>
+        <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
+           title="Scan Config Family"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="Scan Config Family"/>
+        </a>
       </xsl:when>
       <xsl:otherwise>
-        <h1>Network Vulnerability Test</h1>
+        <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
+           title="Scan Config Family"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="Scan Config Family"/>
+        </a>
       </xsl:otherwise>
     </xsl:choose>
-
-    <h2>Details</h2>
-    <xsl:apply-templates select="get_nvts_response/nvt"/>
+  </div>
+  <div class="gb_window_part_content">
+    <xsl:apply-templates select="get_nvts_response/nvt">
+      <xsl:with-param name="config" select="config/name"/>
+    </xsl:apply-templates>
 
     <h2>Preferences</h2>
     <xsl:variable name="config" select="config"/>
@@ -10816,7 +10802,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="edit">
       Edit Scan Config
-
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Config'"/>
         <xsl:with-param name="type" select="'config'"/>
@@ -15979,6 +15964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
+  <xsl:param name="config"/>
   <div class="float_right" style="font-size: 10px;">
     <table style="font-size: 10px;">
       <xsl:if test="@oid != ''">
@@ -16006,6 +15992,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="summary != 'NOSUMMARY'">
       <tr><td>Summary:</td><td><xsl:value-of select="summary"/></td></tr>
     </xsl:if>
+    <tr><td>Config:</td><td><xsl:value-of select="$config"/></td></tr>
     <tr><td>Family:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td>OID:</td><td><xsl:value-of select="@oid"/></td></tr>
     <tr><td>Version:</td><td><xsl:value-of select="version"/></td></tr>
