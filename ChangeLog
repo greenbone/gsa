@@ -1,3 +1,14 @@
+2013-10-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (send_settings_filters): Check for OMP failure
+	responses and write the responses to the buffer.
+	(save_my_settings_omp): Return to edit page instead of get page if
+	any the OMP modify_setting commands failed. Make marking of sections
+	for different settings with comments more consistent.
+
+	* src/html/omp.xsl (edit_my_settings): Add error message box for
+	modify_setting_response.
+
 2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_task_omp): Add ALTERABLE to MODIFY_TASK if given.

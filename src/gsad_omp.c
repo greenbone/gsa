@@ -13975,13 +13975,16 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Send settings resource filters.
  *
- * @param[in]   session  GNUTLS session.
- * @param[in]   data     Data.
- *
+ * @param[in]   session             GNUTLS session.
+ * @param[in]   data                Data.
+ * @param[out]  xml                 GString to write responses to.
+ * @param[out]  modify_failed_flag  Pointer to an int to set to 1 on failure
+ *                                  to modify one of the settings.
  * @return 0 on success, -1 on error.
  */
 static int
-send_settings_filters (gnutls_session_t *session, params_t *data)
+send_settings_filters (gnutls_session_t *session, params_t *data,
+                       GString *xml, int *modify_failed_flag)
 {
   if (data)
     {
@@ -13989,6 +13992,7 @@ send_settings_filters (gnutls_session_t *session, params_t *data)
       char *uuid;
       param_t *param;
       gchar *base64;
+      entity_t entity;
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &uuid, &param))
@@ -14009,9 +14013,18 @@ send_settings_filters (gnutls_session_t *session, params_t *data)
             }
 
           g_free (base64);
-        }
-    }
 
+          entity = NULL;
+          if (read_entity_and_string (session, &entity, &xml))
+            {
+              free_entity (entity);
+              return -1;
+            }
+          if (! omp_success (entity) && modify_failed_flag)
+            *modify_failed_flag = 1;
+        }
+      free_entity (entity);
+    }
   return 0;
 }
 
@@ -14037,6 +14050,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   GString *xml;
   entity_t entity;
   params_t *filters;
+  int modify_failed = 0;
 
   *timezone = NULL;
   *password = NULL;
@@ -14070,6 +14084,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   if (params_value (params, "enable"))
     {
+      /* Send Password setting */
       text = params_value (params, "password");
       text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
 
@@ -14092,8 +14107,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
       g_free (text_64);
 
-      xml = g_string_new ("");
-
       entity = NULL;
       if (read_entity_and_string (&session, &entity, &xml))
         {
@@ -14113,8 +14126,11 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           credentials->password = g_strdup (text);
           *password = g_strdup (text);
         }
+      else
+        modify_failed = 1;
     }
 
+  /* Send Timezone */
   text = params_value (params, "text");
   text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
 
@@ -14166,7 +14182,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
       tzset ();
     }
+  else
+    modify_failed = 1;
 
+  /* Send Results Per Page */
   max = params_value (params, "max");
   max_64 = (max
              ? g_base64_encode ((guchar*) max, strlen (max))
@@ -14192,19 +14211,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   g_free (max_64);
 
-  /* Send resources filters */
-  filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&session, filters))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings");
-    }
-
   entity = NULL;
   if (read_entity_and_string (&session, &entity, &xml))
     {
@@ -14217,7 +14223,23 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_my_settings");
     }
+  if (! omp_success (entity))
+    modify_failed = 1;
 
+  /* Send resources filters */
+  filters = params_values (params, "settings_filter:");
+  if (send_settings_filters (&session, filters, xml, &modify_failed))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
+  /* Send Wizard Rows */
   max = params_value (params, "max_results");
   max_64 = (max
              ? g_base64_encode ((guchar*) max, strlen (max))
@@ -14242,6 +14264,21 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   g_free (max_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (! omp_success (entity))
+    modify_failed = 1;
 
   /* Send Severity Class. */
   text = params_value (params, "severity_class");
@@ -14269,6 +14306,19 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   g_free (text_64);
 
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
   status = entity_attribute (entity, "status");
   if (status && (strlen (status) > 0) && (status[0] == '2'))
     {
@@ -14276,6 +14326,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       credentials->severity = g_strdup (strlen (text) ? text : "UTC");
       *severity = g_strdup (strlen (text) ? text : "UTC");
     }
+  else
+    modify_failed = 1;
 
   /* Send Dynamic Severity setting. */
   text = params_value (params, "dynamic_severity");
@@ -14302,6 +14354,21 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   g_free (text_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (! omp_success (entity))
+    modify_failed = 1;
 
   /* Get filters */
   if (openvas_server_sendf (&session,
@@ -14332,7 +14399,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   free_entity (entity);
   openvas_server_close (socket, session);
-  return get_my_settings (credentials, params, g_string_free (xml, FALSE));
+  if (modify_failed)
+    return edit_my_settings (credentials, params, g_string_free (xml, FALSE));
+  else
+    return get_my_settings (credentials, params, g_string_free (xml, FALSE));
 }
 
 /**
