@@ -2601,7 +2601,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
-  const char *config_id, *target_id, *hosts_ordering;
+  const char *config_id, *target_id, *hosts_ordering, *alterable;
   int ret;
   params_t *alerts, *groups;
   GString *alert_element, *group_elements;
@@ -2620,6 +2620,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
+  alterable = params_value (params, "alterable");
 
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
@@ -2754,10 +2755,14 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "</preference>"
                             "</preferences>"
                             "<observers>%%s%s</observers>"
+                            "%s%i%s"
                             "</modify_task>",
                             hosts_ordering,
                             alert_element->str,
-                            group_elements->str);
+                            group_elements->str,
+                            alterable ? "<alterable>" : "",
+                            alterable ? strcmp (alterable, "0") : 0,
+                            alterable ? "</alterable>" : "");
   response = NULL;
   entity = NULL;
   ret = omp (credentials,

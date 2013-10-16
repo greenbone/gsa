@@ -1,5 +1,12 @@
 2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_task_omp): Add ALTERABLE to MODIFY_TASK if given.
+
+	* src/html/omp.xsl (html-edit-task-form): Add Alterable Task field if
+	the task is New.
+
+2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_task): Send alterable flag through to manager.
 
 	* src/html/omp.xsl (task [details], new_task): Add Alterable Task field.

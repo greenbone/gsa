@@ -4841,6 +4841,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
           </tr>
+          <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">
+            <tr>
+              <td>Alterable Task</td>
+              <td>
+                <xsl:variable name="yes"
+                              select="commands_response/get_tasks_response/task/alterable"/>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                      <input type="radio" name="alterable" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="alterable" value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  yes
+                </label>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                      <input type="radio" name="alterable" value="0" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="alterable" value="0"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  no
+                </label>
+              </td>
+            </tr>
+          </xsl:if>
         </table>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <xsl:choose>
