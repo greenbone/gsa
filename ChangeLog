@@ -1,5 +1,12 @@
 2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_task): Send alterable flag through to manager.
+
+	* src/html/omp.xsl (task [details], new_task): Add Alterable Task field.
+	(html-edit-task-form): Remove alterable clone icon.
+
+2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Build the default filter with the task ID
 	when the task ID is given for the report case.  When a named filter is
 	given add the task ID to the front of the filter.

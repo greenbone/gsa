@@ -2182,7 +2182,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
-  const char *in_assets, *submit, *hosts_ordering;
+  const char *in_assets, *submit, *hosts_ordering, *alterable;
   params_t *alerts, *groups;
   GString *alert_element, *group_element;
 
@@ -2197,6 +2197,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
+  alterable = params_value (params, "alterable");
 
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
@@ -2223,6 +2224,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
       CHECK (max_checks);
       CHECK (max_hosts);
       CHECK (observers);
+      CHECK (alterable);
 
       return new_task_omp (credentials, params);
     }
@@ -2252,6 +2254,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
       CHECK (max_checks);
       CHECK (max_hosts);
       CHECK (observers);
+      CHECK (alterable);
 
       return new_task_omp (credentials, params);
     }
@@ -2267,6 +2270,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (max_checks);
   CHECK (max_hosts);
   CHECK (observers);
+  CHECK (alterable);
 
   if (schedule_id == NULL || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
@@ -2334,6 +2338,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              "</preference>"
                              "</preferences>"
                              "<observers>%s%s</observers>"
+                             "<alterable>%i</alterable>"
                              "</create_task>",
                              config_id,
                              schedule_element,
@@ -2347,7 +2352,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              max_hosts,
                              strcmp (in_assets, "0") ? "yes" : "no",
                              observers,
-                             group_element->str);
+                             group_element->str,
+                             alterable ? strcmp (alterable, "0") : 0);
 
   ret = omp (credentials,
              &response,

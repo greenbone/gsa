@@ -2993,6 +2993,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
+            Alterable Task:
+          </td>
+          <td>
+            <xsl:variable name="yes" select="/envelope/params/alterable"/>
+            <xsl:choose>
+              <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                no
+              </xsl:when>
+              <xsl:otherwise>
+                yes
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>
             Notes:
           </td>
           <td>
@@ -4059,6 +4075,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </td>
         </tr>
+        <tr>
+          <td>Alterable Task</td>
+          <td>
+            <xsl:variable name="yes" select="/envelope/params/alterable"/>
+            <label>
+              <xsl:choose>
+                <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                  <input type="radio" name="alterable" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="alterable" value="1" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              yes
+            </label>
+            <label>
+              <xsl:choose>
+                <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                  <input type="radio" name="alterable" value="0" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="alterable" value="0"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              no
+            </label>
+          </td>
+        </tr>
       </table>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <xsl:choose>
@@ -4317,29 +4361,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id"
                         select="commands_response/get_tasks_response/task/@id"/>
       </xsl:call-template>
-      <xsl:choose>
-        <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
-        </xsl:when>
-        <xsl:when test="commands_response/get_tasks_response/task/alterable = 0">
-          <form style="display: inline; font-size: 0px;" action="/omp" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
-            <input type="hidden" name="cmd" value="clone"/>
-            <input type="hidden" name="resource_type" value="task"/>
-            <input type="hidden" name="next" value="get_task"/>
-            <input type="hidden" name="id" value="{commands_response/get_tasks_response/task/@id}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="hidden" name="alterable" value="1"/>
-            <input type="image" src="/img/alterable.png" alt="Make an Alterable clone of this Task"
-                   name="Make an Alterable clone of this Task"
-                   value="Make an Alterable clone of this Task"
-                   title="Make an Alterable clone of this Task"/>
-          </form>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
