@@ -20044,6 +20044,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="edit_port_list">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_port_range_response"/>
+  <xsl:apply-templates select="delete_port_range_response"/>
   <xsl:apply-templates select="modify_port_list_response"/>
   <xsl:call-template name="html-edit-port-list-form"/>
 </xsl:template>

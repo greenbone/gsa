@@ -1,3 +1,8 @@
+2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (edit_port_list): Match delete response for error
+	dialog.
+
 2013-10-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (send_settings_filters): Check for OMP failure
