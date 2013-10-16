@@ -1,5 +1,10 @@
 2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (delete_group_response): New template.
+	(html-gsa-logo): Add more group indicator icons.
+
+2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (edit_port_list): Match delete response for error
 	dialog.
 
