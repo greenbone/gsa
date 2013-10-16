@@ -1,3 +1,15 @@
+2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Build the default filter with the task ID
+	when the task ID is given for the report case.  When a named filter is
+	given add the task ID to the front of the filter.
+
+	* src/html/omp.xsl (filter-window-part): Remove the filter param from
+	the filter dropdown, otherwise it is used instead of the default in the
+	-- case.
+	(html-reports-table): Pass the task ID as extra param, so that get_many
+	can ensure that it is in the filter.
+
 2013-10-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-users-table): Use database field with same

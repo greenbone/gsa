@@ -1027,13 +1027,22 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           else if (strcmp (type, "user") == 0)
             filter = "sort=role rows=-2 permission=any";
           else if (strcmp (type, "report") == 0)
-            filter = "apply_overrides=1 rows=-2"
-                     " permission=any sort-reverse=date";
+            {
+              const char *task_id;
+              task_id = params_value (params, "task_id");
+              if (task_id)
+                built_filter = g_strdup_printf ("task_id=%s apply_overrides=1"
+                                                " rows=-2 permission=any"
+                                                " sort-reverse=date",
+                                                task_id);
+              else
+                filter = "apply_overrides=1 rows=-2"
+                         " permission=any sort-reverse=date";
+            }
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any";
           else
             filter = "apply_overrides=1 rows=-2 permission=any owner=any";
-
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
             filt_id = "0";
@@ -1047,6 +1056,15 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       else if ((strcmp (filter, "apply_overrides=1") == 0)
                && (strcmp (type, "task") == 0))
         filt_id = "-2";
+    }
+  else if (replace_task_id)
+    {
+      const char *task_id;
+      task_id = params_value (params, "task_id");
+      if (task_id)
+        built_filter = g_strdup_printf ("task_id=%s %s",
+                                        task_id,
+                                        filter ? filter : "");
     }
 
   /* Get the list. */

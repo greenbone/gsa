@@ -597,8 +597,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="exslt:node-set($extra_params)/param">
                   <input type="hidden" name="{name}" value="{value}"/>
                 </xsl:for-each>
-                <!-- Pass filter term too, for GET_REPORTS filter_replace. -->
-                <input type="hidden" name="filter" value="{filters/term}"/>
                 <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
                   <option value="--">--</option>
                   <xsl:variable name="id" select="filters/@id"/>
@@ -21303,6 +21301,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <param>
         <name>replace_task_id</name>
         <value><xsl:value-of select="/envelope/params/replace_task_id"/></value>
+      </param>
+      <param>
+        <name>task_id</name>
+        <value><xsl:value-of select="filters/keywords/keyword[column='task_id']/value"/></value>
       </param>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="2"/>
