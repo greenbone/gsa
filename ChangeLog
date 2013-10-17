@@ -1,5 +1,11 @@
 2013-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (result-body): Set padding of the table row wrapping
+	the details boxes to zero and reduce height of dummy row by removing
+	the line break.
+
+2013-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad/gsa-style.css (note_box_box, override_box_box)
 	(report_section): Add 4px padding.
 

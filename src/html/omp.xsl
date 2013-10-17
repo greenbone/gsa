@@ -22446,7 +22446,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="prognostic"/>
 
   <tr>
-    <td colspan="5">
+    <td colspan="5" style="padding: 0">
       <!-- Tags -->
       <xsl:if test="count(user_tags/tag)">
         <div class="note_box_box">
@@ -22834,7 +22834,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
   </tr>
   <tr>
-    <td><br/></td>
+    <td></td>
   </tr>
 </xsl:template>
 
