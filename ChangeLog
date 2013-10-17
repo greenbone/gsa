@@ -1,3 +1,11 @@
+2013-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad/gsa-style.css (note_box_box, override_box_box)
+	(report_section): Add 4px padding.
+
+	* src/html/omp.xsl (note-detailed, override-detailed): Remove
+	positioning style attributes of buttons.
+
 2013-10-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (delete_group_response): New template.

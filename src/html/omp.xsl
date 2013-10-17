@@ -21482,7 +21482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
     <xsl:if test="$note-buttons = 1">
-      <div class="float_right" style="text-align:right; position: relative; bottom: 3px; right: 3px;">
+      <div class="float_right" style="text-align:right;">
         <div style="display: inline">
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'note'"/>
@@ -21725,7 +21725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
     <xsl:if test="$override-buttons = 1">
-      <div class="float_right" style="text-align:right; position: relative; bottom: 3px; right: 3px;">
+      <div class="float_right" style="text-align:right;">
         <div style="display: inline">
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'override'"/>

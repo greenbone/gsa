@@ -825,6 +825,7 @@ text-align:right;
 .note_box_box {
  background: #ffff90;
  border:1px solid #CCCCCC;
+ padding: 4px;
 }
 
 .note_top_line {
@@ -842,6 +843,7 @@ text-align:right;
 .override_box_box {
  background: #ffff90;
  border:1px solid #CCCCCC;
+ padding: 4px;
 }
 
 .override_top_line {
@@ -856,6 +858,7 @@ text-align:right;
  border-top: 0px;
  border-color: #CCCCCC;
  background-color: #ECEEEE;
+ padding: 4px;
 }
 
 .result_section_top {
