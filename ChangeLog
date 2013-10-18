@@ -1,3 +1,8 @@
+2013-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (report [ports]): In severity column use "severity"
+	instead of "cvss" element.
+
 2013-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (result-body): Set padding of the table row wrapping

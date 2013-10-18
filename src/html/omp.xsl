@@ -24025,10 +24025,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <xsl:for-each select="../../port[text() = $port]">
-                  <xsl:sort data-type="number" select="cvss" order="descending"/>
+                  <xsl:sort data-type="number" select="severity" order="descending"/>
                   <xsl:if test="position() = 1">
                     <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="cvss"/>
+                      <xsl:with-param name="cvss" select="severity"/>
                     </xsl:call-template>
                   </xsl:if>
                 </xsl:for-each>
