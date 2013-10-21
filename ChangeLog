@@ -1,5 +1,10 @@
 2013-10-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/help.xsl (new_task.html, task_details.html): Update help
+	documentation.
+
+2013-10-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Validate source_iface parameter.
 	(create_task_omp, save_task_omp): Handle source_iface parameter.
 

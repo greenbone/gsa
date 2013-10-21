@@ -5485,6 +5485,20 @@ Public License instead of this License.
           <td>Choice</td>
           <td>Localhost</td>
         </tr>
+        <tr class="even">
+          <td>Order for target hosts</td>
+          <td>no</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Sequential</td>
+        </tr>
+        <tr class="even">
+          <td>Network Source Interface</td>
+          <td>no</td>
+          <td>---</td>
+          <td>Alphanumeric</td>
+          <td>eth1</td>
+        </tr>
         <tr class="odd">
           <td>Alert</td>
           <td>no</td>
@@ -6745,7 +6759,8 @@ Public License instead of this License.
       <p>
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.
-       It also lists the <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>,
+       It also lists the scanning order for target hosts, network source
+       interface, <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>,
        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>,
        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
        <a href="glossary.html?token={/envelope/token}#target">Target</a> for the shown report, if
