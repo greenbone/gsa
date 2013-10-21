@@ -2888,7 +2888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Hosts ordering:</td>
+          <td>Order for target hosts</td>
           <td>
             <xsl:choose>
               <xsl:when test="hosts_ordering = 'sequential'">Sequential</xsl:when>
@@ -2896,6 +2896,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="hosts_ordering = 'reverse'">Reverse</xsl:when>
               <xsl:otherwise>N/A</xsl:otherwise>
             </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Network Source Interface:</td>
+          <td>
+            <xsl:value-of select="preferences/preference[scanner_name='source_iface']/value"/>
           </td>
         </tr>
         <tr>
@@ -3887,6 +3893,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Network Source Interface</td>
+          <td>
+            <input type="text" name="source_iface" value="{/envelope/params/source_iface}"/>
+          </td>
+        </tr>
+        <tr>
           <td>Alerts (optional)</td>
           <td>
             <xsl:variable name="alerts"
@@ -4521,6 +4533,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="select-value" select="$hosts_ordering"/>
                     </xsl:call-template>
                   </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Network Source Interface</td>
+                <td>
+                  <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
                 </td>
               </tr>
               <tr>

@@ -2182,7 +2182,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
-  const char *in_assets, *submit, *hosts_ordering, *alterable;
+  const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
   params_t *alerts, *groups;
   GString *alert_element, *group_element;
 
@@ -2195,6 +2195,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   schedule_id = params_value (params, "schedule_id_optional");
   in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
+  source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
   alterable = params_value (params, "alterable");
@@ -2268,6 +2269,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (schedule_id);
   CHECK (in_assets);
   CHECK (max_checks);
+  CHECK (source_iface);
   CHECK (max_hosts);
   CHECK (observers);
   CHECK (alterable);
@@ -2336,6 +2338,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              "<scanner_name>in_assets</scanner_name>"
                              "<value>%s</value>"
                              "</preference>"
+                             "<preference>"
+                             "<scanner_name>source_iface</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
                              "</preferences>"
                              "<observers>%s%s</observers>"
                              "<alterable>%i</alterable>"
@@ -2351,6 +2357,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              max_checks,
                              max_hosts,
                              strcmp (in_assets, "0") ? "yes" : "no",
+                             source_iface,
                              observers,
                              group_element->str,
                              alterable ? strcmp (alterable, "0") : 0);
@@ -2601,7 +2608,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
-  const char *config_id, *target_id, *hosts_ordering, *alterable;
+  const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   int ret;
   params_t *alerts, *groups;
   GString *alert_element, *group_elements;
@@ -2618,6 +2625,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
   max_checks = params_value (params, "max_checks");
+  source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
   alterable = params_value (params, "alterable");
@@ -2646,6 +2654,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
       CHECK_PARAM (next, "Edit Task", edit_task);
       CHECK_PARAM (task_id, "Edit Task", edit_task);
       CHECK_PARAM (max_checks, "Edit Task", edit_task);
+      CHECK_PARAM (source_iface, "Edit Task", edit_task);
       CHECK_PARAM (max_hosts, "Edit Task", edit_task);
       CHECK_PARAM (observers, "Edit Task", edit_task);
       CHECK_PARAM (in_assets, "Edit Task", edit_task);
@@ -2677,6 +2686,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
       CHECK_PARAM (next, "Edit Task", edit_task);
       CHECK_PARAM (task_id, "Edit Task", edit_task);
       CHECK_PARAM (max_checks, "Edit Task", edit_task);
+      CHECK_PARAM (source_iface, "Edit Task", edit_task);
       CHECK_PARAM (max_hosts, "Edit Task", edit_task);
       CHECK_PARAM (observers, "Edit Task", edit_task);
       CHECK_PARAM (in_assets, "Edit Task", edit_task);
@@ -2694,6 +2704,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (next, "Save Task", edit_task);
   CHECK_PARAM (task_id, "Save Task", edit_task);
   CHECK_PARAM (max_checks, "Save Task", edit_task);
+  CHECK_PARAM (source_iface, "Save Task", edit_task);
   CHECK_PARAM (max_hosts, "Save Task", edit_task);
   CHECK_PARAM (observers, "Save Task", edit_task);
   CHECK_PARAM (in_assets, "Save Task", edit_task);
@@ -2753,6 +2764,10 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "<scanner_name>in_assets</scanner_name>"
                             "<value>%%s</value>"
                             "</preference>"
+                            "<preference>"
+                            "<scanner_name>source_iface</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
                             "</preferences>"
                             "<observers>%%s%s</observers>"
                             "%s%i%s"
@@ -2779,6 +2794,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
              max_checks,
              max_hosts,
              strcmp (in_assets, "0") ? "yes" : "no",
+             source_iface,
              observers);
   g_free (format);
 
