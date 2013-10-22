@@ -1,3 +1,8 @@
+2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): In the Reports field link to the
+	current report if there is one.
+
 2013-10-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (new_task.html, task_details.html): Update help

@@ -2944,6 +2944,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                title="Reports on Task {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
+            <xsl:if test="current_report/report/timestamp">
+              <!-- The xsl:text prevents a space before comma. -->
+              <xsl:text>, Current: </xsl:text>
+              <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                <xsl:call-template name="short_timestamp_last"/>
+              </a>
+            </xsl:if>
             (Finished:
              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Reports on Task {name}">
