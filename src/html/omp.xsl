@@ -2888,7 +2888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Order for target hosts</td>
+          <td>Order for target hosts:</td>
           <td>
             <xsl:choose>
               <xsl:when test="hosts_ordering = 'sequential'">Sequential</xsl:when>

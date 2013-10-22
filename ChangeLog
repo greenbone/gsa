@@ -1,3 +1,7 @@
+2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): Add colon to match other fields.
+
 2013-10-22  Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/os.xml:
