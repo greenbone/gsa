@@ -23327,7 +23327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <xsl:variable name="os_count">
     <xsl:choose>
-      <xsl:when test="count(report/host[(detail/name = 'best_os_cpe') = 0]) > 0">
+      <xsl:when test="count(host[detail/name = 'best_os_cpe']) = 0">
         <xsl:value-of select="os/count + 1"/>
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="os/count"/></xsl:otherwise>

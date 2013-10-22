@@ -1,5 +1,10 @@
 2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [section-list]): Remove report from path, and
+	simplify condition.
+
+2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): In the Reports field link to the
 	current report if there is one.
 
