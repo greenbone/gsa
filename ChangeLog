@@ -1,3 +1,8 @@
+2013-10-22  Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/html/os.xml:
+	Added cisco nx-os.
+
 2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [section-list]): Remove report from path, and
