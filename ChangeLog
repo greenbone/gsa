@@ -1,5 +1,13 @@
 2013-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Post release version bump to 4.0.3.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
+2013-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Preparing the gsa 4.0.2 release.
 
 	* CHANGES: Updated.
