@@ -23659,7 +23659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </xsl:when>
     <xsl:when test="$count &gt; 0">
-      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{$current_host}&#34; levels={$levels} {$filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=host=&#34;{$current_host}&#34; levels={$levels} {$filter}&amp;token={/envelope/token}"
          title="Report: Summary ({$current_host} {$name})" style="margin-left:3px;">
          <xsl:value-of select="$count"/>
       </a>

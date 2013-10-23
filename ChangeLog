@@ -1,3 +1,8 @@
+2013-10-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report-hosts-link): Prefix the host keyword with a
+	column to make the filter more usual looking.
+
 2013-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details]): Add colon to match other fields.
