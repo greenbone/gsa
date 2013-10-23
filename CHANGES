@@ -1,3 +1,33 @@
+gsa 4.0.2 (2013-10-23)
+
+This is the second maintenance release of the Greenbone Security Assistant (GSA)
+4.0 module for the Open Vulnerability Assessment System release 6 (OpenVAS-6).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes a number of issues which were discovered after the release
+of Greenbone Security Assistant 4.0.1. For details please refer to the list
+below.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabilis, Matthew Mundell, Timo Pollmeier.
+
+Main changes since 4.0.1:
+* Improved input validation for several dialogs.
+* Added new note and override buttons on the New Note page.
+* Added section "Host Identifcation" to Asset Details.
+* Improved schedules regarding timezone.
+* Bug fixes to preserve filtering in some places.
+* Buf fix for report download to consider the current overrides setting
+  instead of applying overrides always.
+* Bug fix to keep override setting when jumping to a report from task view.
+* Bug fix to preserve overrides setting across actions on task page.
+* Bug fix regarding change of a users password.
+* Bug fix to avoid NOSUMMARY tooltip that occured for newstyle NVTs.
+* Improved error handling for XSL transformations.
+* Various little bug fixes.
+
+
 gsa 4.0.1 (2013-06-07)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)
