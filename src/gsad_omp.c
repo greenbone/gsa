@@ -9290,7 +9290,26 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
-  const char *filt_id, *filter;
+  const char *filt_id, *filter, *apply_filter, *report_section;
+  int ret;
+  int ignore_filter;
+
+  if (params_given (params, "apply_filter")
+      && params_valid (params, "apply_filter"))
+    apply_filter = params_value (params, "apply_filter");
+  else
+    apply_filter = "0";
+
+  if (params_given (params, "report_section")
+      && params_valid (params, "report_section"))
+    report_section = params_value (params, "report_section");
+  else
+    report_section = "";
+
+  ignore_filter = (strcmp (apply_filter, "1")
+                   && strcmp (report_section, "")
+                   && strcmp (report_section, "results")
+                   && strcmp (report_section, "summary"));
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -9533,47 +9552,74 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         esc_min_cvss_base = "";
 
-      if (openvas_server_sendf_xml (&session,
-                                    "<get_reports"
-                                    " autofp=\"%s\""
-                                    " notes=\"%i\""
-                                    " notes_details=\"1\""
-                                    " apply_overrides=\"%i\""
-                                    " overrides=\"%i\""
-                                    " overrides_details=\"1\""
-                                    " result_hosts_only=\"%i\""
-                                    " report_id=\"%s\""
-                                    " first_result=\"%s\""
-                                    " max_results=\"%s\""
-                                    " sort_field=\"%s\""
-                                    " sort_order=\"%s\""
-                                    " levels=\"%s\""
-                                    " delta_states=\"%s\""
-                                    " search_phrase=\"%s\""
-                                    " min_cvss_base=\"%s\""
-                                    " alert_id=\"%s\"/>",
-                                    strcmp (autofp, "0") ? autofp_value : "0",
-                                    strcmp (esc_notes, "0") ? 1 : 0,
-                                    strcmp (esc_overrides, "0") ? 1 : 0,
-                                    strcmp (esc_overrides, "0") ? 1 : 0,
-                                    strcmp (esc_result_hosts_only, "0") ? 1 : 0,
-                                    report_id,
-                                    esc_first_result,
-                                    esc_max_results,
-                                    sort_field ? sort_field : "severity",
-                                    sort_order
-                                     ? sort_order
-                                     : ((sort_field == NULL
-                                         || strcmp (sort_field, "severity") == 0
-                                         || strcmp (sort_field, "type") == 0)
-                                        ? "descending"
-                                        : "ascending"),
-                                    params_value (params, "esc_levels"),
-                                    delta_states->str,
-                                    esc_search_phrase,
-                                    esc_min_cvss_base,
-                                    alert_id)
-          == -1)
+      if (ignore_filter)
+        ret = openvas_server_sendf_xml (&session,
+                                        "<get_reports"
+                                        " autofp=\"0\""
+                                        " notes=\"1\""
+                                        " notes_details=\"1\""
+                                        " apply_overrides=\"0\""
+                                        " overrides=\"1\""
+                                        " overrides_details=\"1\""
+                                        " result_hosts_only=\"0\""
+                                        " report_id=\"%s\""
+                                        " first_result=\"1\""
+                                        " max_results=\"-1\""
+                                        " sort_field=\"severity\""
+                                        " sort_order=\"ascending\""
+                                        " levels=\"hmlgfd\""
+                                        " delta_states=\"\""
+                                        " search_phrase=\"\""
+                                        " min_cvss_base=\"\""
+                                        " alert_id=\"%s\"/>",
+                                        report_id,
+                                        alert_id);
+      else
+        ret = openvas_server_sendf_xml (&session,
+                                        "<get_reports"
+                                        " autofp=\"%s\""
+                                        " notes=\"%i\""
+                                        " notes_details=\"1\""
+                                        " apply_overrides=\"%i\""
+                                        " overrides=\"%i\""
+                                        " overrides_details=\"1\""
+                                        " result_hosts_only=\"%i\""
+                                        " report_id=\"%s\""
+                                        " first_result=\"%s\""
+                                        " max_results=\"%s\""
+                                        " sort_field=\"%s\""
+                                        " sort_order=\"%s\""
+                                        " levels=\"%s\""
+                                        " delta_states=\"%s\""
+                                        " search_phrase=\"%s\""
+                                        " min_cvss_base=\"%s\""
+                                        " alert_id=\"%s\"/>",
+                                        strcmp (autofp, "0") ? autofp_value
+                                                             : "0",
+                                        strcmp (esc_notes, "0") ? 1 : 0,
+                                        strcmp (esc_overrides, "0") ? 1 : 0,
+                                        strcmp (esc_overrides, "0") ? 1 : 0,
+                                        strcmp (esc_result_hosts_only, "0") ? 1
+                                                                            : 0,
+                                        report_id,
+                                        esc_first_result,
+                                        esc_max_results,
+                                        sort_field ? sort_field : "severity",
+                                        sort_order
+                                        ? sort_order
+                                        : ((sort_field == NULL
+                                            || (strcmp (sort_field, "severity")
+                                                == 0)
+                                            || (strcmp (sort_field, "type")
+                                                == 0))
+                                            ? "descending"
+                                            : "ascending"),
+                                        params_value (params, "esc_levels"),
+                                        delta_states->str,
+                                        esc_search_phrase,
+                                        esc_min_cvss_base,
+                                        alert_id);
+      if (ret == -1)
         {
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
@@ -9700,59 +9746,93 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         && (filter == NULL || strcmp (filter, "") == 0))
       filt_id = "-2";
 
-  if (openvas_server_sendf_xml (&session,
-                                " filt_id=\"%s\""
-                                " filter=\"%s\""
-                                " pos=\"%s\""
-                                " autofp=\"%s\""
-                                " notes=\"%i\""
-                                " notes_details=\"1\""
-                                " apply_overrides=\"%i\""
-                                " overrides=\"%i\""
-                                " overrides_details=\"1\""
-                                " result_hosts_only=\"%i\""
-                                " report_id=\"%s\""
-                                " delta_report_id=\"%s\""
-                                " format_id=\"%s\""
-                                " first_result=\"%s\""
-                                " max_results=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " levels=\"%s\""
-                                " delta_states=\"%s\""
-                                " search_phrase=\"%s\""
-                                " min_cvss_base=\"%s\"/>",
-                                filt_id ? filt_id : "0",
-                                filter ? filter : "",
-                                pos ? pos : "1",
-                                strcmp (autofp, "0") ? autofp_value : "0",
-                                strcmp (notes, "0") ? 1 : 0,
-                                strcmp (overrides, "0") ? 1 : 0,
-                                strcmp (overrides, "0") ? 1 : 0,
-                                strcmp (result_hosts_only, "0") ? 1 : 0,
-                                (type && ((strcmp (type, "assets") == 0)
-                                          || (strcmp (type, "prognostic") == 0)))
-                                 ? ""
-                                 : report_id,
-                                delta_report_id ? delta_report_id : "0",
-                                format_id
-                                 ? format_id
-                                 : "a994b278-1f62-11e1-96ac-406186ea4fc5",
-                                first_result,
-                                max_results,
-                                sort_field ? sort_field : "severity",
-                                sort_order
-                                 ? sort_order
-                                 : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0
-                                     || strcmp (sort_field, "severity") == 0)
-                                    ? "descending"
-                                    : "ascending"),
-                                levels->str,
-                                delta_states->str,
-                                search_phrase,
-                                min_cvss_base)
-     == -1)
+  if (ignore_filter)
+    ret = openvas_server_sendf_xml (&session,
+                                    " filt_id=\"0\""
+                                    " filter=\"\""
+                                    " pos=\"1\""
+                                    " autofp=\"0\""
+                                    " notes=\"1\""
+                                    " notes_details=\"1\""
+                                    " apply_overrides=\"1\""
+                                    " overrides=\"1\""
+                                    " overrides_details=\"1\""
+                                    " result_hosts_only=\"0\""
+                                    " report_id=\"%s\""
+                                    " delta_report_id=\"%s\""
+                                    " format_id=\"%s\""
+                                    " first_result=\"1\""
+                                    " max_results=\"-1\""
+                                    " sort_field=\"severity\""
+                                    " sort_order=\"ascending\""
+                                    " levels=\"hmlgfd\""
+                                    " delta_states=\"\""
+                                    " search_phrase=\"\""
+                                    " min_cvss_base=\"\"/>",
+                                    (type && ((strcmp (type, "assets") == 0)
+                                              || (strcmp (type, "prognostic")
+                                                  == 0)))
+                                      ? ""
+                                      : report_id,
+                                    delta_report_id ? delta_report_id : "0",
+                                    format_id
+                                     ? format_id
+                                     : "a994b278-1f62-11e1-96ac-406186ea4fc5");
+  else
+    ret = openvas_server_sendf_xml (&session,
+                                    " filt_id=\"%s\""
+                                    " filter=\"%s\""
+                                    " pos=\"%s\""
+                                    " autofp=\"%s\""
+                                    " notes=\"%i\""
+                                    " notes_details=\"1\""
+                                    " apply_overrides=\"%i\""
+                                    " overrides=\"%i\""
+                                    " overrides_details=\"1\""
+                                    " result_hosts_only=\"%i\""
+                                    " report_id=\"%s\""
+                                    " delta_report_id=\"%s\""
+                                    " format_id=\"%s\""
+                                    " first_result=\"%s\""
+                                    " max_results=\"%s\""
+                                    " sort_field=\"%s\""
+                                    " sort_order=\"%s\""
+                                    " levels=\"%s\""
+                                    " delta_states=\"%s\""
+                                    " search_phrase=\"%s\""
+                                    " min_cvss_base=\"%s\"/>",
+                                    filt_id ? filt_id : "0",
+                                    filter ? filter : "",
+                                    pos ? pos : "1",
+                                    strcmp (autofp, "0") ? autofp_value : "0",
+                                    strcmp (notes, "0") ? 1 : 0,
+                                    strcmp (overrides, "0") ? 1 : 0,
+                                    strcmp (overrides, "0") ? 1 : 0,
+                                    strcmp (result_hosts_only, "0") ? 1 : 0,
+                                    (type && ((strcmp (type, "assets") == 0)
+                                              || (strcmp (type, "prognostic")
+                                                  == 0)))
+                                     ? ""
+                                     : report_id,
+                                    delta_report_id ? delta_report_id : "0",
+                                    format_id
+                                     ? format_id
+                                     : "a994b278-1f62-11e1-96ac-406186ea4fc5",
+                                    first_result,
+                                    max_results,
+                                    sort_field ? sort_field : "severity",
+                                    sort_order
+                                     ? sort_order
+                                     : ((sort_field == NULL
+                                        || strcmp (sort_field, "type") == 0
+                                        || strcmp (sort_field, "severity") == 0)
+                                       ? "descending"
+                                       : "ascending"),
+                                    levels->str,
+                                    delta_states->str,
+                                    search_phrase,
+                                    min_cvss_base);
+  if (ret == -1)
     {
       openvas_server_close (socket, session);
       g_string_free (delta_states, TRUE);

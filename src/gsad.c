@@ -942,6 +942,7 @@ init_validator ()
   openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
   openvas_validator_alias (validator, "alerts",     "optional_number");
   openvas_validator_alias (validator, "alterable", "boolean");
+  openvas_validator_alias (validator, "apply_filter", "boolean");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",            "name");

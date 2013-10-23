@@ -1,3 +1,21 @@
+2013-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add parameter apply_filter.
+
+	* src/gsad_omp.c (get_report): Use a special filter to get all results
+	for pages except results and summary pagem unless apply_filter param is
+	set to 1.
+
+	* src/html/omp.xsl (report [fold-filter-icon])
+	(report [result-details-icon]): Add apply_filter param to links, get
+	filter term from filter param on pages that can modify the filter.
+	(report [result-overrides-icon]): Add apply_filter param to links.
+	(report [section-link]): Get filter term from filter param on pages
+	that can modify the filter.
+	(section-filter): On report_section pages (except results and summary)
+	replace normal filter controls with controls to enable and disable
+	current filter.
+
 2013-10-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report-hosts-link): Prefix the host keyword with a
