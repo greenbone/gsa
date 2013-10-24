@@ -472,6 +472,9 @@ omp_success (entity_t entity)
 {
   const char *status;
 
+  if (entity == NULL)
+    return 0;
+
   status = entity_attribute (entity, "status");
   if ((status == NULL)
       || (strlen (status) == 0))
