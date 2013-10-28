@@ -3437,6 +3437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="current" select="$current"/>
                       <xsl:with-param name="token" select="$token"/>
                       <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                      <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
                     </xsl:call-template>
                     <xsl:copy-of select="html/after/*"/>
                   </td>
@@ -3478,6 +3479,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:with-param name="current" select="$current"/>
                         <xsl:with-param name="token" select="$token"/>
                         <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                        <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
                       </xsl:call-template>
                       <xsl:copy-of select="html/after/*"/>
                     </td>
@@ -5335,13 +5337,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Reports</name>
         <column>
           <name>Total</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>Last</name>
+          <sort-reverse/>
         </column>
       </column>
       <column>
         <name>Severity</name>
+        <sort-reverse/>
         <html>
           <before>
             <div style="float: right; display: inline">
@@ -8067,6 +8072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Modified</name>
+        <sort-reverse/>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
@@ -9293,6 +9299,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="current" select="."/>
   <xsl:param name="extra_params"/>
+  <xsl:param name="sort-reverse"/>
   <xsl:param name="token" select="/envelope/token"/>
   <xsl:variable name="heading">
     <xsl:choose>
@@ -9321,6 +9328,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$name = ''">
       <!-- Starts with some other column. -->
       <xsl:copy-of select="$heading"/>
+    </xsl:when>
+    <xsl:when test="$sort-reverse">
+      <!-- Starts with some other column.  Include reverse sorting link. -->
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:copy-of select="$heading"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column.  Include sorting link. -->
@@ -11208,6 +11219,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">Total</xsl:with-param>
                 <xsl:with-param name="name">families_total</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td width="1" style="font-size:10px;">
@@ -11222,6 +11234,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">Total</xsl:with-param>
                 <xsl:with-param name="name">nvts_total</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td width="1" style="font-size:10px;">
@@ -11974,9 +11987,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>First Run</name>
+        <sort-reverse/>
       </column>
       <column>
         <name>Next Run</name>
+        <sort-reverse/>
       </column>
       <column>
         <name>Period</name>
@@ -14286,6 +14301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">modified</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14302,6 +14318,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -14464,6 +14481,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">published</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14586,6 +14604,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">created</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14594,6 +14613,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">modified</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14618,6 +14638,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -14750,6 +14771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">created</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14758,6 +14780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">modified</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14774,6 +14797,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -14884,6 +14908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">created</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -14900,6 +14925,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -15007,6 +15033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">created</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -15015,6 +15042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">modified</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td>
@@ -15023,6 +15051,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="name">severity</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -19680,6 +19709,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">Total</xsl:with-param>
                 <xsl:with-param name="name">total</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td style="font-size:10px;">
@@ -19687,6 +19717,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">TCP</xsl:with-param>
                 <xsl:with-param name="name">tcp</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
             <td style="font-size:10px;">
@@ -19694,6 +19725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="head">UDP</xsl:with-param>
                 <xsl:with-param name="name">udp</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
+                <xsl:with-param name="sort-reverse" select="true ()"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -21326,6 +21358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="columns">
       <column>
         <name>Date</name>
+        <sort-reverse/>
       </column>
       <column>
         <name>Status</name>
@@ -21335,6 +21368,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Severity</name>
+        <sort-reverse/>
         <html>
           <before>
             <div style="float: right; display: inline">
@@ -21376,18 +21410,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Scan Results</name>
         <column>
           <name>High</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>Medium</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>Low</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>Log</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>False Positive</name>
+          <sort-reverse/>
         </column>
       </column>
     </xsl:with-param>

@@ -1,3 +1,18 @@
+2013-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Sort column reverse by default where it makes more sense.
+
+	* src/html/omp.xsl (list-window): Pass sort-reverse through to
+	column-name.
+	(column-name): Add sort-reverse arg.
+	(html-tasks-table, html-tags-table, html-schedules-table)
+	(html-reports-table): Add specifier to columns that must be sorted
+	reverse by default.
+	(html-configs-table, html-cpe-table, html-cve-table, html-nvt-table)
+	(html-ovaldef-table, html-dfn_cert_adv-table, html-allinfo-table)
+	(html-port-lists-table): Add sort-reverse column-name arg to columns
+	that must be sorted reverse by default.
+
 2013-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report [os]): Add column with CPE SecInfo links.
