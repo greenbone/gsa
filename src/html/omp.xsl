@@ -24719,7 +24719,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="cve" select="cve"/>
           <tr class="position()">
             <td>
-              <xsl:value-of select="$cve"/>
+              <xsl:choose>
+                <xsl:when test="$cve = 'NOCVE'">
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- get the GSA token before entering the for-each loop over the str:tokenize elements -->
+                  <xsl:variable name="gsa_token" select="/envelope/token"/>
+
+                  <xsl:for-each select="str:tokenize ($cve, ', ')">
+                    <xsl:call-template name="get_info_cve_lnk">
+                      <xsl:with-param name="cve" select="text()"/>
+                      <xsl:with-param name="gsa_token" select="$gsa_token"/>
+                    </xsl:call-template>
+                    <xsl:if test="position() != last()"><xsl:text>, </xsl:text></xsl:if>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
             <td>
               <xsl:value-of select="count(../../result[nvt/cve = $cve and generate-id() = generate-id(key('key_report_cves_hosts', concat(host, '|', nvt/cve)))])"/>
