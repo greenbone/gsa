@@ -1,5 +1,9 @@
 2013-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (report [os]): Add column with CPE SecInfo links.
+
+2013-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (report [cves]): Add links to the SecInfo pages of
 	the CVEs.
 

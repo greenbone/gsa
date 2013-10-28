@@ -24295,6 +24295,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <col width="100px"/>
         <tr class="gbntablehead2">
           <td>Operating System</td>
+          <td>CPE</td>
           <td>Hosts</td>
           <td>Severity</td>
         </tr>
@@ -24311,6 +24312,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="img-style" select="'margin-right:2px; vertical-align: text-top;'"/>
                 <xsl:with-param name="os-name" select="1"/>
               </xsl:call-template>
+            </td>
+            <td>
+              <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$value}&amp;details=1&amp;token={/envelope/token}"
+                 title="View Details of CPE {$value}">
+                <xsl:value-of select="$value"/>
+              </a>
             </td>
             <td>
               <xsl:value-of select="count(../../host/detail[name = $name and value = $value])"/>
