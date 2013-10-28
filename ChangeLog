@@ -1,4 +1,9 @@
-2013-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
+2013-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (result [result-headers]): Remove truncation of
+	long NVT names, because the browser wraps the column anyway.
+
+2013-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Sort column reverse by default where it makes more sense.
 

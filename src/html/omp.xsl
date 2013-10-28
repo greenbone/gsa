@@ -22346,24 +22346,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="max" select="80"/>
           <xsl:choose>
-            <xsl:when test="string-length(nvt/name) &gt; $max">
-              <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+            <xsl:when test="../../@type = 'delta'">
+              <a href="/omp?cmd=get_report&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="nvt/name"/>
+              </a>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:choose>
-                <xsl:when test="../../@type = 'delta'">
-                  <a href="/omp?cmd=get_report&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="nvt/name"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="nvt/name"/>
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
+              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="nvt/name"/>
+              </a>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>
