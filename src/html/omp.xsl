@@ -3196,6 +3196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="status_bar">
   <xsl:param name="status">(Unknown)</xsl:param>
   <xsl:param name="progress">(Unknown)</xsl:param>
+  <xsl:param name="title_suffix"></xsl:param>
   <xsl:choose>
     <xsl:when test="$status='Running'">
       <div class="progressbar_box" title="{$status}">
@@ -3206,7 +3207,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='New'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_new" style="width:100px;"></div>
         <div class="progressbar_text">
           <i><b><xsl:value-of select="$status"/></b></i>
@@ -3214,13 +3215,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Requested'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Delete Requested'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
@@ -3232,13 +3233,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Pause Requested'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Paused'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
         <div class="progressbar_text">
           <xsl:value-of select="$status"/>
@@ -3249,19 +3250,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Resume Requested'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Stop Requested'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Stopped'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
         <div class="progressbar_text">
           <xsl:value-of select="$status"/>
@@ -3272,19 +3273,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Internal Error'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_error" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Done'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_done" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Uploading'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_done" style="width:{$progress}px;"></div>
         <div class="progressbar_text">
           <xsl:value-of select="$status"/>
@@ -3296,7 +3297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Container'">
-      <div class="progressbar_box" title="{$status}">
+      <div class="progressbar_box" title="{$status}{$title_suffix}">
         <div class="progressbar_bar_done" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
@@ -5107,32 +5108,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <xsl:call-template name="status_bar">
-            <xsl:with-param name="status">
-              <xsl:choose>
-                <xsl:when test="target/@id='' and status='Running'">
-                  <xsl:text>Uploading</xsl:text>
-                </xsl:when>
-                <xsl:when test="target/@id=''">
-                  <xsl:text>Container</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="status"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:with-param>
-            <xsl:with-param name="progress">
-              <xsl:value-of select="progress/text()"/>
-            </xsl:with-param>
-          </xsl:call-template>
+          <xsl:variable name="current_or_last_report_id">
+            <xsl:choose>
+              <xsl:when test="current_report/report/@id">
+                <xsl:value-of select="current_report/report/@id"/>
+              </xsl:when>
+              <xsl:when test="last_report/report/@id">
+                <xsl:value-of select="last_report/report/@id"/>
+              </xsl:when>
+              <xsl:otherwise></xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="$current_or_last_report_id != ''">
+              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="View last report for Task {name}">
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="target/@id='' and status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="progress/text()"/>
+                  </xsl:with-param>
+                  <xsl:with-param name="title_suffix">
+                    <xsl:text> - Go to the current report</xsl:text>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="status_bar">
+                <xsl:with-param name="status">
+                  <xsl:choose>
+                    <xsl:when test="target/@id='' and status='Running'">
+                      <xsl:text>Uploading</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="target/@id=''">
+                      <xsl:text>Container</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="status"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="progress">
+                  <xsl:value-of select="progress/text()"/>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
         </td>
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
               <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                title="View list of all reports for Task {name}">
-               <xsl:value-of select="report_count/finished"/>
+                title="View list of all reports for Task {name}, including unfinished ones">
+               <xsl:value-of select="report_count/text()"/>
               </a>
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} and status=Done sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                title="View list of all finished reports for Task {name}">
+               <xsl:value-of select="report_count/finished"/>
+              </a>)
             </xsl:when>
             <xsl:otherwise>
             </xsl:otherwise>

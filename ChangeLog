@@ -1,3 +1,10 @@
+2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (status_bar): Add title_suffix parameter.
+	(task): Add link to the current report on the progress bar and add info
+	about the link to the tooltip. Show number of both all and all finished
+	reports with links to the get_reports pages in reports total column.
+
 2013-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (result [result-headers]): Remove truncation of
