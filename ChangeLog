@@ -1,3 +1,13 @@
+2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install new images src/html/img/first.png and
+	src/html/img/last.png.
+
+	* src/html/omp.xsl (filter-window-pager): Add buttons to go to first
+	and last page.
+
+	* src/html/img/first.png, src/html/img/last.png: New image files.
+
 2013-10-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsa-style.css (.gbntable td): New rule.  Breaks words in
