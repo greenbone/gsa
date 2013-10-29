@@ -1,5 +1,10 @@
 2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (report [results-pager]): Add buttons to go to first
+	and last page here as well.
+
+2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (task): Swap report counts in Total column so
 	the one used for sorting comes first.
 
