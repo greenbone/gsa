@@ -5181,14 +5181,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                title="View list of all reports for Task {name}, including unfinished ones">
-               <xsl:value-of select="report_count/text()"/>
-              </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} and status=Done sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} and status=Done sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="View list of all finished reports for Task {name}">
-               <xsl:value-of select="report_count/finished"/>
-              </a>)
+                <xsl:value-of select="report_count/finished"/>
+              </a>
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                title="View list of all reports for Task {name}, including unfinished ones">
+                <xsl:value-of select="report_count/text()"/>
+               </a>)
             </xsl:when>
             <xsl:otherwise>
             </xsl:otherwise>
