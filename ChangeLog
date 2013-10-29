@@ -1,3 +1,9 @@
+2013-10-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsa-style.css (.gbntable td): New rule.  Breaks words in
+	cells of standard tables.
+	(.gbntablehead2 td): Prevent breaking words of headings.
+
 2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report [os]): Add empty CPE column for unknown OS.
