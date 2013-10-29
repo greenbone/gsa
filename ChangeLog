@@ -1,3 +1,21 @@
+2013-10-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	For Targets, Tasks, Report Results and Report SSL Certs make the first
+	column a fixed width and truncate the contents with ellipsis if it
+	reaches the width.
+
+	* src/html/omp.xsl (list-window): Specify width if column is Name or DN.
+	(task, target): Make the Name TDs a gbntable_name, and wrap the contents
+	in a DIV.
+	(result [result-headers]): Specify width of Vulnerability header TD.
+	Make TD gbntable_name and add DIV.
+	(report [ssl_certs]): Make TD gbntable_name and add DIV with tooltip.
+
+	* src/html/gsa-style.css (.gbntable td): Remove word breaking.  Add
+	ellipsis truncation.
+	(.gbntable div): New rule.
+	(.gbntablehead2 td): Remove word breaking.
+
 2013-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (report [results-pager]): Add buttons to go to first

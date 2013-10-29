@@ -298,9 +298,18 @@ table.gbntable {
  background-color: #70C000;
 }
 
-.gbntable td {
- -ms-word-break: break-all;
- word-break: break-all;
+.gbntable_name td {
+ width: 200px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+}
+
+.gbntable_name div {
+ max-width: 200px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
 }
 
 /* green row */
@@ -317,9 +326,6 @@ table.gbntable {
  background-color: #3A3A3A;
  color: #FFFFFF;
  font-weight: bold;
-
- -ms-word-break: normal;
- word-break: normal;
 }
 
 .gbntablehead2 a {

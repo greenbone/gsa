@@ -3446,7 +3446,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:variable>
-                  <td rowspan="2">
+                  <xsl:variable name="style">
+                    <xsl:if test="name = 'Name' or name = 'DN'">width: 200px</xsl:if>
+                  </xsl:variable>
+                  <td style="{$style}" rowspan="2">
                     <xsl:copy-of select="html/before/*"/>
                     <xsl:call-template name="column-name">
                       <xsl:with-param name="head" select="name"/>
@@ -5048,81 +5051,83 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
 
       <tr class="{gsa:table-row-class(position())}">
-        <td>
-          <div class="float_right">
+        <td class="gbntable_name">
+          <div class="gbntable_name">
+            <div class="float_right">
+              <xsl:choose>
+                <xsl:when test="alterable = 0">
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/alterable.png"
+                       style="margin-left:3px;"
+                       border="0"
+                       alt="Task is alterable"
+                       title="Task is alterable"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="string-length(slave/@id) &gt; 0">
+                  <img src="/img/sensor.png"
+                       style="margin-left:3px;"
+                       border="0"
+                       alt="Task is configured to run on slave {slave/name}"
+                       title="Task is configured to run on slave {slave/name}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="string-length (observers) &gt; 0 or count (observers/group) &gt; 0">
+                  <xsl:variable name="observer_groups">
+                    <xsl:choose>
+                      <xsl:when test="count (observers/group) &gt; 0">
+                        <xsl:value-of select="concat ('&#10;Task made visible for Groups: ', gsa:join (observers/group))"/>
+                      </xsl:when>
+                      <xsl:otherwise></xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
+                  <xsl:variable name="observer_roles">
+                    <xsl:choose>
+                      <xsl:when test="count (observers/role) &gt; 0">
+                        <xsl:value-of select="concat ('&#10;Task made visible for Roles: ', gsa:join (observers/role))"/>
+                      </xsl:when>
+                      <xsl:otherwise></xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
+                  <img src="/img/provide_view.png"
+                       style="margin-left:3px;"
+                       border="0"
+                       alt="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"
+                       title="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="owner/name=/envelope/login/text()">
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/view_other.png"
+                       style="margin-left:3px;"
+                       border="0"
+                       alt="Observing task owned by {owner/name}"
+                       title="Observing task owned by {owner/name}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+            <b>
+              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}{gsa:token ()}"
+                 title="View details of Task {name}">
+                <xsl:value-of select="name"/>
+              </a>
+            </b>
             <xsl:choose>
-              <xsl:when test="alterable = 0">
+              <xsl:when test="comment != ''">
+                <br/>(<xsl:value-of select="comment"/>)
               </xsl:when>
-              <xsl:otherwise>
-                <img src="/img/alterable.png"
-                     style="margin-left:3px;"
-                     border="0"
-                     alt="Task is alterable"
-                     title="Task is alterable"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="string-length(slave/@id) &gt; 0">
-                <img src="/img/sensor.png"
-                     style="margin-left:3px;"
-                     border="0"
-                     alt="Task is configured to run on slave {slave/name}"
-                     title="Task is configured to run on slave {slave/name}"/>
-              </xsl:when>
-              <xsl:otherwise>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="string-length (observers) &gt; 0 or count (observers/group) &gt; 0">
-                <xsl:variable name="observer_groups">
-                  <xsl:choose>
-                    <xsl:when test="count (observers/group) &gt; 0">
-                      <xsl:value-of select="concat ('&#10;Task made visible for Groups: ', gsa:join (observers/group))"/>
-                    </xsl:when>
-                    <xsl:otherwise></xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <xsl:variable name="observer_roles">
-                  <xsl:choose>
-                    <xsl:when test="count (observers/role) &gt; 0">
-                      <xsl:value-of select="concat ('&#10;Task made visible for Roles: ', gsa:join (observers/role))"/>
-                    </xsl:when>
-                    <xsl:otherwise></xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <img src="/img/provide_view.png"
-                     style="margin-left:3px;"
-                     border="0"
-                     alt="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"
-                     title="Task made visible for: {observers/text()}{$observer_groups}{$observer_roles}"/>
-              </xsl:when>
-              <xsl:otherwise>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="owner/name=/envelope/login/text()">
-              </xsl:when>
-              <xsl:otherwise>
-                <img src="/img/view_other.png"
-                     style="margin-left:3px;"
-                     border="0"
-                     alt="Observing task owned by {owner/name}"
-                     title="Observing task owned by {owner/name}"/>
-              </xsl:otherwise>
+              <xsl:otherwise></xsl:otherwise>
             </xsl:choose>
           </div>
-          <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}{gsa:token ()}"
-               title="View details of Task {name}">
-              <xsl:value-of select="name"/>
-            </a>
-          </b>
-          <xsl:choose>
-            <xsl:when test="comment != ''">
-              <br/>(<xsl:value-of select="comment"/>)
-            </xsl:when>
-            <xsl:otherwise></xsl:otherwise>
-          </xsl:choose>
         </td>
         <td>
           <xsl:variable name="current_or_last_report_id">
@@ -9489,22 +9494,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="target">
 
   <tr class="{gsa:table-row-class(position())}">
-    <td>
-      <xsl:call-template name="observers-icon">
-        <xsl:with-param name="type" select="'Target'"/>
-      </xsl:call-template>
-      <b>
-        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
-           title="View Details of Target {name}">
-          <xsl:value-of select="name"/>
-        </a>
-      </b>
-      <xsl:choose>
-        <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
+    <td class="gbntable_name">
+      <div class="gbntable_name">
+        <xsl:call-template name="observers-icon">
+          <xsl:with-param name="type" select="'Target'"/>
+        </xsl:call-template>
+        <b>
+          <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
+             title="View Details of Target {name}">
+            <xsl:value-of select="name"/>
+          </a>
+        </b>
+        <xsl:choose>
+          <xsl:when test="comment != ''">
+            <br/>(<xsl:value-of select="comment"/>)
+          </xsl:when>
+          <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+      </div>
     </td>
     <td>
       <xsl:variable name="max" select="500"/>
@@ -22293,7 +22300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="$first-row &gt; 0">
     <tr class="gbntablehead2">
-      <td>Vulnerability
+      <td style="width: 200px;">Vulnerability
         <xsl:if test="$collapse-details-button &gt; 0">
           <div class="float_right">
             <xsl:apply-templates select="../../." mode="result-details-icon"/>
@@ -22349,79 +22356,81 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <tr class="{$header_style} {gsa:table-row-class($class)}">
-    <td> <!-- Vulnerability -->
-      <div class="float_right">
-        <xsl:if test="$note-buttons = 1">
-          <div class="float_left">
-            <xsl:if test="count(notes/note) &gt; 0">
-              <xsl:choose>
-                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
-                  <a href="#notes-{@id}"
-                     title="Notes" style="margin-left:3px;">
-                    <img src="/img/note.png" border="0" alt="Notes"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/note.png" border="0" style="margin-left:3px;"
-                       alt="Notes"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:if>
-          </div>
-        </xsl:if>
-        <xsl:if test="$override-buttons = 1">
-          <div class="float_left">
-            <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
-              <xsl:choose>
-                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
-                  <a href="#overrides-{@id}"
-                     title="Overrides" style="margin-left:3px;">
-                    <img src="/img/override.png" border="0" alt="Overrides"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/override.png" style="margin-left:3px;"
-                       border="0" alt="Overrides"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:if>
-          </div>
-        </xsl:if>
-      </div>
-      <xsl:if test="delta/text()">
-        <xsl:choose>
-          <xsl:when test="delta/text() = 'changed'">[ ~ ] </xsl:when>
-          <xsl:when test="delta/text() = 'gone'">[ &#8722; ] </xsl:when>
-          <xsl:when test="delta/text() = 'new'">[ + ] </xsl:when>
-          <xsl:when test="delta/text() = 'same'">[ = ] </xsl:when>
-        </xsl:choose>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="$prognostic=1">
-          <xsl:call-template name="get_info_cve_lnk">
-            <xsl:with-param name="cve" select="cve/@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="nvt/@oid = 0">
-          <xsl:if test="delta/text()">
-            <br/>
+    <td class="gbntable_name"> <!-- Vulnerability -->
+      <div class="gbntable_name">
+        <div class="float_right">
+          <xsl:if test="$note-buttons = 1">
+            <div class="float_left">
+              <xsl:if test="count(notes/note) &gt; 0">
+                <xsl:choose>
+                  <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                    <a href="#notes-{@id}"
+                       title="Notes" style="margin-left:3px;">
+                      <img src="/img/note.png" border="0" alt="Notes"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <img src="/img/note.png" border="0" style="margin-left:3px;"
+                         alt="Notes"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </div>
           </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
+          <xsl:if test="$override-buttons = 1">
+            <div class="float_left">
+              <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
+                <xsl:choose>
+                  <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                    <a href="#overrides-{@id}"
+                       title="Overrides" style="margin-left:3px;">
+                      <img src="/img/override.png" border="0" alt="Overrides"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <img src="/img/override.png" style="margin-left:3px;"
+                         border="0" alt="Overrides"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </div>
+          </xsl:if>
+        </div>
+        <xsl:if test="delta/text()">
           <xsl:choose>
-            <xsl:when test="../../@type = 'delta'">
-              <a href="/omp?cmd=get_report&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="nvt/name"/>
-              </a>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="nvt/name"/>
-              </a>
-            </xsl:otherwise>
+            <xsl:when test="delta/text() = 'changed'">[ ~ ] </xsl:when>
+            <xsl:when test="delta/text() = 'gone'">[ &#8722; ] </xsl:when>
+            <xsl:when test="delta/text() = 'new'">[ + ] </xsl:when>
+            <xsl:when test="delta/text() = 'same'">[ = ] </xsl:when>
           </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="$prognostic=1">
+            <xsl:call-template name="get_info_cve_lnk">
+              <xsl:with-param name="cve" select="cve/@id"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="nvt/@oid = 0">
+            <xsl:if test="delta/text()">
+              <br/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="../../@type = 'delta'">
+                <a href="/omp?cmd=get_report&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="nvt/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="nvt/name"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
     </td>
     <td> <!-- Severity -->
       <xsl:variable name="severity_title">
@@ -24991,8 +25000,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="hostname" select="../../host[ip = $host/ip]/detail[name/text() = 'hostname']/value"/>
 
           <tr class="{gsa:table-row-class(position())}">
-            <td>
-              <xsl:value-of select="$dn"/>
+            <td class="gbntable_name">
+              <div title="{$dn}" class="gbntable_name">
+                <xsl:value-of select="$dn"/>
+              </div>
             </td>
             <td>
               <xsl:value-of select="$serial"/>
