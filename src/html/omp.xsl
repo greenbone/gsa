@@ -474,6 +474,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN NAMED TEMPLATES -->
 
+<xsl:template name="shy-long-rest">
+  <xsl:param name="string"/>
+  <xsl:param name="max" select="44"/>
+  <xsl:param name="chunk" select="10"/>
+  <xsl:text disable-output-escaping="yes">&amp;shy;</xsl:text>
+  <xsl:value-of select="substring ($string, 1, $chunk)"/>
+  <xsl:if test="string-length ($string) &gt; $chunk">
+    <xsl:call-template name="shy-long-rest">
+      <xsl:with-param name="string"
+                      select="substring ($string, $chunk)"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="shy-long-words">
+  <xsl:param name="string"/>
+  <xsl:param name="max" select="44"/>
+  <xsl:param name="chunk" select="10"/>
+  <xsl:for-each select="str:split ($string, ' ')">
+    <xsl:choose>
+      <xsl:when test="string-length ($string) &gt; $max">
+        <xsl:value-of select="substring ($string, 1, $chunk)"/>
+        <xsl:call-template name="shy-long-rest">
+          <xsl:with-param name="string"
+                          select="substring ($string, $chunk)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$string"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
 <!-- Currently only a very simple formatting method to produce
      nice HTML from a structured text:
      - create paragraphs for each text block separated with a empty line
@@ -25026,22 +25060,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <tr class="{gsa:table-row-class(position())}">
             <xsl:variable name="max" select="80"/>
-            <xsl:choose>
-              <xsl:when test="gsa:has-long-word ($dn, $max)">
-                <td style="white-space: nowrap">
-                  <div title="{$dn}">
-                    <xsl:value-of select="substring($dn, 0, $max)"/>...
-                  </div>
-                </td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td>
-                  <div title="{$dn}">
-                    <xsl:value-of select="$dn"/>
-                  </div>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
+            <td>
+              <div title="{$dn}">
+                <xsl:call-template name="shy-long-words">
+                  <xsl:with-param name="string" select="$dn"/>
+                </xsl:call-template>
+              </div>
+            </td>
             <td>
               <xsl:value-of select="$serial"/>
             </td>

@@ -1,5 +1,12 @@
 2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (shy-long-rest, shy-long-words): New templates.
+	(report [ssl_certs]): Full long words with soft hyphens, instead of
+	truncating at a length, because the differences in character sizes
+	within the font makes the displayed length vary wildly.
+
+2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window, result [result-headers]): Remove column
 	width special case left over from truncation.
 
