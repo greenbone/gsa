@@ -477,13 +477,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="shy-long-rest">
   <xsl:param name="string"/>
   <xsl:param name="max" select="44"/>
-  <xsl:param name="chunk" select="10"/>
+  <xsl:param name="chunk" select="5"/>
   <xsl:text disable-output-escaping="yes">&amp;shy;</xsl:text>
   <xsl:value-of select="substring ($string, 1, $chunk)"/>
   <xsl:if test="string-length ($string) &gt; $chunk">
     <xsl:call-template name="shy-long-rest">
       <xsl:with-param name="string"
-                      select="substring ($string, $chunk)"/>
+                      select="substring ($string, $chunk + 1)"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -491,18 +491,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="shy-long-words">
   <xsl:param name="string"/>
   <xsl:param name="max" select="44"/>
-  <xsl:param name="chunk" select="10"/>
+  <xsl:param name="chunk" select="5"/>
   <xsl:for-each select="str:split ($string, ' ')">
     <xsl:choose>
-      <xsl:when test="string-length ($string) &gt; $max">
-        <xsl:value-of select="substring ($string, 1, $chunk)"/>
+      <xsl:when test="string-length (.) &gt; $max">
+        <xsl:value-of select="substring (., 1, $chunk)"/>
         <xsl:call-template name="shy-long-rest">
           <xsl:with-param name="string"
-                          select="substring ($string, $chunk)"/>
+                          select="substring (., $chunk + 1)"/>
+          <xsl:with-param name="chunk" select="$chunk"/>
         </xsl:call-template>
+        <xsl:text> </xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$string"/>
+        <xsl:value-of select="."/>
+        <xsl:text> </xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:for-each>

@@ -1,5 +1,12 @@
 2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (shy-long-rest): Drop chunk size to 5.  Correct
+	offset of next chunk.
+	(shy-long-words): Drop chunk size to 5.  Correct offset of next chunk.
+	Pass current word instead of whole string.  Add spaces between words.
+
+2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (shy-long-rest, shy-long-words): New templates.
 	(report [ssl_certs]): Full long words with soft hyphens, instead of
 	truncating at a length, because the differences in character sizes
