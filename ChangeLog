@@ -1,3 +1,7 @@
+2013-10-30  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/po/de.xml: Improve wording in German translation.
+
 2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:has-long-word): New function.

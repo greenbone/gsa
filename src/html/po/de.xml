@@ -114,7 +114,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </msg>
   <msg>
     <id>Quick start: Immediately scan an IP address</id>
-    <str>Schnellstart: Unmittelbar ein IP Adresse scannen</str>
+    <str>Schnellstart: Unmittelbar eine IP-Adresse scannen</str>
   </msg>
   <msg>
     <id>IP address or hostname:</id>
