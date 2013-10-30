@@ -1,5 +1,10 @@
 2013-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (short_timestamp_current): New template.
+	(task [details]): Get correct date for current report.
+
+2013-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (result [result-headers]): Apply result-header
 	template to the Vulnerability and Host column to allow sorting.
 

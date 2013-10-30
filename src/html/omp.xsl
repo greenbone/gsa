@@ -2995,7 +2995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <!-- The xsl:text prevents a space before comma. -->
               <xsl:text>, Current: </xsl:text>
               <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
-                <xsl:call-template name="short_timestamp_last"/>
+                <xsl:call-template name="short_timestamp_current"/>
               </a>
             </xsl:if>
             (Finished:
@@ -3160,6 +3160,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="short_timestamp_second_last">
   <xsl:if test="first_report/report/timestamp">
     <xsl:value-of select="concat (date:month-abbreviation(second_last_report/report/timestamp), ' ', date:day-in-month(second_last_report/report/timestamp), ' ', date:year(second_last_report/report/timestamp))"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="short_timestamp_current">
+  <xsl:if test="current_report/report/timestamp">
+    <xsl:value-of select="concat (date:month-abbreviation(current_report/report/timestamp), ' ', date:day-in-month(current_report/report/timestamp), ' ', date:year(current_report/report/timestamp))"/>
   </xsl:if>
 </xsl:template>
 
