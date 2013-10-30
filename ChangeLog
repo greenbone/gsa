@@ -1,3 +1,8 @@
+2013-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (result [result-headers]): Apply result-header
+	template to the Vulnerability and Host column to allow sorting.
+
 2013-10-30  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/po/de.xml: Improve wording in German translation.

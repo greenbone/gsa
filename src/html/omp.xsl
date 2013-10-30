@@ -22301,7 +22301,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="$first-row &gt; 0">
     <tr class="gbntablehead2">
-      <td style="width: 200px;">Vulnerability
+      <td style="width: 200px;">
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'vulnerability'"/>
+              <xsl:with-param name="capital-name" select="'Vulnerability'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            Vulnerability
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="$collapse-details-button &gt; 0">
           <div class="float_right">
             <xsl:apply-templates select="../../." mode="result-details-icon"/>
@@ -22324,7 +22335,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
-      <td>Host</td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'host'"/>
+              <xsl:with-param name="capital-name" select="'Host'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            Host
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
       <td>
         <xsl:choose>
           <xsl:when test="$collapse-details-button &gt; 0">
