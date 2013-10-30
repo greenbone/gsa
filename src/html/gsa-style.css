@@ -298,20 +298,6 @@ table.gbntable {
  background-color: #70C000;
 }
 
-.gbntable_name td {
- width: 200px;
- overflow: hidden;
- white-space: nowrap;
- text-overflow: ellipsis;
-}
-
-.gbntable_name div {
- max-width: 200px;
- overflow: hidden;
- white-space: nowrap;
- text-overflow: ellipsis;
-}
-
 /* green row */
 .gbntablehead1 td{
  text-align: left;

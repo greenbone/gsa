@@ -3457,10 +3457,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:variable>
-                  <xsl:variable name="style">
-                    <xsl:if test="name = 'Name' or name = 'DN'">width: 200px</xsl:if>
-                  </xsl:variable>
-                  <td style="{$style}" rowspan="2">
+                  <td rowspan="2">
                     <xsl:copy-of select="html/before/*"/>
                     <xsl:call-template name="column-name">
                       <xsl:with-param name="head" select="name"/>
@@ -22307,7 +22304,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="$first-row &gt; 0">
     <tr class="gbntablehead2">
-      <td style="width: 200px;">
+      <td>
         <xsl:choose>
           <xsl:when test="$collapse-details-button &gt; 0">
             <xsl:apply-templates select="../../." mode="result-header">

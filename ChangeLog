@@ -1,3 +1,11 @@
+2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (list-window, result [result-headers]): Remove column
+	width special case left over from truncation.
+
+	* src/html/gsa-style.css (.gbntable_name td div): Remove.  Was for
+	truncation.
+
 2013-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (short_timestamp_current): New template.
