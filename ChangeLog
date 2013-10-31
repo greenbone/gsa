@@ -1,3 +1,7 @@
+2013-10-31  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/alterable.png: Updated with new icon.
+
 2013-10-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (gsa:type-many): Add "allinfo" as a type without
