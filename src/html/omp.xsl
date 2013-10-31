@@ -11239,127 +11239,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-configs-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Scan Configs
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'config'"/>
-        <xsl:with-param name="list" select="configs"/>
-        <xsl:with-param name="count" select="count (config)"/>
-        <xsl:with-param name="filtered_count" select="config_count/filtered"/>
-        <xsl:with-param name="full_count" select="config_count/text ()"/>
-      </xsl:call-template>
-      <a href="/help/configs.html?token={/envelope/token}"
-         title="Help: Scan Configs">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="New Scan Config">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <a href="/omp?cmd=get_configs&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_configs&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-           title="Export {config_count/filtered} filtered Scan Configs as XML"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
-        </a>
-      </div>
-      <div id="small_inline_form" style="margin-left:40px; display: inline">
-        <form method="get" action="">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_configs"/>
-          <input type="hidden" name="filter" value="{filters/term}"/>
-          <xsl:call-template name="auto-refresh"/>
-          <input type="image"
-                 name="Update"
-                 src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
-        </form>
-      </div>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="'config'"/>
-      <xsl:with-param name="list" select="configs"/>
-      <!-- TODO Hack. -->
-      <xsl:with-param name="columns">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'config'"/>
+    <xsl:with-param name="cap-type" select="'Scan Configuration'"/>
+    <xsl:with-param name="resources-summary" select="configs"/>
+    <xsl:with-param name="resources" select="config"/>
+    <xsl:with-param name="count" select="count (config)"/>
+    <xsl:with-param name="filtered-count" select="config_count/filtered"/>
+    <xsl:with-param name="full-count" select="config_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Families</name>
         <column>
-          <name>Name</name>
+          <name>Total</name>
+          <field>families_total</field>
+          <sort-reverse/>
         </column>
         <column>
-          <name>Families Total</name>
+          <name>Trend</name>
+          <field>families_trend</field>
+        </column>
+      </column>
+      <column>
+        <name>NVTs</name>
+        <column>
+          <name>Total</name>
+          <field>nvts_total</field>
+          <sort-reverse/>
         </column>
         <column>
-          <name>NVTs Total</name>
+          <name>Trend</name>
+          <field>nvts_total</field>
+          <sort-reverse/>
         </column>
-        <column>
-          <name>Families Trend</name>
-        </column>
-        <column>
-          <name>NVTs Trend</name>
-        </column>
-        <column>
-          <name></name>
-        </column>
-      </xsl:with-param>
-    </xsl:call-template>
-
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td rowspan="2">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">config</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td colspan="2">Families</td>
-            <td colspan="2">NVTs</td>
-            <td width="{gsa:actions-width (4)}" rowspan="2">Actions</td>
-          </tr>
-          <tr class="gbntablehead2">
-            <td width="1" style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">families_total</xsl:with-param>
-                <xsl:with-param name="type">config</xsl:with-param>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td width="1" style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Trend</xsl:with-param>
-                <xsl:with-param name="name">families_trend</xsl:with-param>
-                <xsl:with-param name="type">config</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td width="1" style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">nvts_total</xsl:with-param>
-                <xsl:with-param name="type">config</xsl:with-param>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td width="1" style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Trend</xsl:with-param>
-                <xsl:with-param name="name">nvts_trend</xsl:with-param>
-                <xsl:with-param name="type">config</xsl:with-param>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="config"/>
-        </table>
-      </div>
-    </div>
-  </div>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
+    <xsl:with-param name="icon-count" select="4"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_CONFIG_RESPONSE -->
@@ -19737,113 +19657,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-port-lists-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Port Lists
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'port_list'"/>
-        <xsl:with-param name="list" select="port_lists"/>
-        <xsl:with-param name="count" select="count (port_list)"/>
-        <xsl:with-param name="filtered_count" select="port_list_count/filtered"/>
-        <xsl:with-param name="full_count" select="port_list_count/text ()"/>
-      </xsl:call-template>
-      <a href="/help/port_lists.html?token={/envelope/token}"
-         title="Help: Port Lists">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=new_port_list&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="New Port List">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_port_lists&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-           title="Export port_list_count/filtered filtered Port Lists as XML"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
-        </a>
-      </div>
-      <div id="small_inline_form" style="margin-left:40px; display: inline">
-        <form method="get" action="">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_port_lists"/>
-          <input type="hidden" name="filter" value="{filters/term}"/>
-          <xsl:call-template name="auto-refresh"/>
-          <input type="image"
-                 name="Update"
-                 src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
-        </form>
-      </div>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="'port_list'"/>
-      <xsl:with-param name="list" select="port_lists"/>
-      <!-- TODO Missing top row. -->
-      <xsl:with-param name="columns">
-        <column>
-          <name>Name</name>
-        </column>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'port_list'"/>
+    <xsl:with-param name="cap-type" select="'Port List'"/>
+    <xsl:with-param name="resources-summary" select="port_lists"/>
+    <xsl:with-param name="resources" select="port_list"/>
+    <xsl:with-param name="count" select="count (port_list)"/>
+    <xsl:with-param name="filtered-count" select="port_list_count/filtered"/>
+    <xsl:with-param name="full-count" select="port_list_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Port Counts</name>
         <column>
           <name>Total</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>TCP</name>
+          <sort-reverse/>
         </column>
         <column>
           <name>UDP</name>
+          <sort-reverse/>
         </column>
-      </xsl:with-param>
-    </xsl:call-template>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td rowspan="2">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">port_list</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td colspan="3">Port Counts</td>
-            <td  width="{gsa:actions-width (4)}" rowspan="2">Actions</td>
-          </tr>
-          <tr class="gbntablehead2">
-            <td width="1" style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">total</xsl:with-param>
-                <xsl:with-param name="type">port_list</xsl:with-param>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">TCP</xsl:with-param>
-                <xsl:with-param name="name">tcp</xsl:with-param>
-                <xsl:with-param name="type">port_list</xsl:with-param>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td style="font-size:10px;">
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">UDP</xsl:with-param>
-                <xsl:with-param name="name">udp</xsl:with-param>
-                <xsl:with-param name="type">port_list</xsl:with-param>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="port_list"/>
-        </table>
-      </div>
-    </div>
-  </div>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
+    <xsl:with-param name="icon-count" select="4"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_PORT_LIST_RESPONSE -->
