@@ -1,5 +1,16 @@
 2013-10-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (gsa:type-many): Add "allinfo" as a type without
+	plural s.
+	(edit-header-icons, details-header-icons): Add optional cap-type-plural
+	parameter for consistency with changes to list-window.
+	(list-window): Handle subtypes and special plural cases like "info" or
+	"DFN-CERT Advisories". Hide Actions column if icon-count is 0.
+	(html-cpe-table, html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-dfn_cert_adv-table, html-allinfo-table): Use list-window template.
+
+2013-10-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (html-configs-table, html-port-lists-table): Use
 	list-window template.
 

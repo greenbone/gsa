@@ -178,7 +178,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"></xsl:param>
   <func:result>
     <xsl:choose>
-      <xsl:when test="$type = 'info'">
+      <xsl:when test="$type = 'info' or $type = 'allinfo'">
         <xsl:value-of select="$type"/>
       </xsl:when>
       <xsl:otherwise>
@@ -917,14 +917,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="edit-header-icons">
   <xsl:param name="type"/>
   <xsl:param name="cap-type"/>
+  <xsl:param name="cap-type-plural" select="concat ($cap-type, 's')"/>
   <xsl:param name="id"/>
 
   <a href="/help/{$type}s.html?token={/envelope/token}#edit_{$type}" title="Help: Edit {$cap-type}">
     <img src="/img/help.png"/>
   </a>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-     title="{$cap-type}s" style="margin-left:3px;">
-    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
+     title="{$cap-type-plural}" style="margin-left:3px;">
+    <img src="/img/list.png" border="0" alt="{$cap-type-plural}"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
       <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -3378,7 +3379,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="list-window">
   <xsl:param name="type"/>
+  <xsl:param name="subtype"/>
   <xsl:param name="cap-type"/>
+  <xsl:param name="cap-type-plural" select="concat ($cap-type, 's')"/>
   <xsl:param name="resources-summary"/>
   <xsl:param name="resources"/>
   <xsl:param name="count"/>
@@ -3398,26 +3401,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:param>
   <xsl:variable name="apply-overrides"
                 select="filters/keywords/keyword[column='apply_overrides']/value"/>
+  <xsl:variable name="subtype_param">
+    <xsl:if test="$subtype != ''">
+      <xsl:value-of select="concat ('&amp;', $type, '_type=', $subtype)"/>
+    </xsl:if>
+  </xsl:variable>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="$cap-type"/>s
+    <div class="gb_window_part_center"><xsl:value-of select="concat($cap-type-plural, ' ')"/>
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="list" select="$resources-summary"/>
         <xsl:with-param name="count" select="$count"/>
         <xsl:with-param name="filtered_count" select="$filtered-count"/>
         <xsl:with-param name="full_count" select="$full-count"/>
-        <xsl:with-param name="extra_params" select="$extra_params_string"/>
+        <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
       </xsl:call-template>
-      <a href="/help/{$type}s.html?token={/envelope/token}"
-         title="Help: {$cap-type}s">
-        <img src="/img/help.png"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="$subtype != ''">
+          <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
+            title="Help: {$cap-type-plural}">
+            <img src="/img/help.png"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
+            title="Help: {$cap-type-plural}">
+            <img src="/img/help.png"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:call-template name="wizard-icon"/>
       <xsl:choose>
         <xsl:when test="$type = 'role'"/>
         <xsl:when test="$type = 'report'"/>
+        <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="New {$cap-type}">
@@ -3425,16 +3444,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
          title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <xsl:choose>
         <xsl:when test="$type = 'report'"/>
+        <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=export_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-               title="Export {$filtered-count} filtered {$cap-type}s as XML"
+            <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
+               title="Export {$filtered-count} filtered {$cap-type-plural} as XML"
                style="margin-left:3px;">
               <img src="/img/download.png" border="0" alt="Export XML"/>
             </a>
@@ -3442,12 +3462,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
-        <xsl:when test="0"/>
+        <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
           <div id="small_inline_form" style="margin-left:40px; display: inline">
             <form method="get" action="">
               <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_{$type}s"/>
+              <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
               <xsl:call-template name="auto-refresh"/>
               <input type="image"
@@ -3471,9 +3491,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="subtype" select="$subtype"/>
       <xsl:with-param name="list" select="$resources-summary"/>
       <xsl:with-param name="columns" select="$columns"/>
-      <xsl:with-param name="extra_params" select="$extra_params"/>
+      <xsl:with-param name="extra_params">
+        <xsl:copy-of select="$extra_params"/>
+        <xsl:if test="$subtype != ''">
+          <param>
+            <name><xsl:value-of select="$type"/>_type</name>
+            <value><xsl:value-of select="$subtype"/></value>
+          </param>
+        </xsl:if>
+      </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -3502,7 +3531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="type" select="$type"/>
                       <xsl:with-param name="current" select="$current"/>
                       <xsl:with-param name="token" select="$token"/>
-                      <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                      <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
                       <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
                     </xsl:call-template>
                     <xsl:copy-of select="html/after/*"/>
@@ -3515,7 +3544,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
-            <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
+            <xsl:if test="$icon-count &gt; 0">
+              <td width="{gsa:actions-width ($icon-count)}" rowspan="2">Actions</td>
+            </xsl:if>
           </tr>
           <tr class="gbntablehead2">
             <xsl:variable name="current" select="."/>
@@ -3544,7 +3575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:with-param name="type" select="$type"/>
                         <xsl:with-param name="current" select="$current"/>
                         <xsl:with-param name="token" select="$token"/>
-                        <xsl:with-param name="extra_params" select="$extra_params_string"/>
+                        <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
                         <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
                       </xsl:call-template>
                       <xsl:copy-of select="html/after/*"/>
@@ -3559,7 +3590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="7">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_{$type}s{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -3593,6 +3624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="details-header-icons">
   <xsl:param name="cap-type"/>
+  <xsl:param name="cap-type-plural" select="concat ($cap-type, 's')"/>
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
   <xsl:param name="nonew"/>
@@ -3614,8 +3646,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-     title="{$cap-type}s" style="margin-left:3px;">
-    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
+     title="{$cap-type-plural}" style="margin-left:3px;">
+    <img src="/img/list.png" border="0" alt="{$cap-type-plural}"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
@@ -14255,118 +14287,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CPEs
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/cpe)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-      </xsl:call-template>
-      <a href="/help/cpes.html?token={/envelope/token}"
-        title="Help: CPE">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:if test="not(/envelope/params/info_name or /envelope/params/info_id)">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="extra_params">
-          <param>
-            <name>info_type</name>
-            <value>CPE</value>
-          </param>
-        </xsl:with-param>
-        <xsl:with-param name="columns">
-          <column>
-            <name>Name</name>
-          </column>
-          <column>
-            <name>Title</name>
-          </column>
-          <column>
-            <name>Modified</name>
-          </column>
-          <column>
-            <name>CVEs</name>
-          </column>
-          <column>
-            <name>Severity</name>
-          </column>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
-    <div class="gb_window_part_content_no_pad">
-      <div id="cpes">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Title</xsl:with-param>
-                <xsl:with-param name="name">title</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Modified</xsl:with-param>
-                <xsl:with-param name="name">modified</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVEs</xsl:with-param>
-                <xsl:with-param name="name">cves</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/cpe"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="6">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'cpe'"/>
+    <xsl:with-param name="cap-type" select="'CPE'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/cpe"/>
+    <xsl:with-param name="count" select="count (info/cpe)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Title</name>
+      </column>
+      <column>
+        <name>Modified</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>CVEs</name>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-cve-table">
@@ -14383,161 +14333,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CVEs
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/cve)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-      </xsl:call-template>
-      <a href="/help/cves.html?token={/envelope/token}"
-        title="Help: CVE">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:if test="not(/envelope/params/info_name or /envelope/params/info_id)">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="extra_params">
-          <param>
-            <name>info_type</name>
-            <value>CVE</value>
-          </param>
-        </xsl:with-param>
-        <xsl:with-param name="columns">
-          <column>
-            <name>Name</name>
-          </column>
-          <column>
-            <name>Vector</name>
-          </column>
-          <column>
-            <name>Complexity</name>
-          </column>
-          <column>
-            <name>Authentication</name>
-          </column>
-          <column>
-            <name>Confidentitality Impact</name>
-          </column>
-          <column>
-            <name>Integrity Impact</name>
-          </column>
-          <column>
-            <name>Availability Impact</name>
-          </column>
-          <column>
-            <name>Published</name>
-          </column>
-          <column>
-            <name>Severity</name>
-          </column>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
-    <div class="gb_window_part_content_no_pad">
-      <div id="cves">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Vector</xsl:with-param>
-                <xsl:with-param name="name">vector</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Complexity</xsl:with-param>
-                <xsl:with-param name="name">complexity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Authentication</xsl:with-param>
-                <xsl:with-param name="name">authentication</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Confidentiality Impact</xsl:with-param>
-                <xsl:with-param name="name">confidentiality_impact</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Integrity Impact</xsl:with-param>
-                <xsl:with-param name="name">integrity_impact</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Availability Impact</xsl:with-param>
-                <xsl:with-param name="name">availability_impact</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Published</xsl:with-param>
-                <xsl:with-param name="name">published</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/cve"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="6">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'cve'"/>
+    <xsl:with-param name="cap-type" select="'CVE'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/cve"/>
+    <xsl:with-param name="count" select="count (info/cve)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Vector</name>
+      </column>
+      <column>
+        <name>Complexity</name>
+      </column>
+      <column>
+        <name>Authentication</name>
+      </column>
+      <column>
+        <name>Confidentitality Impact</name>
+      </column>
+      <column>
+        <name>Integrity Impact</name>
+      </column>
+      <column>
+        <name>Availability Impact</name>
+      </column>
+      <column>
+        <name>Published</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-nvt-table">
@@ -14554,139 +14391,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVTs
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/nvt)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-      </xsl:call-template>
-      <a href="/help/nvts.html?token={/envelope/token}"
-        title="Help: NVT">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="'info'"/>
-      <xsl:with-param name="list" select="info"/>
-      <xsl:with-param name="extra_params">
-        <param>
-          <name>info_type</name>
-          <value>NVT</value>
-        </param>
-      </xsl:with-param>
-      <xsl:with-param name="columns">
-        <column>
-          <name>Name</name>
-        </column>
-        <column>
-          <name>Family</name>
-        </column>
-        <column>
-          <name>Created</name>
-        </column>
-        <column>
-          <name>Modified</name>
-        </column>
-        <column>
-          <name>Version</name>
-        </column>
-        <column>
-          <name>CVE</name>
-        </column>
-        <column>
-          <name>Severity</name>
-        </column>
-      </xsl:with-param>
-    </xsl:call-template>
-    <div class="gb_window_part_content_no_pad">
-      <div id="cpes">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Family</xsl:with-param>
-                <xsl:with-param name="name">family</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Created</xsl:with-param>
-                <xsl:with-param name="name">created</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Modified</xsl:with-param>
-                <xsl:with-param name="name">modified</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Version</xsl:with-param>
-                <xsl:with-param name="name">version</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVE</xsl:with-param>
-                <xsl:with-param name="name">cve</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/nvt"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="6">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'nvt'"/>
+    <xsl:with-param name="cap-type" select="'NVT'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/nvt"/>
+    <xsl:with-param name="count" select="count (info/nvt)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Family</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Modified</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Version</name>
+      </column>
+      <column>
+        <name>CVE</name>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-ovaldef-table">
@@ -14703,149 +14444,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">OVAL Definitions
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/ovaldef)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-      </xsl:call-template>
-      <a href="/help/ovaldefs.html?token={/envelope/token}"
-        title="Help: OVAL Definitions">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:if test="not(/envelope/params/info_name or /envelope/params/info_id)">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="extra_params">
-          <param>
-            <name>info_type</name>
-            <value>OVALDEF</value>
-          </param>
-        </xsl:with-param>
-        <xsl:with-param name="columns">
-          <column>
-            <name>Name</name>
-          </column>
-          <column>
-            <name>Version</name>
-          </column>
-          <column>
-            <name>Status</name>
-          </column>
-          <column>
-            <name>Class</name>
-          </column>
-          <column>
-            <name>Created</name>
-          </column>
-          <column>
-            <name>CVEs</name>
-          </column>
-          <column>
-            <name>Severity</name>
-          </column>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
-    <div class="gb_window_part_content_no_pad">
-      <div id="ovaldefs">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Version</xsl:with-param>
-                <xsl:with-param name="name">version</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Status</xsl:with-param>
-                <xsl:with-param name="name">status</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Class</xsl:with-param>
-                <xsl:with-param name="name">class</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Created</xsl:with-param>
-                <xsl:with-param name="name">created</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Modified</xsl:with-param>
-                <xsl:with-param name="name">modified</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVEs</xsl:with-param>
-                <xsl:with-param name="name">cves</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/ovaldef"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="2">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'ovaldef'"/>
+    <xsl:with-param name="cap-type" select="'OVAL Definition'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/ovaldef"/>
+    <xsl:with-param name="count" select="count (info/ovaldef)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Version</name>
+      </column>
+      <column>
+        <name>Status</name>
+      </column>
+      <column>
+        <name>Class</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Modified</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>CVEs</name>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-dfn_cert_adv-table">
@@ -14862,118 +14500,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">DFN-CERT Advisories
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/dfn_cert_adv)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-      </xsl:call-template>
-      <a href="/help/dfn_cert_advs.html?token={/envelope/token}"
-        title="Help: DFN-CERT Advisories">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:if test="not(/envelope/params/info_name or /envelope/params/info_id)">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="extra_params">
-          <param>
-            <name>info_type</name>
-            <value>DFN_CERT_ADV</value>
-          </param>
-        </xsl:with-param>
-        <xsl:with-param name="columns">
-          <column>
-            <name>Name</name>
-          </column>
-          <column>
-            <name>Title</name>
-          </column>
-          <column>
-            <name>Created</name>
-          </column>
-          <column>
-            <name>CVEs</name>
-          </column>
-          <column>
-            <name>Severity</name>
-          </column>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
-    <div class="gb_window_part_content_no_pad">
-      <div id="dfn_cert_advs">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Title</xsl:with-param>
-                <xsl:with-param name="name">title</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Created</xsl:with-param>
-                <xsl:with-param name="name">created</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">CVEs</xsl:with-param>
-                <xsl:with-param name="name">cves</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/dfn_cert_adv"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="2">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'dfn_cert_adv'"/>
+    <xsl:with-param name="cap-type" select="'DFN-CERT Advisory'"/>
+    <xsl:with-param name="cap-type-plural" select="'DFN-CERT Advisories'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/dfn_cert_adv"/>
+    <xsl:with-param name="count" select="count (info/dfn_cert_adv)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Title</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>CVEs</name>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-allinfo-table">
@@ -14990,116 +14547,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
     <br/>
   </xsl:if>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">All SecInfo Information
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="count" select="count(info/allinfo)"/>
-        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
-        <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-      </xsl:call-template>
-      <a href="/help/allinfo.html?token={/envelope/token}"
-        title="Help: All SecInfo Information">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
-      </a>
-    </div>
-    <xsl:if test="not(/envelope/params/info_name or /envelope/params/info_id)">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="'info'"/>
-        <xsl:with-param name="list" select="info"/>
-        <xsl:with-param name="extra_params">
-          <param>
-            <name>info_type</name>
-            <value>allinfo</value>
-          </param>
-        </xsl:with-param>
-        <xsl:with-param name="columns">
-          <column>
-            <name>Name</name>
-          </column>
-          <column>
-            <name>Type</name>
-          </column>
-          <column>
-            <name>Created</name>
-          </column>
-          <column>
-            <name>Modified</name>
-          </column>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
-    <div class="gb_window_part_content_no_pad">
-      <div id="allinfo">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Type</xsl:with-param>
-                <xsl:with-param name="name">type</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Created</xsl:with-param>
-                <xsl:with-param name="name">created</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Modified</xsl:with-param>
-                <xsl:with-param name="name">modified</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Severity</xsl:with-param>
-                <xsl:with-param name="name">severity</xsl:with-param>
-                <xsl:with-param name="type">info</xsl:with-param>
-                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
-                <xsl:with-param name="sort-reverse" select="true ()"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:apply-templates select="info/allinfo"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="7">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=allinfo&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'allinfo'"/>
+    <xsl:with-param name="cap-type" select="'All SecInfo Information'"/>
+    <xsl:with-param name="cap-type-plural" select="'All SecInfo Information'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/allinfo"/>
+    <xsl:with-param name="count" select="count (info/allinfo)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Type</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Modified</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="get_info_response">
