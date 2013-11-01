@@ -1,5 +1,13 @@
 2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Add filt_id to refresh form so that
+	the named filter is kept when the user changes the refresh.  Also remove
+	the override param otherwise the filter term takes preference.  I think
+	this is safe to do now that the overrides are controlled on a separate
+	form.
+
+2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Use a string only version of the omp function when the argument is just
 	a string, otherwise the format specifiers in the strings of complex
 	commands like CREATE_CONFIG can cause errors.

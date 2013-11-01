@@ -3469,21 +3469,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
+              <input type="hidden" name="filt_id" value="{filters/@id}"/>
               <xsl:call-template name="auto-refresh"/>
               <input type="image"
                      name="Update"
                      src="/img/refresh.png"
                      alt="Update" style="margin-left:3px;margin-right:3px;"/>
-              <xsl:if test="$type = 'task' or $type = 'report'">
-                <xsl:choose>
-                  <xsl:when test="$apply-overrides = 0">
-                    <input type="hidden" name="overrides" value="0"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
             </form>
           </div>
         </xsl:otherwise>
