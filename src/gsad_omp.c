@@ -7722,96 +7722,61 @@ create_config_omp (credentials_t * credentials, params_t *params)
 char *
 import_config_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml = NULL;
-  int socket;
-  gchar *html;
+  gchar *command, *html, *response;
+  entity_t entity;
+  int ret;
 
-  switch (manager_connect (credentials, &socket, &session, &html))
+  /* Create the config. */
+
+  response = NULL;
+  entity = NULL;
+  command = g_strdup_printf ("<create_config>"
+                             "%s"
+                             "</create_config>",
+                             params_value (params, "xml_file"));
+  ret = omp (credentials, &response, &entity, command);
+  g_free (command);
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a config. "
+                             "The schedule remains the same. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_configs");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a config. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_configs");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
-                             "No new config was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Internal Error.",
                              "/omp?cmd=get_configs");
-    }
-
-  xml = g_string_new ("<commands_response>");
-
-  /* Create the config. */
-
-  if (openvas_server_sendf (&session,
-                            "<create_config>"
-                            "%s"
-                            "</create_config>",
-                            params_value (params, "xml_file"))
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a config. "
-                           "No new config was created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a config. "
-                           "It is unclear whether the config has been created or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  /* Get all the configs. */
-
-  if (openvas_server_send (&session,
-                           "<get_configs"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a config. "
-                           "The new config was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a config. "
-                           "The new config was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</commands_response>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_configs (credentials, params, response);
+    }
+  else
+    html = new_config (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
@@ -13310,21 +13275,21 @@ import_report_format_omp (credentials_t * credentials, params_t *params)
                              "An internal error occurred while importing a report format. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_schedules");
+                             "/omp?cmd=get_report_formats");
       case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_schedules");
+                             "/omp?cmd=get_report_formats");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_schedules");
+                             "/omp?cmd=get_report_formats");
     }
 
   /* Cleanup, and return transformed XML. */

@@ -9962,6 +9962,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_config"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_config"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">

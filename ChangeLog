@@ -1,3 +1,15 @@
+2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (import_config_omp): Switch to new style with "next"
+	param handling.
+	(import_report_format_omp): Correct fallback URLs.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply create indicator on New
+	Config page.
+
+	* src/html/omp.xsl (html-import-config-form): Add next param to import
+	form.
+
 2013-11-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/last.png, src/html/img/first.png: Replaced
