@@ -1,3 +1,8 @@
+2013-11-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/last.png, src/html/img/first.png: Replaced
+	the placeholder with actual icons.
+
 2013-10-31  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/alterable.png: Updated with new icon.
