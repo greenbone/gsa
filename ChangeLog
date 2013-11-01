@@ -1,5 +1,16 @@
 2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Use a string only version of the omp function when the argument is just
+	a string, otherwise the format specifiers in the strings of complex
+	commands like CREATE_CONFIG can cause errors.
+
+	* src/gsad_omp.c (omp): Replace formatting args with a single string
+	arg.  Update all callers.
+	(ompf): New function.  Formatting version of omp.  Use in all callers
+	that used "omp" with formatting.
+
+2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (import_config_omp): Switch to new style with "next"
 	param handling.
 	(import_report_format_omp): Correct fallback URLs.

@@ -489,19 +489,16 @@ omp_success (entity_t entity)
  * @param[in]  credentials    Username and password for authentication.
  * @param[out] response       Response.
  * @param[out] entity_return  Response entity.
- * @param[in]  format         Command.
- * @param[in]  ...            Arguments for format string.
+ * @param[in]  command        Command.
  *
  * @return -1 failed to connect (response set), 1 send error, 2 read error.
  */
 static int
 omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
-     const char *format, ...)
+     const char *command)
 {
   gnutls_session_t session;
   int socket, ret;
-  gchar *command;
-  va_list args;
   entity_t entity;
 
   switch (manager_connect (credentials, &socket, &session, response))
@@ -520,12 +517,7 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
         return -1;
     }
 
-  va_start (args, format);
-  command = g_markup_vprintf_escaped (format, args);
-  va_end (args);
-
   ret = openvas_server_send (&session, command);
-  g_free (command);
   if (ret == -1)
     {
       openvas_server_close (socket, session);
@@ -544,6 +536,34 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
     free_entity (entity);
   openvas_server_close (socket, session);
   return 0;
+}
+
+/**
+ * @brief Run a single formatted OMP command.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[out] response       Response.
+ * @param[out] entity_return  Response entity.
+ * @param[in]  format         Command.
+ * @param[in]  ...            Arguments for format string.
+ *
+ * @return -1 failed to connect (response set), 1 send error, 2 read error.
+ */
+static int
+ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
+      const char *format, ...)
+{
+  int ret;
+  gchar *command;
+  va_list args;
+
+  va_start (args, format);
+  command = g_markup_vprintf_escaped (format, args);
+  va_end (args);
+
+  ret = omp (credentials, response, entity_return, command);
+  g_free (command);
+  return ret;
 }
 
 /**
@@ -1707,12 +1727,12 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity,
-             "<%s_%s %s_id=\"%s\"/>",
-             action,
-             type,
-             type,
-             resource_id);
+  ret = ompf (credentials, &response, &entity,
+              "<%s_%s %s_id=\"%s\"/>",
+              action,
+              type,
+              type,
+              resource_id);
   switch (ret)
     {
       case 0:
@@ -2783,22 +2803,22 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             alterable ? "</alterable>" : "");
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             format,
-             task_id,
-             name,
-             comment,
-             target_id,
-             config_id,
-             schedule_id,
-             slave_id,
-             max_checks,
-             max_hosts,
-             strcmp (in_assets, "0") ? "yes" : "no",
-             source_iface,
-             observers);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              format,
+              task_id,
+              name,
+              comment,
+              target_id,
+              config_id,
+              schedule_id,
+              slave_id,
+              max_checks,
+              max_hosts,
+              strcmp (in_assets, "0") ? "yes" : "no",
+              source_iface,
+              observers);
   g_free (format);
 
   g_string_free (alert_element, TRUE);
@@ -2940,15 +2960,15 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             format,
-             task_id,
-             name,
-             comment,
-             strcmp (in_assets, "0") ? "yes" : "no",
-             observers);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              format,
+              task_id,
+              name,
+              comment,
+              strcmp (in_assets, "0") ? "yes" : "no",
+              observers);
   g_free (format);
   switch (ret)
     {
@@ -3664,51 +3684,51 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   /* Create the LSC credential. */
 
   if (type && strcmp (type, "gen") == 0)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<create_lsc_credential>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<login>%s</login>"
-               "</create_lsc_credential>",
-               name,
-               comment ? comment : "",
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<create_lsc_credential>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "</create_lsc_credential>",
+                name,
+                comment ? comment : "",
                login);
   else if (type && strcmp (type, "key") == 0)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<create_lsc_credential>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<login>%s</login>"
-               "<key>"
-               "<public>%s</public>"
-               "<private>%s</private>"
-               "<phrase>%s</phrase>"
-               "</key>"
-               "</create_lsc_credential>",
-               name,
-               comment ? comment : "",
-               login,
-               public_key ? public_key : "",
-               private_key ? private_key : "",
-               passphrase ? passphrase : "");
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<create_lsc_credential>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "<key>"
+                "<public>%s</public>"
+                "<private>%s</private>"
+                "<phrase>%s</phrase>"
+                "</key>"
+                "</create_lsc_credential>",
+                name,
+                comment ? comment : "",
+                login,
+                public_key ? public_key : "",
+                private_key ? private_key : "",
+                passphrase ? passphrase : "");
   else
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<create_lsc_credential>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<login>%s</login>"
-               "<password>%s</password>"
-               "</create_lsc_credential>",
-               name,
-               comment ? comment : "",
-               login,
-               password ? password : "");
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<create_lsc_credential>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "<password>%s</password>"
+                "</create_lsc_credential>",
+                name,
+                comment ? comment : "",
+                login,
+                password ? password : "");
 
   switch (ret)
     {
@@ -4152,60 +4172,60 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   response = NULL;
   entity = NULL;
   if (login && change_password)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<modify_lsc_credential lsc_credential_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<login>%s</login>"
-               "<password>%s</password>"
-               "</modify_lsc_credential>",
-               lsc_credential_id,
-               name,
-               comment,
-               login,
-               password);
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "<password>%s</password>"
+                "</modify_lsc_credential>",
+                lsc_credential_id,
+                name,
+                comment,
+                login,
+                password);
 
   else if (login)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<modify_lsc_credential lsc_credential_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<login>%s</login>"
-               "</modify_lsc_credential>",
-               lsc_credential_id,
-               name,
-               comment,
-               login);
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "</modify_lsc_credential>",
+                lsc_credential_id,
+                name,
+                comment,
+                login);
 
   else if (change_password)
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<modify_lsc_credential lsc_credential_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<password>%s</password>"
-               "</modify_lsc_credential>",
-               lsc_credential_id,
-               name,
-               comment,
-               password);
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<password>%s</password>"
+                "</modify_lsc_credential>",
+                lsc_credential_id,
+                name,
+                comment,
+                password);
 
   else
-    ret = omp (credentials,
-               &response,
-               &entity,
-               "<modify_lsc_credential lsc_credential_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "</modify_lsc_credential>",
-               lsc_credential_id,
-               name,
-               comment);
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "</modify_lsc_credential>",
+                lsc_credential_id,
+                name,
+                comment);
 
   switch (ret)
     {
@@ -4672,16 +4692,16 @@ save_agent_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_agent agent_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "</modify_agent>",
-             agent_id,
-             name,
-             comment);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_agent agent_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "</modify_agent>",
+              agent_id,
+              name,
+              comment);
 
   switch (ret)
     {
@@ -6629,25 +6649,25 @@ create_tag_omp (credentials_t *credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_tag>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<value>%s</value>"
-               "<attach>"
-               "<type>%s</type>"
-               "<id>%s</id>"
-               "</attach>"
-               "<active>%s</active>"
-               "</create_tag>",
-               name,
-               comment,
-               value,
-               attach_type,
-               attach_id,
-               active))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_tag>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<value>%s</value>"
+                "<attach>"
+                "<type>%s</type>"
+                "<id>%s</id>"
+                "</attach>"
+                "<active>%s</active>"
+                "</create_tag>",
+                name,
+                comment,
+                value,
+                attach_type,
+                attach_id,
+                active))
     {
       case 0:
       case -1:
@@ -6876,26 +6896,26 @@ save_tag_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<modify_tag tag_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<value>%s</value>"
-               "<attach>"
-               "<type>%s</type>"
-               "<id>%s</id>"
-               "</attach>"
-               "<active>%s</active>"
-               "</modify_tag>",
-               tag_id,
-               name,
-               comment,
-               value,
-               attach_type,
-               attach_id,
-               active))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<modify_tag tag_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<value>%s</value>"
+                "<attach>"
+                "<type>%s</type>"
+                "<id>%s</id>"
+                "</attach>"
+                "<active>%s</active>"
+                "</modify_tag>",
+                tag_id,
+                name,
+                comment,
+                value,
+                attach_type,
+                attach_id,
+                active))
     {
       case 0:
       case -1:
@@ -7660,17 +7680,17 @@ create_config_omp (credentials_t * credentials, params_t *params)
 
   /* Create the config. */
 
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_config>"
-               "<name>%s</name>"
-               "<copy>%s</copy>"
-               "<comment>%s</comment>"
-               "</create_config>",
-               name,
-               base ? base : "empty",
-               comment ? comment : ""))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_config>"
+                "<name>%s</name>"
+                "<copy>%s</copy>"
+                "<comment>%s</comment>"
+                "</create_config>",
+                name,
+                base ? base : "empty",
+                comment ? comment : ""))
     {
       case 0:
       case -1:
@@ -11210,29 +11230,29 @@ create_note_omp (credentials_t *credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_note>"
-               "<active>%s</active>"
-               "<nvt oid=\"%s\"/>"
-               "<hosts>%s</hosts>"
-               "<port>%s</port>"
-               "<severity>%s</severity>"
-               "<text>%s</text>"
-               "<task id=\"%s\"/>"
-               "<result id=\"%s\"/>"
-               "</create_note>",
-               strcmp (active, "1")
-                ? active
-                : (days ? days : "-1"),
-               oid,
-               hosts,
-               port,
-               severity,
-               text ? text : "",
-               task_id,
-               note_result_id))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_note>"
+                "<active>%s</active>"
+                "<nvt oid=\"%s\"/>"
+                "<hosts>%s</hosts>"
+                "<port>%s</port>"
+                "<severity>%s</severity>"
+                "<text>%s</text>"
+                "<task id=\"%s\"/>"
+                "<result id=\"%s\"/>"
+                "</create_note>",
+                strcmp (active, "1")
+                 ? active
+                 : (days ? days : "-1"),
+                oid,
+                hosts,
+                port,
+                severity,
+                text ? text : "",
+                task_id,
+                note_result_id))
     {
       case 0:
       case -1:
@@ -11468,28 +11488,28 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<modify_note note_id=\"%s\">"
-               "<active>%s</active>"
-               "<hosts>%s</hosts>"
-               "<port>%s</port>"
-               "<severity>%s</severity>"
-               "<text>%s</text>"
-               "<task id=\"%s\"/>"
-               "<result id=\"%s\"/>"
-               "</modify_note>",
-               note_id,
-               strcmp (active, "1")
-                ? active
-                : (days ? days : "-1"),
-               hosts ? hosts : "",
-               port ? port : "",
-               severity ? severity : "",
-               text ? text : "",
-               note_task_id,
-               note_result_id))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<modify_note note_id=\"%s\">"
+                "<active>%s</active>"
+                "<hosts>%s</hosts>"
+                "<port>%s</port>"
+                "<severity>%s</severity>"
+                "<text>%s</text>"
+                "<task id=\"%s\"/>"
+                "<result id=\"%s\"/>"
+                "</modify_note>",
+                note_id,
+                strcmp (active, "1")
+                 ? active
+                 : (days ? days : "-1"),
+                hosts ? hosts : "",
+                port ? port : "",
+                severity ? severity : "",
+                text ? text : "",
+                note_task_id,
+                note_result_id))
     {
       case 0:
       case -1:
@@ -11921,31 +11941,31 @@ create_override_omp (credentials_t *credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_override>"
-               "<active>%s</active>"
-               "<nvt oid=\"%s\"/>"
-               "<hosts>%s</hosts>"
-               "<port>%s</port>"
-               "<severity>%s</severity>"
-               "<new_severity>%s</new_severity>"
-               "<text>%s</text>"
-               "<task id=\"%s\"/>"
-               "<result id=\"%s\"/>"
-               "</create_override>",
-               strcmp (active, "1")
-                ? active
-                : (days ? days : "-1"),
-               oid,
-               hosts,
-               port,
-               severity,
-               new_severity,
-               text ? text : "",
-               task_id,
-               override_result_id))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_override>"
+                "<active>%s</active>"
+                "<nvt oid=\"%s\"/>"
+                "<hosts>%s</hosts>"
+                "<port>%s</port>"
+                "<severity>%s</severity>"
+                "<new_severity>%s</new_severity>"
+                "<text>%s</text>"
+                "<task id=\"%s\"/>"
+                "<result id=\"%s\"/>"
+                "</create_override>",
+                strcmp (active, "1")
+                 ? active
+                 : (days ? days : "-1"),
+                oid,
+                hosts,
+                port,
+                severity,
+                new_severity,
+                text ? text : "",
+                task_id,
+                override_result_id))
     {
       case 0:
       case -1:
@@ -12190,30 +12210,30 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<modify_override override_id=\"%s\">"
-               "<active>%s</active>"
-               "<hosts>%s</hosts>"
-               "<port>%s</port>"
-               "<severity>%s</severity>"
-               "<new_severity>%s</new_severity>"
-               "<text>%s</text>"
-               "<task id=\"%s\"/>"
-               "<result id=\"%s\"/>"
-               "</modify_override>",
-               override_id,
-               strcmp (active, "1")
-                ? active
-                : (days ? days : "-1"),
-               hosts ? hosts : "",
-               port ? port : "",
-               severity ? severity : "",
-               new_severity,
-               text ? text : "",
-               override_task_id,
-               override_result_id))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<modify_override override_id=\"%s\">"
+                "<active>%s</active>"
+                "<hosts>%s</hosts>"
+                "<port>%s</port>"
+                "<severity>%s</severity>"
+                "<new_severity>%s</new_severity>"
+                "<text>%s</text>"
+                "<task id=\"%s\"/>"
+                "<result id=\"%s\"/>"
+                "</modify_override>",
+                override_id,
+                strcmp (active, "1")
+                 ? active
+                 : (days ? days : "-1"),
+                hosts ? hosts : "",
+                port ? port : "",
+                severity ? severity : "",
+                new_severity,
+                text ? text : "",
+                override_task_id,
+                override_result_id))
     {
       case 0:
       case -1:
@@ -12533,24 +12553,24 @@ save_slave_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_slave slave_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<host>%s</host>"
-             "<port>%s</port>"
-             "<login>%s</login>"
-             "<password>%s</password>"
-             "</modify_slave>",
-             slave_id,
-             name,
-             comment,
-             host,
-             port,
-             login,
-             password);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_slave slave_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<host>%s</host>"
+              "<port>%s</port>"
+              "<login>%s</login>"
+              "<password>%s</password>"
+              "</modify_slave>",
+              slave_id,
+              name,
+              comment,
+              host,
+              port,
+              login,
+              password);
 
   switch (ret)
     {
@@ -12794,47 +12814,47 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_schedule>"
-               "<name>%s</name>"
-               "%s%s%s"
-               "<first_time>"
-               "<hour>%s</hour>"
-               "<minute>%s</minute>"
-               "<day_of_month>%s</day_of_month>"
-               "<month>%s</month>"
-               "<year>%s</year>"
-               "</first_time>"
-               "<period>"
-               "<unit>%s</unit>"
-               "%s"
-               "</period>"
-               "<duration>"
-               "<unit>%s</unit>"
-               "%s"
-               "</duration>"
-               "<timezone>%s</timezone>"
-               "</create_schedule>",
-               name,
-               comment ? "<comment>" : "",
-               comment ? comment : "",
-               comment ? "</comment>" : "",
-               hour,
-               minute,
-               day_of_month,
-               month,
-               year,
-               (strcmp (period_unit, "")
-                 ? period_unit
-                 : "second"),
-               period,
-               (strcmp (duration_unit, "")
-                 ? duration_unit
-                 : "second"),
-               duration,
-               timezone))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_schedule>"
+                "<name>%s</name>"
+                "%s%s%s"
+                "<first_time>"
+                "<hour>%s</hour>"
+                "<minute>%s</minute>"
+                "<day_of_month>%s</day_of_month>"
+                "<month>%s</month>"
+                "<year>%s</year>"
+                "</first_time>"
+                "<period>"
+                "<unit>%s</unit>"
+                "%s"
+                "</period>"
+                "<duration>"
+                "<unit>%s</unit>"
+                "%s"
+                "</duration>"
+                "<timezone>%s</timezone>"
+                "</create_schedule>",
+                name,
+                comment ? "<comment>" : "",
+                comment ? comment : "",
+                comment ? "</comment>" : "",
+                hour,
+                minute,
+                day_of_month,
+                month,
+                year,
+                (strcmp (period_unit, "")
+                  ? period_unit
+                  : "second"),
+                period,
+                (strcmp (duration_unit, "")
+                  ? duration_unit
+                  : "second"),
+                duration,
+                timezone))
     {
       case 0:
       case -1:
@@ -13368,19 +13388,19 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 
               response = NULL;
               entity = NULL;
-              ret = omp (credentials,
-                         &response,
-                         &entity,
-                         "<modify_report_format"
-                         " report_format_id=\"%s\">"
-                         "<param>"
-                         "<name>%s</name>"
-                         "<value>%s</value>"
-                         "</param>"
-                         "</modify_report_format>",
-                         report_format_id,
-                         param_name + type_end + 2,
-                         value);
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<modify_report_format"
+                          " report_format_id=\"%s\">"
+                          "<param>"
+                          "<name>%s</name>"
+                          "<value>%s</value>"
+                          "</param>"
+                          "</modify_report_format>",
+                          report_format_id,
+                          param_name + type_end + 2,
+                          value);
               g_free (value);
               switch (ret)
                 {
@@ -13415,19 +13435,19 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_report_format"
-             " report_format_id=\"%s\">"
-             "<name>%s</name>"
-             "<summary>%s</summary>"
-             "<active>%s</active>"
-             "</modify_report_format>",
-             report_format_id,
-             name,
-             summary,
-             enable);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_report_format"
+              " report_format_id=\"%s\">"
+              "<name>%s</name>"
+              "<summary>%s</summary>"
+              "<active>%s</active>"
+              "</modify_report_format>",
+              report_format_id,
+              name,
+              summary,
+              enable);
 
   switch (ret)
     {
@@ -13498,11 +13518,11 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<verify_report_format report_format_id=\"%s\"/>",
-             report_format_id);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<verify_report_format report_format_id=\"%s\"/>",
+              report_format_id);
 
   switch (ret)
     {
@@ -14807,17 +14827,17 @@ create_group_omp (credentials_t *credentials, params_t *params)
 
   /* Create the group. */
 
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_group>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<users>%s</users>"
-               "</create_group>",
-               name,
-               comment,
-               users))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_group>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<users>%s</users>"
+                "</create_group>",
+                name,
+                comment,
+                users))
     {
       case 0:
       case -1:
@@ -14959,18 +14979,18 @@ save_group_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_group group_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<users>%s</users>"
-             "</modify_group>",
-             group_id,
-             name,
-             comment,
-             users);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_group group_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<users>%s</users>"
+              "</modify_group>",
+              group_id,
+              name,
+              comment,
+              users);
 
   switch (ret)
     {
@@ -15308,20 +15328,20 @@ create_permission_omp (credentials_t *credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<create_permission>"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<resource id=\"%s\"/>"
-             "<subject id=\"%s\"><type>%s</type></subject>"
-             "</create_permission>",
-             name,
-             comment ? comment : "",
-             resource_id,
-             subject_id,
-             subject_type);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<create_permission>"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<resource id=\"%s\"/>"
+              "<subject id=\"%s\"><type>%s</type></subject>"
+              "</create_permission>",
+              name,
+              comment ? comment : "",
+              resource_id,
+              subject_id,
+              subject_type);
 
   switch (ret)
     {
@@ -15610,23 +15630,23 @@ save_permission_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_permission permission_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "<subject id=\"%s\">"
-             "<type>%s</type>"
-             "</subject>"
-             "<resource id=\"%s\"/>"
-             "</modify_permission>",
-             permission_id,
-             name,
-             comment,
-             subject_id,
-             subject_type,
-             (resource_id && strlen (resource_id)) ? resource_id : "0");
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_permission permission_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<subject id=\"%s\">"
+              "<type>%s</type>"
+              "</subject>"
+              "<resource id=\"%s\"/>"
+              "</modify_permission>",
+              permission_id,
+              name,
+              comment,
+              subject_id,
+              subject_type,
+              (resource_id && strlen (resource_id)) ? resource_id : "0");
   switch (ret)
     {
       case 0:
@@ -15718,19 +15738,19 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 
   /* Create the port_list. */
 
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_port_list>"
-               "<name>%s</name>"
-               "<port_range>%s</port_range>"
-               "<comment>%s</comment>"
-               "</create_port_list>",
-               name,
-               strcmp (from_file, "0")
-                ? params_value (params, "file")
-                : port_range,
-               comment ? comment : ""))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_port_list>"
+                "<name>%s</name>"
+                "<port_range>%s</port_range>"
+                "<comment>%s</comment>"
+                "</create_port_list>",
+                name,
+                strcmp (from_file, "0")
+                 ? params_value (params, "file")
+                 : port_range,
+                comment ? comment : ""))
     {
       case 0:
       case -1:
@@ -15801,19 +15821,19 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<create_port_range>"
-             "<port_list id=\"%s\"/>"
-             "<start>%s</start>"
-             "<end>%s</end>"
-             "<type>%s</type>"
-             "</create_port_range>",
-             port_list_id,
-             start,
-             end,
-             type);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<create_port_range>"
+              "<port_list id=\"%s\"/>"
+              "<start>%s</start>"
+              "<end>%s</end>"
+              "<type>%s</type>"
+              "</create_port_range>",
+              port_list_id,
+              start,
+              end,
+              type);
 
   switch (ret)
     {
@@ -15989,16 +16009,16 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_port_list port_list_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "</modify_port_list>",
-             port_list_id,
-             name,
-             comment);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_port_list port_list_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "</modify_port_list>",
+              port_list_id,
+              name,
+              comment);
 
   switch (ret)
     {
@@ -16811,19 +16831,19 @@ create_filter_omp (credentials_t *credentials, params_t *params)
   CHECK_PARAM (term, "Create Filter", new_filter);
   CHECK_PARAM (type, "Create Filter", new_filter);
 
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<create_filter>"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<term>%s</term>"
-               "<type>%s</type>"
-               "</create_filter>",
-               name,
-               comment,
-               term,
-               type))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_filter>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<term>%s</term>"
+                "<type>%s</type>"
+                "</create_filter>",
+                name,
+                comment,
+                term,
+                type))
     {
       case 0:
       case -1:
@@ -17245,46 +17265,46 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  switch (omp (credentials,
-               &response,
-               &entity,
-               "<modify_schedule schedule_id=\"%s\">"
-               "<name>%s</name>"
-               "<comment>%s</comment>"
-               "<first_time>"
-               "<hour>%s</hour>"
-               "<minute>%s</minute>"
-               "<day_of_month>%s</day_of_month>"
-               "<month>%s</month>"
-               "<year>%s</year>"
-               "</first_time>"
-               "<timezone>%s</timezone>"
-               "<period>"
-               "<unit>%s</unit>"
-               "%s"
-               "</period>"
-               "<duration>"
-               "<unit>%s</unit>"
-               "%s"
-               "</duration>"
-               "</modify_schedule>",
-               schedule_id,
-               name ? name : "",
-               comment ? comment : "",
-               hour,
-               minute,
-               day_of_month,
-               month,
-               year,
-               timezone,
-               (strcmp (period_unit, "")
-                 ? period_unit
-                 : "second"),
-               period,
-               (strcmp (duration_unit, "")
-                 ? duration_unit
-                 : "second"),
-               duration))
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<modify_schedule schedule_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<first_time>"
+                "<hour>%s</hour>"
+                "<minute>%s</minute>"
+                "<day_of_month>%s</day_of_month>"
+                "<month>%s</month>"
+                "<year>%s</year>"
+                "</first_time>"
+                "<timezone>%s</timezone>"
+                "<period>"
+                "<unit>%s</unit>"
+                "%s"
+                "</period>"
+                "<duration>"
+                "<unit>%s</unit>"
+                "%s"
+                "</duration>"
+                "</modify_schedule>",
+                schedule_id,
+                name ? name : "",
+                comment ? comment : "",
+                hour,
+                minute,
+                day_of_month,
+                month,
+                year,
+                timezone,
+                (strcmp (period_unit, "")
+                  ? period_unit
+                  : "second"),
+                period,
+                (strcmp (duration_unit, "")
+                  ? duration_unit
+                  : "second"),
+                duration))
     {
       case 0:
       case -1:
@@ -18377,21 +18397,21 @@ save_auth_omp (credentials_t* credentials, params_t *params)
   /** @warning authdn shall contain a single %s, handle with care. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
-             &response,
-             &entity,
-             "<modify_auth>"
-             "<group name=\"%s\">"
-             "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-             "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-             "<auth_conf_setting key=\"%s\" value=\"%s\"/>"
-             "</group>"
-             "</modify_auth>",
-             method,
-             truefalse,
-             ldaphost,
-             (strcmp (method, "method:ads") == 0) ? "domain" : "authdn",
-             (strcmp (method, "method:ads") == 0) ? domain : authdn);
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_auth>"
+              "<group name=\"%s\">"
+              "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+              "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+              "<auth_conf_setting key=\"%s\" value=\"%s\"/>"
+              "</group>"
+              "</modify_auth>",
+              method,
+              truefalse,
+              ldaphost,
+              (strcmp (method, "method:ads") == 0) ? "domain" : "authdn",
+              (strcmp (method, "method:ads") == 0) ? domain : authdn);
   switch (ret)
     {
       case 0:
