@@ -1,3 +1,7 @@
+2013-11-04  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/omp.xsl: Add missing ":".
+
 2013-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Add filt_id to refresh form so that

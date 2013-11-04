@@ -20449,7 +20449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:call-template name="severity-label">
               <xsl:with-param name="level" select="'Low'"/>
-            </xsl:call-template>
+            </xsl:call-template>:
           </td>
           <td>
             <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
