@@ -3365,7 +3365,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
   if (build_filter)
     new_filt_id = "";
   else
-    new_filt_id = "-2";
+    new_filt_id = "0";
 
   filt_id = params_get (params, "filt_id");
   if (filt_id)
