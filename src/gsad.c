@@ -834,6 +834,7 @@ init_validator ()
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "ifaces_allow", "^0|1|2$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
@@ -986,6 +987,7 @@ init_validator ()
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
+  openvas_validator_alias (validator, "access_ifaces", "hosts_opt");
   openvas_validator_alias (validator, "max_checks",   "number");
   openvas_validator_alias (validator, "max_hosts",    "number");
   openvas_validator_alias (validator, "method",       "condition");

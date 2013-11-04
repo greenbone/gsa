@@ -1,3 +1,15 @@
+2013-11-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate access_ifaces and ifaces_allow
+	parameters.
+
+	* src/gsad_omp.c (create_user_omp, save_user_omp): Send ifaces element
+	with the appropriate allow attribute.
+
+	* src/html/omp.xsl (html-create-user-form, user [edit]): Add
+	fields to set allowed/denied network interface access.
+	(user [details]): Output Interface Access.
+
 2013-11-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/omp.xsl: Add missing ":".

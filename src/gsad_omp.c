@@ -17681,7 +17681,7 @@ get_users_omp (credentials_t * credentials, params_t *params)
 char *
 create_user_omp (credentials_t * credentials, params_t *params)
 {
-  const char *name, *password, *hosts, *hosts_allow;
+  const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   const char *enable_ldap_connect, *submit;
   int ret;
   params_t *groups, *roles;
@@ -17693,6 +17693,8 @@ create_user_omp (credentials_t * credentials, params_t *params)
   password = params_value (params, "password");
   hosts = params_value (params, "access_hosts");
   hosts_allow = params_value (params, "hosts_allow");
+  ifaces = params_value (params, "access_ifaces");
+  ifaces_allow = params_value (params, "ifaces_allow");
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
 
   submit = params_value (params, "submit_plus_group");
@@ -17741,9 +17743,12 @@ create_user_omp (credentials_t * credentials, params_t *params)
       return new_user_omp (credentials, params);
     }
 
-  if (name == NULL || password == NULL || hosts == NULL || hosts_allow == NULL)
-    return new_user (credentials, params,
-                     GSAD_MESSAGE_INVALID_PARAM ("Create User"));
+  CHECK_PARAM (name, "Create User", new_user);
+  CHECK_PARAM (password, "Create User", new_user);
+  CHECK_PARAM (hosts, "Create User", new_user);
+  CHECK_PARAM (hosts_allow, "Create User", new_user);
+  CHECK_PARAM (ifaces, "Create User", new_user);
+  CHECK_PARAM (ifaces_allow, "Create User", new_user);
 
   /* Create the user. */
 
@@ -17798,6 +17803,14 @@ create_user_omp (credentials_t * credentials, params_t *params)
       buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
                                      hosts_allow,
                                      hosts);
+      g_string_append (string, buf);
+      g_free (buf);
+    }
+  if (strcmp (ifaces_allow, "2") && strlen (ifaces))
+    {
+      buf = g_markup_printf_escaped ("<ifaces allow=\"%s\">%s</ifaces>",
+                                     ifaces_allow,
+                                     ifaces);
       g_string_append (string, buf);
       g_free (buf);
     }
@@ -18025,8 +18038,8 @@ save_user_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response, *buf;
-  const char *user_id, *login, *modify_password, *password;
-  const char *hosts, *hosts_allow, *enable_ldap_connect, *submit;
+  const char *user_id, *login, *modify_password, *password, *submit;
+  const char *hosts, *hosts_allow, *enable_ldap_connect, *ifaces, *ifaces_allow;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
@@ -18039,6 +18052,8 @@ save_user_omp (credentials_t * credentials, params_t *params,
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
    * access. */
   hosts_allow = params_value (params, "hosts_allow");
+  ifaces = params_value (params, "access_ifaces");
+  ifaces_allow = params_value (params, "ifaces_allow");
   login = params_value (params, "login");
   modify_password = params_value (params, "modify_password");
   password = params_value (params, "password");
@@ -18101,8 +18116,9 @@ save_user_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (modify_password, "Save User", edit_user);
   CHECK_PARAM (password, "Save User", edit_user);
   CHECK_PARAM (hosts, "Save User", edit_user);
-  CHECK_PARAM (hosts, "Save User", edit_user);
   CHECK_PARAM (hosts_allow, "Save User", edit_user);
+  CHECK_PARAM (ifaces, "Save User", edit_user);
+  CHECK_PARAM (ifaces_allow, "Save User", edit_user);
 
   /* Modify the user. */
 
@@ -18121,6 +18137,14 @@ save_user_omp (credentials_t * credentials, params_t *params,
                                    hosts_allow, hosts);
   else
     buf = g_strdup ("<hosts allow=\"0\"></hosts>");
+  g_string_append (command, buf);
+  g_free (buf);
+
+  if (strcmp (ifaces_allow, "2") && strlen (ifaces))
+    buf = g_markup_printf_escaped ("<ifaces allow=\"%s\">%s</ifaces>",
+                                   ifaces_allow, ifaces);
+  else
+    buf = g_strdup ("<ifaces allow=\"0\"></ifaces>");
   g_string_append (command, buf);
   g_free (buf);
 

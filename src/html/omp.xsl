@@ -26197,6 +26197,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      size="30" maxlength="2000"/>
             </td>
           </tr>
+          <tr class="even">
+            <td valign="top">Interface Access</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="not (boolean (/envelope/params/ifaces_allow)) or (/envelope/params/ifaces_allow = '2')">
+                    <input type="radio" name="ifaces_allow" value="2" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="2"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow All
+              </label>
+              <br/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/ifaces_allow = '1'">
+                    <input type="radio" name="ifaces_allow" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow:
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/ifaces_allow = '0'">
+                    <input type="radio" name="ifaces_allow" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Deny:
+              </label>
+              <br/>
+              <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
+                     size="30" maxlength="2000"/>
+            </td>
+          </tr>
           <!-- Only if ldap-connect is enabled, it is per-user. !-->
           <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
             <tr class="even">
@@ -26468,6 +26510,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="hosts/@allow = 1">
                 Allow:
                 <xsl:value-of select="hosts/text()"/>
+              </xsl:when>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Interface Access:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="count(ifaces) = 0 or ifaces/@allow = 2">
+                Allow All
+              </xsl:when>
+              <xsl:when test="ifaces/@allow = 3">
+                Custom
+              </xsl:when>
+              <xsl:when test="ifaces/@allow = 0">
+                Deny:
+                <xsl:value-of select="ifaces/text()"/>
+              </xsl:when>
+              <xsl:when test="ifaces/@allow = 1">
+                Allow:
+                <xsl:value-of select="ifaces/text()"/>
               </xsl:when>
             </xsl:choose>
           </td>
@@ -26800,6 +26863,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
+                     maxlength="2000"/>
+            </td>
+          </tr>
+          <tr class="even">
+            <td valign="top">Interface Access</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="count(ifaces) = 0 or ifaces/@allow &gt; 1">
+                    <input type="radio" name="ifaces_allow" value="2" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="2"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow All
+              </label>
+              <br/>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="ifaces/@allow = 1">
+                    <input type="radio" name="ifaces_allow" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow:
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="ifaces/@allow = 0">
+                    <input type="radio" name="ifaces_allow" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="ifaces_allow" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Deny:
+              </label>
+              <br/>
+              <input type="text" name="access_ifaces" value="{ifaces}" size="30"
                      maxlength="2000"/>
             </td>
           </tr>
