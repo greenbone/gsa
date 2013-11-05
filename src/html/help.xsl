@@ -2640,6 +2640,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        The CIDR notation (e.g. <tt>192.168.10.0/24</tt>) can be used.
       </p>
       <p>
+       Note on <b>Interface Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
+       contain a list of comma-separated interface names.
+      </p>
+      <p>
        Note on <b>Role</b>s:
        <ul>
          <li>
@@ -2694,6 +2698,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>---</td>
           <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
           <td>"Allow all", "Allow:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
+        </tr>
+        <tr class="even">
+          <td>Interface access</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
+          <td>"Allow all", "Allow:" and "<tt>eth0, eth2, eth3</tt>"</td>
         </tr>
       </table>
       <p>

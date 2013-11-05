@@ -1,3 +1,8 @@
+2013-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/help.xsl (users.html): Update documentation for users
+	interface access.
+
 2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Add new-icon arg.
