@@ -1,5 +1,10 @@
 2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-user-form): Default role to User,
+	because that is the usual case.
+
+2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Apply create indicator on New
 	Permission page.
 

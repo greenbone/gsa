@@ -26084,11 +26084,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:for-each>
               <xsl:variable name="count"
                             select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
-              <xsl:call-template name="new-user-role-select">
-                <xsl:with-param name="roles" select="get_roles_response"/>
-                <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
-                <xsl:with-param name="position" select="$count + 1"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="$count = 0">
+                  <select name="role_id_optional:1">
+                    <option value="--">--</option>
+                    <xsl:for-each select="get_roles_response/role">
+                      <xsl:choose>
+                        <xsl:when test="name = 'User'">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="new-user-role-select">
+                    <xsl:with-param name="roles" select="get_roles_response"/>
+                    <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
+                    <xsl:with-param name="position" select="$count + 1"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
 
               <xsl:choose>
                 <xsl:when test="string-length (/envelope/params/roles)">
