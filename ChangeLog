@@ -1,3 +1,8 @@
+2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply create indicator on New
+	Permission page.
+
 2013-11-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (params_toggle_override): Replace the filt_id with 0
