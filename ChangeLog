@@ -1,5 +1,11 @@
 2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Add new-icon arg.
+	(html-permissions-table): For now only show new icon for Admins.  Other
+	users can't get the lists of users, roles and groups anyway.
+
+2013-11-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-user-form): Default role to User,
 	because that is the usual case.
 

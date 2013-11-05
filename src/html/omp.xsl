@@ -3389,6 +3389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="full-count"/>
   <xsl:param name="columns"/>
   <xsl:param name="icon-count" select="8"/>
+  <xsl:param name="new-icon" select="true ()"/>
   <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="extra_params_string">
@@ -3437,12 +3438,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$type = 'role'"/>
         <xsl:when test="$type = 'report'"/>
         <xsl:when test="$type = 'info'"/>
-        <xsl:otherwise>
+        <xsl:when test="$new-icon">
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="New {$cap-type}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
-        </xsl:otherwise>
+        </xsl:when>
       </xsl:choose>
       <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
          title="Return to default filter view" style="margin-left:3px;">
@@ -18845,6 +18846,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
+    <xsl:with-param name="new-icon" select="/envelope/role = 'Admin'"/>
   </xsl:call-template>
 </xsl:template>
 
