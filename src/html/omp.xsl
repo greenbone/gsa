@@ -3580,11 +3580,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:apply-templates select="$resources"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
             <tr>
-              <td class="footnote" colspan="7">
+              <td class="footnote" colspan="4">
                 (Applied filter:
                 <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
+              </td>
+              <td colspan="3">
+                <div class="float_right">
+                  <xsl:call-template name="filter-window-pager">
+                    <xsl:with-param name="type" select="$type"/>
+                    <xsl:with-param name="list" select="$resources-summary"/>
+                    <xsl:with-param name="count" select="$count"/>
+                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                    <xsl:with-param name="full_count" select="$full-count"/>
+                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                  </xsl:call-template>
+                </div>
               </td>
             </tr>
           </xsl:if>

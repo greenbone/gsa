@@ -1,5 +1,9 @@
 2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Add pager controls at bottom of list.
+
+2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_one, get_many, get_task, get_config)
 	(get_config_family, get_config_nvt): Remove actions attribute.
 
