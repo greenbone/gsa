@@ -548,9 +548,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
-      <xsl:if test = "$list/@start &gt; 1">
-        <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test = "$list/@start &gt; 1">
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="First"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="$list/@start > $list/@max">
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
@@ -558,6 +563,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$list/@start &gt; 1">
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
         </xsl:when>
+        <xsl:otherwise>
+          <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="Previous"/>
+        </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
@@ -565,12 +573,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="$full_count">
         (total: <xsl:value-of select="$full_count"/>)
       </xsl:if>
-      <xsl:if test = "$last &lt; $filtered_count">
-        <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
-      </xsl:if>
-      <xsl:if test = "$last &lt; $filtered_count">
-        <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test = "$last &lt; $filtered_count">
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="Next"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test = "$last &lt; $filtered_count">
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="Last"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="$full_count">

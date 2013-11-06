@@ -1,5 +1,15 @@
 2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (filter-window-pager): Grey out the icons on the edge
+	pages, instead of removing them.
+
+	* src/html/img/first_inactive.png, src/html/img/previous_inactive.png,
+	src/html/img/next_inactive.png, src/html/img/last_inactive.png: New files.
+
+	* CMakeLists.txt: Install new icons.
+
+2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window): Add pager controls at bottom of list.
 
 2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
