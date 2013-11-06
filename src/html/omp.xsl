@@ -3598,13 +3598,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:apply-templates select="$resources"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
             <tr>
-              <td class="footnote" colspan="4">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-              <td colspan="3">
+              <!-- + 1 for Action column. -->
+              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + 1}">
                 <div class="float_right">
                   <xsl:call-template name="filter-window-pager">
                     <xsl:with-param name="type" select="$type"/>
@@ -3615,6 +3610,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
                   </xsl:call-template>
                 </div>
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
               </td>
             </tr>
           </xsl:if>

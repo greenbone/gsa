@@ -1,5 +1,11 @@
 2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Use a single TD for the list footer,
+	counting the number of columns for the colspan instead of using a fixed
+	number.
+
+2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-pager): Grey out the icons on the edge
 	pages, instead of removing them.
 
