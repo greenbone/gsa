@@ -1,3 +1,8 @@
+2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one, get_many, get_task, get_config)
+	(get_config_family, get_config_nvt): Remove actions attribute.
+
 2013-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (users.html): Update documentation for users

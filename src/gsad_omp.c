@@ -849,7 +849,6 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   if (openvas_server_sendf (&session,
                             "<get_%ss"
                             " %s_id=\"%s\""
-                            " actions=\"g\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " %s/>",
@@ -1092,8 +1091,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get the list. */
 
-  request = g_markup_printf_escaped (" actions=\"g\""
-                                     " %sfilt_id=\"%s\""
+  request = g_markup_printf_escaped (" %sfilt_id=\"%s\""
                                      " %sfilter=\"%s\""
                                      " filter_replace=\"%s\""
                                      " first=\"%s\""
@@ -3510,7 +3508,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             "<commands>"
                             "<get_tasks"
                             " task_id=\"%s\""
-                            " actions=\"g\""
                             " filter=\"apply_overrides=%i\""
                             " details=\"1\"/>"
                             "%s%s%s"
@@ -7907,12 +7904,10 @@ get_config (credentials_t * credentials, params_t *params,
   if (openvas_server_sendf (&session,
                             "<get_configs"
                             " config_id=\"%s\""
-                            " actions=\"%s\""
                             " families=\"1\""
                             " tasks=\"1\""
                             " preferences=\"1\"/>",
-                            config_id,
-                            edit ? "" : "g")
+                            config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -8317,7 +8312,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit)
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" actions=\"g\" details=\"1\""
+                            " config_id=\"%s\" details=\"1\""
                             " family=\"%s\" timeout=\"1\" preference_count=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
@@ -8610,7 +8605,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" actions=\"g\" nvt_oid=\"%s\""
+                            " config_id=\"%s\" nvt_oid=\"%s\""
                             " details=\"1\" preferences=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
