@@ -24500,7 +24500,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>NVT</td>
           <td>Host</td>
           <td>Port</td>
-          <td style="width:100px;">Severity</td>
         </tr>
         <xsl:for-each select="report/errors/error">
           <xsl:variable name="host" select="host"/>
@@ -24522,24 +24521,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:value-of select="port"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="severity &gt;= 0.0">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="severity"/>
-                    <xsl:with-param name="extra_text" select="concat (' (', gsa:result-cvss-risk-factor (severity), ')')"/>
-                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="''"/>
-                    <xsl:with-param name="extra_text" select="gsa:result-cvss-risk-factor (severity)"/>
-                    <xsl:with-param name="title" select="gsa:result-cvss-risk-factor (severity)"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
             </td>
           </tr>
         </xsl:for-each>

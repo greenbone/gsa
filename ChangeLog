@@ -1,5 +1,9 @@
 2013-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [errors]): Remove severity column.
+
+2013-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [section-list]): Move Summary section title
 	to the top of the menu.
 
