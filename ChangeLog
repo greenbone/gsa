@@ -1,5 +1,12 @@
 2013-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [results-pager]): Add vertical align to all
+	IMG styles, so they align consistently.
+	(report [results]): Add filter and page controls at bottom of list, like
+	in the standard lists.
+
+2013-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [results-pager]): Add grey arrow icons, as in
 	other lists.
 
