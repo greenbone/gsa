@@ -22888,14 +22888,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li>
               <xsl:apply-templates select="." mode="section-link">
-                <xsl:with-param name="count" select="result_count/full"/>
-                <xsl:with-param name="section" select="'results'"/>
+                <xsl:with-param name="section" select="'summary'"/>
                 <xsl:with-param name="type" select="$type"/>
               </xsl:apply-templates>
             </li>
             <li>
               <xsl:apply-templates select="." mode="section-link">
-                <xsl:with-param name="section" select="'summary'"/>
+                <xsl:with-param name="count" select="result_count/full"/>
+                <xsl:with-param name="section" select="'results'"/>
                 <xsl:with-param name="type" select="$type"/>
               </xsl:apply-templates>
             </li>

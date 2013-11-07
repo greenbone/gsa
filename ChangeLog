@@ -1,3 +1,8 @@
+2013-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [section-list]): Move Summary section title
+	to the top of the menu.
+
 2013-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window): Use a single TD for the list footer,
