@@ -1,3 +1,8 @@
+2013-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report [results-pager]): Add grey arrow icons, as in
+	other lists.
+
 2013-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [errors]): Remove severity column.
@@ -141,7 +146,7 @@
 2013-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (shy-long-rest, shy-long-words): New templates.
-	(report [ssl_certs]): Full long words with soft hyphens, instead of
+	(report [ssl_certs]): Fill long words with soft hyphens, instead of
 	truncating at a length, because the differences in character sizes
 	within the font makes the displayed length vary wildly.
 
