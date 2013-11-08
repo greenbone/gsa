@@ -1,3 +1,8 @@
+2013-11-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/help.xsl: Update documentation for users Host Access as it
+	now supports the full syntax supported by Targets.
+
 2013-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [results-pager]): Add vertical align to all

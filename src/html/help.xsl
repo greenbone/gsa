@@ -2636,15 +2636,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        Note on <b>Host Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
-       contain a list of comma-separated IPs.
-       The CIDR notation (e.g. <tt>192.168.10.0/24</tt>) can be used.
+       contain a list of <b>Hosts</b>.
+       <xsl:call-template name="hosts_note"/>
       </p>
       <p>
        Note on <b>Interface Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
        contain a list of comma-separated interface names.
       </p>
       <p>
-       Note on <b>Role</b>s:
+       Note on <b>Roles</b>:
        <ul>
          <li>
            A "User" has enough privileges for everyday use.
