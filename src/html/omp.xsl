@@ -2044,9 +2044,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png" border="0"/>
       </a>
       <xsl:choose>
-        <xsl:when test="count (report/host) = 0 or report/@scap_loaded = 0">
-          <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
-               style="margin-left:3px;"/>
+        <xsl:when test="count (report/host) = 0">
+          <xsl:variable name="desc"
+                        select="'No hosts available for Prognostic Report'"/>
+          <img src="/img/prognosis_inactive.png" border="0"
+               style="margin-left:3px;"
+               title="{$desc}"
+               alt="{$desc}"/>
+        </xsl:when>
+        <xsl:when test="report/@scap_loaded = 0">
+          <xsl:variable name="desc"
+                        select="'No SCAP data available for Prognostic Report'"/>
+          <img src="/img/prognosis_inactive.png" border="0"
+               style="margin-left:3px;"
+               title="{$desc}"
+               alt="{$desc}"/>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
@@ -22708,8 +22720,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         select="detail[name = 'prognosis']/value"/>
           <xsl:choose>
             <xsl:when test="(count (detail[name = 'App']) = 0) or (string-length ($threat) = 0)">
-              <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
-                   style="margin-left:3px;"/>
+              <xsl:variable name="desc"
+                            select="'No Apps detected for Prognostic Report'"/>
+              <img src="/img/prognosis_inactive.png" border="0"
+                   style="margin-left:3px;"
+                   title="{$desc}"
+                   alt="{$desc}"/>
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
