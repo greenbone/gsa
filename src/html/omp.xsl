@@ -2011,6 +2011,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:call-template>
                   </label>
                 </td>
+                <td class="threat_info_table_h">
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Log']">
+                        <input type="checkbox" name="level_log" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_log" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:call-template name="severity-label">
+                      <xsl:with-param name="level" select="'Log'"/>
+                    </xsl:call-template>
+                  </label>
+                </td>
               </tr>
             </table>
           </div>
@@ -22628,6 +22644,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="level" select="'Low'"/>
         </xsl:call-template>
       </td>
+      <td>
+        <xsl:call-template name="severity-label">
+          <xsl:with-param name="level" select="'Log'"/>
+        </xsl:call-template>
+      </td>
       <td>Last Report</td>
       <td>OS</td>
       <td>Ports</td>
@@ -22658,6 +22679,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
+        </td>
+        <td>
+          <xsl:value-of select="detail[name/text() = 'report/result_count/log']/value"/>
         </td>
         <td>
           <xsl:choose>

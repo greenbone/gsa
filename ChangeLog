@@ -1,3 +1,8 @@
+2013-11-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (assets): Add filter label for log results.
+	(report [assets]): Add log results column.
+
 2013-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets, report [assets]): Add tooltip to greyed out
