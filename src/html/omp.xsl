@@ -20420,8 +20420,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          <img src="/img/help.png"/>
        </a>
        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-          style="margin-left:3px;">
-         <img src="/img/list.png" border="0" alt="Report"/>
+          style="margin-left:3px;" title="Hosts">
+         <img src="/img/list.png" border="0" alt="Hosts"/>
        </a>
       <xsl:choose>
         <xsl:when test="../@scap_loaded = 0">

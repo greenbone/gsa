@@ -1,5 +1,9 @@
 2013-11-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (host): Add tooltip to hosts list icon.
+
+2013-11-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (assets): Add filter label for log results.
 	(report [assets]): Add log results column.
 
