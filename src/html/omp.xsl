@@ -22679,9 +22679,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="$current_host"/>
             <xsl:if test="$hostname">
               <xsl:choose>
-                <xsl:when test="string-length ($hostname) > 20">
+                <xsl:when test="string-length ($hostname) > 15">
                   <xsl:value-of
-                   select="concat(' (', substring ($hostname, 1, 20),'...)')"/>
+                   select="concat(' (', substring ($hostname, 1, 15),'...)')"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of

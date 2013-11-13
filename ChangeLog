@@ -1,3 +1,9 @@
+2013-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (report [assets]): Lower abbreviation limit
+	from 20 to 15 to make width fit better even for names with wide letters.
+	The first 15 chars of a hostname usually is enough to distinguish.
+
 2013-11-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-users-form, user [edit]): Update hosts
