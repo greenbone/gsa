@@ -22662,12 +22662,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="current_host" select="ip"/>
       <tr>
         <td>
+          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+          <xsl:variable name="title">
+            <xsl:choose>
+              <xsl:when test="string-length ($hostname) > 0">
+                <xsl:value-of
+                 select="concat('View details of Host ', ip, ' (', $hostname,')')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat('View details of Host ', ip)"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
-            title="View details of Host {ip}" style="margin-left:3px;">
-            <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+             title="{$title}" style="margin-left:3px;">
             <xsl:value-of select="$current_host"/>
             <xsl:if test="$hostname">
-              <xsl:value-of select="concat(' (', $hostname, ')')"/>
+              <xsl:choose>
+                <xsl:when test="string-length ($hostname) > 20">
+                  <xsl:value-of
+                   select="concat(' (', substring ($hostname, 1, 20),'...)')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of
+                   select="concat(' (', $hostname, ')')"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:if>
           </a>
         </td>

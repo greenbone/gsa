@@ -1,3 +1,8 @@
+2013-11-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [assets]): Abbreviate hostname in IP column
+	when its value is very long. Add hostname to the tooltip.
+
 2013-11-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (host): Add tooltip to hosts list icon.
