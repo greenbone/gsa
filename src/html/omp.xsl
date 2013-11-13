@@ -26300,7 +26300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow:
+                Deny all and allow:
               </label>
               <label>
                 <xsl:choose>
@@ -26311,7 +26311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny:
+                Allow all and deny:
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
@@ -26342,7 +26342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow:
+                Deny all and allow:
               </label>
               <label>
                 <xsl:choose>
@@ -26353,7 +26353,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny:
+                Allow all and deny:
               </label>
               <br/>
               <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
@@ -26969,7 +26969,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow:
+                Deny all and allow:
               </label>
               <label>
                 <xsl:choose>
@@ -26980,7 +26980,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny:
+                Allow all and deny:
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
@@ -27011,7 +27011,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow:
+                Deny all and allow:
               </label>
               <label>
                 <xsl:choose>
@@ -27022,7 +27022,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny:
+                Allow all and deny:
               </label>
               <br/>
               <input type="text" name="access_ifaces" value="{ifaces}" size="30"

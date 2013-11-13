@@ -2635,12 +2635,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        The list of users will be updated.
       </p>
       <p>
-       Note on <b>Host Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
+       Note on <b>Host Access</b>: If "Deny all and allow:" or "Allow all and deny:" is chosen, the text field should
        contain a list of <b>Hosts</b>.
        <xsl:call-template name="hosts_note"/>
       </p>
       <p>
-       Note on <b>Interface Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
+       Note on <b>Interface Access</b>: If "Deny all and allow:" or "Allow all and deny:" is chosen, the text field should
        contain a list of comma-separated interface names.
       </p>
       <p>
@@ -2696,15 +2696,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Host access</td>
           <td>yes</td>
           <td>---</td>
-          <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
-          <td>"Allow all", "Allow:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
+          <td>"Allow all", or either "Allow all and deny:" or "Deny all and allow:" with additional entry</td>
+          <td>"Allow all", "Allow all and deny:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
         </tr>
         <tr class="even">
           <td>Interface access</td>
           <td>yes</td>
           <td>---</td>
-          <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
-          <td>"Allow all", "Allow:" and "<tt>eth0, eth2, eth3</tt>"</td>
+          <td>"Allow all", or either "Allow all and deny:" or "Deny all and allow:" with additional entry</td>
+          <td>"Allow all", "Allow all and deny:" and "<tt>eth0, eth2, eth3</tt>"</td>
         </tr>
       </table>
       <p>
