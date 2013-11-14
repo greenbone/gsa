@@ -1,5 +1,13 @@
 2013-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/last_inactive.png,
+	src/html/img/first_inactive.png,
+	src/html/img/previous_inactive.png,
+	src/html/img/next_inactive.png: Updated placeholders with
+	greyed out icons produced in the same way as the others.
+
+2013-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/omp.xsl (report [assets]): Lower abbreviation limit
 	from 20 to 15 to make width fit better even for names with wide letters.
 	The first 15 chars of a hostname usually is enough to distinguish.
