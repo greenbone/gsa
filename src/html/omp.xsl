@@ -6246,7 +6246,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-edit-agent-form"/>
 </xsl:template>
 
-<!--     CREATE_AGENT_RESPONSE -->
+<!--     RESPONSES -->
 
 <xsl:template match="create_agent_response">
   <xsl:call-template name="command_result_dialog">
@@ -6259,8 +6259,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
-
-<!--     DELETE_AGENT_RESPONSE -->
 
 <xsl:template match="delete_agent_response">
   <xsl:call-template name="command_result_dialog">
@@ -6276,11 +6274,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!--     MODIFY_AGENT_RESPONSE -->
-
 <xsl:template match="modify_agent_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Agent</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="verify_agent_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Verify Agent</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -6424,6 +6432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
+  <xsl:apply-templates select="verify_agent_response"/>
   <xsl:apply-templates select="get_agents_response/agent" mode="details"/>
 </xsl:template>
 
@@ -18622,7 +18631,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="165">Name</td>
             <td>
               <select name="permission">
-                <xsl:for-each select="/envelope/capabilities/help_response/schema/command">
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
                 </xsl:for-each>
               </select>
@@ -18680,7 +18689,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Permission"/>
+              <input type="submit" name="submit" value="Create Permission"/>
             </td>
           </tr>
         </table>
@@ -18982,7 +18991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="name">
                   <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
                 </xsl:variable>
-                <xsl:for-each select="/envelope/capabilities/help_response/schema/command">
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:choose>
                     <xsl:when test="gsa:lower-case (name) = $name">
                       <option value="{$name}" selected="1"><xsl:value-of select="$name"/></option>

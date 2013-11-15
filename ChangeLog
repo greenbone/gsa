@@ -1,3 +1,11 @@
+2013-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (verify_agent_response): New template.
+	(get_agent): Match verify response.
+	(html-create-permission-form): Exclude GET_VERSION from dropdown.  Use
+	Create instead of Save in button text.
+	(html-edit-permission-form): Exclude GET_VERSION from dropdown.
+
 2013-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/last_inactive.png,
