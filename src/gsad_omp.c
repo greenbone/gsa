@@ -1062,7 +1062,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                          " permission=any sort-reverse=date";
             }
           else if (strcmp (type, "task"))
-            filter = "rows=-2 permission=any";
+            filter = "rows=-2 permission=any owner=any";
           else
             filter = "apply_overrides=1 rows=-2 permission=any owner=any";
           if (filt_id && strcmp (filt_id, ""))
