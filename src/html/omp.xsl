@@ -1923,6 +1923,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="image"
                  name="Update"
                  src="/img/refresh.png"
+                 title="Update"
                  alt="Update" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
@@ -22715,7 +22716,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="start/text() != ''">
-              <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}">
+              <xsl:variable name="report_id" select="detail[name = 'report/@id' and source/name = 'openvasmd']/value"/>
+              <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}"
+                 title="View Report {$report_id}">
                 <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
               </a>
             </xsl:when>
