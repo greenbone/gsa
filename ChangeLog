@@ -1,3 +1,16 @@
+2013-11-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Don't validate value 2 for hosts_allow
+	and ifaces_allow.
+
+	* src/gsad_omp.c (create_user_omp, save_user_omp): Remove special case
+	handling of value 2 for hosts_allow and ifaces allow. Refactor code.
+
+	* src/html/omp.xsl (html-create-user-form): Remove Allow All choice for
+	interfaces and hosts access. Adjust default choices.
+	(user): Remove output case for Allow All hosts and interfaces access.
+	(user [edit]): Remove Allow All choice.
+
 2013-11-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Add owner=any to default filter.

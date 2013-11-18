@@ -17793,22 +17793,11 @@ create_user_omp (credentials_t * credentials, params_t *params)
   g_string_append (string, role_elements->str);
   g_string_free (role_elements, TRUE);
 
-  if (strcmp (hosts_allow, "2") && strlen (hosts))
-    {
-      buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
-                                     hosts_allow,
-                                     hosts);
-      g_string_append (string, buf);
-      g_free (buf);
-    }
-  if (strcmp (ifaces_allow, "2") && strlen (ifaces))
-    {
-      buf = g_markup_printf_escaped ("<ifaces allow=\"%s\">%s</ifaces>",
-                                     ifaces_allow,
-                                     ifaces);
-      g_string_append (string, buf);
-      g_free (buf);
-    }
+  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>"
+                                 "<ifaces allow=\"%s\">%s</ifaces>",
+                                 hosts_allow, hosts, ifaces_allow, ifaces);
+  g_string_append (string, buf);
+  g_free (buf);
   if ((enable_ldap_connect) && (strcmp (enable_ldap_connect, "1") == 0))
     {
       g_string_append (string,
@@ -18127,19 +18116,9 @@ save_user_omp (credentials_t * credentials, params_t *params,
   g_string_append (command, buf);
   g_free (buf);
 
-  if (strcmp (hosts_allow, "2") && strlen (hosts))
-    buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
-                                   hosts_allow, hosts);
-  else
-    buf = g_strdup ("<hosts allow=\"0\"></hosts>");
-  g_string_append (command, buf);
-  g_free (buf);
-
-  if (strcmp (ifaces_allow, "2") && strlen (ifaces))
-    buf = g_markup_printf_escaped ("<ifaces allow=\"%s\">%s</ifaces>",
-                                   ifaces_allow, ifaces);
-  else
-    buf = g_strdup ("<ifaces allow=\"0\"></ifaces>");
+  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>"
+                                 "<ifaces allow=\"%s\">%s</ifaces>",
+                                 hosts_allow, hosts, ifaces_allow, ifaces);
   g_string_append (command, buf);
   g_free (buf);
 

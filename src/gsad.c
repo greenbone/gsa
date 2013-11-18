@@ -825,7 +825,7 @@ init_validator ()
   openvas_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
   openvas_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
   openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]{1,2000}$");
-  openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
+  openvas_validator_add (validator, "hosts_allow", "^0|1$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,2000}$");
   openvas_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
@@ -834,7 +834,7 @@ init_validator ()
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "ifaces_allow", "^0|1|2$");
+  openvas_validator_add (validator, "ifaces_allow", "^0|1$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
