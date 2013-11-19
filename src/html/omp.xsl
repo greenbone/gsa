@@ -18943,7 +18943,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
-    <xsl:with-param name="new-icon" select="/envelope/role = 'Admin'"/>
+    <xsl:with-param name="new-icon" select="boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'create_permission'] and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_users']) and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_roles']) and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_groups']))"/>
   </xsl:call-template>
 </xsl:template>
 

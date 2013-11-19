@@ -1,3 +1,8 @@
+2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-permissions-table): Make the new icon depend on
+	capabilities, instead of on the role.
+
 2013-11-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (main): Add --gnutls-priorities option with NORMAL as
