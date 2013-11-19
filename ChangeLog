@@ -1,5 +1,12 @@
 2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:join-capital, gsa:type-name): New functions.
+	(get_trash): Generate Contents from node set, so that the row style can
+	be calculated from the position, because some rows will be missing for
+	some users.  Move the Credentials section up into alphabetical order.
+
+2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_task): Add extra_xml arg.  Update all callers.
 	(create_report_omp, create_task_omp): Pass response to new_task for
 	error dialog.

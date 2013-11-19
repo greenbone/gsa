@@ -365,6 +365,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
 </func:function>
 
+<func:function name="gsa:join-capital">
+  <xsl:param name="nodes"/>
+  <func:result>
+    <xsl:for-each select="$nodes">
+      <xsl:value-of select="gsa:capitalise (text ())"/>
+      <xsl:if test="position() != last()">
+        <xsl:text> </xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:type-name">
+  <xsl:param name="type"/>
+  <func:result select="gsa:join-capital (str:split ($type, '_'))"/>
+</func:function>
+
 <func:function name="gsa:alert-in-trash">
   <xsl:for-each select="alert">
     <xsl:if test="trash/text() != '0'">
@@ -25837,102 +25854,110 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Type</td>
           <td>Items</td>
         </tr>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
-          <tr class="even">
-            <td><a href="#agents">Agents</a></td>
-            <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
+        <xsl:variable name="items">
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+            <item>
+              <type>agent</type>
+              <count><xsl:value-of select="count(get_agents_response/agent)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+            <item>
+              <type>alert</type>
+              <count><xsl:value-of select="count(get_alerts_response/alert)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+            <item>
+              <type>config</type>
+              <count><xsl:value-of select="count(get_configs_response/config)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+            <item>
+              <type>credential</type>
+              <count><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+            <item>
+              <type>filter</type>
+              <count><xsl:value-of select="count(get_filters_response/filter)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
+            <item>
+              <type>group</type>
+              <count><xsl:value-of select="count(get_groups_response/group)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+            <item>
+              <type>note</type>
+              <count><xsl:value-of select="count(get_notes_response/note)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
+            <item>
+              <type>override</type>
+              <count><xsl:value-of select="count(get_overrides_response/override)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+            <item>
+              <type>permission</type>
+              <count><xsl:value-of select="count(get_permissions_response/permission)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+            <item>
+              <type>port_list</type>
+              <count><xsl:value-of select="count(get_port_lists_response/port_list)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+            <item>
+              <type>report_format</type>
+              <count><xsl:value-of select="count(get_report_formats_response/report_format)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+            <item>
+              <type>schedule</type>
+              <count><xsl:value-of select="count(get_schedules_response/schedule)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+            <item>
+              <type>slave</type>
+              <count><xsl:value-of select="count(get_slaves_response/slave)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+            <item>
+              <type>tag</type>
+              <count><xsl:value-of select="count(get_tags_response/tag)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+            <item>
+              <type>target</type>
+              <count><xsl:value-of select="count(get_targets_response/target)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+            <item>
+              <type>task</type>
+              <count><xsl:value-of select="count(get_tasks_response/task)"/></count>
+            </item>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:for-each select="exslt:node-set ($items)/item">
+          <tr class="{gsa:table-row-class(position())}">
+            <td><a href="#{type}s"><xsl:value-of select="gsa:type-name (type)"/>s</a></td>
+            <td><xsl:value-of select="count"/></td>
           </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
-          <tr class="odd">
-            <td><a href="#alerts">Alerts</a></td>
-            <td><xsl:value-of select="count(get_alerts_response/alert)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-          <tr class="even">
-            <td><a href="#configs">Scan Configs</a></td>
-            <td><xsl:value-of select="count(get_configs_response/config)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
-          <tr class="odd">
-            <td><a href="#credentials">Credentials</a></td>
-            <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
-          <tr class="even">
-            <td><a href="#filters">Filters</a></td>
-            <td><xsl:value-of select="count(get_filters_response/filter)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
-          <tr class="odd">
-            <td><a href="#groups">Groups</a></td>
-            <td><xsl:value-of select="count(get_groups_response/group)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
-          <tr class="even">
-            <td><a href="#notes">Notes</a></td>
-            <td><xsl:value-of select="count(get_notes_response/note)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
-          <tr class="odd">
-            <td><a href="#overrides">Overrides</a></td>
-            <td><xsl:value-of select="count(get_overrides_response/override)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
-          <tr class="even">
-            <td><a href="#permissions">Permissions</a></td>
-            <td><xsl:value-of select="count(get_permissions_response/permission)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
-          <tr class="odd">
-            <td><a href="#port_lists">Port Lists</a></td>
-            <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-          <tr class="even">
-            <td><a href="#report_formats">Report Formats</a></td>
-            <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-          <tr class="odd">
-            <td><a href="#schedules">Schedules</a></td>
-            <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-          <tr class="even">
-            <td><a href="#slaves">Slaves</a></td>
-            <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
-          <tr class="odd">
-            <td><a href="#tags">Tags</a></td>
-            <td><xsl:value-of select="count(get_tags_response/tag)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-          <tr class="even">
-            <td><a href="#targets">Targets</a></td>
-            <td><xsl:value-of select="count(get_targets_response/target)"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-          <tr class="odd">
-            <td><a href="#the_tasks">Tasks</a></td>
-            <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
-          </tr>
-        </xsl:if>
+        </xsl:for-each>
       </table>
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
@@ -25962,6 +25987,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:for-each>
       </xsl:if>
 
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+        <a name="credentials"></a>
+        <h1>Credentials</h1>
+        <!-- The for-each makes the get_lsc_credentials_response the current node. -->
+        <xsl:for-each select="get_lsc_credentials_response">
+          <xsl:call-template name="html-lsc-credentials-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
         <a name="filters"></a>
         <h1>Filters</h1>
@@ -25977,15 +26011,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_groups_response the current node. -->
         <xsl:for-each select="get_groups_response">
           <xsl:call-template name="html-groups-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
-
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
-        <a name="credentials"></a>
-        <h1>Credentials</h1>
-        <!-- The for-each makes the get_lsc_credentials_response the current node. -->
-        <xsl:for-each select="get_lsc_credentials_response">
-          <xsl:call-template name="html-lsc-credentials-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 
