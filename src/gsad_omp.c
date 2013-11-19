@@ -1828,11 +1828,13 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  message      If not NULL, display message.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_task (credentials_t * credentials, const char *message, params_t *params)
+new_task (credentials_t * credentials, const char *message, params_t *params,
+          const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -2050,6 +2052,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
         }
     }
 
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   if (message)
     g_string_append_printf (xml, GSAD_MESSAGE_INVALID, message, "Create Task");
   g_string_append_printf (xml,
@@ -2076,7 +2080,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
 char *
 new_task_omp (credentials_t * credentials, params_t *params)
 {
-  return new_task (credentials, NULL, params);
+  return new_task (credentials, NULL, params, NULL);
 }
 
 /**
@@ -2104,7 +2108,7 @@ create_report_omp (credentials_t * credentials, params_t *params)
   if (((task_id == NULL) && (name == NULL))
       || ((task_id == NULL) && (comment == NULL))
       || (xml_file == NULL))
-    return new_task (credentials, "Invalid parameter", params);
+    return new_task (credentials, "Invalid parameter", params, NULL);
 
   xml_file_array = g_strsplit (xml_file, "%", -1);
   if (xml_file_array != NULL && xml_file_array[0] != NULL)
@@ -2174,17 +2178,18 @@ create_report_omp (credentials_t * credentials, params_t *params)
         html = get_tasks (credentials, params, response);
     }
   else
-    html = new_task (credentials, NULL, params);
+    html = new_task (credentials, NULL, params, response);
   free_entity (entity);
   g_free (response);
   return html;
 }
 
 #define CHECK(name)                                                        \
-  if (name == NULL)                                                       \
+  if (name == NULL)                                                        \
     return new_task (credentials,                                          \
                      "Given " G_STRINGIFY (name) " was invalid",           \
-                     params);
+                     params,                                               \
+                     NULL)
 
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
@@ -2429,7 +2434,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
         html = get_tasks (credentials, params, response);
     }
   else
-    html = new_task (credentials, response, params);
+    html = new_task (credentials, NULL, params, response);
   free_entity (entity);
   g_free (response);
   return html;

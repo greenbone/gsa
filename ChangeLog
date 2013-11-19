@@ -1,5 +1,16 @@
 2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_task): Add extra_xml arg.  Update all callers.
+	(create_report_omp, create_task_omp): Pass response to new_task for
+	error dialog.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply indicator on New Task page.
+
+	* src/html/omp.xsl (new_task): Apply create_task_response for error
+	dialog.
+
+2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-permissions-table): Make the new icon depend on
 	capabilities, instead of on the role.
 

@@ -4012,6 +4012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="new_task">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_task_response"/>
 
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
