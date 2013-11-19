@@ -1,3 +1,11 @@
+2013-11-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (main): Add --gnutls-priorities option with NORMAL as
+	default value. Add MHD_OPTION_HTTPS_PRIORITIES to MHD_start_daemon calls
+	accordingly.
+
+	* doc/gsad.8: Add documentation for gnutls-priorities cli option.
+
 2013-11-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Don't validate value 2 for hosts_allow
