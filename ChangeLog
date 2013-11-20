@@ -1,3 +1,15 @@
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Display icons in generic templates according to permissions.
+
+	* src/html/omp.xsl (gsa:may, gsa:may-op): New functions.
+	(list-window-line-icons, task-icons): Add gsa:may based permission
+	checks.
+	(task [details]): Remove observed variable because it is only used once
+	and gsa:may should be used for the permissions instead.
+	(list-window): Use gsa:may-op for new-icon flag.
+	(html-permissions-table): Use gsa:may-op.
+
 2013-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:join-capital, gsa:type-name): New functions.

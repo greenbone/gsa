@@ -68,6 +68,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN XPATH FUNCTIONS -->
 
+<func:function name="gsa:may">
+  <xsl:param name="name"/>
+  <xsl:param name="permissions" select="permissions"/>
+  <func:result select="boolean ($permissions/permission[name='Everything']) or boolean ($permissions/permission[name=$name])"/>
+</func:function>
+
+<func:function name="gsa:may-op">
+  <xsl:param name="name"/>
+  <func:result select="boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = gsa:lower-case ($name)])"/>
+</func:function>
+
 <func:function name="gsa:build-levels">
   <xsl:param name="filters"></xsl:param>
   <func:result>
@@ -1056,13 +1067,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$notrash">
     </xsl:when>
-    <xsl:when test="writable='0' or in_use!='0'">
-      <img src="/img/trashcan_inactive.png"
-           border="0"
-           alt="To Trashcan"
-           style="margin-left:3px;"/>
-    </xsl:when>
-    <xsl:otherwise>
+    <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
       <xsl:call-template name="trashcan-icon">
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="id" select="@id"/>
@@ -1071,6 +1076,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         </xsl:with-param>
       </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/trashcan_inactive.png"
+           border="0"
+           alt="To Trashcan"
+           style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
@@ -1078,16 +1089,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
-        <xsl:when test="writable='0'">
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="Edit {$cap-type}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
@@ -2838,9 +2849,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
-  <xsl:param name="observed" select="owner/name!=/envelope/login/text()"/>
   <xsl:choose>
-    <xsl:when test="$observed or target/@id=''">
+    <xsl:when test="gsa:may ('start_task') = 0 or target/@id = ''">
       <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
@@ -2878,7 +2888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
-    <xsl:when test="$observed or target/@id=''">
+    <xsl:when test="gsa:may ('resume_task') = 0 or target/@id = ''">
       <img src="/img/resume_inactive.png" border="0" alt="Resume"
          style="margin-left:3px;"/>
     </xsl:when>
@@ -2918,7 +2928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
-    <xsl:when test="$observed or target/@id=''">
+    <xsl:when test="gsa:may ('stop_task') = 0 or target/@id=''">
       <img src="/img/stop_inactive.png" border="0" alt="Stop"
          style="margin-left:3px;"/>
     </xsl:when>
@@ -2961,7 +2971,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="task" mode="details">
   <xsl:variable name="apply-overrides" select="../apply_overrides"/>
-  <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -3145,7 +3154,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <xsl:choose>
-          <xsl:when test="$observed">
+          <xsl:when test="owner/name!=/envelope/login/text()">
             <tr>
               <td><b>Owner:</b></td>
               <td>
@@ -3483,7 +3492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="full-count"/>
   <xsl:param name="columns"/>
   <xsl:param name="icon-count" select="8"/>
-  <xsl:param name="new-icon" select="true ()"/>
+  <xsl:param name="new-icon" select="gsa:may-op (concat ('create_', $type))"/>
   <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="extra_params_string">
@@ -18961,7 +18970,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
-    <xsl:with-param name="new-icon" select="boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'create_permission'] and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_users']) and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_roles']) and boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = 'get_groups']))"/>
+    <xsl:with-param name="new-icon" select="gsa:may-op ('create_permission') and gsa:may-op ('get_users') and gsa:may-op ('get_roles') and gsa:may-op ('get_groups')"/>
   </xsl:call-template>
 </xsl:template>
 
