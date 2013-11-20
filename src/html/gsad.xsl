@@ -4,7 +4,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:func = "http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
-    extension-element-prefixes="func gsa">
+    xmlns:exslt="http://exslt.org/common"
+    extension-element-prefixes="func exslt gsa">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -1400,20 +1401,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </a>
      <ul>
       <li class="pointy"></li>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+      <xsl:if test="gsa:may-op ('GET_TASKS')">
         <li><a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Tasks')"/>
             </a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORTS']">
+      <xsl:if test="gsa:may-op ('GET_REPORTS')">
         <li><a href="/omp?cmd=get_reports&amp;token={/envelope/token}">Reports</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+      <xsl:if test="gsa:may-op ('GET_NOTES')">
         <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt permission=any&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Notes')"/>
             </a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
+      <xsl:if test="gsa:may-op ('GET_OVERRIDES')">
         <li class="last"><a href="/omp?cmd=get_overrides&amp;filter=sort=nvt permission=any&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Overrides')"/>
             </a></li>
@@ -1452,7 +1453,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </div>
      </a>
      <ul>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
+      <xsl:if test="gsa:may-op ('GET_INFO')">
        <li class="pointy"></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">NVTs</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">CVEs</a></li>
@@ -1478,42 +1479,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </a>
      <ul>
       <li class="pointy"></li>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+      <xsl:if test="gsa:may-op ('GET_TARGETS')">
         <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">
               <xsl:value-of select="gsa:i18n('Targets')"/>
             </a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+      <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
         <li class="indent"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+      <xsl:if test="gsa:may-op ('GET_LSC_CREDENTIALS')">
         <li class="indent"><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+      <xsl:if test="gsa:may-op ('GET_CONFIGS')">
         <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+      <xsl:if test="gsa:may-op ('GET_ALERTS')">
         <li class="section_start"><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+      <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
         <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+      <xsl:if test="gsa:may-op ('GET_REPORT_FORMATS')">
         <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+      <xsl:if test="gsa:may-op ('GET_SLAVES')">
         <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+      <xsl:if test="gsa:may-op ('GET_AGENTS')">
         <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+      <xsl:if test="gsa:may-op ('GET_FILTERS')">
         <li class="section_start"><a href="/omp?cmd=get_filters&amp;token={/envelope/token}">Filters</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+      <xsl:if test="gsa:may-op ('GET_TAGS')">
         <li><a href="/omp?cmd=get_tags&amp;token={/envelope/token}">Tags</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+      <xsl:if test="gsa:may-op ('GET_PERMISSIONS')">
         <li class="last"><a href="/omp?cmd=get_permissions&amp;token={/envelope/token}">Permissions</a></li>
       </xsl:if>
      </ul>
@@ -1534,37 +1535,86 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SETTINGS']">
+      <xsl:if test="gsa:may-op ('GET_SETTINGS')">
         <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SYSTEM_REPORTS']">
+      <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
         <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
       </xsl:if>
       <li class="last"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">CVSS Calculator</a></li>
      </ul>
     </li>
     <li>
-     <a class="top_button"
-        href="/omp?cmd=get_users&amp;token={/envelope/token}">
-       Administration
-       <div class="first_button_overlay">
-         <ul class="first_button_overlay">
-           <li class="pointy"></li>
-           <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Users')"/>
-           </li>
-         </ul>
-       </div>
-     </a>
-     <ul>
-      <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
-      <li><a href="/omp?cmd=get_groups&amp;token={/envelope/token}">Groups</a></li>
-      <li><a href="/omp?cmd=get_roles&amp;token={/envelope/token}">Roles</a></li>
-      <li><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
-      <li><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
-      <li class="last"><a href="/omp?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>
-     </ul>
+      <xsl:variable name="items">
+        <xsl:if test="gsa:may-op ('GET_USERS')">
+          <item>
+            <page>get_users</page>
+			<name>Users</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_GROUPS')">
+          <item>
+            <page>get_groups</page>
+			<name>Groups</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_ROLES')">
+          <item>
+            <page>get_roles</page>
+			<name>Roles</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('DESCRIBE_FEED')">
+          <item>
+            <page>get_feed</page>
+			<name>NVT Feed</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('DESCRIBE_SCAP')">
+          <item>
+            <page>get_scap</page>
+			<name>SCAP Feed</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('DESCRIBE_CERT')">
+          <item>
+            <page>get_cert</page>
+			<name>CERT Feed</name>
+          </item>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
+          <a class="top_button"
+             href="/omp?cmd=get_users&amp;token={/envelope/token}">
+            Administration
+            <xsl:if test="count (exslt:node-set ($items)/item) &gt; 0">
+              <div class="first_button_overlay">
+                <ul class="first_button_overlay">
+                  <li class="pointy"></li>
+                  <li class="first_button_overlay">
+                    <xsl:value-of select="gsa:i18n (exslt:node-set ($items)/item/name)"/>
+                  </li>
+                </ul>
+              </div>
+            </xsl:if>
+          </a>
+          <ul>
+            <li class="pointy"></li>
+            <xsl:for-each select="exslt:node-set ($items)/item">
+              <xsl:choose>
+                <xsl:when test="position() = last()">
+                  <li class="last"><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                </xsl:when>
+                <xsl:otherwise>
+                  <li><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+            <br/>
+          </ul>
+        </xsl:when>
+      </xsl:choose>
     </li>
     <li class="last_button">
      <a class="top_button"
