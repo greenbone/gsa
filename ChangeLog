@@ -1,5 +1,12 @@
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Generate Configuration menu
+	from node set, so that the last column is always handled correctly,
+	skipping the menu entirely if the menu would be empty.  Do i18n on
+	Administration menu items.
+
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Use gsa:may-op to do
 	capability check.  Generate Administration menu from node set, so that
 	the last column is always handled correctly, skipping the menu entirely

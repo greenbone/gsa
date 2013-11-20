@@ -1465,59 +1465,123 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </ul>
     </li>
     <li>
-     <a class="top_button"
-        href="/omp?cmd=get_targets&amp;token={/envelope/token}">
-       Configuration
-       <div class="first_button_overlay">
-         <ul class="first_button_overlay">
-           <li class="pointy"></li>
-           <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Targets')"/>
-           </li>
-         </ul>
-       </div>
-     </a>
-     <ul>
-      <li class="pointy"></li>
-      <xsl:if test="gsa:may-op ('GET_TARGETS')">
-        <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">
-              <xsl:value-of select="gsa:i18n('Targets')"/>
-            </a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
-        <li class="indent"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_LSC_CREDENTIALS')">
-        <li class="indent"><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_CONFIGS')">
-        <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_ALERTS')">
-        <li class="section_start"><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
-        <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_REPORT_FORMATS')">
-        <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_SLAVES')">
-        <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_AGENTS')">
-        <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_FILTERS')">
-        <li class="section_start"><a href="/omp?cmd=get_filters&amp;token={/envelope/token}">Filters</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_TAGS')">
-        <li><a href="/omp?cmd=get_tags&amp;token={/envelope/token}">Tags</a></li>
-      </xsl:if>
-      <xsl:if test="gsa:may-op ('GET_PERMISSIONS')">
-        <li class="last"><a href="/omp?cmd=get_permissions&amp;token={/envelope/token}">Permissions</a></li>
-      </xsl:if>
-     </ul>
+      <xsl:variable name="items">
+        <xsl:if test="gsa:may-op ('GET_TARGETS')">
+          <item>
+            <page>get_targets</page>
+			<name>Targets</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
+          <item>
+            <page>get_port_lists</page>
+			<name>Port Lists</name>
+            <class>indent</class>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_LSC_CREDENTIALS')">
+          <item>
+            <page>get_lsc_credentials</page>
+			<name>Credentials</name>
+            <class>indent</class>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_CONFIGS')">
+          <item>
+            <page>get_configs</page>
+			<name>Scan Configs</name>
+          </item>
+        </xsl:if>
+        <divider/>
+        <xsl:if test="gsa:may-op ('GET_ALERTS')">
+          <item>
+            <page>get_alerts</page>
+			<name>Alerts</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
+          <item>
+            <page>get_schedules</page>
+			<name>Schedules</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_REPORT_FORMATS')">
+          <item>
+            <page>get_report_formats</page>
+			<name>Report Formats</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_SLAVES')">
+          <item>
+            <page>get_slaves</page>
+			<name>Slaves</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_AGENTS')">
+          <item>
+            <page>get_agents</page>
+			<name>Agents</name>
+          </item>
+        </xsl:if>
+        <divider/>
+        <xsl:if test="gsa:may-op ('GET_FILTERS')">
+          <item>
+            <page>get_filters</page>
+			<name>Filters</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_TAGS')">
+          <item>
+            <page>get_tags</page>
+			<name>Tags</name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_PERMISSIONS')">
+          <item>
+            <page>get_permissions</page>
+			<name>Permissions</name>
+          </item>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
+          <a class="top_button"
+             href="/omp?cmd=get_targets&amp;token={/envelope/token}">
+            Configuration
+            <div class="first_button_overlay">
+              <ul class="first_button_overlay">
+                <li class="pointy"></li>
+                <li class="first_button_overlay">
+                  <xsl:value-of select="gsa:i18n (exslt:node-set ($items)/item/name)"/>
+                </li>
+              </ul>
+            </div>
+          </a>
+          <ul>
+            <li class="pointy"></li>
+            <xsl:for-each select="exslt:node-set ($items)/*">
+              <xsl:if test="name (.) = 'item'">
+                <xsl:variable name="divider">
+                  <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
+                    <xsl:text>section_start</xsl:text>
+                  </xsl:if>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="position() = last()">
+                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:when>
+                  <xsl:when test="(string-length ($divider) &gt; 0) or (string-length (class) &gt; 0)">
+                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <li><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </xsl:for-each>
+          </ul>
+        </xsl:when>
+      </xsl:choose>
     </li>
     <li>
      <a class="top_button"
@@ -1607,7 +1671,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <li class="last"><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
                 </xsl:when>
                 <xsl:otherwise>
-                  <li><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="name"/></a></li>
+                  <li><a href="/omp?cmd={page}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n (name)"/></a></li>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
