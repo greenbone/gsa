@@ -82,7 +82,7 @@ endif (MANDATORY_TOOL_MISSING)
 # TODO: Check for (optional) rats, flawfinder, splint, doxygen.
 
 ## Check for existance of required libraries
-pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.4.2)
+pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.16)
 pkg_check_modules (GTHREAD REQUIRED gthread-2.0)

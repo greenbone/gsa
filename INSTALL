@@ -19,7 +19,7 @@ Prerequisites:
 * glib-2.0 (>= 2.16)
 * libxml
 * libxslt
-* libmicrohttpd (>= 0.4.2)
+* libmicrohttpd (>= 0.9.0)
 * libexslt
 * pkg-config
 * xsltproc
