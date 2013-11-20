@@ -722,7 +722,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="time"/>
   <div style="text-align:left;">
     <div class="logo_l">
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}" title="Greenbone Security Assistant">
+      <a href="/omp?token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>

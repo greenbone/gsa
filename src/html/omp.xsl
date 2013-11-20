@@ -25855,17 +25855,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div style="text-align:right">
-        <form action="" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="empty_trashcan"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
-          <input type="submit"
-                 name="submit"
-                 value="Empty Trashcan"
-                 title="Empty Trashcan"/>
-        </form>
-      </div>
+      <xsl:if test="gsa:may-op ('empty_trashcan')">
+        <div style="text-align:right">
+          <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="empty_trashcan"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="submit"
+                   name="submit"
+                   value="Empty Trashcan"
+                   title="Empty Trashcan"/>
+          </form>
+        </div>
+      </xsl:if>
 
       <h1>Contents</h1>
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -27603,11 +27605,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: My Settings">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
-         title="Edit My Settings"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
-      </a>
+      <xsl:if test="gsa:may-op ('modify_setting')">
+        <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
+           title="Edit My Settings"
+           style="margin-left:3px;">
+          <img src="/img/edit.png"/>
+        </a>
+      </xsl:if>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -27624,243 +27628,245 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Password</td>
             <td>********</td>
           </tr>
-          <tr class="even">
-            <td>Rows Per Page</td>
-            <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
-          </tr>
-          <tr class="odd">
-            <td>Wizard Rows</td>
-            <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
-          </tr>
-          <tr class="even">
-            <td>Severity Class</td>
-            <td>
-              <xsl:call-template name="severity-settings-name">
-                <xsl:with-param name="type"
-                                select="get_settings_response/setting[name='Severity Class']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Dynamic Severity</td>
-            <td>
-              <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
-              <xsl:choose>
-                <xsl:when test="$dynamic_severity = 0">No</xsl:when>
-                <xsl:when test="$dynamic_severity = 1">Yes</xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$dynamic_severity"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Agents Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Agents Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Alerts Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Alerts Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Configs Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Configs Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Credentials Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Credentials Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Filters Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Filters Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Notes Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Notes Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Overrides Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Overrides Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Port Lists Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Port Lists Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Reports Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Reports Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Report Formats Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Report Formats Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Results Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Results Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Roles Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Roles Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Schedules Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Schedules Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Slaves Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Slaves Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Tags Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Tags Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>Targets Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Targets Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Tasks Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Tasks Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>CPE Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='CPE Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>CVE Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='CVE Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>NVT Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='NVT Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>OVAL Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='OVAL Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td>DFN-CERT Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>All SecInfo Filter</td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
+          <xsl:if test="gsa:may-op ('get_settings')">
+            <tr class="even">
+              <td>Rows Per Page</td>
+              <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
+            </tr>
+            <tr class="odd">
+              <td>Wizard Rows</td>
+              <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
+            </tr>
+            <tr class="even">
+              <td>Severity Class</td>
+              <td>
+                <xsl:call-template name="severity-settings-name">
+                  <xsl:with-param name="type"
+                                  select="get_settings_response/setting[name='Severity Class']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Dynamic Severity</td>
+              <td>
+                <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
+                <xsl:choose>
+                  <xsl:when test="$dynamic_severity = 0">No</xsl:when>
+                  <xsl:when test="$dynamic_severity = 1">Yes</xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$dynamic_severity"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Agents Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Agents Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Alerts Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Alerts Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Configs Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Configs Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Credentials Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Credentials Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Filters Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Filters Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Notes Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Notes Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Overrides Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Overrides Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Port Lists Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Reports Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Reports Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Report Formats Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Results Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Results Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Roles Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Roles Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Schedules Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Schedules Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Slaves Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Slaves Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Tags Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Tags Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>Targets Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Targets Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>Tasks Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Tasks Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>CPE Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='CPE Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>CVE Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='CVE Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>NVT Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='NVT Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>OVAL Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='OVAL Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td>DFN-CERT Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>All SecInfo Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+          </xsl:if>
         </table>
       </div>
     </div>

@@ -1,5 +1,15 @@
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Remove cmd from URL so that C code
+	uses default according to user's capabilities.
+
+	* src/html/omp.xsl (get_trash): Only display Empty Trashcan when user
+	can do so.
+	(get_my_settings): Only display edit icon when user can edit.  Hide most
+	settings when GET_SETTINGS has been taken from user.
+
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): If cmd is NULL before validation, then
 	provide a command according to user's capabilities.
 
