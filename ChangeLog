@@ -1,3 +1,10 @@
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Generate Scan Management menu
+	from node set, so that the last column is always handled correctly,
+	skipping the menu entirely if the menu would be empty.  Get token from a
+	variable inside for-each.
+
 2013-11-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Get results filters for prognostic
