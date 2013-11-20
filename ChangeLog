@@ -1,3 +1,11 @@
+2013-11-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Get results filters for prognostic
+	reports.
+
+	* src/html/omp.xsl (report-icons): For prognostic reports add type
+	parameter and replace report_id with host in list view link.
+
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Generate Configuration menu
