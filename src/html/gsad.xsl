@@ -1936,7 +1936,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
               <xsl:when test="string-length(url) = 0">
-                <input type="hidden" name="text" value="/omp?cmd=get_tasks" />
+                <input type="hidden" name="text" value="/omp?r=1" />
               </xsl:when>
               <xsl:otherwise>
                 <input type="hidden" name="text" value="{url}" />

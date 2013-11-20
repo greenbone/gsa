@@ -53,6 +53,8 @@
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
+#define _GNU_SOURCE /* for strcasecmp */
+
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -1907,6 +1909,18 @@ exec_omp_get (struct MHD_Connection *connection,
   cmd =
     (char *) MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
                                           "cmd");
+  if (cmd == NULL)
+    {
+      if (credentials->capabilities
+          && strcasestr (credentials->capabilities, "get_tasks"))
+        cmd = "get_tasks";
+      else if (credentials->capabilities
+               && strcasestr (credentials->capabilities, "get_reports"))
+        cmd = "get_reports";
+      else
+        cmd = "get_my_settings";
+    }
+
   if (openvas_validate (validator, "cmd", cmd))
     cmd = NULL;
 

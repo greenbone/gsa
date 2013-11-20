@@ -1,5 +1,13 @@
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): If cmd is NULL before validation, then
+	provide a command according to user's capabilities.
+
+	* src/html/gsad.xsl (login_page): Remove the cmd param from the default
+	URL, so that exec_omp_get can decide on a default.
+
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Generate Scan Management menu
 	from node set, so that the last column is always handled correctly,
 	skipping the menu entirely if the menu would be empty.  Get token from a
