@@ -1,5 +1,10 @@
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Remove test from around
+	My Settings, because there's always at least the timezone there.
+
+2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Remove cmd from URL so that C code
 	uses default according to user's capabilities.
 

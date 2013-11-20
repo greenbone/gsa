@@ -1630,9 +1630,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
-      <xsl:if test="gsa:may-op ('GET_SETTINGS')">
-        <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
-      </xsl:if>
+      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
       <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
         <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
       </xsl:if>
