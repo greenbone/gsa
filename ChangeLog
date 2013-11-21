@@ -1,3 +1,15 @@
+2013-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* CMakeLists.txt (FILES): Add clone_inactive.png.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply Create Permission indicator
+	on Permissions page.
+
+	* src/html/omp.xsl (list-window-line-icons): Grey out clone according to
+	capabilities.
+
+	* src/html/img/clone_inactive.png: New file.
+
 2013-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Remove test from around

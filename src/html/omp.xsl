@@ -1106,7 +1106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$noclone">
     </xsl:when>
-    <xsl:otherwise>
+    <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <div style="display: inline">
         <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -1121,6 +1121,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="Clone" value="Clone" title="Clone"/>
         </form>
       </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/clone_inactive.png"
+           alt="Clone"
+           value="Clone"
+           title="Clone"
+           style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>

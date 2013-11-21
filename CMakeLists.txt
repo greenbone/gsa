@@ -381,6 +381,7 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/wizard.png
                src/html/img/upload.png
                src/html/img/clone.png
+               src/html/img/clone_inactive.png
                src/html/img/enchantress.png
                src/html/img/next.png
                src/html/img/next_inactive.png
