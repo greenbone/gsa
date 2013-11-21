@@ -1,3 +1,9 @@
+2013-11-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Send parameters host_search_phrase,
+	host_levels, host_first_result, host_max_results to manager for
+	prognostic reports.
+
 2013-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* CMakeLists.txt (FILES): Add clone_inactive.png.

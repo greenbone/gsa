@@ -9279,6 +9279,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
   const char *filt_id, *filter, *apply_filter, *report_section;
+  const char *host_search_phrase, *host_levels;
+  const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter;
 
@@ -9727,6 +9729,58 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (filter == NULL)
     filter = "";
 
+  if (type && (strcmp (type, "prognostic") == 0))
+    {
+      host_search_phrase = params_value (params, "host_search_phrase");
+      if (host_search_phrase == NULL)
+        params_given (params, "host_search_phrase")
+          || (host_search_phrase = "");
+
+      host_levels = params_value (params, "host_levels");
+      if (host_levels == NULL)
+        params_given (params, "host_levels")
+          || (host_levels = "");
+
+      host_first_result = params_value (params, "host_first_result");
+      if (host_first_result == NULL
+          || sscanf (host_first_result, "%u", &first) != 1)
+        host_first_result = "1";
+
+      host_max_results = params_value (params, "host_max_results");
+      if (host_max_results == NULL
+          || sscanf (host_max_results, "%u", &max) != 1)
+        host_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+      if (host_search_phrase == NULL)
+        {
+          openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
+          g_string_free (levels, TRUE);
+          xml = g_string_new ("");
+          g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                                  "Given host search_phrase was invalid",
+                                  "Get Report");
+          return g_string_free (xml, FALSE);
+        }
+
+      ret = openvas_server_sendf_xml (&session,
+                                      " host_search_phrase=\"%s\""
+                                      " host_levels=\"%s\""
+                                      " host_first_result=\"%s\""
+                                      " host_max_results=\"%s\"",
+                                      host_search_phrase,
+                                      host_levels,
+                                      host_first_result,
+                                      host_max_results);
+    }
+  else
+    {
+      host_search_phrase = NULL;
+      host_levels = NULL;
+      host_first_result = NULL;
+      host_max_results = NULL;
+    }
+
   /* Don't apply default filter when applying result filter checkboxes/textboxes
    */
   if (sort_field == NULL && sort_order == NULL)
@@ -9982,44 +10036,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           if (type && (strcmp (type, "prognostic") == 0))
             {
-              const char *host_search_phrase, *host_levels;
-              const char *host_first_result, *host_max_results;
-
               xml = g_string_new ("<get_prognostic_report>");
-
-              host_search_phrase = params_value (params, "host_search_phrase");
-              if (host_search_phrase == NULL)
-                params_given (params, "host_search_phrase")
-                  || (host_search_phrase = "");
-
-              host_levels = params_value (params, "host_levels");
-              if (host_levels == NULL)
-                params_given (params, "host_levels")
-                  || (host_levels = "");
-
-              host_first_result = params_value (params, "host_first_result");
-              if (host_first_result == NULL
-                  || sscanf (host_first_result, "%u", &first) != 1)
-                host_first_result = "1";
-
-              host_max_results = params_value (params, "host_max_results");
-              if (host_max_results == NULL
-                  || sscanf (host_max_results, "%u", &max) != 1)
-                host_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
-
-              if (host_search_phrase == NULL)
-                {
-                  openvas_server_close (socket, session);
-                  g_string_free (commands_xml, TRUE);
-                  g_string_free (levels, TRUE);
-                  g_string_free (xml, TRUE);
-                  xml = g_string_new ("");
-                  g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
-                                          "Given host search_phrase was invalid",
-                                          "Get Report");
-                  return g_string_free (xml, FALSE);
-                }
-
 
               xml_string_append (xml,
                                  "<host_search_phrase>"
