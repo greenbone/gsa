@@ -1,3 +1,9 @@
+2013-11-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 5.0+beta3 release.
+
+	* CHANGES: Updated.
+
 2013-11-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Send parameters host_search_phrase,

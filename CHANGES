@@ -1,3 +1,30 @@
+gsa 5.0+beta3 (2013-11-22)
+
+This is the third beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for Alterable Tasks and Source Interface access
+control. It changes the default result filter to include "low" and "log"
+messages as well and adds support for selecting the cipher suite to be used for
+the HTTPS connection, as well as numerous improvements to the user interface.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Michael Meyer, Matthew Mundell, Timo Pollmeier, Jan-Oliver
+Wagner and Michael Wiegand.
+
+Main changes since 5.0+beta2:
+* Support for Alterable Tasks has been added.
+* Support for setting of the Source Interface has been added.
+* Support for the new "Severity" concept has been added in more places.
+* The default result filter now includes "low" and "log" messages as well.
+* Add support for setting the priorities for cipher suites when using HTTPS.
+* The required minimum libmicrohttpd version has increased to 0.9.0.
+* The interface has been simplified, improved and made more consistent in a
+  number of places.
+* Code cleanup.
+
+
 gsa 5.0+beta2 (2013-09-30)
 
 This is the second beta version of the upcoming 5.0 release of the Greenbone
