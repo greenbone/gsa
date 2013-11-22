@@ -1113,7 +1113,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="cmd" value="clone"/>
           <input type="hidden" name="resource_type" value="{$type}"/>
-          <input type="hidden" name="next" value="{$next}"/>
+          <input type="hidden" name="next" value="get_{$type}"/>
           <input type="hidden" name="id" value="{@id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>

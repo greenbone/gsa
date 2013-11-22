@@ -1,5 +1,10 @@
 2013-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window-line-icons): Go to the details page
+	after cloning, to match the other create operations.
+
+2013-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window-line-icons): Grey the clone icon when
 	the resource is owned by someone else.
 
