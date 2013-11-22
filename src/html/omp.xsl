@@ -19017,6 +19017,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                value="{commands_response/get_permissions_response/permission/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
