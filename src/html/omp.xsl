@@ -27730,6 +27730,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
               </td>
             </tr>
+            <tr class="even">
+              <td>Permissions Filter</td>
+              <td>
+                <xsl:call-template name="get-settings-filter">
+                  <xsl:with-param name="filter"
+                                  select="get_settings_response/setting[name='Permissions Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
             <tr class="odd">
               <td>Port Lists Filter</td>
               <td>
@@ -28043,6 +28052,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'Override'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Overrides Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Permissions Filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'ffb16b28-538c-11e3-b8f9-406186ea4fc5'"/>
+                    <xsl:with-param name="filter-type" select="'Permission'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Permissions Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
