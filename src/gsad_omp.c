@@ -851,6 +851,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                             " %s_id=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
+                            " details=\"1\""
                             " %s/>",
                             type,
                             type,

@@ -1,3 +1,8 @@
+2013-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one): Add details param so that Note/Override
+	Details pages include all details.
+
 2013-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (list-window-line-icons): Go to the details page
