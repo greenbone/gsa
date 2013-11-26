@@ -18787,10 +18787,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="resource/type"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
-         title="Details">
-        <xsl:value-of select="resource/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="resource/trash = '1'">
+          <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
+             title="Details">
+            <xsl:value-of select="resource/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="subject/type"/>
@@ -18844,10 +18851,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="gsa:capitalise (resource/type)"/>
             <xsl:text> </xsl:text>
-            <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
-               title="Details">
-              <xsl:value-of select="resource/name"/>
-            </a>
+            <xsl:choose>
+              <xsl:when test="resource/trash = '1'">
+                <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
+                   title="Details">
+                  <xsl:value-of select="resource/name"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </table>

@@ -1,3 +1,8 @@
+2013-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (permission, permission [details]): Note when the
+	resource is in the trashcan.
+
 2013-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_one): Add details param so that Note/Override
