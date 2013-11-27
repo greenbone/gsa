@@ -1,5 +1,11 @@
 2013-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Remove id="tasks" from all DIVs.  This seems to be
+	a copy and paste propogation.  There is no "tasks" in the css anyway.
+	(get_trash): Correct name of tasks anchor.
+
+2013-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window-line-icons): Enable cloning of global
 	resources.
 

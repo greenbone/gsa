@@ -3607,7 +3607,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
+      <div>
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <xsl:variable name="current" select="."/>
@@ -8012,7 +8012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-filters-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -17020,7 +17020,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-notes-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>NVT</td>
@@ -18228,7 +18228,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-overrides-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>NVT</td>
@@ -18417,7 +18417,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-groups-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -18952,7 +18952,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-permissions-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25391,7 +25391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-roles-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25679,7 +25679,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-agents-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25692,7 +25692,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-configs-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td rowspan="2">Name</td>
@@ -25712,7 +25712,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-alerts-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25728,7 +25728,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-lsc-credentials-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25742,7 +25742,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-port-lists-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25754,7 +25754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-report-formats-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25770,7 +25770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-schedules-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25786,7 +25786,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-slaves-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25801,7 +25801,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-tags-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25816,7 +25816,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-targets-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
@@ -25833,7 +25833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-tasks-trash-table">
-  <div id="tasks">
+  <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td rowspan="2">Task</td>
@@ -26145,7 +26145,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-        <a name="the_tasks"></a>
+        <a name="tasks"></a>
         <h1>Tasks</h1>
         <!-- The for-each makes the get_tasks_response the current node. -->
         <xsl:for-each select="get_tasks_response">
@@ -27132,7 +27132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
     <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
+      <div>
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_auth"/>
@@ -27642,7 +27642,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </div>
     <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
+      <div>
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <td>Name</td>
@@ -27928,7 +27928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
+      <div>
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_my_settings"/>
