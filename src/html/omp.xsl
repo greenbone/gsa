@@ -18788,6 +18788,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="resource/deleted != 0">
+          <b>Orphan</b>
+        </xsl:when>
         <xsl:when test="resource/trash = '1'">
           <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
         </xsl:when>
@@ -18852,6 +18855,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:capitalise (resource/type)"/>
             <xsl:text> </xsl:text>
             <xsl:choose>
+              <xsl:when test="resource/deleted != 0">
+                <b>Orphan</b>
+              </xsl:when>
               <xsl:when test="resource/trash = '1'">
                 <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
               </xsl:when>

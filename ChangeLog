@@ -1,3 +1,8 @@
+2013-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (permission, permission [details]): Mark deleted
+	resources with "Orphan".
+
 2013-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (permission, permission [details]): Note when the
