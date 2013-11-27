@@ -1,5 +1,10 @@
 2013-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (list-window-line-icons): Enable cloning of global
+	resources.
+
+2013-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (permission, permission [details]): Mark deleted
 	resources with "Orphan".
 

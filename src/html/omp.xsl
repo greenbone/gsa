@@ -1106,7 +1106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$noclone">
     </xsl:when>
-    <xsl:when test="gsa:may-op (concat ('create_', $type)) and owner/name = /envelope/login/text()">
+    <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or string-length (owner/name) = 0)">
       <div style="display: inline">
         <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
