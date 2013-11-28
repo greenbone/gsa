@@ -18806,7 +18806,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="subject/type"/>
     </td>
     <td>
-      <xsl:value-of select="subject/name"/>
+      <xsl:choose>
+        <xsl:when test="subject/trash = '1'">
+          <xsl:value-of select="subject/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="subject/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
@@ -18843,10 +18850,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><xsl:value-of select="gsa:capitalise (subject/type)"/>:</td>
           <td>
-            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
-               title="Details">
-              <xsl:value-of select="subject/name"/>
-            </a>
+            <xsl:choose>
+              <xsl:when test="subject/trash = '1'">
+                <xsl:value-of select="subject/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
+                   title="Details">
+                  <xsl:value-of select="subject/name"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
         <tr>
