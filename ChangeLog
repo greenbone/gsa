@@ -1,3 +1,7 @@
+2013-12-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Correct user sort field.
+
 2013-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (permission, permission [details]): Note when subject
