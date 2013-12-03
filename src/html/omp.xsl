@@ -376,6 +376,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="str:replace (gsa:lower-case ($type), ' ', '_')"/>
 </func:function>
 
+<func:function name="gsa:command-type">
+  <xsl:param name="command"/>
+  <xsl:variable name="after"
+                select="substring-after (str:replace (gsa:lower-case ($command), '_', ' '), ' ')"/>
+  <xsl:variable name="type">
+    <xsl:choose>
+      <xsl:when test="substring ($after, string-length ($after)) = 's'">
+        <xsl:value-of select="substring ($after, 1, string-length ($after) - 1)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$after"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$type = 'lsc credential'">
+      <func:result select="'credential'"/>
+    </xsl:when>
+    <xsl:when test="$type = 'config'">
+      <func:result select="'scan config'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="$type"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <func:function name="gsa:join-capital">
   <xsl:param name="nodes"/>
   <func:result>
@@ -498,6 +525,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="string"/>
   <xsl:param name="max" select="44"/>
   <func:result select="count (str:split ($string, ' ')[string-length (.) &gt; $max]) &gt; 0"/>
+</func:function>
+
+<func:function name="gsa:permission-description">
+  <xsl:param name="name"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="name = 'authenticate'">May login</xsl:when>
+      <xsl:when test="name = 'commands'">May run multiple OMP commands in one</xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'create'">May create a new <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'delete'">May delete an existing <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'get'">Has read access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'modify'">Has write access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
+      <xsl:when test="name = 'empty_trashcan'">May empty the trashcan</xsl:when>
+      <xsl:when test="name = 'restore'">May restore items from the trashcan</xsl:when>
+      <xsl:when test="contains (name, '_')">
+        May <xsl:value-of select="substring-before (name, '_')"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
+      <xsl:otherwise><xsl:value-of select="name"/></xsl:otherwise>
+    </xsl:choose>
+  </func:result>
 </func:function>
 
 <!-- BEGIN NAMED TEMPLATES -->
@@ -25400,6 +25448,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="users/text()"/></td>
         </tr>
       </table>
+      <xsl:choose>
+        <xsl:when test="count(../../get_permissions_response/permission) = 0">
+          <h1>Permissions: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Permissions</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Description</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="../../get_permissions_response/permission">
+              <tr class="{gsa:table-row-class(position())}">
+                <td>
+                  <xsl:value-of select="gsa:permission-description (name)"/>
+                </td>
+                <td width="100">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
