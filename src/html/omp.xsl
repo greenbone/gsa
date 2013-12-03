@@ -535,6 +535,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="name = 'commands'">May run multiple OMP commands in one</xsl:when>
       <xsl:when test="substring-before (name, '_') = 'create'">May create a new <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
       <xsl:when test="substring-before (name, '_') = 'delete'">May delete an existing <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
+      <xsl:when test="name = 'get_info'">Has read access to SecInfo</xsl:when>
       <xsl:when test="substring-before (name, '_') = 'get'">Has read access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
       <xsl:when test="substring-before (name, '_') = 'modify'">Has write access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
       <xsl:when test="name = 'empty_trashcan'">May empty the trashcan</xsl:when>
