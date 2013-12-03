@@ -183,6 +183,8 @@ static char *get_user (credentials_t *, params_t *, const char *);
 
 static char *get_users (credentials_t *, params_t *, const char *);
 
+static char *wizard (credentials_t *, params_t *, const char *);
+
 
 /* Helpers. */
 
@@ -742,6 +744,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
+
+  if (strcmp (next, "wizard") == 0)
+    return wizard (credentials, params, response);
 
   return NULL;
 }
@@ -13673,7 +13678,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new note. "
+                             "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_tasks");
@@ -13683,10 +13688,10 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
     {
       html = next_page (credentials, params, response);
       if (html == NULL)
-        html = get_tasks (credentials, params, response);
+        html = wizard (credentials, params, response);
     }
   else
-    html = get_tasks (credentials, params, response);
+    html = wizard (credentials, params, response);
   free_entity (entity);
   g_free (response);
   return html;
@@ -18478,16 +18483,16 @@ save_auth_omp (credentials_t* credentials, params_t *params)
 /* Wizards. */
 
 /**
- * @brief Returns page to create a new task.
+ * @brief Returns a wizard page.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
- * @param[in]  message      If not NULL, display message.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_omp (credentials_t *credentials, params_t *params)
+wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -18512,7 +18517,8 @@ wizard_omp (credentials_t *credentials, params_t *params)
 
   xml = g_string_new ("");
   g_string_append_printf (xml,
-                          "<wizard><%s/>",
+                          "<wizard>%s<%s/>",
+                          extra_xml ? extra_xml : "",
                           params_value (params, "name"));
 
   /* Get the setting. */
@@ -18547,6 +18553,20 @@ wizard_omp (credentials_t *credentials, params_t *params)
   g_string_append_printf (xml, "</wizard>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns a wizard page.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+wizard_omp (credentials_t *credentials, params_t *params)
+{
+  return wizard (credentials, params, NULL);
 }
 
 

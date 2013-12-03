@@ -1318,6 +1318,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_users/gsad_msg"
                              mode="response-indicator"/>
 
+        <!-- Wizards -->
+        <xsl:apply-templates select="wizard/run_wizard_response"
+                             mode="response-indicator"/>
+
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
             document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"JavaScript is active\" title=\"JavaScript is active\"/&gt;");

@@ -112,6 +112,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="hidden" name="next" value="get_tasks"/>
             <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
             <input type="submit" name="submit" value="Start Scan"/>
           </form>

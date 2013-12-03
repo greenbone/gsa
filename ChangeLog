@@ -1,3 +1,18 @@
+2013-12-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (next_page): Add case for wizard.
+	(run_wizard_omp): Fix internal error message. Return to wizard page
+	by default.
+	(wizard_omp): Delegate request to function "wizard".
+	(wizard): New function. Uses body from wizard_omp and includes extra
+	XML like responses.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add run_wizard response indicator
+	on wizard page.
+
+	* src/html/wizard.xsl (quick-first-scan-wizard): Add "next" parameter
+	to explicitly go to get_tasks page.
+
 2013-12-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Correct user sort field.
