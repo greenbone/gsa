@@ -531,7 +531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="resource"/>
   <xsl:variable name="lower" select="gsa:lower-case (name)"/>
-  <xsl:variable name="has-resource" select="string-length ($resource/type) &gt; 0"/>
+  <xsl:variable name="has-resource" select="boolean ($resource) and string-length ($resource/type) &gt; 0"/>
   <func:result>
     <xsl:choose>
       <xsl:when test="$lower = 'authenticate'">may login</xsl:when>
