@@ -1,5 +1,10 @@
 2013-12-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:permission-description): Add cases for
+	permissions on specific resources.  Update callers.
+
+2013-12-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (gsa:permission-description): Use lowercase name
 	param instead of name element.  Prevent leading space after contains
 	test.  Add Everything.

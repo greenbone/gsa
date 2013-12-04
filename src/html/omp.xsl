@@ -529,19 +529,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:permission-description">
   <xsl:param name="name"/>
-  <xsl:variable name="lower" select="gsa:lower-case ($name)"/>
+  <xsl:param name="resource"/>
+  <xsl:variable name="lower" select="gsa:lower-case (name)"/>
+  <xsl:variable name="has-resource" select="string-length ($resource/type) &gt; 0"/>
   <func:result>
     <xsl:choose>
       <xsl:when test="$lower = 'authenticate'">may login</xsl:when>
       <xsl:when test="$lower = 'commands'">may run multiple OMP commands in one</xsl:when>
       <xsl:when test="$lower = 'everything'">has all permissions</xsl:when>
-      <xsl:when test="substring-before ($lower, '_') = 'create'">may create a new <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
-      <xsl:when test="substring-before ($lower, '_') = 'delete'">may delete an existing <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
-      <xsl:when test="$lower = 'get_info'">has read access to SecInfo</xsl:when>
-      <xsl:when test="substring-before ($lower, '_') = 'get'">has read access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
-      <xsl:when test="substring-before ($lower, '_') = 'modify'">has write access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
       <xsl:when test="$lower = 'empty_trashcan'">may empty the trashcan</xsl:when>
       <xsl:when test="$lower = 'restore'">may restore items from the trashcan</xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'create'">may create a new <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
+      <xsl:when test="$lower = 'get_info'">has read access to SecInfo</xsl:when>
+
+      <xsl:when test="$has-resource and substring-before ($lower, '_') = 'delete'">
+        <xsl:text>may delete </xsl:text>
+        <xsl:value-of select="gsa:command-type ($lower)"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$resource/name"/>
+      </xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'delete'">may delete an existing <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
+      <xsl:when test="$has-resource and substring-before ($lower, '_') = 'get'">
+        <xsl:text>has read access to </xsl:text>
+        <xsl:value-of select="gsa:command-type ($lower)"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$resource/name"/>
+      </xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'get'">has read access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
+      <xsl:when test="$has-resource and substring-before ($lower, '_') = 'modify'">
+        <xsl:text>has write access to </xsl:text>
+        <xsl:value-of select="gsa:command-type ($lower)"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$resource/name"/>
+      </xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'modify'">has write access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
+
       <xsl:when test="contains ($lower, '_')">
         <xsl:text>may </xsl:text>
         <xsl:value-of select="substring-before ($lower, '_')"/>
@@ -18904,7 +18926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="gsa:capitalise (subject/type)"/>
             <xsl:text> </xsl:text>
-            <xsl:value-of select="gsa:permission-description (name)"/>
+            <xsl:value-of select="gsa:permission-description (name, resource)"/>
           </td>
         </tr>
         <tr>
@@ -25475,7 +25497,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
               <tr class="{gsa:table-row-class(position())}">
                 <td>
-                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name)))"/>
+                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name), false ()))"/>
                 </td>
                 <td width="100">
                   <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="Details">
@@ -25499,7 +25521,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="../../get_permissions_response/permission">
               <tr class="{gsa:table-row-class(position())}">
                 <td>
-                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (name))"/>
+                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
                 </td>
                 <td width="100">
                   <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="Details">
