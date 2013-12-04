@@ -529,22 +529,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:permission-description">
   <xsl:param name="name"/>
+  <xsl:variable name="lower" select="gsa:lower-case ($name)"/>
   <func:result>
     <xsl:choose>
-      <xsl:when test="name = 'authenticate'">may login</xsl:when>
-      <xsl:when test="name = 'commands'">may run multiple OMP commands in one</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'create'">may create a new <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'delete'">may delete an existing <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
-      <xsl:when test="name = 'get_info'">has read access to SecInfo</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'get'">has read access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'modify'">has write access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
-      <xsl:when test="name = 'empty_trashcan'">may empty the trashcan</xsl:when>
-      <xsl:when test="name = 'restore'">may restore items from the trashcan</xsl:when>
-      <xsl:when test="contains (name, '_')">
-        may <xsl:value-of select="substring-before (name, '_')"/>
+      <xsl:when test="$lower = 'authenticate'">may login</xsl:when>
+      <xsl:when test="$lower = 'commands'">may run multiple OMP commands in one</xsl:when>
+      <xsl:when test="$lower = 'everything'">has all permissions</xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'create'">may create a new <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'delete'">may delete an existing <xsl:value-of select="gsa:command-type ($lower)"/></xsl:when>
+      <xsl:when test="$lower = 'get_info'">has read access to SecInfo</xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'get'">has read access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
+      <xsl:when test="substring-before ($lower, '_') = 'modify'">has write access to <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
+      <xsl:when test="$lower = 'empty_trashcan'">may empty the trashcan</xsl:when>
+      <xsl:when test="$lower = 'restore'">may restore items from the trashcan</xsl:when>
+      <xsl:when test="contains ($lower, '_')">
+        <xsl:text>may </xsl:text>
+        <xsl:value-of select="substring-before ($lower, '_')"/>
         <xsl:text> </xsl:text>
-        <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
-      <xsl:otherwise><xsl:value-of select="name"/></xsl:otherwise>
+        <xsl:value-of select="gsa:command-type ($lower)"/>s</xsl:when>
+      <xsl:otherwise><xsl:value-of select="$lower"/></xsl:otherwise>
     </xsl:choose>
   </func:result>
 </func:function>
@@ -25460,6 +25463,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
           <h1>Permissions: None</h1>
+        </xsl:when>
+        <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
+          <h1>Permissions (Role has Everything)</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <xsl:variable name="id" select="../../get_permissions_response/permission/@id"/>
+            <tr class="gbntablehead2">
+              <td>Description</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
+              <tr class="{gsa:table-row-class(position())}">
+                <td>
+                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name)))"/>
+                </td>
+                <td width="100">
+                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
         </xsl:when>
         <xsl:otherwise>
           <h1>Permissions</h1>
