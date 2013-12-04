@@ -531,17 +531,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <func:result>
     <xsl:choose>
-      <xsl:when test="name = 'authenticate'">May login</xsl:when>
-      <xsl:when test="name = 'commands'">May run multiple OMP commands in one</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'create'">May create a new <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'delete'">May delete an existing <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
-      <xsl:when test="name = 'get_info'">Has read access to SecInfo</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'get'">Has read access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
-      <xsl:when test="substring-before (name, '_') = 'modify'">Has write access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
-      <xsl:when test="name = 'empty_trashcan'">May empty the trashcan</xsl:when>
-      <xsl:when test="name = 'restore'">May restore items from the trashcan</xsl:when>
+      <xsl:when test="name = 'authenticate'">may login</xsl:when>
+      <xsl:when test="name = 'commands'">may run multiple OMP commands in one</xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'create'">may create a new <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'delete'">may delete an existing <xsl:value-of select="gsa:command-type (name)"/></xsl:when>
+      <xsl:when test="name = 'get_info'">has read access to SecInfo</xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'get'">has read access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
+      <xsl:when test="substring-before (name, '_') = 'modify'">has write access to <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
+      <xsl:when test="name = 'empty_trashcan'">may empty the trashcan</xsl:when>
+      <xsl:when test="name = 'restore'">may restore items from the trashcan</xsl:when>
       <xsl:when test="contains (name, '_')">
-        May <xsl:value-of select="substring-before (name, '_')"/>
+        may <xsl:value-of select="substring-before (name, '_')"/>
         <xsl:text> </xsl:text>
         <xsl:value-of select="gsa:command-type (name)"/>s</xsl:when>
       <xsl:otherwise><xsl:value-of select="name"/></xsl:otherwise>
@@ -18897,6 +18897,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
+          <td>Description:</td>
+          <td>
+            <xsl:value-of select="gsa:capitalise (subject/type)"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="gsa:permission-description (name)"/>
+          </td>
+        </tr>
+        <tr>
           <td><xsl:value-of select="gsa:capitalise (subject/type)"/>:</td>
           <td>
             <xsl:choose>
@@ -25463,10 +25471,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="../../get_permissions_response/permission">
               <tr class="{gsa:table-row-class(position())}">
                 <td>
-                  <xsl:value-of select="gsa:permission-description (name)"/>
+                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (name))"/>
                 </td>
                 <td width="100">
-                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"

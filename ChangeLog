@@ -1,3 +1,9 @@
+2013-12-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (gsa:permission-description): Drop leading capital.
+	(permission [details]): Add description field.
+	(role [details]): Capitalise description.  Link to permission.
+
 2013-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:permission-description): Add special case for
