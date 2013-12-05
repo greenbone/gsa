@@ -1,5 +1,9 @@
 2013-12-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (params_mhd_add): Use strlen to determine size of value.
+
+2013-12-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (init_validator): Add wizard_get command.
 	(params_mhd_add): Handle hashtable parameters like event_data:hosts.
 	(exec_omp_get): Add wizard_get command.
