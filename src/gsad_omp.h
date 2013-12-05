@@ -324,6 +324,7 @@ char * save_auth_omp (credentials_t *, params_t *);
 
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);
+char * wizard_get_omp (credentials_t *, params_t *);
 
 char * cvss_calculator (credentials_t *, params_t *);
 

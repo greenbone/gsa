@@ -769,7 +769,8 @@ init_validator ()
                          "|(toggle_tag)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
-                         "|(wizard)$");
+                         "|(wizard)"
+                         "|(wizard_get)$");
 
 
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
@@ -1864,6 +1865,58 @@ static int
 params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value)
 {
+  if ((strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+      || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
+      || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
+      || (strncmp (name, "file:", strlen ("file:")) == 0)
+      || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
+      || (strncmp (name, "password:", strlen ("password:")) == 0)
+      || (strncmp (name, "preference:", strlen ("preference:")) == 0)
+      || (strncmp (name, "select:", strlen ("select:")) == 0)
+      || (strncmp (name, "trend:", strlen ("trend:")) == 0)
+      || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
+      || (strncmp (name, "nvt:", strlen ("nvt:")) == 0)
+      || (strncmp (name, "alert_id_optional:", strlen ("alert_id_optional:"))
+          == 0)
+      || (strncmp (name, "group_id_optional:", strlen ("group_id_optional:"))
+          == 0)
+      || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
+          == 0))
+    {
+      param_t *param;
+      const char *colon;
+      gchar *prefix;
+
+      colon = strchr (name, ':');
+
+      /* Hashtable param, like for radios. */
+      if ((colon - name) == (strlen (name) - 1))
+        {
+          params_append_bin (params, name, value, sizeof (value), 0);
+
+          return MHD_YES;
+        }
+
+      prefix = g_strndup (name, 1 + colon - name);
+      param = params_get (params, prefix);
+
+      if (param == NULL)
+        {
+          param = params_add (params, prefix, "");
+          param->values = params_new ();
+        }
+      else if (param->values == NULL)
+        param->values = params_new ();
+
+      g_free (prefix);
+
+      params_append_bin (param->values, colon + 1, value, sizeof (value), 0);
+
+      return MHD_YES;
+    }
+
+  /* Single value param. */
+
   params_add ((params_t *) params, name, value);
   return MHD_YES;
 }
@@ -2293,6 +2346,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (wizard)
+  ELSE (wizard_get)
 
   else
     return gsad_message (credentials,

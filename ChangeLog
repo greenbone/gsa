@@ -1,3 +1,13 @@
+2013-12-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add wizard_get command.
+	(params_mhd_add): Handle hashtable parameters like event_data:hosts.
+	(exec_omp_get): Add wizard_get command.
+
+	* src/gsad_omp.c (wizard_get, wizard_get_omp): New functions.
+
+	* src/gsad_omp.h (wizard_get_omp): New function prototype.
+
 2013-12-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:permission-description): Check existence before

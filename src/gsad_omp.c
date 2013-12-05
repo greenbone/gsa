@@ -185,6 +185,8 @@ static char *get_users (credentials_t *, params_t *, const char *);
 
 static char *wizard (credentials_t *, params_t *, const char *);
 
+static char *wizard_get (credentials_t *, params_t *, const char *);
+
 
 /* Helpers. */
 
@@ -18616,6 +18618,126 @@ char *
 wizard_omp (credentials_t *credentials, params_t *params)
 {
   return wizard (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns a wizard_get page.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  const char *name;
+  int ret;
+  GString *run;
+  param_t *param;
+  gchar *param_name, *html, *response;
+  params_iterator_t iter;
+  params_t *wizard_params;
+  entity_t entity;
+  gchar *wizard_xml;
+
+  /* The naming is a bit subtle here, because the HTTP request
+   * parameters are called "param"s and so are the OMP wizard
+   * parameters. */
+
+  name = params_value (params, "name");
+  if (name == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while trying to start a wizard. "
+                         "Diagnostics: Required parameter 'name' was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  run = g_string_new ("<run_wizard read_only=\"1\">");
+
+  g_string_append_printf (run,
+                          "<name>%s</name>"
+                          "<params>",
+                          name);
+
+  wizard_params = params_values (params, "event_data:");
+  if (wizard_params)
+    {
+      params_iterator_init (&iter, wizard_params);
+      while (params_iterator_next (&iter, &param_name, &param))
+        xml_string_append (run,
+                           "<param>"
+                           "<name>%s</name>"
+                           "<value>%s</value>"
+                           "</param>",
+                           param_name,
+                           param->value);
+    }
+
+  g_string_append (run, "</params></run_wizard>");
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, run->str);
+  g_string_free (run, TRUE);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while running a wizard. "
+                             "The wizard did not start. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while running a wizard. "
+                             "It is unclear whether the wizard started or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while running a wizard. "
+                             "It is unclear whether the wizard started or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  wizard_xml = g_strdup_printf ("%s %s",
+                                extra_xml ? extra_xml : "",
+                                response);
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, wizard_xml);
+      if (html == NULL)
+        html = wizard (credentials, params, wizard_xml);
+    }
+  else
+    html = wizard (credentials, params, wizard_xml);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+/**
+ * @brief Returns a wizard_get page.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+wizard_get_omp (credentials_t *credentials, params_t *params)
+{
+  return wizard_get (credentials, params, NULL);
 }
 
 
