@@ -975,6 +975,7 @@ init_validator ()
   openvas_validator_alias (validator, "filterbox",          "boolean");
   openvas_validator_alias (validator, "from_file",          "boolean");
   openvas_validator_alias (validator, "force_wizard",       "boolean");
+  openvas_validator_alias (validator, "get_name", "name");
   openvas_validator_alias (validator, "group_id",           "id");
   openvas_validator_alias (validator, "group_id_optional",  "id_optional");
   openvas_validator_alias (validator, "group_id_optional:name",  "number");

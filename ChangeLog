@@ -1,3 +1,11 @@
+2013-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add get_name as alias for name parameter.
+
+	* src/gsad_omp.c (wizard_get): Get wizard name from get_name parameter
+	to avoid conflicts with name in run_wizard_omp. Create response XML
+	directly.
+
 2013-12-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (params_mhd_add): Use strlen to determine size of value.

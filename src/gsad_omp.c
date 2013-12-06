@@ -18636,7 +18636,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
   int ret;
   GString *run;
   param_t *param;
-  gchar *param_name, *html, *response;
+  gchar *param_name, *response;
   params_iterator_t iter;
   params_t *wizard_params;
   entity_t entity;
@@ -18646,12 +18646,12 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
    * parameters are called "param"s and so are the OMP wizard
    * parameters. */
 
-  name = params_value (params, "name");
+  name = params_value (params, "get_name");
   if (name == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while trying to start a wizard. "
-                         "Diagnostics: Required parameter 'name' was NULL.",
+                         "Diagnostics: Required parameter 'get_name' was NULL.",
                          "/omp?cmd=get_tasks");
 
   run = g_string_new ("<run_wizard read_only=\"1\">");
@@ -18709,21 +18709,12 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
                              "/omp?cmd=get_tasks");
     }
 
-  wizard_xml = g_strdup_printf ("%s %s",
+  wizard_xml = g_strdup_printf ("<wizard><%s/>%s%s</wizard>",
+                                name,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, wizard_xml);
-      if (html == NULL)
-        html = wizard (credentials, params, wizard_xml);
-    }
-  else
-    html = wizard (credentials, params, wizard_xml);
-  free_entity (entity);
-  g_free (response);
-  return html;
+  return xsl_transform_omp (credentials, wizard_xml);
 }
 
 /**
