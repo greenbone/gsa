@@ -3559,11 +3559,79 @@ drop_privileges (struct passwd * nobody_pw)
     }
   if (setuid (nobody_pw->pw_uid) != 0)
     {
-      g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
+      g_critical ("%s: Failed to drop user privileges!\n", __FUNCTION__);
       return FALSE;
     }
 
   return TRUE;
+}
+
+/**
+ * @brief Chroot and drop privileges, if requested.
+ *
+ * @param[in]  do_chroot  Whether to chroot.
+ * @param[in]  drop       Whether to drop privileges.
+ *
+ * @return 0 success, 1 failed (will g_critical in fail case).
+ */
+static int
+chroot_drop_privileges (gboolean do_chroot, gboolean drop)
+{
+  struct passwd *nobody_pw;
+
+  if (drop)
+    {
+      nobody_pw = getpwnam ("nobody");
+      if (nobody_pw == NULL)
+        {
+          g_critical ("%s: Failed to drop privileges."
+                      "  Could not determine UID and GID for user \"nobody\"!\n",
+                      __FUNCTION__);
+          return 1;
+        }
+    }
+  else
+    nobody_pw = NULL;
+
+  if (do_chroot)
+    {
+      /* Chroot into state dir. */
+
+      if (chroot (GSA_DATA_DIR))
+        {
+          g_critical ("%s: Failed to chroot: %s\n",
+                      __FUNCTION__,
+                      strerror (errno));
+          return 1;
+        }
+    }
+
+  if (nobody_pw && (drop_privileges (nobody_pw) == FALSE))
+    {
+      g_critical ("%s: Failed to drop privileges\n",
+                  __FUNCTION__);
+      return 1;
+    }
+
+  if (do_chroot)
+    {
+      if (chdir ("/"))
+        {
+          g_critical ("%s: failed change to chroot root directory: %s\n",
+                      __FUNCTION__,
+                      strerror (errno));
+          return 1;
+        }
+    }
+  else if (chdir (GSA_DATA_DIR))
+    {
+      g_critical ("%s: failed change to state dir (" GSA_DATA_DIR "): %s\n",
+                  __FUNCTION__,
+                  strerror (errno));
+      return 1;
+    }
+
+  return 0;
 }
 
 /**
@@ -3740,6 +3808,7 @@ main (int argc, char **argv)
   /* Process command line options. */
 
   static gboolean do_chroot = FALSE;
+  static gboolean drop = FALSE;
   static gboolean foreground = FALSE;
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
@@ -3758,6 +3827,9 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
+    {"drop-privileges", '\0',
+     0, G_OPTION_ARG_NONE, &drop,
+     "Drop privileges.", NULL},
     {"foreground", 'f',
      0, G_OPTION_ARG_NONE, &foreground,
      "Run in foreground.", NULL},
@@ -3797,7 +3869,7 @@ main (int argc, char **argv)
      "Use <file> as the certificate for HTTPS", "<file>"},
     {"do-chroot", '\0',
      0, G_OPTION_ARG_NONE, &do_chroot,
-     "Do chroot and drop privileges.", NULL},
+     "Do chroot.", NULL},
     {"secure-cookie", '\0',
      0, G_OPTION_ARG_NONE, &secure_cookie,
      "Use a secure cookie (implied when using HTTPS).", NULL},
@@ -4011,48 +4083,6 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  if (do_chroot)
-    {
-      /* Chroot into state dir and drop privileges. */
-
-      struct passwd * nobody_pw = getpwnam ("nobody");
-      if (nobody_pw == NULL)
-        {
-          g_critical ("%s: Failed to drop privileges."
-                      "  Could not determine UID and GID for user \"nobody\"!\n",
-                      __FUNCTION__);
-          exit (EXIT_FAILURE);
-        }
-
-      if (chroot (GSA_DATA_DIR))
-        {
-          g_critical ("%s: Failed to chroot: %s\n",
-                      __FUNCTION__,
-                      strerror (errno));
-          exit (EXIT_FAILURE);
-        }
-
-      if (drop_privileges (nobody_pw) == FALSE)
-        {
-          g_critical ("%s: Failed to drop privileges\n",
-                      __FUNCTION__);
-          exit (EXIT_FAILURE);
-        }
-
-      if (chdir ("/"))
-        {
-          g_critical ("%s: failed change to chroot root directory\n",
-                      __FUNCTION__);
-          exit (EXIT_FAILURE);
-        }
-    }
-  else if (chdir (GSA_DATA_DIR))
-    {
-      g_critical ("%s: failed change to state dir (" GSA_DATA_DIR ")\n",
-                  __FUNCTION__);
-      exit (EXIT_FAILURE);
-    }
-
   if (redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
@@ -4249,6 +4279,11 @@ main (int argc, char **argv)
                   gsad_port);
         }
     }
+
+  /* Chroot and drop privileges, if requested. */
+
+  if (chroot_drop_privileges (do_chroot, drop))
+    exit (EXIT_FAILURE);
 
   /* Wait forever for input or interrupts. */
 

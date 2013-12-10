@@ -1,5 +1,15 @@
 2013-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (drop_privileges): Correct error message.
+	(chroot_drop_privileges): New function.  Chroot and drop according to
+	args.
+	(main): Add --drop option.  Do the chroot after initialising the MHD
+	daemon, in order to bind to a privileged port.  Separate control of
+	chroot and dropping privileges according to --chroot and --drop options,
+	in case the user wants to reduce privileges using capabilites instead.
+
+2013-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (main): Make do_chroot errors more detailed.
 
 2013-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
