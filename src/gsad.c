@@ -4033,7 +4033,11 @@ main (int argc, char **argv)
         }
 
       if (drop_privileges (nobody_pw) == FALSE)
-        exit (EXIT_FAILURE);
+        {
+          g_critical ("%s: Failed to drop privileges\n",
+                      __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
 
       if (chdir ("/"))
         {
@@ -4152,20 +4156,24 @@ main (int argc, char **argv)
           use_secure_cookie = 1;
 
           if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
-                                    NULL, NULL))
+                                    NULL, &error))
             {
-              g_critical ("%s: Could not load private SSL key from %s!\n",
+              g_critical ("%s: Could not load private SSL key from %s: %s\n",
                           __FUNCTION__,
-                          ssl_private_key_filename);
+                          ssl_private_key_filename,
+                          error->message);
+              g_error_free (error);
               exit (EXIT_FAILURE);
             }
 
           if (!g_file_get_contents (ssl_certificate_filename, &ssl_certificate,
-                                    NULL, NULL))
+                                    NULL, &error))
             {
-              g_critical ("%s: Could not load SSL certificate from %s!\n",
+              g_critical ("%s: Could not load SSL certificate from %s: %s\n",
                           __FUNCTION__,
-                          ssl_certificate_filename);
+                          ssl_certificate_filename,
+                          error->message);
+              g_error_free (error);
               exit (EXIT_FAILURE);
             }
 
