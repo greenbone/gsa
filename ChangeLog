@@ -1,3 +1,17 @@
+2013-12-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-pager, filter-window-part)
+	(edit-header-icons, edit-settings-filters, list-window-line-icons)
+	(report [results-pager], task-icons, task [details], list-window)
+	(details-header-icons, report [report], task [trash])
+	(lsc_credential [trash], alert [trash], filter [trash], tag [trash])
+	(target [trash], html-config-table, config [trash], schedule [trash])
+	(slave [trash], group [trash], permission [trash], port_list [trash])
+	(html-edit-port-list-form, host, result-details)
+	(report [section-filter], role [trash], get_system_reports_response)
+	(user): Add tooltips to inactive icons and others like filter controls
+	and the ones for updating the apply_overrides settings.
+
 2013-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (drop_privileges): Correct error message.

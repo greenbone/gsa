@@ -655,7 +655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="First"/>
+          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="Already on first page"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -666,7 +666,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="Previous"/>
+          <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="Already on first page"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="$list/@start"/> -
@@ -680,7 +680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="Next"/>
+          <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="Already on last page"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -688,7 +688,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="Last"/>
+          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="Already on last page"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -760,6 +760,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        name="New Filter"
                        src="/img/new.png"
                        alt="New Filter"
+                       title="New {gsa:type-name($type)} Filter from current term"
                        style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
               </div>
             </form>
@@ -786,6 +787,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
                 <input type="image"
                        name="Switch Filter"
+                       title="Switch Filter"
                        src="/img/refresh.png"
                        alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
                 <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
@@ -811,6 +813,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  maxlength="1000"/>
           <input type="image"
                  name="Update Filter"
+                 title="Update Filter"
                  src="/img/refresh.png"
                  alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
           <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
@@ -1152,9 +1155,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
+      <xsl:variable name="inactive_text">
+        <xsl:choose>
+          <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
+          <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
+          <xsl:when test="not(gsa:may (concat ('delete_', $type)))">Permission to move <xsl:value-of select="$cap-type"/> to trashcan denied</xsl:when>
+          <xsl:otherwise>Cannot move to trashcan.</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <img src="/img/trashcan_inactive.png"
            border="0"
            alt="To Trashcan"
+           title="{$inactive_text}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -1171,7 +1183,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:variable name="inactive_text">
+            <xsl:choose>
+              <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
+              <xsl:when test="not(gsa:may (concat ('delete_', $type)))">Permission to edit <xsl:value-of select="$cap-type"/> denied</xsl:when>
+              <xsl:otherwise>Cannot modify <xsl:value-of select="$cap-type"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               title="{$inactive_text}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -1196,11 +1216,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </div>
     </xsl:when>
+    <xsl:when test="owner/name = /envelope/login/text() or string-length (owner/name) = 0">
+      <img src="/img/clone_inactive.png"
+           alt="Clone"
+           value="Clone"
+           title="{$cap-type} must be owned or global"
+           style="margin-left:3px;"/>
+    </xsl:when>
     <xsl:otherwise>
       <img src="/img/clone_inactive.png"
            alt="Clone"
            value="Clone"
-           title="Clone"
+           title="Permission to clone denied"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -2235,9 +2262,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test = "report/results/@start &lt;= 1">
       <img style="vertical-align: text-top; margin-left:10px;margin-right:3px;"
-           src="/img/first_inactive.png" border="0" title="First"/>
+           src="/img/first_inactive.png" border="0" title="Already on first page"/>
       <img style="vertical-align: text-top; margin-right:3px;"
-           src="/img/previous_inactive.png" border="0" title="Previous"/>
+           src="/img/previous_inactive.png" border="0" title="Already on first page"/>
     </xsl:when>
     <xsl:when test="../../delta">
       <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
@@ -2263,9 +2290,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test = "$last &gt;= report/result_count/filtered">
       <img style="vertical-align: text-top; margin-left:3px;"
-           src="/img/next_inactive.png" border="0" title="Next"/>
+           src="/img/next_inactive.png" border="0" title="Already on last page"/>
       <img style="vertical-align: text-top; margin-left:3px;margin-right:10px;"
-           src="/img/last_inactive.png" border="0" title="Last"/>
+           src="/img/last_inactive.png" border="0" title="Already on last page"/>
     </xsl:when>
     <xsl:when test="../../delta">
       <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
@@ -2931,8 +2958,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
   <xsl:choose>
-    <xsl:when test="gsa:may ('start_task') = 0 or target/@id = ''">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
+    <xsl:when test="target/@id = ''">
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start" title="Task is a container"/>
+    </xsl:when>
+    <xsl:when test="gsa:may ('start_task') = 0">
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start" title="Permission to start task denied"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
       <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
@@ -2953,7 +2983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start" title="Tasks is already active or paused"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="start-icon">
@@ -2969,12 +2999,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
-    <xsl:when test="gsa:may ('resume_task') = 0 or target/@id = ''">
-      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+    <xsl:when test="target/@id = ''">
+      <img src="/img/resume_inactive.png" border="0" alt="Resume" title="Task is a container"
+         style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="gsa:may ('resume_task') = 0">
+      <img src="/img/resume_inactive.png" border="0" alt="Resume" title="Permission to resume task denied"
          style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
-      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+      <img src="/img/resume_inactive.png" border="0" alt="Resume" title="Task is scheduled"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="status='Stopped'">
@@ -3004,18 +3038,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+      <img src="/img/resume_inactive.png" border="0" alt="Resume" title="Task is not paused or stopped"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
-    <xsl:when test="gsa:may ('stop_task') = 0 or target/@id=''">
-      <img src="/img/stop_inactive.png" border="0" alt="Stop"
+    <xsl:when test="gsa:may ('stop_task') = 0">
+      <img src="/img/stop_inactive.png" border="0" alt="Stop" title="Permission to stop task denied"
+         style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="target/@id=''">
+      <img src="/img/stop_inactive.png" border="0" alt="Stop" title="Task is a container"
          style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
       <img src="/img/stop_inactive.png" border="0"
-           alt="Stop"
+           alt="Stop" title="Task is scheduled"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1">
@@ -3032,7 +3070,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested' or status='Delete Requested' or status='Ultimate Delete Requested'">
       <img src="/img/stop_inactive.png" border="0"
-           alt="Stop"
+           alt="Stop" title="Tasks can only be be stopped when running or paused"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:otherwise>
@@ -3088,6 +3126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="image"
                  name="Update"
                  src="/img/refresh.png"
+                 title="Update auto-refresh"
                  alt="Update" style="margin-left:3px;margin-right:3px;"/>
           <xsl:choose>
             <xsl:when test="$apply-overrides = 0">
@@ -3659,6 +3698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="image"
                      name="Update"
                      src="/img/refresh.png"
+                     title="Update auto-refresh"
                      alt="Update" style="margin-left:3px;margin-right:3px;"/>
             </form>
           </div>
@@ -3849,7 +3889,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:variable name="inactive_text">
+          <xsl:choose>
+            <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
+            <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
+            <xsl:otherwise>Cannot move <xsl:value-of select="$cap-type"/> to trashcan</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+             title="{$inactive_text}"
              style="margin-left:3px;"/>
       </xsl:otherwise>
     </xsl:choose>
@@ -3860,6 +3908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="writable='0'">
           <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               title="{$cap-type} is not writable"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -4615,8 +4664,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="$delta = @id or string-length (../../filters/keywords/keyword[column='task_id']) = 0">
+        <xsl:when test="$delta = @id">
           <img src="/img/delta_inactive.png" border="0" alt="Compare"
+               title="Report is already selected for delta"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:when test="string-length (../../filters/keywords/keyword[column='task_id']) = 0">
+          <img src="/img/delta_inactive.png" border="0" alt="Compare"
+               title="Filter must be limited to a single Task to allow delta reports"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:when test="string-length ($delta) &gt; 0">
@@ -4635,10 +4690,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
-        <xsl:when test="boolean ($observed) or scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
+        <xsl:when test="boolean ($observed)">
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Report is observed"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               title="Scan is active or paused"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -5576,7 +5639,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | slave[trash!='0'] | (alert[trash!='0'])[0]"/>
+          <xsl:variable name="resources_string">
+            <xsl:for-each select="$resources_list">
+              <xsl:value-of select="gsa:type-name(name(.))"/>
+              <xsl:if test="position() &lt; last()-1">, </xsl:if>
+              <xsl:if test="position() = last()-1"> and </xsl:if>
+            </xsl:for-each>
+          </xsl:variable>
           <img src="/img/restore_inactive.png" border="0" alt="Restore"
+               title="{$resources_string} must be restored first"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -6097,6 +6169,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               title="Credential is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -7622,6 +7695,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="filter/trash = '1'">
           <img src="/img/restore_inactive.png" border="0" alt="Restore"
+               title="Filter must be restored first"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -7641,6 +7715,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Alert is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -8011,6 +8086,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Filter is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -8610,6 +8686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Tag is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -9876,7 +9953,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or port_list/trash = '1'">
-          <img src="/img/restore_inactive.png" border="0" alt="Restore"
+          <xsl:variable name="resources_string">
+            <xsl:if test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1'">Credentials</xsl:if>
+            <xsl:if test="(ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1') and port_list/trash = '1'"> and </xsl:if>
+            <xsl:if test="port_list/trash = '1'">Port List</xsl:if>
+          </xsl:variable>
+          <img src="/img/restore_inactive.png" border="0" alt="Restore" title="{$resources_string} must be restored first."
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -9896,6 +9978,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Target is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -11283,13 +11366,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:variable name="inactive_text">
+              <xsl:choose>
+                <xsl:when test="in_use != '0'">Scan Config is still in use</xsl:when>
+                <xsl:when test="writable = '0'">Scan Config is not writable</xsl:when>
+                <xsl:otherwise>Cannot move Scan Config to trashcan</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+                 title="{$inactive_text}"
                  style="margin-left:3px;"/>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="$config/writable='0'">
             <img src="/img/edit_inactive.png" border="0" alt="Edit"
+                 title="Scan Config is not writable"
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
@@ -11712,6 +11804,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               title="Scan Config is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -13107,6 +13200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Schedule is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -13586,6 +13680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Slave is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -18449,6 +18544,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Group is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -19030,6 +19126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Permission is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -19525,6 +19622,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Port list is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -19787,6 +19885,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <img src="/img/delete_inactive.png"
                        border="0"
                        alt="Delete"
+                       title="Port list is still in use"
                        style="margin-left:3px;"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -20623,6 +20722,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </select>
           <input type="image"
                  name="Update"
+                 title="Update"
                  src="/img/refresh.png"
                  alt="Update" style="margin-left:3px;margin-right:3px;"/>
         </form>
@@ -21802,6 +21902,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </select>
             <input type="image"
                    name="Update"
+                   title="Update"
                    src="/img/refresh.png"
                    alt="Update" style="margin-left:3px;margin-right:3px;"/>
           </form>
@@ -23303,6 +23404,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   name="New Filter"
                   src="/img/new.png"
                   alt="New Filter"
+                  title="New Result Filter from current term"
                   style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
           </div>
         </form>
@@ -23343,6 +23445,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="image"
                   name="Switch Filter"
                   src="/img/refresh.png"
+                  title="Switch Filter"
                   alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
             <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
               title="Filters">
@@ -23381,6 +23484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   maxlength="1000"/>
             <input type="image"
                   name="Update Filter"
+                  title="Update Filter"
                   src="/img/refresh.png"
                   alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
             <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
@@ -23425,6 +23529,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <input type="image"
                    name="Update Filter"
+                   title="Update Filter"
                    src="/img/refresh.png"
                    alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
             <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
@@ -25446,6 +25551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="Delete"
+               title="Role is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -25739,6 +25845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
                 <input type="image"
                        name="Update"
+                       title="Update"
                        src="/img/refresh.png"
                        alt="Update" style="margin-left:3px;margin-right:3px;"/>
               </form>
@@ -26726,6 +26833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="name=/envelope/login/text()">
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               title="Currently logged in as this user"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
