@@ -1,5 +1,11 @@
 2013-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report-hosts-link): Filter by host with a plain
+	filter term.  When results have full powerfilter it will be possible to
+	filter by the host column.
+
+2013-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (host, report [assets], report-ports-link)
 	(report [vulns]): Remove leading = from filter terms, for clarity.
 
