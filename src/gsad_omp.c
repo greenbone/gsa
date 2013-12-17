@@ -505,6 +505,9 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
   int socket, ret;
   entity_t entity;
 
+  if (entity_return)
+    *entity_return = NULL;
+
   switch (manager_connect (credentials, &socket, &session, response))
     {
       case 0:
