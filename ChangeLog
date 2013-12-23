@@ -1,3 +1,10 @@
+2013-12-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report [ssl_certs]): Work with SSLInfo entries
+	instead of SSLDetails and adjust code accordingly. This solves the bug
+	of only one entry being present when the same ssl cert might be used on
+	different ports on the same host.
+
 2013-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (omp): Clear entity_return initially, as some callers

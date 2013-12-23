@@ -24757,15 +24757,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Port</td>
           <td width="{gsa:actions-width (1)}">Actions</td>
         </tr>
-        <xsl:for-each select="report/host/detail[contains(name, 'SSLDetails:')]">
-          <!-- Sort by DN value -->
-          <xsl:sort select="substring-before(substring-after(value, 'issuer:'), '|')"/>
+        <xsl:for-each select="report/host/detail[contains(name, 'SSLInfo')]">
+          <xsl:variable name="port" select="substring-before(value, '::')"/>
+          <xsl:variable name="fingerprint" select="substring-after(substring-after(value, ':'), ':')"/>
 
-          <xsl:variable name="fingerprint" select="substring-after(name, 'SSLDetails:')"/>
-          <xsl:variable name="details" select="value"/>
-          <xsl:variable name="sslinfo" select="../detail[name='SSLInfo' and contains(value, $fingerprint)]"/>
+          <xsl:variable name="ssldetails" select="../detail[name=concat('SSLDetails:', $fingerprint)]"/>
+          <xsl:variable name="details" select="$ssldetails/value"/>
           <xsl:variable name="cert" select="substring-after(../detail[name = concat('Cert:', $fingerprint)]/value, ':')"/>
-          <xsl:variable name="port" select="substring-before($sslinfo/value, ':')"/>
           <xsl:variable name="dn" select="substring-before(substring-after($details, 'issuer:'), '|')"/>
 
           <xsl:variable name="serial" select="substring-before(substring-after($details, 'serial:'), '|')"/>
