@@ -23320,13 +23320,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$type != 'prognostic' and $type != 'delta'">
                 <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="section" select="'topology'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
                   <xsl:with-param name="count" select="ssl_certs/count"/>
                   <xsl:with-param name="section" select="'ssl_certs'"/>
                 </xsl:apply-templates>
