@@ -1,3 +1,10 @@
+2014-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (report [section-link]): Add link_style and element
+	parameters to allow creating the link around an element.
+	(report-icons): Add scan status bar for normal scan reports, linking
+	to report summary.
+
 2014-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Skip results on Summary page.

@@ -23171,6 +23171,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="count"/>
   <xsl:param name="class" select="'section_sublist'"/>
+  <xsl:param name="link_style" select="'list'"/>
+  <xsl:param name="element" select="''"/>
 
   <xsl:variable name="host" select="/envelope/params/host"/>
   <xsl:variable name="pos" select="/envelope/params/pos"/>
@@ -23211,9 +23213,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <li class="{$class}">
-    <a href="{$link}"><xsl:value-of select="$name"/></a>
-  </li>
+  <xsl:choose>
+    <xsl:when test="$link_style = 'list'">
+      <li class="{$class}">
+        <a href="{$link}"><xsl:value-of select="$name"/></a>
+      </li>
+    </xsl:when>
+    <xsl:when test="$link_style = 'element'">
+      <a href="{$link}"><xsl:copy-of select="$element"/></a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="{$link}" class="{$class}"><xsl:value-of select="$name"/></a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="report" mode="section-list">
@@ -24474,6 +24486,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Return to default filter view">
         <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/list.png"/>
       </a>
+      <xsl:choose>
+        <xsl:when test="not(/envelope/params/delta_report_id != '')">
+          <div style="float:right; margin-top:2px">
+            <xsl:apply-templates select="report" mode="section-link">
+              <xsl:with-param name="section" select="'summary'"/>
+              <xsl:with-param name="type">
+                <xsl:choose>
+                  <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
+                  <xsl:otherwise>normal</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+              <xsl:with-param name="count" select="-1"/>
+              <xsl:with-param name="link_style" select="'element'"/>
+
+              <xsl:with-param name="element">
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </div>
+        </xsl:when>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
