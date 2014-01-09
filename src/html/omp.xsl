@@ -6702,7 +6702,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       Task run status changed to
                     </label>
                     <select name="event_data:status">
-                      <option value="Delete Requested">Delete Requested</option>
                       <option value="Done" selected="1">Done</option>
                       <option value="New">New</option>
                       <option value="Requested">Requested</option>
@@ -7110,10 +7109,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:variable name="eventdata"
                                   select="commands_response/get_alerts_response/alert/event/data/text()"/>
                     <select name="event_data:status">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Delete Requested'"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
+                      <xsl:if test="$eventdata = 'Delete Requested'">
+                        <!-- In case the user has an alert with this state. -->
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'Delete Requested'"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                      </xsl:if>
                       <xsl:call-template name="opt">
                         <xsl:with-param name="value" select="'Done'"/>
                         <xsl:with-param name="select-value" select="$eventdata"/>
