@@ -1,3 +1,9 @@
+2013-01-13  Benoit Allard  <benoit.allard@greenbone.net>
+
+	Preparing the gsa 5.0+beta4 release.
+
+	* CHANGES: Updated.
+
 2014-01-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-create-alert-form): Remove Delete Requested.
