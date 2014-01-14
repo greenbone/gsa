@@ -27710,13 +27710,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  Synchronization
+                  <xsl:choose>
+                    <xsl:when test="string-length (scap/currently_syncing/user) = 0">
+                      Migration
+                    </xsl:when>
+                    <xsl:otherwise>
+                      Synchronization
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <b>in progress</b>.  Started
                   <b>
                     <xsl:value-of select="scap/currently_syncing/timestamp"/>
                   </b>
-                  by
-                  <b><xsl:value-of select="scap/currently_syncing/user"/></b>.
+                  <xsl:choose>
+                    <xsl:when test="string-length (scap/currently_syncing/user) = 0">
+                      on the command line.
+                    </xsl:when>
+                    <xsl:otherwise>
+                      by
+                      <b><xsl:value-of select="scap/currently_syncing/user"/></b>.
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
             </xsl:when>
@@ -27837,13 +27851,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  Synchronization
+                  <xsl:choose>
+                    <xsl:when test="string-length (cert/currently_syncing/user) = 0">
+                      Migration
+                    </xsl:when>
+                    <xsl:otherwise>
+                      Synchronization
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <b>in progress</b>.  Started
                   <b>
                     <xsl:value-of select="cert/currently_syncing/timestamp"/>
                   </b>
-                  by
-                  <b><xsl:value-of select="cert/currently_syncing/user"/></b>.
+                  <xsl:choose>
+                    <xsl:when test="string-length (cert/currently_syncing/user) = 0">
+                      on the command line.
+                    </xsl:when>
+                    <xsl:otherwise>
+                      by
+                      <b><xsl:value-of select="cert/currently_syncing/user"/></b>.
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
             </xsl:when>
