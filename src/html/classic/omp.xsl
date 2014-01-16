@@ -695,7 +695,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="$full_count">
-        (<xsl:value-of select="gsa:i18n ('total')"/>l:value-of select="$full_count"/>)
+        (<xsl:value-of select="gsa:i18n ('total')"/>: <xsl:value-of select="$full_count"/>)
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
