@@ -324,23 +324,23 @@ install (FILES src/html/classic/favicon.gif
                src/html/classic/rnc.xsl
                src/html/classic/os.xml
                src/html/classic/wizard.xsl
-         DESTINATION ${GSA_DATA_DIR})
+         DESTINATION ${GSA_DATA_DIR}/classic)
 
 install (FILES src/html/classic/login/login.html
                src/html/classic/gsa-style.css
                src/html/classic/favicon.gif
-         DESTINATION ${GSA_DATA_DIR}/login)
+         DESTINATION ${GSA_DATA_DIR}/classic/login)
 
 install (FILES src/html/classic/img/gsa_splash.png
-         DESTINATION ${GSA_DATA_DIR}/login/img)
+         DESTINATION ${GSA_DATA_DIR}/classic/login/img)
 
 install (FILES src/html/classic/po/de.xml
-         DESTINATION ${GSA_DATA_DIR}/po)
+         DESTINATION ${GSA_DATA_DIR}/classic/po)
 
 install (FILES src/html/classic/img/style/window_dec_a.png
                src/html/classic/img/style/window_dec_b.png
                src/html/classic/img/style/window_dec_c.png
-         DESTINATION ${GSA_DATA_DIR}/login/img/style)
+         DESTINATION ${GSA_DATA_DIR}/classic/login/img/style)
 
 install (FILES src/html/classic/img/agent.png
                src/html/classic/img/descending.png
@@ -429,7 +429,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/first_inactive.png
                src/html/classic/img/last.png
                src/html/classic/img/last_inactive.png
-         DESTINATION ${GSA_DATA_DIR}/img)
+         DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/logo_l.png
                src/html/classic/img/style/logo_r.png
@@ -445,7 +445,7 @@ install (FILES src/html/classic/img/style/logo_l.png
                src/html/classic/img/style/dropdown_arrow.png
                src/html/classic/img/style/dropdown_arrow_green.png
                src/html/classic/img/style/highlight_green.png
-         DESTINATION ${GSA_DATA_DIR}/img/style)
+         DESTINATION ${GSA_DATA_DIR}/classic/img/style)
 
 install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_apple.png
@@ -474,7 +474,7 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_unknown.png
                 src/html/classic/img/os_vmware.png
                 src/html/classic/img/os_windows.png
-         DESTINATION ${GSA_DATA_DIR}/img)
+         DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/cpe/other.png
                src/html/classic/img/cpe/a:apache:http_server.png
@@ -490,13 +490,13 @@ install (FILES src/html/classic/img/cpe/other.png
                src/html/classic/img/cpe/a:sourcefire.png
                src/html/classic/img/cpe/a:typo3:typo3.png
                src/html/classic/img/cpe/a:wordpress:wordpress.png
-         DESTINATION ${GSA_DATA_DIR}/img/cpe)
+         DESTINATION ${GSA_DATA_DIR}/classic/img/cpe)
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
-         DESTINATION ${GSA_DATA_DIR})
+         DESTINATION ${GSA_DATA_DIR}/classic)
 
 ## Program
 

@@ -3578,6 +3578,7 @@ static int
 chroot_drop_privileges (gboolean do_chroot, gboolean drop)
 {
   struct passwd *nobody_pw;
+  gchar *data_dir;
 
   if (drop)
     {
@@ -3593,15 +3594,18 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
   else
     nobody_pw = NULL;
 
+  data_dir = g_build_filename (GSA_DATA_DIR, "classic", NULL);
+
   if (do_chroot)
     {
       /* Chroot into state dir. */
 
-      if (chroot (GSA_DATA_DIR))
+      if (chroot (data_dir))
         {
           g_critical ("%s: Failed to chroot: %s\n",
                       __FUNCTION__,
                       strerror (errno));
+          g_free (data_dir);
           return 1;
         }
     }
@@ -3610,6 +3614,7 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
     {
       g_critical ("%s: Failed to drop privileges\n",
                   __FUNCTION__);
+      g_free (data_dir);
       return 1;
     }
 
@@ -3620,17 +3625,20 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
           g_critical ("%s: failed change to chroot root directory: %s\n",
                       __FUNCTION__,
                       strerror (errno));
+          g_free (data_dir);
           return 1;
         }
     }
-  else if (chdir (GSA_DATA_DIR))
+  else if (chdir (data_dir))
     {
       g_critical ("%s: failed change to state dir (" GSA_DATA_DIR "): %s\n",
                   __FUNCTION__,
                   strerror (errno));
+      g_free (data_dir);
       return 1;
     }
 
+  g_free (data_dir);
   return 0;
 }
 
