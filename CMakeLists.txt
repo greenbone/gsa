@@ -299,7 +299,7 @@ message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 add_custom_target (cpe-icon-dict
                    ALL
                    COMMENT "Generating CPE icon dictionary"
-                   COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-cpe-icon-dict.sh" --src_path "${CMAKE_SOURCE_DIR}/src/html/img/cpe" > ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
+                   COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-cpe-icon-dict.sh" --src_path "${CMAKE_SOURCE_DIR}/src/html/classic/img/cpe" > ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
 
 ## Version
@@ -315,150 +315,181 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 ## Install
 
-install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
-               src/html/help.xsl src/html/omp.xsl
-			   src/html/omp-doc.xsl src/html/rnc.xsl
-			   src/html/os.xml src/html/wizard.xsl
+install (FILES src/html/classic/favicon.gif
+               src/html/classic/gsad.xsl
+               src/html/classic/gsa-style.css
+               src/html/classic/help.xsl
+               src/html/classic/omp.xsl
+               src/html/classic/omp-doc.xsl
+               src/html/classic/rnc.xsl
+               src/html/classic/os.xml
+               src/html/classic/wizard.xsl
          DESTINATION ${GSA_DATA_DIR})
 
-install (FILES src/html/login/login.html src/html/gsa-style.css
-               src/html/favicon.gif
+install (FILES src/html/classic/login/login.html
+               src/html/classic/gsa-style.css
+               src/html/classic/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/login)
 
-install (FILES src/html/img/gsa_splash.png
+install (FILES src/html/classic/img/gsa_splash.png
          DESTINATION ${GSA_DATA_DIR}/login/img)
 
-install (FILES src/html/po/de.xml
+install (FILES src/html/classic/po/de.xml
          DESTINATION ${GSA_DATA_DIR}/po)
 
-install (FILES src/html/img/style/window_dec_a.png
-               src/html/img/style/window_dec_b.png
-               src/html/img/style/window_dec_c.png
+install (FILES src/html/classic/img/style/window_dec_a.png
+               src/html/classic/img/style/window_dec_b.png
+               src/html/classic/img/style/window_dec_c.png
          DESTINATION ${GSA_DATA_DIR}/login/img/style)
 
-install (FILES src/html/img/agent.png src/html/img/descending.png
-               src/html/img/key.png src/html/img/p_bar_bg.png
-               src/html/img/start_inactive.png src/html/img/alert_sign.png
-               src/html/img/details.png src/html/img/list_inactive.png
-               src/html/img/p_bar_done.png src/html/img/start.png
-               src/html/img/ascending_inactive.png src/html/img/download.png
-               src/html/img/list.png src/html/img/p_bar_error.png
-               src/html/img/stop_inactive.png src/html/img/ascending.png
-               src/html/img/edit_inactive.png
-               src/html/img/p_bar_new.png src/html/img/stop.png
-               src/html/img/edit.png
-               src/html/img/p_bar.png
-               src/html/img/bullet2.png src/html/img/exe.png
-               src/html/img/p_bar_request.png
-               src/html/img/trend_down.png src/html/img/bullet.png
-               src/html/img/refresh.png src/html/img/trend_less.png
-               src/html/img/deb.png src/html/img/gsa_splash.png
-               src/html/img/resume_inactive.png
-               src/html/img/trend_more.png src/html/img/delete_inactive.png
-               src/html/img/help.png src/html/img/new_note.png
-               src/html/img/resume.png src/html/img/trend_nochange.png
-               src/html/img/delete_note.png
-               src/html/img/new.png src/html/img/rpm.png
-               src/html/img/trend_up.png src/html/img/delete.png
-               src/html/img/scheduled_inactive.png
-               src/html/img/descending_inactive.png
-               src/html/img/note.png
-               src/html/img/scheduled.png src/html/img/pause.png
-               src/html/img/override.png src/html/img/new_override.png
-               src/html/img/pause_inactive.png
-               src/html/img/trashcan.png src/html/img/trashcan_inactive.png
-               src/html/img/indicator_js.png
-               src/html/img/restore.png src/html/img/restore_inactive.png
-               src/html/img/delta.png src/html/img/delta_inactive.png
-               src/html/img/delta_second.png
-               src/html/img/indicator_operation_ok.png
-               src/html/img/indicator_operation_failed.png
-               src/html/img/prognosis.png
-               src/html/img/prognosis_inactive.png
-               src/html/img/provide_view.png
-               src/html/img/view_other.png
-               src/html/img/sensor.png
-               src/html/img/wizard.png
-               src/html/img/upload.png
-               src/html/img/clone.png
-               src/html/img/clone_inactive.png
-               src/html/img/enchantress.png
-               src/html/img/next.png
-               src/html/img/next_inactive.png
-               src/html/img/previous.png
-               src/html/img/previous_inactive.png
-               src/html/img/verify.png
-               src/html/img/tag.png
-               src/html/img/fold.png
-               src/html/img/unfold.png
-               src/html/img/enable.png
-               src/html/img/disable.png
-               src/html/img/overrides_disabled.png
-               src/html/img/overrides_enabled.png
-               src/html/img/alterable.png
-               src/html/img/first.png
-               src/html/img/first_inactive.png
-               src/html/img/last.png
-               src/html/img/last_inactive.png
+install (FILES src/html/classic/img/agent.png
+               src/html/classic/img/descending.png
+               src/html/classic/img/key.png
+               src/html/classic/img/p_bar_bg.png
+               src/html/classic/img/start_inactive.png
+               src/html/classic/img/alert_sign.png
+               src/html/classic/img/details.png
+               src/html/classic/img/list_inactive.png
+               src/html/classic/img/p_bar_done.png
+               src/html/classic/img/start.png
+               src/html/classic/img/ascending_inactive.png
+               src/html/classic/img/download.png
+               src/html/classic/img/list.png
+               src/html/classic/img/p_bar_error.png
+               src/html/classic/img/stop_inactive.png
+               src/html/classic/img/ascending.png
+               src/html/classic/img/edit_inactive.png
+               src/html/classic/img/p_bar_new.png
+               src/html/classic/img/stop.png
+               src/html/classic/img/edit.png
+               src/html/classic/img/p_bar.png
+               src/html/classic/img/bullet2.png
+               src/html/classic/img/exe.png
+               src/html/classic/img/p_bar_request.png
+               src/html/classic/img/trend_down.png
+               src/html/classic/img/bullet.png
+               src/html/classic/img/refresh.png
+               src/html/classic/img/trend_less.png
+               src/html/classic/img/deb.png
+               src/html/classic/img/gsa_splash.png
+               src/html/classic/img/resume_inactive.png
+               src/html/classic/img/trend_more.png
+               src/html/classic/img/delete_inactive.png
+               src/html/classic/img/help.png
+               src/html/classic/img/new_note.png
+               src/html/classic/img/resume.png
+               src/html/classic/img/trend_nochange.png
+               src/html/classic/img/delete_note.png
+               src/html/classic/img/new.png
+               src/html/classic/img/rpm.png
+               src/html/classic/img/trend_up.png
+               src/html/classic/img/delete.png
+               src/html/classic/img/scheduled_inactive.png
+               src/html/classic/img/descending_inactive.png
+               src/html/classic/img/note.png
+               src/html/classic/img/scheduled.png
+               src/html/classic/img/pause.png
+               src/html/classic/img/override.png
+               src/html/classic/img/new_override.png
+               src/html/classic/img/pause_inactive.png
+               src/html/classic/img/trashcan.png
+               src/html/classic/img/trashcan_inactive.png
+               src/html/classic/img/indicator_js.png
+               src/html/classic/img/restore.png
+               src/html/classic/img/restore_inactive.png
+               src/html/classic/img/delta.png
+               src/html/classic/img/delta_inactive.png
+               src/html/classic/img/delta_second.png
+               src/html/classic/img/indicator_operation_ok.png
+               src/html/classic/img/indicator_operation_failed.png
+               src/html/classic/img/prognosis.png
+               src/html/classic/img/prognosis_inactive.png
+               src/html/classic/img/provide_view.png
+               src/html/classic/img/view_other.png
+               src/html/classic/img/sensor.png
+               src/html/classic/img/wizard.png
+               src/html/classic/img/upload.png
+               src/html/classic/img/clone.png
+               src/html/classic/img/clone_inactive.png
+               src/html/classic/img/enchantress.png
+               src/html/classic/img/next.png
+               src/html/classic/img/next_inactive.png
+               src/html/classic/img/previous.png
+               src/html/classic/img/previous_inactive.png
+               src/html/classic/img/verify.png
+               src/html/classic/img/tag.png
+               src/html/classic/img/fold.png
+               src/html/classic/img/unfold.png
+               src/html/classic/img/enable.png
+               src/html/classic/img/disable.png
+               src/html/classic/img/overrides_disabled.png
+               src/html/classic/img/overrides_enabled.png
+               src/html/classic/img/alterable.png
+               src/html/classic/img/first.png
+               src/html/classic/img/first_inactive.png
+               src/html/classic/img/last.png
+               src/html/classic/img/last_inactive.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
-install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
-               src/html/img/style/window_dec_a.png
-               src/html/img/style/window_dec_b.png
-               src/html/img/style/window_dec_c.png src/html/img/style/logo_m.png
-               src/html/img/style/window_dec_a_error.png
-               src/html/img/style/window_dec_b_error.png
-               src/html/img/style/window_dec_c_error.png
-               src/html/img/style/top_menu_buttons.png
-               src/html/img/style/menu_pointy.png
-               src/html/img/style/dropdown_arrow.png
-               src/html/img/style/dropdown_arrow_green.png
-               src/html/img/style/highlight_green.png
+install (FILES src/html/classic/img/style/logo_l.png
+               src/html/classic/img/style/logo_r.png
+               src/html/classic/img/style/window_dec_a.png
+               src/html/classic/img/style/window_dec_b.png
+               src/html/classic/img/style/window_dec_c.png
+               src/html/classic/img/style/logo_m.png
+               src/html/classic/img/style/window_dec_a_error.png
+               src/html/classic/img/style/window_dec_b_error.png
+               src/html/classic/img/style/window_dec_c_error.png
+               src/html/classic/img/style/top_menu_buttons.png
+               src/html/classic/img/style/menu_pointy.png
+               src/html/classic/img/style/dropdown_arrow.png
+               src/html/classic/img/style/dropdown_arrow_green.png
+               src/html/classic/img/style/highlight_green.png
          DESTINATION ${GSA_DATA_DIR}/img/style)
 
-install (FILES  src/html/img/os_aix.png
-                src/html/img/os_apple.png
-                src/html/img/os_centos.png
-                src/html/img/os_cisco.png
-                src/html/img/os_conflict.png
-                src/html/img/os_debian.png
-                src/html/img/os_fedora.png
-                src/html/img/os_freebsd.png
-                src/html/img/os_gentoo.png
-                src/html/img/os_gos.png
-                src/html/img/os_junos.png
-                src/html/img/os_hp.png
-                src/html/img/os_linux.png
-                src/html/img/os_mandriva.png
-                src/html/img/os_netbsd.png
-                src/html/img/os_novell.png
-                src/html/img/os_openbsd.png
-                src/html/img/os_redhat.png
-                src/html/img/os_slackware.png
-                src/html/img/os_sun.png
-                src/html/img/os_suse.png
-                src/html/img/os_trustix.png
-                src/html/img/os_ubuntu.png
-                src/html/img/os_ucs.png
-                src/html/img/os_unknown.png
-                src/html/img/os_vmware.png
-                src/html/img/os_windows.png
+install (FILES  src/html/classic/img/os_aix.png
+                src/html/classic/img/os_apple.png
+                src/html/classic/img/os_centos.png
+                src/html/classic/img/os_cisco.png
+                src/html/classic/img/os_conflict.png
+                src/html/classic/img/os_debian.png
+                src/html/classic/img/os_fedora.png
+                src/html/classic/img/os_freebsd.png
+                src/html/classic/img/os_gentoo.png
+                src/html/classic/img/os_gos.png
+                src/html/classic/img/os_junos.png
+                src/html/classic/img/os_hp.png
+                src/html/classic/img/os_linux.png
+                src/html/classic/img/os_mandriva.png
+                src/html/classic/img/os_netbsd.png
+                src/html/classic/img/os_novell.png
+                src/html/classic/img/os_openbsd.png
+                src/html/classic/img/os_redhat.png
+                src/html/classic/img/os_slackware.png
+                src/html/classic/img/os_sun.png
+                src/html/classic/img/os_suse.png
+                src/html/classic/img/os_trustix.png
+                src/html/classic/img/os_ubuntu.png
+                src/html/classic/img/os_ucs.png
+                src/html/classic/img/os_unknown.png
+                src/html/classic/img/os_vmware.png
+                src/html/classic/img/os_windows.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
-install (FILES src/html/img/cpe/other.png
-               src/html/img/cpe/a:apache:http_server.png
-               src/html/img/cpe/a:drupal:drupal.png
-               src/html/img/cpe/a:google.png
-               src/html/img/cpe/a:gnu.png
-               src/html/img/cpe/a:mysql:mysql.png
-               src/html/img/cpe/a:openbsd:openssh.png
-               src/html/img/cpe/a:otrs:otrs.png
-               src/html/img/cpe/a:php:php.png
-               src/html/img/cpe/a:postgresql:postgresql.png
-               src/html/img/cpe/a:snort:snort.png
-               src/html/img/cpe/a:sourcefire.png
-               src/html/img/cpe/a:typo3:typo3.png
-               src/html/img/cpe/a:wordpress:wordpress.png
+install (FILES src/html/classic/img/cpe/other.png
+               src/html/classic/img/cpe/a:apache:http_server.png
+               src/html/classic/img/cpe/a:drupal:drupal.png
+               src/html/classic/img/cpe/a:google.png
+               src/html/classic/img/cpe/a:gnu.png
+               src/html/classic/img/cpe/a:mysql:mysql.png
+               src/html/classic/img/cpe/a:openbsd:openssh.png
+               src/html/classic/img/cpe/a:otrs:otrs.png
+               src/html/classic/img/cpe/a:php:php.png
+               src/html/classic/img/cpe/a:postgresql:postgresql.png
+               src/html/classic/img/cpe/a:snort:snort.png
+               src/html/classic/img/cpe/a:sourcefire.png
+               src/html/classic/img/cpe/a:typo3:typo3.png
+               src/html/classic/img/cpe/a:wordpress:wordpress.png
          DESTINATION ${GSA_DATA_DIR}/img/cpe)
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf

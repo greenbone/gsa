@@ -1,3 +1,13 @@
+2014-01-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Moving the entire html part into subdirectory "classic/"
+	to eventually allow additional user interface in parallel.
+	For the time being the install destination is still the same.
+
+	* src/CMakeLists.txt, CMakeLists.txt: Adjusted paths.
+
+	* src/html/*: Moved into src/html/classic/.
+
 2014-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/po/de.xml: Add translations for main menu items, content

@@ -116,24 +116,24 @@ add_dependencies (check splint rats flawfinder)
 if (PATH_TO_XSLTPROC)
   add_custom_target (omp-xsl-syntax ALL
                                     COMMENT "Checking syntax of omp.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/omp.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/omp.xsl)
+                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl
+                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl)
   add_custom_target (gsad-xsl-syntax ALL
                                      COMMENT "Checking syntax of gsad.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl)
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl)
   add_custom_target (help-xsl-syntax ALL
                                      COMMENT "Checking syntax of help.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/help.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/help.xsl)
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl)
   add_custom_target (rnc-xsl-syntax ALL
                                     COMMENT "Checking syntax of rnc.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/rnc.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/rnc.xsl)
+                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl
+                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl)
   add_custom_target (omp-doc-xsl-syntax ALL
-										COMMENT "Checking syntax of omp-doc.xsl"
-										COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/omp-doc.xsl
-										DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/omp-doc.xsl)
+                                        COMMENT "Checking syntax of omp-doc.xsl"
+                                        COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl
+                                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl)
 else (PATH_TO_XSLTPROC)
   message ("Not performing simple stylesheet tests -- xsltproc not found.")
 endif (PATH_TO_XSLTPROC)
