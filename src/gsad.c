@@ -3904,7 +3904,7 @@ main (int argc, char **argv)
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
       else
-      printf ("Copyright (C) 2010-2013 Greenbone Networks GmbH\n");
+      printf ("Copyright (C) 2010-2014 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
       printf
         ("This is free software: you are free to change and redistribute it.\n"
