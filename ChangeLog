@@ -1,5 +1,10 @@
 2014-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (details-header-icons): Make icons depend on
+	user's capabilities too.
+
+2014-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (chroot_drop_privileges): Change into classic dir.
 
 	* CMakeLists.txt: Install classic files to subdir "classic".

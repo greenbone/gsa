@@ -3869,12 +3869,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
   <xsl:choose>
     <xsl:when test="$nonew"/>
-    <xsl:otherwise>
+    <xsl:when test="gsa:may (concat ('create_', $type))">
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
-    </xsl:otherwise>
+    </xsl:when>
   </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
      title="{$cap-type-plural}" style="margin-left:3px;">
@@ -3882,7 +3882,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
-      <xsl:when test="writable!='0' and in_use='0'">
+      <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
         <xsl:call-template name="trashcan-icon">
           <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="id" select="@id"/>
@@ -3910,16 +3910,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
-        <xsl:when test="writable='0'">
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               title="{$cap-type} is not writable"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type))}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               title="{$cap-type} is not writable"
+               style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
