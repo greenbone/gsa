@@ -241,20 +241,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </func:function>
 
 <func:function name="gsa:newstyle-nvt">
-    <xsl:param name="nvt"/>
-    <xsl:choose>
-      <xsl:when test="string-length(gsa:get-nvt-tag ($nvt/tags, 'summary'))
-                    and string-length(gsa:get-nvt-tag ($nvt/tags, 'affected'))
-                    and string-length(gsa:get-nvt-tag ($nvt/tags, 'insight'))
-                    and string-length(gsa:get-nvt-tag ($nvt/tags, 'vuldetect'))
-                    and string-length(gsa:get-nvt-tag ($nvt/tags, 'impact'))
-                    and string-length(gsa:get-nvt-tag ($nvt/tags, 'solution'))">
-        <func:result select="1"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <func:result select="0"/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:param name="nvt"/>
+  <xsl:choose>
+    <xsl:when test="string-length (gsa:get-nvt-tag ($nvt/tags, 'summary'))
+                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'affected'))
+                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'insight'))
+                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'vuldetect'))
+                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'impact'))
+                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'solution'))">
+      <func:result select="1"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="0"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </func:function>
 
 <func:function name="gsa:cvss-risk-factor">
@@ -14560,7 +14560,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;{$dfn_cert_adv_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
      title="View Details of DFN CERT Advisory {$dfn_cert_adv}">
-     <xsl:call-template name="wrap" disable-output-escaping="yes">
+    <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$dfn_cert_adv"/>
       <xsl:with-param name="width" select="'55'"/>
       <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>

@@ -1,3 +1,8 @@
+2014-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (gsa:newstyle-nvt, gsa:cvss-risk-factor): Correct
+	indent.
+
 2014-01-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c, src/html/omp.xsl, src/html/gsad.xsl,
