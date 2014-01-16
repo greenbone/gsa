@@ -1,3 +1,26 @@
+2014-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/po/de.xml: Add translations for main menu items, content
+	pagination, filter section, trashcan and several common actions.
+
+	* src/html/gsad.xsl (i18n_language): New global variable.
+	(html-gsa-logo, html-gsa-navigation): Mark "Logged in as ...",
+	JavaScript indicator and main menu item text for i18n.
+
+	* src/html/omp.xsl (gsa:report-section-title, filter-window-pager)
+	(filter-window-part, auto-refresh, list-window-line-icons)
+	(trash-delete-icon, delete-icon, pause-icon, restore-icon, resume-icon)
+	(start-icon, stop-icon, trashcan-icon, assets, report [results-pager])
+	(fold-filter-icon-img, fold-filter-icon, result-overrides-icon-img)
+	(task [details], list-window, new_task, report [report], task [trash])
+	(lsc_credential [trash], alert [trash], filter [trash], tag [trash])
+	(target [trash], config [trash], schedule [trash], slave [trash])
+	(group [trash], permission [trash], port_list [trash])
+	(html-edit-port-list-form, host, result-details)
+	(report [section-filter], report-section-pager, report-icons)
+	(role [trash], get_trash, user): Mark menu and common action text for
+	i18n.
+
 2014-01-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/: New.

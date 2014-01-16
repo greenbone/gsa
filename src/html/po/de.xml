@@ -27,10 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
 <i18n>
-  <msg>
-    <id>Apply overrides</id>
-    <str>Übersteuerung anwenden</str>
-  </msg>
+  <!-- Logo header (logged in user, JavaScript info, response indicators)-->
   <msg>
     <id>Logged in as</id>
     <str>Angemeldet als</str>
@@ -40,28 +37,762 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Abmelden</str>
   </msg>
   <msg>
+    <id>JavaScript is active</id>
+    <str>JavaScript ist aktiv</str>
+  </msg>
+
+  <!-- Top main menu buttons -->
+  <msg>
+    <id>Scan Management</id>
+    <str>Scan-Management</str>
+  </msg>
+  <msg>
+    <id>Asset Management</id>
+    <str>Asset-Management</str>
+  </msg>
+  <msg>
+    <id>SecInfo Management</id>
+    <str>SecInfo-Management</str>
+  </msg>
+  <msg>
+    <id>Configuration</id>
+    <str>Konfiguration</str>
+  </msg>
+  <msg>
+    <id>Extras</id>
+    <str>Extras</str>
+  </msg>
+  <msg>
+    <id>Administration</id>
+    <str>Administration</str>
+  </msg>
+  <msg>
+    <id>Help</id>
+    <str>Hilfe</str>
+  </msg>
+
+  <!-- Scan Management types and common strings for them -->
+  <msg>
+    <id>Task</id>
+    <str>Aufgabe</str>
+  </msg>
+  <msg>
+    <id>Tasks</id>
+    <str>Aufgaben</str>
+  </msg>
+  <msg>
     <id>New Task</id>
     <str>Neue Aufgabe</str>
+  </msg>
+  <msg>
+    <id>Delete Task</id>
+    <str>Aufgabe löschen</str>
+  </msg>
+  <msg>
+    <id>Edit Task</id>
+    <str>Aufgabe bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Report</id>
+    <str>Bericht</str>
+  </msg>
+  <msg>
+    <id>Reports</id>
+    <str>Berichte</str>
+  </msg>
+  <msg>
+    <id>Delete Report</id>
+    <str>Bericht löschen</str>
+  </msg>
+
+  <msg>
+    <id>Note</id>
+    <str>Notiz</str>
   </msg>
   <msg>
     <id>Notes</id>
     <str>Notizen</str>
   </msg>
   <msg>
+    <id>New Note</id>
+    <str>Neue Notiz</str>
+  </msg>
+  <msg>
+    <id>Edit Note</id>
+    <str>Notiz bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Override</id>
+    <str>Übersteuerung</str>
+  </msg>
+  <msg>
     <id>Overrides</id>
     <str>Übersteuerungen</str>
   </msg>
   <msg>
-    <id>Report: Summary</id>
-    <str>Bericht: Übersicht</str>
+    <id>New Override</id>
+    <str>Neue Übersteuerung</str>
+  </msg>
+  <msg>
+    <id>Edit Override</id>
+    <str>Übersteuerung bearbeiten</str>
+  </msg>
+
+  <!-- Asset Management types and common strings for them -->
+  <msg>
+    <id>Host</id>
+    <str>Host</str>
+  </msg>
+  <msg>
+    <id>Hosts</id>
+    <str>Hosts</str>
+  </msg>
+
+  <!-- SecInfo types and common strings for them -->
+  <msg>
+    <id>NVT</id>
+    <str>NVT</str>
+  </msg>
+  <msg>
+    <id>NVTs</id>
+    <str>NVTs</str>
+  </msg>
+  <msg>
+    <id>CVE</id>
+    <str>CVE</str>
+  </msg>
+  <msg>
+    <id>CVEs</id>
+    <str>CVEs</str>
+  </msg>
+  <msg>
+    <id>CPE</id>
+    <str>CPE</str>
+  </msg>
+  <msg>
+    <id>CPEs</id>
+    <str>CPEs</str>
+  </msg>
+  <msg>
+    <id>OVAL Definition</id>
+    <str>OVAL-Definition</str>
+  </msg>
+  <msg>
+    <id>OVAL Definitions</id>
+    <str>OVAL-Definitionen</str>
+  </msg>
+  <msg>
+    <id>DFN-CERT Advisory</id>
+    <str>DFN-CERT-Advisory</str>
+  </msg>
+  <msg>
+    <id>DFN-CERT Advisories</id>
+    <str>DFN-CERT-Advisories</str>
+  </msg>
+  <msg>
+    <id>All SecInfo</id>
+    <str>Alle Sicherheitsinfos</str>
+  </msg>
+  <msg>
+    <id>All SecInfo Information</id>
+    <str>Alle Sicherheitsinfos</str>
+  </msg>
+
+  <!-- Configuration types and common strings for them -->
+  <msg>
+    <id>Target</id>
+    <str>Ziel</str>
   </msg>
   <msg>
     <id>Targets</id>
     <str>Ziele</str>
   </msg>
   <msg>
-    <id>Tasks</id>
-    <str>Aufgaben</str>
+    <id>New Target</id>
+    <str>Neues Ziel</str>
+  </msg>
+  <msg>
+    <id>Edit Target</id>
+    <str>Ziel bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Port List</id>
+    <str>Portliste</str>
+  </msg>
+  <msg>
+    <id>Port Lists</id>
+    <str>Portlisten</str>
+  </msg>
+  <msg>
+    <id>New Port List</id>
+    <str>Neue Portliste</str>
+  </msg>
+  <msg>
+    <id>Edit Port List</id>
+    <str>Portliste bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Credential</id>
+    <str>Anmeldedaten</str>
+  </msg>
+  <msg>
+    <id>Credentials</id>
+    <str>Anmeldedaten</str>
+  </msg>
+  <msg>
+    <id>New Credential</id>
+    <str>Neue Anmeldedaten</str>
+  </msg>
+  <msg>
+    <id>Edit Credential</id>
+    <str>Anmeldedaten bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Scan Config</id>
+    <str>Scan-Konfiguration</str>
+  </msg>
+  <msg>
+    <id>Scan Configs</id>
+    <str>Scan-Konfigurationen</str>
+  </msg>
+  <msg>
+    <id>Configs</id>
+    <str>Konfigurationen</str>
+  </msg>
+  <msg>
+    <id>New Scan Configs</id>
+    <str>Neue Scan-Konfig</str>
+  </msg>
+  <msg>
+    <id>Edit Scan Configs</id>
+    <str>Scan-Konfig bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Alert</id>
+    <str>Benachrichtigung</str>
+  </msg>
+  <msg>
+    <id>Alerts</id>
+    <str>Benachrichtigungen</str>
+  </msg>
+  <msg>
+    <id>New Alert</id>
+    <str>Neue Benachrichtigung</str>
+  </msg>
+  <msg>
+    <id>Edit Alert</id>
+    <str>Benachrichtigung bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Schedule</id>
+    <str>Zeitplan</str>
+  </msg>
+  <msg>
+    <id>Schedules</id>
+    <str>Zeitpläne</str>
+  </msg>
+  <msg>
+    <id>New Schedule</id>
+    <str>Neuer Zeitplan</str>
+  </msg>
+  <msg>
+    <id>Edit Schedule</id>
+    <str>Zeitplan bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Report Format</id>
+    <str>Berichtformat</str>
+  </msg>
+  <msg>
+    <id>Report Formats</id>
+    <str>Berichtformate</str>
+  </msg>
+  <msg>
+    <id>New Report Format</id>
+    <str>Neues Berichtformat</str>
+  </msg>
+  <msg>
+    <id>Edit Report Format</id>
+    <str>Berichtformat bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Schedule</id>
+    <str>Zeitplan</str>
+  </msg>
+  <msg>
+    <id>Schedules</id>
+    <str>Zeitpläne</str>
+  </msg>
+  <msg>
+    <id>New Schedule</id>
+    <str>Neuer Zeitplan</str>
+  </msg>
+  <msg>
+    <id>Edit Schedule</id>
+    <str>Zeitplan bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Slave</id>
+    <str>Slave</str>
+  </msg>
+  <msg>
+    <id>Slaves</id>
+    <str>Slaves</str>
+  </msg>
+  <msg>
+    <id>New Slave</id>
+    <str>Neuer Slave</str>
+  </msg>
+  <msg>
+    <id>Edit Slave</id>
+    <str>Slave bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Agent</id>
+    <str>Agent</str>
+  </msg>
+  <msg>
+    <id>Agents</id>
+    <str>Agenten</str>
+  </msg>
+  <msg>
+    <id>New Agent</id>
+    <str>Neuer Agent</str>
+  </msg>
+  <msg>
+    <id>Edit Agent</id>
+    <str>Agent bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Filter</id>
+    <str>Filter</str>
+  </msg>
+  <msg>
+    <id>Filters</id>
+    <str>Filter</str>
+  </msg>
+  <msg>
+    <id>New Filter</id>
+    <str>Neuer Filter</str>
+  </msg>
+  <msg>
+    <id>Edit Filter</id>
+    <str>Filter bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Tag</id>
+    <str>Tag</str>
+  </msg>
+  <msg>
+    <id>Tags</id>
+    <str>Tags</str>
+  </msg>
+  <msg>
+    <id>New Tag</id>
+    <str>Neuer Tag</str>
+  </msg>
+  <msg>
+    <id>Edit Tag</id>
+    <str>Tag bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Permission</id>
+    <str>Berechtigung</str>
+  </msg>
+  <msg>
+    <id>Permissions</id>
+    <str>Berechtigungen</str>
+  </msg>
+  <msg>
+    <id>New Permission</id>
+    <str>Neue Berechtigung</str>
+  </msg>
+  <msg>
+    <id>Edit Permission</id>
+    <str>Berechtigung bearbeiten</str>
+  </msg>
+
+  <!-- Extras menu items -->
+  <msg>
+    <id>Trashcan</id>
+    <str>Mülleimer</str>
+  </msg>
+  <msg>
+    <id>My Settings</id>
+    <str>Eigene Einstellungen</str>
+  </msg>
+  <msg>
+    <id>Performance</id>
+    <str>Leistung</str>
+  </msg>
+  <msg>
+    <id>CVSS Calculator</id>
+    <str>CVSS-Rechner</str>
+  </msg>
+
+  <!-- Administration types and common strings for them -->
+  <msg>
+    <id>User</id>
+    <str>Benutzer</str>
+  </msg>
+  <msg>
+    <id>Users</id>
+    <str>Benutzer</str>
+  </msg>
+  <msg>
+    <id>New User</id>
+    <str>Neuer Benutzer</str>
+  </msg>
+  <msg>
+    <id>Edit User</id>
+    <str>Benutzer bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Group</id>
+    <str>Gruppe</str>
+  </msg>
+  <msg>
+    <id>Groups</id>
+    <str>Gruppen</str>
+  </msg>
+  <msg>
+    <id>New Group</id>
+    <str>Neue Gruppe</str>
+  </msg>
+  <msg>
+    <id>Edit Group</id>
+    <str>Gruppe bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>Role</id>
+    <str>Rolle</str>
+  </msg>
+  <msg>
+    <id>Roles</id>
+    <str>Rollen</str>
+  </msg>
+  <msg>
+    <id>New Group</id>
+    <str>Neue Rolle</str>
+  </msg>
+  <msg>
+    <id>Edit Group</id>
+    <str>Rolle bearbeiten</str>
+  </msg>
+
+  <msg>
+    <id>NVT Feed</id>
+    <str>NVT-Feed</str>
+  </msg>
+  <msg>
+    <id>SCAP Feed</id>
+    <str>SCAP-Feed</str>
+  </msg>
+  <msg>
+    <id>CERT Feed</id>
+    <str>CERT-Feed</str>
+  </msg>
+
+  <!-- Help menu items -->
+  <msg>
+    <id>Contents</id>
+    <str>Inhalt</str>
+  </msg>
+  <msg>
+    <id>About</id>
+    <str>Über GSA</str>
+  </msg>
+
+  <!-- Content window common elements -->
+  <msg>
+    <id> of </id>
+    <str> von </str>
+  </msg>
+  <msg>
+    <id>total</id>
+    <str>gesamt</str>
+  </msg>
+
+  <msg>
+    <id>First</id>
+    <str>Erste</str>
+  </msg>
+  <msg>
+    <id>Previous</id>
+    <str>Vorherige</str>
+  </msg>
+  <msg>
+    <id>Next</id>
+    <str>Nächste</str>
+  </msg>
+  <msg>
+    <id>Last</id>
+    <str>Letzte</str>
+  </msg>
+  <msg>
+    <id>Already on first page</id>
+    <str>Bereits auf der ersten Seite</str>
+  </msg>
+  <msg>
+    <id>Already on last page</id>
+    <str>Bereits auf der letzten Seite</str>
+  </msg>
+
+  <msg>
+    <id>Export XML</id>
+    <str>Exportiere XML</str>
+  </msg>
+  <msg>
+    <id>Export</id>
+    <str>Exportiere</str>
+  </msg>
+  <msg>
+    <id>filtered</id>
+    <str>gefilterte</str>
+  </msg>
+  <msg>
+    <id>as XML</id>
+    <str>als XML</str>
+  </msg>
+
+  <msg>
+    <id>Return to default filter view</id>
+    <str>Zurück zur Standardfilter-Ansicht</str>
+  </msg>
+  <msg>
+    <id>Return</id>
+    <str>Zurück</str>
+  </msg>
+
+  <msg>
+    <id>No auto-refresh</id>
+    <str>Kein Auto-Refresh</str>
+  </msg>
+  <msg>
+    <id>Refresh every</id>
+    <str>Refresh alle</str>
+  </msg>
+  <msg>
+    <id>Sec.</id>
+    <str>Sek.</str>
+  </msg>
+  <msg>
+    <id>Update</id>
+    <str>Aktualisieren</str>
+  </msg>
+  <msg>
+    <id>Update auto-refresh</id>
+    <str>Auto-Refresh aktualisieren</str>
+  </msg>
+
+  <msg>
+   <id>Move To Trashcan</id>
+   <str>In den Mülleimer verschieben</str>
+  </msg>
+  <msg>
+   <id>To Trashcan</id>
+   <str>In den Mülleimer</str>
+  </msg>
+
+  <!-- Filter bar common elements -->
+  <msg>
+    <id>Powerfilter</id>
+    <str>Powerfilter</str>
+  </msg>
+  <msg>
+    <id>Update Filter</id>
+    <str>Filter aktualisieren</str>
+  </msg>
+  <!-- TODO: New XY filter from current term -->
+  <msg>
+    <id>Switch Filter</id>
+    <str>Filter umschalten</str>
+  </msg>
+  <msg>
+    <id>Switch</id>
+    <str>Umschalten</str>
+  </msg>
+  <msg>
+    <id>Fold filter</id>
+    <str>Filter einklappen</str>
+  </msg>
+  <msg>
+    <id>Unfold filter</id>
+    <str>Filter ausklappen</str>
+  </msg>
+
+  <msg>
+    <id>Apply overrides</id>
+    <str>Übersteuerung anwenden</str>
+  </msg>
+  <msg>
+   <id>Overrides are Applied</id>
+   <str>Übersteuerungen werden angewendet</str>
+  </msg>
+  <msg>
+    <id>No overrides</id>
+    <str>Keine Übersteuerung</str>
+  </msg>
+
+  <msg>
+    <id>First result</id>
+    <str>Erstes Ergebnis</str>
+  </msg>
+  <msg>
+    <id>Results per page</id>
+    <str>Ergebnisse pro Seite</str>
+  </msg>
+  <msg>
+    <id>Sort by</id>
+    <str>Sortieren nach</str>
+  </msg>
+  <msg>
+    <id>Ascending</id>
+    <str>Aufsteigend</str>
+  </msg>
+  <msg>
+    <id>Descending</id>
+    <str>Absteigend</str>
+  </msg>
+  <msg>
+    <id>Simple search terms</id>
+    <str>Einfache Suchbegriffe</str>
+  </msg>
+  <msg>
+    <id>Additional filter commands</id>
+    <str>Zusätzliche Filterbefehle</str>
+  </msg>
+  <msg>
+    <id>Apply</id>
+    <str>Anwenden</str>
+  </msg>
+
+  <!-- Table content common elements -->
+  <msg>
+    <id>Delete</id>
+    <str>Löschen</str>
+  </msg>
+  <msg>
+    <id>Clone</id>
+    <str>Clonen</str>
+  </msg>
+
+  <!-- Reports common -->
+  <msg>
+    <id>Start</id>
+    <str>Starten</str>
+  </msg>
+  <msg>
+    <id>Resume</id>
+    <str>Fortsetzen</str>
+  </msg>
+  <msg>
+    <id>Stop</id>
+    <str>Stoppen</str>
+  </msg>
+  <msg>
+    <id>Pause</id>
+    <str>Pausieren</str>
+  </msg>
+
+  <!-- Report sections -->
+  <msg>
+    <id>Report: Prognostic Results</id>
+    <str>Bericht: Vorhersage-Ergebnisse</str>
+  </msg>
+  <msg>
+    <id>Report: Delta Results</id>
+    <str>Bericht: Delta-Ergebnisse</str>
+  </msg>
+  <msg>
+    <id>Report: Results</id>
+    <str>Bericht: Ergebnisse</str>
+  </msg>
+  <msg>
+    <id>Report: Prognostic Summary</id>
+    <str>Bericht: Vorhersage-Übersicht</str>
+  </msg>
+  <msg>
+    <id>Report: Delta Summary</id>
+    <str>Bericht: Delta-Übersicht</str>
+  </msg>
+  <msg>
+    <id>Report: Summary</id>
+    <str>Bericht: Übersicht</str>
+  </msg>
+  <msg>
+    <id>Report: Prognostic Hosts</id>
+    <str>Bericht: Vorhersage-Hosts</str>
+  </msg>
+  <msg>
+    <id>Report: Hosts</id>
+    <str>Bericht: Hosts</str>
+  </msg>
+  <msg>
+    <id>Report: Ports</id>
+    <str>Bericht: Ports</str>
+  </msg>
+  <msg>
+    <id>Report: Operating Systems</id>
+    <str>Bericht: Betriebssysteme</str>
+  </msg>
+  <msg>
+    <id>Report: Prognostic Applications</id>
+    <str>Bericht: Vorhersage-Anwendungen</str>
+  </msg>
+  <msg>
+    <id>Report: Applications</id>
+    <str>Bericht: Anwendungen</str>
+  </msg>
+  <msg>
+    <id>Report: Vulnerabilities</id>
+    <str>Bericht: Schwachstellen</str>
+  </msg>
+  <msg>
+    <id>Report: CVEs</id>
+    <str>Bericht: CVEs</str>
+  </msg>
+  <msg>
+    <id>Report: Closed CVEs</id>
+    <str>Bericht: Geschlossene CVEs</str>
+  </msg>
+  <msg>
+    <id>Report: Topology</id>
+    <str>Bericht: Topologie</str>
+  </msg>
+  <msg>
+    <id>Report: SSL Certificates</id>
+    <str>Bericht: SSL-Zertifikate</str>
+  </msg>
+  <msg>
+    <id>Report: Error Messages</id>
+    <str>Bericht: Fehlermeldungen</str>
+  </msg>
+
+  <!-- Trashcan -->
+  <msg>
+    <id>Empty Trashcan</id>
+    <str>Mülleimer leeren</str>
+  </msg>
+  <msg>
+    <id>Restore</id>
+    <str>Wiederherstellen</str>
   </msg>
 
   <!-- wizard.xsl -->

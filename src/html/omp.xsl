@@ -499,24 +499,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <func:result>
     <xsl:choose>
-      <xsl:when test="$section = 'results' and $type = 'prognostic'">Report: Prognostic Results</xsl:when>
-      <xsl:when test="$section = 'results' and $type = 'delta'">Report: Delta Results</xsl:when>
-      <xsl:when test="$section = 'results'">Report: Results</xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'prognostic'">Report: Prognostic Summary</xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'delta'">Report: Delta Summary</xsl:when>
-      <xsl:when test="$section = 'summary'">Report: Summary</xsl:when>
-      <xsl:when test="$section = 'hosts' and $type = 'prognostic'">Report: Prognostic Hosts</xsl:when>
-      <xsl:when test="$section = 'hosts'">Report: Hosts</xsl:when>
-      <xsl:when test="$section = 'ports'">Report: Ports</xsl:when>
-      <xsl:when test="$section = 'os'">Report: Operating Systems</xsl:when>
-      <xsl:when test="$section = 'apps' and $type = 'prognostic'">Report: Prognostic Applications</xsl:when>
-      <xsl:when test="$section = 'apps'">Report: Applications</xsl:when>
-      <xsl:when test="$section = 'vulns'">Report: Vulnerabilities</xsl:when>
-      <xsl:when test="$section = 'cves'">Report: CVEs</xsl:when>
-      <xsl:when test="$section = 'closed_cves'">Report: Closed CVEs</xsl:when>
-      <xsl:when test="$section = 'topology'">Report: Topology</xsl:when>
-      <xsl:when test="$section = 'ssl_certs'">Report: SSL Certificates</xsl:when>
-      <xsl:when test="$section = 'errors'">Report: Error Messages</xsl:when>
+      <xsl:when test="$section = 'results' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Results')"/></xsl:when>
+      <xsl:when test="$section = 'results' and $type = 'delta'"><xsl:value-of select="gsa:i18n ('Report: Delta Results')"/></xsl:when>
+      <xsl:when test="$section = 'results'"><xsl:value-of select="gsa:i18n ('Report: Results')"/></xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Summary')"/></xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'delta'"><xsl:value-of select="gsa:i18n ('Report: Delta Summary')"/></xsl:when>
+      <xsl:when test="$section = 'summary'"><xsl:value-of select="gsa:i18n ('Report: Summary')"/></xsl:when>
+      <xsl:when test="$section = 'hosts' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Hosts')"/></xsl:when>
+      <xsl:when test="$section = 'hosts'"><xsl:value-of select="gsa:i18n ('Report: Hosts')"/></xsl:when>
+      <xsl:when test="$section = 'ports'"><xsl:value-of select="gsa:i18n ('Report: Ports')"/></xsl:when>
+      <xsl:when test="$section = 'os'"><xsl:value-of select="gsa:i18n ('Report: Operating Systems')"/></xsl:when>
+      <xsl:when test="$section = 'apps' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Applications')"/></xsl:when>
+      <xsl:when test="$section = 'apps'"><xsl:value-of select="gsa:i18n ('Report: Applications')"/></xsl:when>
+      <xsl:when test="$section = 'vulns'"><xsl:value-of select="gsa:i18n ('Report: Vulnerabilities')"/></xsl:when>
+      <xsl:when test="$section = 'cves'"><xsl:value-of select="gsa:i18n ('Report: CVEs')"/></xsl:when>
+      <xsl:when test="$section = 'closed_cves'"><xsl:value-of select="gsa:i18n ('Report: Closed CVEs')"/></xsl:when>
+      <xsl:when test="$section = 'topology'"><xsl:value-of select="gsa:i18n ('Report: Topology')"/></xsl:when>
+      <xsl:when test="$section = 'ssl_certs'"><xsl:value-of select="gsa:i18n ('Report: SSL Certificates')"/></xsl:when>
+      <xsl:when test="$section = 'errors'"><xsl:value-of select="gsa:i18n ('Report: Error Messages')"/></xsl:when>
     </xsl:choose>
   </func:result>
 </func:function>
@@ -652,49 +652,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
       <xsl:choose>
         <xsl:when test = "$list/@start &gt; 1">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First')}"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="Already on first page"/>
+          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="{gsa:i18n ('Already on first page')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
         <xsl:when test="$list/@start > $list/@max">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous')}"/></a>
         </xsl:when>
         <xsl:when test="$list/@start &gt; 1">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous')}"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="Already on first page"/>
+          <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="{gsa:i18n ('Already on first page')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
-      of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
+      <xsl:value-of select="gsa:i18n (' of ')"/>
+      <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
       <xsl:if test="$full_count">
-        (total: <xsl:value-of select="$full_count"/>)
+        (<xsl:value-of select="gsa:i18n ('total')"/>: <xsl:value-of select="$full_count"/>)
       </xsl:if>
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next')}"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="Already on last page"/>
+          <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="{gsa:i18n ('Already on last page')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
+          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last')}"/></a>
         </xsl:when>
         <xsl:otherwise>
-          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="Already on last page"/>
+          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="{gsa:i18n ('Already on last page')}"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="$full_count">
-        (total: <xsl:value-of select="$full_count"/>)
+        (<xsl:value-of select="gsa:i18n ('total')"/>l:value-of select="$full_count"/>)
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
@@ -787,13 +788,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
                 <input type="image"
                        name="Switch Filter"
-                       title="Switch Filter"
+                       title="{gsa:i18n ('Switch Filter')}"
                        src="/img/refresh.png"
-                       alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                       alt="{gsa:i18n ('Switch')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
                 <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-                   title="Filters">
+                   title="{gsa:i18n ('Filters')}">
                   <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                       src="/img/list.png" border="0" alt="Filters"/>
+                       src="/img/list.png" border="0" alt="{gsa:i18n ('Filters')}"/>
                 </a>
               </div>
             </form>
@@ -807,16 +808,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="{name}" value="{value}"/>
         </xsl:for-each>
         <div style="padding: 2px;">
-          Filter:
+          <xsl:value-of select="gsa:i18n ('Filter')"/>:
           <input type="text" name="filter" size="53"
                  value="{concat (filters/term, ' ')}"
                  maxlength="1000"/>
           <input type="image"
                  name="Update Filter"
-                 title="Update Filter"
+                 title="{gsa:i18n ('Update Filter')}"
                  src="/img/refresh.png"
-                 alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-          <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+                 alt="{gsa:i18n ('Update')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+          <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help')}: {gsa:i18n ('Powerfilter')}">
             <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                  src="/img/help.png" border="0"/>
           </a>
@@ -830,10 +831,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="title">
             <xsl:choose>
               <xsl:when test="$filterbox=1">
-                <xsl:value-of select="'Fold filter'"/>
+                <xsl:value-of select="gsa:i18n ('Fold filter')"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="'Unfold filter'"/>
+                <xsl:value-of select="gsa:i18n ('Unfold filter')"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
@@ -889,13 +890,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Apply overrides
+                <xsl:value-of select="gsa:i18n ('Apply overrides')"/>
               </label>
             </div>
           </xsl:if>
           <xsl:if test="filters/keywords/keyword[column='first']">
             <div style="padding: 2px;">
-              First result:
+              <xsl:value-of select="gsa:i18n ('First result')"/>:
               <input type="text" name="first" size="5"
                      value="{filters/keywords/keyword[column='first']/value}"
                      maxlength="400"/>
@@ -903,7 +904,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="filters/keywords/keyword[column='rows']">
             <div style="padding: 2px;">
-              Results per page:
+              <xsl:value-of select="gsa:i18n ('Results per page')"/>:
               <input type="text" name="max" size="5"
                      value="{filters/keywords/keyword[column='rows']/value}"
                      maxlength="400"/>
@@ -911,7 +912,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="exslt:node-set ($columns)">
             <div style="padding: 2px;">
-              Sort by:
+              <xsl:value-of select="gsa:i18n ('Sort by')"/>:
               <xsl:variable name="sort" select="sort/field/text ()"/>
               <select style="margin-bottom: 0px;" name="sort_field" size="1">
                 <xsl:for-each select="exslt:node-set ($columns)/column">
@@ -958,7 +959,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="sort_order" value="ascending"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Ascending
+                <xsl:value-of select="gsa:i18n ('Ascending')"/>
               </label>
               <label>
                 <xsl:choose>
@@ -969,12 +970,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="sort_order" value="descending"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Descending
+                <xsl:value-of select="gsa:i18n ('Descending')"/>
               </label>
             </div>
           </xsl:if>
           <div style="padding: 2px;">
-            Simple search terms:
+            <xsl:value-of select="gsa:i18n ('Simple search terms')"/>:
             <xsl:variable name="simple">
               <xsl:call-template name="filter-simple"/>
             </xsl:variable>
@@ -983,10 +984,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    maxlength="400"/>
           </div>
           <div style="float: right; margin-right: 5px">
-            <input type="submit" value="Apply" title="Apply"/>
+            <input type="submit" value="{gsa:i18n ('Apply')}" title="{gsa:i18n ('Apply')}"/>
           </div>
           <div style="padding: 2px;">
-            Additional filter commands:
+            <xsl:value-of select="gsa:i18n ('Additional filter commands')"/>:
             <xsl:variable name="rest">
               <xsl:call-template name="filter-rest"/>
             </xsl:variable>
@@ -1004,34 +1005,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
     <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='0'">
-        <option value="0" selected="1">&#8730;No auto-refresh</option>
+        <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No auto-refresh')"/></option>
       </xsl:when>
       <xsl:otherwise>
-        <option value="0">No auto-refresh</option>
+        <option value="0"><xsl:value-of select="gsa:i18n ('No auto-refresh')"/></option>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='10'">
-        <option value="10" selected="1">&#8730;Refresh every 10 Sec.</option>
+        <option value="10" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every')"/> 10 <xsl:value-of select="gsa:i18n ('Sec.')"/></option>
       </xsl:when>
       <xsl:otherwise>
-        <option value="10">Refresh every 10 Sec.</option>
+        <option value="10"><xsl:value-of select="gsa:i18n ('Refresh every')"/> 10 <xsl:value-of select="gsa:i18n ('Sec.')"/></option>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='30'">
-        <option value="30" selected="1">&#8730;Refresh every 30 Sec.</option>
+        <option value="30" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every')"/> 30 <xsl:value-of select="gsa:i18n ('Sec.')"/></option>
       </xsl:when>
       <xsl:otherwise>
-        <option value="30">Refresh every 30 Sec.</option>
+        <option value="30"><xsl:value-of select="gsa:i18n ('Refresh every')"/> 30 <xsl:value-of select="gsa:i18n ('Sec.')"/></option>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='60'">
-        <option value="60" selected="1">&#8730;Refresh every 60 Sec.</option>
+        <option value="60" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every')"/> 60 Sec.</option>
       </xsl:when>
       <xsl:otherwise>
-        <option value="60">Refresh every 60 Sec.</option>
+        <option value="60"><xsl:value-of select="gsa:i18n ('Refresh every')"/> 60 <xsl:value-of select="gsa:i18n ('Sec.')"/></option>
       </xsl:otherwise>
     </xsl:choose>
   </select>
@@ -1177,7 +1178,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Edit {$cap-type}"
+             title="{gsa:i18n (concat ('Edit ', $cap-type))}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
@@ -1212,7 +1213,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="image" src="/img/clone.png" alt="Clone {$cap-type}"
-                 name="Clone" value="Clone" title="Clone"/>
+                 name="Clone" value="Clone" title="{gsa:i18n ('Clone')}"/>
         </form>
       </div>
     </xsl:when>
@@ -1236,9 +1237,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Export {$cap-type}"
+         title="{gsa:i18n ('Export')} {gsa:i18n ($cap-type)}"
          style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
+        <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export')}"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -1255,8 +1256,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="delete_trash_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/delete.png" alt="Delete"
-             name="Delete" value="Delete" title="Delete"/>
+      <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete')}"
+             name="Delete" value="Delete" title="{gsa:i18n ('Delete')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1273,8 +1274,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/delete.png" alt="Delete"
-             name="Delete" value="Delete" title="Delete"/>
+      <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete')}"
+             name="Delete" value="Delete" title="{gsa:i18n ('Delete')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1292,8 +1293,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="pause_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/pause.png" alt="Pause"
-             name="Pause" value="Pause" title="Pause"/>
+      <input type="image" src="/img/pause.png" alt="{gsa:i18n ('Pause')}"
+             name="Pause" value="Pause" title="{gsa:i18n ('Pause')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1309,8 +1310,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="restore"/>
       <input type="hidden" name="target_id" value="{$id}"/>
-      <input type="image" src="/img/restore.png" alt="Restore"
-             name="Restore" value="Restore" title="Restore"/>
+      <input type="image" src="/img/restore.png" alt="{gsa:i18n ('Restore')}"
+             name="Restore" value="Restore" title="{gsa:i18n ('Restore')}"/>
     </form>
   </div>
 </xsl:template>
@@ -1328,8 +1329,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/resume.png" alt="Resume"
-             name="Resume" value="Resume" title="Resume"/>
+      <input type="image" src="/img/resume.png" alt="{gsa:i18n ('Resume')}"
+             name="Resume" value="Resume" title="{gsa:i18n ('Resume')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1352,7 +1353,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <input type="image" src="/img/start.png" alt="{$alt}"
-             name="{$alt}" value="{$alt}" title="{$alt}"/>
+             name="{$alt}" value="{$alt}" title="{gsa:i18n($alt)}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1370,8 +1371,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="stop_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/stop.png" alt="Stop"
-             name="Stop" value="Stop" title="Stop"/>
+      <input type="image" src="/img/stop.png" alt="{gsa:i18n('Stop')}"
+             name="Stop" value="Stop" title="{gsa:i18n('Stop')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -1389,8 +1390,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/trashcan.png" alt="To Trashcan"
-             name="To Trashcan" value="To Trashcan" title="Move To Trashcan"/>
+      <input type="image" src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan')}"
+             name="To Trashcan" value="To Trashcan" title="{gsa:i18n ('Move To Trashcan')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -2047,20 +2048,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">&#8730;No overrides</option>
-                <option value="1" >Apply overrides</option>
+                <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                <option value="1" ><xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="0">No overrides</option>
-                <option value="1" selected="1">&#8730;Apply overrides</option>
+                <option value="0"><xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
               </xsl:otherwise>
             </xsl:choose>
           </select>
           <input type="image"
-                 name="Update"
+                 name="{gsa:i18n ('Update')}"
                  src="/img/refresh.png"
-                 title="Update"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                 title="{gsa:i18n ('Update')}"
+                 alt="{gsa:i18n ('Update')}" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
     </div>
@@ -2185,7 +2186,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:value-of select="report/hosts/@start"/> -
           <xsl:value-of select="$last"/>
-          of <xsl:value-of select="report/host_count/filtered"/>
+          <xsl:value-of select="gsa:i18n (' of ')"/>
+          <xsl:value-of select="report/host_count/filtered"/>
           <xsl:if test = "$last &lt; report/host_count/filtered">
             <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
           </xsl:if>
@@ -2262,21 +2264,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test = "report/results/@start &lt;= 1">
       <img style="vertical-align: text-top; margin-left:10px;margin-right:3px;"
-           src="/img/first_inactive.png" border="0" title="Already on first page"/>
+           src="/img/first_inactive.png" border="0" title="{gsa:i18n ('Already on first page')}"/>
       <img style="vertical-align: text-top; margin-right:3px;"
-           src="/img/previous_inactive.png" border="0" title="Already on first page"/>
+           src="/img/previous_inactive.png" border="0" title="{gsa:i18n ('Already on first page')}"/>
     </xsl:when>
     <xsl:when test="../../delta">
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First')}"/></a>
+      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous')}"/></a>
     </xsl:when>
     <xsl:when test="@type='prognostic'">
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First')}"/></a>
+      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}">
+        <img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous')}"/>
+      </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="First"/></a>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First')}"/></a>
+      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous')}"/></a>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -2290,21 +2294,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test = "$last &gt;= report/result_count/filtered">
       <img style="vertical-align: text-top; margin-left:3px;"
-           src="/img/next_inactive.png" border="0" title="Already on last page"/>
+           src="/img/next_inactive.png" border="0" title="{gsa:i18n ('Already on last page')}"/>
       <img style="vertical-align: text-top; margin-left:3px;margin-right:10px;"
-           src="/img/last_inactive.png" border="0" title="Already on last page"/>
+           src="/img/last_inactive.png" border="0" title="{gsa:i18n ('Already on last page')}"/>
     </xsl:when>
     <xsl:when test="../../delta">
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
+      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next')}"/></a>
+      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last')}"/></a>
     </xsl:when>
     <xsl:when test="@type='prognostic'">
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
+      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next')}"/></a>
+      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last')}"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="Next"/></a>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="Last"/></a>
+      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next')}"/></a>
+      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last')}"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2315,12 +2319,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$fold &gt; 0">
       <img src="/img/fold.png"
            style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="Fold filter" title="Fold filter"/>
+           alt="{gsa:i18n ('Fold filter')}" title="{gsa:i18n ('Fold filter')}"/>
     </xsl:when>
     <xsl:otherwise>
       <img src="/img/unfold.png"
            style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="Unfold filter" title="Unfold filter"/>
+           alt="{gsa:i18n ('Unfold filter')}" title="{gsa:i18n ('Unfold filter')}"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2368,10 +2372,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="title">
     <xsl:choose>
       <xsl:when test="$filterbox=1">
-        <xsl:value-of select="'Fold filter'"/>
+        <xsl:value-of select="gsa:i18n ('Fold filter')"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="'Unfold filter'"/>
+        <xsl:value-of select="gsa:i18n ('Unfold filter')"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -2461,16 +2465,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$overrides = 1">
       <img src="/img/overrides_enabled.png"
-           alt="Overrides are Applied"
+           alt="{gsa:i18n('Overrides are Applied')}"
            value="Overrides are Applied"
-           title="Overrides are Applied"
+           title="{gsa:i18n('Overrides are Applied')}"
            style="margin-left:3px;margin-right:3px;"/>
     </xsl:when>
     <xsl:otherwise>
       <img src="/img/overrides_disabled.png"
-           alt="No Overrides"
+           alt="{gsa:i18n('No Overrides')}"
            value="No Overrides"
-           title="No Overrides"
+           title="{gsa:i18n('No Overrides')}"
            style="margin-left:3px;margin-right:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -3126,8 +3130,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="image"
                  name="Update"
                  src="/img/refresh.png"
-                 title="Update auto-refresh"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                 title="{gsa:i18n ('Update auto-refresh')}"
+                 alt="{gsa:i18n ('Update')}" style="margin-left:3px;margin-right:3px;"/>
           <xsl:choose>
             <xsl:when test="$apply-overrides = 0">
               <input type="hidden" name="overrides" value="0"/>
@@ -3633,7 +3637,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="concat($cap-type-plural, ' ')"/>
+    <div class="gb_window_part_center"><xsl:value-of select="concat(gsa:i18n ($cap-type-plural), ' ')"/>
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="list" select="$resources-summary"/>
@@ -3645,13 +3649,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="$subtype != ''">
           <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
-            title="Help: {$cap-type-plural}">
+            title="{gsa:i18n ('Help')}: {gsa:i18n ($cap-type-plural)}">
             <img src="/img/help.png"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
-            title="Help: {$cap-type-plural}">
+            title="{gsa:i18n ('Help')}: {gsa:i18n ($cap-type-plural)}">
             <img src="/img/help.png"/>
           </a>
         </xsl:otherwise>
@@ -3663,14 +3667,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$type = 'info'"/>
         <xsl:when test="$new-icon">
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="New {$cap-type}">
+             title="{gsa:i18n (concat ('New ', $cap-type))}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:when>
       </xsl:choose>
       <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to default filter view" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Return"/>
+         title="{gsa:i18n ('Return to default filter view')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Return')}"/>
       </a>
       <xsl:choose>
         <xsl:when test="$type = 'report'"/>
@@ -3678,9 +3682,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
             <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-               title="Export {$filtered-count} filtered {$cap-type-plural} as XML"
+               title="{gsa:i18n ('Export')} {$filtered-count} {gsa:i18n ('filtered')} {gsa:i18n ($cap-type-plural)} {gsa:i18n ('as XML')}"
                style="margin-left:3px;">
-              <img src="/img/download.png" border="0" alt="Export XML"/>
+              <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML')}"/>
             </a>
           </div>
         </xsl:otherwise>
@@ -3698,8 +3702,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="image"
                      name="Update"
                      src="/img/refresh.png"
-                     title="Update auto-refresh"
-                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                     title="{gsa:i18n ('Update auto-refresh')}"
+                     alt="{gsa:i18n ('Update')}" style="margin-left:3px;margin-right:3px;"/>
             </form>
           </div>
         </xsl:otherwise>
@@ -3913,7 +3917,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-             title="Edit {$cap-type}">
+             title="{gsa:i18n (concat ('Edit ', $cap-type))}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:otherwise>
@@ -4177,7 +4181,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img src="/img/help.png"/>
     </a>
     <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Wizard">
+       title="{gsa:i18n ('Wizard')}">
       <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -4693,14 +4697,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="boolean ($observed)">
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Report is observed"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Scan is active or paused"
                style="margin-left:3px;"/>
         </xsl:when>
@@ -5647,7 +5651,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:if test="position() = last()-1"> and </xsl:if>
             </xsl:for-each>
           </xsl:variable>
-          <img src="/img/restore_inactive.png" border="0" alt="Restore"
+          <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore')}"
                title="{$resources_string} must be restored first"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -6168,7 +6172,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete')}"
                title="Credential is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -7696,7 +7700,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="filter/trash = '1'">
-          <img src="/img/restore_inactive.png" border="0" alt="Restore"
+          <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore')}"
                title="Filter must be restored first"
                style="margin-left:3px;"/>
         </xsl:when>
@@ -7716,7 +7720,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Alert is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -8087,7 +8091,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Filter is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -8687,7 +8691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Tag is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -9960,7 +9964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:if test="(ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1') and port_list/trash = '1'"> and </xsl:if>
             <xsl:if test="port_list/trash = '1'">Port List</xsl:if>
           </xsl:variable>
-          <img src="/img/restore_inactive.png" border="0" alt="Restore" title="{$resources_string} must be restored first."
+          <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore')}" title="{$resources_string} must be restored first."
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -9979,7 +9983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Target is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -11805,7 +11809,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete')}"
                title="Scan Config is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -13201,7 +13205,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Schedule is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -13681,7 +13685,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Slave is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -18545,7 +18549,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Group is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -19127,7 +19131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Permission is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -19623,7 +19627,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Port list is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -19886,7 +19890,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:otherwise>
                   <img src="/img/delete_inactive.png"
                        border="0"
-                       alt="Delete"
+                       alt="{gsa:i18n ('Delete')}"
                        title="Port list is still in use"
                        style="margin-left:3px;"/>
                 </xsl:otherwise>
@@ -20713,20 +20717,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">&#8730;No overrides</option>
-                <option value="1" >Apply overrides</option>
+                <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                <option value="1" ><xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="0">No overrides</option>
-                <option value="1" selected="1">&#8730;Apply overrides</option>
+                <option value="0"><xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
               </xsl:otherwise>
             </xsl:choose>
           </select>
           <input type="image"
                  name="Update"
-                 title="Update"
+                 title="{gsa:i18n ('Update')}"
                  src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                 alt="{gsa:i18n ('Update')}" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
     </div>
@@ -21893,20 +21897,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <select style="margin-bottom: 0px;" name="apply_overrides" size="1">
               <xsl:choose>
                 <xsl:when test="$apply-overrides = 0">
-                  <option value="0" selected="$apply-overrides">&#8730;No overrides</option>
-                  <option value="1" >Apply overrides</option>
+                  <option value="0" selected="$apply-overrides">&#8730;<xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                  <option value="1" ><xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="0">No overrides</option>
-                  <option value="1" selected="1">&#8730;Apply overrides</option>
+                  <option value="0"><xsl:value-of select="gsa:i18n ('No overrides')"/></option>
+                  <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply overrides')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </select>
             <input type="image"
                    name="Update"
-                   title="Update"
+                   title="{gsa:i18n ('Update')}"
                    src="/img/refresh.png"
-                   alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                   alt="{gsa:i18n ('Update')}" style="margin-left:3px;margin-right:3px;"/>
           </form>
         </div>
       </xsl:if>
@@ -23450,14 +23454,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:for-each>
             </select>
             <input type="image"
-                  name="Switch Filter"
+                  name="{gsa:i18n ('Switch Filter')}"
                   src="/img/refresh.png"
-                  title="Switch Filter"
-                  alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                  title="{gsa:i18n ('Switch Filter')}"
+                  alt="{gsa:i18n ('Switch Filter')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
             <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-              title="Filters">
+              title="{gsa:i18n ('Filters')}">
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                  src="/img/list.png" border="0" alt="Filters"/>
+                  src="/img/list.png" border="0" alt="{gsa:i18n ('Filters')}"/>
             </a>
             <input type="hidden" name="token" value="{/envelope/token}"/>
           </div>
@@ -23491,10 +23495,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   maxlength="1000"/>
             <input type="image"
                   name="Update Filter"
-                  title="Update Filter"
+                  title="{gsa:i18n ('Update Filter')}"
                   src="/img/refresh.png"
-                  alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-            <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+                  alt="{gsa:i18n ('Update')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+            <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help')}: {gsa:i18n ('Powerfilter')}">
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                   src="/img/help.png" border="0"/>
             </a>
@@ -23536,10 +23540,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <input type="image"
                    name="Update Filter"
-                   title="Update Filter"
+                   title="{gsa:i18n ('Update Filter')}"
                    src="/img/refresh.png"
-                   alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-            <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+                   alt="{gsa:i18n ('Update')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+            <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help')}: {gsa:i18n ('Powerfilter')}">
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                   src="/img/help.png" border="0"/>
             </a>
@@ -23559,11 +23563,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div style="margin-left: 3px; display: inline;">
     <xsl:if test="$filtered &gt; 0">
-      <xsl:value-of select="concat($start, ' - ', $current, ' of ')"/>
+      <xsl:value-of select="concat($start, ' - ', $current, gsa:i18n (' of '))"/>
     </xsl:if>
     <xsl:value-of select="$filtered"/>
   <xsl:if test="$total != ''">
-    (total: <xsl:value-of select="$total"/>)
+    (<xsl:value-of select="gsa:i18n ('total')"/>: <xsl:value-of select="$total"/>)
   </xsl:if>
   </div>
 </xsl:template>
@@ -24479,13 +24483,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="@type='prognostic'">
       <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;type=prognostic&amp;host={/envelope/params/host}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-        title="Return to default filter view">
+        title="{gsa:i18n ('Return to default filter view')}">
         <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/list.png"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;report_id={@id}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-        title="Return to default filter view">
+        title="{gsa:i18n ('Return to default filter view')}">
         <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/list.png"/>
       </a>
       <xsl:choose>
@@ -25593,7 +25597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                border="0"
-               alt="Delete"
+               alt="{gsa:i18n ('Delete')}"
                title="Role is still in use"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -26176,9 +26180,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Trashcan
+    <div class="gb_window_part_center">
+      <xsl:value-of select="concat(gsa:i18n ('Trashcan'), ' ')"/>
       <a href="/help/trashcan.html?token={/envelope/token}"
-         title="Help: Trashcan">
+        title="{concat(gsa:i18n('Help'),': ',gsa:i18n('Trashcan'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -26191,13 +26196,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="submit"
                    name="submit"
-                   value="Empty Trashcan"
-                   title="Empty Trashcan"/>
+                   value="{gsa:i18n ('Empty Trashcan')}"
+                   title="{gsa:i18n ('Empty Trashcan')}"/>
           </form>
         </div>
       </xsl:if>
 
-      <h1>Contents</h1>
+      <h1><xsl:value-of select="gsa:i18n ('Contents')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>Type</td>
@@ -26303,7 +26308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:variable>
         <xsl:for-each select="exslt:node-set ($items)/item">
           <tr class="{gsa:table-row-class(position())}">
-            <td><a href="#{type}s"><xsl:value-of select="gsa:type-name (type)"/>s</a></td>
+            <td><a href="#{type}s"><xsl:value-of select="gsa:i18n(concat(gsa:type-name (type), 's'))"/></a></td>
             <td><xsl:value-of select="count"/></td>
           </tr>
         </xsl:for-each>
@@ -26311,7 +26316,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
         <a name="agents"></a>
-        <h1>Agents</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Agents')"/></h1>
         <!-- The for-each makes the get_agents_response the current node. -->
         <xsl:for-each select="get_agents_response">
           <xsl:call-template name="html-agents-trash-table"/>
@@ -26320,7 +26325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
         <a name="alerts"></a>
-        <h1>Alerts</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Alerts')"/></h1>
         <!-- The for-each makes the get_alerts_response the current node. -->
         <xsl:for-each select="get_alerts_response">
           <xsl:call-template name="html-alerts-trash-table"/>
@@ -26329,7 +26334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <a name="configs"></a>
-        <h1>Scan Configs</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Scan Configs')"/></h1>
         <!-- The for-each makes the get_configs_response the current node. -->
         <xsl:for-each select="get_configs_response">
           <xsl:call-template name="html-configs-trash-table"/>
@@ -26338,7 +26343,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
         <a name="credentials"></a>
-        <h1>Credentials</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Credentials')"/></h1>
         <!-- The for-each makes the get_lsc_credentials_response the current node. -->
         <xsl:for-each select="get_lsc_credentials_response">
           <xsl:call-template name="html-lsc-credentials-trash-table"/>
@@ -26347,7 +26352,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
         <a name="filters"></a>
-        <h1>Filters</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Filters')"/></h1>
         <!-- The for-each makes the get_filters_response the current node. -->
         <xsl:for-each select="get_filters_response">
           <xsl:call-template name="html-filters-trash-table"/>
@@ -26356,7 +26361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
         <a name="groups"></a>
-        <h1>Groups</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Groups')"/></h1>
         <!-- The for-each makes the get_groups_response the current node. -->
         <xsl:for-each select="get_groups_response">
           <xsl:call-template name="html-groups-trash-table"/>
@@ -26365,7 +26370,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
         <a name="notes"></a>
-        <h1>Notes</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Notes')"/></h1>
         <!-- The for-each makes the get_notes_response the current node. -->
         <xsl:for-each select="get_notes_response">
           <xsl:call-template name="html-notes-trash-table"/>
@@ -26374,7 +26379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
         <a name="overrides"></a>
-        <h1>Overrides</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Overrides')"/></h1>
         <!-- The for-each makes the get_overrides_response the current node. -->
         <xsl:for-each select="get_overrides_response">
           <xsl:call-template name="html-overrides-trash-table"/>
@@ -26383,7 +26388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
         <a name="permissions"></a>
-        <h1>Permissions</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Permissions')"/></h1>
         <!-- The for-each makes the get_permissions_response the current node. -->
         <xsl:for-each select="get_permissions_response">
           <xsl:call-template name="html-permissions-trash-table"/>
@@ -26392,7 +26397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
         <a name="port_lists"></a>
-        <h1>Port Lists</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Port Lists')"/></h1>
         <!-- The for-each makes the get_port_lists_response the current node. -->
         <xsl:for-each select="get_port_lists_response">
           <xsl:call-template name="html-port-lists-trash-table"/>
@@ -26401,7 +26406,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
         <a name="report_formats"></a>
-        <h1>Report Formats</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Report Formats')"/></h1>
         <!-- The for-each makes the get_report_formats_response the current node. -->
         <xsl:for-each select="get_report_formats_response">
           <xsl:call-template name="html-report-formats-trash-table"/>
@@ -26410,7 +26415,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
         <a name="schedules"></a>
-        <h1>Schedules</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Schedules')"/></h1>
         <!-- The for-each makes the get_schedules_response the current node. -->
         <xsl:for-each select="get_schedules_response">
           <xsl:call-template name="html-schedules-trash-table"/>
@@ -26419,7 +26424,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
         <a name="slaves"></a>
-        <h1>Slaves</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Slaves')"/></h1>
         <!-- The for-each makes the get_slaves_response the current node. -->
         <xsl:for-each select="get_slaves_response">
           <xsl:call-template name="html-slaves-trash-table"/>
@@ -26428,7 +26433,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
         <a name="tags"></a>
-        <h1>Tags</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Tags')"/></h1>
         <!-- The for-each makes the get_tags_response the current node. -->
         <xsl:for-each select="get_tags_response">
           <xsl:call-template name="html-tags-trash-table"/>
@@ -26437,7 +26442,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
         <a name="targets"></a>
-        <h1>Targets</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Targets')"/></h1>
         <!-- The for-each makes the get_targets_response the current node. -->
         <xsl:for-each select="get_targets_response">
           <xsl:call-template name="html-targets-trash-table"/>
@@ -26446,7 +26451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
         <a name="tasks"></a>
-        <h1>Tasks</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Tasks')"/></h1>
         <!-- The for-each makes the get_tasks_response the current node. -->
         <xsl:for-each select="get_tasks_response">
           <xsl:call-template name="html-tasks-trash-table"/>
@@ -26875,7 +26880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="name=/envelope/login/text()">
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete')}"
                title="Currently logged in as this user"
                style="margin-left:3px;"/>
         </xsl:when>
@@ -26888,8 +26893,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="user_id" value="{@id}"/>
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="image" src="/img/delete.png" alt="Delete"
-                     name="Delete" value="Delete" title="Delete"/>
+              <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete')}"
+                     name="Delete" value="Delete" title="{gsa:i18n ('Delete')}"/>
             </form>
           </div>
         </xsl:otherwise>
