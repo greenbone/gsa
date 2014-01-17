@@ -1,5 +1,13 @@
 2014-01-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/gsad.xsl (html-gsa-logo): Match indicator icon for
+	edit group error.
+
+	* src/html/classic/omp.xsl (edit_group): Match modify_group_response for
+	error case.
+
+2014-01-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* CMakeLists.txt: Install verify_active.png.
 
 	* src/html/classic/omp.xsl (report_format): Grey verify icon depending
