@@ -3882,27 +3882,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
-      <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
-        <xsl:call-template name="trashcan-icon">
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:with-param name="id" select="@id"/>
-          <xsl:with-param name="params">
-            <input type="hidden" name="filter" value="{$filter}"/>
-            <input type="hidden" name="filt_id" value="{$filt_id}"/>
-          </xsl:with-param>
-        </xsl:call-template>
+      <xsl:when test="$type = 'user'">
+        <xsl:choose>
+          <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
+            <xsl:call-template name="delete-icon">
+              <xsl:with-param name="type" select="$type"/>
+              <xsl:with-param name="id" select="@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="filter" value="{$filter}"/>
+                <input type="hidden" name="filt_id" value="{$filt_id}"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="inactive_text">
+              <xsl:choose>
+                <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
+                <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
+                <xsl:otherwise>Cannot delete <xsl:value-of select="$cap-type"/></xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <img src="/img/delete_inactive.png" border="0" alt="Delete"
+                 title="{$inactive_text}"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="inactive_text">
-          <xsl:choose>
-            <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
-            <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
-            <xsl:otherwise>Cannot move <xsl:value-of select="$cap-type"/> to trashcan</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
-             title="{$inactive_text}"
-             style="margin-left:3px;"/>
+        <xsl:choose>
+          <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
+            <xsl:call-template name="trashcan-icon">
+              <xsl:with-param name="type" select="$type"/>
+              <xsl:with-param name="id" select="@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="filter" value="{$filter}"/>
+                <input type="hidden" name="filt_id" value="{$filt_id}"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="inactive_text">
+              <xsl:choose>
+                <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
+                <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
+                <xsl:otherwise>Cannot move <xsl:value-of select="$cap-type"/> to trashcan</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+                 title="{$inactive_text}"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
