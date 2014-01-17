@@ -417,6 +417,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/previous.png
                src/html/classic/img/previous_inactive.png
                src/html/classic/img/verify.png
+               src/html/classic/img/verify_inactive.png
                src/html/classic/img/tag.png
                src/html/classic/img/fold.png
                src/html/classic/img/unfold.png

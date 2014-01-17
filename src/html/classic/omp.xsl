@@ -20329,11 +20329,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'report_format'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Verify Report Format"
-         style="margin-left:3px;">
-        <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may ('verify_report_format')">
+          <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Verify Report Format"
+             style="margin-left:3px;">
+            <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/verify_inactive.png"
+               border="0"
+               alt="Verify Report Format"
+               title="Permission to verify Report Format denied"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
