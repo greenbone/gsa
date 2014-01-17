@@ -3905,36 +3905,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:3px;"/>
       </xsl:otherwise>
     </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="$noedit">
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n (concat ('Edit ', $cap-type))}">
-            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               title="{$cap-type} is not writable"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="$noexport">
-    </xsl:when>
-    <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-         title="Export {$cap-type} XML"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export XML"/>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$noedit">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
+            <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+               title="{gsa:i18n (concat ('Edit ', $cap-type))}">
+              <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/edit_inactive.png" border="0" alt="Edit"
+                 title="{$cap-type} is not writable"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$noexport">
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+           title="Export {$cap-type} XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
 </xsl:template>
 
