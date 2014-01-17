@@ -3884,6 +3884,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$type = 'user'">
         <xsl:choose>
+          <xsl:when test="name=/envelope/login/text()">
+            <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete')}"
+                 title="Currently logged in as this user"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
             <xsl:call-template name="delete-icon">
               <xsl:with-param name="type" select="$type"/>
