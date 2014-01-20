@@ -1,5 +1,10 @@
 2014-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (my_settings.html): Add Tags filter.
+	(new_tag.html): Fix paragraph saying "target" where it should be "tag".
+
+2014-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (DEFAULT_GSAD_FACE): New #define
 	(chroot_drop_privileges): chroot or chdir to a specified subdirectory.
 	(main): Add command line parameter "--face" to allow selection of

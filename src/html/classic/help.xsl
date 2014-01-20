@@ -4829,6 +4829,10 @@ Public License instead of this License.
       <p>
         Default filter to use when getting the <a href="slaves.html?token={/envelope/token}">Slaves</a> page.
       </p>
+      <h4>Tags filter</h4>
+      <p>
+        Default filter to use when getting the <a href="tags.html?token={/envelope/token}">Tags</a> page.
+      </p>
       <h4>Targets filter</h4>
       <p>
         Default filter to use when getting the <a href="targets.html?token={/envelope/token}">Targets</a> page.
@@ -5208,8 +5212,8 @@ Public License instead of this License.
         For creating a new
         <a href="glossary.html?token={/envelope/token}#tag">Tag</a>
         the dialog offers these entries.
-        Hit the button "Create Tag" to submit the new target.
-        The Targets page will be shown.
+        Hit the button "Create Tag" to submit the new tag.
+        The Tags page will be shown.
       </p>
 
       <table class="gbntable">
