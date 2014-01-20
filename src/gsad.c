@@ -132,6 +132,11 @@
 #define SESSION_TIMEOUT 15
 
 /**
+ * @brief Default face name.
+ */
+#define DEFAULT_GSAD_FACE "classic"
+
+/**
  * @brief Libgcrypt thread callback definition.
  */
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
@@ -3571,11 +3576,13 @@ drop_privileges (struct passwd * nobody_pw)
  *
  * @param[in]  do_chroot  Whether to chroot.
  * @param[in]  drop       Whether to drop privileges.
+ * @param[in]  subdir     Subdirectory of GSA_DATA_DIR to chroot or chdir to.
  *
  * @return 0 success, 1 failed (will g_critical in fail case).
  */
 static int
-chroot_drop_privileges (gboolean do_chroot, gboolean drop)
+chroot_drop_privileges (gboolean do_chroot, gboolean drop,
+                        const gchar *subdir)
 {
   struct passwd *nobody_pw;
   gchar *data_dir;
@@ -3594,7 +3601,7 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
   else
     nobody_pw = NULL;
 
-  data_dir = g_build_filename (GSA_DATA_DIR, "classic", NULL);
+  data_dir = g_build_filename (GSA_DATA_DIR, subdir, NULL);
 
   if (do_chroot)
     {
@@ -3602,8 +3609,9 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
 
       if (chroot (data_dir))
         {
-          g_critical ("%s: Failed to chroot: %s\n",
+          g_critical ("%s: Failed to chroot to \"%s\": %s\n",
                       __FUNCTION__,
+                      data_dir,
                       strerror (errno));
           g_free (data_dir);
           return 1;
@@ -3631,8 +3639,9 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop)
     }
   else if (chdir (data_dir))
     {
-      g_critical ("%s: failed change to state dir (" GSA_DATA_DIR "): %s\n",
+      g_critical ("%s: failed to change to \"%s\": %s\n",
                   __FUNCTION__,
+                  data_dir,
                   strerror (errno));
       g_free (data_dir);
       return 1;
@@ -3832,6 +3841,7 @@ main (int argc, char **argv)
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
+  static gchar *face_name = NULL;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -3890,6 +3900,9 @@ main (int argc, char **argv)
     {"gnutls-priorities", '\0',
      0, G_OPTION_ARG_STRING, &gnutls_priorities,
      "GnuTLS priorities string.", "<string>"},
+    {"face", 0,
+     0, G_OPTION_ARG_STRING, &face_name,
+     "Use interface files from subdirectory <dir>", "<dir>"},
     {NULL}
   };
 
@@ -4290,8 +4303,22 @@ main (int argc, char **argv)
 
   /* Chroot and drop privileges, if requested. */
 
-  if (chroot_drop_privileges (do_chroot, drop))
-    exit (EXIT_FAILURE);
+  if (chroot_drop_privileges (do_chroot, drop,
+                              face_name ? face_name : DEFAULT_GSAD_FACE))
+    {
+      if (face_name && strcmp (face_name, DEFAULT_GSAD_FACE))
+        {
+          g_critical ("%s: Cannot use custom face \"%s\".\n",
+                      __FUNCTION__, face_name);
+          exit (EXIT_FAILURE);
+        }
+      else
+        {
+          g_critical ("%s: Cannot use default face \"%s\"!\n",
+                      __FUNCTION__, DEFAULT_GSAD_FACE);
+          exit (EXIT_FAILURE);
+        }
+    }
 
   /* Wait forever for input or interrupts. */
 

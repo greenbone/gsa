@@ -1,5 +1,12 @@
 2014-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (DEFAULT_GSAD_FACE): New #define
+	(chroot_drop_privileges): chroot or chdir to a specified subdirectory.
+	(main): Add command line parameter "--face" to allow selection of
+	a custom user interface to serve.
+
+2014-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (next_page): Add wizard_get case.
 
 2014-01-17  Matthew Mundell <matthew.mundell@greenbone.net>
