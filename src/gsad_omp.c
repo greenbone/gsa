@@ -753,6 +753,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "wizard") == 0)
     return wizard (credentials, params, response);
 
+  if (strcmp (next, "wizard_get") == 0)
+    return wizard_get (credentials, params, response);
+
   return NULL;
 }
 
