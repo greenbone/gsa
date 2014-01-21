@@ -1069,11 +1069,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               if (task_id)
                 built_filter = g_strdup_printf ("task_id=%s apply_overrides=1"
                                                 " rows=-2 permission=any"
-                                                " sort-reverse=date",
+                                                " owner=any sort-reverse=date",
                                                 task_id);
               else
                 filter = "apply_overrides=1 rows=-2"
-                         " permission=any sort-reverse=date";
+                         " permission=any owner=any sort-reverse=date";
             }
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any owner=any";
