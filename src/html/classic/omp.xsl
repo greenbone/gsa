@@ -1476,9 +1476,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="string"></xsl:param>
 
   <xsl:for-each select="str:tokenize($string, '&#10;')">
-      <xsl:call-template name="highlight-diff-line">
-        <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
-      </xsl:call-template>
+    <xsl:call-template name="highlight-diff-line">
+      <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
+    </xsl:call-template>
   </xsl:for-each>
 </xsl:template>
 
@@ -1500,25 +1500,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="(substring($string, 1, 1) = '@')">
 <div class="diff-line-hunk">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:when>
         <xsl:when test="(substring($string, 1, 1) = '+')">
 <div class="diff-line-plus">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:when>
         <xsl:when test="(substring($string, 1, 1) = '-')">
 <div class="diff-line-minus">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:when>
         <xsl:otherwise>
 <div class="diff-line">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="string-length($string) &gt; 90">&#8629;
+      <xsl:if test="string-length($string) &gt; 90">
 <xsl:call-template name="highlight-diff-line">
   <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
 </xsl:call-template>
@@ -1558,25 +1570,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="(substring($string, 1, 1) = '@')">
 <div class="diff-line-hunk">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:when>
         <xsl:when test="(substring($string, 1, 1) = '+')">
 <div class="diff-line-plus">
 <xsl:value-of select="substring($string, 1, 90)"/>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
 </div>
         </xsl:when>
         <xsl:when test="(substring($string, 1, 1) = '-')">
 <div class="diff-line-minus">
 <xsl:value-of select="substring($string, 1, 90)"/>
 </div>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
 <div class="diff-line">
 <xsl:value-of select="substring($string, 1, 90)"/>
 </div>
+          <xsl:if test="string-length($string) &gt; 90">
+            <xsl:text>&#8629;</xsl:text>
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="string-length($string) &gt; 90">&#8629;
+      <xsl:if test="string-length($string) &gt; 90">
 <xsl:call-template name="hightlight-diff-line">
   <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
 </xsl:call-template>
