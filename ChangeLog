@@ -1,5 +1,10 @@
 2014-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Also get details on Delta Summary page,
+	because Manager only returns the counts when returning the results.
+
+2014-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (highlight-diff): Decrease indent.
 	(highlight-diff-line): Put the wrap indicator inside the line DIV,
 	otherwise it makes an extra line.

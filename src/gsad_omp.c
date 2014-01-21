@@ -9719,6 +9719,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             (type
                              && (strcmp (type, "assets") == 0)
                              && host)
+                            || delta_report_id
                             || strcmp (report_section, "summary"),
                             host ? " host=\"" : "",
                             host ? host : "",
