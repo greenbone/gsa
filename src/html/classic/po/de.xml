@@ -92,6 +92,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Task</id>
     <str>Aufgabe bearbeiten</str>
   </msg>
+  <msg>
+    <id>Task Details</id>
+    <str>Aufgaben-Details</str>
+  </msg>
+  <msg>
+    <id>Task Filter</id>
+    <str>Aufgaben-Filter</str>
+  </msg>
+  <msg>
+    <id>Save Task</id>
+    <str>Aufgabe speichern</str>
+  </msg>
+  <msg>
+    <id>Create Task</id>
+    <str>Aufgabe erstellen</str>
+  </msg>
 
   <msg>
     <id>Report</id>
@@ -122,6 +138,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Note</id>
     <str>Notiz bearbeiten</str>
   </msg>
+  <msg>
+    <id>Note Details</id>
+    <str>Notiz-Details</str>
+  </msg>
+  <msg>
+    <id>Notiz Filter</id>
+    <str>Notiz-Filter</str>
+  </msg>
 
   <msg>
     <id>Override</id>
@@ -138,6 +162,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Override</id>
     <str>Übersteuerung bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Override Details</id>
+    <str>Übersteuerungs-Details</str>
+  </msg>
+  <msg>
+    <id>Override Filter</id>
+    <str>Übersteuerungs-Filter</str>
   </msg>
 
   <!-- Asset Management types and common strings for them -->
@@ -160,6 +192,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>NVTs</str>
   </msg>
   <msg>
+    <id>NVT Details</id>
+    <str>NVT-Details</str>
+  </msg>
+
+  <msg>
     <id>CVE</id>
     <str>CVE</str>
   </msg>
@@ -167,6 +204,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>CVEs</id>
     <str>CVEs</str>
   </msg>
+  <msg>
+    <id>CVE Details</id>
+    <str>CVE-Details</str>
+  </msg>
+
   <msg>
     <id>CPE</id>
     <str>CPE</str>
@@ -176,6 +218,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>CPEs</str>
   </msg>
   <msg>
+    <id>CPE Details</id>
+    <str>CPE-Details</str>
+  </msg>
+
+  <msg>
     <id>OVAL Definition</id>
     <str>OVAL-Definition</str>
   </msg>
@@ -183,6 +230,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>OVAL Definitions</id>
     <str>OVAL-Definitionen</str>
   </msg>
+  <msg>
+    <id>OVAL Definition Details</id>
+    <str>OVAL-Definitions-Details</str>
+  </msg>
+
   <msg>
     <id>DFN-CERT Advisory</id>
     <str>DFN-CERT-Advisory</str>
@@ -192,12 +244,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>DFN-CERT-Advisories</str>
   </msg>
   <msg>
+    <id>DFN-CERT Advisory Details</id>
+    <str>DFN-CERT-Advisory-Details</str>
+  </msg>
+
+  <msg>
     <id>All SecInfo</id>
     <str>Alle Sicherheitsinfos</str>
   </msg>
   <msg>
     <id>All SecInfo Information</id>
     <str>Alle Sicherheitsinfos</str>
+  </msg>
+  <msg>
+    <id>Info Filter</id>
+    <str>Info-Filter</str>
   </msg>
 
   <!-- Configuration types and common strings for them -->
@@ -217,6 +278,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Target</id>
     <str>Ziel bearbeiten</str>
   </msg>
+  <msg>
+    <id>Target Details</id>
+    <str>Ziel-Details</str>
+  </msg>
+  <msg>
+    <id>Target Filter</id>
+    <str>Ziel-Filter</str>
+  </msg>
 
   <msg>
     <id>Port List</id>
@@ -233,6 +302,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Port List</id>
     <str>Portliste bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Port List Details</id>
+    <str>Portlisten-Details</str>
+  </msg>
+  <msg>
+    <id>Port List Filter</id>
+    <str>Portlisten-Filter</str>
   </msg>
 
   <msg>
@@ -251,6 +328,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Credential</id>
     <str>Anmeldedaten bearbeiten</str>
   </msg>
+  <msg>
+    <id>Credential Details</id>
+    <str>Anmeldedaten-Details</str>
+  </msg>
+  <msg>
+    <id>Credential Filter</id>
+    <str>Anmeldedaten-Filter</str>
+  </msg>
 
   <msg>
     <id>Scan Config</id>
@@ -265,12 +350,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Konfigurationen</str>
   </msg>
   <msg>
-    <id>New Scan Configs</id>
+    <id>New Scan Config</id>
     <str>Neue Scan-Konfig</str>
   </msg>
   <msg>
     <id>Edit Scan Configs</id>
     <str>Scan-Konfig bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Scan Config Details</id>
+    <str>Scan-Konfigurations-Details</str>
+  </msg>
+  <msg>
+    <id>Scan Config Filter</id>
+    <str>Scan-Konfigurations-Filter</str>
   </msg>
 
   <msg>
@@ -289,6 +382,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Alert</id>
     <str>Benachrichtigung bearbeiten</str>
   </msg>
+  <msg>
+    <id>Alert Details</id>
+    <str>Benachrichtigungs-Details</str>
+  </msg>
+  <msg>
+    <id>Alert Filter</id>
+    <str>Benachrichtigungs-Filter</str>
+  </msg>
 
   <msg>
     <id>Schedule</id>
@@ -305,6 +406,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Schedule</id>
     <str>Zeitplan bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Schedule Details</id>
+    <str>Zeitplan-Details</str>
+  </msg>
+  <msg>
+    <id>Schedule Filter</id>
+    <str>Zeitplan-Filter</str>
   </msg>
 
   <msg>
@@ -323,23 +432,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Report Format</id>
     <str>Berichtformat bearbeiten</str>
   </msg>
+  <msg>
+    <id>Report Format Details</id>
+    <str>Berichtformats-Details</str>
+  </msg>
+    <msg>
+    <id>Report Format Filter</id>
+    <str>Berichtformats-Filter</str>
+  </msg>
 
-  <msg>
-    <id>Schedule</id>
-    <str>Zeitplan</str>
-  </msg>
-  <msg>
-    <id>Schedules</id>
-    <str>Zeitpläne</str>
-  </msg>
-  <msg>
-    <id>New Schedule</id>
-    <str>Neuer Zeitplan</str>
-  </msg>
-  <msg>
-    <id>Edit Schedule</id>
-    <str>Zeitplan bearbeiten</str>
-  </msg>
 
   <msg>
     <id>Slave</id>
@@ -356,6 +457,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Slave</id>
     <str>Slave bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Slave Details</id>
+    <str>Slave-Details</str>
+  </msg>
+  <msg>
+    <id>Slave Filter</id>
+    <str>Slave-Filter</str>
   </msg>
 
   <msg>
@@ -374,6 +483,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Agent</id>
     <str>Agent bearbeiten</str>
   </msg>
+  <msg>
+    <id>Agent Details</id>
+    <str>Agenten-Details</str>
+  </msg>
+  <msg>
+    <id>Agent Filter</id>
+    <str>Agenten-Filter</str>
+  </msg>
 
   <msg>
     <id>Filter</id>
@@ -390,6 +507,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Filter</id>
     <str>Filter bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Filter Details</id>
+    <str>Filter-Details</str>
+  </msg>
+  <msg>
+    <id>Filter Filter</id>
+    <str>Filter-Filter</str>
   </msg>
 
   <msg>
@@ -408,6 +533,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Tag</id>
     <str>Tag bearbeiten</str>
   </msg>
+  <msg>
+    <id>Tag Details</id>
+    <str>Tag-Details</str>
+  </msg>
+  <msg>
+    <id>Tag Filter</id>
+    <str>Tag-Filter</str>
+  </msg>
 
   <msg>
     <id>Permission</id>
@@ -424,6 +557,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Permission</id>
     <str>Berechtigung bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Permission Details</id>
+    <str>Berechtigungs-Details</str>
+  </msg>
+  <msg>
+    <id>Permission Filter</id>
+    <str>Berechtigungs-Filter</str>
   </msg>
 
   <!-- Extras menu items -->
@@ -461,6 +602,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit User</id>
     <str>Benutzer bearbeiten</str>
   </msg>
+  <msg>
+    <id>User Details</id>
+    <str>Benutzer-Details</str>
+  </msg>
+  <msg>
+    <id>User Filter</id>
+    <str>Benutzer-Filter</str>
+  </msg>
 
   <msg>
     <id>Group</id>
@@ -478,6 +627,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Edit Group</id>
     <str>Gruppe bearbeiten</str>
   </msg>
+  <msg>
+    <id>Group Details</id>
+    <str>Gruppen-Details</str>
+  </msg>
+  <msg>
+    <id>Group Filter</id>
+    <str>Gruppen-Filter</str>
+  </msg>
 
   <msg>
     <id>Role</id>
@@ -494,6 +651,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>Edit Group</id>
     <str>Rolle bearbeiten</str>
+  </msg>
+  <msg>
+    <id>Role Details</id>
+    <str>Rollen-Details</str>
+  </msg>
+  <msg>
+    <id>Role Filter</id>
+    <str>Rollen-Filter</str>
   </msg>
 
   <msg>
@@ -556,19 +721,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <msg>
     <id>Export XML</id>
-    <str>Exportiere XML</str>
+    <str>XML exportieren</str>
   </msg>
   <msg>
     <id>Export</id>
-    <str>Exportiere</str>
+    <str>Exportieren</str>
   </msg>
   <msg>
-    <id>filtered</id>
-    <str>gefilterte</str>
+    <id>Export </id>
+    <str></str>
   </msg>
   <msg>
-    <id>as XML</id>
-    <str>als XML</str>
+    <id> filtered </id>
+    <str> gefilterte </str>
+  </msg>
+  <msg>
+    <id> as XML</id>
+    <str> als XML exportieren</str>
   </msg>
 
   <msg>
@@ -619,7 +788,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Update Filter</id>
     <str>Filter aktualisieren</str>
   </msg>
-  <!-- TODO: New XY filter from current term -->
+
+  <msg>
+    <id>New </id>
+    <str>Neuen </str>
+  </msg>
+  <msg>
+    <id> from current term</id>
+    <str> aus aktuellem Suchausdruck erstellen</str>
+  </msg>
   <msg>
     <id>Switch Filter</id>
     <str>Filter umschalten</str>
@@ -685,15 +862,181 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- Table content common elements -->
   <msg>
+    <id>#DETAILS_OF_PREFIX#</id>
+    <str>Details für </str>
+  </msg>
+  <msg>
+    <id>#DETAILS_OF_SUFFIX#</id>
+    <str> ansehen</str>
+  </msg>
+
+  <msg>
     <id>Delete</id>
     <str>Löschen</str>
+  </msg>
+  <msg>
+    <id>Edit</id>
+    <str>Bearbeiten</str>
   </msg>
   <msg>
     <id>Clone</id>
     <str>Clonen</str>
   </msg>
 
-  <!-- Reports common -->
+  <msg>
+    <id> is still in use</id>
+    <str> wird noch verwendet</str>
+  </msg>
+  <msg>
+    <id> is not writable</id>
+    <str> ist nicht beschreibbar</str>
+  </msg>
+  <msg>
+    <id> cannot be deleted</id>
+    <str> kann nicht gelöscht werden</str>
+  </msg>
+  <msg>
+    <id> cannot be moved to Trashcan</id>
+    <str> kann nicht in den Mülleimer verschoben werden</str>
+  </msg>
+
+  <!-- Common resource properties -->
+  <msg>
+    <id>Actions</id>
+    <str>Aktionen</str>
+  </msg>
+  <msg>
+    <id>Active</id>
+    <str>Aktiv</str>
+  </msg>
+  <msg>
+    <id>Comment</id>
+    <str>Kommentar</str>
+  </msg>
+  <msg>
+    <id>Created</id>
+    <str>Erstellt</str>
+  </msg>
+  <msg>
+    <id>Date</id>
+    <str>Datum</str>
+  </msg>
+  <msg>
+    <id>ID</id>
+    <str>ID</str>
+  </msg>
+  <msg>
+    <id>Last Modified</id>
+    <str>Zuletzt geändert</str>
+  </msg>
+  <msg>
+    <id>Modified</id>
+    <str>Geändert</str>
+  </msg>
+  <msg>
+    <id>Name</id>
+    <str>Name</str>
+  </msg>
+  <msg>
+    <id>Owner</id>
+    <str>Besitzer</str>
+  </msg>
+  <msg>
+    <id>Severity</id>
+    <str>Schweregrad</str>
+  </msg>
+  <msg>
+    <id>Status</id>
+    <str>Status</str>
+  </msg>
+  <msg>
+    <id>Total</id>
+    <str>Gesamt</str>
+  </msg>
+  <msg>
+    <id>Text</id>
+    <str>Text</str>
+  </msg>
+
+  <!-- Common resource property values -->
+  <msg>
+    <id>Any</id>
+    <str>Beliebig</str>
+  </msg>
+  <msg>
+    <id>N/A</id>
+    <str>N/A</str>
+  </msg>
+    <msg>
+    <id>None</id>
+    <str>Keine</str>
+  </msg>
+    <msg>
+    <id>none</id>
+    <str>keine</str>
+  </msg>
+  <msg>
+    <id>yes</id>
+    <str>ja</str>
+  </msg>
+  <msg>
+    <id>Yes</id>
+    <str>Ja</str>
+  </msg>
+  <msg>
+    <id>no</id>
+    <str>nein</str>
+  </msg>
+  <msg>
+    <id>No</id>
+    <str>Nein</str>
+  </msg>
+
+  <msg>
+    <id>optional</id>
+    <str>optional</str>
+  </msg>
+  <msg>
+    <id>immutable</id>
+    <str>unveränderlich</str>
+  </msg>
+
+
+  <!-- Severity Levels -->
+  <msg>
+    <id>Error</id>
+    <str>Fehler</str>
+  </msg>
+  <msg>
+    <id>Debug</id>
+    <str>Debug</str>
+  </msg>
+  <msg>
+    <id>False Positive</id>
+    <str>Falsch Positiv</str>
+  </msg>
+  <msg>
+    <id>False Pos.</id>
+    <str>Falsch Pos.</str>
+  </msg>
+  <msg>
+    <id>Log</id>
+    <str>Log</str>
+  </msg>
+  <msg>
+    <id>Low</id>
+    <str>Niedrig</str>
+  </msg>
+  <msg>
+    <id>Medium</id>
+    <str>Mittel</str>
+  </msg>
+  <msg>
+    <id>High</id>
+    <str>Hoch</str>
+  </msg>
+
+  <!-- Task actions and properties -->
   <msg>
     <id>Start</id>
     <str>Starten</str>
@@ -710,6 +1053,295 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Pause</id>
     <str>Pausieren</str>
   </msg>
+
+  <msg>
+    <id>Task is a container</id>
+    <str>Aufgabe ist ein Container</str>
+  </msg>
+  <msg>
+    <id>Permission to start task denied</id>
+    <str>Keine Berechtigung, Aufgabe zu starten</str>
+  </msg>
+  <msg>
+    <id>Permission to resume task denied</id>
+    <str>Keine Berechtigung, Aufgabe fortzusetzen</str>
+  </msg>
+  <msg>
+    <id>Permission to stop task denied</id>
+    <str>Keine Berechtigung, Aufgabe zu stoppen</str>
+  </msg>
+  <msg>
+    <id>Task is already active or paused</id>
+    <str>Aufgabe ist bereits aktiv oder pausiert</str>
+  </msg>
+  <msg>
+    <id>Task is scheduled</id>
+    <str>Aufgabe ist durch Zeitplan gesteuert</str>
+  </msg>
+  <msg>
+    <id>Task is not paused or stopped</id>
+    <str>Aufgabe ist nicht pausiert oder gestoppt</str>
+  </msg>
+  <msg>
+    <id>Tasks can only be be stopped when running or paused</id>
+    <str>Nur laufende oder pausierte Aufgaben können gestoppt werden</str>
+  </msg>
+
+  <!-- Task status texts -->
+  <msg>
+    <id>Container</id>
+    <str>Container</str>
+  </msg>
+  <msg>
+    <id>Uploading</id>
+    <str>Upload Läuft</str>
+  </msg>
+  <msg>
+    <id>Delete Requested</id>
+    <str>Löschen Angefordert</str>
+  </msg>
+  <msg>
+    <id>Ultimate Delete Requested</id>
+    <str>Entgültiges Löschen Angefordert</str>
+  </msg>
+  <msg>
+    <id>Done</id>
+    <str>Abgeschlossen</str>
+  </msg>
+  <msg>
+    <id>New</id>
+    <str>Neu</str>
+  </msg>
+  <msg>
+    <id>Pause Requested</id>
+    <str>Pause Angefordert</str>
+  </msg>
+  <msg>
+    <id>Paused</id>
+    <str>Pausiert</str>
+  </msg>
+  <msg>
+    <id>Requested</id>
+    <str>Angefordert</str>
+  </msg>
+  <msg>
+    <id>Resume Requested</id>
+    <str>Fortsetzen Angefordert</str>
+  </msg>
+  <msg>
+    <id>Running</id>
+    <str>Läuft gerade</str>
+  </msg>
+  <msg>
+    <id>Stop Requested</id>
+    <str>Stopp Angefordert</str>
+  </msg>
+  <msg>
+    <id>Stopped</id>
+    <str>Gestoppt</str>
+  </msg>
+  <msg>
+    <id>Internal Error</id>
+    <str>Interner Fehler</str>
+  </msg>
+
+  <msg>
+    <id> at </id>
+    <str> bei </str>
+  </msg>
+
+  <msg>
+    <id>Go to the current report</id>
+    <str>Zum aktuellen Bericht gehen</str>
+  </msg>
+  <msg>
+    <id>View list of all finished reports for Task</id>
+    <str>Betrachte Liste aller abschlossenen Berichte für Aufgabe</str>
+  </msg>
+  <msg>
+    <id>Last</id>
+    <context>Task-Reports</context>
+    <str>Letzter</str>
+  </msg>
+  <msg>
+    <id>View list of all finished reports for Task </id>
+    <str>Liste aller abschlossenen Berichte für Aufgabe </str>
+  </msg>
+  <msg>
+    <id>#TASK FINSISHED REPORTS SUFFIX#</id>
+    <str> betrachten</str>
+  </msg>
+  <msg>
+    <id>View list of all reports for Task </id>
+    <str>Liste aller Berichte für Aufgabe </str>
+  </msg>
+  <msg>
+    <id>, including unfinished ones</id>
+    <str> betrachten, inklusive nicht abgeschlossener Berichte</str>
+  </msg>
+  <msg>
+    <id>View last report for Task </id>
+    <str>Letzten Bericht für Aufgabe </str>
+  </msg>
+  <msg>
+    <id>#TASK LAST REPORT SUFFIX#</id>
+    <str> betrachten</str>
+  </msg>
+
+  <msg>
+    <id>Trend</id>
+    <str>Trend</str>
+  </msg>
+  <msg>
+    <id>Severity increased</id>
+    <str>Schweregrad hat zugenommen</str>
+  </msg>
+  <msg>
+    <id>Severity decreased</id>
+    <str>Schweregrad hat abgenommen</str>
+  </msg>
+  <msg>
+    <id>Vulnerability count increased</id>
+    <str>Anzahl Schwachstellen hat zugenommen</str>
+  </msg>
+  <msg>
+    <id>Vulnerability count decreased</id>
+    <str>Anzahl Schwachstellen hat abgenommen</str>
+  </msg>
+  <msg>
+    <id>Vulnerabilities did not change</id>
+    <str>Schwachstellen haben sich nicht geändert</str>
+  </msg>
+
+  <msg>
+    <id>Alterable</id>
+    <str>Änderbar</str>
+  </msg>
+  <msg>
+    <id>Task is alterable</id>
+    <str>Aufgabe is änderbar.</str>
+  </msg>
+  <msg>
+    <id>This is an Alterable Task. Reports may not relate to current Scan Config or Target!</id>
+    <str>Diese Aufgabe is änderbar. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!</str>
+  </msg>
+  <msg>
+    <id>Alterable Task</id>
+    <str>Änderbare Aufgabe</str>
+  </msg>
+
+  <msg>
+    <id>#TASK RUN ON SLAVE PREFIX#</id>
+    <str>Aufgabe ist konfiguriert, um auf Slave </str>
+  </msg>
+  <msg>
+    <id>#TASK RUN ON SLAVE SUFFIX#</id>
+    <str> ausgeführt zu werden</str>
+  </msg>
+
+  <msg>
+    <id>Task made visible for:</id>
+    <str>Aufgabe sichtbar gemacht für: </str>
+  </msg>
+  <msg>
+    <id>Task made visible for Groups:</id>
+    <str>Aufgabe sichtbar gemacht für die Gruppen:</str>
+  </msg>
+  <msg>
+    <id>Task made visible for Roles:</id>
+    <str>Aufgabe sichtbar gemacht für die Rollen:</str>
+  </msg>
+  <msg>
+    <id>Observing task owned by</id>
+    <str>Beobachte Aufgabe von Besitzer</str>
+  </msg>
+
+  <msg>
+    <id>Order for target hosts</id>
+    <str>Reihefolge der Ziel-Hosts</str>
+  </msg>
+  <msg>
+    <id>Sequential</id>
+    <str>Sequentiell</str>
+  </msg>
+  <msg>
+    <id>Random</id>
+    <str>Zufällig</str>
+  </msg>
+  <msg>
+    <id>Reverse</id>
+    <str>Umgekehrt</str>
+  </msg>
+
+  <msg>
+    <id>Network Source Interface</id>
+    <str>Netzwerk-Quell-Interface</str>
+  </msg>
+  <msg>
+    <id>Reports on Task</id>
+    <str>Berichte für Aufgabe</str>
+  </msg>
+  <msg>
+    <id>Notes on Task</id>
+    <str>Notizen für Aufgabe</str>
+  </msg>
+  <msg>
+    <id>Overrides on Task</id>
+    <str>Übersteuerungen für Aufgabe</str>
+  </msg>
+
+  <msg>
+    <id>Observers</id>
+    <str>Beobachter</str>
+  </msg>
+  <msg>
+    <id>Observer Groups</id>
+    <str>Beobachter-Gruppen</str>
+  </msg>
+
+  <msg>
+    <id>Add to Assets</id>
+    <str>Zu Assets hinzufügen</str>
+  </msg>
+  <msg>
+    <id>Add results to Asset Management</id>
+    <str>Ergebnisse zum Asset-Management hinzufügen</str>
+  </msg>
+
+  <msg>
+    <id>Scan Targets</id>
+    <str>Scan-Ziele</str>
+  </msg>
+  <msg>
+    <id>Import Report</id>
+    <str>Bericht importieren</str>
+  </msg>
+  <msg>
+    <id>Add Report</id>
+    <str>Bericht hinzufügen</str>
+  </msg>
+
+  <msg>
+    <id>New Container Task</id>
+    <str>Neue Container-Aufgabe</str>
+  </msg>
+
+  <!-- Scan Preferences -->
+  <msg>
+    <id>Scan Intensity</id>
+    <str>Scan-Intensität</str>
+  </msg>
+  <msg>
+    <id>Maximum concurrently executed NVTs per host</id>
+    <str>Maximal gleichzeitig ausgeführte NVT pro Host</str>
+  </msg>
+  <msg>
+    <id>Maximum concurrently scanned hosts</id>
+    <str>Maximal gleichzeitig gescannte Hosts</str>
+  </msg>
+
+  <!-- Report actions and properties -->
+  <!-- TODO -->
 
   <!-- Report sections -->
   <msg>
@@ -784,6 +1416,108 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Report: Error Messages</id>
     <str>Bericht: Fehlermeldungen</str>
   </msg>
+
+  <!-- Note actions and properties -->
+  <!-- TODO -->
+
+  <!-- Override actions and properties -->
+  <!-- TODO -->
+
+  <!-- Host actions and properties -->
+  <!-- TODO -->
+
+  <!-- Common SecInfo actions and properties -->
+  <!-- TODO -->
+
+  <!-- NVT actions and properties -->
+  <!-- TODO -->
+
+  <!-- CVE actions and properties -->
+  <!-- TODO -->
+
+  <!-- CPE actions and properties -->
+  <!-- TODO -->
+
+  <!-- OVAL definition actions and properties -->
+  <!-- TODO -->
+
+  <!-- DFN-CERT Advisory actions and properties -->
+  <!-- TODO -->
+
+  <!-- Target actions and properties -->
+  <!-- TODO -->
+
+  <!-- Port List actions and properties -->
+  <!-- TODO -->
+
+  <!-- LSC Credential actions and properties -->
+  <!-- TODO -->
+
+  <!-- Scan Config actions and properties -->
+  <!-- TODO -->
+
+  <!-- Alert actions and properties -->
+  <!-- TODO -->
+
+  <!-- Schedule actions and properties -->
+  <!-- TODO -->
+
+  <!-- Report Format actions and properties -->
+  <!-- TODO -->
+
+  <!-- Slave actions and properties -->
+  <!-- TODO -->
+
+  <!-- Agent actions and properties -->
+  <!-- TODO -->
+
+  <!-- Filter actions and properties -->
+  <!-- TODO -->
+
+  <!-- Tag actions and properties -->
+  <!-- TODO -->
+  <msg>
+    <id>Value</id>
+    <str>Wert</str>
+  </msg>
+  <msg>
+    <id>Enable Tag</id>
+    <str>Tag aktivieren</str>
+  </msg>
+  <msg>
+    <id>Disable Tag</id>
+    <str>Tag deaktivieren</str>
+  </msg>
+
+  <!-- General user Tags window -->
+  <msg>
+    <id>User Tags list</id>
+    <str>Liste der Benutzer-Tags</str>
+  </msg>
+  <msg>
+    <id>User Tags for</id>
+    <str>Benutzer-Tags für</str>
+  </msg>
+  <msg>
+    <id>Add Tag</id>
+    <str>Tag hinzufügen</str>
+  </msg>
+  <msg>
+    <id>with Value</id>
+    <str>mit Wert</str>
+  </msg>
+
+  <!-- Permission actions and properties -->
+  <!-- TODO -->
+
+  <!-- User actions and properties -->
+  <!-- TODO -->
+
+  <!-- Group actions and properties -->
+  <!-- TODO -->
+
+  <!-- Role actions and properties -->
+  <!-- TODO -->
 
   <!-- Trashcan -->
   <msg>

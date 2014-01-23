@@ -46,18 +46,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- language code, needed where /envelope is not available -->
 <xsl:variable name="i18n_language" select="substring(/envelope/i18n, 1, 2)"/>
 
+<xsl:variable name="i18n_po_path">
+  <xsl:choose>
+    <xsl:when test="$i18n_language = 'de'">po/de.xml</xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+
 <!-- XPATH FUNCTIONS -->
 
 <func:function name="gsa:i18n">
   <xsl:param name="str"/>
+  <xsl:param name="context" select="''"/>
+  <xsl:param name="default" select="$str"/>
+
   <func:result>
+    <xsl:variable name="id_match" select="document($i18n_po_path)/i18n/msg[id = $str]"/>
+    <xsl:variable name="new_str">
+      <xsl:choose>
+        <xsl:when test="$context != '' and count($id_match) &gt; 1 and $id_match[context = $context]">
+          <xsl:value-of select="$id_match[context = $context]/str"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$id_match[not(context)]/str"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$i18n_language = 'de' and
-                      document('po/de.xml')//i18n/msg[normalize-space(id) = normalize-space($str)]/str">
-        <xsl:value-of select="document('po/de.xml')//i18n/msg[normalize-space(id) = normalize-space($str)]/str"/>
+      <xsl:when test="$id_match">
+        <xsl:value-of select="$new_str"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$str"/>
+        <xsl:value-of select="$default"/>
       </xsl:otherwise>
     </xsl:choose>
   </func:result>
@@ -1436,7 +1456,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
                 <li class="first_button_overlay">
-                  <xsl:value-of select="gsa:i18n (exslt:node-set ($items)/item/name)"/>
+                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
                 </li>
               </ul>
             </div>
@@ -1595,7 +1615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
                 <li class="first_button_overlay">
-                  <xsl:value-of select="gsa:i18n (exslt:node-set ($items)/item/name)"/>
+                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
                 </li>
               </ul>
             </div>
@@ -1698,7 +1718,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <ul class="first_button_overlay">
                   <li class="pointy"></li>
                   <li class="first_button_overlay">
-                    <xsl:value-of select="gsa:i18n (exslt:node-set ($items)/item/name)"/>
+                    <xsl:value-of select="exslt:node-set ($items)/item/name"/>
                   </li>
                 </ul>
               </div>
@@ -1712,7 +1732,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <li class="last"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                 </xsl:when>
                 <xsl:otherwise>
-                  <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="gsa:i18n (name)"/></a></li>
+                  <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>

@@ -1,3 +1,49 @@
+2014-01-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add German translation for Tasks pages and several general strings of
+	other resource types like common table headers, severity levels and
+	tooltips of details page links.
+
+	* src/html/classic/gsad.xsl (i18n_po_path): New global variable.
+	(gsa:i18n): Add context and default parameters, remove use of
+	normalize-space.
+	(html-gsa-navigation): Remove gsa:i18n calls that would attempt
+	translating items twice.
+
+	* src/html/classic/omp.xsl (gsa:view_details_title): New function.
+	(filter-window-part): Add i18n for "New [...] filter from current term"
+	and field names.
+	(edit-header-icons, severity-label, user-tags-window)
+	(tag [for_resource], toggle-tag-icon): Add i18n marking.
+	(assets, report [filterbox]): Add i18n marking for Apply button.
+	(task-icons, task [details], trend_meter, status_bar): Add i18n marking.
+	(list-window): Restructure Export i18n marking, add i18n of filter
+	column names.
+	(minor-details): Add i18n marking.
+	(details-header-icons): Add and restructure i18n marking. Rewrite
+	text for easier translation.
+	(new_task): Add i18n marking.
+	(report, last_report): Add i18n marking for Report / Task details and
+	severity bar.
+	(new_task, html-edit-task-form, task, html-tasks-table): Add i18n
+	marking.
+	(lsc_credential, agent, alert, filter, tag): Use view_details_title
+	function.
+	(column-name): Apply i18n to show column names, add i18n_context param.
+	(target, config, schedule, slave, get_info_cpe_lnk, get_info_cve_lnk)
+	(get_info_nvt_lnk, get_info_ovaldef_lnk, get_info_dfn_cert_adv_lnk)
+	(note, override, override [details], group, permission, port_list)
+	(report_format, host, result [result-headers], report [assets])
+	(report [vulns], report [os], report [os-severity])
+	(report [unknown-os-severity], report [app-severity], role, user): Use
+	view_details_title function and apply i18n to severity bars.
+
+	* src/html/classic/po/de.xml: Add "[...] Details" and "[...] Filter"
+	strings. Update strings for export, new filter, details. Add general
+	property names and values, severity levels, User Tags window strings,
+	Task actions, properties and values. Add TODO comments for other
+	resource types.
+
 2014-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Also get details on Delta Summary page,
