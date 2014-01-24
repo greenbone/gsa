@@ -1,3 +1,11 @@
+2014-01-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/po/de.xml: Update copyright and authors.
+	Reorganize strings into categories: Generic, interface element specific,
+	resource type specific, special page specific, wizard. Add comments
+	for categories and template for resource type string organization.
+	Fix typos in "View list of all reports [...]", Note and Role strings.
+
 2014-01-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add German translation for Tasks pages and several general strings of
