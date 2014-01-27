@@ -276,28 +276,31 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   params_iterator_init (&iter, credentials->params);
   while (params_iterator_next (&iter, &name, &param))
     {
-      if (name && (name[strlen (name) - 1] == ':') && param->values)
+      if (name)
         {
-          gchar *child_name;
-          params_iterator_t children_iter;
-          param_t *child_param;
+          if ((name[strlen (name) - 1] == ':') && param->values)
+            {
+              gchar *child_name;
+              params_iterator_t children_iter;
+              param_t *child_param;
 
-          params_iterator_init (&children_iter, param->values);
-          while (params_iterator_next (&children_iter, &child_name,
-                                       &child_param))
-            if (child_param->value
-                && child_param->valid
-                && child_param->valid_utf8)
-              xml_string_append (string,
-                                 "<_param>"
-                                 "<name>%s%s</name><value>%s</value>"
-                                 "</_param>",
-                                 name, child_name, child_param->value);
+              params_iterator_init (&children_iter, param->values);
+              while (params_iterator_next (&children_iter, &child_name,
+                                           &child_param))
+                if (child_param->value
+                    && child_param->valid
+                    && child_param->valid_utf8)
+                  xml_string_append (string,
+                                     "<_param>"
+                                     "<name>%s%s</name><value>%s</value>"
+                                     "</_param>",
+                                     name, child_name, child_param->value);
+            }
+
+          if (param->value && param->valid && param->valid_utf8
+              && strcmp (name, "xml_file"))
+            xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
         }
-
-      if (param->value && param->valid && param->valid_utf8
-          && strcmp (name, "xml_file"))
-        xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
     }
   g_string_append (string, "</params>");
 
@@ -1337,7 +1340,6 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                             resource_id)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2560,7 +2562,6 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                              : "")
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4602,9 +4603,12 @@ download_agent_omp (credentials_t * credentials,
                 *filename = g_strdup (entity_text (filename_entity));
               else
                 *filename = NULL;
+              if (!(*filename && strlen (*filename)))
+                {
+                  g_free(*filename);
+                  *filename = g_strdup_printf ("agent-%s-%s", agent_id, format);
+                }
             }
-          if (!(*filename && strlen (*filename)))
-            *filename = g_strdup_printf ("agent-%s-%s", agent_id, format);
           free_entity (entity);
           return 0;
         }
@@ -5481,7 +5485,6 @@ edit_alert (credentials_t * credentials, params_t *params,
                             alert_id)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6804,7 +6807,6 @@ edit_tag (credentials_t * credentials, params_t *params,
                             tag_id)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -7250,7 +7252,6 @@ edit_target (credentials_t * credentials, params_t *params,
                             target_id)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -14139,8 +14140,8 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
             }
           if (! omp_success (entity) && modify_failed_flag)
             *modify_failed_flag = 1;
+          free_entity(entity);
         }
-      free_entity (entity);
     }
   return 0;
 }
@@ -14162,8 +14163,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text, *status, *max;
-  gchar *text_64, *max_64;
+  const char *text, *passwd, *status, *max;
+  gchar *text_64, *passwd_64, *max_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
@@ -14173,9 +14174,12 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   *password = NULL;
   *severity = NULL;
 
-  if ((params_value (params, "text") == NULL)
-      || (params_value (params, "password") == NULL)
-      || (params_value (params, "max") == NULL))
+  text = params_value (params, "text");
+  passwd = params_value (params, "password"); 
+  max = params_value (params, "max");
+  if ((text == NULL)
+      || (passwd == NULL)
+      || (max == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"));
@@ -14202,18 +14206,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (params_value (params, "enable"))
     {
       /* Send Password setting */
-      text = params_value (params, "password");
-      text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
+      passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
       if (openvas_server_sendf (&session,
                                 "<modify_setting>"
                                 "<name>Password</name>"
                                 "<value>%s</value>"
                                 "</modify_setting>",
-                                text_64 ? text_64 : "")
+                                passwd_64 ? passwd_64 : "")
           == -1)
         {
-          g_free (text_64);
+          g_free (passwd_64);
           openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -14222,7 +14225,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to send command to manager daemon.",
                                "/omp?cmd=get_my_settings");
         }
-      g_free (text_64);
+      g_free (passwd_64);
 
       entity = NULL;
       if (read_entity_and_string (&session, &entity, &xml))
@@ -14240,16 +14243,15 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       if (status && (strlen (status) > 0) && (status[0] == '2'))
         {
           g_free (credentials->password);
-          credentials->password = g_strdup (text);
-          *password = g_strdup (text);
+          credentials->password = g_strdup (passwd);
+          *password = g_strdup (passwd);
         }
       else
         modify_failed = 1;
     }
 
   /* Send Timezone */
-  text = params_value (params, "text");
-  text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
+  text_64 = g_base64_encode ((guchar*) text, strlen (text));
 
   if (openvas_server_sendf (&session,
                             "<modify_setting>"
@@ -14303,10 +14305,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     modify_failed = 1;
 
   /* Send Results Per Page */
-  max = params_value (params, "max");
-  max_64 = (max
-             ? g_base64_encode ((guchar*) max, strlen (max))
-             : g_strdup (""));
+  max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
   if (openvas_server_sendf (&session,
                             "<modify_setting"
@@ -14440,8 +14439,11 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (status && (strlen (status) > 0) && (status[0] == '2'))
     {
       g_free (credentials->severity);
-      credentials->severity = g_strdup (strlen (text) ? text : "UTC");
-      *severity = g_strdup (strlen (text) ? text : "UTC");
+      if ((text != NULL) && (strlen (text) > 0))
+        {
+          credentials->severity = g_strdup (text);
+          *severity = g_strdup (text);
+        }
     }
   else
     modify_failed = 1;

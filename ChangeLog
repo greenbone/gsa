@@ -1,3 +1,14 @@
+2014-01-27  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Solve issues raised by the clang static analyser.
+
+	* src/gsad_omp.c (xsl_transform_omp, save_my_settings_omp): Null
+          pointer passed as an argument to a 'nonnull' parameter
+	  (edit_resource, edit_task, edit_alert, edit_tag, edit_target,
+	   send_settings_filters): Function call argument is an uninitialized
+	  value
+          (download_agent_omp): Dereference of null pointer
+
 2014-01-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [section-list]): Rename
