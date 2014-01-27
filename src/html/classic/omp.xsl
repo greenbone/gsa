@@ -502,9 +502,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$section = 'results' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Results')"/></xsl:when>
       <xsl:when test="$section = 'results' and $type = 'delta'"><xsl:value-of select="gsa:i18n ('Report: Delta Results')"/></xsl:when>
       <xsl:when test="$section = 'results'"><xsl:value-of select="gsa:i18n ('Report: Results')"/></xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Summary')"/></xsl:when>
-      <xsl:when test="$section = 'summary' and $type = 'delta'"><xsl:value-of select="gsa:i18n ('Report: Delta Summary')"/></xsl:when>
-      <xsl:when test="$section = 'summary'"><xsl:value-of select="gsa:i18n ('Report: Summary')"/></xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Summary and Download')"/></xsl:when>
+      <xsl:when test="$section = 'summary' and $type = 'delta'"><xsl:value-of select="gsa:i18n ('Report: Delta Summary and Download')"/></xsl:when>
+      <xsl:when test="$section = 'summary'"><xsl:value-of select="gsa:i18n ('Report: Summary and Download')"/></xsl:when>
       <xsl:when test="$section = 'hosts' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Hosts')"/></xsl:when>
       <xsl:when test="$section = 'hosts'"><xsl:value-of select="gsa:i18n ('Report: Hosts')"/></xsl:when>
       <xsl:when test="$section = 'ports'"><xsl:value-of select="gsa:i18n ('Report: Ports')"/></xsl:when>
@@ -23710,13 +23710,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$count &gt; 0 and $current_host = ''">
       <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=levels={$levels} {$filter}&amp;token={/envelope/token}"
-         title="Report: Summary ({$name})" style="margin-left:3px;">
+         title="Report: Summary and Download ({$name})" style="margin-left:3px;">
          <xsl:value-of select="$count"/>
       </a>
     </xsl:when>
     <xsl:when test="$count &gt; 0">
       <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=&#34;{$current_host}&#34; levels={$levels} {$filter}&amp;token={/envelope/token}"
-         title="Report: Summary ({$current_host} {$name})" style="margin-left:3px;">
+         title="Report: Summary and Download ({$current_host} {$name})" style="margin-left:3px;">
          <xsl:value-of select="$count"/>
       </a>
     </xsl:when>
@@ -24555,9 +24555,131 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-     title="Help: View Report (View Report)">
+     title="Help: View Report">
     <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/help.png"/>
   </a>
+</xsl:template>
+
+<xsl:template name="full-report-export-form">
+  <form action="" method="get">
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="hidden" name="cmd" value="get_report"/>
+    <input type="hidden" name="report_id" value="{report/@id}"/>
+    <input type="hidden" name="first_result" value="1"/>
+    <input type="hidden" name="max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
+    <input type="hidden" name="notes" value="1"/>
+    <input type="hidden" name="overrides" value="1"/>
+    <input type="hidden" name="result_hosts_only" value="1"/>
+    <input type="hidden" name="levels" value="hmlgf"/>
+    <input type="hidden" name="autofp"
+            value="{report/filters/autofp}"/>
+    <select name="report_format_id" title="Download Format">
+      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
+        <xsl:choose>
+          <xsl:when test="@type='prognostic' and name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:when test="@type='../../delta' and name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:when test="name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="{@id}"><xsl:value-of select="name"/></option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </select>
+    <input type="image"
+            name="submit"
+            value="Download"
+            title="Download full Report"
+            src="/img/download.png"
+            border="0"
+            style="margin-left:3px;"
+            alt="Download"/>
+  </form>
+</xsl:template>
+
+<xsl:template name="filtered-report-export-form">
+  <xsl:param name="apply-overrides" select="report/filters/apply_overrides"/>
+  <xsl:param name="levels" select="report/filters/text()"/>
+
+  <form action="" method="get">
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="hidden" name="cmd" value="get_report"/>
+    <input type="hidden" name="report_id" value="{report/@id}"/>
+
+    <xsl:choose>
+      <xsl:when test="../../delta">
+        <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+        <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+      </xsl:when>
+      <xsl:when test="@type='prognostic'">
+        <input type="hidden" name="type" value="prognostic"/>
+        <input type="hidden" name="host" value="{report/filters/host}"/>
+        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+      </xsl:when>
+    </xsl:choose>
+
+    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+    <input type="hidden" name="max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
+    <input type="hidden" name="levels" value="{$levels}"/>
+    <input type="hidden"
+            name="search_phrase"
+            value="{report/filters/phrase}"/>
+    <input type="hidden"
+            name="apply_min_cvss_base"
+            value="{number (string-length (report/filters/min_cvss_base) &gt; 0)}"/>
+    <input type="hidden"
+            name="min_cvss_base"
+            value="{report/filters/min_cvss_base}"/>
+    <input type="hidden"
+            name="sort_field"
+            value="{report/sort/field/text()}"/>
+    <input type="hidden"
+            name="sort_order"
+            value="{report/sort/field/order}"/>
+    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+    <input type="hidden"
+            name="overrides"
+            value="{$apply-overrides}"/>
+    <input type="hidden"
+            name="result_hosts_only"
+            value="{report/filters/result_hosts_only}"/>
+    <input type="hidden" name="autofp"
+            value="{report/filters/autofp}"/>
+    <select name="report_format_id" title="Download Format">
+      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
+        <xsl:choose>
+          <xsl:when test="@type='prognostic' and name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:when test="@type='../../delta' and name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:when test="name='PDF'">
+            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="{@id}"><xsl:value-of select="name"/></option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </select>
+    <input type="image"
+            name="submit"
+            value="Download"
+            title="Download filtered Report"
+            src="/img/download.png"
+            border="0"
+            style="margin-left:3px;"
+            alt="Download"/>
+  </form>
 </xsl:template>
 
 <xsl:template name="report-icons">
@@ -24615,6 +24737,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
+  <div id="small_inline_form" style="display:inline; margin-left: 7px" >
+    <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
+  </div>
 </xsl:template>
 
 <xsl:template match="get_report_closed_cves_response">
@@ -25359,45 +25484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <div id="small_form" style="float:right;">
-                  <form action="" method="get">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{report/@id}"/>
-                    <input type="hidden" name="first_result" value="1"/>
-                    <input type="hidden" name="max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
-                    <input type="hidden" name="notes" value="1"/>
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="hidden" name="result_hosts_only" value="1"/>
-                    <input type="hidden" name="levels" value="hmlgf"/>
-                    <input type="hidden" name="autofp"
-                           value="{report/filters/autofp}"/>
-                    <select name="report_format_id" title="Download Format">
-                      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
-                        <xsl:choose>
-                          <xsl:when test="@type='prognostic' and name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:when test="@type='../../delta' and name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:when test="name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <input type="image"
-                           name="submit"
-                           value="Download"
-                           title="Download"
-                           src="/img/download.png"
-                           border="0"
-                           style="margin-left:3px;"
-                           alt="Download"/>
-                  </form>
+                  <xsl:call-template name="full-report-export-form"/>
                 </div>
               </td>
             </tr>
@@ -25489,80 +25576,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>
               <td>
                 <div id="small_form" style="float:right;">
-                  <form action="" method="get">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{report/@id}"/>
-
-                    <xsl:choose>
-                      <xsl:when test="../../delta">
-                        <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-                        <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
-                      </xsl:when>
-                      <xsl:when test="@type='prognostic'">
-                        <input type="hidden" name="type" value="prognostic"/>
-                        <input type="hidden" name="host" value="{report/filters/host}"/>
-                        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-                        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-                        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-                        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-                      </xsl:when>
-                    </xsl:choose>
-
-                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                    <input type="hidden" name="max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
-                    <input type="hidden" name="levels" value="{$levels}"/>
-                    <input type="hidden"
-                           name="search_phrase"
-                           value="{report/filters/phrase}"/>
-                    <input type="hidden"
-                           name="apply_min_cvss_base"
-                           value="{number (string-length (report/filters/min_cvss_base) &gt; 0)}"/>
-                    <input type="hidden"
-                           name="min_cvss_base"
-                           value="{report/filters/min_cvss_base}"/>
-                    <input type="hidden"
-                           name="sort_field"
-                           value="{report/sort/field/text()}"/>
-                    <input type="hidden"
-                           name="sort_order"
-                           value="{report/sort/field/order}"/>
-                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                    <input type="hidden"
-                           name="overrides"
-                           value="{$apply-overrides}"/>
-                    <input type="hidden"
-                           name="result_hosts_only"
-                           value="{report/filters/result_hosts_only}"/>
-                    <input type="hidden" name="autofp"
-                           value="{report/filters/autofp}"/>
-                    <select name="report_format_id" title="Download Format">
-                      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
-                        <xsl:choose>
-                          <xsl:when test="@type='prognostic' and name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:when test="@type='../../delta' and name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:when test="name='PDF'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <input type="image"
-                           name="submit"
-                           value="Download"
-                           title="Download"
-                           src="/img/download.png"
-                           border="0"
-                           style="margin-left:3px;"
-                           alt="Download"/>
-                  </form>
+                  <xsl:call-template name="filtered-report-export-form">
+                    <xsl:with-param name="apply-overrides" select="$apply-overrides"/>
+                    <xsl:with-param name="levels" select="$levels"/>
+                  </xsl:call-template>
                 </div>
               </td>
             </xsl:otherwise>

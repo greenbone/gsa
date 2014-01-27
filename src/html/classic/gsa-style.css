@@ -903,7 +903,7 @@ text-align:right;
 }
 
 #report_section_list ul li ul {
- width: 255px;
+ width: 317px;
  z-index: 6;
  position: absolute;
  display:none;
@@ -918,7 +918,7 @@ text-align:right;
  line-height: 22px;
  font-size: 10px;
  color: #3A3A3A;
- width: 255px;
+ width: 317px;
  height: 22px;
 }
 

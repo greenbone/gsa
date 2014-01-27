@@ -872,16 +872,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Bericht: Ergebnisse</str>
   </msg>
   <msg>
-    <id>Report: Prognostic Summary</id>
-    <str>Bericht: Vorhersage-Übersicht</str>
+    <id>Report: Prognostic Summary and Download</id>
+    <str>Bericht: Vorhersage-Übersicht und Download</str>
   </msg>
   <msg>
-    <id>Report: Delta Summary</id>
-    <str>Bericht: Delta-Übersicht</str>
+    <id>Report: Delta Summary and Download</id>
+    <str>Bericht: Delta-Übersicht und Download</str>
   </msg>
   <msg>
-    <id>Report: Summary</id>
-    <str>Bericht: Übersicht</str>
+    <id>Report: Summary and Download</id>
+    <str>Bericht: Übersicht und Download</str>
   </msg>
   <msg>
     <id>Report: Prognostic Hosts</id>

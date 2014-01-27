@@ -1,3 +1,19 @@
+2014-01-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsa-style (#report_section_list ul li ul)
+	(#report_section_list ul li ul a): Increase width for longer titles.
+
+	* src/html/classic/omp.xsl (gsa:report-section-title)
+	(report-hosts-link): Change "Summary" to "Summary and Download".
+	(report-help-icon): Remove redundant "(View Report)"
+	(filtered-report-export-form, full-report-export-form): New templates,
+	export forms from report [summary].
+	(report-icons): Add report export form.
+	(report [summary]): Use new templates for report export forms.
+
+	* src/html/classic/po/de.xml (875): Adapt to changed report section
+	titles.
+
 2014-01-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/po/de.xml: Update copyright and authors.
