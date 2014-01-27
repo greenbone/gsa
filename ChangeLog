@@ -1,5 +1,10 @@
 2014-01-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [section-list]): Rename
+	"Report: Task Details" to "Task: Details"
+
+2014-01-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsa-style (#report_section_list ul li ul)
 	(#report_section_list ul li ul a): Increase width for longer titles.
 
