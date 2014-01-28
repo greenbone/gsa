@@ -1,3 +1,9 @@
+2014-01-28  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Preparing the 5.0+beta5 release
+
+	* CHANGES: Updated
+
 2014-01-27  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Solve issues raised by the clang static analyser.
