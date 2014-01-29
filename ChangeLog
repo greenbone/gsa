@@ -1,3 +1,22 @@
+2014-01-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (gsa:i18n): Explicitly select text from
+	elements.
+
+	* src/html/classic/omp.xsl (gsa:date-diff): Mark for i18n.
+	(list-window-line-icons): Update i18n for Export.
+	(result-details-icon-img, task [details], report [report])
+	(interval-with-unit, result-details, report [result-header](
+	(report [result-headers], result [result-body], report [assets])
+	(report [section-list], report [ports], report [vulns], report [os])
+	(report [apps], report [prognostic_apps], full-report-export-form)
+	(filtered-report-export-form, report [closed_cves], report [cves])
+	(report [ssl_certs], report [summary]): Add new i18n for reports
+	and schedule due dates.
+
+	* src/html/classic/po/de.xml: Update "Export" strings and add
+	translations Report Summary and Results page.
+
 2014-01-28  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post release version bump.

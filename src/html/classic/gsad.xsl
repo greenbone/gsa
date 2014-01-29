@@ -61,14 +61,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default" select="$str"/>
 
   <func:result>
-    <xsl:variable name="id_match" select="document($i18n_po_path)/i18n/msg[id = $str]"/>
+    <xsl:variable name="id_match" select="document($i18n_po_path)/i18n/msg[id/text() = $str]"/>
     <xsl:variable name="new_str">
       <xsl:choose>
-        <xsl:when test="$context != '' and count($id_match) &gt; 1 and $id_match[context = $context]">
-          <xsl:value-of select="$id_match[context = $context]/str"/>
+        <xsl:when test="$context != '' and count($id_match) &gt; 1 and $id_match[context/text() = $context]">
+          <xsl:value-of select="$id_match[context/text() = $context]/str/text()"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$id_match[not(context)]/str"/>
+          <xsl:value-of select="$id_match[not(context)]/str/text()"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

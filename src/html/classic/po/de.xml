@@ -79,6 +79,87 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>none</id>
     <str>keine</str>
   </msg>
+  <!-- Time units -->
+  <msg>
+    <id>sec</id>
+    <str>Sek.</str>
+  </msg>
+  <msg>
+    <id>secs</id>
+    <str>Sek.</str>
+  </msg>
+  <msg>
+    <id>sec(s)</id>
+    <str>Sek.</str>
+  </msg>
+  <msg>
+    <id>seconds</id>
+    <str>Sekunden</str>
+  </msg>
+  <msg>
+    <id>min</id>
+    <str>Min.</str>
+  </msg>
+  <msg>
+    <id>mins</id>
+    <str>Min.</str>
+  </msg>
+  <msg>
+    <id>min(s)</id>
+    <str>Min.</str>
+  </msg>
+  <msg>
+    <id>minutes</id>
+    <str>Minuten</str>
+  </msg>
+  <msg>
+    <id>hour</id>
+    <str>Stunde</str>
+  </msg>
+  <msg>
+    <id>hours</id>
+    <str>Stunden</str>
+  </msg>
+  <msg>
+    <id>hour(s)</id>
+    <str>Stunde(n)</str>
+  </msg>
+  <msg>
+    <id>day</id>
+    <str>Tag</str>
+  </msg>
+  <msg>
+    <id>days</id>
+    <str>Tage</str>
+  </msg>
+  <msg>
+    <id>day(s)</id>
+    <str>Tag(e)</str>
+  </msg>
+  <msg>
+    <id>week</id>
+    <str>Woche</str>
+  </msg>
+  <msg>
+    <id>weeks</id>
+    <str>Wochen</str>
+  </msg>
+  <msg>
+    <id>week(s)</id>
+    <str>Woche(n)</str>
+  </msg>
+  <msg>
+    <id>month</id>
+    <str>Monat</str>
+  </msg>
+  <msg>
+    <id>months</id>
+    <str>Monate</str>
+  </msg>
+  <msg>
+    <id>month(s)</id>
+    <str>Monat(e)</str>
+  </msg>
 
   <!-- 2. Interface part specific strings -->
   <!-- 2.1 Logo header (logged in user, JavaScript info, response indicators)-->
@@ -299,6 +380,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Erstellt</str>
   </msg>
   <msg>
+    <id>Current</id>
+    <str>Aktuell</str>
+  </msg>
+  <msg>
     <id>Date</id>
     <str>Datum</str>
   </msg>
@@ -323,12 +408,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Besitzer</str>
   </msg>
   <msg>
+    <id>References</id>
+    <str>Verweise</str>
+  </msg>
+  <msg>
     <id>Severity</id>
     <str>Schweregrad</str>
   </msg>
   <msg>
     <id>Status</id>
     <str>Status</str>
+  </msg>
+  <msg>
+    <id>Summary</id>
+    <str>Zusammenfassung</str>
   </msg>
   <msg>
     <id>Total</id>
@@ -382,6 +475,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>High</id>
     <str>Hoch</str>
+  </msg>
+
+  <!-- General vulnerability terms -->
+  <msg>
+    <id>Vulnerability</id>
+    <str>Schwachstelle</str>
+  </msg>
+  <msg>
+    <id>Impact</id>
+    <str>Auswirkungen</str>
+  </msg>
+  <msg>
+    <id>Solution</id>
+    <str>Lösung</str>
   </msg>
 
   <!-- 3.1.3 Generic resource actions -->
@@ -447,6 +554,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id> as XML</id>
     <str> als XML exportieren</str>
+  </msg>
+  <msg>
+    <id>#EXPORT_SUFFIX#</id>
+    <str> exportieren</str>
   </msg>
 
   <!-- Move to Trashcan -->
@@ -773,6 +884,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Go to the current report</id>
     <str>Zum aktuellen Bericht gehen</str>
   </msg>
+  <!-- finished Reports -->
+  <msg>
+    <id>Finished</id>
+    <str>Abgeschlossen</str>
+  </msg>
   <!-- all finished Reports-->
   <msg>
     <id>View list of all finished reports for Task </id>
@@ -832,6 +948,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <str>Berichte</str>
   </msg>
 
+  <msg>
+    <id>Full report</id>
+    <str>Vollständiger Bericht</str>
+  </msg>
+  <msg>
+    <id>Filtered report</id>
+    <str>Gefilterter Bericht</str>
+  </msg>
+
   <!-- 3.3.1. Report common properties, values and references -->
   <!-- Report common actions -->
   <msg>
@@ -849,15 +974,128 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </msg>
 
   <!-- 3.3.2 Report specific actions not related to referenced resources -->
-    <!-- TODO -->
+  <!-- Delete restrictions -->
+  <msg>
+    <id>Report is observed</id>
+    <str>Bericht wird beobachtet</str>
+  </msg>
+  <!-- Delta reports -->
+  <msg>
+    <id>Compare</id>
+    <str>Vergleichen</str>
+  </msg>
+  <msg>
+    <id>Report is already selected for delta</id>
+    <str>Bericht ist bereits für Delta ausgewählt</str>
+  </msg>
+  <msg>
+    <id>Filter must be limited to a single Task to allow delta reports</id>
+    <str>Filter muss auf eine einzige Aufgabe beschränkt sein, um Delta-Bereichte zu erlauben</str>
+  </msg>
+  <!-- Download full / filtered report -->
+  <msg>
+    <id>Download Format</id>
+    <str>Download-Format</str>
+  </msg>
+  <msg>
+    <id>Download full Report</id>
+    <str>Vollständigen Bericht herunterladen</str>
+  </msg>
+  <msg>
+    <id>Download filtered Report</id>
+    <str>Gefilterten Bericht herunterladen</str>
+  </msg>
+  <!-- View report = details -->
+  <msg>
+    <id>View Report</id>
+    <str>Bericht anzeigen</str>
+  </msg>
 
-  <!-- 3.3.3 Report specific specific properties and property values -->
-    <!-- TODO -->
+  <!-- 3.3.3 Report specific properties and property values -->
+  <!-- Scan data -->
+  <msg>
+    <id>Scan initiated</id>
+    <str>Scan eingeleitet</str>
+  </msg>
+  <msg>
+    <id>Scan 1 initiated</id>
+    <str>Scan 1 eingeleitet</str>
+  </msg>
+  <msg>
+    <id>Scan 2 initiated</id>
+    <str>Scan 2 eingeleitet</str>
+  </msg>
+
+  <msg>
+    <id>Scan started</id>
+    <str>Scan gestartet</str>
+  </msg>
+  <msg>
+    <id>Scan 1 started</id>
+    <str>Scan 1 gestartet</str>
+  </msg>
+  <msg>
+    <id>Scan 1 started</id>
+    <str>Scan 1 gestartet</str>
+  </msg>
+
+  <msg>
+    <id>Scan ended</id>
+    <str>Scan beendet</str>
+  </msg>
+  <msg>
+    <id>Scan 1 ended</id>
+    <str>Scan 1 beendet</str>
+  </msg>
+  <msg>
+    <id>Scan 2 ended</id>
+    <str>Scan 2 beendet</str>
+  </msg>
+
+  <msg>
+    <id>Scan duration</id>
+    <str>Scan-Dauer</str>
+  </msg>
+  <msg>
+    <id>Scan 1 duration</id>
+    <str>Dauer Scan 1</str>
+  </msg>
+  <msg>
+    <id>Scan 2 duration</id>
+    <str>Dauer Scan 2</str>
+  </msg>
+
+  <msg>
+    <id>Scan status</id>
+    <str>Scan-Status</str>
+  </msg>
+  <msg>
+    <id>Scan 1 status</id>
+    <str>Status Scan 1</str>
+  </msg>
+  <msg>
+    <id>Scan 2 status</id>
+    <str>Status Scan 2</str>
+  </msg>
 
   <!-- 3.3.4 Report specific references and reference actions -->
-    <!-- TODO -->
+  <!-- Alert references -->
+  <msg>
+    <id>Run Alert</id>
+    <str>Benachrichtigung ausführen</str>
+  </msg>
+  <!-- Hosts references -->
+  <msg>
+    <id>Multiple hosts</id>
+    <str>Mehrere Hosts</str>
+  </msg>
+  <!-- Task references -->
+  <msg>
+    <id>Result of Task</id>
+    <str>Ergebnis für Aufgabe</str>
+  </msg>
 
-  <!-- 3.3.5. Report : other strings -->
+  <!-- 3.3.5. Report : Report sections and subtypes -->
   <!-- Report section names -->
   <msg>
     <id>Report: Prognostic Results</id>
@@ -931,6 +1169,138 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <id>Report: Error Messages</id>
     <str>Bericht: Fehlermeldungen</str>
   </msg>
+  <msg>
+    <id>Task: Details</id>
+    <str>Aufgabe: Details</str>
+  </msg>
+
+  <!-- 3.4.6. Report : Results -->
+  <msg>
+    <id>Result</id>
+    <str>Ergebnis</str>
+  </msg>
+  <msg>
+    <id>Results</id>
+    <str>Ergebnisse</str>
+  </msg>
+
+  <msg>
+    <id>Scan Results</id>
+    <str>Scan-Ergebnisse</str>
+  </msg>
+
+  <msg>
+    <id>Result Details</id>
+    <str>Ergebnis-Details</str>
+  </msg>
+  <!-- 3.4.6.1. Result actions -->
+  <msg>
+    <id>Collapse details of all vulnerabilities</id>
+    <str>Details aller Schwachstellen einklappen</str>
+  </msg>
+  <msg>
+    <id>Expand to full details of all vulnerabilities</id>
+    <str>Details aller Schwachstellen ausklappen</str>
+  </msg>
+  <!-- 3.4.6.2. Result properties and values -->
+  <!-- List properties -->
+  <msg>
+    <id>Application CPE</id>
+    <str>Anwendungs-CPE</str>
+  </msg>
+  <msg>
+    <id>DN</id>
+    <str>DN</str>
+  </msg>
+  <msg>
+    <id>IANA</id>
+    <str>IANA</str>
+  </msg>
+  <msg>
+    <id>Port</id>
+    <str>Port</str>
+  </msg>
+  <msg>
+    <id>Not valid before</id>
+    <str>Nicht gültig vor</str>
+  </msg>
+  <msg>
+    <id>Not valid after</id>
+    <str>Nicht gültig nach</str>
+  </msg>
+  <msg>
+    <id>NVT Severity</id>
+    <str>NVT-Schweregrad</str>
+  </msg>
+  <msg>
+    <id>Occurrences</id>
+    <str>Vorkommen</str>
+  </msg>
+  <msg>
+    <id>Operating System</id>
+    <str>Betriebssystem</str>
+  </msg>
+  <msg>
+    <id>Location</id>
+    <str>Ort</str>
+  </msg>
+  <!-- Result details -->
+  <msg>
+    <id>Vulnerability Detection Result</id>
+    <str>Ergebnis zur Schwachstellenerkennung</str>
+  </msg>
+  <msg>
+    <id>Vulnerability Insight</id>
+    <str>Schwachstellen-Einblick</str>
+  </msg>
+  <msg>
+    <id>Vulnerability Detection Method</id>
+    <str>Methode zur Schwachstellenerkennung</str>
+  </msg>
+  <msg>
+    <id>Vulnerability was detected according to the Vulnerability Detection Method.</id>
+    <str>Schwachstelle wurde gemäß der Methode zur Schwachstellenerkennung erkannt.</str>
+  </msg>
+  <msg>
+    <id>Log Method</id>
+    <str>Log-Methode</str>
+  </msg>
+  <msg>
+    <id>Version used</id>
+    <str>Benutzte Version</str>
+  </msg>
+  <msg>
+    <id>Product Detection Result</id>
+    <str>Ergebnis zur Produkterkennung</str>
+  </msg>
+  <msg>
+    <id>Product</id>
+    <str>Produkt</str>
+  </msg>
+  <msg>
+    <id>Method</id>
+    <str>Methode</str>
+  </msg>
+  <!-- Delta results -->
+  <msg>
+    <id>Different Lines</id>
+    <str>Zeilen mit Unterschieden</str>
+  </msg>
+
+  <!-- 3.4.6.3. Result references -->
+  <!-- Result Notes -->
+
+  <!-- Result Overrides -->
+  <msg>
+    <id>Overridden from </id>
+    <str>Übersteuert von </str>
+  </msg>
+  <!-- Result Tags -->
+  <msg>
+    <id>Result Tags</id>
+    <str>Ergebnis-Tags</str>
+  </msg>
+
 
   <!-- 3.4 Notes -->
   <msg>
@@ -946,6 +1316,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>New Note</id>
     <str>Neue Notiz</str>
+  </msg>
+  <msg>
+    <id>Add Note</id>
+    <str>Notiz hinzufügen</str>
   </msg>
 
   <msg>
@@ -991,6 +1365,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <msg>
     <id>New Override</id>
     <str>Neue Übersteuerung</str>
+  </msg>
+  <msg>
+    <id>Add Override</id>
+    <str>Übersteuerung hinzufügen</str>
   </msg>
 
   <msg>
@@ -1500,7 +1878,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- TODO -->
 
   <!-- 3.18.3 Schedule specific specific properties and property values -->
-    <!-- TODO -->
+  <!-- Next due date -->
+  <msg>
+    <id>Next due: </id>
+    <str>Fälligkeit:</str>
+  </msg>
+  <msg>
+    <id>Next due: over</id>
+    <str>Fälligkeit: abgelaufen</str>
+  </msg>
 
   <!-- 3.18.4 Schedule specific references and reference actions -->
     <!-- TODO -->
