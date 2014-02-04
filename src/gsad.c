@@ -3585,7 +3585,6 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop,
                         const gchar *subdir)
 {
   struct passwd *nobody_pw;
-  gchar *data_dir;
 
   if (drop)
     {
@@ -3601,19 +3600,17 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop,
   else
     nobody_pw = NULL;
 
-  data_dir = g_build_filename (GSA_DATA_DIR, subdir, NULL);
 
   if (do_chroot)
     {
       /* Chroot into state dir. */
 
-      if (chroot (data_dir))
+      if (chroot (GSA_DATA_DIR))
         {
           g_critical ("%s: Failed to chroot to \"%s\": %s\n",
                       __FUNCTION__,
-                      data_dir,
+                      GSA_DATA_DIR,
                       strerror (errno));
-          g_free (data_dir);
           return 1;
         }
     }
@@ -3622,32 +3619,38 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop,
     {
       g_critical ("%s: Failed to drop privileges\n",
                   __FUNCTION__);
-      g_free (data_dir);
       return 1;
     }
 
   if (do_chroot)
     {
-      if (chdir ("/"))
+      gchar* root_face_dir = g_build_filename ("/", subdir, NULL);
+      if (chdir (root_face_dir))
         {
-          g_critical ("%s: failed change to chroot root directory: %s\n",
+          g_critical ("%s: failed change to chroot root directory (%s): %s\n",
                       __FUNCTION__,
+                      root_face_dir,
+                      strerror (errno));
+          g_free (root_face_dir);
+          return 1;
+        }
+      g_free (root_face_dir);
+    }
+  else
+    {
+      gchar* data_dir = g_build_filename (GSA_DATA_DIR, subdir, NULL);
+      if (chdir (data_dir))
+        {
+          g_critical ("%s: failed to change to \"%s\": %s\n",
+                      __FUNCTION__,
+                      data_dir,
                       strerror (errno));
           g_free (data_dir);
           return 1;
         }
-    }
-  else if (chdir (data_dir))
-    {
-      g_critical ("%s: failed to change to \"%s\": %s\n",
-                  __FUNCTION__,
-                  data_dir,
-                  strerror (errno));
       g_free (data_dir);
-      return 1;
     }
 
-  g_free (data_dir);
   return 0;
 }
 
