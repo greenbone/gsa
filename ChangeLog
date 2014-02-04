@@ -1,3 +1,18 @@
+2014-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* doc/i18n-howto.txt: New file.
+
+	* src/html/classic/gsad.xsl (gsa:i18n): Select i18n strings by context
+	first, then by the actual string to reduce lookup time.
+	(html-gsa-logo, html-gsa-navigation): Add now mandatory context
+	parameter to gsa:i18n calls.
+
+	* src/html/classic/omp.xsl: Add now mandatory context parameter to
+	gsa:i18n calls.
+
+	* src/html/classic/po/de.xml: Group strings by context for new string
+	selection method. Move documentation and template to new howto file.
+
 2014-01-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* INSTALL: Add section about static code analysis with CLang.

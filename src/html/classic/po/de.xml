@@ -28,2482 +28,3090 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
 <i18n>
-  <!-- 1. Generic interface strings -->
-
-  <!-- 1.1 Generic actions -->
-  <msg>
-    <id>Apply</id>
-    <str>Anwenden</str>
-  </msg>
-  <msg>
-    <id>Help</id>
-    <str>Hilfe</str>
-  </msg>
-  <msg>
-    <id>Return</id>
-    <str>Zurück</str>
-  </msg>
-
-  <!-- 1.2 Generic properties and values -->
-  <!-- Textual representations of boolean values -->
-  <msg>
-    <id>yes</id>
-    <str>ja</str>
-  </msg>
-  <msg>
-    <id>Yes</id>
-    <str>Ja</str>
-  </msg>
-  <msg>
-    <id>no</id>
-    <str>nein</str>
-  </msg>
-  <msg>
-    <id>No</id>
-    <str>Nein</str>
-  </msg>
-  <!-- Determiners -->
-  <msg>
-    <id>Any</id>
-    <str>Beliebig</str>
-  </msg>
-  <msg>
-    <id>N/A</id>
-    <str>N/A</str>
-  </msg>
+  <!-- 1. Common interface strings -->
+  <!-- 1.1 Logo header (logged in user, JS info, response indicators)-->
+  <grp>
+    <ctxt>Logo</ctxt>
     <msg>
-    <id>None</id>
-    <str>Keine</str>
-  </msg>
+      <id>Logged in as</id>
+      <str>Angemeldet als</str>
+    </msg>
     <msg>
-    <id>none</id>
-    <str>keine</str>
-  </msg>
-  <!-- Time units -->
-  <msg>
-    <id>sec</id>
-    <str>Sek.</str>
-  </msg>
-  <msg>
-    <id>secs</id>
-    <str>Sek.</str>
-  </msg>
-  <msg>
-    <id>sec(s)</id>
-    <str>Sek.</str>
-  </msg>
-  <msg>
-    <id>seconds</id>
-    <str>Sekunden</str>
-  </msg>
-  <msg>
-    <id>min</id>
-    <str>Min.</str>
-  </msg>
-  <msg>
-    <id>mins</id>
-    <str>Min.</str>
-  </msg>
-  <msg>
-    <id>min(s)</id>
-    <str>Min.</str>
-  </msg>
-  <msg>
-    <id>minutes</id>
-    <str>Minuten</str>
-  </msg>
-  <msg>
-    <id>hour</id>
-    <str>Stunde</str>
-  </msg>
-  <msg>
-    <id>hours</id>
-    <str>Stunden</str>
-  </msg>
-  <msg>
-    <id>hour(s)</id>
-    <str>Stunde(n)</str>
-  </msg>
-  <msg>
-    <id>day</id>
-    <str>Tag</str>
-  </msg>
-  <msg>
-    <id>days</id>
-    <str>Tage</str>
-  </msg>
-  <msg>
-    <id>day(s)</id>
-    <str>Tag(e)</str>
-  </msg>
-  <msg>
-    <id>week</id>
-    <str>Woche</str>
-  </msg>
-  <msg>
-    <id>weeks</id>
-    <str>Wochen</str>
-  </msg>
-  <msg>
-    <id>week(s)</id>
-    <str>Woche(n)</str>
-  </msg>
-  <msg>
-    <id>month</id>
-    <str>Monat</str>
-  </msg>
-  <msg>
-    <id>months</id>
-    <str>Monate</str>
-  </msg>
-  <msg>
-    <id>month(s)</id>
-    <str>Monat(e)</str>
-  </msg>
+      <id>Logout</id>
+      <str>Abmelden</str>
+    </msg>
+    <msg>
+      <id>JavaScript is active</id>
+      <str>JavaScript ist aktiv</str>
+    </msg>
+  </grp>
 
-  <!-- 2. Interface part specific strings -->
-  <!-- 2.1 Logo header (logged in user, JavaScript info, response indicators)-->
-  <msg>
-    <id>Logged in as</id>
-    <str>Angemeldet als</str>
-  </msg>
-  <msg>
-    <id>Logout</id>
-    <str>Abmelden</str>
-  </msg>
-  <msg>
-    <id>JavaScript is active</id>
-    <str>JavaScript ist aktiv</str>
-  </msg>
+  <!-- 1.2 Main Menu items -->
+  <grp>
+    <ctxt>MM</ctxt>
+    <msg>
+      <id>Scan Management</id>
+      <str>Scan-Management</str>
+    </msg>
+    <msg>
+      <id>Asset Management</id>
+      <str>Asset-Management</str>
+    </msg>
+    <msg>
+      <id>SecInfo Management</id>
+      <str>SecInfo-Management</str>
+    </msg>
+    <msg>
+      <id>Configuration</id>
+      <str>Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Extras</id>
+      <str>Extras</str>
+    </msg>
+    <msg>
+      <id>Administration</id>
+      <str>Administration</str>
+    </msg>
+  </grp>
+    <!-- "Help" has its own context -->
 
-  <!-- 2.2 Main menu buttons -->
-  <msg>
-    <id>Scan Management</id>
-    <str>Scan-Management</str>
-  </msg>
-  <msg>
-    <id>Asset Management</id>
-    <str>Asset-Management</str>
-  </msg>
-  <msg>
-    <id>SecInfo Management</id>
-    <str>SecInfo-Management</str>
-  </msg>
-  <msg>
-    <id>Configuration</id>
-    <str>Konfiguration</str>
-  </msg>
-  <msg>
-    <id>Extras</id>
-    <str>Extras</str>
-  </msg>
-  <msg>
-    <id>Administration</id>
-    <str>Administration</str>
-  </msg>
-    <!-- Help: See 1.1, Items: See 3. and 4. -->
+  <!-- 1.3 Error box -->
+  <!-- TODO -->
 
-    <!-- For menu items see:
-        3. Resource specific strings
-        4. Special function strings -->
+  <!-- 1.4 Login screen -->
+  <!-- TODO -->
 
-  <!-- 2.3 Content window -->
-  <!-- 2.3.1 Pagination -->
-  <msg>
-    <id> of </id>
-    <str> von </str>
-  </msg>
-  <msg>
-    <id>total</id>
-    <str>gesamt</str>
-  </msg>
+  <!-- 2        Resource display common strings -->
+  <!-- 2.1      Pagination -->
+  <grp>
+    <ctxt>Pagination</ctxt>
+    <msg>
+      <id> of </id>
+      <str> von </str>
+    </msg>
+    <msg>
+      <id>total</id>
+      <str>gesamt</str>
+    </msg>
 
-  <msg>
-    <id>First</id>
-    <str>Erste</str>
-  </msg>
-  <msg>
-    <id>Previous</id>
-    <str>Vorherige</str>
-  </msg>
-  <msg>
-    <id>Next</id>
-    <str>Nächste</str>
-  </msg>
-  <msg>
-    <id>Last</id>
-    <str>Letzte</str>
-  </msg>
-  <msg>
-    <id>Already on first page</id>
-    <str>Bereits auf der ersten Seite</str>
-  </msg>
-  <msg>
-    <id>Already on last page</id>
-    <str>Bereits auf der letzten Seite</str>
-  </msg>
+    <msg>
+      <id>First</id>
+      <str>Erste</str>
+    </msg>
+    <msg>
+      <id>Previous</id>
+      <str>Vorherige</str>
+    </msg>
+    <msg>
+      <id>Next</id>
+      <str>Nächste</str>
+    </msg>
+    <msg>
+      <id>Last</id>
+      <str>Letzte</str>
+    </msg>
+    <msg>
+      <id>Already on first page</id>
+      <str>Bereits auf der ersten Seite</str>
+    </msg>
+    <msg>
+      <id>Already on last page</id>
+      <str>Bereits auf der letzten Seite</str>
+    </msg>
+  </grp>
 
-  <!-- 2.3.2 Powerfilter -->
-  <msg>
-    <id>Return to default filter view</id>
-    <str>Zurück zur Standardfilter-Ansicht</str>
-  </msg>
+  <!-- 2.2      Filter Box -->
+  <grp>
+    <ctxt>Filter Box</ctxt>
 
-  <msg>
-    <id>Powerfilter</id>
-    <str>Powerfilter</str>
-  </msg>
-  <msg>
-    <id>Update Filter</id>
-    <str>Filter aktualisieren</str>
-  </msg>
+    <msg>
+      <id>Powerfilter</id>
+      <str>Powerfilter</str>
+    </msg>
 
-  <msg>
-    <id>New </id>
-    <str>Neuen </str>
-  </msg>
+    <msg>
+      <id>Filter</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>Filter</str>
+    </msg>
+
+    <msg>
+      <id>Update Filter</id>
+      <str>Filter aktualisieren</str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>Aktualisieren</str>
+    </msg>
+
+    <msg>
+      <id>New </id>
+      <str>Neuen </str>
+    </msg>
     <!-- For filter type name like "Task Filter" see:
           3. Resource specific strings -->
-  <msg>
-    <id> from current term</id>
-    <str> aus aktuellem Suchausdruck erstellen</str>
-  </msg>
-
-  <msg>
-    <id>Switch Filter</id>
-    <str>Filter umschalten</str>
-  </msg>
-  <msg>
-    <id>Switch</id>
-    <str>Umschalten</str>
-  </msg>
-  <msg>
-    <id>Fold filter</id>
-    <str>Filter einklappen</str>
-  </msg>
-  <msg>
-    <id>Unfold filter</id>
-    <str>Filter ausklappen</str>
-  </msg>
-
-  <msg>
-    <id>Applied filter</id>
-    <str>Angewandter Filter</str>
-  </msg>
-
-  <msg>
-    <id>First result</id>
-    <str>Erstes Ergebnis</str>
-  </msg>
-  <msg>
-    <id>Results per page</id>
-    <str>Ergebnisse pro Seite</str>
-  </msg>
-  <msg>
-    <id>Sort by</id>
-    <str>Sortieren nach</str>
-  </msg>
-  <msg>
-    <id>Ascending</id>
-    <str>Aufsteigend</str>
-  </msg>
-  <msg>
-    <id>Descending</id>
-    <str>Absteigend</str>
-  </msg>
-  <msg>
-    <id>Simple search terms</id>
-    <str>Einfache Suchbegriffe</str>
-  </msg>
-  <msg>
-    <id>Additional filter commands</id>
-    <str>Zusätzliche Filterbefehle</str>
-  </msg>
-
-  <!-- 2.3.3 Auto-refresh -->
-  <msg>
-    <id>No auto-refresh</id>
-    <str>Kein Auto-Refresh</str>
-  </msg>
-  <msg>
-    <id>Refresh every</id>
-    <str>Refresh alle</str>
-  </msg>
-  <msg>
-    <id>Sec.</id>
-    <str>Sek.</str>
-  </msg>
-  <msg>
-    <id>Update</id>
-    <str>Aktualisieren</str>
-  </msg>
-  <msg>
-    <id>Update auto-refresh</id>
-    <str>Auto-Refresh aktualisieren</str>
-  </msg>
-
-  <!-- 2.3.4 Override controls -->
-  <msg>
-    <id>Apply overrides</id>
-    <str>Übersteuerung anwenden</str>
-  </msg>
-  <msg>
-   <id>Overrides are Applied</id>
-   <str>Übersteuerungen werden angewendet</str>
-  </msg>
-  <msg>
-    <id>No overrides</id>
-    <str>Keine Übersteuerung</str>
-  </msg>
-
-    <!-- For resource properties and actions see:
-          3. Resource specific strings -->
-
-
-  <!-- 3. Resource specific strings -->
-  <!-- 3.1 Generic resource-related strings -->
-  <msg>
-    <id>Actions</id>
-    <str>Aktionen</str>
-  </msg>
-  <!-- 3.1.1 Generic resource properties -->
-  <msg>
-    <id>Active</id>
-    <str>Aktiv</str>
-  </msg>
-  <msg>
-    <id>Comment</id>
-    <str>Kommentar</str>
-  </msg>
-  <msg>
-    <id>Created</id>
-    <str>Erstellt</str>
-  </msg>
-  <msg>
-    <id>Current</id>
-    <str>Aktuell</str>
-  </msg>
-  <msg>
-    <id>Date</id>
-    <str>Datum</str>
-  </msg>
-  <msg>
-    <id>ID</id>
-    <str>ID</str>
-  </msg>
-  <msg>
-    <id>Last Modified</id>
-    <str>Zuletzt geändert</str>
-  </msg>
-  <msg>
-    <id>Modified</id>
-    <str>Geändert</str>
-  </msg>
-  <msg>
-    <id>Name</id>
-    <str>Name</str>
-  </msg>
-  <msg>
-    <id>Owner</id>
-    <str>Besitzer</str>
-  </msg>
-  <msg>
-    <id>References</id>
-    <str>Verweise</str>
-  </msg>
-  <msg>
-    <id>Severity</id>
-    <str>Schweregrad</str>
-  </msg>
-  <msg>
-    <id>Status</id>
-    <str>Status</str>
-  </msg>
-  <msg>
-    <id>Summary</id>
-    <str>Zusammenfassung</str>
-  </msg>
-  <msg>
-    <id>Total</id>
-    <str>Gesamt</str>
-  </msg>
-  <msg>
-    <id>Text</id>
-    <str>Text</str>
-  </msg>
-
-  <!-- property qualifiers -->
-  <msg>
-    <id>optional</id>
-    <str>optional</str>
-  </msg>
-  <msg>
-    <id>immutable</id>
-    <str>unveränderlich</str>
-  </msg>
-
-  <!-- 3.1.2 Generic resource property values -->
-  <!-- Severity levels -->
-  <msg>
-    <id>Error</id>
-    <str>Fehler</str>
-  </msg>
-  <msg>
-    <id>Debug</id>
-    <str>Debug</str>
-  </msg>
-  <msg>
-    <id>False Positive</id>
-    <str>Falsch Positiv</str>
-  </msg>
-  <msg>
-    <id>False Pos.</id>
-    <str>Falsch Pos.</str>
-  </msg>
-  <msg>
-    <id>Log</id>
-    <str>Log</str>
-  </msg>
-  <msg>
-    <id>Low</id>
-    <str>Niedrig</str>
-  </msg>
-  <msg>
-    <id>Medium</id>
-    <str>Mittel</str>
-  </msg>
-  <msg>
-    <id>High</id>
-    <str>Hoch</str>
-  </msg>
-
-  <!-- General vulnerability terms -->
-  <msg>
-    <id>Vulnerability</id>
-    <str>Schwachstelle</str>
-  </msg>
-  <msg>
-    <id>Impact</id>
-    <str>Auswirkungen</str>
-  </msg>
-  <msg>
-    <id>Solution</id>
-    <str>Lösung</str>
-  </msg>
-
-  <!-- 3.1.3 Generic resource actions -->
-  <!-- General descriptions for denied actions (e.g. delete, trash, edit) -->
-  <msg>
-    <id> is still in use</id>
-    <str> wird noch verwendet</str>
-  </msg>
-  <msg>
-    <id> is not writable</id>
-    <str> ist nicht beschreibbar</str>
-  </msg>
-
-  <!-- Clone -->
-  <msg>
-    <id>Clone</id>
-    <str>Clonen</str>
-  </msg>
-
-  <!-- Details -->
-  <msg>
-    <id>#DETAILS_OF_PREFIX#</id>
-    <str>Details für </str>
-  </msg>
-  <msg>
-    <id>#DETAILS_OF_SUFFIX#</id>
-    <str> ansehen</str>
-  </msg>
-
-  <!-- Delete -->
-  <msg>
-    <id>Delete</id>
-    <str>Löschen</str>
-  </msg>
-  <msg>
-    <id> cannot be deleted</id>
-    <str> kann nicht gelöscht werden</str>
-  </msg>
-
-  <!-- Edit -->
-  <msg>
-    <id>Edit</id>
-    <str>Bearbeiten</str>
-  </msg>
-
-  <!-- Export -->
-  <msg>
-    <id>Export XML</id>
-    <str>XML exportieren</str>
-  </msg>
-  <msg>
-    <id>Export</id>
-    <str>Exportieren</str>
-  </msg>
-  <msg>
-    <id>Export </id>
-    <str></str>
-  </msg>
-  <msg>
-    <id> filtered </id>
-    <str> gefilterte </str>
-  </msg>
-  <msg>
-    <id> as XML</id>
-    <str> als XML exportieren</str>
-  </msg>
-  <msg>
-    <id>#EXPORT_SUFFIX#</id>
-    <str> exportieren</str>
-  </msg>
-
-  <!-- Move to Trashcan -->
-  <msg>
-   <id>Move To Trashcan</id>
-   <str>In den Mülleimer verschieben</str>
-  </msg>
-  <msg>
-   <id>To Trashcan</id>
-   <str>In den Mülleimer</str>
-  </msg>
-  <msg>
-    <id> cannot be moved to Trashcan</id>
-    <str> kann nicht in den Mülleimer verschoben werden</str>
-  </msg>
-
-  <!-- 3.2. Tasks -->
-  <msg>
-    <id>Task</id>
-    <str>Aufgabe</str>
-  </msg>
-  <msg>
-    <id>Tasks</id>
-    <str>Aufgaben</str>
-  </msg>
-
-  <!-- 3.2.1. Task common properties, values and references -->
-  <!-- Task common actions -->
-  <msg>
-    <id>New Task</id>
-    <str>Neue Aufgabe</str>
-  </msg>
-  <msg>
-    <id>Create Task</id>
-    <str>Aufgabe erstellen</str>
-  </msg>
-
-  <msg>
-    <id>Edit Task</id>
-    <str>Aufgabe bearbeiten</str>
-  </msg>
-  <msg>
-    <id>Save Task</id>
-    <str>Aufgabe speichern</str>
-  </msg>
-
-  <msg>
-    <id>Delete Task</id>
-    <str>Aufgabe löschen</str>
-  </msg>
-
-  <!-- Task common references -->
-  <msg>
-    <id>Task Details</id>
-    <str>Aufgaben-Details</str>
-  </msg>
-  <msg>
-    <id>Task Filter</id>
-    <str>Aufgaben-Filter</str>
-  </msg>
-
-  <!-- 3.2.2 Task specific actions not related to referenced resources -->
-  <!-- Task status actions -->
-  <msg>
-    <id>Start</id>
-    <str>Starten</str>
-  </msg>
-  <msg>
-    <id>Resume</id>
-    <str>Fortsetzen</str>
-  </msg>
-  <msg>
-    <id>Stop</id>
-    <str>Stoppen</str>
-  </msg>
-  <msg>
-    <id>Pause</id>
-    <str>Pausieren</str>
-  </msg>
-  <!-- Task status action tooltips -->
-  <msg>
-    <id>Task is a container</id>
-    <str>Aufgabe ist ein Container</str>
-  </msg>
-  <msg>
-    <id>Permission to start task denied</id>
-    <str>Keine Berechtigung, Aufgabe zu starten</str>
-  </msg>
-  <msg>
-    <id>Permission to resume task denied</id>
-    <str>Keine Berechtigung, Aufgabe fortzusetzen</str>
-  </msg>
-  <msg>
-    <id>Permission to stop task denied</id>
-    <str>Keine Berechtigung, Aufgabe zu stoppen</str>
-  </msg>
-  <msg>
-    <id>Task is already active or paused</id>
-    <str>Aufgabe ist bereits aktiv oder pausiert</str>
-  </msg>
-  <msg>
-    <id>Task is scheduled</id>
-    <str>Aufgabe ist durch Zeitplan gesteuert</str>
-  </msg>
-  <msg>
-    <id>Task is not paused or stopped</id>
-    <str>Aufgabe ist nicht pausiert oder gestoppt</str>
-  </msg>
-  <msg>
-    <id>Tasks can only be be stopped when running or paused</id>
-    <str>Nur laufende oder pausierte Aufgaben können gestoppt werden</str>
-  </msg>
-  <!-- New Container Task -->
-  <msg>
-    <id>New Container Task</id>
-    <str>Neue Container-Aufgabe</str>
-  </msg>
-    <!-- for report import see Task speific references -->
-
-  <!-- 3.2.2 Task specific properties and property values -->
-  <!-- Alterable -->
-  <msg>
-    <id>Alterable</id>
-    <str>Änderbar</str>
-  </msg>
-  <msg>
-    <id>Task is alterable</id>
-    <str>Aufgabe is änderbar.</str>
-  </msg>
-  <msg>
-    <id>This is an Alterable Task. Reports may not relate to current Scan Config or Target!</id>
-    <str>Diese Aufgabe is änderbar. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!</str>
-  </msg>
-  <msg>
-    <id>Alterable Task</id>
-    <str>Änderbare Aufgabe</str>
-  </msg>
-  <!-- Asset Management settings -->
-  <msg>
-    <id>Add to Assets</id>
-    <str>Zu Assets hinzufügen</str>
-  </msg>
-  <msg>
-    <id>Add results to Asset Management</id>
-    <str>Ergebnisse zum Asset-Management hinzufügen</str>
-  </msg>
-  <!-- Order of target hosts -->
-  <msg>
-    <id>Order for target hosts</id>
-    <str>Reihefolge der Ziel-Hosts</str>
-  </msg>
-  <msg>
-    <id>Sequential</id>
-    <str>Sequentiell</str>
-  </msg>
-  <msg>
-    <id>Random</id>
-    <str>Zufällig</str>
-  </msg>
-  <msg>
-    <id>Reverse</id>
-    <str>Umgekehrt</str>
-  </msg>
-  <!-- Scan Intensity -->
-  <msg>
-    <id>Scan Intensity</id>
-    <str>Scan-Intensität</str>
-  </msg>
-  <msg>
-    <id>Maximum concurrently executed NVTs per host</id>
-    <str>Maximal gleichzeitig ausgeführte NVT pro Host</str>
-  </msg>
-  <msg>
-    <id>Maximum concurrently scanned hosts</id>
-    <str>Maximal gleichzeitig gescannte Hosts</str>
-  </msg>
-  <!-- Source Interface -->
-  <msg>
-    <id>Network Source Interface</id>
-    <str>Netzwerk-Quell-Interface</str>
-  </msg>
-  <!-- Status texts -->
-  <msg>
-    <id>Container</id>
-    <str>Container</str>
-  </msg>
-  <msg>
-    <id>Uploading</id>
-    <str>Upload Läuft</str>
-  </msg>
-  <msg>
-    <id>Delete Requested</id>
-    <str>Löschen Angefordert</str>
-  </msg>
-  <msg>
-    <id>Ultimate Delete Requested</id>
-    <str>Entgültiges Löschen Angefordert</str>
-  </msg>
-  <msg>
-    <id>Done</id>
-    <str>Abgeschlossen</str>
-  </msg>
-  <msg>
-    <id>New</id>
-    <str>Neu</str>
-  </msg>
-  <msg>
-    <id>Pause Requested</id>
-    <str>Pause Angefordert</str>
-  </msg>
-  <msg>
-    <id>Paused</id>
-    <str>Pausiert</str>
-  </msg>
-  <msg>
-    <id>Requested</id>
-    <str>Angefordert</str>
-  </msg>
-  <msg>
-    <id>Resume Requested</id>
-    <str>Fortsetzen Angefordert</str>
-  </msg>
-  <msg>
-    <id>Running</id>
-    <str>Läuft gerade</str>
-  </msg>
-  <msg>
-    <id>Stop Requested</id>
-    <str>Stopp Angefordert</str>
-  </msg>
-  <msg>
-    <id>Stopped</id>
-    <str>Gestoppt</str>
-  </msg>
-  <msg>
-    <id>Internal Error</id>
-    <str>Interner Fehler</str>
-  </msg>
-  <!-- Status: "at" for progress bar -->
-  <msg>
-    <id> at </id>
-    <str> bei </str>
-  </msg>
-  <!-- Trend -->
-  <msg>
-    <id>Trend</id>
-    <str>Trend</str>
-  </msg>
-  <msg>
-    <id>Severity increased</id>
-    <str>Schweregrad hat zugenommen</str>
-  </msg>
-  <msg>
-    <id>Severity decreased</id>
-    <str>Schweregrad hat abgenommen</str>
-  </msg>
-  <msg>
-    <id>Vulnerability count increased</id>
-    <str>Anzahl Schwachstellen hat zugenommen</str>
-  </msg>
-  <msg>
-    <id>Vulnerability count decreased</id>
-    <str>Anzahl Schwachstellen hat abgenommen</str>
-  </msg>
-  <msg>
-    <id>Vulnerabilities did not change</id>
-    <str>Schwachstellen haben sich nicht geändert</str>
-  </msg>
-
-  <!-- 3.2.4. Task specific references and reference actions -->
-  <!-- Notes -->
-  <msg>
-    <id>Notes on Task</id>
-    <str>Notizen für Aufgabe</str>
-  </msg>
-  <!-- Observers and observer groups -->
-  <msg>
-    <id>Observers</id>
-    <str>Beobachter</str>
-  </msg>
-  <msg>
-    <id>Observer Groups</id>
-    <str>Beobachter-Gruppen</str>
-  </msg>
-
-  <msg>
-    <id>Task made visible for:</id>
-    <str>Aufgabe sichtbar gemacht für: </str>
-  </msg>
-  <msg>
-    <id>Task made visible for Groups:</id>
-    <str>Aufgabe sichtbar gemacht für die Gruppen:</str>
-  </msg>
-  <msg>
-    <id>Task made visible for Roles:</id>
-    <str>Aufgabe sichtbar gemacht für die Rollen:</str>
-  </msg>
-  <msg>
-    <id>Observing task owned by</id>
-    <str>Beobachte Aufgabe von Besitzer</str>
-  </msg>
-  <!-- Overrides -->
-  <msg>
-    <id>Overrides on Task</id>
-    <str>Übersteuerungen für Aufgabe</str>
-  </msg>
-  <!-- Reports -->
-  <!-- generic Reports -->
-  <msg>
-    <id>Reports on Task</id>
-    <str>Berichte für Aufgabe</str>
-  </msg>
-  <!-- all current Reports-->
-  <msg>
-    <id>View list of all reports for Task </id>
-    <str>Liste aller Berichte für Aufgabe </str>
-  </msg>
-  <msg>
-    <id>, including unfinished ones</id>
-    <str> betrachten, inklusive nicht abgeschlossener Berichte</str>
-  </msg>
-  <!-- current Report-->
-  <msg>
-    <id>Go to the current report</id>
-    <str>Zum aktuellen Bericht gehen</str>
-  </msg>
-  <!-- finished Reports -->
-  <msg>
-    <id>Finished</id>
-    <str>Abgeschlossen</str>
-  </msg>
-  <!-- all finished Reports-->
-  <msg>
-    <id>View list of all finished reports for Task </id>
-    <str>Liste aller abschlossenen Berichte für Aufgabe </str>
-  </msg>
-  <msg>
-    <id>#TASK FINSISHED REPORTS SUFFIX#</id>
-    <str> betrachten</str>
-  </msg>
-  <!-- last finished Report -->
-  <msg>
-    <id>Last</id>
-    <context>Task-Reports</context>
-    <str>Letzter</str>
-  </msg>
-  <msg>
-    <id>View last report for Task </id>
-    <str>Letzten Bericht für Aufgabe </str>
-  </msg>
-  <msg>
-    <id>#TASK LAST REPORT SUFFIX#</id>
-    <str> betrachten</str>
-  </msg>
-  <!-- import Report -->
-  <msg>
-    <id>Import Report</id>
-    <str>Bericht importieren</str>
-  </msg>
-  <msg>
-    <id>Add Report</id>
-    <str>Bericht hinzufügen</str>
-  </msg>
-  <!-- Slave -->
-  <msg>
-    <id>#TASK RUN ON SLAVE PREFIX#</id>
-    <str>Aufgabe ist konfiguriert, um auf Slave </str>
-  </msg>
-  <msg>
-    <id>#TASK RUN ON SLAVE SUFFIX#</id>
-    <str> ausgeführt zu werden</str>
-  </msg>
-  <!-- Targets -->
-  <msg>
-    <id>Scan Targets</id>
-    <str>Scan-Ziele</str>
-  </msg>
-  <!-- 3.2.5. Task : other strings -->
-    <!-- None -->
-
-  <!-- 3.3. Reports -->
-  <msg>
-    <id>Report</id>
-    <str>Bericht</str>
-  </msg>
-  <msg>
-    <id>Reports</id>
-    <str>Berichte</str>
-  </msg>
-
-  <msg>
-    <id>Full report</id>
-    <str>Vollständiger Bericht</str>
-  </msg>
-  <msg>
-    <id>Filtered report</id>
-    <str>Gefilterter Bericht</str>
-  </msg>
-
-  <!-- 3.3.1. Report common properties, values and references -->
-  <!-- Report common actions -->
-  <msg>
-    <id>Delete Report</id>
-    <str>Bericht löschen</str>
-  </msg>
-  <!-- Report common references -->
-  <msg>
-    <id>Report Details</id>
-    <str>Bericht-Details</str>
-  </msg>
-  <msg>
-    <id>Report Filter</id>
-    <str>Bericht-Filter</str>
-  </msg>
-
-  <!-- 3.3.2 Report specific actions not related to referenced resources -->
-  <!-- Delete restrictions -->
-  <msg>
-    <id>Report is observed</id>
-    <str>Bericht wird beobachtet</str>
-  </msg>
-  <!-- Delta reports -->
-  <msg>
-    <id>Compare</id>
-    <str>Vergleichen</str>
-  </msg>
-  <msg>
-    <id>Report is already selected for delta</id>
-    <str>Bericht ist bereits für Delta ausgewählt</str>
-  </msg>
-  <msg>
-    <id>Filter must be limited to a single Task to allow delta reports</id>
-    <str>Filter muss auf eine einzige Aufgabe beschränkt sein, um Delta-Bereichte zu erlauben</str>
-  </msg>
-  <!-- Download full / filtered report -->
-  <msg>
-    <id>Download Format</id>
-    <str>Download-Format</str>
-  </msg>
-  <msg>
-    <id>Download full Report</id>
-    <str>Vollständigen Bericht herunterladen</str>
-  </msg>
-  <msg>
-    <id>Download filtered Report</id>
-    <str>Gefilterten Bericht herunterladen</str>
-  </msg>
-  <!-- View report = details -->
-  <msg>
-    <id>View Report</id>
-    <str>Bericht anzeigen</str>
-  </msg>
-
-  <!-- 3.3.3 Report specific properties and property values -->
-  <!-- Scan data -->
-  <msg>
-    <id>Scan initiated</id>
-    <str>Scan eingeleitet</str>
-  </msg>
-  <msg>
-    <id>Scan 1 initiated</id>
-    <str>Scan 1 eingeleitet</str>
-  </msg>
-  <msg>
-    <id>Scan 2 initiated</id>
-    <str>Scan 2 eingeleitet</str>
-  </msg>
-
-  <msg>
-    <id>Scan started</id>
-    <str>Scan gestartet</str>
-  </msg>
-  <msg>
-    <id>Scan 1 started</id>
-    <str>Scan 1 gestartet</str>
-  </msg>
-  <msg>
-    <id>Scan 1 started</id>
-    <str>Scan 1 gestartet</str>
-  </msg>
-
-  <msg>
-    <id>Scan ended</id>
-    <str>Scan beendet</str>
-  </msg>
-  <msg>
-    <id>Scan 1 ended</id>
-    <str>Scan 1 beendet</str>
-  </msg>
-  <msg>
-    <id>Scan 2 ended</id>
-    <str>Scan 2 beendet</str>
-  </msg>
-
-  <msg>
-    <id>Scan duration</id>
-    <str>Scan-Dauer</str>
-  </msg>
-  <msg>
-    <id>Scan 1 duration</id>
-    <str>Dauer Scan 1</str>
-  </msg>
-  <msg>
-    <id>Scan 2 duration</id>
-    <str>Dauer Scan 2</str>
-  </msg>
-
-  <msg>
-    <id>Scan status</id>
-    <str>Scan-Status</str>
-  </msg>
-  <msg>
-    <id>Scan 1 status</id>
-    <str>Status Scan 1</str>
-  </msg>
-  <msg>
-    <id>Scan 2 status</id>
-    <str>Status Scan 2</str>
-  </msg>
-
-  <!-- 3.3.4 Report specific references and reference actions -->
-  <!-- Alert references -->
-  <msg>
-    <id>Run Alert</id>
-    <str>Benachrichtigung ausführen</str>
-  </msg>
-  <!-- Hosts references -->
-  <msg>
-    <id>Multiple hosts</id>
-    <str>Mehrere Hosts</str>
-  </msg>
-  <!-- Task references -->
-  <msg>
-    <id>Result of Task</id>
-    <str>Ergebnis für Aufgabe</str>
-  </msg>
-
-  <!-- 3.3.5. Report : Report sections and subtypes -->
-  <!-- Report section names -->
-  <msg>
-    <id>Report: Prognostic Results</id>
-    <str>Bericht: Vorhersage-Ergebnisse</str>
-  </msg>
-  <msg>
-    <id>Report: Delta Results</id>
-    <str>Bericht: Delta-Ergebnisse</str>
-  </msg>
-  <msg>
-    <id>Report: Results</id>
-    <str>Bericht: Ergebnisse</str>
-  </msg>
-  <msg>
-    <id>Report: Prognostic Summary and Download</id>
-    <str>Bericht: Vorhersage-Übersicht und Download</str>
-  </msg>
-  <msg>
-    <id>Report: Delta Summary and Download</id>
-    <str>Bericht: Delta-Übersicht und Download</str>
-  </msg>
-  <msg>
-    <id>Report: Summary and Download</id>
-    <str>Bericht: Übersicht und Download</str>
-  </msg>
-  <msg>
-    <id>Report: Prognostic Hosts</id>
-    <str>Bericht: Vorhersage-Hosts</str>
-  </msg>
-  <msg>
-    <id>Report: Hosts</id>
-    <str>Bericht: Hosts</str>
-  </msg>
-  <msg>
-    <id>Report: Ports</id>
-    <str>Bericht: Ports</str>
-  </msg>
-  <msg>
-    <id>Report: Operating Systems</id>
-    <str>Bericht: Betriebssysteme</str>
-  </msg>
-  <msg>
-    <id>Report: Prognostic Applications</id>
-    <str>Bericht: Vorhersage-Anwendungen</str>
-  </msg>
-  <msg>
-    <id>Report: Applications</id>
-    <str>Bericht: Anwendungen</str>
-  </msg>
-  <msg>
-    <id>Report: Vulnerabilities</id>
-    <str>Bericht: Schwachstellen</str>
-  </msg>
-  <msg>
-    <id>Report: CVEs</id>
-    <str>Bericht: CVEs</str>
-  </msg>
-  <msg>
-    <id>Report: Closed CVEs</id>
-    <str>Bericht: Geschlossene CVEs</str>
-  </msg>
-  <msg>
-    <id>Report: Topology</id>
-    <str>Bericht: Topologie</str>
-  </msg>
-  <msg>
-    <id>Report: SSL Certificates</id>
-    <str>Bericht: SSL-Zertifikate</str>
-  </msg>
-  <msg>
-    <id>Report: Error Messages</id>
-    <str>Bericht: Fehlermeldungen</str>
-  </msg>
-  <msg>
-    <id>Task: Details</id>
-    <str>Aufgabe: Details</str>
-  </msg>
-
-  <!-- 3.4.6. Report : Results -->
-  <msg>
-    <id>Result</id>
-    <str>Ergebnis</str>
-  </msg>
-  <msg>
-    <id>Results</id>
-    <str>Ergebnisse</str>
-  </msg>
-
-  <msg>
-    <id>Scan Results</id>
-    <str>Scan-Ergebnisse</str>
-  </msg>
-
-  <msg>
-    <id>Result Details</id>
-    <str>Ergebnis-Details</str>
-  </msg>
-  <!-- 3.4.6.1. Result actions -->
-  <msg>
-    <id>Collapse details of all vulnerabilities</id>
-    <str>Details aller Schwachstellen einklappen</str>
-  </msg>
-  <msg>
-    <id>Expand to full details of all vulnerabilities</id>
-    <str>Details aller Schwachstellen ausklappen</str>
-  </msg>
-  <!-- 3.4.6.2. Result properties and values -->
-  <!-- List properties -->
-  <msg>
-    <id>Application CPE</id>
-    <str>Anwendungs-CPE</str>
-  </msg>
-  <msg>
-    <id>DN</id>
-    <str>DN</str>
-  </msg>
-  <msg>
-    <id>IANA</id>
-    <str>IANA</str>
-  </msg>
-  <msg>
-    <id>Port</id>
-    <str>Port</str>
-  </msg>
-  <msg>
-    <id>Not valid before</id>
-    <str>Nicht gültig vor</str>
-  </msg>
-  <msg>
-    <id>Not valid after</id>
-    <str>Nicht gültig nach</str>
-  </msg>
-  <msg>
-    <id>NVT Severity</id>
-    <str>NVT-Schweregrad</str>
-  </msg>
-  <msg>
-    <id>Occurrences</id>
-    <str>Vorkommen</str>
-  </msg>
-  <msg>
-    <id>Operating System</id>
-    <str>Betriebssystem</str>
-  </msg>
-  <msg>
-    <id>Location</id>
-    <str>Ort</str>
-  </msg>
-  <!-- Result details -->
-  <msg>
-    <id>Vulnerability Detection Result</id>
-    <str>Ergebnis zur Schwachstellenerkennung</str>
-  </msg>
-  <msg>
-    <id>Vulnerability Insight</id>
-    <str>Schwachstellen-Einblick</str>
-  </msg>
-  <msg>
-    <id>Vulnerability Detection Method</id>
-    <str>Methode zur Schwachstellenerkennung</str>
-  </msg>
-  <msg>
-    <id>Vulnerability was detected according to the Vulnerability Detection Method.</id>
-    <str>Schwachstelle wurde gemäß der Methode zur Schwachstellenerkennung erkannt.</str>
-  </msg>
-  <msg>
-    <id>Log Method</id>
-    <str>Log-Methode</str>
-  </msg>
-  <msg>
-    <id>Version used</id>
-    <str>Benutzte Version</str>
-  </msg>
-  <msg>
-    <id>Product Detection Result</id>
-    <str>Ergebnis zur Produkterkennung</str>
-  </msg>
-  <msg>
-    <id>Product</id>
-    <str>Produkt</str>
-  </msg>
-  <msg>
-    <id>Method</id>
-    <str>Methode</str>
-  </msg>
-  <!-- Delta results -->
-  <msg>
-    <id>Different Lines</id>
-    <str>Zeilen mit Unterschieden</str>
-  </msg>
-
-  <!-- 3.4.6.3. Result references -->
-  <!-- Result Notes -->
-
-  <!-- Result Overrides -->
-  <msg>
-    <id>Overridden from </id>
-    <str>Übersteuert von </str>
-  </msg>
-  <!-- Result Tags -->
-  <msg>
-    <id>Result Tags</id>
-    <str>Ergebnis-Tags</str>
-  </msg>
-
-
-  <!-- 3.4 Notes -->
-  <msg>
-    <id>Note</id>
-    <str>Notiz</str>
-  </msg>
-  <msg>
-    <id>Notes</id>
-    <str>Notizen</str>
-  </msg>
-  <!-- 3.4.1. Note common properties, values and references -->
-  <!-- Note common actions -->
-  <msg>
-    <id>New Note</id>
-    <str>Neue Notiz</str>
-  </msg>
-  <msg>
-    <id>Add Note</id>
-    <str>Notiz hinzufügen</str>
-  </msg>
-
-  <msg>
-    <id>Edit Note</id>
-    <str>Notiz bearbeiten</str>
-  </msg>
-
-  <!-- Note common references -->
-  <msg>
-    <id>Note Details</id>
-    <str>Notiz-Details</str>
-  </msg>
-  <msg>
-    <id>Note Filter</id>
-    <str>Notiz-Filter</str>
-  </msg>
-
-  <!-- 3.4.2 Note specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.4.3 Note specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.4.4 Note specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.4.5. Note : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.5 Overrides -->
-  <msg>
-    <id>Override</id>
-    <str>Übersteuerung</str>
-  </msg>
-  <msg>
-    <id>Overrides</id>
-    <str>Übersteuerungen</str>
-  </msg>
-
-  <!-- 3.5.1. Override common properties, values and references -->
-  <!-- Override common actions -->
-  <msg>
-    <id>New Override</id>
-    <str>Neue Übersteuerung</str>
-  </msg>
-  <msg>
-    <id>Add Override</id>
-    <str>Übersteuerung hinzufügen</str>
-  </msg>
-
-  <msg>
-    <id>Edit Override</id>
-    <str>Übersteuerung bearbeiten</str>
-  </msg>
-
-  <!-- Override common references -->
-  <msg>
-    <id>Override Details</id>
-    <str>Übersteuerungs-Details</str>
-  </msg>
-  <msg>
-    <id>Override Filter</id>
-    <str>Übersteuerungs-Filter</str>
-  </msg>
-
-  <!-- 3.5.2 Override specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.5.3 Override specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.5.4 Override specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.5.5. Override : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.6 Hosts -->
-  <msg>
-    <id>Host</id>
-    <str>Host</str>
-  </msg>
-  <msg>
-    <id>Hosts</id>
-    <str>Hosts</str>
-  </msg>
-
-  <!-- 3.6.1. Host common properties, values and references -->
-  <!-- Host common actions -->
-    <!-- None -->
-  <!-- Host common references -->
-    <!-- None -->
-
-  <!-- 3.6.2 Host specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.6.3 Host specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.6.4 Host specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.6.5. Host : other strings -->
-    <!-- TODO -->
-
-  <!-- 3.7 NVTs -->
-  <msg>
-    <id>NVT</id>
-    <str>NVT</str>
-  </msg>
-  <msg>
-    <id>NVTs</id>
-    <str>NVTs</str>
-  </msg>
-
-  <!-- 3.7.1. NVT common properties, values and references -->
-  <!-- NVT common actions -->
-    <!-- None -->
-  <!-- NVT common references -->
-  <msg>
-    <id>NVT Details</id>
-    <str>NVT-Details</str>
-  </msg>
-
-  <!-- 3.7.2 NVT specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.7.3 NVT specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.7.4 NVT specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.7.5. NVT : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.8 CVEs -->
-  <msg>
-    <id>CVE</id>
-    <str>CVE</str>
-  </msg>
-  <msg>
-    <id>CVEs</id>
-    <str>CVEs</str>
-  </msg>
-  <!-- 3.8.1. CVE common properties, values and references -->
-  <!-- CVE common actions -->
-    <!-- None -->
-  <!-- CVE common references -->
-  <msg>
-    <id>CVE Details</id>
-    <str>CVE-Details</str>
-  </msg>
-
-  <!-- 3.8.2 CVE specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.8.3 CVE specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.8.4 CVE specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.8.5. CVE : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.9 CPEs -->
-  <msg>
-    <id>CPE</id>
-    <str>CPE</str>
-  </msg>
-  <msg>
-    <id>CPEs</id>
-    <str>CPEs</str>
-  </msg>
-  <!-- 3.9.1. CPE common properties, values and references -->
-  <!-- CPE common actions -->
-    <!-- None -->
-  <!-- CPE common references -->
-  <msg>
-    <id>CPE Details</id>
-    <str>CPE-Details</str>
-  </msg>
-
-  <!-- 3.9.2 CPE specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.9.3 CPE specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.9.4 CPE specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.9.5. CPE : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.10 OVAL Definitions -->
-  <msg>
-    <id>OVAL Definition</id>
-    <str>OVAL-Definition</str>
-  </msg>
-  <msg>
-    <id>OVAL Definitions</id>
-    <str>OVAL-Definitionen</str>
-  </msg>
-  <!-- 3.10.1. OVAL Definition common properties, values and references -->
-  <!-- OVAL Definition common actions -->
-    <!-- None -->
-  <!-- OVAL Definition common references -->
-  <msg>
-    <id>OVAL Definition Details</id>
-    <str>OVAL-Definitions-Details</str>
-  </msg>
-
-  <!-- 3.10.2 OVAL Definition specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.10.3 OVAL Definition specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.10.4 OVAL Definition specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.10.5. OVAL Definition : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.11 DFN-CERT Advisories -->
-  <msg>
-    <id>DFN-CERT Advisory</id>
-    <str>DFN-CERT-Advisory</str>
-  </msg>
-  <msg>
-    <id>DFN-CERT Advisories</id>
-    <str>DFN-CERT-Advisories</str>
-  </msg>
-
-  <!-- 3.11.1. DFN-CERT Advisory common properties, values and references -->
-  <!-- DFN-CERT Advisory common actions -->
-    <!-- None -->
-  <!-- DFN-CERT Advisory common references -->
-  <msg>
-    <id>DFN-CERT Advisory Details</id>
-    <str>DFN-CERT-Advisory-Details</str>
-  </msg>
-
-  <!-- 3.11.2 DFN-CERT Advisory specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.11.3 DFN-CERT Advisory specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.11.4 DFN-CERT Advisory specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.11.5. DFN-CERT Advisory : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.12 Info (all / generic) -->
-  <msg>
-    <id>All SecInfo</id>
-    <str>Alle Sicherheitsinfos</str>
-  </msg>
-  <msg>
-    <id>All SecInfo Information</id>
-    <str>Alle Sicherheitsinfos</str>
-  </msg>
-  <!-- 3.12.1. Info common properties, values and references -->
-  <!-- Info common actions -->
-    <!-- None -->
-  <!-- Info common references -->
-  <msg>
-    <id>Info Filter</id>
-    <str>Info-Filter</str>
-  </msg>
-
-  <!-- 3.12.2 Info specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.12.3 Info specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.12.4 Info specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.12.5. Info : other strings -->
-    <!-- TODO -->
-
-
-
-  <!-- 3.13 Targets -->
-  <msg>
-    <id>Target</id>
-    <str>Ziel</str>
-  </msg>
-  <msg>
-    <id>Targets</id>
-    <str>Ziele</str>
-  </msg>
-  <!-- 3.13.1. Target common properties, values and references -->
-  <!-- Target common actions -->
-  <msg>
-    <id>New Target</id>
-    <str>Neues Ziel</str>
-  </msg>
-
-  <msg>
-    <id>Edit Target</id>
-    <str>Ziel bearbeiten</str>
-  </msg>
-  <!-- Target common references -->
-  <msg>
-    <id>Target Details</id>
-    <str>Ziel-Details</str>
-  </msg>
-  <msg>
-    <id>Target Filter</id>
-    <str>Ziel-Filter</str>
-  </msg>
-
-  <!-- 3.13.2 Target specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.13.3 Target specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.13.4 Target specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.13.5. Target : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.14 Port Lists -->
-  <msg>
-    <id>Port List</id>
-    <str>Portliste</str>
-  </msg>
-  <msg>
-    <id>Port Lists</id>
-    <str>Portlisten</str>
-  </msg>
-
-  <!-- 3.14.1. Port List common properties, values and references -->
-  <!-- Port List common actions -->
-  <msg>
-    <id>New Port List</id>
-    <str>Neue Portliste</str>
-  </msg>
-
-  <msg>
-    <id>Edit Port List</id>
-    <str>Portliste bearbeiten</str>
-  </msg>
-
-  <!-- Port List common references -->
-  <msg>
-    <id>Port List Details</id>
-    <str>Portlisten-Details</str>
-  </msg>
-  <msg>
-    <id>Port List Filter</id>
-    <str>Portlisten-Filter</str>
-  </msg>
-
-  <!-- 3.14.2 Port List specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.14.3 Port List specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.14.4 Port List specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.14.5. Port List : other strings -->
-    <!-- TODO -->
-
-
+    <msg>
+      <id> from current term</id>
+      <str> aus aktuellem Suchausdruck erstellen</str>
+    </msg>
+
+    <msg>
+      <id>Switch Filter</id>
+      <str>Filter umschalten</str>
+    </msg>
+    <msg>
+      <id>Switch</id>
+      <str>Umschalten</str>
+    </msg>
+    <msg>
+      <id>Fold filter</id>
+      <str>Filter einklappen</str>
+    </msg>
+    <msg>
+      <id>Unfold filter</id>
+      <str>Filter ausklappen</str>
+    </msg>
+
+    <msg>
+      <id>Applied filter</id>
+      <str>Angewandter Filter</str>
+    </msg>
+
+    <msg>
+      <id>First result</id>
+      <str>Erstes Ergebnis</str>
+    </msg>
+    <msg>
+      <id>Results per page</id>
+      <str>Ergebnisse pro Seite</str>
+    </msg>
+    <msg>
+      <id>Sort by</id>
+      <str>Sortieren nach</str>
+    </msg>
+    <msg>
+      <id>Ascending</id>
+      <str>Aufsteigend</str>
+    </msg>
+    <msg>
+      <id>Descending</id>
+      <str>Absteigend</str>
+    </msg>
+    <msg>
+      <id>Simple search terms</id>
+      <str>Einfache Suchbegriffe</str>
+    </msg>
+    <msg>
+      <id>Additional filter commands</id>
+      <str>Zusätzliche Filterbefehle</str>
+    </msg>
+  </grp>
+
+  <!-- 2.3      Actions and selectors -->
+  <!-- 2.3.1    Actions available in content windows, header and table rows -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+    <ctxt>Window</ctxt>
+    <!-- Action denied strings (generic) -->
+    <msg>
+      <id> is still in use</id>
+      <str> wird noch verwendet</str>
+    </msg>
+    <msg>
+      <id> is not writable</id>
+      <str> ist nicht beschreibbar</str>
+    </msg>
+
+    <!-- Apply button -->
+    <msg>
+      <id>Apply</id>
+      <str>Anwenden</str>
+    </msg>
+
+    <!-- Delete -->
+    <msg>
+      <id>Delete</id>
+      <str>Löschen</str>
+    </msg>
+    <msg>
+      <id> cannot be deleted</id>
+      <str> kann nicht gelöscht werden</str>
+    </msg>
+
+    <!-- Edit -->
+    <msg>
+      <id>Edit</id>
+      <str>Bearbeiten</str>
+    </msg>
+
+    <!-- Export -->
+    <msg>
+      <id>Export XML</id>
+      <str>XML exportieren</str>
+    </msg>
+    <msg>
+      <id>Export</id>
+      <str>Exportieren</str>
+    </msg>
+    <msg>
+      <id>Export </id>
+      <str></str>
+    </msg>
+    <msg>
+      <id> filtered </id>
+      <str> gefilterte </str>
+    </msg>
+    <msg>
+      <id>#EXPORT_SUFFIX#</id>
+      <str> exportieren</str>
+    </msg>
+    <msg>
+      <id> as XML</id>
+      <str> als XML exportieren</str>
+    </msg>
+
+    <!-- Move to Trashcan-->
+    <msg>
+      <id>Move To Trashcan</id>
+      <str>In den Mülleimer verschieben</str>
+    </msg>
+    <msg>
+      <id>To Trashcan</id>
+      <str>In den Mülleimer</str>
+    </msg>
+    <msg>
+      <id> cannot be moved to Trashcan</id>
+      <str> kann nicht in den Mülleimer verschoben werden</str>
+    </msg>
+  </grp>
+
+  <!-- 2.3.2    Actions not available in table rows (e.g. only in headers) -->
+  <grp>
+    <ctxt>Window</ctxt>
+    <!-- Auto-refresh -->
+    <msg>
+      <id>No auto-refresh</id>
+      <str>Kein Auto-Refresh</str>
+    </msg>
+    <msg>
+      <id>Refresh every</id>
+      <str>Refresh alle</str>
+    </msg>
+    <msg>
+      <id>Sec.</id>
+      <str>Sek.</str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>Aktualisieren</str>
+    </msg>
+    <msg>
+      <id>Update auto-refresh</id>
+      <str>Auto-Refresh aktualisieren</str>
+    </msg>
+    <!-- Return to Default filter -->
+    <msg>
+      <id>Return to default filter view</id>
+      <str>Zurück zur Standardfilter-Ansicht</str>
+    </msg>
+    <msg>
+      <id>Return</id>
+      <str>Zurück</str>
+    </msg>
+  </grp>
+  <!-- 2.3.3    Actions available only in table rows -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+
+    <!-- Clone -->
+    <msg>
+      <id>Clone</id>
+      <str>Clonen</str>
+    </msg>
+
+    <!-- Details -->
+    <msg>
+      <id>#DETAILS_OF_PREFIX#</id>
+      <str>Details für </str>
+    </msg>
+    <msg>
+      <id>#DETAILS_OF_SUFFIX#</id>
+      <str> ansehen</str>
+    </msg>
+  </grp>
+  <!-- 2.3.4    Actions in Forms -->
+  <grp>
+    <ctxt>Form</ctxt>
+    <msg>
+      <id>Apply</id>
+      <str>Anwenden</str>
+    </msg>
+  </grp>
+  <!-- 2.3.5    Actions with special availability rules -->
+
+  <!-- 2.4      Common resource properties -->
+  <!-- 2.4.1    Common property names / table headers -->
+  <grp>
+    <ctxt>Window</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+
+    <msg>
+      <id>Actions</id>
+      <str>Aktionen</str>
+    </msg>
+
+    <msg>
+      <id>Active</id>
+      <str>Aktiv</str>
+    </msg>
+    <msg>
+      <id>Comment</id>
+      <str>Kommentar</str>
+    </msg>
+    <msg>
+      <id>Created</id>
+      <str>Erstellt</str>
+    </msg>
+    <msg>
+      <id>Current</id>
+      <str>Aktuell</str>
+    </msg>
+    <msg>
+      <id>Date</id>
+      <str>Datum</str>
+    </msg>
+    <msg>
+      <id>ID</id>
+      <str>ID</str>
+    </msg>
+    <msg>
+      <id>Last Modified</id>
+      <str>Zuletzt geändert</str>
+    </msg>
+    <msg>
+      <id>Modified</id>
+      <str>Geändert</str>
+    </msg>
+    <msg>
+      <id>Name</id>
+      <str>Name</str>
+    </msg>
+    <msg>
+      <id>Owner</id>
+      <str>Besitzer</str>
+    </msg>
+    <msg>
+      <id>References</id>
+      <str>Verweise</str>
+    </msg>
+    <msg>
+      <id>Severity</id>
+      <str>Schweregrad</str>
+    </msg>
+    <msg>
+      <id>Status</id>
+      <str>Status</str>
+    </msg>
+    <msg>
+      <id>Summary</id>
+      <str>Zusammenfassung</str>
+    </msg>
+    <msg>
+      <id>Text</id>
+      <str>Text</str>
+    </msg>
+    <msg>
+      <id>Title</id>
+      <str>Titel</str>
+    </msg>
+    <msg>
+      <id>Total</id>
+      <str>Gesamt</str>
+    </msg>
+    <msg>
+      <id>Type</id>
+      <str>Typ</str>
+    </msg>
+    <msg>
+      <id>Version</id>
+      <str>Version</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.2    Generic values -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+    <ctxt>Window</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+
+    <!-- Boolean values -->
+    <msg>
+      <id>yes</id>
+      <str>ja</str>
+    </msg>
+    <msg>
+      <id>Yes</id>
+      <str>Ja</str>
+    </msg>
+    <msg>
+      <id>no</id>
+      <str>nein</str>
+    </msg>
+    <msg>
+      <id>No</id>
+      <str>Nein</str>
+    </msg>
+    <!-- Determiners -->
+    <msg>
+      <id>Any</id>
+      <str>Beliebig</str>
+    </msg>
+    <msg>
+      <id>N/A</id>
+      <str>N/A</str>
+    </msg>
+      <msg>
+      <id>None</id>
+      <str>Keine</str>
+    </msg>
+      <msg>
+      <id>none</id>
+      <str>keine</str>
+    </msg>
+    <!-- Property qualifiers -->
+    <msg>
+      <id>optional</id>
+      <str>optional</str>
+    </msg>
+    <msg>
+      <id>immutable</id>
+      <str>unveränderlich</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.3    Severity -->
+  <grp>
+    <ctxt>Severity</ctxt>
+
+    <msg>
+      <id>N/A</id>
+      <str>N/A</str>
+    </msg>
+    <msg>
+      <id>Any</id>
+      <str>Beliebig</str>
+    </msg>
+
+    <msg>
+      <id>Error</id>
+      <str>Fehler</str>
+    </msg>
+    <msg>
+      <id>Debug</id>
+      <str>Debug</str>
+    </msg>
+    <msg>
+      <id>False Positive</id>
+      <str>Falsch Positiv</str>
+    </msg>
+    <msg>
+      <id>False Pos.</id>
+      <str>Falsch Pos.</str>
+    </msg>
+    <msg>
+      <id>Log</id>
+      <str>Log</str>
+    </msg>
+    <msg>
+      <id>Low</id>
+      <str>Niedrig</str>
+    </msg>
+    <msg>
+      <id>Medium</id>
+      <str>Mittel</str>
+    </msg>
+    <msg>
+      <id>High</id>
+      <str>Hoch</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.4    Time units -->
+  <grp>
+    <ctxt>Time</ctxt>
+    <msg>
+      <id>sec</id>
+      <str>Sek.</str>
+    </msg>
+    <msg>
+      <id>secs</id>
+      <str>Sek.</str>
+    </msg>
+    <msg>
+      <id>sec(s)</id>
+      <str>Sek.</str>
+    </msg>
+    <msg>
+      <id>seconds</id>
+      <str>Sekunden</str>
+    </msg>
+    <msg>
+      <id>min</id>
+      <str>Min.</str>
+    </msg>
+    <msg>
+      <id>mins</id>
+      <str>Min.</str>
+    </msg>
+    <msg>
+      <id>min(s)</id>
+      <str>Min.</str>
+    </msg>
+    <msg>
+      <id>minutes</id>
+      <str>Minuten</str>
+    </msg>
+    <msg>
+      <id>hour</id>
+      <str>Stunde</str>
+    </msg>
+    <msg>
+      <id>hours</id>
+      <str>Stunden</str>
+    </msg>
+    <msg>
+      <id>hour(s)</id>
+      <str>Stunde(n)</str>
+    </msg>
+    <msg>
+      <id>day</id>
+      <str>Tag</str>
+    </msg>
+    <msg>
+      <id>days</id>
+      <str>Tage</str>
+    </msg>
+    <msg>
+      <id>day(s)</id>
+      <str>Tag(e)</str>
+    </msg>
+    <msg>
+      <id>week</id>
+      <str>Woche</str>
+    </msg>
+    <msg>
+      <id>weeks</id>
+      <str>Wochen</str>
+    </msg>
+    <msg>
+      <id>week(s)</id>
+      <str>Woche(n)</str>
+    </msg>
+    <msg>
+      <id>month</id>
+      <str>Monat</str>
+    </msg>
+    <msg>
+      <id>months</id>
+      <str>Monate</str>
+    </msg>
+    <msg>
+      <id>month(s)</id>
+      <str>Monat(e)</str>
+    </msg>
+  </grp>
+
+  <!-- 3 Resource specific strings -->
+
+  <!-- 3.1 Tasks -->
+  <!-- 3.1.1 Task type name and common strings -->
+  <grp>
+    <ctxt>Task</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Task</id>
+      <str>Aufgabe</str>
+    </msg>
+    <msg>
+      <id>Tasks</id>
+      <str>Aufgaben</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Task</id>
+      <str>Neue Aufgabe</str>
+    </msg>
+    <msg>
+      <id>Create Task</id>
+      <str>Aufgabe erstellen</str>
+    </msg>
+
+    <msg>
+      <id>Edit Task</id>
+      <str>Aufgabe bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Task</id>
+      <str>Aufgabe speichern</str>
+    </msg>
+
+    <msg>
+      <id>Delete Task</id>
+      <str>Aufgabe löschen</str>
+    </msg>
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Task Details</id>
+      <str>Aufgaben-Details</str>
+    </msg>
+    <msg>
+      <id>Task Filter</id>
+      <str>Aufgaben-Filter</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.2    Task actions and properties - all views -->
+  <grp>
+    <ctxt>Task Table Row</ctxt>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- Status change actions -->
+    <msg>
+      <id>Start</id>
+      <str>Starten</str>
+    </msg>
+    <msg>
+      <id>Resume</id>
+      <str>Fortsetzen</str>
+    </msg>
+    <msg>
+      <id>Stop</id>
+      <str>Stoppen</str>
+    </msg>
+    <msg>
+      <id>Pause</id>
+      <str>Pausieren</str>
+    </msg>
+    <!-- Task status action tooltips -->
+    <msg>
+      <id>Task is a container</id>
+      <str>Aufgabe ist ein Container</str>
+    </msg>
+    <msg>
+      <id>Permission to start task denied</id>
+      <str>Keine Berechtigung, Aufgabe zu starten</str>
+    </msg>
+    <msg>
+      <id>Permission to resume task denied</id>
+      <str>Keine Berechtigung, Aufgabe fortzusetzen</str>
+    </msg>
+    <msg>
+      <id>Permission to stop task denied</id>
+      <str>Keine Berechtigung, Aufgabe zu stoppen</str>
+    </msg>
+    <msg>
+      <id>Task is already active or paused</id>
+      <str>Aufgabe ist bereits aktiv oder pausiert</str>
+    </msg>
+    <msg>
+      <id>Task is scheduled</id>
+      <str>Aufgabe ist durch Zeitplan gesteuert</str>
+    </msg>
+    <msg>
+      <id>Task is not paused or stopped</id>
+      <str>Aufgabe ist nicht pausiert oder gestoppt</str>
+    </msg>
+    <msg>
+      <id>Tasks can only be be stopped when running or paused</id>
+      <str>Nur laufende oder pausierte Aufgaben können gestoppt werden</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Alterable -->
+    <msg>
+      <id>Alterable</id>
+      <str>Änderbar</str>
+    </msg>
+    <msg>
+      <id>Task is alterable</id>
+      <str>Aufgabe is änderbar.</str>
+    </msg>
+    <msg>
+      <id>This is an Alterable Task. Reports may not relate to current Scan Config or Target!</id>
+      <str>Diese Aufgabe is änderbar. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!</str>
+    </msg>
+    <msg>
+      <id>Alterable Task</id>
+      <str>Änderbare Aufgabe</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Observers and observer groups -->
+    <msg>
+      <id>Observers</id>
+      <str>Beobachter</str>
+    </msg>
+    <msg>
+      <id>Observer Groups</id>
+      <str>Beobachter-Gruppen</str>
+    </msg>
+
+    <msg>
+      <id>Task made visible for:</id>
+      <str>Aufgabe sichtbar gemacht für: </str>
+    </msg>
+    <msg>
+      <id>Task made visible for Groups:</id>
+      <str>Aufgabe sichtbar gemacht für die Gruppen:</str>
+    </msg>
+    <msg>
+      <id>Task made visible for Roles:</id>
+      <str>Aufgabe sichtbar gemacht für die Rollen:</str>
+    </msg>
+    <msg>
+      <id>Observing task owned by</id>
+      <str>Beobachte Aufgabe von Besitzer</str>
+    </msg>
+    <!-- Reports -->
+    <!-- generic Reports -->
+    <msg>
+      <id>Reports on Task</id>
+      <str>Berichte für Aufgabe</str>
+    </msg>
+    <!-- all current Reports-->
+    <msg>
+      <id>View list of all reports for Task </id>
+      <str>Liste aller Berichte für Aufgabe </str>
+    </msg>
+    <msg>
+      <id>, including unfinished ones</id>
+      <str> betrachten, inklusive nicht abgeschlossener Berichte</str>
+    </msg>
+    <!-- current Report-->
+    <msg>
+      <id>Go to the current report</id>
+      <str>Zum aktuellen Bericht gehen</str>
+    </msg>
+    <!-- finished Reports -->
+    <msg>
+      <id>Finished</id>
+      <str>Abgeschlossen</str>
+    </msg>
+    <!-- all finished Reports-->
+    <msg>
+      <id>View list of all finished reports for Task </id>
+      <str>Liste aller abschlossenen Berichte für Aufgabe </str>
+    </msg>
+    <msg>
+      <id>#TASK FINSISHED REPORTS SUFFIX#</id>
+      <str> betrachten</str>
+    </msg>
+    <!-- last finished Report -->
+    <msg>
+      <id>Last</id>
+      <str>Letzter</str>
+    </msg>
+    <msg>
+      <id>View last report for Task </id>
+      <str>Letzten Bericht für Aufgabe </str>
+    </msg>
+    <msg>
+      <id>#TASK LAST REPORT SUFFIX#</id>
+      <str> betrachten</str>
+    </msg>
+    <!-- import Report -->
+    <msg>
+      <id>Import Report</id>
+      <str>Bericht importieren</str>
+    </msg>
+    <msg>
+      <id>Add Report</id>
+      <str>Bericht hinzufügen</str>
+    </msg>
+    <!-- Slave -->
+    <msg>
+      <id>#TASK RUN ON SLAVE PREFIX#</id>
+      <str>Aufgabe ist konfiguriert, um auf Slave </str>
+    </msg>
+    <msg>
+      <id>#TASK RUN ON SLAVE SUFFIX#</id>
+      <str> ausgeführt zu werden</str>
+    </msg>
+    <!-- Trend -->
+    <msg>
+      <id>Trend</id>
+      <str>Trend</str>
+    </msg>
+    <msg>
+      <id>Severity increased</id>
+      <str>Schweregrad hat zugenommen</str>
+    </msg>
+    <msg>
+      <id>Severity decreased</id>
+      <str>Schweregrad hat abgenommen</str>
+    </msg>
+    <msg>
+      <id>Vulnerability count increased</id>
+      <str>Anzahl Schwachstellen hat zugenommen</str>
+    </msg>
+    <msg>
+      <id>Vulnerability count decreased</id>
+      <str>Anzahl Schwachstellen hat abgenommen</str>
+    </msg>
+    <msg>
+      <id>Vulnerabilities did not change</id>
+      <str>Schwachstellen haben sich nicht geändert</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.3    Task actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>New Container Task</id>
+      <str>Neue Container-Aufgabe</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Order of target hosts -->
+    <msg>
+      <id>Order for target hosts</id>
+      <str>Reihefolge der Ziel-Hosts</str>
+    </msg>
+    <msg>
+      <id>Sequential</id>
+      <str>Sequentiell</str>
+    </msg>
+    <msg>
+      <id>Random</id>
+      <str>Zufällig</str>
+    </msg>
+    <msg>
+      <id>Reverse</id>
+      <str>Umgekehrt</str>
+    </msg>
+    <!-- Scan Intensity -->
+    <msg>
+      <id>Scan Intensity</id>
+      <str>Scan-Intensität</str>
+    </msg>
+    <msg>
+      <id>Maximum concurrently executed NVTs per host</id>
+      <str>Maximal gleichzeitig ausgeführte NVT pro Host</str>
+    </msg>
+    <msg>
+      <id>Maximum concurrently scanned hosts</id>
+      <str>Maximal gleichzeitig gescannte Hosts</str>
+    </msg>
+    <!-- Source Interface -->
+    <msg>
+      <id>Network Source Interface</id>
+      <str>Netzwerk-Quell-Interface</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Asset Management settings -->
+    <msg>
+      <id>Add to Assets</id>
+      <str>Zu Assets hinzufügen</str>
+    </msg>
+    <msg>
+      <id>Add results to Asset Management</id>
+      <str>Ergebnisse zum Asset-Management hinzufügen</str>
+    </msg>
+    <!-- Notes -->
+    <msg>
+      <id>Notes on Task</id>
+      <str>Notizen für Aufgabe</str>
+    </msg>
+    <!-- Overrides -->
+    <msg>
+      <id>Overrides on Task</id>
+      <str>Übersteuerungen für Aufgabe</str>
+    </msg>
+
+    <!-- Targets -->
+    <msg>
+      <id>Scan Targets</id>
+      <str>Scan-Ziele</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.4    Task actions and properties - table rows only -->
+  <!--
+  <grp>
+    <ctxt>Task Table Row</ctxt>
+
+  </grp>
+  -->
+
+  <!-- 3.1.5    Task status -->
+  <grp>
+    <ctxt>Status</ctxt>
+
+    <msg>
+      <id>Container</id>
+      <str>Container</str>
+    </msg>
+    <msg>
+      <id>Uploading</id>
+      <str>Upload Läuft</str>
+    </msg>
+    <msg>
+      <id>Delete Requested</id>
+      <str>Löschen Angefordert</str>
+    </msg>
+    <msg>
+      <id>Ultimate Delete Requested</id>
+      <str>Entgültiges Löschen Angefordert</str>
+    </msg>
+    <msg>
+      <id>Done</id>
+      <str>Abgeschlossen</str>
+    </msg>
+    <msg>
+      <id>New</id>
+      <str>Neu</str>
+    </msg>
+    <msg>
+      <id>Pause Requested</id>
+      <str>Pause Angefordert</str>
+    </msg>
+    <msg>
+      <id>Paused</id>
+      <str>Pausiert</str>
+    </msg>
+    <msg>
+      <id>Requested</id>
+      <str>Angefordert</str>
+    </msg>
+    <msg>
+      <id>Resume Requested</id>
+      <str>Fortsetzen Angefordert</str>
+    </msg>
+    <msg>
+      <id>Running</id>
+      <str>Läuft gerade</str>
+    </msg>
+    <msg>
+      <id>Stop Requested</id>
+      <str>Stopp Angefordert</str>
+    </msg>
+    <msg>
+      <id>Stopped</id>
+      <str>Gestoppt</str>
+    </msg>
+    <msg>
+      <id>Internal Error</id>
+      <str>Interner Fehler</str>
+    </msg>
+    <!-- Status: "at" for progress bar -->
+    <msg>
+      <id> at </id>
+      <str> bei </str>
+    </msg>
+  </grp>
+
+  <!-- 3.2. Reports -->
+  <!-- 3.2.1. Report type name and common strings -->
+  <grp>
+    <ctxt>Report</ctxt>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Report</id>
+      <str>Bericht</str>
+    </msg>
+    <msg>
+      <id>Reports</id>
+      <str>Berichte</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>Delete Report</id>
+      <str>Bericht löschen</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Report Details</id>
+      <str>Bericht-Details</str>
+    </msg>
+    <msg>
+      <id>Report Filter</id>
+      <str>Bericht-Filter</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.2    Report actions and properties - all views -->
+  <grp>
+    <ctxt>Report Table Row</ctxt>
+    <ctxt>Report Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- Delete restrictions -->
+    <msg>
+      <id>Report is observed</id>
+      <str>Bericht wird beobachtet</str>
+    </msg>
+    <!-- Delta reports -->
+    <msg>
+      <id>Compare</id>
+      <str>Vergleichen</str>
+    </msg>
+    <msg>
+      <id>Report is already selected for delta</id>
+      <str>Bericht ist bereits für Delta ausgewählt</str>
+    </msg>
+    <msg>
+      <id>Filter must be limited to a single Task to allow delta reports</id>
+      <str>Filter muss auf eine einzige Aufgabe beschränkt sein, um Delta-Bereichte zu erlauben</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.2.3    Report actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Report Window</ctxt>
+
+    <!-- - - Actions - - -->
+    <!-- Download full / filtered report -->
+    <msg>
+      <id>Download Format</id>
+      <str>Download-Format</str>
+    </msg>
+    <msg>
+      <id>Download full Report</id>
+      <str>Vollständigen Bericht herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download filtered Report</id>
+      <str>Gefilterten Bericht herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download</id>
+      <str>Herunterladen</str>
+    </msg>
+    <!-- Run Alert -->
+    <msg>
+      <id>Run Alert</id>
+      <str>Benachrichtigung ausführen</str>
+    </msg>
+    <!-- View report = details -->
+    <msg>
+      <id>View Report</id>
+      <str>Bericht anzeigen</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Scan data -->
+    <msg>
+      <id>Scan initiated</id>
+      <str>Scan eingeleitet</str>
+    </msg>
+    <msg>
+      <id>Scan 1 initiated</id>
+      <str>Scan 1 eingeleitet</str>
+    </msg>
+    <msg>
+      <id>Scan 2 initiated</id>
+      <str>Scan 2 eingeleitet</str>
+    </msg>
+
+    <msg>
+      <id>Scan started</id>
+      <str>Scan gestartet</str>
+    </msg>
+    <msg>
+      <id>Scan 1 started</id>
+      <str>Scan 1 gestartet</str>
+    </msg>
+    <msg>
+      <id>Scan 1 started</id>
+      <str>Scan 1 gestartet</str>
+    </msg>
+
+    <msg>
+      <id>Scan ended</id>
+      <str>Scan beendet</str>
+    </msg>
+    <msg>
+      <id>Scan 1 ended</id>
+      <str>Scan 1 beendet</str>
+    </msg>
+    <msg>
+      <id>Scan 2 ended</id>
+      <str>Scan 2 beendet</str>
+    </msg>
+
+    <msg>
+      <id>Scan duration</id>
+      <str>Scan-Dauer</str>
+    </msg>
+    <msg>
+      <id>Scan 1 duration</id>
+      <str>Dauer Scan 1</str>
+    </msg>
+    <msg>
+      <id>Scan 2 duration</id>
+      <str>Dauer Scan 2</str>
+    </msg>
+
+    <msg>
+      <id>Scan status</id>
+      <str>Scan-Status</str>
+    </msg>
+    <msg>
+      <id>Scan 1 status</id>
+      <str>Status Scan 1</str>
+    </msg>
+    <msg>
+      <id>Scan 2 status</id>
+      <str>Status Scan 2</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Hosts references -->
+    <msg>
+      <id>Multiple hosts</id>
+      <str>Mehrere Hosts</str>
+    </msg>
+    <!-- Result Counts -->
+    <msg>
+      <id>Scan Results</id>
+      <str>Scan-Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Full report</id>
+      <str>Vollständiger Bericht</str>
+    </msg>
+    <msg>
+      <id>Filtered report</id>
+      <str>Gefilterter Bericht</str>
+    </msg>
+    <!-- Schedule due time -->
+    <msg>
+      <id>Next due: </id>
+      <str>Fälligkeit:</str>
+    </msg>
+    <msg>
+      <id>Next due: over</id>
+      <str>Fälligkeit: abgelaufen</str>
+    </msg>
+    <!-- Task references -->
+    <msg>
+      <id>Result of Task</id>
+      <str>Ergebnis für Aufgabe</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.4      Report actions and properties - table rows only -->
+  <!-- None -->
+  <!--
+  <grp>
+    <ctxt>Report Table Row</ctxt>
+  </grp>
+  -->
+
+  <!-- 3.2.5    Report sections -->
+  <grp>
+    <ctxt>Report Section</ctxt>
+    <msg>
+      <id>Report: Prognostic Results</id>
+      <str>Bericht: Vorhersage-Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Report: Delta Results</id>
+      <str>Bericht: Delta-Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Report: Results</id>
+      <str>Bericht: Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Summary and Download</id>
+      <str>Bericht: Vorhersage-Übersicht und Download</str>
+    </msg>
+    <msg>
+      <id>Report: Delta Summary and Download</id>
+      <str>Bericht: Delta-Übersicht und Download</str>
+    </msg>
+    <msg>
+      <id>Report: Summary and Download</id>
+      <str>Bericht: Übersicht und Download</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Hosts</id>
+      <str>Bericht: Vorhersage-Hosts</str>
+    </msg>
+    <msg>
+      <id>Report: Hosts</id>
+      <str>Bericht: Hosts</str>
+    </msg>
+    <msg>
+      <id>Report: Ports</id>
+      <str>Bericht: Ports</str>
+    </msg>
+    <msg>
+      <id>Report: Operating Systems</id>
+      <str>Bericht: Betriebssysteme</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Applications</id>
+      <str>Bericht: Vorhersage-Anwendungen</str>
+    </msg>
+    <msg>
+      <id>Report: Applications</id>
+      <str>Bericht: Anwendungen</str>
+    </msg>
+    <msg>
+      <id>Report: Vulnerabilities</id>
+      <str>Bericht: Schwachstellen</str>
+    </msg>
+    <msg>
+      <id>Report: CVEs</id>
+      <str>Bericht: CVEs</str>
+    </msg>
+    <msg>
+      <id>Report: Closed CVEs</id>
+      <str>Bericht: Geschlossene CVEs</str>
+    </msg>
+    <msg>
+      <id>Report: Topology</id>
+      <str>Bericht: Topologie</str>
+    </msg>
+    <msg>
+      <id>Report: SSL Certificates</id>
+      <str>Bericht: SSL-Zertifikate</str>
+    </msg>
+    <msg>
+      <id>Report: Error Messages</id>
+      <str>Bericht: Fehlermeldungen</str>
+    </msg>
+    <msg>
+      <id>Task: Details</id>
+      <str>Aufgabe: Details</str>
+    </msg>
+  </grp>
+
+
+  <!-- 3.3      Results -->
+  <!-- 3.3.1    Result type name and common strings -->
+  <grp>
+    <ctxt>Result</ctxt>
+    <ctxt>Result Window</ctxt>
+
+    <msg>
+      <id>Result</id>
+      <str>Ergebnis</str>
+    </msg>
+    <msg>
+      <id>Results</id>
+      <str>Ergebnisse</str>
+    </msg>
+  </grp>
+  <!-- 3.3.2    Result actions and properties - all views -->
+  <grp>
+    <ctxt>Result Table Row</ctxt>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.3.3    Result actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Collapse details of all vulnerabilities</id>
+      <str>Details aller Schwachstellen einklappen</str>
+    </msg>
+    <msg>
+      <id>Expand to full details of all vulnerabilities</id>
+      <str>Details aller Schwachstellen ausklappen</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Application CPE</id>
+      <str>Anwendungs-CPE</str>
+    </msg>
+    <msg>
+      <id>DN</id>
+      <str>DN</str>
+    </msg>
+    <msg>
+      <id>IANA</id>
+      <str>IANA</str>
+    </msg>
+    <msg>
+      <id>Impact</id>
+      <str>Auswirkungen</str>
+    </msg>
+    <msg>
+      <id>Port</id>
+      <str>Port</str>
+    </msg>
+    <msg>
+      <id>Not valid before</id>
+      <str>Nicht gültig vor</str>
+    </msg>
+    <msg>
+      <id>Not valid after</id>
+      <str>Nicht gültig nach</str>
+    </msg>
+    <msg>
+      <id>NVT Severity</id>
+      <str>NVT-Schweregrad</str>
+    </msg>
+    <msg>
+      <id>Occurrences</id>
+      <str>Vorkommen</str>
+    </msg>
+    <msg>
+      <id>Operating System</id>
+      <str>Betriebssystem</str>
+    </msg>
+    <msg>
+      <id>Location</id>
+      <str>Ort</str>
+    </msg>
+    <msg>
+      <id>Serial</id>
+      <str>Seriennummer</str>
+    </msg>
+    <msg>
+      <id>Solution</id>
+      <str>Lösung</str>
+    </msg>
+    <msg>
+      <id>Vulnerability</id>
+      <str>Schwachstelle</str>
+    </msg>
+    <!-- Details -->
+    <msg>
+      <id>Vulnerability Detection Result</id>
+      <str>Ergebnis zur Schwachstellenerkennung</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Insight</id>
+      <str>Schwachstellen-Einblick</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Detection Method</id>
+      <str>Methode zur Schwachstellenerkennung</str>
+    </msg>
+    <msg>
+      <id>Vulnerability was detected according to the Vulnerability Detection Method.</id>
+      <str>Schwachstelle wurde gemäß der Methode zur Schwachstellenerkennung erkannt.</str>
+    </msg>
+    <msg>
+      <id>Log</id>
+      <str>Log</str>
+    </msg>
+    <msg>
+      <id>Log Method</id>
+      <str>Log-Methode</str>
+    </msg>
+    <msg>
+      <id>Version used</id>
+      <str>Benutzte Version</str>
+    </msg>
+    <msg>
+      <id>Product Detection Result</id>
+      <str>Ergebnis zur Produkterkennung</str>
+    </msg>
+    <msg>
+      <id>Product</id>
+      <str>Produkt</str>
+    </msg>
+    <msg>
+      <id>Method</id>
+      <str>Methode</str>
+    </msg>
+    <!-- Delta results -->
+    <msg>
+      <id>Different Lines</id>
+      <str>Zeilen mit Unterschieden</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- Result Overrides -->
+    <msg>
+      <id>Overridden from </id>
+      <str>Übersteuert von </str>
+    </msg>
+    <!-- Result Tags -->
+    <msg>
+      <id>Result Tags</id>
+      <str>Ergebnis-Tags</str>
+    </msg>
+  </grp>
+  <!-- 3.3.4    Result actions and properties - table rows only -->
+  <grp>
+    <ctxt>Result Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.4      Notes -->
+  <!-- 3.4.1    Note type name and common strings -->
+  <grp>
+    <ctxt>Note</ctxt>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Note</id>
+      <str>Notiz</str>
+    </msg>
+    <msg>
+      <id>Notes</id>
+      <str>Notizen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Note</id>
+      <str>Neue Notiz</str>
+    </msg>
+    <msg>
+      <id>Add Note</id>
+      <str>Notiz hinzufügen</str>
+    </msg>
+
+    <msg>
+      <id>Edit Note</id>
+      <str>Notiz bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Note Details</id>
+      <str>Notiz-Details</str>
+    </msg>
+    <msg>
+      <id>Note Filter</id>
+      <str>Notiz-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.4.2    Note actions and properties - all views -->
+  <grp>
+    <ctxt>Note Table Row</ctxt>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.4.3    Note actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.4.4    Note actions and properties - table rows only -->
+  <grp>
+    <ctxt>Note Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.5      Overrides -->
+  <!-- 3.5.1    Override type name and common strings -->
+  <grp>
+    <ctxt>Override</ctxt>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Override</id>
+      <str>Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>Overrides</id>
+      <str>Übersteuerungen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Override</id>
+      <str>Neue Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>Add Override</id>
+      <str>Übersteuerung hinzufügen</str>
+    </msg>
+
+    <msg>
+      <id>Edit Override</id>
+      <str>Übersteuerung bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Override Details</id>
+      <str>Übersteuerungs-Details</str>
+    </msg>
+    <msg>
+      <id>Override Filter</id>
+      <str>Übersteuerungs-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.5.2    Override actions and properties - all views -->
+  <grp>
+    <ctxt>Override Table Row</ctxt>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.5.3    Override actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.5.4    Override actions and properties - table rows only -->
+  <grp>
+    <ctxt>Override Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.5.5    Override controls -->
+  <grp>
+    <ctxt>Override Controls</ctxt>
+    <msg>
+      <id>Apply overrides</id>
+      <str>Übersteuerung anwenden</str>
+    </msg>
+    <msg>
+    <id>Overrides are Applied</id>
+    <str>Übersteuerungen werden angewendet</str>
+    </msg>
+    <msg>
+      <id>No overrides</id>
+      <str>Keine Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>Aktualisieren</str>
+    </msg>
+  </grp>
+
+  <!-- 3.6      Hosts -->
+  <!-- 3.6.1    Host type name and common strings -->
+  <grp>
+    <ctxt>Host</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Host</id>
+      <str>Host</str>
+    </msg>
+    <msg>
+      <id>Hosts</id>
+      <str>Hosts</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+  </grp>
+  <!-- 3.6.2    Host actions and properties - all views -->
+  <grp>
+    <ctxt>Host Table Row</ctxt>
+    <ctxt>Host Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.6.3    Host actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Host Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.6.4    Host actions and properties - table rows only -->
+  <grp>
+    <ctxt>Host Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.7      NVTs -->
+  <!-- 3.7.1    NVT type name and common strings -->
+  <grp>
+    <ctxt>NVT</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>NVT Details</id>
+      <str>NVT-Details</str>
+    </msg>
+  </grp>
+  <!-- 3.7.2    NVT actions and properties - all views -->
+  <grp>
+    <ctxt>NVT Table Row</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.7.3    NVT actions and properties - window / headers only -->
+  <grp>
+    <ctxt>NVT Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.7.4    NVT actions and properties - table rows only -->
+  <grp>
+    <ctxt>NVT Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.8      CVEs -->
+  <!-- 3.8.1    CVE type name and common strings -->
+  <grp>
+    <ctxt>CVE</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>CVE Details</id>
+      <str>CVE-Details</str>
+    </msg>
+  </grp>
+  <!-- 3.8.2    CVE actions and properties - all views -->
+  <grp>
+    <ctxt>CVE Table Row</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.8.3    CVE actions and properties - window / headers only -->
+  <grp>
+    <ctxt>CVE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.8.4    CVE actions and properties - table rows only -->
+  <grp>
+    <ctxt>CVE Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.9      CPE -->
+  <!-- 3.9.1    CPE type name and common strings -->
+  <grp>
+    <ctxt>CPE</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>CPE Details</id>
+      <str>CPE-Details</str>
+    </msg>
+  </grp>
+  <!-- 3.9.2    CPE actions and properties - all views -->
+  <grp>
+    <ctxt>CPE Table Row</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.9.3    CPE actions and properties - window / headers only -->
+  <grp>
+    <ctxt>CPE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.9.4    CPE actions and properties - table rows only -->
+  <grp>
+    <ctxt>CPE Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.10      OVAL Definitions -->
+  <!-- 3.10.1    OVAL Definition type name and common strings -->
+  <grp>
+    <ctxt>OVAL Definition</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>Info</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>OVAL Definition</id>
+      <str>OVAL-Definition</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL-Definitionen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>OVAL Definition Details</id>
+      <str>OVAL-Definitions-Details</str>
+    </msg>
+  </grp>
+  <!-- 3.10.2    OVAL Definition actions and properties - all views -->
+  <grp>
+    <ctxt>OVAL Definition Table Row</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.10.3    OVAL Definition actions and properties - window / headers only -->
+  <grp>
+    <ctxt>OVAL Definition Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.10.4    OVAL Definition actions and properties - table rows only -->
+  <grp>
+    <ctxt>OVAL Definition Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.11      DFN-CERT Advisories -->
+  <!-- 3.11.1    DFN-CERT Advisory type name and common strings -->
+  <grp>
+    <ctxt>DFN-CERT Advisory</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Info</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>DFN-CERT Advisory</id>
+      <str>DFN-CERT-Advisory</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT-Advisories</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>DFN-CERT Advisory Details</id>
+      <str>DFN-CERT-Advisory-Details</str>
+    </msg>
+  </grp>
+  <!-- 3.11.2    DFN-CERT Advisory actions and properties - all views -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Table Row</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.3    DFN-CERT Advisory actions and properties - window / headers only -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.4    DFN-CERT Advisory actions and properties - table rows only -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.12      Info (All Info)-->
+  <!-- 3.12.1    Info type name and common strings -->
+  <grp>
+    <ctxt>All SecInfo Information</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>All SecInfo</id>
+      <str>Alle Sicherheitsinfos</str>
+    </msg>
+    <msg>
+      <id>All SecInfo Information</id>
+      <str>Alle Sicherheitsinfos</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Info Filter</id>
+      <str>Info-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.12.2    Info actions and properties - all views -->
+  <grp>
+    <ctxt>All SecInfo Table Row</ctxt>
+    <ctxt>All SecInfo Window</ctxt>
+    <ctxt>Info Table Row</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.12.3    Info actions and properties - window / headers only -->
+  <grp>
+    <ctxt>All SecInfo Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.12.4    Info actions and properties - table rows only -->
+  <grp>
+    <ctxt>All SecInfo Table Row</ctxt>
+    <ctxt>Info Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.13      Targets -->
+  <!-- 3.13.1    Target type name and common strings -->
+  <grp>
+    <ctxt>Target</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Target</id>
+      <str>Ziel</str>
+    </msg>
+    <msg>
+      <id>Targets</id>
+      <str>Ziele</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Target</id>
+      <str>Neues Ziel</str>
+    </msg>
+
+    <msg>
+      <id>Edit Target</id>
+      <str>Ziel bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Target Details</id>
+      <str>Ziel-Details</str>
+    </msg>
+    <msg>
+      <id>Target Filter</id>
+      <str>Ziel-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.13.2    Target actions and properties - all views -->
+  <grp>
+    <ctxt>Target Table Row</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.13.3    Target actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.13.4    Target actions and properties - table rows only -->
+  <grp>
+    <ctxt>Target Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.14      Port Lists -->
+  <!-- 3.14.1    Port List type name and common strings -->
+  <grp>
+    <ctxt>Port List</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Port List</id>
+      <str>Portliste</str>
+    </msg>
+    <msg>
+      <id>Port Lists</id>
+      <str>Portlisten</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Port List</id>
+      <str>Neue Portliste</str>
+    </msg>
+
+    <msg>
+      <id>Edit Port List</id>
+      <str>Portliste bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Port List Details</id>
+      <str>Portlisten-Details</str>
+    </msg>
+    <msg>
+      <id>Port List Filter</id>
+      <str>Portlisten-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.14.2    Port List actions and properties - all views -->
+  <grp>
+    <ctxt>Port List Table Row</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.14.3    Port List actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Port List Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.14.4    Port List actions and properties - table rows only -->
+  <grp>
+    <ctxt>Port List Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  
   <!-- 3.15 Credentials -->
-  <msg>
-    <id>Credential</id>
-    <str>Anmeldedaten</str>
-  </msg>
-  <msg>
-    <id>Credentials</id>
-    <str>Anmeldedaten</str>
-  </msg>
-
-  <!-- 3.15.1. Credential common properties, values and references -->
-  <!-- Credential common actions -->
-  <msg>
-    <id>New Credential</id>
-    <str>Neue Anmeldedaten</str>
-  </msg>
-
-  <msg>
-    <id>Edit Credential</id>
-    <str>Anmeldedaten bearbeiten</str>
-  </msg>
-  <!-- Credential common references -->
-  <msg>
-    <id>Credential Details</id>
-    <str>Anmeldedaten-Details</str>
-  </msg>
-  <msg>
-    <id>Credential Filter</id>
-    <str>Anmeldedaten-Filter</str>
-  </msg>
-
-  <!-- 3.15.2 Credential specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.15.3 Credential specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.15.4 Credential specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.15.5. RESOURCE : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.16 Scan Configs -->
-  <msg>
-    <id>Scan Config</id>
-    <str>Scan-Konfiguration</str>
-  </msg>
-  <msg>
-    <id>Scan Configs</id>
-    <str>Scan-Konfigurationen</str>
-  </msg>
-  <msg>
-    <id>Configs</id>
-    <str>Konfigurationen</str>
-  </msg>
-
-  <!-- 3.16.1. Scan Config common properties, values and references -->
-  <!-- Scan Config common actions -->
-  <msg>
-    <id>New Scan Config</id>
-    <str>Neue Scan-Konfig</str>
-  </msg>
-
-  <msg>
-    <id>Edit Scan Configs</id>
-    <str>Scan-Konfig bearbeiten</str>
-  </msg>
-
-  <!-- Scan Config common references -->
-  <msg>
-    <id>Scan Config Details</id>
-    <str>Scan-Konfigurations-Details</str>
-  </msg>
-  <msg>
-    <id>Scan Config Filter</id>
-    <str>Scan-Konfigurations-Filter</str>
-  </msg>
-
-  <!-- 3.16.2 Scan Config specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.16.3 Scan Config specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.16.4 Scan Config specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.16.5. Scan Config : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.17 Alerts -->
-  <msg>
-    <id>Alert</id>
-    <str>Benachrichtigung</str>
-  </msg>
-  <msg>
-    <id>Alerts</id>
-    <str>Benachrichtigungen</str>
-  </msg>
-
-  <!-- 3.17.1. Alert common properties, values and references -->
-  <!-- Alert common actions -->
-  <msg>
-    <id>New Alert</id>
-    <str>Neue Benachrichtigung</str>
-  </msg>
-
-  <msg>
-    <id>Edit Alert</id>
-    <str>Benachrichtigung bearbeiten</str>
-  </msg>
-
-  <!-- Alert common references -->
-  <msg>
-    <id>Alert Details</id>
-    <str>Benachrichtigungs-Details</str>
-  </msg>
-  <msg>
-    <id>Alert Filter</id>
-    <str>Benachrichtigungs-Filter</str>
-  </msg>
-
-  <!-- 3.17.2 Alert specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.17.3 Alert specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.17.4 Alert specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.17.5. Alert : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.18 Schedules -->
-  <msg>
-    <id>Schedule</id>
-    <str>Zeitplan</str>
-  </msg>
-  <msg>
-    <id>Schedules</id>
-    <str>Zeitpläne</str>
-  </msg>
-
-  <!-- 3.18.1. Schedule common properties, values and references -->
-  <!-- Schedule common actions -->
-  <msg>
-    <id>New Schedule</id>
-    <str>Neuer Zeitplan</str>
-  </msg>
-
-  <msg>
-    <id>Edit Schedule</id>
-    <str>Zeitplan bearbeiten</str>
-  </msg>
-
-  <!-- Schedule common references -->
-  <msg>
-    <id>Schedule Details</id>
-    <str>Zeitplan-Details</str>
-  </msg>
-  <msg>
-    <id>Schedule Filter</id>
-    <str>Zeitplan-Filter</str>
-  </msg>
-
-  <!-- 3.18.2 Schedule specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.18.3 Schedule specific specific properties and property values -->
-  <!-- Next due date -->
-  <msg>
-    <id>Next due: </id>
-    <str>Fälligkeit:</str>
-  </msg>
-  <msg>
-    <id>Next due: over</id>
-    <str>Fälligkeit: abgelaufen</str>
-  </msg>
-
-  <!-- 3.18.4 Schedule specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.18.5. Schedule : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.19 Report Formats -->
-  <msg>
-    <id>Report Format</id>
-    <str>Berichtformat</str>
-  </msg>
-  <msg>
-    <id>Report Formats</id>
-    <str>Berichtformate</str>
-  </msg>
-
-  <!-- 3.19.1. Report Format common properties, values and references -->
-  <!-- Report Format common actions -->
-  <msg>
-    <id>New Report Format</id>
-    <str>Neues Berichtformat</str>
-  </msg>
-
-  <msg>
-    <id>Edit Report Format</id>
-    <str>Berichtformat bearbeiten</str>
-  </msg>
-
-  <!-- Report Format common references -->
-  <msg>
-    <id>Report Format Details</id>
-    <str>Berichtformats-Details</str>
-  </msg>
-  <msg>
-    <id>Report Format Filter</id>
-    <str>Berichtformats-Filter</str>
-  </msg>
-
-  <!-- 3.19.2 Report Format specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.19.3 Report Format specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.19.4 Report Format specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.19.5. Report Format : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.20 Slaves -->
-  <msg>
-    <id>Slave</id>
-    <str>Slave</str>
-  </msg>
-  <msg>
-    <id>Slaves</id>
-    <str>Slaves</str>
-  </msg>
-
-  <!-- 3.20.1. Slave common properties, values and references -->
-  <!-- Slave common actions -->
-  <msg>
-    <id>New Slave</id>
-    <str>Neuer Slave</str>
-  </msg>
-
-  <msg>
-    <id>Edit Slave</id>
-    <str>Slave bearbeiten</str>
-  </msg>
-
-  <!-- Slave common references -->
-  <msg>
-    <id>Slave Details</id>
-    <str>Slave-Details</str>
-  </msg>
-  <msg>
-    <id>Slave Filter</id>
-    <str>Slave-Filter</str>
-  </msg>
-
-  <!-- 3.20.2 Slave specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.20.3 Slave specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.20.4 Slave specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.20.5. Slave : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.21 Agents -->
-  <msg>
-    <id>Agent</id>
-    <str>Agent</str>
-  </msg>
-  <msg>
-    <id>Agents</id>
-    <str>Agenten</str>
-  </msg>
-
-  <!-- 3.21.1. Agent common properties, values and references -->
-  <!-- Agent common actions -->
-  <msg>
-    <id>New Agent</id>
-    <str>Neuer Agent</str>
-  </msg>
-
-  <msg>
-    <id>Edit Agent</id>
-    <str>Agent bearbeiten</str>
-  </msg>
-
-  <!-- Agent common references -->
-  <msg>
-    <id>Agent Details</id>
-    <str>Agenten-Details</str>
-  </msg>
-  <msg>
-    <id>Agent Filter</id>
-    <str>Agenten-Filter</str>
-  </msg>
-
-  <!-- 3.21.2 Agent specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.21.3 Agent specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.21.4 Agent specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.21.5. Agent : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.22 Filters -->
-  <msg>
-    <id>Filter</id>
-    <str>Filter</str>
-  </msg>
-  <msg>
-    <id>Filters</id>
-    <str>Filter</str>
-  </msg>
-
-  <!-- 3.22.1. Filter common properties, values and references -->
-  <!-- Filter common actions -->
-  <msg>
-    <id>New Filter</id>
-    <str>Neuer Filter</str>
-  </msg>
-
-  <msg>
-    <id>Edit Filter</id>
-    <str>Filter bearbeiten</str>
-  </msg>
-
-  <!-- Filter common references -->
-  <msg>
-    <id>Filter Details</id>
-    <str>Filter-Details</str>
-  </msg>
-  <msg>
-    <id>Filter Filter</id>
-    <str>Filter-Filter</str>
-  </msg>
-
-  <!-- 3.22.2 Filter specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.22.3 Filter specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.22.4 Filter specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.22.5. Filter : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.23 Tags -->
-  <msg>
-    <id>Tag</id>
-    <str>Tag</str>
-  </msg>
-  <msg>
-    <id>Tags</id>
-    <str>Tags</str>
-  </msg>
-
-  <!-- 3.23.1. Tags common properties, values and references -->
-  <!-- Tags common actions -->
-  <msg>
-    <id>New Tag</id>
-    <str>Neuer Tag</str>
-  </msg>
-
-  <msg>
-    <id>Edit Tag</id>
-    <str>Tag bearbeiten</str>
-  </msg>
-
-  <!-- Tags common references -->
-  <msg>
-    <id>Tag Details</id>
-    <str>Tag-Details</str>
-  </msg>
-  <msg>
-    <id>Tag Filter</id>
-    <str>Tag-Filter</str>
-  </msg>
-
-  <!-- 3.23.2 Tags specific actions not related to referenced resources -->
-  <msg>
-    <id>Disable Tag</id>
-    <str>Tag deaktivieren</str>
-  </msg>
-  <msg>
-    <id>Enable Tag</id>
-    <str>Tag aktivieren</str>
-  </msg>
-
-  <!-- 3.23.3 Tags specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.23.4 Tags specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.23.5. Tags : other strings -->
-  <!-- User Tags window shown on details page -->
-  <msg>
-    <id>User Tags list</id>
-    <str>Liste der Benutzer-Tags</str>
-  </msg>
-  <msg>
-    <id>User Tags for</id>
-    <str>Benutzer-Tags für</str>
-  </msg>
-  <msg>
-    <id>Add Tag</id>
-    <str>Tag hinzufügen</str>
-  </msg>
-  <msg>
-    <id>with Value</id>
-    <str>mit Wert</str>
-  </msg>
-
-
-  <!-- 3.24 Permissions -->
-  <msg>
-    <id>Permission</id>
-    <str>Berechtigung</str>
-  </msg>
-  <msg>
-    <id>Permissions</id>
-    <str>Berechtigungen</str>
-  </msg>
-
-  <!-- 3.24.1. Permissions common properties, values and references -->
-  <!-- Permissions common actions -->
-  <msg>
-    <id>New Permission</id>
-    <str>Neue Berechtigung</str>
-  </msg>
-
-  <msg>
-    <id>Edit Permission</id>
-    <str>Berechtigung bearbeiten</str>
-  </msg>
-
-  <!-- Permissions common references -->
-  <msg>
-    <id>Permission Details</id>
-    <str>Berechtigungs-Details</str>
-  </msg>
-  <msg>
-    <id>Permission Filter</id>
-    <str>Berechtigungs-Filter</str>
-  </msg>
-
-  <!-- 3.24.2 Permissions specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.24.3 Permissions specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.24.4 Permissions specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.24.5. Permissions : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.25 Users -->
-  <msg>
-    <id>User</id>
-    <str>Benutzer</str>
-  </msg>
-  <msg>
-    <id>Users</id>
-    <str>Benutzer</str>
-  </msg>
-
-  <!-- 3.25.1. User common properties, values and references -->
-  <!-- User common actions -->
-  <msg>
-    <id>New User</id>
-    <str>Neuer Benutzer</str>
-  </msg>
-  <msg>
-    <id>Edit User</id>
-    <str>Benutzer bearbeiten</str>
-  </msg>
-
-  <!-- User common references -->
-  <msg>
-    <id>User Details</id>
-    <str>Benutzer-Details</str>
-  </msg>
-  <msg>
-    <id>User Filter</id>
-    <str>Benutzer-Filter</str>
-  </msg>
-
-  <!-- 3.25.2 User specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.25.3 User specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.25.4 User specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.25.5. User : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.26 Groups -->
-  <msg>
-    <id>Group</id>
-    <str>Gruppe</str>
-  </msg>
-  <msg>
-    <id>Groups</id>
-    <str>Gruppen</str>
-  </msg>
-
-  <!-- 3.26.1. Group common properties, values and references -->
-  <!-- Group common actions -->
-  <msg>
-    <id>New Group</id>
-    <str>Neue Gruppe</str>
-  </msg>
-
-  <msg>
-    <id>Edit Group</id>
-    <str>Gruppe bearbeiten</str>
-  </msg>
-  <!-- Group common references -->
-  <msg>
-    <id>Group Details</id>
-    <str>Gruppen-Details</str>
-  </msg>
-  <msg>
-    <id>Group Filter</id>
-    <str>Gruppen-Filter</str>
-  </msg>
-
-  <!-- 3.26.2 Group specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.26.3 Group specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.26.4 Group specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.26.5. Group : other strings -->
-    <!-- TODO -->
-
-
-  <!-- 3.27 Roles -->
-  <msg>
-    <id>Role</id>
-    <str>Rolle</str>
-  </msg>
-  <msg>
-    <id>Roles</id>
-    <str>Rollen</str>
-  </msg>
-
-  <!-- 3.27.1. Role common properties, values and references -->
-  <!-- Role common actions -->
-  <msg>
-    <id>New Role</id>
-    <str>Neue Rolle</str>
-  </msg>
-  <msg>
-    <id>Edit Role</id>
-    <str>Rolle bearbeiten</str>
-  </msg>
-  <!-- Role common references -->
-  <msg>
-    <id>Role Details</id>
-    <str>Rollen-Details</str>
-  </msg>
-  <msg>
-    <id>Role Filter</id>
-    <str>Rollen-Filter</str>
-  </msg>
-  <!-- 3.27.2 Role specific actions not related to referenced resources -->
-    <!-- TODO -->
-
-  <!-- 3.27.3 Role specific specific properties and property values -->
-    <!-- TODO -->
-
-  <!-- 3.27.4 Role specific references and reference actions -->
-    <!-- TODO -->
-
-  <!-- 3.27.5. Role : other strings -->
-    <!-- TODO -->
-
-
-<!-- Template for new resource types - - - - - - - - - - - - - - - - - - - -->
-
-  <!-- 3.X RESOURCEs -->
-    <!-- Name of the type, as well as its plural (and other common variants) -->
-  <!-- 3.X.1. RESOURCE common properties, values and references -->
-  <!-- RESOURCE common actions -->
-    <!-- specific versions of actions shared with other types:
-         new, edit, trash, delete -->
-  <!-- RESOURCE common references -->
-    <!-- details, filter -->
-
-  <!-- 3.X.2 RESOURCE specific actions not related to referenced resources -->
-    <!-- actions specific to the resource that are not the addition of
-         references or a simple change property change, sorted alphabetically
-         and together with associated messages.
-         Example: Starting a Task -->
-
-  <!-- 3.X.3 RESOURCE specific specific properties and property values -->
-    <!-- properties specific to a resource that are not directly referencing
-         another resource, sorted alphabetically and together with associated
-         values and messages
-         Example: Order of target hosts in a Task -->
-
-  <!-- 3.X.4 RESOURCE specific references and reference actions -->
-    <!-- properties referencing other resources, sorted by resource type
-         alphabetically and together with associated values and messages
-         Example: All results for a Task -->
-
-  <!-- 3.X.5. RESOURCE : other strings -->
-    <!-- all other strings associated with the resource type -->
-
-
-<!-- End of template for new resource types - - - - - - - - - - - - - - - - -->
----------------
+
+  <!-- 3.15      Credentials -->
+  <!-- 3.15.1    Credential type name and common strings -->
+  <grp>
+    <ctxt>Credential</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Credential</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>Credentials</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Credential</id>
+      <str>Neue Anmeldedaten</str>
+    </msg>
+
+    <msg>
+      <id>Edit Credential</id>
+      <str>Anmeldedaten bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Credential Details</id>
+      <str>Anmeldedaten-Details</str>
+    </msg>
+    <msg>
+      <id>Credential Filter</id>
+      <str>Anmeldedaten-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.15.2    Credential actions and properties - all views -->
+  <grp>
+    <ctxt>Credential Table Row</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.15.3    Credential actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.15.4    Credential actions and properties - table rows only -->
+  <grp>
+    <ctxt>Credential Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.16      Scan Configs -->
+  <!-- 3.16.1    Scan Config type name and common strings -->
+  <grp>
+    <ctxt>Config</ctxt>
+    <ctxt>Scan Config</ctxt>
+    <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Scan Config</id>
+      <str>Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Scan Configs</id>
+      <str>Scan-Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>Scan Configuration</id>
+      <str>Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Scan Configurations</id>
+      <str>Scan-Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>Configs</id>
+      <str>Konfigurationen</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Scan Config</id>
+      <str>Neue Scan-Konfig</str>
+    </msg>
+
+    <msg>
+      <id>Edit Scan Configs</id>
+      <str>Scan-Konfig bearbeiten</str>
+    </msg>
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Scan Config Details</id>
+      <str>Scan-Konfigurations-Details</str>
+    </msg>
+    <msg>
+      <id>Scan Config Filter</id>
+      <str>Scan-Konfigurations-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.16.2    Scan Config actions and properties - all views -->
+  <grp>
+    <ctxt>Scan Config Table Row</ctxt>
+    <ctxt>Scan Config Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.16.3    Scan Config actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Scan Config Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.16.4    Scan Config actions and properties - table rows only -->
+  <grp>
+    <ctxt>Scan Config Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.17      Alerts -->
+  <!-- 3.17.1    Alert type name and common strings -->
+  <grp>
+    <ctxt>Alert</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Alert</id>
+      <str>Benachrichtigung</str>
+    </msg>
+    <msg>
+      <id>Alerts</id>
+      <str>Benachrichtigungen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Alert</id>
+      <str>Neue Benachrichtigung</str>
+    </msg>
+
+    <msg>
+      <id>Edit Alert</id>
+      <str>Benachrichtigung bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Alert Details</id>
+      <str>Benachrichtigungs-Details</str>
+    </msg>
+    <msg>
+      <id>Alert Filter</id>
+      <str>Benachrichtigungs-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.17.2    Alert actions and properties - all views -->
+  <grp>
+    <ctxt>Alert Table Row</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.17.3    Alert actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.17.4    Alert actions and properties - table rows only -->
+  <grp>
+    <ctxt>Alert Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.18      Schedules -->
+  <!-- 3.18.1    Schedule type name and common strings -->
+  <grp>
+    <ctxt>Schedule</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Schedule</id>
+      <str>Zeitplan</str>
+    </msg>
+    <msg>
+      <id>Schedules</id>
+      <str>Zeitpläne</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Schedule</id>
+      <str>Neuer Zeitplan</str>
+    </msg>
+
+    <msg>
+      <id>Edit Schedule</id>
+      <str>Zeitplan bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Schedule Details</id>
+      <str>Zeitplan-Details</str>
+    </msg>
+    <msg>
+      <id>Schedule Filter</id>
+      <str>Zeitplan-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.18.2    Schedule actions and properties - all views -->
+  <grp>
+    <ctxt>Schedule Table Row</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.18.3    Schedule actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.18.4    Schedule actions and properties - table rows only -->
+  <grp>
+    <ctxt>Schedule Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.19      Report Formats -->
+  <!-- 3.19.1    Report Format type name and common strings -->
+  <grp>
+    <ctxt>Report Format</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Report Format</id>
+      <str>Berichtformat</str>
+    </msg>
+    <msg>
+      <id>Report Formats</id>
+      <str>Berichtformate</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Report Format</id>
+      <str>Neues Berichtformat</str>
+    </msg>
+
+    <msg>
+      <id>Edit Report Format</id>
+      <str>Berichtformat bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Report Format Details</id>
+      <str>Berichtformats-Details</str>
+    </msg>
+    <msg>
+      <id>Report Format Filter</id>
+      <str>Berichtformats-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.19.2    Report Format actions and properties - all views -->
+  <grp>
+    <ctxt>Report Format Table Row</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.19.3    Report Format actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.19.4    Report Format actions and properties - table rows only -->
+  <grp>
+    <ctxt>Report Format Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.20      Slaves -->
+  <!-- 3.20.1    Slave type name and common strings -->
+  <grp>
+    <ctxt>Slave</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Slave</id>
+      <str>Slave</str>
+    </msg>
+    <msg>
+      <id>Slaves</id>
+      <str>Slaves</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Slave</id>
+      <str>Neuer Slave</str>
+    </msg>
+
+    <msg>
+      <id>Edit Slave</id>
+      <str>Slave bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Slave Details</id>
+      <str>Slave-Details</str>
+    </msg>
+    <msg>
+      <id>Slave Filter</id>
+      <str>Slave-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.20.2    Slave actions and properties - all views -->
+  <grp>
+    <ctxt>Slave Table Row</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.20.3    Slave actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.20.4    Slave actions and properties - table rows only -->
+  <grp>
+    <ctxt>Slave Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.21      Agents -->
+  <!-- 3.21.1    Agent type name and common strings -->
+  <grp>
+    <ctxt>Agent</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Agent</id>
+      <str>Agent</str>
+    </msg>
+    <msg>
+      <id>Agents</id>
+      <str>Agenten</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Agent</id>
+      <str>Neuer Agent</str>
+    </msg>
+
+    <msg>
+      <id>Edit Agent</id>
+      <str>Agent bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Agent Details</id>
+      <str>Agenten-Details</str>
+    </msg>
+    <msg>
+      <id>Agent Filter</id>
+      <str>Agenten-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.21.2    Agent actions and properties - all views -->
+  <grp>
+    <ctxt>Agent Table Row</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.21.3    Agent actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.21.4    Agent actions and properties - table rows only -->
+  <grp>
+    <ctxt>Agent Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.22      Filters -->
+  <!-- 3.22.1    Filter type name and common strings -->
+  <grp>
+    <ctxt>Filter</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Filter</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>Filter</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Filter</id>
+      <str>Neuer Filter</str>
+    </msg>
+
+    <msg>
+      <id>Edit Filter</id>
+      <str>Filter bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Filter Details</id>
+      <str>Filter-Details</str>
+    </msg>
+    <msg>
+      <id>Filter Filter</id>
+      <str>Filter-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.22.2    Filter actions and properties - all views -->
+  <grp>
+    <ctxt>Filter Table Row</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.22.3    Filter actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Filter Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.22.4    Filter actions and properties - table rows only -->
+  <grp>
+    <ctxt>Filter Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.23      Tags -->
+  <!-- 3.23.1    Tag type name and common strings -->
+  <grp>
+    <ctxt>Tag</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Tag</id>
+      <str>Tag</str>
+    </msg>
+    <msg>
+      <id>Tags</id>
+      <str>Tags</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>Add Tag</id>
+      <str>Tag hinzufügen</str>
+    </msg>
+    <msg>
+      <id>New Tag</id>
+      <str>Neuer Tag</str>
+    </msg>
+
+    <msg>
+      <id>Edit Tag</id>
+      <str>Tag bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Tag Details</id>
+      <str>Tag-Details</str>
+    </msg>
+    <msg>
+      <id>Tag Filter</id>
+      <str>Tag-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.23.2    Tag actions and properties - all views -->
+  <grp>
+    <ctxt>Tag Table Row</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Disable Tag</id>
+      <str>Tag deaktivieren</str>
+    </msg>
+    <msg>
+      <id>Enable Tag</id>
+      <str>Tag aktivieren</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.23.3    Tag actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.23.4    Tag actions and properties - table rows only -->
+  <grp>
+    <ctxt>Tag Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.23.5    User Tags window on other resources -->
+  <grp>
+    <ctxt>Tag Window</ctxt>
+    <msg>
+      <id>User Tags list</id>
+      <str>Liste der Benutzer-Tags</str>
+    </msg>
+    <msg>
+      <id>User Tags for</id>
+      <str>Benutzer-Tags für</str>
+    </msg>
+    <msg>
+      <id>with Value</id>
+      <str>mit Wert</str>
+    </msg>
+  </grp>
+
+  <!-- 3.24      Permissions -->
+  <!-- 3.24.1    Permission type name and common strings -->
+  <grp>
+    <ctxt>Permission</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Permission</id>
+      <str>Berechtigung</str>
+    </msg>
+    <msg>
+      <id>Permissions</id>
+      <str>Berechtigungen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Permission</id>
+      <str>Neue Berechtigung</str>
+    </msg>
+
+    <msg>
+      <id>Edit Permission</id>
+      <str>Berechtigung bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Permission Details</id>
+      <str>Berechtigungs-Details</str>
+    </msg>
+    <msg>
+      <id>Permission Filter</id>
+      <str>Berechtigungs-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.24.2    Permission actions and properties - all views -->
+  <grp>
+    <ctxt>Permission Table Row</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.24.3    Permission actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.24.4    Permission actions and properties - table rows only -->
+  <grp>
+    <ctxt>Permission Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.25      Users -->
+  <!-- 3.25.1    User type name and common strings -->
+  <grp>
+    <ctxt>User</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>User</id>
+      <str>Benutzer</str>
+    </msg>
+    <msg>
+      <id>Users</id>
+      <str>Benutzer</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New User</id>
+      <str>Neuer Benutzer</str>
+    </msg>
+    <msg>
+      <id>Edit User</id>
+      <str>Benutzer bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>User Details</id>
+      <str>Benutzer-Details</str>
+    </msg>
+    <msg>
+      <id>User Filter</id>
+      <str>Benutzer-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.25.2    User actions and properties - all views -->
+  <grp>
+    <ctxt>User Table Row</ctxt>
+    <ctxt>User Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.25.3    User actions and properties - window / headers only -->
+  <grp>
+    <ctxt>User Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.25.4    User actions and properties - table rows only -->
+  <grp>
+    <ctxt>User Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.26      Groups -->
+  <!-- 3.26.1    Group type name and common strings -->
+  <grp>
+    <ctxt>Group</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Group</id>
+      <str>Gruppe</str>
+    </msg>
+    <msg>
+      <id>Groups</id>
+      <str>Gruppen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Group</id>
+      <str>Neue Gruppe</str>
+    </msg>
+
+    <msg>
+      <id>Edit Group</id>
+      <str>Gruppe bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Group Details</id>
+      <str>Gruppen-Details</str>
+    </msg>
+    <msg>
+      <id>Group Filter</id>
+      <str>Gruppen-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.26.2    Group actions and properties - all views -->
+  <grp>
+    <ctxt>Group Table Row</ctxt>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.26.3    Group actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.26.4    Group actions and properties - table rows only -->
+  <grp>
+    <ctxt>Group Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.27      Roles -->
+  <!-- 3.27.1    Role type name and common strings -->
+  <grp>
+    <ctxt>Role</ctxt>
+    <ctxt>Role Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Role</id>
+      <str>Rolle</str>
+    </msg>
+    <msg>
+      <id>Roles</id>
+      <str>Rollen</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Role</id>
+      <str>Neue Rolle</str>
+    </msg>
+
+    <msg>
+      <id>Edit Role</id>
+      <str>Rolle bearbeiten</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Role Details</id>
+      <str>Rollen-Details</str>
+    </msg>
+    <msg>
+      <id>Role Filter</id>
+      <str>Rollen-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.27.2    Role actions and properties - all views -->
+  <grp>
+    <ctxt>Role Table Row</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.27.3    Role actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.27.4    Role actions and properties - table rows only -->
+  <grp>
+    <ctxt>Role Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
 
   <!-- 4. Special menu items -->
   <!-- 4.1. Trashcan -->
-  <msg>
-    <id>Trashcan</id>
-    <str>Mülleimer</str>
-  </msg>
-  <!-- 4.1.1 Trash actions -->
-  <msg>
-    <id>Empty Trashcan</id>
-    <str>Mülleimer leeren</str>
-  </msg>
-  <msg>
-    <id>Restore</id>
-    <str>Wiederherstellen</str>
-  </msg>
+  <grp>
+    <ctxt>Trashcan</ctxt>
+    <!-- 4.1.1 Page name and general text -->
+    <msg>
+      <id>Trashcan</id>
+      <str>Mülleimer</str>
+    </msg>
+    <msg>
+      <id>Contents</id>
+      <str>Inhalt</str>
+    </msg>
+    <!-- 4.1.1 Trash actions -->
+    <msg>
+      <id>Empty Trashcan</id>
+      <str>Mülleimer leeren</str>
+    </msg>
+    <msg>
+      <id>Restore</id>
+      <str>Wiederherstellen</str>
+    </msg>
+  </grp>
 
   <!-- 4.2. My Settings -->
-  <msg>
-    <id>My Settings</id>
-    <str>Eigene Einstellungen</str>
-  </msg>
+  <grp>
+    <ctxt>My Settings</ctxt>
+    <msg>
+      <id>My Settings</id>
+      <str>Eigene Einstellungen</str>
+    </msg>
+  </grp>
 
   <!-- 4.3. Performance -->
-  <msg>
-    <id>Performance</id>
-    <str>Leistung</str>
-  </msg>
+  <grp>
+    <ctxt>Performance</ctxt>
+    <msg>
+      <id>Performance</id>
+      <str>Leistung</str>
+    </msg>
+  </grp>
 
   <!-- 4.4 CVSS Calculator -->
-  <msg>
-    <id>CVSS Calculator</id>
-    <str>CVSS-Rechner</str>
-  </msg>
+  <grp>
+    <ctxt>CVSS Calculator</ctxt>
+    <msg>
+      <id>CVSS Calculator</id>
+      <str>CVSS-Rechner</str>
+    </msg>
+  </grp>
 
   <!-- 4.5. Feeds -->
-  <msg>
-    <id>NVT Feed</id>
-    <str>NVT-Feed</str>
-  </msg>
-  <msg>
-    <id>SCAP Feed</id>
-    <str>SCAP-Feed</str>
-  </msg>
-  <msg>
-    <id>CERT Feed</id>
-    <str>CERT-Feed</str>
-  </msg>
+  <grp>
+    <ctxt>Feed Sync</ctxt>
+    <msg>
+      <id>NVT Feed</id>
+      <str>NVT-Feed</str>
+    </msg>
+    <msg>
+      <id>SCAP Feed</id>
+      <str>SCAP-Feed</str>
+    </msg>
+    <msg>
+      <id>CERT Feed</id>
+      <str>CERT-Feed</str>
+    </msg>
+  </grp>
+
   <!-- 4.6. Help menu -->
-  <msg>
-    <id>Contents</id>
-    <str>Inhalt</str>
-  </msg>
-  <msg>
-    <id>About</id>
-    <str>Über GSA</str>
-  </msg>
+  <grp>
+    <ctxt>Help</ctxt>
+    <msg>
+      <id>Help</id>
+      <str>Hilfe</str>
+    </msg>
+
+    <msg>
+      <id>Contents</id>
+      <str>Inhalt</str>
+    </msg>
+    <msg>
+      <id>About</id>
+      <str>Über GSA</str>
+    </msg>
+  </grp>
+  
+
 
   <!-- 5. Wizards (wizard.xsl) -->
+  <grp>
+    <ctxt>Wizard</ctxt>
+    <msg>
+      <id>Wizard</id>
+      <str>Wizard</str>
+    </msg>
+  </grp>
   <!-- 5.1 Task wizard -->
-  <msg>
-    <id>Task Wizard</id>
-    <str>Aufgaben-Wizard</str>
-  </msg>
-  <msg>
-    <id>Welcome dear new user!</id>
-    <str>Willkommen neue Anwender!</str>
-  </msg>
-  <msg>
-    <id>
-      To explore this powerful application and to
-      have a quick start for doing things the first time,
-      I am here to assist you with some hints and short-cuts.
-    </id>
-    <str>
-      Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen
-      und um schnell erste Ergebnisse zu erzielen, helfe ich
-      mit Hinweisen und Abkürzungen.
-    </str>
-  </msg>
-  <msg>
-    <id>I will appear automatically in areas where you have
-          created no or only a few objects. And disappear when you
-          have more than
-    </id>
-    <str>Ich erscheine automatisch dort wo noch keine oder nur wenige
-            Objekte vorliegen. Und verschwinde wieder wenn mehr als</str>
-  </msg>
-  <msg>
-    <id>objects. You can call me with this icon</id>
-    <str>Objekte vorliegen. Ich kann aber über dieses Icon</str>
-  </msg>
-  <msg>
-    <id>any time later on.</id>
-    <str>jederzeit wieder aktiviert werden.</str>
-  </msg>
-  <msg>
-    <id>For more detailed information
-          on functionality, please try the integrated help system. It is
-          always available as a context sensitive link as icon
-    </id>
-    <str>Für detaillierte Information zu den Funktionen steht das
-            integrierte Hilfe-System zur Verfügung. Diese steht jederzeit
-            kontext-bezogen über das Hilfe-Icon bereit:
-            </str>
-  </msg>
-  <msg>
-    <id>Quick start: Immediately scan an IP address</id>
-    <str>Schnellstart: Unmittelbar eine IP-Adresse scannen</str>
-  </msg>
-  <msg>
-    <id>IP address or hostname:</id>
-    <str>IP-Adresse oder Hostname:</str>
-  </msg>
-  <msg>
-    <id>For this short-cut I will do the following for you:</id>
-    <str>Für diese Abkürzung werde ich folgendes durchführen:</str>
-  </msg>
-  <msg>
-    <id>Create a new Target with default Port List</id>
-    <str>Erstellen eines neuen Ziels mit voreingestellter Port-Liste</str>
-  </msg>
-  <msg>
-    <id>Create a new Task using this target with default Scan Configuration</id>
-    <str>Erstellen einer neuen Aufgabe mit diesem Ziel und voreingestellter Scan-Konfiguration</str>
-  </msg>
-  <msg>
-    <id>Start this scan task right away</id>
-    <str>Direktes Starten dieser Scan-Aufgabe</str>
-  </msg>
-  <msg>
-    <id>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</id>
-    <str>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</str>
-  </msg>
-  <msg>
-    <id>In fact, you must not lean back.
-          As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the link in the name column</id>
-    <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
-            über 1% liegt kann man bereits in die Details des Scan-Berichts</str>
-  </msg>
-  <msg>
-    <id>and review the results collected so far.</id>
-    <str>springen</str>
-  </msg>
-  <msg>
-    <id>By clicking the New Task icon</id>
-    <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
-  </msg>
-  <msg>
-    <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon</id>
-    <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt</str>
-  </msg>
-
+  <grp>
+    <ctxt>Task Wizard</ctxt>
+    <msg>
+      <id>Task Wizard</id>
+      <str>Aufgaben-Wizard</str>
+    </msg>
+    <msg>
+      <id>Welcome dear new user!</id>
+      <str>Willkommen neue Anwender!</str>
+    </msg>
+    <msg>
+      <id>
+        To explore this powerful application and to
+        have a quick start for doing things the first time,
+        I am here to assist you with some hints and short-cuts.
+      </id>
+      <str>
+        Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen
+        und um schnell erste Ergebnisse zu erzielen, helfe ich
+        mit Hinweisen und Abkürzungen.
+      </str>
+    </msg>
+    <msg>
+      <id>I will appear automatically in areas where you have
+            created no or only a few objects. And disappear when you
+            have more than
+      </id>
+      <str>Ich erscheine automatisch dort wo noch keine oder nur wenige
+              Objekte vorliegen. Und verschwinde wieder wenn mehr als</str>
+    </msg>
+    <msg>
+      <id>objects. You can call me with this icon</id>
+      <str>Objekte vorliegen. Ich kann aber über dieses Icon</str>
+    </msg>
+    <msg>
+      <id>any time later on.</id>
+      <str>jederzeit wieder aktiviert werden.</str>
+    </msg>
+    <msg>
+      <id>For more detailed information
+            on functionality, please try the integrated help system. It is
+            always available as a context sensitive link as icon
+      </id>
+      <str>Für detaillierte Information zu den Funktionen steht das
+              integrierte Hilfe-System zur Verfügung. Diese steht jederzeit
+              kontext-bezogen über das Hilfe-Icon bereit:
+              </str>
+    </msg>
+    <msg>
+      <id>Quick start: Immediately scan an IP address</id>
+      <str>Schnellstart: Unmittelbar eine IP-Adresse scannen</str>
+    </msg>
+    <msg>
+      <id>IP address or hostname:</id>
+      <str>IP-Adresse oder Hostname:</str>
+    </msg>
+    <msg>
+      <id>For this short-cut I will do the following for you:</id>
+      <str>Für diese Abkürzung werde ich folgendes durchführen:</str>
+    </msg>
+    <msg>
+      <id>Create a new Target with default Port List</id>
+      <str>Erstellen eines neuen Ziels mit voreingestellter Port-Liste</str>
+    </msg>
+    <msg>
+      <id>Create a new Task using this target with default Scan Configuration</id>
+      <str>Erstellen einer neuen Aufgabe mit diesem Ziel und voreingestellter Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Start this scan task right away</id>
+      <str>Direktes Starten dieser Scan-Aufgabe</str>
+    </msg>
+    <msg>
+      <id>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</id>
+      <str>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</str>
+    </msg>
+    <msg>
+      <id>In fact, you must not lean back.
+            As soon as the scan progress is beyond 1%,
+            you can already jump into the scan report via the link in the name column</id>
+      <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
+              über 1% liegt kann man bereits in die Details des Scan-Berichts</str>
+    </msg>
+    <msg>
+      <id>and review the results collected so far.</id>
+      <str>springen</str>
+    </msg>
+    <msg>
+      <id>By clicking the New Task icon</id>
+      <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
+    </msg>
+    <msg>
+      <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon</id>
+      <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt</str>
+    </msg>
+  </grp>
 </i18n>

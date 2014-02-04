@@ -1,0 +1,131 @@
+GSA INTERNATIONALIZATION HOWTO
+==============================
+
+Usage of gsa:i18n
+=================
+
+To allow a string in GSA to be translated, you must use the XPath function
+gsa:i18n with the following parameters:
+
+"id"      : The identifier that is used to look up the translated string.
+             Usually this is the untranslated version, but it can be different
+             if the parameter "default" is used.
+"context" : The context name which specifies which context groups should
+             be considered when looking up the string. See the section
+             "Contexts" for details on how this works
+"default" : The string to use when no translation is found. If omitted,
+             the id is used.
+            A common usage for not using the id as the default is for
+             allowing prefix or suffix strings that are used in translations
+             but not in the original. In this case the default is set to an
+             empty string ('').
+
+
+Contexts
+========
+
+To reduce the amount of time spent on finding strings in the translation
+XML files, the strings are placed inside "context groups".
+When looking up a string id, only context groups which are marked with the
+context given to the gsa:i18n function will be searched.
+
+
+General guidelines for assigning and creating new contexts and groups
+---------------------------------------------------------------------
+
+When grouping strings, you should look for a compromise between the following:
+
+* Generic terms should use generic contexts to avoid redundant definitions
+   or inclusion into contexts that do not use them.
+
+* More specific strings should be used in specific contexts to keep the more
+   generic ones small.
+
+* To make finding the correct context easier you can put semantically similar
+   strings into a group for more contexts than strictly necessary so they
+   are not scattered throughout different context groups.
+
+* The amount of context assignments and groups should not grow too large to
+   reduce time searching them.
+
+
+Currently used contexts:
+------------------------
+"Logo" : Strings used in the the logo header
+"MM"   : (Top level) main menu items
+"Help" : Item labels for the Help menu / "Help: <Resource Type>"
+"Pagination" : Strings used for pagination labels
+"Filter Box" : The filter box at the top of table pages.
+"Table Row"  : Generic actions, properties, etc. used inside table rows.
+               To be used many times on a single page.
+"Window"     : Generic actions, properties, etc. used everywhere except
+               table rows.
+               To be used sparsely, e.g. on details pages.
+"<RT>"           : The type name of the resource type <RT> as well as
+                   variants of very common terms like "New <RT>" or
+                   "<RT> Details".
+"<RT> Table Row" : Actions, properties, etc. specific to the resource type
+                   <RT> used inside table rows.
+                   To be used many times on a single page.
+"<RT> Window"    : Actions, properties, etc. specific to the resource type
+                   <RT> used everywhere except table rows.
+                   To be used sparsely, e.g. on details pages.
+"Trashcan"        : Strings used by the Trashcan page.
+"My Settings"     : Strings used by the "My Settings" page.
+"Performance"     : Strings used by the Performance page.
+"CVSS Calculator" : Strings used by the Performance page.
+"Feed Sync"       : Strings used by feed sync page like "NVT Sync"
+"Wizard"      : Strings shared by all wizards.
+"Task Wizard" : Strings used by the Task Wizard.
+
+
+Structure of translation files
+==============================
+
+Elements
+--------
+  i18n : root element, contains multiple grp elements.
+  grp  : context group (See section "Contexts"), can contain multiple
+          ctxt and msg elements.
+  ctxt : context assignment, all messages in the same group will be available
+          in this context (See section "Contexts").
+  msg  : message, consisting of an id and a translated string (str).
+  id   : identifier string (usually untranslated version of a string)
+  str  : translated string
+
+
+Template for new resource types
+-------------------------------
+
+  <!-- 3.X      RESOURCEs -->
+  <!-- 3.X.1    RESOURCE type name and common strings -->
+  <grp>
+    <ctxt>RESOURCE</ctxt>
+    <ctxt>RESOURCE Window</ctxt>
+    <!-- - - Type name - - -->
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+  </grp>
+  <!-- 3.X.2    RESOURCE actions and properties - all views -->
+  <grp>
+    <ctxt>RESOURCE Table Row</ctxt>
+    <ctxt>RESOURCE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.X.3    RESOURCE actions and properties - window / headers only -->
+  <grp>
+    <ctxt>RESOURCE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.X.4    RESOURCE actions and properties - table rows only -->
+  <grp>
+    <ctxt>RESOURCE Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.X.5    (Groups of special specific strings like Task Status) -->

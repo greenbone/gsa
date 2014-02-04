@@ -56,25 +56,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- XPATH FUNCTIONS -->
 
 <func:function name="gsa:i18n">
-  <xsl:param name="str"/>
-  <xsl:param name="context" select="''"/>
-  <xsl:param name="default" select="$str"/>
+  <xsl:param name="id"/>
+  <xsl:param name="context"/>
+  <xsl:param name="default" select="$id"/>
+
+  <!-- $new_msg must be whole message, not just id because existing translations may have empty strings -->
+  <xsl:variable name="new_msg" select="document($i18n_po_path)/i18n/grp[ctxt/text() = $context]/msg[id/text() = $id]"/>
 
   <func:result>
-    <xsl:variable name="id_match" select="document($i18n_po_path)/i18n/msg[id/text() = $str]"/>
-    <xsl:variable name="new_str">
-      <xsl:choose>
-        <xsl:when test="$context != '' and count($id_match) &gt; 1 and $id_match[context/text() = $context]">
-          <xsl:value-of select="$id_match[context/text() = $context]/str/text()"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$id_match[not(context)]/str/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$id_match">
-        <xsl:value-of select="$new_str"/>
+      <xsl:when test="$new_msg != ''">
+        <xsl:value-of select="$new_msg/str"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$default"/>
@@ -757,18 +749,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$username = ''">
           </xsl:when>
           <xsl:when test="string-length ($username) &gt; 45">
-            <xsl:value-of select="gsa:i18n('Logged in as')"/>
+            <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>
             <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="substring ($username, 1, 45)"/>...</a></b> |
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n('Logged in as')"/>
+            <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>
             <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout')}" style="margin-left:3px;">
-          <xsl:value-of select="gsa:i18n('Logout')"/>
+        <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout', 'Logo')}" style="margin-left:3px;">
+          <xsl:value-of select="gsa:i18n('Logout', 'Logo')"/>
         </a>
         <br/>
         <br/>
@@ -1350,7 +1342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
-            document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"<xsl:value-of select="gsa:i18n('JavaScript is active')"/>\" title=\"<xsl:value-of select="gsa:i18n('JavaScript is active')"/>\"/&gt;");
+            document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"<xsl:value-of select="gsa:i18n('JavaScript is active', 'Logo')"/>\" title=\"<xsl:value-of select="gsa:i18n('JavaScript is active', 'Logo')"/>\"/&gt;");
           </script>
           <noscript></noscript>
         </a>
@@ -1424,26 +1416,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
             <page>get_tasks</page>
-            <name><xsl:value-of select="gsa:i18n ('Tasks')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Tasks', 'Task')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_REPORTS')">
           <item>
             <page>get_reports</page>
-            <name><xsl:value-of select="gsa:i18n ('Reports')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Reports', 'Report')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_NOTES')">
           <item>
             <page>get_notes</page>
-            <name><xsl:value-of select="gsa:i18n ('Notes')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_OVERRIDES')">
           <item>
 <!-- filter=sort=nvt permission=any FIX -->
             <page>get_overrides</page>
-            <name><xsl:value-of select="gsa:i18n ('Overrides')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
@@ -1451,7 +1443,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
           <a class="top_button"
              href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Scan Management')"/>
+            <xsl:value-of select="gsa:i18n ('Scan Management', 'MM')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1486,19 +1478,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li>
         <a class="top_button"
            href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">
-          <xsl:value-of select="gsa:i18n ('Asset Management')"/>
+          <xsl:value-of select="gsa:i18n ('Asset Management', 'MM')"/>
           <div class="first_button_overlay">
             <ul class="first_button_overlay">
               <li class="pointy"></li>
               <li class="first_button_overlay overlay_last">
-                <xsl:value-of select="gsa:i18n('Hosts')"/>
+                <xsl:value-of select="gsa:i18n('Hosts', 'Host')"/>
               </li>
             </ul>
           </div>
         </a>
         <ul>
           <li class="pointy"></li>
-          <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Hosts</a></li>
+          <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
         </ul>
       </li>
     </xsl:if>
@@ -1506,24 +1498,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li>
         <a class="top_button"
            href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
-          <xsl:value-of select="gsa:i18n ('SecInfo Management')"/>
+          <xsl:value-of select="gsa:i18n ('SecInfo Management', 'MM')"/>
           <div class="first_button_overlay">
             <ul class="first_button_overlay">
               <li class="pointy"></li>
               <li class="first_button_overlay">
-                <xsl:value-of select="gsa:i18n('NVTs')"/>
+                <xsl:value-of select="gsa:i18n('NVTs', 'Info')"/>
               </li>
             </ul>
           </div>
         </a>
         <ul>
           <li class="pointy"></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories')"/></a></li>
-          <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo')"/></a></li>
+          <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
+          <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'Info')"/></a></li>
+          <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'Info')"/></a></li>
+          <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
+          <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'Info')"/></a></li>
+          <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
         </ul>
       </li>
     </xsl:if>
@@ -1532,77 +1524,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_TARGETS')">
           <item>
             <page>get_targets</page>
-            <name><xsl:value-of select="gsa:i18n ('Targets')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Targets', 'Target')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
           <item>
             <page>get_port_lists</page>
-            <name><xsl:value-of select="gsa:i18n ('Port Lists')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/></name>
             <class>indent</class>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_LSC_CREDENTIALS')">
           <item>
             <page>get_lsc_credentials</page>
-            <name><xsl:value-of select="gsa:i18n ('Credentials')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></name>
             <class>indent</class>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CONFIGS')">
           <item>
             <page>get_configs</page>
-            <name><xsl:value-of select="gsa:i18n ('Scan Configs')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_ALERTS')">
           <item>
             <page>get_alerts</page>
-            <name><xsl:value-of select="gsa:i18n ('Alerts')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
           <item>
             <page>get_schedules</page>
-            <name><xsl:value-of select="gsa:i18n ('Schedules')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Schedules', 'Schedule')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_REPORT_FORMATS')">
           <item>
             <page>get_report_formats</page>
-            <name><xsl:value-of select="gsa:i18n ('Report Formats')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Report Formats', 'Report Format')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SLAVES')">
           <item>
             <page>get_slaves</page>
-            <name><xsl:value-of select="gsa:i18n ('Slaves')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Slaves', 'Slave')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_AGENTS')">
           <item>
             <page>get_agents</page>
-            <name><xsl:value-of select="gsa:i18n ('Agents')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Agents', 'Agent')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_FILTERS')">
           <item>
             <page>get_filters</page>
-            <name><xsl:value-of select="gsa:i18n ('Filters')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Filters', 'Filter')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_TAGS')">
           <item>
             <page>get_tags</page>
-            <name><xsl:value-of select="gsa:i18n ('Tags')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Tags', 'Tag')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_PERMISSIONS')">
           <item>
             <page>get_permissions</page>
-            <name><xsl:value-of select="gsa:i18n ('Permissions')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
@@ -1610,7 +1602,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
           <a class="top_button"
              href="/omp?cmd=get_targets&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Configuration')"/>
+            <xsl:value-of select="gsa:i18n ('Configuration', 'MM')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1649,24 +1641,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <li>
      <a class="top_button"
         href="/omp?cmd=get_trash&amp;token={/envelope/token}">
-       <xsl:value-of select="gsa:i18n ('Extras')"/>
+       <xsl:value-of select="gsa:i18n ('Extras', 'MM')"/>
        <div class="first_button_overlay">
          <ul class="first_button_overlay">
            <li class="pointy"></li>
            <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Trashcan')"/>
+             <xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/>
            </li>
          </ul>
        </div>
      </a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n('Trashcan')"/></a></li>
-      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('My Settings')"/></a></li>
+      <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/></a></li>
+      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/></a></li>
       <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
-        <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Performance')"/></a></li>
+        <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/></a></li>
       </xsl:if>
-      <li class="last"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVSS Calculator')"/></a></li>
+      <li class="last"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVSS Calculator', 'CVSS Calculator')"/></a></li>
      </ul>
     </li>
     <li>
@@ -1674,37 +1666,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_USERS')">
           <item>
             <page>get_users</page>
-            <name><xsl:value-of select="gsa:i18n ('Users')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Users', 'User')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_GROUPS')">
           <item>
             <page>get_groups</page>
-            <name><xsl:value-of select="gsa:i18n ('Groups')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_ROLES')">
           <item>
             <page>get_roles</page>
-            <name><xsl:value-of select="gsa:i18n ('Roles')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED')">
           <item>
             <page>get_feed</page>
-            <name><xsl:value-of select="gsa:i18n ('NVT Feed')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('NVT Feed', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('DESCRIBE_SCAP')">
           <item>
             <page>get_scap</page>
-            <name><xsl:value-of select="gsa:i18n ('SCAP Feed')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('SCAP Feed', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('DESCRIBE_CERT')">
           <item>
             <page>get_cert</page>
-            <name><xsl:value-of select="gsa:i18n ('CERT Feed')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('CERT Feed', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
@@ -1712,7 +1704,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
           <a class="top_button"
              href="/omp?cmd=get_users&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Administration')"/>
+            <xsl:value-of select="gsa:i18n ('Administration', 'MM')"/>
             <xsl:if test="count (exslt:node-set ($items)/item) &gt; 0">
               <div class="first_button_overlay">
                 <ul class="first_button_overlay">
@@ -1744,20 +1736,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <li class="last_button">
      <a class="top_button"
         href="/help/contents.html?token={/envelope/token}">
-       <xsl:value-of select="gsa:i18n ('Help')"/>
+       <xsl:value-of select="gsa:i18n ('Help', 'Help')"/>
        <div class="first_button_overlay">
          <ul class="first_button_overlay">
            <li class="pointy"></li>
            <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Contents')"/>
+             <xsl:value-of select="gsa:i18n('Contents', 'Help')"/>
            </li>
          </ul>
        </div>
      </a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/help/contents.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Contents')"/></a></li>
-      <li class="last"><a href="/help/about.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('About')"/></a></li>
+      <li><a href="/help/contents.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Contents', 'Help')"/></a></li>
+      <li class="last"><a href="/help/about.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('About', 'Help')"/></a></li>
      </ul>
     </li>
    </ul>
