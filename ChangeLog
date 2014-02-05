@@ -1,3 +1,11 @@
+2014-02-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (DEFAULT_GSAD_LANGUAGE): New #define.
+	(gsad_connection_info, free_resources): Add language component.
+	(exec_omp_post): Copy language from con_info to credentials.
+	(request_handler): Get language for POST as well as help and login page
+	GET requests. Add i18n elements to login_page XML.
+
 2014-02-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl, src/html/classic/omp.xsl: Replace

@@ -132,6 +132,11 @@
 #define SESSION_TIMEOUT 15
 
 /**
+ * @brief Default language string.
+ */
+#define DEFAULT_GSAD_LANGUAGE "en-en"
+
+/**
  * @brief Default face name.
  */
 #define DEFAULT_GSAD_FACE "classic"
@@ -1124,6 +1129,7 @@ struct gsad_connection_info
   int answercode;                          ///< HTTP response code.
   params_t *params;                        ///< Request parameters.
   char *cookie;                            ///< Value of SID cookie param.
+  char *language;                          ///< Value of Language-Accept header.
 };
 
 /**
@@ -1180,6 +1186,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
   params_free (con_info->params);
   free (con_info->cookie);
+  free (con_info->language);
   free (con_info);
   *con_cls = NULL;
 }
@@ -1501,13 +1508,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "</message>"
                                      "<token></token>"
                                      "<time>%s</time>"
+                                     "<i18n>%s</i18n>"
                                      "</login_page>",
                                      ret == 2
                                       ? "  OMP service is down."
                                       : (ret == -1
                                           ? "  Error during authentication."
                                           : ""),
-                                     ctime_now);
+                                     ctime_now,
+                                     con_info->language ? con_info->language
+                                                        : DEFAULT_GSAD_LANGUAGE
+                                    );
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
@@ -1550,8 +1561,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                  "</message>"
                                  "<token></token>"
                                  "<time>%s</time>"
+                                 "<i18n>%s</i18n>"
                                  "</login_page>",
-                                 ctime_now);
+                                 ctime_now,
+                                 con_info->language ? con_info->language
+                                                    : DEFAULT_GSAD_LANGUAGE);
           res = xsl_transform (xml);
           g_free (xml);
           con_info->response = res;
@@ -1627,11 +1641,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "<url>%s</url>"
+                                     "<i18n>%s</i18n>"
                                      "</login_page>",
                                      ctime_now,
                                      caller
                                       ? caller
-                                      : "");
+                                      : "",
+                                     con_info->language ? con_info->language
+                                                        : DEFAULT_GSAD_LANGUAGE
+                                    );
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -1653,8 +1671,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "</message>"
                              "<token></token>"
                              "<time>%s</time>"
+                             "<i18n>%s</i18n>"
                              "</login_page>",
-                             ctime_now);
+                             ctime_now,
+                             con_info->language ? con_info->language
+                                                : DEFAULT_GSAD_LANGUAGE
+                            );
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -1685,6 +1707,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                : NULL;
   credentials->token = strdup (user->token);
   credentials->params = con_info->params;
+
+  credentials->language = g_strdup (con_info->language ? con_info->language
+                                                       : DEFAULT_GSAD_LANGUAGE);
+
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
@@ -2800,15 +2826,23 @@ file_content_response (credentials_t *credentials,
       gchar *xml;
       char *res;
       char ctime_now[200];
+      const char* language;
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
+      language = MHD_lookup_connection_value (connection,
+                                              MHD_HEADER_KIND,
+                                              "Accept-Language");
+
       xml = g_strdup_printf ("<login_page>"
                              "<token></token>"
                              "<time>%s</time>"
+                             "<i18n>%s</i18n>"
                              "</login_page>",
-                             ctime_now);
+                             ctime_now,
+                             language ? language : DEFAULT_GSAD_LANGUAGE
+                            );
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -3202,6 +3236,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
                         || ((strcmp (cmd, "get_report") == 0)
                             && report_format_id)));
 
+          language = MHD_lookup_connection_value (connection,
+                                                  MHD_HEADER_KIND,
+                                                  "Accept-Language");
+
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
                  ("<login_page>"
@@ -3211,6 +3249,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                   "<token></token>"
                   "<time>%s</time>"
                   "<url>%s</url>"
+                  "<i18n>%s</i18n>"
                   "</login_page>",
                   ((ret == 2)
                     ? (strncmp (url, "/logout", strlen ("/logout"))
@@ -3223,7 +3262,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                   (((export == 0)
                     && strncmp (url, "/logout", strlen ("/logout")))
                     ? full_url
-                    : ""));
+                    : ""),
+                  language ? language : DEFAULT_GSAD_LANGUAGE
+                 );
           g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
@@ -3256,14 +3297,21 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
           user_remove (user);
 
+          language = MHD_lookup_connection_value (connection,
+                                                  MHD_HEADER_KIND,
+                                                  "Accept-Language");
+
           xml = g_strdup_printf ("<login_page>"
                                  "<message>"
                                  "Successfully logged out."
                                  "</message>"
                                  "<token></token>"
                                  "<time>%s</time>"
+                                 "<i18n>%s</i18n>"
                                  "</login_page>",
-                                 ctime_now);
+                                 ctime_now,
+                                 language ? language : DEFAULT_GSAD_LANGUAGE
+                                );
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -3297,7 +3345,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       language = MHD_lookup_connection_value (connection,
                                               MHD_HEADER_KIND,
                                               "Accept-Language");
-      credentials->language = g_strdup (language ? language : "en");
+      credentials->language = g_strdup (language ? language
+                                                 : DEFAULT_GSAD_LANGUAGE);
 
       sid = g_strdup (user->cookie);
 
@@ -3396,6 +3445,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
+              /* Accept-Language: de; q=1.0, en; q=0.5 */
+              language = MHD_lookup_connection_value (connection,
+                                                      MHD_HEADER_KIND,
+                                                      "Accept-Language");
+
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
@@ -3413,11 +3467,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                              "<time>%s</time>"
                                              "<login>%s</login>"
                                              "<role>%s</role>"
+                                             "<i18n>%s</i18n>"
                                              "<help><%s/></help>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
                                              credentials->role,
+                                             language ? language
+                                                      : DEFAULT_GSAD_LANGUAGE,
                                              page);
               xml = g_strdup_printf ("%s"
                                      "<capabilities>%s</capabilities>"
@@ -3477,7 +3534,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "POST"))
     {
       user_t *user;
-      const char *sid;
+      const char *sid, *language;
       gchar *new_sid;
 
       if (NULL == *con_cls)
@@ -3522,6 +3579,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
         con_info->cookie = NULL;
       else
         con_info->cookie = g_strdup (sid);
+
+      language = MHD_lookup_connection_value (connection,
+                                              MHD_HEADER_KIND,
+                                              "Accept-Language");
+      con_info->language = g_strdup (language ? language : "en");
 
       new_sid = NULL;
       ret = exec_omp_post (con_info, &user, &new_sid);
