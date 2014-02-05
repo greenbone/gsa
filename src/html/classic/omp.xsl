@@ -2130,7 +2130,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="submit" value="{gsa:i18n ('Apply', 'Window')}" title="{gsa:i18n ('Apply', 'Window')}"/>
           </div>
           <div style="padding: 2px;">
-            Threat:
+            Severity:
             <table style="display: inline">
               <tr>
                 <td class="threat_info_table_h">
@@ -2831,7 +2831,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="submit" value="{gsa:i18n ('Apply', 'Window')}" title="{gsa:i18n ('Apply', 'Window')}"/>
         </div>
         <div style="padding: 2px;">
-          Threat:
+          Severity:
           <table style="display: inline">
             <tr>
               <td class="threat_info_table_h">
@@ -21093,7 +21093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="gbntablehead2">
               <td style="font-size:10px;width:104px">Severity</td>
               <td style="font-size:10px;">CVE</td>
-              <td style="font-size:10px;">Threats</td>
+              <td style="font-size:10px;">Severity</td>
             </tr>
             <xsl:for-each select="detail[name = 'App']">
 
@@ -26245,7 +26245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td rowspan="2">Task</td>
         <td width="1" rowspan="2">Status</td>
         <td colspan="3">Reports</td>
-        <td rowspan="2">Threat</td>
+        <td rowspan="2">Severity</td>
         <td rowspan="2">Trend</td>
         <td width="{$trash-actions-width}" rowspan="2">Actions</td>
       </tr>

@@ -1,3 +1,8 @@
+2014-02-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/help.xsl, src/html/classic/omp.xsl: Replace
+	last occurances of term "threat" by "severity" all over the place.
+
 2014-02-04  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad.c (chroot_drop_privileges): chroot one level below the face
