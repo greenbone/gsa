@@ -132,9 +132,9 @@
 #define SESSION_TIMEOUT 15
 
 /**
- * @brief Default language string.
+ * @brief Default language code, used when Accept-Language header is missing.
  */
-#define DEFAULT_GSAD_LANGUAGE "en-en"
+#define DEFAULT_GSAD_LANGUAGE "en"
 
 /**
  * @brief Default face name.
