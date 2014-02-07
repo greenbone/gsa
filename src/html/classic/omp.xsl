@@ -283,7 +283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="$cvss_score = 0.0">None</xsl:when>
-          <xsl:when test="$cvss_score &gt;= 0.0 and $cvss_score &lt;= 3.9">Low</xsl:when>
+          <xsl:when test="$cvss_score &gt;= 0.1 and $cvss_score &lt;= 3.9">Low</xsl:when>
           <xsl:when test="$cvss_score &gt;= 4.0 and $cvss_score &lt;= 6.9">Medium</xsl:when>
           <xsl:when test="$cvss_score &gt;= 7.0 and $cvss_score &lt;= 10.0">High</xsl:when>
           <xsl:otherwise>None</xsl:otherwise>
