@@ -161,7 +161,7 @@ const char *ERROR_PAGE = "<html><body>HTTP Method not supported</body></html>";
  * @brief Server error HTML.
  */
 char *SERVER_ERROR =
-  "<html><body>An internal server error has occured.</body></html>";
+  "<html><body>An internal server error has occurred.</body></html>";
 
 /**
  * @brief The handle on the embedded HTTP daemon.
@@ -1576,7 +1576,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                              "Internal error",
                                              __FUNCTION__,
                                              __LINE__,
-                                             "An internal error occured inside GSA daemon. "
+                                             "An internal error occurred inside GSA daemon. "
                                              "Diagnostics: Error in login or password.",
                                              "/omp?cmd=get_tasks");
         }
@@ -1592,14 +1592,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         con_info->response
          = gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occured inside GSA daemon. "
+                         "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token missing.",
                          "/omp?cmd=get_tasks");
       else
         con_info->response
          = gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occured inside GSA daemon. "
+                         "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token bad.",
                          "/omp?cmd=get_tasks");
       con_info->answercode = MHD_HTTP_OK;
@@ -1614,7 +1614,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response
        = gsad_message (credentials,
                        "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occured inside GSA daemon. "
+                       "An internal error occurred inside GSA daemon. "
                        "Diagnostics: Bad token.",
                        "/omp?cmd=get_tasks");
       con_info->answercode = MHD_HTTP_OK;
@@ -1740,7 +1740,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
-                                         "An internal error occured inside GSA daemon. "
+                                         "An internal error occurred inside GSA daemon. "
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_tasks");
     }
@@ -1876,7 +1876,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
-                                         "An internal error occured inside GSA daemon. "
+                                         "An internal error occurred inside GSA daemon. "
                                          "Diagnostics: Unknown command.",
                                          "/omp?cmd=get_tasks");
     }
@@ -2024,7 +2024,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occured inside GSA daemon. "
+                         "An internal error occurred inside GSA daemon. "
                          "Diagnostics: No valid command for omp.",
                          "/omp?cmd=get_tasks");
 
@@ -2383,7 +2383,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occured inside GSA daemon. "
+                         "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Unknown command.",
                          "/omp?cmd=get_tasks");
 }
@@ -3198,7 +3198,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           res =  gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occured inside GSA daemon. "
+                               "An internal error occurred inside GSA daemon. "
                                "Diagnostics: Bad token.",
                                "/omp?cmd=get_tasks");
           response = MHD_create_response_from_data (strlen (res), res,

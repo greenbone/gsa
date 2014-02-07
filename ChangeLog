@@ -1,5 +1,10 @@
 2014-02-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (SERVER_ERROR, exec_omp_post, exec_omp_get)
+	(request_handler): Spell "occurred" right.
+
+2014-02-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:cvss-risk-factor): Use 0.1 in Low test
 	because 0.0 is already covered by None.
 
