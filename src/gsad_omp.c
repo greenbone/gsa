@@ -14175,7 +14175,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   *severity = NULL;
 
   text = params_value (params, "text");
-  passwd = params_value (params, "password"); 
+  passwd = params_value (params, "password");
   max = params_value (params, "max");
   if ((text == NULL)
       || (passwd == NULL)

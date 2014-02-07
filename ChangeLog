@@ -1,5 +1,9 @@
 2014-02-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings_omp): Flush trailing space.
+
+2014-02-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (SERVER_ERROR, exec_omp_post, exec_omp_get)
 	(request_handler): Spell "occurred" right.
 
