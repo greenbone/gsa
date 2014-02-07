@@ -1,3 +1,22 @@
+2014-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* doc/i18n-howto.txt: Add "Time" context.
+
+	* src/html/classic/omp.xsl (minor-details, html-config-table): Replace
+	capital "M" in "Last Modified" with lower case "m" for consistency.
+	(get_info_cve_lnk, html-create-note-form, html-edit-note-form, note)
+	(note [trash], note [details], html-notes-trash-table)
+	(html-create-override-form, html-edit-override-form, override)
+	(override [trash], override [details], html-overrides-trash-table)
+	(note-detailed, override-detailedresult-details, section-filter)
+	(report-hosts-link, report-ports-link, report [hosts], report [vulns])
+	(report [apps], report [app-severity], download_ssl_cert)
+	(report [errors], report [summary], html-tasks-trash-table): Apply i18n
+	to notes and overrides and various other scan management elements.
+
+	* src/html/classic/po/de.xml: Add Report filters, various generic terms,
+	and terms related to results, notes and overrides.
+
 2014-02-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (DEFAULT_GSAD_LANGUAGE): Set to "en" and clarify usage.

@@ -209,6 +209,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Additional filter commands</id>
       <str>Zusätzliche Filterbefehle</str>
     </msg>
+
+    <!-- Special Report filters -->
+    <msg>
+      <id>All results</id>
+      <str>Alle Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Results filtered with:</id>
+      <str>Ergebnisse filtern:</str>
+    </msg>
   </grp>
 
   <!-- 2.3      Actions and selectors -->
@@ -335,6 +345,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <!-- Details -->
     <msg>
+      <id>Details</id>
+      <str>Details</str>
+    </msg>
+    <msg>
       <id>#DETAILS_OF_PREFIX#</id>
       <str>Details für </str>
     </msg>
@@ -416,7 +430,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>ID</str>
     </msg>
     <msg>
-      <id>Last Modified</id>
+      <id>Last modified</id>
       <str>Zuletzt geändert</str>
     </msg>
     <msg>
@@ -430,6 +444,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Owner</id>
       <str>Besitzer</str>
+    </msg>
+    <msg>
+      <id>Port</id>
+      <str>Port</str>
+    </msg>
+    <msg>
+      <id>Ports</id>
+      <str>Ports</str>
     </msg>
     <msg>
       <id>References</id>
@@ -521,6 +543,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- Determiners -->
     <msg>
+      <id>All</id>
+      <str>Alle</str>
+    </msg>
+    <msg>
       <id>Any</id>
       <str>Beliebig</str>
     </msg>
@@ -558,6 +584,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Any</id>
       <str>Beliebig</str>
+    </msg>
+    <msg>
+      <id>All</id>
+      <str>Alle</str>
     </msg>
 
     <msg>
@@ -676,6 +706,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>month(s)</id>
       <str>Monat(e)</str>
+    </msg>
+
+    <msg>
+      <id>until</id>
+      <str>bis</str>
+    </msg>
+    <msg>
+      <id>for the next</id>
+      <str>für die nächsten</str>
+    </msg>
+    <msg>
+      <id>always</id>
+      <str>immer</str>
     </msg>
   </grp>
 
@@ -1364,7 +1407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Result</ctxt>
     <ctxt>Result Window</ctxt>
-
+    <!-- - - Type name - - -->
     <msg>
       <id>Result</id>
       <str>Ergebnis</str>
@@ -1372,6 +1415,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Results</id>
       <str>Ergebnisse</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Result Details</id>
+      <str>Ergebnis-Details</str>
+    </msg>
+    <msg>
+      <id>Result Filter</id>
+      <str>Ergebnis-Filter</str>
     </msg>
   </grp>
   <!-- 3.3.2    Result actions and properties - all views -->
@@ -1396,12 +1451,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- - - Properties - - -->
     <msg>
+      <id>Apps</id>
+      <str>Anw.</str>
+    </msg>
+    <msg>
       <id>Application CPE</id>
       <str>Anwendungs-CPE</str>
     </msg>
     <msg>
+      <id>Distance</id>
+      <str>Distanz</str>
+    </msg>
+    <msg>
       <id>DN</id>
       <str>DN</str>
+    </msg>
+    <msg>
+      <id>End</id>
+      <str>Ende</str>
+    </msg>
+    <msg>
+      <id>Error Message</id>
+      <str>Fehlermeldung</str>
     </msg>
     <msg>
       <id>IANA</id>
@@ -1410,10 +1481,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Impact</id>
       <str>Auswirkungen</str>
-    </msg>
-    <msg>
-      <id>Port</id>
-      <str>Port</str>
     </msg>
     <msg>
       <id>Not valid before</id>
@@ -1436,6 +1503,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Betriebssystem</str>
     </msg>
     <msg>
+      <id>OS</id>
+      <str>OS</str>
+    </msg>
+    <msg>
       <id>Location</id>
       <str>Ort</str>
     </msg>
@@ -1446,6 +1517,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Solution</id>
       <str>Lösung</str>
+    </msg>
+    <msg>
+      <id>Start</id>
+      <str>Start</str>
     </msg>
     <msg>
       <id>Vulnerability</id>
@@ -1508,13 +1583,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Result Tags</id>
       <str>Ergebnis-Tags</str>
     </msg>
+    <msg>
+      <id>User Tags for this Result</id>
+      <str>Benutzer-Tags für dieses Ergebnis</str>
+    </msg>
   </grp>
   <!-- 3.3.4    Result actions and properties - table rows only -->
   <grp>
     <ctxt>Result Table Row</ctxt>
     <!-- - - Actions - - -->
+    <!-- SSL Cert -->
+    <msg>
+      <id>Download SSL Cert</id>
+      <str>SSL-Zertifikat herunterladen</str>
+    </msg>
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
+    <!-- Results - Missing CPE detail -->
+    <msg>
+      <id>Includes </id>
+      <str>Beinhaltet </str>
+    </msg>
+    <msg>
+      <id> host(s) where CPE was found in inventory, but number of installations could not be determined</id>
+      <str> Host(s) für die der CPE-Name im Inventar gefunden wurde, aber die Anzahl Installation nicht festgestellt werden konnte</str>
+    </msg>
+    <!-- Results for App -->
+    <msg>
+      <id>for App</id>
+      <str>für Anwendung</str>
+    </msg>
   </grp>
 
 
@@ -1541,10 +1639,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Add Note</id>
       <str>Notiz hinzufügen</str>
     </msg>
+    <msg>
+      <id>Create Note</id>
+      <str>Notiz erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Note</id>
       <str>Notiz bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Note</id>
+      <str>Notiz speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -1562,14 +1668,75 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Note Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <!-- Orphan -->
+    <msg>
+      <id>Orphan</id>
+      <str>Verwaist</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <!-- NVT: None -->
+    <msg>
+      <id>None.  Result was an open port.</id>
+      <str>Keiner.  Ergebnis war ein offener Port</str>
+    </msg>
+    <msg>
+      <id>No NVT</id>
+      <str>Keiner</str>
+    </msg>
+    <msg>
+      <id>Result was an open port.</id>
+      <str>Ergebnis war ein offener Port</str>
+    </msg>
   </grp>
   <!-- 3.4.3    Note actions and properties - window / headers only -->
   <grp>
     <ctxt>Note Window</ctxt>
     <!-- - - Actions - - -->
+
     <!-- - - Properties - - -->
+    <!-- Active -->
+    <msg>
+      <id>Active until</id>
+      <str>Aktiv bis</str>
+    </msg>
+    <!-- Application -->
+    <msg>
+      <id>Application</id>
+      <str>Anwendung</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <!-- Result -->
+    <msg>
+      <id>Only the selected one</id>
+      <str>Nur das ausgewählte</str>
+    </msg>
+    <msg>
+      <id>Associated Result</id>
+      <str>Zugehöriges Ergebnis</str>
+    </msg>
+    <!-- NVT -->
+    <msg>
+      <id>NVT Name</id>
+      <str>NVT-Name</str>
+    </msg>
+    <msg>
+      <id>NVT OID</id>
+      <str>NVT-OID</str>
+    </msg>
+    <!-- Tags -->
+    <msg>
+      <id>User Tags for this Note</id>
+      <str>Benutzer-Tags für diese Notiz</str>
+    </msg>
+    <!-- - - Other - - -->
+    <msg>
+      <id>Appearance</id>
+      <str>Aussehen</str>
+    </msg>
+    <msg>
+      <id>Appearance when active</id>
+      <str>Aussehen, wenn aktiv</str>
+    </msg>
   </grp>
   <!-- 3.4.4    Note actions and properties - table rows only -->
   <grp>
@@ -1603,10 +1770,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Add Override</id>
       <str>Übersteuerung hinzufügen</str>
     </msg>
+    <msg>
+      <id>Create Override</id>
+      <str>Übersteuerung erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Override</id>
       <str>Übersteuerung bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Override</id>
+      <str>Übersteuerung speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -1624,14 +1799,107 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Override Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <!-- Orphan -->
+    <msg>
+      <id>Orphan</id>
+      <str>Verwaist</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <!-- NVT: None -->
+    <msg>
+      <id>None.  Result was an open port.</id>
+      <str>Keiner.  Ergebnis war ein offener Port</str>
+    </msg>
+    <msg>
+      <id>No NVT</id>
+      <str>Keiner</str>
+    </msg>
+    <msg>
+      <id>Result was an open port.</id>
+      <str>Ergebnis war ein offener Port</str>
+    </msg>
   </grp>
   <!-- 3.5.3    Override actions and properties - window / headers only -->
   <grp>
     <ctxt>Override Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <!-- Active -->
+    <msg>
+      <id>Active until</id>
+      <str>Aktiv bis</str>
+    </msg>
+    <!-- Application -->
+    <msg>
+      <id>Application</id>
+      <str>Anwendung</str>
+    </msg>
+    <!-- From ... To .. -->
+    <msg>
+      <id>From</id>
+      <str>Von</str>
+    </msg>
+    <msg>
+      <id>To</id>
+      <str>Nach</str>
+    </msg>
+
+    <msg>
+      <id>Override from </id>
+      <str>Übersteuerung von </str>
+    </msg>
+    <msg>
+      <id> to </id>
+      <str> nach </str>
+    </msg>
+    <!-- New Severity -->
+    <msg>
+      <id>New Severity</id>
+      <str>Neuer Schweregrad</str>
+    </msg>
+    <msg>
+      <id>Other</id>
+      <str>Anderer</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <!-- Result -->
+    <msg>
+      <id>Only the selected one</id>
+      <str>Nur das ausgewählte</str>
+    </msg>
+    <msg>
+      <id>Associated Result</id>
+      <str>Zugehöriges Ergebnis</str>
+    </msg>
+    <!-- NVT -->
+    <msg>
+      <id>NVT Name</id>
+      <str>NVT-Name</str>
+    </msg>
+    <msg>
+      <id>NVT OID</id>
+      <str>NVT-OID</str>
+    </msg>
+    <!-- Tags -->
+    <msg>
+      <id>User Tags for this Note</id>
+      <str>Benutzer-Tags für diese Notiz</str>
+    </msg>
+    <!-- - - Other - - -->
+    <msg>
+      <id>Appearance</id>
+      <str>Aussehen</str>
+    </msg>
+    <msg>
+      <id>Appearance when active</id>
+      <str>Aussehen, wenn aktiv</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>User Tags for this Override</id>
+      <str>Benutzer-Tags für diese Übersteuerung</str>
+    </msg>
   </grp>
   <!-- 3.5.4    Override actions and properties - table rows only -->
   <grp>
@@ -2934,7 +3202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Contents</id>
       <str>Inhalt</str>
     </msg>
-    <!-- 4.1.1 Trash actions -->
+    <!-- 4.1.2 Trash actions -->
     <msg>
       <id>Empty Trashcan</id>
       <str>Mülleimer leeren</str>
@@ -2942,6 +3210,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Restore</id>
       <str>Wiederherstellen</str>
+    </msg>
+    <!-- 4.1.3 References from resources -->
+    <!-- "in trashcan" -->
+    <msg>
+      <id>in </id>
+      <str>im </str>
+    </msg>
+    <msg>
+      <id>trashcan</id>
+      <str>Mülleimer</str>
     </msg>
   </grp>
 

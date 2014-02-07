@@ -56,6 +56,7 @@ Currently used contexts:
 "Help" : Item labels for the Help menu / "Help: <Resource Type>"
 "Pagination" : Strings used for pagination labels
 "Filter Box" : The filter box at the top of table pages.
+"Time"       : Time related strings.
 "Table Row"  : Generic actions, properties, etc. used inside table rows.
                To be used many times on a single page.
 "Window"     : Generic actions, properties, etc. used everywhere except
