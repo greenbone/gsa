@@ -4076,6 +4076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="cap-type" select="'Task'"/>
             <xsl:with-param name="type" select="'task'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="extra-params-details" select="concat ('&amp;overrides=', ../apply_overrides)"/>
           </xsl:call-template>
         </td>
       </tr>
