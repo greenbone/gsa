@@ -1449,7 +1449,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Expand to full details of all vulnerabilities</id>
       <str>Details aller Schwachstellen ausklappen</str>
     </msg>
+
+    <msg>
+      <id>This report contains at least one Error message</id>
+      <str>Dieser Bericht enthält mindestens eine Fehlermeldung</str>
+    </msg>
+    <msg>
+      <id>Click here to go to the Errors page</id>
+      <str>Klicken Sie hier, um zur Fehler-Seite zu gelangen</str>
+    </msg>
     <!-- - - Properties - - -->
+    <msg>
+      <id>0 results</id>
+      <str>0 Ergebnisse</str>
+    </msg>
+
     <msg>
       <id>Apps</id>
       <str>Anw.</str>

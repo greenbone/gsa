@@ -1,3 +1,11 @@
+2014-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [results]): Add i18n for "0 results"
+	display and add a link to the errors page if there are no results, but
+	there is at least one error message.
+
+	* src/html/classic/po/de.xml: Add new messages.
+
 2014-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter-simple): Include quotes if keyword

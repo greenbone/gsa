@@ -2933,6 +2933,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 select="report/filters/text()"/>
   <xsl:variable name="apply-overrides"
                 select="report/filters/apply_overrides"/>
+  <xsl:variable name="type">
+    <xsl:choose>
+      <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
+      <xsl:otherwise>normal</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -2983,7 +2989,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          0 results
+          <xsl:value-of select="gsa:i18n ('0 results', 'Result Window')"/>
+          <xsl:if test="report/errors/count &gt; 0">
+            <br/>
+            <br/>
+            <xsl:apply-templates select="report" mode="section-link">
+              <xsl:with-param name="count" select="result_count/full"/>
+              <xsl:with-param name="section" select="'errors'"/>
+              <xsl:with-param name="type" select="$type"/>
+              <xsl:with-param name="link_style" select="'element'"/>
+              <xsl:with-param name="element">
+                <span title="{gsa:i18n ('Click here to go to the Errors page', 'Result Window')}."><xsl:value-of select="gsa:i18n ('This report contains at least one Error message', 'Result Window')"/>.</span>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
     </div>
