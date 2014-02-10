@@ -719,7 +719,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="relation"/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
     <xsl:value-of select="value"/>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
     <xsl:text> </xsl:text>
   </xsl:for-each>
 </xsl:template>
