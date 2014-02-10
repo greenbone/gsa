@@ -839,11 +839,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Task is alterable</id>
-      <str>Aufgabe is änderbar.</str>
+      <str>Aufgabe ist änderbar.</str>
     </msg>
     <msg>
       <id>This is an Alterable Task. Reports may not relate to current Scan Config or Target!</id>
-      <str>Diese Aufgabe is änderbar. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!</str>
+      <str>Diese Aufgabe ist änderbar. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!</str>
     </msg>
     <msg>
       <id>Alterable Task</id>
@@ -1606,7 +1606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id> host(s) where CPE was found in inventory, but number of installations could not be determined</id>
-      <str> Host(s) für die der CPE-Name im Inventar gefunden wurde, aber die Anzahl Installation nicht festgestellt werden konnte</str>
+      <str> Host(s), für die der CPE-Name im Inventar gefunden wurde, aber die Anzahl Installation nicht festgestellt werden konnte</str>
     </msg>
     <!-- Results for App -->
     <msg>

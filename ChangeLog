@@ -1,3 +1,8 @@
+2014-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/po/de.xml: Fix typos in text for alterable tasks and
+	add missing comma in text for unknown CPE installation counts.
+
 2014-02-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_my_settings_omp): Flush trailing space.
