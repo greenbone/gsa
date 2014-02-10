@@ -1,3 +1,10 @@
+2014-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (filter-window-part): In "Sort by" dropdown
+	test by field first, remove the single check from the multiple case, and
+	for columns with headings append the heading to the dropdown item.
+	(html-cve-table): Correct spelling.
+
 2014-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [results]): Space "0 results" text

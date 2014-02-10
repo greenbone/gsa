@@ -928,7 +928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="exslt:node-set ($columns)/column">
                   <xsl:variable name="single" select="count (column) = 0"/>
                   <xsl:choose>
-                    <xsl:when test="($single) and (gsa:column-filter-name (name) = $sort)">
+                    <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
                       <option value="{gsa:column-filter-name (name)}"
                               selected="1">
                         <xsl:value-of select="gsa:i18n(name, concat(gsa:type-name($type), ' Window'))"/>
@@ -942,15 +942,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:otherwise>
                       <xsl:for-each select="column">
                         <xsl:choose>
-                          <xsl:when test="($single) and (gsa:column-filter-name (name) = $sort)">
+                          <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
                             <option value="{gsa:column-filter-name (name)}"
                                     selected="1">
-                              <xsl:value-of select="gsa:i18n(name, concat(gsa:type-name($type), ' Window'))"/>
+                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), concat(gsa:type-name($type), ' Window'))"/>
                             </option>
                           </xsl:when>
                           <xsl:otherwise>
                             <option value="{gsa:column-filter-name (name)}">
-                              <xsl:value-of select="gsa:i18n(name, concat(gsa:type-name($type), ' Window'))"/>
+                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), concat(gsa:type-name($type), ' Window'))"/>
                             </option>
                           </xsl:otherwise>
                         </xsl:choose>
@@ -14745,7 +14745,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Authentication</name>
       </column>
       <column>
-        <name>Confidentitality Impact</name>
+        <name>Confidentiality Impact</name>
       </column>
       <column>
         <name>Integrity Impact</name>
