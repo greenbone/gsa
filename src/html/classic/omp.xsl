@@ -2989,20 +2989,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('0 results', 'Result Window')"/>
-          <xsl:if test="report/errors/count &gt; 0">
-            <br/>
-            <br/>
-            <xsl:apply-templates select="report" mode="section-link">
-              <xsl:with-param name="count" select="result_count/full"/>
-              <xsl:with-param name="section" select="'errors'"/>
-              <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="link_style" select="'element'"/>
-              <xsl:with-param name="element">
-                <span title="{gsa:i18n ('Click here to go to the Errors page', 'Result Window')}."><xsl:value-of select="gsa:i18n ('This report contains at least one Error message', 'Result Window')"/>.</span>
-              </xsl:with-param>
-            </xsl:apply-templates>
-          </xsl:if>
+          <div style="padding: 1px">
+            <p><xsl:value-of select="gsa:i18n ('0 results', 'Result Window')"/></p>
+            <xsl:if test="report/errors/count &gt; 0">
+              <xsl:apply-templates select="report" mode="section-link">
+                <xsl:with-param name="count" select="result_count/full"/>
+                <xsl:with-param name="section" select="'errors'"/>
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="link_style" select="'element'"/>
+                <xsl:with-param name="element">
+                  <p title="{gsa:i18n ('Click here to go to the Errors page', 'Result Window')}."><xsl:value-of select="gsa:i18n ('This report contains at least one Error message', 'Result Window')"/>.</p>
+                </xsl:with-param>
+              </xsl:apply-templates>
+            </xsl:if>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
     </div>

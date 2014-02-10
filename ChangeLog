@@ -1,5 +1,10 @@
 2014-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [results]): Space "0 results" text
+	and the errors page link using div and p elements.
+
+2014-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [results]): Add i18n for "0 results"
 	display and add a link to the errors page if there are no results, but
 	there is at least one error message.
