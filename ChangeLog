@@ -1,5 +1,13 @@
 2014-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/gsad.xsl (html-gsa-logo): Match CREATE_REPORT
+	response, for container case.
+
+	* src/html/classic/omp.xsl (new_task): Match CREATE_REPORT response, for
+	container case.
+
+2014-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-part): In "Sort by" dropdown
 	test by field first, remove the single check from the multiple case, and
 	for columns with headings append the heading to the dropdown item.
