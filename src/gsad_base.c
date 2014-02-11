@@ -114,14 +114,16 @@ ctime_r_strip_newline (time_t *time, char *string)
 /**
  * @brief XSL Transformation.
  *
- * Does the transformation from XML to HTML applying omp.xsl.
+ * Transforms XML by applying a given XSL stylesheet, usually into HTML.
  *
- * @param[in]  xml_text  The XML text to tranform.
+ * @param[in]  xml_text        The XML text to transform.
+ * @param[in]  xsl_stylesheet  The file name of the XSL stylesheet to use.
  *
  * @return HTML output from XSL transformation.
  */
 char *
-xsl_transform (const char *xml_text)
+xsl_transform_with_stylesheet (const char *xml_text,
+                               const char *xsl_stylesheet)
 {
 #ifdef USE_LIBXSLT
   xsltStylesheetPtr cur = NULL;
@@ -129,23 +131,24 @@ xsl_transform (const char *xml_text)
   xmlChar *doc_txt_ptr = NULL;
   int doc_txt_len;
 
+  tracef ("xsl stylesheet: [%s]\n", xml_text);
   tracef ("text to transform: [%s]\n", xml_text);
 
   exsltRegisterAll ();
 
   xmlSubstituteEntitiesDefault (1);
   xmlLoadExtDtdDefaultValue = 1;
-  cur = xsltParseStylesheetFile ((const xmlChar *) XSL_PATH);
+  cur = xsltParseStylesheetFile ((const xmlChar *) xsl_stylesheet);
   if (cur == NULL)
     {
-      g_warning ("Failed to parse stylesheet " XSL_PATH);
+      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
       return g_strdup (FAIL_HTML);
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
   if (doc == NULL)
     {
-      g_warning ("Failed to parse stylesheet " XSL_PATH);
+      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
       xsltFreeStylesheet (cur);
       return g_strdup (FAIL_HTML);
     }
@@ -153,7 +156,7 @@ xsl_transform (const char *xml_text)
   res = xsltApplyStylesheet (cur, doc, NULL);
   if (res == NULL)
     {
-      g_warning ("Failed to apply stylesheet " XSL_PATH);
+      g_warning ("Failed to apply stylesheet %s", xsl_stylesheet);
       xsltFreeStylesheet (cur);
       return g_strdup (FAIL_HTML);
     }
@@ -212,7 +215,7 @@ xsl_transform (const char *xml_text)
 
   cmd = (gchar **) g_malloc (4 * sizeof (gchar *));
   cmd[0] = g_strdup ("xsltproc");
-  cmd[1] = g_strdup (XSL_PATH);
+  cmd[1] = g_strdup (xsl_stylesheet);
   cmd[2] = g_strdup (content_file);
   cmd[3] = NULL;
   g_debug ("%s: Spawning in parent dir: %s %s %s\n",
@@ -258,6 +261,21 @@ xsl_transform (const char *xml_text)
   g_free (standard_out);
   return g_strdup (FAIL_HTML);
 #endif
+}
+
+/**
+ * @brief XSL Transformation.
+ *
+ * Does the transformation from XML to HTML applying omp.xsl.
+ *
+ * @param[in]  xml_text  The XML text to transform.
+ *
+ * @return HTML output from XSL transformation.
+ */
+char *
+xsl_transform (const char *xml_text)
+{
+  return xsl_transform_with_stylesheet (xml_text, XSL_PATH);
 }
 
 /**

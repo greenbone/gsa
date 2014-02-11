@@ -3450,6 +3450,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                       MHD_HEADER_KIND,
                                                       "Accept-Language");
 
+              gchar *preferred_language = g_strndup (language, 2);
+              gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
@@ -3483,7 +3485,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                      credentials->capabilities);
               g_free (pre);
               g_free (page);
-              res = xsl_transform (xml);
+
+              xsl_filename = g_strdup_printf ("help_%s.xsl", preferred_language);
+
+              if (access (xsl_filename, R_OK) == 0)
+                res = xsl_transform_with_stylesheet (xml, xsl_filename);
+              else
+                res = xsl_transform_with_stylesheet (xml, "help.xsl");
+
+              g_free (preferred_language);
+              g_free (xsl_filename);
             }
           if (res == NULL)
             res = gsad_message (credentials,

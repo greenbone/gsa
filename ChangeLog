@@ -1,3 +1,20 @@
+2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (request_handler): If possible, select the XSL file for
+	help pages based on the Accept-Language HTTP header.
+
+	* src/gsad_base.c (xsl_transform_with_stylesheet): New function.
+	Renamed xsl_transform with additional parameter to select the
+	stylesheet to apply.
+	(xsl_transform): Delegate to xsl_transform_with_stylesheet.
+
+	* src/gsad_base.h (xsl_transform_with_stylesheet): New function
+	prototype.
+
+	* src/html/classic/help.xsl: Include gsad.xsl.
+
+	* src/html/classic/gsad.xsl: Remove help.xsl include.
+
 2014-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-gsa-logo): Match CREATE_REPORT
