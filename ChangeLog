@@ -1,5 +1,9 @@
 2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* doc/i18n-howto.txt: Add section on the translation of help pages.
+
+2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* CMakeLists.txt: Add installation of new html/classic/help_de.xsl.
 
 	* src/html/classic/help.xsl (tasks.html): Update and clarify
