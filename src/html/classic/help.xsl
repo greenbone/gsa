@@ -7968,7 +7968,7 @@ Public License instead of this License.
           <td>Description</td>
         </tr>
         <tr class="odd">
-          <td>Task</td>
+          <td>Name</td>
           <td>
             Shows name of the task. Names are not
             necessarily unique, so the same name
@@ -7980,6 +7980,19 @@ Public License instead of this License.
             <div>
               The right hand side of this column may contain a number of icons:
               <table style="margin-left: 10px">
+                <tr>
+                  <td valign="top">
+                    <img src="/img/alterable.png"
+                         border="0"
+                         alt="Task is alterable"
+                         title="Task is alterable"/>
+                  </td>
+                  <td>
+                    The task is marked as alterable. This allows some
+                    properties to be edited which would otherwise be locked
+                    once reports exist for the task.
+                  </td>
+                </tr>
                 <tr>
                   <td valign="top">
                     <img src="/img/sensor.png"
@@ -8017,9 +8030,12 @@ Public License instead of this License.
             </div>
           </td>
         </tr>
-        <tr>
+        <tr class="even">
           <td>Status</td>
-          <td>The status of a task is one of these:
+          <td>The status of the most recent scan by the task.<br/>
+              Clicking the progress bar will bring you to the current report,
+              which may be incomplete depending on the status of the scan.<br/>
+              The status of a task is one of these:
             <br/>
             <table>
               <tr><td valign="top">
@@ -8107,7 +8123,8 @@ Public License instead of this License.
                   82% complete when it was paused.  The newest report might be incomplete.
                   The task will change to stopped if the scanner or manager
                   server is restarted, for example on reboot.
-                  The scan service remains stand-by active and will not release any memory.
+                  The scan service remains stand-by active and will not release any memory
+                  as long as the the task is paused.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Internal Error">
@@ -8143,19 +8160,18 @@ Public License instead of this License.
         <tr class="odd">
           <td>Reports: Total</td>
           <td>The number of reports that have been created by
-              running this task.</td>
+              running this task. The first number show how many reports
+              from finished scans exist for the task while the number in
+              brackets also includes reports of unfinished scans.<br/>
+              Clicking one of the numbers will bring you to the
+              corresponding list of reports.</td>
         </tr>
-        <tr>
-          <td>Reports: First</td>
-          <td>Date when the first report was created.
-              This field is left empty if less then 2
-              reports are available.</td>
+        <tr class="even">
+          <td>Reports: Last</td>
+          <td>Date when the last finished report was created. You can jump
+              to this report by clicking the date.</td>
         </tr>
         <tr class="odd">
-          <td>Reports: Last</td>
-          <td>Date when the newest report was created.</td>
-        </tr>
-        <tr>
           <td>Severity</td>
           <td>Highest severity of the newest report. The bar will be colored
               according to the severity level defined by the current <a href="/help/my_settings.html?token={/envelope/token}#severity_class">Severity Class</a>:
@@ -8201,8 +8217,8 @@ Public License instead of this License.
                 <td valign="top">
                   <xsl:call-template name="severity-bar">
                     <xsl:with-param name="cvss" select="'0.0'"/>
-                    <xsl:with-param name="extra_text" select="' (None)'"/>
-                    <xsl:with-param name="title" select="'None'"/>
+                    <xsl:with-param name="extra_text" select="' (Log)'"/>
+                    <xsl:with-param name="title" select="'Log'"/>
                   </xsl:call-template>
                 </td>
                 <td>
@@ -8214,7 +8230,7 @@ Public License instead of this License.
             </table>
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Trend</td>
           <td>Describes the change of vulnerabilities between the newest
               report and the report before the newest:
@@ -8277,7 +8293,7 @@ Public License instead of this License.
        <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon.
       </p>
       <p>
-       The selection that is currently for the present page is marked with a hook (&#8730;).
+       The selection that is currently for the present page is marked with a check mark (&#8730;).
       </p>
       <p>
        Note that leaving this page will reset the refresh interval to manual refresh.
@@ -8302,18 +8318,21 @@ Public License instead of this License.
       <a name="overrides"></a>
       <h3>Overrides</h3>
       <p>
-       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
-       The selection allows to switch to a view without applying overrides.
+       The icon in the header of the severity column shows whether the
+       configured <a href="glossary.html?token={/envelope/token}#override">overrides</a>
+       are applied (<img src="/img/enabled.png" alt="Overrides are applied" title="Overrides are applied"/>)
+       or not (<img src="/img/disabled.png" alt="No Overrides" title="No Overrides"/>).
+      </p>
+      <p>
+       By default the overrides are applied. Clicking the icon allows to switch
+       to a view without applying overrides and back.
        In the table view, severity classes, severity numbers and trend might change
-       when switching this selection.
-       By pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon a change is confirmed.
+       when toggling the overrides.
       </p>
       <p>
-       The selection that is active for the present page is marked with a hook (&#8730;).
-      </p>
-      <p>
-       Note that leaving this page will reset the overrides selection to apply overrides.
+       Note that leaving this page will reset the selection to apply overrides
+       if you leave this page. Exceptions are the task details page as well
+       as reports and report lists.
       </p>
 
       <a name="actions"></a>
@@ -8368,11 +8387,10 @@ Public License instead of this License.
       <h4>Stop Task</h4>
       <p>
        Pressing the stop icon <img src="/img/stop.png" alt="Stop" title="Stop"/> will
-       stop a running task. The list of tasks will be updated and for this task
-       a half-finished report is added to the list of reports.
+       stop a running task. The list of tasks will be updated.
       </p>
       <p>
-       This action is only available if the task status shows a progress bar.
+       This action is only available if the task is either running or paused.
       </p>
 
       <h4>Move Task to Trashcan</h4>
@@ -8383,7 +8401,8 @@ Public License instead of this License.
        of the reports associated with this task will be moved to the trashcan.
       </p>
       <p>
-       This action is only available if the task has status "New", "Done" or "Container".
+       This action is only available if the task has status "New", "Done",
+       "Stopped" or "Container".
       </p>
 
       <a name="edit_task"></a>
@@ -8392,7 +8411,7 @@ Public License instead of this License.
        Pressing the "Edit Task" icon <img src="/img/edit.png" alt="Edit Task"
          title="Edit Task"/> will
        switch to an overview of the configuration for this task and allows
-       editing of some of the tasks properties.
+       editing of some of the task's properties.
       </p>
     </div>
   </div>

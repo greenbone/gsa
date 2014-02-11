@@ -1,5 +1,16 @@
 2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* CMakeLists.txt: Add installation of new html/classic/help_de.xsl.
+
+	* src/html/classic/help.xsl (tasks.html): Update and clarify
+	descriptions. Add "even" class to table rows to make hover
+	effect consistent.
+
+	* src/html/classic/help_de.xsl: New file. Translation of help.xsl
+	to German (currently only covering Tasks table).
+
+2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window-line-icons, task)
 	(note-detailed, override-detailed): Set blank i18n fallbacks for some
 	affix strings that are not used for the default English text.
