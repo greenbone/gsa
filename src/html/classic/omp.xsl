@@ -1247,7 +1247,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row')}"
+         title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row', '')}"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Window')}"/>
       </a>
@@ -5626,7 +5626,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Table Row')}">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Table Row', '')}">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -21640,7 +21640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </form>
         </div>
         <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ('Note', 'Note')}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row')}"
+           title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ('Note', 'Note')}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row', '')}"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Table Row')}"/>
         </a>
@@ -21884,7 +21884,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </form>
         </div>
         <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ('Override', 'Override')}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row')}"
+           title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ('Override', 'Override')}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row', '')}"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Window')}"/>
         </a>

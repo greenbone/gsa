@@ -1,5 +1,11 @@
 2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window-line-icons, task)
+	(note-detailed, override-detailed): Set blank i18n fallbacks for some
+	affix strings that are not used for the default English text.
+
+2014-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (request_handler): If possible, select the XSL file for
 	help pages based on the Accept-Language HTTP header.
 
