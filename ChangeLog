@@ -1,5 +1,10 @@
 2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (my_settings.html): Move "Jump to dialog" to
+	icon.  Add User Interface Language.
+
+2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add setting User Interface Language.
 
 	* src/gsad.c (struct user, user_add): Add language.

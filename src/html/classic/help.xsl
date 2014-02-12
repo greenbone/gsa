@@ -4633,10 +4633,14 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="my_settings.html">
-  <div class="gb_window_part_center">Help: My Settings</div>
+  <div class="gb_window_part_center">Help: My Settings
+    <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
+       title="My Settings" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="My Settings"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4709,6 +4713,12 @@ Public License instead of this License.
       <h3>Password</h3>
       <p>
         The password for logging into the GSA.
+      </p>
+
+      <h3>User Interface Language</h3>
+      <p>
+        The language used in the user interface.  If "Browser Language"
+        is selected then the language requested by the browser will be used.
       </p>
 
       <h3>Rows Per Page</h3>
