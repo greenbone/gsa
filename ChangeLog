@@ -1,5 +1,9 @@
 2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Use definition instead of "en".
+
+2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post, file_content_response)
 	(request_handler): Reformat overhanging parentheses.
 

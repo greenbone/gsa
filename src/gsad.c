@@ -3593,7 +3593,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
       language = MHD_lookup_connection_value (connection,
                                               MHD_HEADER_KIND,
                                               "Accept-Language");
-      con_info->language = g_strdup (language ? language : "en");
+      con_info->language = g_strdup (language
+                                      ? language
+                                      : DEFAULT_GSAD_LANGUAGE);
 
       new_sid = NULL;
       ret = exec_omp_post (con_info, &user, &new_sid);
