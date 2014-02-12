@@ -1516,9 +1516,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                           ? "  Error during authentication."
                                           : ""),
                                      ctime_now,
-                                     con_info->language ? con_info->language
-                                                        : DEFAULT_GSAD_LANGUAGE
-                                    );
+                                     con_info->language
+                                      ? con_info->language
+                                      : DEFAULT_GSAD_LANGUAGE);
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
@@ -1647,9 +1647,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      caller
                                       ? caller
                                       : "",
-                                     con_info->language ? con_info->language
-                                                        : DEFAULT_GSAD_LANGUAGE
-                                    );
+                                     con_info->language
+                                      ? con_info->language
+                                      : DEFAULT_GSAD_LANGUAGE);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -1674,9 +1674,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "<i18n>%s</i18n>"
                              "</login_page>",
                              ctime_now,
-                             con_info->language ? con_info->language
-                                                : DEFAULT_GSAD_LANGUAGE
-                            );
+                             con_info->language
+                              ? con_info->language
+                              : DEFAULT_GSAD_LANGUAGE);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -2841,8 +2841,9 @@ file_content_response (credentials_t *credentials,
                              "<i18n>%s</i18n>"
                              "</login_page>",
                              ctime_now,
-                             language ? language : DEFAULT_GSAD_LANGUAGE
-                            );
+                             language
+                              ? language
+                              : DEFAULT_GSAD_LANGUAGE);
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -3263,8 +3264,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     && strncmp (url, "/logout", strlen ("/logout")))
                     ? full_url
                     : ""),
-                  language ? language : DEFAULT_GSAD_LANGUAGE
-                 );
+                  language ? language : DEFAULT_GSAD_LANGUAGE);
           g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
@@ -3310,8 +3310,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  "<i18n>%s</i18n>"
                                  "</login_page>",
                                  ctime_now,
-                                 language ? language : DEFAULT_GSAD_LANGUAGE
-                                );
+                                 language ? language : DEFAULT_GSAD_LANGUAGE);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
