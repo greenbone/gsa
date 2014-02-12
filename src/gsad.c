@@ -226,6 +226,7 @@ struct user
   gchar *timezone;     ///< Timezone.
   gchar *severity;     ///< Severity class.
   gchar *capabilities; ///< Capabilities.
+  gchar *language;     ///< User Interface Language, in short form like "en".
   time_t time;         ///< Login time.
 };
 
@@ -250,12 +251,14 @@ static GMutex *mutex = NULL;
  * @param[in]  severity      Severity class setting of user.
  * @param[in]  role          Role of user.
  * @param[in]  capabilities  Capabilities of manager.
+ * @param[in]  language      User Interface Language setting.
  *
  * @return Added user.
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *severity, const gchar *role, const gchar *capabilities)
+          const gchar *severity, const gchar *role, const gchar *capabilities,
+          const gchar *language)
 {
   user_t *user = NULL;
   int index;
@@ -284,6 +287,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->timezone = g_strdup (timezone);
       g_free (user->capabilities);
       user->capabilities = g_strdup (capabilities);
+      g_free (user->language);
     }
   else
     {
@@ -296,8 +300,10 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->timezone = g_strdup (timezone);
       user->severity = g_strdup (severity);
       user->capabilities = g_strdup (capabilities);
+      user->language = language ? g_strdup (language) : NULL;
       g_ptr_array_add (users, (gpointer) user);
     }
+  set_language_code (&user->language, language);
   user->time = time (NULL);
   return user;
 }
@@ -443,6 +449,36 @@ user_set_severity (const gchar *name, const gchar *severity)
         {
           g_free (item->severity);
           item->severity = g_strdup (severity);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Set language of user.
+ *
+ * @param[in]   name      User name.
+ * @param[in]   language  Language.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_language (const gchar *name, const gchar *language)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->language);
+          set_language_code (&item->language, language);
           ret = 0;
           break;
         }
@@ -850,6 +886,7 @@ init_validator ()
   openvas_validator_add (validator, "ifaces_allow", "^0|1$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
+  openvas_validator_add (validator, "lang",         "^(Browser Language|English|German)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   /* Used for Administrator users, LSC credentials, login for target
    * locator and slave login name.  Needs to match validate_username in
@@ -1129,7 +1166,7 @@ struct gsad_connection_info
   int answercode;                          ///< HTTP response code.
   params_t *params;                        ///< Request parameters.
   char *cookie;                            ///< Value of SID cookie param.
-  char *language;                          ///< Value of Language-Accept header.
+  char *language;                          ///< Value of Accept-Language header.
 };
 
 /**
@@ -1485,13 +1522,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           && password)
         {
           int ret;
-          gchar *timezone, *role, *capabilities, *severity;
+          gchar *timezone, *role, *capabilities, *severity, *language;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
                                   &timezone,
                                   &severity,
-                                  &capabilities);
+                                  &capabilities,
+                                  &language);
           if (ret)
             {
               time_t now;
@@ -1531,12 +1569,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                timezone,
                                severity,
                                role,
-                               capabilities);
+                               capabilities,
+                               language);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
               g_free (severity);
               g_free (capabilities);
+              g_free (language);
               g_free (role);
               return 1;
             }
@@ -1708,8 +1748,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->token = strdup (user->token);
   credentials->params = con_info->params;
 
-  credentials->language = g_strdup (con_info->language ? con_info->language
-                                                       : DEFAULT_GSAD_LANGUAGE);
+  credentials->language = user->language
+                           ? g_strdup (user->language)
+                           : g_strdup (con_info->language
+                                        ? con_info->language
+                                        : DEFAULT_GSAD_LANGUAGE);
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
@@ -1823,10 +1866,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
-      char *timezone, *password, *severity;
+      char *timezone, *password, *severity, *language;
       con_info->response = save_my_settings_omp (credentials, con_info->params,
+                                                 con_info->language,
                                                  &timezone, &password,
-                                                 &severity);
+                                                 &severity, &language);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->username, timezone);
@@ -1836,10 +1880,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (severity)
         /* credentials->severity set in save_my_settings_omp before XSLT. */
         user_set_severity (credentials->username, severity);
+      if (language)
+        /* credentials->language set in save_my_settings_omp before XSLT. */
+        user_set_language (credentials->username, language);
 
       g_free (timezone);
       g_free (password);
       g_free (severity);
+      g_free (language);
     }
   ELSE (save_note)
   ELSE (save_override)
@@ -3340,12 +3388,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
-      /* Accept-Language: de; q=1.0, en; q=0.5 */
-      language = MHD_lookup_connection_value (connection,
-                                              MHD_HEADER_KIND,
-                                              "Accept-Language");
-      credentials->language = g_strdup (language ? language
-                                                 : DEFAULT_GSAD_LANGUAGE);
+      if (user->language)
+        credentials->language = g_strdup (user->language);
+      else
+        {
+          /* Accept-Language: de; q=1.0, en; q=0.5 */
+          language = MHD_lookup_connection_value (connection,
+                                                  MHD_HEADER_KIND,
+                                                  "Accept-Language");
+          credentials->language = g_strdup (language ? language
+                                                     : DEFAULT_GSAD_LANGUAGE);
+        }
 
       sid = g_strdup (user->cookie);
 
@@ -3444,12 +3497,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
-              /* Accept-Language: de; q=1.0, en; q=0.5 */
-              language = MHD_lookup_connection_value (connection,
-                                                      MHD_HEADER_KIND,
-                                                      "Accept-Language");
-
-              gchar *preferred_language = g_strndup (language, 2);
+              gchar *preferred_language = g_strndup (credentials->language, 2);
               gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
@@ -3474,8 +3522,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                              ctime_now,
                                              credentials->username,
                                              credentials->role,
-                                             language ? language
-                                                      : DEFAULT_GSAD_LANGUAGE,
+                                             credentials->language,
                                              page);
               xml = g_strdup_printf ("%s"
                                      "<capabilities>%s</capabilities>"

@@ -1,5 +1,32 @@
 2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add setting User Interface Language.
+
+	* src/gsad.c (struct user, user_add): Add language.
+	(user_set_language): New function.
+	(init_validator): Add "lang".
+	(gsad_connection_info): Correct comment.
+	(exec_omp_post): Set language from authenticate_omp on user.  Set
+	credentials language from user if present.  Set user language after
+	save_my_settings.
+	(request_handler): Check for user language before using Accept-Language.
+	Remove Accept-Language lookup in help case because the language is
+	available in the credentials.
+
+	* src/gsad_base.c (set_language_code): New function.
+
+	* src/gsad_base.h: Add header accordingly.
+
+	* src/gsad_omp.c (save_my_settings_omp): Add User Interface Language.
+	(authenticate_omp): Add language return.
+
+	* src/gsad_base.h: Update headers accordingly.
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Add User
+	Interface Language.
+
+2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Use definition instead of "en".
 
 2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>

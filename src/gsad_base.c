@@ -75,6 +75,27 @@ gsad_base_init ()
 }
 
 /**
+ * @brief Set language code of user.
+ *
+ * Caller must handle locking.
+ *
+ * @param[in]   lang      Language slot.
+ * @param[in]   language  User Interface Language.
+ */
+void
+set_language_code (gchar **lang, const gchar *language)
+{
+  if (language == NULL || strcmp (language, "Browser Language") == 0)
+    *lang = NULL;
+  else if (strcmp (language, "English") == 0)
+    *lang = g_strdup ("en");
+  else if (strcmp (language, "German") == 0)
+    *lang = g_strdup ("de");
+  else
+    *lang = NULL;
+}
+
+/**
  * @brief Return string from ctime_r with newline replaces with terminator.
  *
  * @param[in]  time    Time.

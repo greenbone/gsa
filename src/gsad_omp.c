@@ -14151,20 +14151,24 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[in]  accept_language  Accept-Language, from browser.
  * @param[out] timezone     Timezone.  Caller must free.
  * @param[out] password     Password.  Caller must free.
+ * @param[out] severity     Severity.  Caller must free.
+ * @param[out] language     Language.  Caller must free.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_my_settings_omp (credentials_t * credentials, params_t *params,
-                      char **timezone, char **password, char **severity)
+                      const char *accept_language, char **timezone,
+                      char **password, char **severity, char **language)
 {
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text, *passwd, *status, *max;
-  gchar *text_64, *passwd_64, *max_64;
+  const char *lang, *text, *passwd, *status, *max;
+  gchar *lang_64, *text_64, *passwd_64, *max_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
@@ -14173,13 +14177,16 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   *timezone = NULL;
   *password = NULL;
   *severity = NULL;
+  *language = NULL;
 
   text = params_value (params, "text");
   passwd = params_value (params, "password");
   max = params_value (params, "max");
+  lang = params_value (params, "lang");
   if ((text == NULL)
       || (passwd == NULL)
-      || (max == NULL))
+      || (max == NULL)
+      || (lang == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"));
@@ -14304,7 +14311,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   else
     modify_failed = 1;
 
-  /* Send Results Per Page */
+  /* Send Rows Per Page */
   max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
   if (openvas_server_sendf (&session,
@@ -14340,6 +14347,56 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
+    modify_failed = 1;
+
+  /* Send User Interface Language. */
+  lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            lang_64 ? lang_64 : "")
+      == -1)
+    {
+      g_free (lang_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (lang_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (omp_success (entity))
+    {
+      gchar *language_code;
+      set_language_code (&language_code, lang);
+      if (language_code)
+        {
+          g_free (credentials->language);
+          credentials->language = language_code;
+        }
+      else
+        credentials->language = g_strdup (accept_language);
+    }
+  else
     modify_failed = 1;
 
   /* Send resources filters */
@@ -18753,13 +18810,14 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
  * @param[out] timezone      Timezone.
  * @param[out] severity      Severity class.
  * @param[out] capabilities  Capabilities of manager.
+ * @param[out] language      User Interface Language, or NULL.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_omp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities)
+                  gchar **capabilities, gchar **language)
 {
   gnutls_session_t session;
   int socket;
@@ -18797,6 +18855,65 @@ authenticate_omp (const gchar * username, const gchar * password,
       char first;
       gchar *response;
       int ret;
+
+      /* Get language setting. */
+
+      ret = openvas_server_send
+             (&session,
+              "<get_settings"
+              " setting_id=\"6765549a-934e-11e3-b358-406186ea4fc5\"/>");
+      if (ret)
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Read the response. */
+
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Check the response. */
+
+      status = entity_attribute (entity, "status");
+      if (status == NULL
+          || strlen (status) == 0)
+        {
+          g_free (response);
+          free_entity (entity);
+          return -1;
+        }
+      first = status[0];
+      if (first == '2')
+        {
+          entity_t setting;
+          setting = entity_child (entity, "setting");
+          if (setting == NULL)
+            {
+              free_entity (entity);
+              g_free (response);
+              return -1;
+            }
+          setting = entity_child (setting, "value");
+          if (setting == NULL)
+            {
+              free_entity (entity);
+              g_free (response);
+              return -1;
+            }
+          *language = g_strdup (entity_text (setting));
+          free_entity (entity);
+        }
+      else
+        {
+          free_entity (entity);
+          g_free (response);
+          return -1;
+        }
 
       /* Request help. */
 

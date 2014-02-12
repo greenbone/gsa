@@ -28103,15 +28103,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Value</td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Timezone</td>
             <td><xsl:value-of select="/envelope/timezone"/></td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Password</td>
             <td>********</td>
           </tr>
           <xsl:if test="gsa:may-op ('get_settings')">
+            <tr class="odd">
+              <td>User Interface Language</td>
+              <td>
+                <xsl:variable name="lang">
+                  <xsl:choose>
+                    <xsl:when test="string-length (get_settings_response/setting[name='User Interface Language']/value) &gt; 0">
+                      <xsl:value-of select="get_settings_response/setting[name='User Interface Language']/value"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>Browser Language</xsl:text>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="$lang"/>
+              </td>
+            </tr>
             <tr class="even">
               <td>Rows Per Page</td>
               <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
@@ -28410,6 +28426,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <br/>
                 <input type="password" autocomplete="off" name="password"
                        size="30" maxlength="400" value=""/>
+              </td>
+            </tr>
+            <tr>
+              <td>User Interface Language</td>
+              <td>
+                <xsl:variable name="lang">
+                  <xsl:choose>
+                    <xsl:when test="string-length (get_settings_response/setting[name='User Interface Language']/value) &gt; 0">
+                      <xsl:value-of select="get_settings_response/setting[name='User Interface Language']/value"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>Browser Language</xsl:text>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <select name="lang">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'Browser Language'"/>
+                    <xsl:with-param name="content" select="'Browser Language'"/>
+                    <xsl:with-param name="select-value" select="$lang"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'English'"/>
+                    <xsl:with-param name="content" select="'English'"/>
+                    <xsl:with-param name="select-value" select="$lang"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'German'"/>
+                    <xsl:with-param name="content" select="'German'"/>
+                    <xsl:with-param name="select-value" select="$lang"/>
+                  </xsl:call-template>
+                </select>
               </td>
             </tr>
             <tr>

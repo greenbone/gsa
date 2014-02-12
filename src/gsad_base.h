@@ -103,6 +103,7 @@ struct method_data_param
 typedef struct method_data_param method_data_param_t;
 
 int gsad_base_init ();
+void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);
 char * xsl_transform_with_stylesheet (const char *, const char *);
 char * xsl_transform (const char *);
