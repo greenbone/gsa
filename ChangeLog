@@ -1,5 +1,17 @@
 2014-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add Alive Test to Create Target and Target Details.
+
+	* src/gsad.c (init_validator): Add alive_tests.
+
+	* src/gsad_omp.c (create_target_omp): Send alive_tests too.
+
+	* src/html/classic/omp.xsl (html-create-target-form): Add Alive Test
+	field.
+	(target [details]): Show Alive Test.
+
+2014-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (user_set_language_code): New function.
 	(exec_omp_post): After save_my_settings_omp, when language is NULL,
 	set the user's language from the credentials, because the browser value

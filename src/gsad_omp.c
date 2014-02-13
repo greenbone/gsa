@@ -5969,8 +5969,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *command;
   const char *name, *hosts, *exclude_hosts, *target_locator, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *port_list_id;
-  const char *reverse_lookup_only, *reverse_lookup_unify;
+  const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
+  const char *alive_tests;
   gchar *credentials_element, *smb_credentials_element;
   gchar* source_element = NULL;
   gchar* comment_element = NULL;
@@ -5989,6 +5989,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  alive_tests = params_value (params, "alive_tests");
 
   CHECK_PARAM (name, "Create Target", new_target);
   CHECK_PARAM (target_source, "Create Target", new_target)
@@ -6011,6 +6012,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   if (strcmp (target_credential, "--"))
     CHECK_PARAM (port, "Create Target", new_target);
   CHECK_PARAM (target_smb_credential, "Create Target", new_target);
+  CHECK_PARAM (alive_tests, "Create Target", new_target);
 
   username = params_value (params, "login");
   password = params_value (params, "password");
@@ -6059,6 +6061,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
                              "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                              "<port_list id=\"%s\"/>"
                              "%s%s%s%s"
+                             "<alive_tests>%s</alive_tests>"
                              "</create_target>",
                              name,
                              (strcmp (source_element, "") == 0)
@@ -6073,7 +6076,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
                              comment_element,
                              source_element,
                              credentials_element,
-                             smb_credentials_element);
+                             smb_credentials_element,
+                             alive_tests);
 
   g_free (comment_element);
   g_free (credentials_element);

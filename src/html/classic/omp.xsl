@@ -9471,6 +9471,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td>Alive Test:</td>
+            <td>
+              <select name="alive_tests">
+                <option value="Scan Config Default">Scan Config Default</option>
+                <option value="ICMP Ping">ICMP Ping</option>
+                <option value="TCP Service Ping">TCP Service Ping</option>
+                <option value="ARP Ping">ARP Ping</option>
+                <option value="ICMP &amp; TCP Service Ping">ICMP &amp; TCP Service Ping</option>
+                <option value="ICMP &amp; ARP Ping">ICMP &amp; ARP Ping</option>
+                <option value="TCP Service &amp; ARP Ping">TCP Service &amp; ARP Ping</option>
+                <option value="ICMP, TCP Service &amp; ARP Ping">ICMP, TCP Service &amp; ARP Ping</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Target"/>
             </td>
@@ -10161,6 +10176,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="smb_lsc_credential/name"/>
             </a>
+          </td>
+        </tr>
+        <tr>
+          <td>Alive Test:</td>
+          <td>
+            <xsl:value-of select="alive_tests/text()"/>
           </td>
         </tr>
       </table>
