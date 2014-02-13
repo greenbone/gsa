@@ -1,3 +1,13 @@
+2014-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (user_set_language_code): New function.
+	(exec_omp_post): After save_my_settings_omp, when language is NULL,
+	set the user's language from the credentials, because the browser value
+	will have been set in the credentials.
+
+	* src/gsad_omp.c (save_my_settings_omp): Actually set the language
+	return.
+
 2014-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (my_settings.html): Move "Jump to dialog" to

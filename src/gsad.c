@@ -488,6 +488,36 @@ user_set_language (const gchar *name, const gchar *language)
 }
 
 /**
+ * @brief Set language of user, given a code.
+ *
+ * @param[in]   name      User name.
+ * @param[in]   language  Language code.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_language_code (const gchar *name, const gchar *language)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->language);
+          item->language = g_strdup (language);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
  * @brief Release a user_t returned by user_add or user_find.
  *
  * @param[in]  user  User.
@@ -1880,9 +1910,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (severity)
         /* credentials->severity set in save_my_settings_omp before XSLT. */
         user_set_severity (credentials->username, severity);
+      /* credentials->language is set in save_my_settings_omp before XSLT. */
       if (language)
-        /* credentials->language set in save_my_settings_omp before XSLT. */
         user_set_language (credentials->username, language);
+      else
+        user_set_language_code (credentials->username, credentials->language);
 
       g_free (timezone);
       g_free (password);

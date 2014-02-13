@@ -14392,6 +14392,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         {
           g_free (credentials->language);
           credentials->language = language_code;
+          *language = g_strdup (lang);
         }
       else
         credentials->language = g_strdup (accept_language);
