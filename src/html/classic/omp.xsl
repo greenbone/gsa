@@ -9804,6 +9804,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td>Alive Test:</td>
+            <td>
+              <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
+              <select name="alive_tests">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Scan Config Default'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ICMP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'TCP Service Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ARP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ICMP &amp; TCP Service Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ICMP &amp; ARP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'TCP Service &amp; ARP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ICMP, TCP Service &amp; ARP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save Target"/>
             </td>

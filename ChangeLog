@@ -1,3 +1,12 @@
+2014-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Alive Test to Modify Target.
+
+	* src/gsad_omp.c (save_target_omp): Send alive_tests too.
+
+	* src/html/classic/omp.xsl (html-edit-target-form): Add Alive Test
+	field.
+
 2014-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Alive Test to Create Target and Target Details.
