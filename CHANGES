@@ -1,3 +1,23 @@
+gsa 5.0+beta6 (2014-02-16)
+
+This is the sixth beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds the setting for user interface language and Alive Test
+to Target management.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Timo Pollmeier and Benoît Allard.
+
+Main changes since 5.0+beta5:
+* Add Alive Test to Create Target, Modify Target and Target Details.
+* Add setting User Interface Language.
+* More translations to German language.
+* Improved i18n implementation.
+* Code cleanup and various small bug-fixes.
+
+
 gsa 5.0+beta5 (2014-01-28)
 
 This is the fifth beta version of the upcoming 5.0 release of the Greenbone
