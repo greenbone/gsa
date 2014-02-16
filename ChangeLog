@@ -1,3 +1,8 @@
+2014-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-target-form): Move Comment up to
+	match details page and other edit pages.
+
 2014-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Alive Test to Modify Target.

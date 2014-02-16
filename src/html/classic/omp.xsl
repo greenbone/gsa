@@ -9535,6 +9535,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_targets_response/target/comment}"/>
+            </td>
+          </tr>
+          <tr>
           <td valign="top" width="175">Hosts</td>
           <xsl:choose>
             <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
@@ -9703,13 +9710,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </label>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Comment (optional)</td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_targets_response/target/comment}"/>
             </td>
           </tr>
           <tr>
