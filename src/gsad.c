@@ -1066,6 +1066,7 @@ init_validator ()
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
+  openvas_validator_alias (validator, "in_use",             "boolean");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");

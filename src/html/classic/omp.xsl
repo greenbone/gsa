@@ -9523,6 +9523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
+        <input type="hidden" name="in_use" value="{commands_response/get_targets_response/target/in_use}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="165">Name</td>
@@ -9541,268 +9542,557 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_targets_response/target/comment}"/>
             </td>
           </tr>
-          <tr>
-          <td valign="top" width="175">Hosts</td>
           <xsl:choose>
-            <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
-              <!-- No target locator(s) given. -->
-              <td>
-                <table>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="manual"
-                               checked="1"/>
-                        Manual
-                      </label>
-                    </td>
-                    <td>
-                      <input type="text" name="hosts"
-                             value="{commands_response/get_targets_response/target/hosts}"
-                             size="30"
-                             maxlength="2000"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="file"/>
-                        From file
-                      </label>
-                    </td>
-                    <td>
-                      <input type="file" name="file" size="30"/>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- Target locator(s) given. -->
-              <td>
-                <table>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="manual"
-                               checked="1"/>
-                        Manual
-                      </label>
-                    </td>
-                    <td>
-                      <input type="text" name="hosts"
-                             value="{commands_response/get_targets_response/target/hosts}"
-                             size="30"
-                             maxlength="2000"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="file"/>
-                        From file
-                      </label>
-                    </td>
-                    <td>
-                      <input type="file" name="file" size="30"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="import"/>
-                        Import
-                      </label>
-                    </td>
-                    <td>
-                      <select name="target_locator">
-                        <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
-                                             mode="select"/>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>
-                      Import Authentication
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
+            <xsl:when test="commands_response/get_targets_response/target/in_use = '0'">
+              <tr>
+                <td valign="top" width="175">Hosts</td>
+                <xsl:choose>
+                  <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
+                    <!-- No target locator(s) given. -->
                     <td>
                       <table>
-                      <tr>
-                        <td>Username</td>
-                        <td>
-                          <input type="text" name="login" value="" size="15"
-                                maxlength="80"/>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Password</td>
-                        <td>
-                          <input type="password" autocomplete="off"
-                                 name="password" value="" size="15"
-                                 maxlength="80"/>
-                        </td>
-                      </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="manual"
+                                     checked="1"/>
+                              Manual
+                            </label>
+                          </td>
+                          <td>
+                            <input type="text" name="hosts"
+                                   value="{commands_response/get_targets_response/target/hosts}"
+                                   size="30"
+                                   maxlength="2000"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="file"/>
+                              From file
+                            </label>
+                          </td>
+                          <td>
+                            <input type="file" name="file" size="30"/>
+                          </td>
+                        </tr>
                       </table>
                     </td>
-                  </tr>
-                </table>
-              </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <!-- Target locator(s) given. -->
+                    <td>
+                      <table>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="manual"
+                                     checked="1"/>
+                              Manual
+                            </label>
+                          </td>
+                          <td>
+                            <input type="text" name="hosts"
+                                   value="{commands_response/get_targets_response/target/hosts}"
+                                   size="30"
+                                   maxlength="2000"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="file"/>
+                              From file
+                            </label>
+                          </td>
+                          <td>
+                            <input type="file" name="file" size="30"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="import"/>
+                              Import
+                            </label>
+                          </td>
+                          <td>
+                            <select name="target_locator">
+                              <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
+                                                   mode="select"/>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>
+                            Import Authentication
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>
+                            <table>
+                            <tr>
+                              <td>Username</td>
+                              <td>
+                                <input type="text" name="login" value="" size="15"
+                                      maxlength="80"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Password</td>
+                              <td>
+                                <input type="password" autocomplete="off"
+                                       name="password" value="" size="15"
+                                       maxlength="80"/>
+                              </td>
+                            </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </tr>
+              <tr>
+                <td valign="top" width="175">Exclude Hosts</td>
+                <td>
+                  <input type="text" name="exclude_hosts"
+                         value="{commands_response/get_targets_response/target/exclude_hosts}"
+                         size="30" maxlength="2000"/>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="175">Reverse Lookup Only</td>
+                <td>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
+                        <input type="radio" name="reverse_lookup_only" value="1" checked="1"/>Yes
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_only" value="1"/>Yes
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
+                        <input type="radio" name="reverse_lookup_only" value="0" checked="1"/>No
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_only" value="0"/>No
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="175">Reverse Lookup Unify</td>
+                <td>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
+                        <input type="radio" name="reverse_lookup_unify" value="1" checked="1"/>Yes
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_unify" value="1"/>Yes
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
+                        <input type="radio" name="reverse_lookup_unify" value="0" checked="1"/>No
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_unify" value="0"/>No
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="175">Port List</td>
+                <td>
+                  <select name="port_list_id">
+                    <xsl:variable name="port_list_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                    </xsl:variable>
+                    <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+                      <xsl:choose>
+                        <xsl:when test="@id = $port_list_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="175">SSH Credential (optional)</td>
+                <td>
+                  <select name="lsc_credential_id">
+                    <xsl:variable name="lsc_credential_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                      <xsl:choose>
+                        <xsl:when test="@id = $lsc_credential_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  on port
+                  <xsl:variable name="credential"
+                                select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
+                  <xsl:choose>
+                    <xsl:when test="$credential and string-length ($credential/port)">
+                      <input type="text"
+                             name="port"
+                             value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                             size="6"
+                             maxlength="400"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="text" name="port" value="22" size="6" maxlength="400"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="175">SMB Credential (optional)</td>
+                <td>
+                  <select name="lsc_smb_credential_id">
+                    <xsl:variable name="lsc_credential_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                      <xsl:choose>
+                        <xsl:when test="@id = $lsc_credential_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="width" select="240"/>
+              <!-- Target is in use. -->
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('Hosts', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <xsl:choose>
+                  <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
+                    <!-- No target locator(s) given. -->
+                    <td>
+                      <table>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="manual"
+                                     checked="1" disabled="1"/>
+                              Manual
+                            </label>
+                          </td>
+                          <td>
+                            <input type="text" name="hosts"
+                                   value="{commands_response/get_targets_response/target/hosts}"
+                                   size="30"
+                                   maxlength="2000"
+                                   disabled="1"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="file" disabled="1"/>
+                              From file
+                            </label>
+                          </td>
+                          <td>
+                            <input type="file" name="file" size="30" disabled="1"/>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <!-- Target locator(s) given. -->
+                    <td>
+                      <table>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="manual"
+                                     checked="1" disabled="1"/>
+                              Manual
+                            </label>
+                          </td>
+                          <td>
+                            <input type="text" name="hosts"
+                                   value="{commands_response/get_targets_response/target/hosts}"
+                                   size="30"
+                                   maxlength="2000"
+                                   disabled="1"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="file" disabled="1"/>
+                              From file
+                            </label>
+                          </td>
+                          <td>
+                            <input type="file" name="file" size="30" disabled="1"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="target_source" value="import"
+                                     disabled="1"/>
+                              Import
+                            </label>
+                          </td>
+                          <td>
+                            <select name="target_locator">
+                              <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
+                                                   mode="select"/>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>
+                            Import Authentication
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>
+                            <table>
+                            <tr>
+                              <td>Username</td>
+                              <td>
+                                <input type="text" name="login" value="" size="15"
+                                      maxlength="80" disabled="1"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Password</td>
+                              <td>
+                                <input type="password" autocomplete="off"
+                                       name="password" value="" size="15"
+                                       maxlength="80" disabled="1"/>
+                              </td>
+                            </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <input type="text" name="exclude_hosts"
+                         value="{commands_response/get_targets_response/target/exclude_hosts}"
+                         size="30" maxlength="2000"
+                         disabled="1"/>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
+                        <input type="radio" name="reverse_lookup_only" value="1" checked="1" disabled="1"/>Yes
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_only" value="1" disabled="1"/>Yes
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
+                        <input type="radio" name="reverse_lookup_only" value="0" checked="1" disabled="1"/>No
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_only" value="0" disabled="1"/>No
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
+                        <input type="radio" name="reverse_lookup_unify" value="1" checked="1" disabled="1"/>Yes
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_unify" value="1" disabled="1"/>Yes
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
+                        <input type="radio" name="reverse_lookup_unify" value="0" checked="1" disabled="1"/>No
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="reverse_lookup_unify" value="0" disabled="1"/>No
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('Port List', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <select name="port_list_id" disabled="1">
+                    <xsl:variable name="port_list_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                    </xsl:variable>
+                    <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+                      <xsl:choose>
+                        <xsl:when test="@id = $port_list_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <select name="lsc_credential_id" disabled="1">
+                    <xsl:variable name="lsc_credential_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                      <xsl:choose>
+                        <xsl:when test="@id = $lsc_credential_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  on port
+                  <xsl:variable name="credential"
+                                select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
+                  <xsl:choose>
+                    <xsl:when test="$credential and string-length ($credential/port)">
+                      <input type="text"
+                             name="port"
+                             value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                             size="6"
+                             maxlength="400"
+                             disabled="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="text" name="port" value="22" size="6" maxlength="400" disabled="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" width="{$width}">
+                  <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                </td>
+                <td>
+                  <select name="lsc_smb_credential_id" disabled="1">
+                    <xsl:variable name="lsc_credential_id">
+                      <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                      <xsl:choose>
+                        <xsl:when test="@id = $lsc_credential_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
             </xsl:otherwise>
           </xsl:choose>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Exclude Hosts</td>
-            <td>
-              <input type="text" name="exclude_hosts"
-                     value="{commands_response/get_targets_response/target/exclude_hosts}"
-                     size="30" maxlength="2000"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Reverse Lookup Only</td>
-            <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
-                    <input type="radio" name="reverse_lookup_only" value="1" checked="1"/>Yes
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="reverse_lookup_only" value="1"/>Yes
-                  </xsl:otherwise>
-                </xsl:choose>
-              </label>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
-                    <input type="radio" name="reverse_lookup_only" value="0" checked="1"/>No
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="reverse_lookup_only" value="0"/>No
-                  </xsl:otherwise>
-                </xsl:choose>
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Reverse Lookup Unify</td>
-            <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
-                    <input type="radio" name="reverse_lookup_unify" value="1" checked="1"/>Yes
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="reverse_lookup_unify" value="1"/>Yes
-                  </xsl:otherwise>
-                </xsl:choose>
-              </label>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
-                    <input type="radio" name="reverse_lookup_unify" value="0" checked="1"/>No
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="reverse_lookup_unify" value="0"/>No
-                  </xsl:otherwise>
-                </xsl:choose>
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Port List</td>
-            <td>
-              <select name="port_list_id">
-                <xsl:variable name="port_list_id">
-                  <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
-                </xsl:variable>
-                <xsl:for-each select="commands_response/get_port_lists_response/port_list">
-                  <xsl:choose>
-                    <xsl:when test="@id = $port_list_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">SSH Credential (optional)</td>
-            <td>
-              <select name="lsc_credential_id">
-                <xsl:variable name="lsc_credential_id">
-                  <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
-                  <xsl:choose>
-                    <xsl:when test="@id = $lsc_credential_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              on port
-              <xsl:variable name="credential"
-                            select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
-              <xsl:choose>
-                <xsl:when test="$credential and string-length ($credential/port)">
-                  <input type="text"
-                         name="port"
-                         value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
-                         size="6"
-                         maxlength="400"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port" value="22" size="6" maxlength="400"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">SMB Credential (optional)</td>
-            <td>
-              <select name="lsc_smb_credential_id">
-                <xsl:variable name="lsc_credential_id">
-                  <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
-                  <xsl:choose>
-                    <xsl:when test="@id = $lsc_credential_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
           <tr>
             <td>Alive Test:</td>
             <td>

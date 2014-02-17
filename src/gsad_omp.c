@@ -7394,9 +7394,81 @@ save_target_omp (credentials_t * credentials, params_t *params)
   const char *name, *next, *hosts, *target_locator, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
-  const char *reverse_lookup_unify, *alive_tests;
+  const char *reverse_lookup_unify, *alive_tests, *in_use;
 
+  alive_tests = params_value (params, "alive_tests");
   name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  in_use = params_value (params, "in_use");
+  target_id = params_value (params, "target_id");
+
+  CHECK_PARAM (name, "Save Target", edit_target);
+  CHECK_PARAM (target_id, "Save Target", edit_target);
+  CHECK_PARAM (comment, "Save Target", edit_target);
+  CHECK_PARAM (alive_tests, "Save Target", edit_target);
+  CHECK_PARAM (in_use, "Save Target", edit_target);
+
+  if (strcmp (in_use, "0"))
+    {
+      entity_t entity;
+
+      /* Target is in use.  Modify fewer fields. */
+
+      response = NULL;
+      entity = NULL;
+      switch (ompf (credentials,
+                    &response,
+                    &entity,
+                    "<modify_target target_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<alive_tests>%s</alive_tests>"
+                    "</modify_target>",
+                    target_id,
+                    name ? name : "",
+                    comment ? comment : "",
+                    alive_tests))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving a target. "
+                                 "The target remains the same. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_targets");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving a target. "
+                                 "It is unclear whether the target has been saved or not. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_targets");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving a target. "
+                                 "It is unclear whether the target has been saved or not. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_targets");
+        }
+
+      if (omp_success (entity))
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = get_targets_omp (credentials, params);
+        }
+      else
+        html = edit_target (credentials, params, response);
+
+      free_entity (entity);
+      g_free (response);
+      return html;
+    }
+
   next = params_value (params, "next");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
@@ -7404,22 +7476,15 @@ save_target_omp (credentials_t * credentials, params_t *params)
   reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
   target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
-  comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
-  target_id = params_value (params, "target_id");
-  alive_tests = params_value (params, "alive_tests");
 
-  CHECK_PARAM (name, "Save Target", edit_target);
-  CHECK_PARAM (target_id, "Save Target", edit_target);
   CHECK_PARAM (target_source, "Save Target", edit_target);
-  CHECK_PARAM (comment, "Save Target", edit_target);
   CHECK_PARAM (port_list_id, "Save Target", edit_target);
   CHECK_PARAM (target_credential, "Save Target", edit_target);
   CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
-  CHECK_PARAM (alive_tests, "Save Target", edit_target);
 
   if (next == NULL)
     next = "get_target";
