@@ -4685,7 +4685,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="observed" select="0"/>
   <xsl:param name="apply_overrides" select="../../../../apply_overrides"/>
   <xsl:param name="delta" select="/envelope/params/delta_report_id"/>
-  <xsl:param name="task_id" select="../../../get_tasks_response/task/@id"/>
+  <xsl:param name="task_id" select="/envelope/params/task_id"/>
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
