@@ -929,8 +929,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:variable name="single" select="count (column) = 0"/>
                   <xsl:choose>
                     <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
-                      <option value="{gsa:column-filter-name (name)}"
-                              selected="1">
+                      <option value="{$sort}" selected="1">
+                        <xsl:value-of select="gsa:i18n(name, concat(gsa:type-name($type), ' Window'))"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:when test="$single and boolean (field)">
+                      <option value="{field}">
                         <xsl:value-of select="gsa:i18n(name, concat(gsa:type-name($type), ' Window'))"/>
                       </option>
                     </xsl:when>
@@ -943,8 +947,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:for-each select="column">
                         <xsl:choose>
                           <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
-                            <option value="{gsa:column-filter-name (name)}"
-                                    selected="1">
+                            <option value="{$sort}" selected="1">
+                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), concat(gsa:type-name($type), ' Window'))"/>
+                            </option>
+                          </xsl:when>
+                          <xsl:when test="boolean (field)">
+                            <option value="{field}">
                               <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), concat(gsa:type-name($type), ' Window'))"/>
                             </option>
                           </xsl:when>

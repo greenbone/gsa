@@ -1,5 +1,14 @@
 2014-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Use FIELD from column
+	definition if there is one, when generating "Sort by" dropdown.  This
+	gets cases like "Trust (Last Verified)" working.
+
+	* src/gsad.c (init_validator): Double sort_field length to accommodate
+	"Confidentiality Impact".
+
+2014-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [report]): Get task_id from envelope,
 	instead of from the XML which selects a single task when all tasks were
 	requested.

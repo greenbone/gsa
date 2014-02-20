@@ -1000,7 +1000,7 @@ init_validator ()
   openvas_validator_add (validator, "trend:value", "^(0|1)$");
   openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
-  openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
+  openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "submit_plus",    "^\\+$");
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
