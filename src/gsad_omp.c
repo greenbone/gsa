@@ -6238,19 +6238,19 @@ clone_omp (credentials_t *credentials, params_t *params)
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
 
   /* Cleanup, and return next page. */
 
-  if (params_given (params, "next") == 0)
+  if (omp_success (entity) == 0 || params_given (params, "next") == 0)
     {
       gchar *next;
       next = g_strdup_printf ("get_%ss", type);
       params_add (params, "next", next);
       g_free (next);
     }
+  free_entity (entity);
   html = next_page (credentials, params, response);
   g_free (response);
   if (html == NULL)

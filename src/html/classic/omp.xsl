@@ -1219,7 +1219,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$noclone">
     </xsl:when>
-    <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or string-length (owner/name) = 0)">
+    <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or (string-length (owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))">
       <div style="display: inline">
         <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -19590,6 +19590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_permission">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_permission_response"/>
+  <xsl:apply-templates select="create_permission_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>

@@ -1,3 +1,11 @@
+2014-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Add special
+	permission case to clone icon check.
+	(get_permission): Match create_permission_response too.
+
+	* src/gsad_omp.c (clone_omp): If clone fails, go to associated GET page.
+
 2014-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter-window-part): Use FIELD from column
