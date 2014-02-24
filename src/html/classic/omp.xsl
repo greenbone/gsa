@@ -22321,7 +22321,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
           </a>
-          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+          <div id="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
             <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Export ', 'Window')}{gsa:i18n ('Result', 'Result')}{gsa:i18n (' as XML', 'Window')}"
                style="margin-left:3px;">
@@ -22337,45 +22337,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="$delta=0">
-        <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
-        <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-          <form action="" method="get">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="get_result"/>
-            <input type="hidden" name="result_id" value="{@id}"/>
-            <input type="hidden" name="task_id" value="{$task_id}"/>
-            <input type="hidden" name="name" value="{$task_name}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-
-            <input type="hidden" name="report_id"
-                   value="{$report_id}"/>
-            <input type="hidden" name="report_result_id"
-                   value="{$report_result_id}"/>
-            <input type="hidden" name="autofp"
-                   value="{/envelope/params/autofp}"/>
-
-            <select style="margin-bottom: 0px;" name="apply_overrides" size="1">
-              <xsl:choose>
-                <xsl:when test="$apply-overrides = 0">
-                  <option value="0" selected="$apply-overrides">&#8730;<xsl:value-of select="gsa:i18n ('No overrides', 'Override Controls')"/></option>
-                  <option value="1" ><xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="0"><xsl:value-of select="gsa:i18n ('No overrides', 'Override Controls')"/></option>
-                  <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </select>
-            <input type="image"
-                   name="Update"
-                   title="{gsa:i18n ('Update', 'Override Controls')}"
-                   src="/img/refresh.png"
-                   alt="{gsa:i18n ('Update', 'Override Controls')}" style="margin-left:3px;margin-right:3px;"/>
-          </form>
-        </div>
-      </xsl:if>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right" style="font-size: 10px;">
