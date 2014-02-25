@@ -1,4 +1,9 @@
-2013-02-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2014-02-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-headers]): Add overrides
+	control in severity column.
+
+2014-02-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [details]): Remove apply overrides
 	dropdown menu.

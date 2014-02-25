@@ -22467,6 +22467,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="gsa:i18n ('Severity', 'Result Window')"/>
+            <div style="float: right; display: inline">
+              <form method="get" action="">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_result"/>
+                <input type="hidden" name="result_id" value="{@id}"/>
+                <input type="hidden" name="filter" value="{filters/term}"/>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/apply_overrides = 0">
+                    <input type="hidden" name="apply_overrides" value="1"/>
+                    <input type="image" name="No Overrides" value="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="apply_overrides" value="0"/>
+                    <input type="image" name="Overrides are Applied"
+                           value="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </form>
+            </div>
           </xsl:otherwise>
         </xsl:choose>
       </td>
