@@ -76,32 +76,6 @@ typedef struct
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
-/**
- * @brief Config preference.
- */
-typedef struct
-{
-  gchar *name;     ///< Name of preference.
-  gchar *nvt;      ///< ID of NVT.
-  void *value;     ///< Value of preference.
-  int value_size;  ///< Size of value.
-} preference_t;
-
-/**
- * @brief Method data parameters.
- */
-struct method_data_param
-{
-  gchar *key;             /* Key. */
-  gchar *value;           /* Binary value. */
-  gsize value_size;       /* Size of value. */
-};
-
-/**
- * @brief Method data parameter type.
- */
-typedef struct method_data_param method_data_param_t;
-
 int gsad_base_init ();
 void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);

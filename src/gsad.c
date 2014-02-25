@@ -2659,7 +2659,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
   body = g_strdup_printf ("<html><body>Code 303 - Redirecting to"
                           " <a href=\"%s\">%s<a/></body></html>\n",
                           location, location);
-  response = MHD_create_response_from_data (2, "\r\n", MHD_NO, MHD_YES);
+  response = MHD_create_response_from_data (2, body, MHD_NO, MHD_YES);
   g_free (body);
 
   if (!response)
@@ -3128,15 +3128,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
 {
   const char *url_base = "/";
   char *default_file = "/login/login.html";
-  const char *omp_cgi_base = "/omp";
   enum content_type content_type;
   char *content_disposition = NULL;
   gsize response_size = 0;
   int http_response_code = MHD_HTTP_OK;
 
-  struct MHD_Response *response = NULL;
-  int ret;
-  char *res;
   credentials_t *credentials = NULL;
 
 
@@ -3201,8 +3197,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "GET"))
     {
       const char *token, *cookie, *language;
+      const char *omp_cgi_base = "/omp";
+      struct MHD_Response *response;
       user_t *user;
       gchar *sid;
+      int ret;
+      char *res;
 
       token = NULL;
       cookie = NULL;
@@ -3371,7 +3371,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           time_t now;
           gchar *xml;
-          char *res;
           char ctime_now[200];
 
           now = time (NULL);
@@ -3627,6 +3626,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       user_t *user;
       const char *sid, *language;
       gchar *new_sid;
+      int ret;
 
       if (NULL == *con_cls)
         {

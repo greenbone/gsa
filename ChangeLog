@@ -1,5 +1,21 @@
 2014-02-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (send_redirect_header): Use body variable for html
+	response.
+	(request_handler): Reduce variables scopes.
+
+	* src/gsad_base.h (preference_t, method_data_param): Remove unused
+	structs.
+
+	* src/gsad_omp.c (edit_resource, save_container_task_omp)
+	(download_lsc_credential_omp, create_agent_omp, download_agent_omp)
+	(new_agent_omp, save_alert_omp, save_target_omp, get_report)
+	(send_settings_filters, save_my_settings_omp, export_omp_doc_omp):
+	Reduce variables scopes and remove unused variables.
+	(create_override_omp): Delete redundant else if branch.
+
+2014-02-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (result [result-headers]): Add overrides
 	control in severity column.
 

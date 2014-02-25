@@ -1293,12 +1293,11 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *id_name;
-  const char *resource_id, *next;
+  const char *resource_id;
 
   id_name = g_strdup_printf ("%s_id", type);
   resource_id = params_value (params, id_name);
   g_free (id_name);
-  next = params_value (params, "next");
 
   if (resource_id == NULL)
     return gsad_message (credentials,
@@ -1307,9 +1306,6 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                          "The resource remains as it was. "
                          "Diagnostics: Required ID parameter was NULL.",
                          "/omp?cmd=get_tasks");
-
-  if (next == NULL)
-    next = "get_tasks";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2895,7 +2891,7 @@ char *
 save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *format, *response, *html;
-  const char *submit, *comment, *name, *next, *task_id;
+  const char *submit, *comment, *name, *task_id;
   const char *observers, *in_assets;
   params_t *groups;
   GString *group_elements;
@@ -2905,7 +2901,6 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
-  next = params_value (params, "next");
   task_id = params_value (params, "task_id");
   observers = params_value (params, "observers");
 
@@ -2942,9 +2937,6 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
                          "The task remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
-
-  if (next == NULL)
-    next = "get_task";
 
   group_elements = g_string_new ("");
   groups = params_values (params, "group_id_optional:");
@@ -3907,7 +3899,6 @@ download_lsc_credential_omp (credentials_t * credentials,
       || strcmp (format, "deb") == 0
       || strcmp (format, "exe") == 0)
     {
-      char *package_encoded = NULL;
       gchar *package_decoded = NULL;
       entity_t package_entity = NULL, credential_entity;
 
@@ -3932,7 +3923,7 @@ download_lsc_credential_omp (credentials_t * credentials,
       if (package_entity != NULL)
         {
           gsize len;
-          package_encoded = entity_text (package_entity);
+          char *package_encoded = entity_text (package_entity);
           if (strlen (package_encoded))
             {
               package_decoded = (gchar *) g_base64_decode (package_encoded,
@@ -4330,9 +4321,8 @@ new_agent_omp (credentials_t *credentials, params_t *params)
 char *
 create_agent_omp (credentials_t * credentials, params_t *params)
 {
-  int ret;
   entity_t entity;
-  gchar *command, *response, *html;
+  gchar *response, *html;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
@@ -4353,7 +4343,9 @@ create_agent_omp (credentials_t * credentials, params_t *params)
     return get_agents (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
   else
     {
+      int ret;
       gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
+      gchar *command;
 
       /* Create the agent. */
 
@@ -4552,7 +4544,6 @@ download_agent_omp (credentials_t * credentials,
       || strcmp (format, "howto_install") == 0
       || strcmp (format, "howto_use") == 0)
     {
-      char *package_encoded = NULL;
       gchar *package_decoded = NULL;
       entity_t package_entity = NULL, agent_entity;
 
@@ -4576,7 +4567,7 @@ download_agent_omp (credentials_t * credentials,
         package_entity = entity_child (agent_entity, "package");
       if (package_entity != NULL)
         {
-          package_encoded = entity_text (package_entity);
+          char *package_encoded = entity_text (package_entity);
           if (strlen (package_encoded))
             {
               package_decoded = (gchar *) g_base64_decode (package_encoded,
@@ -5557,7 +5548,7 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   GString *xml;
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *alert_id, *next;
+  const char *name, *comment, *alert_id;
   const char *event, *condition, *method;
   const char *filter_id;
   params_t *event_data, *condition_data, *method_data;
@@ -5565,7 +5556,6 @@ save_alert_omp (credentials_t * credentials, params_t *params)
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  next = params_value (params, "next");
   condition = params_value (params, "condition");
   event = params_value (params, "event");
   method = params_value (params, "method");
@@ -5581,9 +5571,6 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (filter_id, "Save Alert", edit_alert);
 
   xml = g_string_new ("");
-
-  if (next == NULL)
-    next = "get_alerts";
 
   /* Modify the alert. */
 
@@ -7391,7 +7378,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *next, *hosts, *target_locator, *exclude_hosts, *comment;
+  const char *name, *hosts, *target_locator, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
@@ -7469,7 +7456,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
       return html;
     }
 
-  next = params_value (params, "next");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
   reverse_lookup_only = params_value (params, "reverse_lookup_only");
@@ -7485,9 +7471,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (port_list_id, "Save Target", edit_target);
   CHECK_PARAM (target_credential, "Save Target", edit_target);
   CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
-
-  if (next == NULL)
-    next = "get_target";
 
   if (target_credential
       && strcmp (target_credential, "--")
@@ -9352,8 +9335,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             gsize *report_len, gchar **content_type, char **content_disposition,
             const char *extra_xml, int *error)
 {
-  char *report_encoded = NULL;
-  gchar *report_decoded = NULL;
   GString *xml, *commands_xml;
   entity_t entity;
   entity_t report_entity;
@@ -10066,6 +10047,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report_entity != NULL)
             {
               const char *extension, *requested_content_type;
+              char *report_encoded;
+              gchar *report_decoded;
               extension = entity_attribute (report_entity, "extension");
               requested_content_type = entity_attribute (report_entity,
                                                          "content_type");
@@ -10076,7 +10059,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                * when *report_len is zero. */
               if (report_decoded == NULL)
                 {
-                  report_decoded = (gchar *) g_strdup ("");
+                  report_decoded = g_strdup ("");
                   *report_len = 0;
                 }
               if (extension && requested_content_type && content_type
@@ -12030,9 +12013,6 @@ create_override_omp (credentials_t *credentials, params_t *params)
       if (task_id && (strcmp (task_id, "0") == 0))
         task_id = params_value (params, "override_task_uuid");
     }
-  else if (params_given (params, "override_task_id")
-           && strcmp (params_original_value (params, "override_task_id"), ""))
-    task_id = "";
   else
     task_id = "";
 
@@ -14182,16 +14162,17 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
       params_iterator_t iter;
       char *uuid;
       param_t *param;
-      gchar *base64;
       entity_t entity;
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &uuid, &param))
         {
-          base64 = param->value ?
-                    g_base64_encode ((guchar*) param->value,
-                                     strlen (param->value))
-                    : g_strdup("");
+          gchar *base64;
+          if (param->value)
+            base64 = g_base64_encode ((guchar*) param->value,
+                                      strlen (param->value));
+          else
+            base64 = g_strdup("");
           if (openvas_server_sendf_xml (session,
                                         "<modify_setting setting_id=\"%s\">"
                                         "<value>%s</value>"
@@ -14241,7 +14222,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   gchar *html;
   const char *lang, *text, *passwd, *status, *max;
-  gchar *lang_64, *text_64, *passwd_64, *max_64;
+  gchar *lang_64, *text_64, *max_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
@@ -14286,7 +14267,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (params_value (params, "enable"))
     {
       /* Send Password setting */
-      passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
+      gchar *passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
       if (openvas_server_sendf (&session,
                                 "<modify_setting>"
@@ -14746,7 +14727,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
   entity_t entity, response;
   gnutls_session_t session;
   int socket;
-  char *content = NULL, *content_64;
+  char *content = NULL;
   gchar *html;
   const char *format;
   time_t now;
@@ -14804,6 +14785,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
     *content_length = strlen (content);
   else
     {
+      char *content_64;
       entity = entity_child (response, "schema");
       if (entity == NULL)
         {
