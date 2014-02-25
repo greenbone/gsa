@@ -1,5 +1,10 @@
 2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task, html-create-user-form): Use --
+	as option value, for consistency.
+
+2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (main): Remove stray else that was hiding the Copyright
 	line with --version and --debug-tls.
 

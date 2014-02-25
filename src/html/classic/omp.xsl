@@ -4422,11 +4422,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:variable name="alert_id" select="value"/>
                   <xsl:choose>
                     <xsl:when test="string-length ($alert_id) &gt; 0">
-<!-- FIX val - - in new-task-alert-select -->
-                      <option value="0">--</option>
+                      <option value="--">--</option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="0" selected="1">--</option>
+                      <option value="--" selected="1">--</option>
                     </xsl:otherwise>
                   </xsl:choose>
                   <xsl:for-each select="$alerts">
@@ -4542,11 +4541,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:variable name="group_id" select="value"/>
                   <xsl:choose>
                     <xsl:when test="string-length ($group_id) &gt; 0">
-<!-- FIX val - - in new-task-group-select -->
-                      <option value="0">--</option>
+                      <option value="--">--</option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="0" selected="1">--</option>
+                      <option value="--" selected="1">--</option>
                     </xsl:otherwise>
                   </xsl:choose>
                   <xsl:for-each select="$groups">
@@ -27184,11 +27182,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:variable name="group_id" select="value"/>
                     <xsl:choose>
                       <xsl:when test="string-length ($group_id) &gt; 0">
-<!-- FIX? -->
-                        <option value="0">--</option>
+                        <option value="--">--</option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
+                        <option value="--" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:for-each select="$groups">
