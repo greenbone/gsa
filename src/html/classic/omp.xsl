@@ -9375,6 +9375,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
           <td valign="top" width="175">Hosts</td>
           <xsl:choose>
             <xsl:when test="not ($target-sources/target_locator)">
@@ -9513,12 +9519,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="radio" name="reverse_lookup_unify" value="0"
                        checked="1"/>No
               </label>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Comment (optional)</td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <xsl:if test="gsa:may-op ('get_port_lists')">
