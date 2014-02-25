@@ -1,5 +1,10 @@
 2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (main): Remove stray else that was hiding the Copyright
+	line with --version and --debug-tls.
+
+2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Show or hide dialog elements according to the availability of commands.
 
 	* src/gsad_omp.c (new_target): Only get credentials, locators and

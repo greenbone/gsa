@@ -4082,7 +4082,6 @@ main (int argc, char **argv)
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      else
       printf ("Copyright (C) 2010-2014 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
       printf
