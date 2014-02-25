@@ -1321,17 +1321,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="restore-icon">
   <xsl:param name="id"></xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp"
-          method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="restore"/>
-      <input type="hidden" name="target_id" value="{$id}"/>
-      <input type="image" src="/img/restore.png" alt="{gsa:i18n ('Restore', 'Trashcan')}"
-             name="Restore" value="Restore" title="{gsa:i18n ('Restore', 'Trashcan')}"/>
-    </form>
-  </div>
+  <xsl:if test="gsa:may-op ('restore')">
+    <div style="display: inline">
+      <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp"
+            method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="cmd" value="restore"/>
+        <input type="hidden" name="target_id" value="{$id}"/>
+        <input type="image" src="/img/restore.png" alt="{gsa:i18n ('Restore', 'Trashcan')}"
+               name="Restore" value="Restore" title="{gsa:i18n ('Restore', 'Trashcan')}"/>
+      </form>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="resume-icon">
@@ -1711,15 +1713,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
-<xsl:template name="user-tags-window">
+<xsl:template name="user-tags-window-checked">
   <xsl:param name="resource_type"/>
   <xsl:param name="resource_subtype"/>
-  <xsl:param name="resource_id" select="@id"/>
-  <xsl:param name="next" select="concat('get_',$resource_type)"/>
-  <xsl:param name="report_section" select="''"/>
-  <xsl:param name="title" select="concat(gsa:i18n('User Tags for', 'Tag Window'),' &quot;',name,'&quot;:')"/>
-  <xsl:param name="user_tags" select="user_tags" />
-  <xsl:param name="tag_names" select="../../get_tags_response"/>
+  <xsl:param name="resource_id"/>
+  <xsl:param name="next"/>
+  <xsl:param name="report_section"/>
+  <xsl:param name="title"/>
+  <xsl:param name="user_tags"/>
+  <xsl:param name="tag_names"/>
   <xsl:variable name="title_shortened">
     <xsl:choose>
       <xsl:when test="string-length($title) > 80">
@@ -1748,6 +1750,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
+          <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
             title=""
@@ -1875,6 +1878,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template name="user-tags-window">
+  <xsl:param name="resource_type"/>
+  <xsl:param name="resource_subtype"/>
+  <xsl:param name="resource_id" select="@id"/>
+  <xsl:param name="next" select="concat('get_',$resource_type)"/>
+  <xsl:param name="report_section" select="''"/>
+  <xsl:param name="title" select="concat(gsa:i18n('User Tags for', 'Tag Window'),' &quot;',name,'&quot;:')"/>
+  <xsl:param name="user_tags" select="user_tags" />
+  <xsl:param name="tag_names" select="../../get_tags_response"/>
+  <xsl:if test="gsa:may-op ('get_tags')">
+    <xsl:call-template name="user-tags-window-checked">
+      <xsl:with-param name="resource_type" select="$resource_type"/>
+      <xsl:with-param name="resource_subtype" select="$resource_subtype"/>
+      <xsl:with-param name="resource_id" select="$resource_id"/>
+      <xsl:with-param name="next" select="$next"/>
+      <xsl:with-param name="report_section" select="$report_section"/>
+      <xsl:with-param name="title" select="$title"/>
+      <xsl:with-param name="user_tags" select="$user_tags"/>
+      <xsl:with-param name="tag_names" select="$tag_names"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="tag" mode="for_resource">
@@ -3720,7 +3746,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:call-template name="wizard-icon"/>
+      <xsl:if test="gsa:may-op ('run_wizard')">
+        <xsl:call-template name="wizard-icon"/>
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="$type = 'role'"/>
         <xsl:when test="$type = 'report'"/>
@@ -4298,6 +4326,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <xsl:if test="not (gsa:may-op ('get_alerts'))">
+        <input type="hidden" name="alerts" value="1"/>
+        <input type="hidden" name="alert_id_optional:1" value="--"/>
+      </xsl:if>
+      <xsl:if test="not (gsa:may-op ('get_schedules'))">
+        <input type="hidden" name="schedule_id_optional" value="--"/>
+      </xsl:if>
+      <xsl:if test="not (gsa:may-op ('get_slaves'))">
+        <input type="hidden" name="slave_id_optional" value="--"/>
+      </xsl:if>
+      <xsl:if test="not (gsa:may-op ('get_groups'))">
+        <input type="hidden" name="groups" value="1"/>
+        <input type="hidden" name="group_id_optional:1" value="--"/>
+      </xsl:if>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
          <td valign="top" width="135"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -4369,25 +4411,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="text" name="source_iface" value="{/envelope/params/source_iface}"/>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-          <td>
-            <xsl:variable name="alerts"
-                          select="get_alerts_response/alert"/>
-            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']">
-              <select name="{name}">
-                <xsl:variable name="alert_id" select="value"/>
+        <xsl:if test="gsa:may-op ('get_alerts')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <xsl:variable name="alerts"
+                            select="get_alerts_response/alert"/>
+              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']">
+                <select name="{name}">
+                  <xsl:variable name="alert_id" select="value"/>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($alert_id) &gt; 0">
+<!-- FIX val - - in new-task-alert-select -->
+                      <option value="0">--</option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="0" selected="1">--</option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:for-each select="$alerts">
+                    <xsl:choose>
+                      <xsl:when test="@id = $alert_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:for-each>
+              <xsl:variable name="count"
+                            select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
+              <xsl:call-template name="new-task-alert-select">
+                <xsl:with-param name="alerts" select="get_alerts_response"/>
+                <xsl:with-param name="count" select="/envelope/params/alerts - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/alerts)">
+                  <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="alerts" value="{1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <!-- Force the Create Task button to be the default. -->
+              <input style="position: absolute; left: -100%"
+                     type="submit" name="submit" value="Create Task"/>
+              <input type="submit" name="submit_plus" value="+"/>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_schedules')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <select name="schedule_id_optional">
+                <xsl:variable name="schedule_id"
+                              select="/envelope/params/schedule_id_optional"/>
                 <xsl:choose>
-                  <xsl:when test="string-length ($alert_id) &gt; 0">
-                    <option value="0">--</option>
+                  <xsl:when test="string-length ($schedule_id) &gt; 0">
+                    <option value="--">--</option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
+                    <option value="--" selected="1">--</option>
                   </xsl:otherwise>
                 </xsl:choose>
-                <xsl:for-each select="$alerts">
+                <xsl:for-each select="get_schedules_response/schedule">
                   <xsl:choose>
-                    <xsl:when test="@id = $alert_id">
+                    <xsl:when test="@id = $schedule_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
@@ -4396,85 +4491,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:for-each>
               </select>
-              <br/>
-            </xsl:for-each>
-            <xsl:variable name="count"
-                          select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
-            <xsl:call-template name="new-task-alert-select">
-              <xsl:with-param name="alerts" select="get_alerts_response"/>
-              <xsl:with-param name="count" select="/envelope/params/alerts - $count"/>
-              <xsl:with-param name="position" select="$count + 1"/>
-            </xsl:call-template>
-
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/alerts)">
-                <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="alerts" value="{1}"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <!-- Force the Create Task button to be the default. -->
-            <input style="position: absolute; left: -100%"
-                   type="submit" name="submit" value="Create Task"/>
-            <input type="submit" name="submit_plus" value="+"/>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-          <td>
-            <select name="schedule_id_optional">
-              <xsl:variable name="schedule_id"
-                            select="/envelope/params/schedule_id_optional"/>
-              <xsl:choose>
-                <xsl:when test="string-length ($schedule_id) &gt; 0">
-                  <option value="--">--</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="--" selected="1">--</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:for-each select="get_schedules_response/schedule">
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_slaves')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <select name="slave_id_optional">
+                <xsl:variable name="slave_id">
+                  <xsl:value-of select="/envelope/params/slave_id_optional"/>
+                </xsl:variable>
                 <xsl:choose>
-                  <xsl:when test="@id = $schedule_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  <xsl:when test="string-length ($slave_id) &gt; 0">
+                    <option value="--">--</option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                    <option value="--" selected="1">--</option>
                   </xsl:otherwise>
                 </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-          <td>
-            <select name="slave_id_optional">
-              <xsl:variable name="slave_id">
-                <xsl:value-of select="/envelope/params/slave_id_optional"/>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="string-length ($slave_id) &gt; 0">
-                  <option value="--">--</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="--" selected="1">--</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:for-each select="get_slaves_response/slave">
-                <xsl:choose>
-                  <xsl:when test="@id = $slave_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </td>
-        </tr>
+                <xsl:for-each select="get_slaves_response/slave">
+                  <xsl:choose>
+                    <xsl:when test="@id = $slave_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Observers', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
           <td>
@@ -4482,54 +4531,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{gsa:param-or ('observers', '')}"/>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-          <td>
-            <xsl:variable name="groups"
-                          select="get_groups_response/group"/>
-            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
-              <select name="{name}">
-                <xsl:variable name="group_id" select="value"/>
-                <xsl:choose>
-                  <xsl:when test="string-length ($group_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="$groups">
+        <xsl:if test="gsa:may-op ('get_groups')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <xsl:variable name="groups"
+                            select="get_groups_response/group"/>
+              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
+                <select name="{name}">
+                  <xsl:variable name="group_id" select="value"/>
                   <xsl:choose>
-                    <xsl:when test="@id = $group_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    <xsl:when test="string-length ($group_id) &gt; 0">
+<!-- FIX val - - in new-task-group-select -->
+                      <option value="0">--</option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                      <option value="0" selected="1">--</option>
                     </xsl:otherwise>
                   </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-            </xsl:for-each>
-            <xsl:variable name="count"
-                          select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
-            <xsl:call-template name="new-task-group-select">
-              <xsl:with-param name="groups" select="get_groups_response"/>
-              <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
-              <xsl:with-param name="position" select="$count + 1"/>
-            </xsl:call-template>
+                  <xsl:for-each select="$groups">
+                    <xsl:choose>
+                      <xsl:when test="@id = $group_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:for-each>
+              <xsl:variable name="count"
+                            select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+              <xsl:call-template name="new-task-group-select">
+                <xsl:with-param name="groups" select="get_groups_response"/>
+                <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
 
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/groups)">
-                <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="groups" value="{1}"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <input type="submit" name="submit_plus_group" value="+"/>
-          </td>
-        </tr>
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/groups)">
+                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="groups" value="{1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <input type="submit" name="submit_plus_group" value="+"/>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Add results to Asset Management', 'Task Window')"/></td>
           <td>
@@ -5735,6 +5787,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0') and (gsa:alert-in-trash () = 0)">
           <xsl:call-template name="restore-icon">
             <xsl:with-param name="id" select="@id"/>
@@ -6779,6 +6832,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_alert"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <xsl:if test="not (gsa:may-op ('get_report_formats'))">
+          <input type="hidden" name="filter_id" value="0"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="145">Name</td>
@@ -6892,17 +6948,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           </label>
                         </td>
                       </tr>
-                      <tr>
-                        <td colspan="3" valign="top">
-                          <label>
-                            <input type="radio" name="method_data:notice" value="0"/>
-                            Include report
-                          </label>
-                          <select name="method_data:notice_report_format">
-                            <xsl:for-each select="$report-formats/report_format">
-                              <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                      <xsl:if test="gsa:may-op ('get_report_formats')">
+                        <tr>
+                          <td colspan="3" valign="top">
+                            <label>
+                              <input type="radio" name="method_data:notice" value="0"/>
+                              Include report
+                            </label>
+                            <select name="method_data:notice_report_format">
+                              <xsl:for-each select="$report-formats/report_format">
+                                <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                  <xsl:choose>
+                                    <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                      <option value="{@id}" selected="1">
+                                        <xsl:value-of select="name"/>
+                                      </option>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                      <option value="{@id}">
+                                        <xsl:value-of select="name"/>
+                                      </option>
+                                    </xsl:otherwise>
+                                  </xsl:choose>
+                                </xsl:if>
+                              </xsl:for-each>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" valign="top">
+                            <label>
+                              <input type="radio" name="method_data:notice" value="2"/>
+                              Attach report
+                            </label>
+                            <select name="method_data:notice_attach_format">
+                              <xsl:for-each select="$report-formats/report_format">
                                 <xsl:choose>
-                                  <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                  <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
                                     <option value="{@id}" selected="1">
                                       <xsl:value-of select="name"/>
                                     </option>
@@ -6913,35 +6995,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                     </option>
                                   </xsl:otherwise>
                                 </xsl:choose>
-                              </xsl:if>
-                            </xsl:for-each>
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3" valign="top">
-                          <label>
-                            <input type="radio" name="method_data:notice" value="2"/>
-                            Attach report
-                          </label>
-                          <select name="method_data:notice_attach_format">
-                            <xsl:for-each select="$report-formats/report_format">
-                              <xsl:choose>
-                                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                                  <option value="{@id}" selected="1">
-                                    <xsl:value-of select="name"/>
-                                  </option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}">
-                                    <xsl:value-of select="name"/>
-                                  </option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </select>
-                        </td>
-                      </tr>
+                              </xsl:for-each>
+                            </select>
+                          </td>
+                        </tr>
+                      </xsl:if>
                     </table>
                   </td>
                 </tr>
@@ -7066,17 +7124,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr>
-            <td valign="top" width="145">Report Result Filter (optional)</td>
-            <td colspan="2">
-              <select name="filter_id">
-                <option value="0">--</option>
-                <xsl:for-each select="$filters/filter">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
+          <xsl:if test="gsa:may-op ('get_report_formats')">
+            <tr>
+              <td valign="top" width="145">Report Result Filter (optional)</td>
+              <td colspan="2">
+                <select name="filter_id">
+                  <option value="0">--</option>
+                  <xsl:for-each select="$filters/filter">
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:for-each>
+                </select>
+              </td>
+            </tr>
+          </xsl:if>
           <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Alert"/>
@@ -7797,6 +7857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="filter/trash = '1'">
           <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore', 'Trashcan')}"
                title="Filter must be restored first"
@@ -9293,6 +9354,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
+        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+          <input type="hidden" name="lsc_credential_id" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+          <input type="hidden" name="lsc_credential_id" value="--"/>
+          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_port_lists'))">
+          <!-- Use port list "OpenVAS Default". -->
+          <input type="hidden"
+                 name="port_list_id"
+                 value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name
@@ -9449,35 +9523,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <tr>
-            <td valign="top" width="175">Port List</td>
-            <td>
-              <select name="port_list_id">
-                <xsl:apply-templates select="$port-lists" mode="select"/>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">SSH Credential (optional)</td>
-            <td>
-              <select name="lsc_credential_id">
-                <option value="--">--</option>
-                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
-              </select>
-              on port
-              <input type="text" name="port" value="22" size="6"
-                     maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">SMB Credential (optional)</td>
-            <td>
-              <select name="lsc_smb_credential_id">
-                <option value="--">--</option>
-                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
-              </select>
-            </td>
-          </tr>
+          <xsl:if test="gsa:may-op ('get_port_lists')">
+            <tr>
+              <td valign="top" width="175">Port List</td>
+              <td>
+                <select name="port_list_id">
+                  <xsl:apply-templates select="$port-lists" mode="select"/>
+                </select>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+            <tr>
+              <td valign="top" width="175">SSH Credential (optional)</td>
+              <td>
+                <select name="lsc_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                </select>
+                on port
+                <input type="text" name="port" value="22" size="6"
+                       maxlength="400"/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" width="175">SMB Credential (optional)</td>
+              <td>
+                <select name="lsc_smb_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                </select>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td>Alive Test:</td>
             <td>
@@ -10402,6 +10480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or port_list/trash = '1'">
           <xsl:variable name="resources_string">
             <xsl:if test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1'">Credentials</xsl:if>
@@ -27001,6 +27080,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_user"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <xsl:if test="not (gsa:may-op ('get_roles'))">
+          <input type="hidden" name="role_id_optional:1" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_groups'))">
+          <input type="hidden" name="group_id_optional:1" value="--"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125">Login Name</td>
@@ -27016,44 +27101,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="40"/>
             </td>
           </tr>
-          <tr class="odd">
-            <td>Roles (optional)</td>
-            <td>
-              <xsl:variable name="roles"
-                            select="get_roles_response/role"/>
-              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']">
-                <select name="{name}">
-                  <xsl:variable name="role_id" select="value"/>
-                  <xsl:choose>
-                    <xsl:when test="string-length ($role_id) &gt; 0">
-                      <option value="0">--</option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="0" selected="1">--</option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:for-each select="$roles">
+          <xsl:if test="gsa:may-op ('get_roles')">
+            <tr class="odd">
+              <td>Roles (optional)</td>
+              <td>
+                <xsl:variable name="roles"
+                              select="get_roles_response/role"/>
+                <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']">
+                  <select name="{name}">
+                    <xsl:variable name="role_id" select="value"/>
                     <xsl:choose>
-                      <xsl:when test="@id = $role_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      <xsl:when test="string-length ($role_id) &gt; 0">
+                        <option value="0">--</option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                        <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <br/>
-              </xsl:for-each>
-              <xsl:variable name="count"
-                            select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
-              <xsl:choose>
-                <xsl:when test="$count = 0">
-                  <select name="role_id_optional:1">
-                    <option value="--">--</option>
-                    <xsl:for-each select="get_roles_response/role">
+                    <xsl:for-each select="$roles">
                       <xsl:choose>
-                        <xsl:when test="name = 'User'">
+                        <xsl:when test="@id = $role_id">
                           <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -27062,81 +27129,104 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:choose>
                     </xsl:for-each>
                   </select>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="new-user-role-select">
-                    <xsl:with-param name="roles" select="get_roles_response"/>
-                    <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
-                    <xsl:with-param name="position" select="$count + 1"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
+                  <br/>
+                </xsl:for-each>
+                <xsl:variable name="count"
+                              select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
+                <xsl:choose>
+                  <xsl:when test="$count = 0">
+                    <select name="role_id_optional:1">
+                      <option value="--">--</option>
+                      <xsl:for-each select="get_roles_response/role">
+                        <xsl:choose>
+                          <xsl:when test="name = 'User'">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="new-user-role-select">
+                      <xsl:with-param name="roles" select="get_roles_response"/>
+                      <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
+                      <xsl:with-param name="position" select="$count + 1"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
 
-              <xsl:choose>
-                <xsl:when test="string-length (/envelope/params/roles)">
-                  <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="roles" value="{1}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <!-- Force the Create User button to be the default. -->
-              <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="Create User"/>
-              <input type="submit" name="submit_plus_role" value="+"/>
-            </td>
-          </tr>
-          <tr class="even">
-            <td>Groups (optional)</td>
-            <td>
-              <xsl:variable name="groups"
-                            select="get_groups_response/group"/>
-              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
-                <select name="{name}">
-                  <xsl:variable name="group_id" select="value"/>
-                  <xsl:choose>
-                    <xsl:when test="string-length ($group_id) &gt; 0">
-                      <option value="0">--</option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="0" selected="1">--</option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:for-each select="$groups">
+                <xsl:choose>
+                  <xsl:when test="string-length (/envelope/params/roles)">
+                    <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="roles" value="{1}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <!-- Force the Create User button to be the default. -->
+                <input style="position: absolute; left: -100%"
+                       type="submit" name="submit" value="Create User"/>
+                <input type="submit" name="submit_plus_role" value="+"/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="gsa:may-op ('get_groups')">
+            <tr class="even">
+              <td>Groups (optional)</td>
+              <td>
+                <xsl:variable name="groups"
+                              select="get_groups_response/group"/>
+                <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
+                  <select name="{name}">
+                    <xsl:variable name="group_id" select="value"/>
                     <xsl:choose>
-                      <xsl:when test="@id = $group_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      <xsl:when test="string-length ($group_id) &gt; 0">
+<!-- FIX? -->
+                        <option value="0">--</option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                        <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <br/>
-              </xsl:for-each>
-              <xsl:variable name="count"
-                            select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
-              <xsl:call-template name="new-user-group-select">
-                <xsl:with-param name="groups" select="get_groups_response"/>
-                <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
-                <xsl:with-param name="position" select="$count + 1"/>
-              </xsl:call-template>
+                    <xsl:for-each select="$groups">
+                      <xsl:choose>
+                        <xsl:when test="@id = $group_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <br/>
+                </xsl:for-each>
+                <xsl:variable name="count"
+                              select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+                <xsl:call-template name="new-user-group-select">
+                  <xsl:with-param name="groups" select="get_groups_response"/>
+                  <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+                  <xsl:with-param name="position" select="$count + 1"/>
+                </xsl:call-template>
 
-              <xsl:choose>
-                <xsl:when test="string-length (/envelope/params/groups)">
-                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="groups" value="{1}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <!-- Force the Create User button to be the default. -->
-              <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="Create User"/>
-              <input type="submit" name="submit_plus_group" value="+"/>
-            </td>
-          </tr>
+                <xsl:choose>
+                  <xsl:when test="string-length (/envelope/params/groups)">
+                    <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="groups" value="{1}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <!-- Force the Create User button to be the default. -->
+                <input style="position: absolute; left: -100%"
+                       type="submit" name="submit" value="Create User"/>
+                <input type="submit" name="submit_plus_group" value="+"/>
+              </td>
+            </tr>
+          </xsl:if>
           <tr class="odd">
             <td valign="top">Host Access</td>
             <td>

@@ -1,3 +1,20 @@
+2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Show or hide dialog elements according to the availability of commands.
+
+	* src/gsad_omp.c (new_target): Only get credentials, locators and
+	port lists if the relevant commands are available.
+
+	* src/html/classic/omp.xsl (restore-icon): Check if command available.
+	(user-tags-window-checked): New function.  From user-tags-window.
+	(user-tags-window): Check if command is available.
+	(list-window): Check command for wizard icon.
+	(new-task, html-create-alert-form, html-create-target-form)
+	(html-create-user-form): Hide optional fields according to availability
+	of commands.
+	(task [trash], alert [trash], target [trash]): Explicitly check for
+	restore command.
+
 2014-02-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (send_redirect_header): Use body variable for html
