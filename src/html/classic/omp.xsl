@@ -9555,7 +9555,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:if>
           <tr>
-            <td>Alive Test:</td>
+            <td>Alive Test</td>
             <td>
               <select name="alive_tests">
                 <option value="Scan Config Default">Scan Config Default</option>
@@ -10178,7 +10178,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <tr>
-            <td>Alive Test:</td>
+            <td>Alive Test</td>
             <td>
               <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
               <select name="alive_tests">

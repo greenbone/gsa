@@ -1,5 +1,10 @@
 2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Remove colon from Alive Test for consistency.
+
+2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-target-form): Move Comment up
 	to match other pages.
 
