@@ -79,8 +79,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- 1.3 Error box -->
   <!-- TODO -->
 
-  <!-- 1.4 Login screen -->
-  <!-- TODO -->
+  <!-- 1.4 Login page -->
+  <grp>
+    <ctxt>Login</ctxt>
+    <!-- Form fields -->
+    <msg>
+      <id>Username</id>
+      <str>Benutzername</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
+    <msg>
+      <id>Login</id>
+      <str>Anmelden</str>
+    </msg>
+    <!-- Messages -->
+    <msg>
+      <id>Successfully logged out.</id>
+      <str>Erfolgreich abgemeldet.</str>
+    </msg>
+    <msg>
+      <id>Already logged out.</id>
+      <str>Bereits abgemeldet.</str>
+    </msg>
+    <msg>
+      <id>Logged out. OMP service is down.</id>
+      <str>Abgemeldet. OMP-Dienst nicht erreichbar.</str>
+    </msg>
+    <msg>
+      <id>Login failed.</id>
+      <str>Login fehlgeschlagen.</str>
+    </msg>
+    <msg>
+      <id>Login failed.  OMP service is down..</id>
+      <str>Login fehlgeschlagen.  OMP-Dienst nicht erreichbar.</str>
+    </msg>
+    <msg>
+      <id>Login failed.  Error during authentication.</id>
+      <str>Login fehlgeschlagen.  Fehler während Authentifizierung.</str>
+    </msg>
+    <msg>
+      <id>Session has expired.  Please login again.</id>
+      <str>Sitzung ist abgelaufen.  Bitte melden Sie sich erneut an.</str>
+    </msg>
+    <msg>
+      <id>Cookie missing or bad..  Please login again.</id>
+      <str>Cookie fehlt oder ist fehlerhaft.  Bitte melden Sie sich erneut an.</str>
+    </msg>
+    <msg>
+      <id>Token missing or bad..  Please login again.</id>
+      <str>Token fehlt oder ist fehlerhaft.  Bitte melden Sie sich erneut an.</str>
+    </msg>
+  </grp>
 
   <!-- 2        Resource display common strings -->
   <!-- 2.1      Pagination -->

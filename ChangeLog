@@ -1,3 +1,11 @@
+2014-02-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (i18n_language): Also try to get language
+	from login_page.
+	(login_page): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for login page.
+
 2014-02-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Show or hide edit dialog elements according to the availability of

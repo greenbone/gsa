@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- GLOBAL VARIABLES -->
 <!-- language code, needed where /envelope is not available -->
-<xsl:variable name="i18n_language" select="substring(/envelope/i18n, 1, 2)"/>
+<xsl:variable name="i18n_language" select="substring((/envelope | /login_page)/i18n, 1, 2)"/>
 
 <xsl:variable name="i18n_po_path">
   <xsl:choose>
@@ -1951,7 +1951,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window_part_content">
         <img src="/img/gsa_splash.png" alt="" />
         <center>
-          <div style="color: red"><xsl:value-of select="message"/></div>
+          <div style="color: red"><xsl:value-of select="gsa:i18n (message, 'Login')"/></div>
           <form action="/omp" method="post" enctype="multipart/formdata">
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
@@ -1964,15 +1964,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <table>
               <tr>
-                <td>Username</td>
+                <td><xsl:value-of select="gsa:i18n ('Username', 'Login')"/></td>
                 <td><input type="text" autocomplete="off" name="login" value="" autofocus="autofocus"/></td>
               </tr>
               <tr>
-                <td>Password</td>
+                <td><xsl:value-of select="gsa:i18n ('Password', 'Login')"/></td>
                 <td><input type="password" autocomplete="off" name="password" value="" /></td>
               </tr>
             </table>
-            <div style="text-align:center;float:center;"><input type="submit" value="Login" /></div>
+            <div style="text-align:center;float:center;"><input type="submit" value="{gsa:i18n ('Login', 'Login')}" /></div>
             <br clear="all" />
           </form>
         </center>
