@@ -752,62 +752,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="0"/>
         <xsl:otherwise>
           <div style="float: right">
-            <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
-              <div style="display: inline; padding: 2px; vertical-align:middle;">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="create_filter"/>
-                <input type="hidden" name="caller" value="{/envelope/caller}"/>
-                <input type="hidden" name="comment" value=""/>
-                <input type="hidden" name="term" value="{filters/term}"/>
-                <input type="hidden" name="optional_resource_type" value="{$type}"/>
-                <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
-                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                <xsl:for-each select="exslt:node-set($extra_params)/param">
-                  <input type="hidden" name="{name}" value="{value}"/>
-                </xsl:for-each>
-                <input type="text" name="name" value="" size="10"
-                       maxlength="80" style="vertical-align:middle"/>
-                <input type="image"
-                       name="New Filter"
-                       src="/img/new.png"
-                       alt="New Filter"
-                       title="{gsa:i18n ('New ', 'Filter Box')}{gsa:i18n (concat (gsa:type-name($type), ' Filter'), gsa:type-name($type))}{gsa:i18n (' from current term', 'Filter Box')}"
-                       style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-              </div>
-            </form>
-            <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
-              <div style="display: inline; padding: 2px; vertical-align:middle;">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-                <xsl:for-each select="exslt:node-set($extra_params)/param">
-                  <input type="hidden" name="{name}" value="{value}"/>
-                </xsl:for-each>
-                <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
-                  <option value="--">--</option>
-                  <xsl:variable name="id" select="filters/@id"/>
-                  <xsl:for-each select="../filters/get_filters_response/filter">
-                    <xsl:choose>
-                      <xsl:when test="@id = $id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
+            <xsl:if test="gsa:may-op ('create_filter')">
+              <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+                <div style="display: inline; padding: 2px; vertical-align:middle;">
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                  <input type="hidden" name="cmd" value="create_filter"/>
+                  <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                  <input type="hidden" name="comment" value=""/>
+                  <input type="hidden" name="term" value="{filters/term}"/>
+                  <input type="hidden" name="optional_resource_type" value="{$type}"/>
+                  <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <xsl:for-each select="exslt:node-set($extra_params)/param">
+                    <input type="hidden" name="{name}" value="{value}"/>
                   </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="Switch Filter"
-                       title="{gsa:i18n ('Switch Filter', 'Filter Box')}"
-                       src="/img/refresh.png"
-                       alt="{gsa:i18n ('Switch', 'Filter Box')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-                <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Filters', 'Filter Box')}">
-                  <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                       src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter Box')}"/>
-                </a>
-              </div>
-            </form>
+                  <input type="text" name="name" value="" size="10"
+                         maxlength="80" style="vertical-align:middle"/>
+                  <input type="image"
+                         name="New Filter"
+                         src="/img/new.png"
+                         alt="New Filter"
+                         title="{gsa:i18n ('New ', 'Filter Box')}{gsa:i18n (concat (gsa:type-name($type), ' Filter'), gsa:type-name($type))}{gsa:i18n (' from current term', 'Filter Box')}"
+                         style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                </div>
+              </form>
+            </xsl:if>
+            <xsl:if test="gsa:may-op ('get_filters')">
+              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+                <div style="display: inline; padding: 2px; vertical-align:middle;">
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                  <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+                  <xsl:for-each select="exslt:node-set($extra_params)/param">
+                    <input type="hidden" name="{name}" value="{value}"/>
+                  </xsl:for-each>
+                  <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
+                    <option value="--">--</option>
+                    <xsl:variable name="id" select="filters/@id"/>
+                    <xsl:for-each select="../filters/get_filters_response/filter">
+                      <xsl:choose>
+                        <xsl:when test="@id = $id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <input type="image"
+                         name="Switch Filter"
+                         title="{gsa:i18n ('Switch Filter', 'Filter Box')}"
+                         src="/img/refresh.png"
+                         alt="{gsa:i18n ('Switch', 'Filter Box')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                  <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+                     title="{gsa:i18n ('Filters', 'Filter Box')}">
+                    <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                         src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter Box')}"/>
+                  </a>
+                </div>
+              </form>
+            </xsl:if>
           </div>
         </xsl:otherwise>
       </xsl:choose>
@@ -3464,7 +3468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
-  <xsl:if test="target/@id=''">
+  <xsl:if test="target/@id='' and gsa:may-op ('create_report')">
     <br/>
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
@@ -4924,6 +4928,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <xsl:if test="not (gsa:may-op ('get_alerts'))">
+          <input type="hidden" name="alerts" value="1"/>
+          <input type="hidden" name="alert_id_optional:1" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_schedules'))">
+          <input type="hidden" name="schedule_id" value="0"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_slaves'))">
+          <input type="hidden" name="slave_id" value="0"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_groups'))">
+          <input type="hidden" name="groups" value="1"/>
+          <input type="hidden" name="group_id_optional:1" value="--"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
            <td valign="top" width="185"><xsl:value-of select="gsa:i18n ('Name', 'Task Window')"/></td>
@@ -5076,169 +5094,175 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
                 </td>
               </tr>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                <td>
-                  <xsl:variable name="alerts"
-                                select="commands_response/get_alerts_response/alert"/>
-                  <xsl:choose>
-                    <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']) &gt; 0">
-                      <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']/value">
-                        <select name="alert_id_optional:{position ()}">
-                          <xsl:variable name="alert_id" select="text ()"/>
-                          <xsl:choose>
-                            <xsl:when test="string-length ($alert_id) &gt; 0">
-                              <option value="0">--</option>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <option value="0" selected="1">--</option>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                          <xsl:for-each select="$alerts">
-                            <xsl:choose>
-                              <xsl:when test="@id = $alert_id">
-                                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <option value="{@id}"><xsl:value-of select="name"/></option>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                          </xsl:for-each>
-                        </select>
-                        <br/>
-                      </xsl:for-each>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:for-each select="commands_response/get_tasks_response/task/alert">
-                        <select name="alert_id_optional:{position ()}">
-                          <xsl:variable name="alert_id" select="@id"/>
-                          <xsl:choose>
-                            <xsl:when test="string-length ($alert_id) &gt; 0">
-                              <option value="0">--</option>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <option value="0" selected="1">--</option>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                          <xsl:for-each select="$alerts">
-                            <xsl:choose>
-                              <xsl:when test="@id = $alert_id">
-                                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <option value="{@id}"><xsl:value-of select="name"/></option>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                          </xsl:for-each>
-                        </select>
-                        <br/>
-                      </xsl:for-each>
-                    </xsl:otherwise>
-                  </xsl:choose>
-
-                  <xsl:variable name="count">
-                    <xsl:variable name="params"
-                                  select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
+              <xsl:if test="gsa:may-op ('get_alerts')">
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td>
+                    <xsl:variable name="alerts"
+                                  select="commands_response/get_alerts_response/alert"/>
                     <xsl:choose>
-                      <xsl:when test="$params &gt; 0">
-                        <xsl:value-of select="$params"/>
+                      <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']) &gt; 0">
+                        <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']/value">
+                          <select name="alert_id_optional:{position ()}">
+                            <xsl:variable name="alert_id" select="text ()"/>
+                            <xsl:choose>
+                              <xsl:when test="string-length ($alert_id) &gt; 0">
+                                <option value="0">--</option>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <option value="0" selected="1">--</option>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:for-each select="$alerts">
+                              <xsl:choose>
+                                <xsl:when test="@id = $alert_id">
+                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
+                          </select>
+                          <br/>
+                        </xsl:for-each>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
+                        <xsl:for-each select="commands_response/get_tasks_response/task/alert">
+                          <select name="alert_id_optional:{position ()}">
+                            <xsl:variable name="alert_id" select="@id"/>
+                            <xsl:choose>
+                              <xsl:when test="string-length ($alert_id) &gt; 0">
+                                <option value="0">--</option>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <option value="0" selected="1">--</option>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:for-each select="$alerts">
+                              <xsl:choose>
+                                <xsl:when test="@id = $alert_id">
+                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
+                          </select>
+                          <br/>
+                        </xsl:for-each>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:variable>
-                  <xsl:call-template name="new-task-alert-select">
-                    <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
-                    <xsl:with-param name="count" select="alerts - $count"/>
-                    <xsl:with-param name="position" select="$count + 1"/>
-                  </xsl:call-template>
 
-                  <!-- Force the Create Task button to be the default. -->
-                  <input style="position: absolute; left: -100%"
-                         type="submit" name="submit" value="Create Task"/>
-                  <input type="submit" name="submit_plus" value="+"/>
-
-                  <xsl:choose>
-                    <xsl:when test="string-length (/envelope/params/alerts)">
-                      <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="hidden" name="alerts" value="{$count + 1}"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                <td>
-                  <select name="schedule_id">
-                    <xsl:variable name="schedule_id">
+                    <xsl:variable name="count">
+                      <xsl:variable name="params"
+                                    select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
                       <xsl:choose>
-                        <xsl:when test="string-length (/envelope/params/schedule_id) &gt; 0">
-                          <xsl:value-of select="/envelope/params/schedule_id"/>
+                        <xsl:when test="$params &gt; 0">
+                          <xsl:value-of select="$params"/>
                         </xsl:when>
                         <xsl:otherwise>
-                          <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+                          <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
                         </xsl:otherwise>
                       </xsl:choose>
                     </xsl:variable>
+                    <xsl:call-template name="new-task-alert-select">
+                      <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
+                      <xsl:with-param name="count" select="alerts - $count"/>
+                      <xsl:with-param name="position" select="$count + 1"/>
+                    </xsl:call-template>
+
+                    <!-- Force the Create Task button to be the default. -->
+                    <input style="position: absolute; left: -100%"
+                           type="submit" name="submit" value="Create Task"/>
+                    <input type="submit" name="submit_plus" value="+"/>
+
                     <xsl:choose>
-                      <xsl:when test="string-length ($schedule_id) &gt; 0">
-                        <option value="0">--</option>
+                      <xsl:when test="string-length (/envelope/params/alerts)">
+                        <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
+                        <input type="hidden" name="alerts" value="{$count + 1}"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="commands_response/get_schedules_response/schedule">
+                  </td>
+                </tr>
+              </xsl:if>
+              <xsl:if test="gsa:may-op ('get_schedules')">
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td>
+                    <select name="schedule_id">
+                      <xsl:variable name="schedule_id">
+                        <xsl:choose>
+                          <xsl:when test="string-length (/envelope/params/schedule_id) &gt; 0">
+                            <xsl:value-of select="/envelope/params/schedule_id"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="@id = $schedule_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($schedule_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                <td>
-                  <select name="slave_id">
-                    <xsl:variable name="slave_id">
+                      <xsl:for-each select="commands_response/get_schedules_response/schedule">
+                        <xsl:choose>
+                          <xsl:when test="@id = $schedule_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
+              <xsl:if test="gsa:may-op ('get_slaves')">
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td>
+                    <select name="slave_id">
+                      <xsl:variable name="slave_id">
+                        <xsl:choose>
+                          <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
+                            <xsl:value-of select="/envelope/params/slave_id"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
-                          <xsl:value-of select="/envelope/params/slave_id"/>
+                        <xsl:when test="string-length ($slave_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:variable>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($slave_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="commands_response/get_slaves_response/slave">
-                      <xsl:choose>
-                        <xsl:when test="@id = $slave_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
+                      <xsl:for-each select="commands_response/get_slaves_response/slave">
+                        <xsl:choose>
+                          <xsl:when test="@id = $slave_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
           <tr>
@@ -5248,96 +5272,98 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{gsa:param-or ('observers', commands_response/get_tasks_response/task/observers/text())}"/>
             </td>
           </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-            <td>
-              <xsl:variable name="groups"
-                            select="commands_response/get_groups_response/group"/>
-              <xsl:choose>
-                <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']) &gt; 0">
-                  <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']/value">
-                    <select name="group_id_optional:{position ()}">
-                      <xsl:variable name="group_id" select="text ()"/>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($group_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="$groups">
-                        <xsl:choose>
-                          <xsl:when test="@id = $group_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <br/>
-                  </xsl:for-each>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:for-each select="commands_response/get_tasks_response/task/observers/group">
-                    <select name="group_id_optional:{position ()}">
-                      <xsl:variable name="group_id" select="@id"/>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($group_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="$groups">
-                        <xsl:choose>
-                          <xsl:when test="@id = $group_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <br/>
-                  </xsl:for-each>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:variable name="count">
-                <xsl:variable name="params"
-                              select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+          <xsl:if test="gsa:may-op ('get_groups')">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+              <td>
+                <xsl:variable name="groups"
+                              select="commands_response/get_groups_response/group"/>
                 <xsl:choose>
-                  <xsl:when test="$params &gt; 0">
-                    <xsl:value-of select="$params"/>
+                  <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']) &gt; 0">
+                    <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']/value">
+                      <select name="group_id_optional:{position ()}">
+                        <xsl:variable name="group_id" select="text ()"/>
+                        <xsl:choose>
+                          <xsl:when test="string-length ($group_id) &gt; 0">
+                            <option value="0">--</option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0" selected="1">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:for-each select="$groups">
+                          <xsl:choose>
+                            <xsl:when test="@id = $group_id">
+                              <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="{@id}"><xsl:value-of select="name"/></option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </xsl:for-each>
+                      </select>
+                      <br/>
+                    </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="count (commands_response/get_tasks_response/task/observers/group)"/>
+                    <xsl:for-each select="commands_response/get_tasks_response/task/observers/group">
+                      <select name="group_id_optional:{position ()}">
+                        <xsl:variable name="group_id" select="@id"/>
+                        <xsl:choose>
+                          <xsl:when test="string-length ($group_id) &gt; 0">
+                            <option value="0">--</option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0" selected="1">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:for-each select="$groups">
+                          <xsl:choose>
+                            <xsl:when test="@id = $group_id">
+                              <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="{@id}"><xsl:value-of select="name"/></option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </xsl:for-each>
+                      </select>
+                      <br/>
+                    </xsl:for-each>
                   </xsl:otherwise>
                 </xsl:choose>
-              </xsl:variable>
-              <xsl:call-template name="new-task-group-select">
-                <xsl:with-param name="groups" select="commands_response/get_groups_response"/>
-                <xsl:with-param name="count" select="groups - $count"/>
-                <xsl:with-param name="position" select="$count + 1"/>
-              </xsl:call-template>
 
-              <input type="submit" name="submit_plus_group" value="+"/>
+                <xsl:variable name="count">
+                  <xsl:variable name="params"
+                                select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+                  <xsl:choose>
+                    <xsl:when test="$params &gt; 0">
+                      <xsl:value-of select="$params"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="count (commands_response/get_tasks_response/task/observers/group)"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <xsl:call-template name="new-task-group-select">
+                  <xsl:with-param name="groups" select="commands_response/get_groups_response"/>
+                  <xsl:with-param name="count" select="groups - $count"/>
+                  <xsl:with-param name="position" select="$count + 1"/>
+                </xsl:call-template>
 
-              <xsl:choose>
-                <xsl:when test="string-length (/envelope/params/groups)">
-                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="groups" value="{$count + 1}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
+                <input type="submit" name="submit_plus_group" value="+"/>
+
+                <xsl:choose>
+                  <xsl:when test="string-length (/envelope/params/groups)">
+                    <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="groups" value="{$count + 1}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <xsl:variable name="in_assets"
                           select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
@@ -5469,7 +5495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </form>
     </div>
   </div>
-  <xsl:if test="commands_response/get_tasks_response/task/target/@id = ''">
+  <xsl:if test="commands_response/get_tasks_response/task/target/@id = '' and gsa:may-op ('create_report')">
     <br/>
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
@@ -6830,7 +6856,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_alert"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <xsl:if test="not (gsa:may-op ('get_report_formats'))">
+        <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -7122,7 +7148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <xsl:if test="gsa:may-op ('get_report_formats')">
+          <xsl:if test="gsa:may-op ('get_filters')">
             <tr>
               <td valign="top" width="145">Report Result Filter (optional)</td>
               <td colspan="2">
@@ -7241,6 +7267,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="alert" value="{/envelope/params/alert}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <xsl:if test="not (gsa:may-op ('get_filters'))">
+          <input type="hidden" name="filter_id" value="0"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="165">Name</td>
@@ -7414,19 +7443,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           </label>
                         </td>
                       </tr>
-                      <tr>
-                        <td colspan="3" valign="top">
-                            <xsl:call-template name="radio-button">
-                              <xsl:with-param name="name" select="'method_data:notice'"/>
-                              <xsl:with-param name="text" select="'Include report'"/>
-                              <xsl:with-param name="value" select="'0'"/>
-                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                            </xsl:call-template>
-                          <select name="method_data:notice_report_format">
-                            <xsl:for-each select="$report-formats/report_format">
-                              <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                      <xsl:if test="gsa:may-op ('get_filters')">
+                        <tr>
+                          <td colspan="3" valign="top">
+                              <xsl:call-template name="radio-button">
+                                <xsl:with-param name="name" select="'method_data:notice'"/>
+                                <xsl:with-param name="text" select="'Include report'"/>
+                                <xsl:with-param name="value" select="'0'"/>
+                                <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                              </xsl:call-template>
+                            <select name="method_data:notice_report_format">
+                              <xsl:for-each select="$report-formats/report_format">
+                                <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                  <xsl:choose>
+                                    <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
+                                      <option value="{@id}" selected="1">
+                                        <xsl:value-of select="name"/>
+                                      </option>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                      <option value="{@id}">
+                                        <xsl:value-of select="name"/>
+                                      </option>
+                                    </xsl:otherwise>
+                                  </xsl:choose>
+                                </xsl:if>
+                              </xsl:for-each>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" valign="top">
+                              <xsl:call-template name="radio-button">
+                                <xsl:with-param name="name" select="'method_data:notice'"/>
+                                <xsl:with-param name="text" select="'Attach report'"/>
+                                <xsl:with-param name="value" select="'2'"/>
+                                <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                              </xsl:call-template>
+                            <select name="method_data:notice_attach_format">
+                              <xsl:for-each select="$report-formats/report_format">
                                 <xsl:choose>
-                                  <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
+                                  <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
                                     <option value="{@id}" selected="1">
                                       <xsl:value-of select="name"/>
                                     </option>
@@ -7437,37 +7494,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                     </option>
                                   </xsl:otherwise>
                                 </xsl:choose>
-                              </xsl:if>
-                            </xsl:for-each>
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3" valign="top">
-                            <xsl:call-template name="radio-button">
-                              <xsl:with-param name="name" select="'method_data:notice'"/>
-                              <xsl:with-param name="text" select="'Attach report'"/>
-                              <xsl:with-param name="value" select="'2'"/>
-                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                            </xsl:call-template>
-                          <select name="method_data:notice_attach_format">
-                            <xsl:for-each select="$report-formats/report_format">
-                              <xsl:choose>
-                                <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
-                                  <option value="{@id}" selected="1">
-                                    <xsl:value-of select="name"/>
-                                  </option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}">
-                                    <xsl:value-of select="name"/>
-                                  </option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </select>
-                        </td>
-                      </tr>
+                              </xsl:for-each>
+                            </select>
+                          </td>
+                        </tr>
+                      </xsl:if>
                     </table>
                   </td>
                 </tr>
@@ -7613,26 +7644,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <xsl:variable name="filtername"
-              select="commands_response/get_alerts_response/alert/filter/name"/>
-          <tr>
-            <td valign="top" width="145">Report Filter (optional)</td>
-            <td colspan="2">
-              <select name="filter_id">
-                <option value="0">--</option>
-                <xsl:for-each select="$filters/filter">
-                  <xsl:choose>
-                    <xsl:when test="name = $filtername">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
+          <xsl:if test="gsa:may-op ('get_filters')">
+            <xsl:variable name="filtername"
+                select="commands_response/get_alerts_response/alert/filter/name"/>
+            <tr>
+              <td valign="top" width="145">Report Filter (optional)</td>
+              <td colspan="2">
+                <select name="filter_id">
+                  <option value="0">--</option>
+                  <xsl:for-each select="$filters/filter">
+                    <xsl:choose>
+                      <xsl:when test="name = $filtername">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save Alert"/>
@@ -9608,6 +9641,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
         <input type="hidden" name="in_use" value="{commands_response/get_targets_response/target/in_use}"/>
+        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+          <input type="hidden" name="lsc_credential_id" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+          <input type="hidden" name="lsc_credential_id" value="--"/>
+          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_port_lists'))">
+          <!-- Use port list "OpenVAS Default". -->
+          <input type="hidden"
+                 name="port_list_id"
+                 value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="165">Name</td>
@@ -9799,97 +9845,101 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                 </td>
               </tr>
-              <tr>
-                <td valign="top" width="175">Port List</td>
-                <td>
-                  <select name="port_list_id">
-                    <xsl:variable name="port_list_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
-                    </xsl:variable>
-                    <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+              <xsl:if test="gsa:may-op ('get_port_lists')">
+                <tr>
+                  <td valign="top" width="175">Port List</td>
+                  <td>
+                    <select name="port_list_id">
+                      <xsl:variable name="port_list_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                      </xsl:variable>
+                      <xsl:for-each select="get_port_lists_response/port_list">
+                        <xsl:choose>
+                          <xsl:when test="@id = $port_list_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
+              <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+                <tr>
+                  <td valign="top" width="175">SSH Credential (optional)</td>
+                  <td>
+                    <select name="lsc_credential_id">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="@id = $port_list_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td valign="top" width="175">SSH Credential (optional)</td>
-                <td>
-                  <select name="lsc_credential_id">
-                    <xsl:variable name="lsc_credential_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
-                    </xsl:variable>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    on port
+                    <xsl:variable name="credential"
+                                  select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
                     <xsl:choose>
-                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                        <option value="0">--</option>
+                      <xsl:when test="$credential and string-length ($credential/port)">
+                        <input type="text"
+                               name="port"
+                               value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                               size="6"
+                               maxlength="400"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
+                        <input type="text" name="port" value="22" size="6" maxlength="400"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" width="175">SMB Credential (optional)</td>
+                  <td>
+                    <select name="lsc_smb_credential_id">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="@id = $lsc_credential_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  on port
-                  <xsl:variable name="credential"
-                                select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
-                  <xsl:choose>
-                    <xsl:when test="$credential and string-length ($credential/port)">
-                      <input type="text"
-                             name="port"
-                             value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
-                             size="6"
-                             maxlength="400"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="text" name="port" value="22" size="6" maxlength="400"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-              <tr>
-                <td valign="top" width="175">SMB Credential (optional)</td>
-                <td>
-                  <select name="lsc_smb_credential_id">
-                    <xsl:variable name="lsc_credential_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
-                    </xsl:variable>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
-                      <xsl:choose>
-                        <xsl:when test="@id = $lsc_credential_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
             </xsl:when>
             <xsl:otherwise>
               <xsl:variable name="width" select="240"/>
@@ -10077,104 +10127,108 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                 </td>
               </tr>
-              <tr>
-                <td valign="top" width="{$width}">
-                  <xsl:value-of select="gsa:i18n ('Port List', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
-                </td>
-                <td>
-                  <select name="port_list_id" disabled="1">
-                    <xsl:variable name="port_list_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
-                    </xsl:variable>
-                    <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+              <xsl:if test="gsa:may-op ('get_port_lists')">
+                <tr>
+                  <td valign="top" width="{$width}">
+                    <xsl:value-of select="gsa:i18n ('Port List', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                  </td>
+                  <td>
+                    <select name="port_list_id" disabled="1">
+                      <xsl:variable name="port_list_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                      </xsl:variable>
+                      <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+                        <xsl:choose>
+                          <xsl:when test="@id = $port_list_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
+              <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+                <tr>
+                  <td valign="top" width="{$width}">
+                    <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                  </td>
+                  <td>
+                    <select name="lsc_credential_id" disabled="1">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="@id = $port_list_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td valign="top" width="{$width}">
-                  <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
-                </td>
-                <td>
-                  <select name="lsc_credential_id" disabled="1">
-                    <xsl:variable name="lsc_credential_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
-                    </xsl:variable>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    on port
+                    <xsl:variable name="credential"
+                                  select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
                     <xsl:choose>
-                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                        <option value="0">--</option>
+                      <xsl:when test="$credential and string-length ($credential/port)">
+                        <input type="text"
+                               name="port"
+                               value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                               size="6"
+                               maxlength="400"
+                               disabled="1"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
+                        <input type="text" name="port" value="22" size="6" maxlength="400" disabled="1"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" width="{$width}">
+                    <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                  </td>
+                  <td>
+                    <select name="lsc_smb_credential_id" disabled="1">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                      </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="@id = $lsc_credential_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  on port
-                  <xsl:variable name="credential"
-                                select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
-                  <xsl:choose>
-                    <xsl:when test="$credential and string-length ($credential/port)">
-                      <input type="text"
-                             name="port"
-                             value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
-                             size="6"
-                             maxlength="400"
-                             disabled="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="text" name="port" value="22" size="6" maxlength="400" disabled="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-              <tr>
-                <td valign="top" width="{$width}">
-                  <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
-                </td>
-                <td>
-                  <select name="lsc_smb_credential_id" disabled="1">
-                    <xsl:variable name="lsc_credential_id">
-                      <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
-                    </xsl:variable>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
-                      <xsl:choose>
-                        <xsl:when test="@id = $lsc_credential_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
           <tr>
@@ -28593,222 +28647,224 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </td>
             </tr>
-            <tr class="even">
-              <td>Agents Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Agents Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Alerts Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Alerts Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Configs Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Configs Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Credentials Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Credentials Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Filters Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Filters Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Notes Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Notes Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Overrides Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Overrides Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Permissions Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Permissions Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Port Lists Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Port Lists Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Reports Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Reports Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Report Formats Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Report Formats Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Results Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Results Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Roles Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Roles Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Schedules Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Schedules Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Slaves Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Slaves Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Tags Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Tags Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>Targets Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Targets Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>Tasks Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='Tasks Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>CPE Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='CPE Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>CVE Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='CVE Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>NVT Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='NVT Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>OVAL Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='OVAL Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td>DFN-CERT Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>All SecInfo Filter</td>
-              <td>
-                <xsl:call-template name="get-settings-filter">
-                  <xsl:with-param name="filter"
-                                  select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
+            <xsl:if test="gsa:may-op ('get_filters')">
+              <tr class="even">
+                <td>Agents Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Agents Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Alerts Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Alerts Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Configs Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Configs Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Credentials Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Credentials Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Filters Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Filters Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Notes Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Notes Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Overrides Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Overrides Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Permissions Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Permissions Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Port Lists Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Reports Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Reports Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Report Formats Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Results Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Results Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Roles Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Roles Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Schedules Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Schedules Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Slaves Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Slaves Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Tags Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Tags Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>Targets Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Targets Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>Tasks Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Tasks Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>CPE Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='CPE Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>CVE Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='CVE Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>NVT Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='NVT Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>OVAL Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='OVAL Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="odd">
+                <td>DFN-CERT Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
+                <td>All SecInfo Filter</td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
           </xsl:if>
         </table>
       </div>
@@ -28936,271 +28992,273 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
               </td>
             </tr>
-            <tr>
-              <td>Agents Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'4a1334c1-cb93-4a79-8634-103b0a50bdcd'"/>
-                    <xsl:with-param name="filter-type" select="'Agent'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Agents Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Alerts Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'"/>
-                    <xsl:with-param name="filter-type" select="'Alert'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Alerts Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Configs Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'1a9fbd91-0182-44cd-bc88-a13a9b3b1bef'"/>
-                    <xsl:with-param name="filter-type" select="'Config'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Configs Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Credentials Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'186a5ac8-fe5a-4fb1-aa22-44031fb339f3'"/>
-                    <xsl:with-param name="filter-type" select="'Credential'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Credentials Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Filters Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'f9691163-976c-47e7-ad9a-38f2d5c81649'"/>
-                    <xsl:with-param name="filter-type" select="'Filter'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Filters Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Notes Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'96abcd5a-9b6d-456c-80b8-c3221bfa499d'"/>
-                    <xsl:with-param name="filter-type" select="'Note'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Notes Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Overrides Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'eaaaebf1-01ef-4c49-b7bb-955461c78e0a'"/>
-                    <xsl:with-param name="filter-type" select="'Override'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Overrides Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Permissions Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'ffb16b28-538c-11e3-b8f9-406186ea4fc5'"/>
-                    <xsl:with-param name="filter-type" select="'Permission'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Permissions Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Port Lists Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'7d52d575-baeb-4d98-bb68-e1730dbc6236'"/>
-                    <xsl:with-param name="filter-type" select="'Port List'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Port Lists Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Reports Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'48ae588e-9085-41bc-abcb-3d6389cf7237'"/>
-                    <xsl:with-param name="filter-type" select="'Report'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Reports Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Report Formats Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'249c7a55-065c-47fb-b453-78e11a665565'"/>
-                    <xsl:with-param name="filter-type" select="'Report Format'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Report Formats Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Results Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'739ab810-163d-11e3-9af6-406186ea4fc5'"/>
-                    <xsl:with-param name="filter-type" select="'Result'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Results Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Roles Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'f38e673a-bcd1-11e2-a19a-406186ea4fc5'"/>
-                    <xsl:with-param name="filter-type" select="'Role'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Roles Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Schedules Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'a83e321b-d994-4ae8-beec-bfb5fe3e7336'"/>
-                    <xsl:with-param name="filter-type" select="'Schedule'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Schedules Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Slaves Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'"/>
-                    <xsl:with-param name="filter-type" select="'Slave'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Slaves Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Tags Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'108eea3b-fc61-483c-9da9-046762f137a8'"/>
-                    <xsl:with-param name="filter-type" select="'Tag'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Tags Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Targets Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'236e2e41-9771-4e7a-8124-c432045985e0'"/>
-                    <xsl:with-param name="filter-type" select="'Target'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Targets Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>Tasks Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'1c981851-8244-466c-92c4-865ffe05e721'"/>
-                    <xsl:with-param name="filter-type" select="'Task'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Tasks Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>CPE Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'3414a107-ae46-4dea-872d-5c4479a48e8f'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CPE Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>CVE Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'def63b5a-41ef-43f4-b9ef-03ef1665db5d'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CVE Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>NVT Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'bef08b33-075c-4f8c-84f5-51f6137e40a3'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='NVT Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>OVAL Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='OVAL Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr>
-              <td>DFN-CERT Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'312350ed-bc06-44f3-8b3f-ab9eb828b80b'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
+            <xsl:if test="gsa:may-op ('get_filters')">
+              <tr>
+                <td>Agents Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'4a1334c1-cb93-4a79-8634-103b0a50bdcd'"/>
+                      <xsl:with-param name="filter-type" select="'Agent'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Agents Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Alerts Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'"/>
+                      <xsl:with-param name="filter-type" select="'Alert'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Alerts Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Configs Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'1a9fbd91-0182-44cd-bc88-a13a9b3b1bef'"/>
+                      <xsl:with-param name="filter-type" select="'Config'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Configs Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Credentials Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'186a5ac8-fe5a-4fb1-aa22-44031fb339f3'"/>
+                      <xsl:with-param name="filter-type" select="'Credential'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Credentials Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Filters Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'f9691163-976c-47e7-ad9a-38f2d5c81649'"/>
+                      <xsl:with-param name="filter-type" select="'Filter'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Filters Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Notes Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'96abcd5a-9b6d-456c-80b8-c3221bfa499d'"/>
+                      <xsl:with-param name="filter-type" select="'Note'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Notes Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Overrides Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'eaaaebf1-01ef-4c49-b7bb-955461c78e0a'"/>
+                      <xsl:with-param name="filter-type" select="'Override'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Overrides Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Permissions Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'ffb16b28-538c-11e3-b8f9-406186ea4fc5'"/>
+                      <xsl:with-param name="filter-type" select="'Permission'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Permissions Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Port Lists Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'7d52d575-baeb-4d98-bb68-e1730dbc6236'"/>
+                      <xsl:with-param name="filter-type" select="'Port List'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Reports Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'48ae588e-9085-41bc-abcb-3d6389cf7237'"/>
+                      <xsl:with-param name="filter-type" select="'Report'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Reports Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Report Formats Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'249c7a55-065c-47fb-b453-78e11a665565'"/>
+                      <xsl:with-param name="filter-type" select="'Report Format'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Results Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'739ab810-163d-11e3-9af6-406186ea4fc5'"/>
+                      <xsl:with-param name="filter-type" select="'Result'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Results Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Roles Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'f38e673a-bcd1-11e2-a19a-406186ea4fc5'"/>
+                      <xsl:with-param name="filter-type" select="'Role'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Roles Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Schedules Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'a83e321b-d994-4ae8-beec-bfb5fe3e7336'"/>
+                      <xsl:with-param name="filter-type" select="'Schedule'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Schedules Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Slaves Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'"/>
+                      <xsl:with-param name="filter-type" select="'Slave'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Slaves Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Tags Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'108eea3b-fc61-483c-9da9-046762f137a8'"/>
+                      <xsl:with-param name="filter-type" select="'Tag'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Tags Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Targets Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'236e2e41-9771-4e7a-8124-c432045985e0'"/>
+                      <xsl:with-param name="filter-type" select="'Target'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Targets Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Tasks Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'1c981851-8244-466c-92c4-865ffe05e721'"/>
+                      <xsl:with-param name="filter-type" select="'Task'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='Tasks Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>CPE Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'3414a107-ae46-4dea-872d-5c4479a48e8f'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='CPE Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>CVE Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'def63b5a-41ef-43f4-b9ef-03ef1665db5d'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='CVE Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>NVT Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'bef08b33-075c-4f8c-84f5-51f6137e40a3'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='NVT Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>OVAL Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='OVAL Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td>DFN-CERT Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'312350ed-bc06-44f3-8b3f-ab9eb828b80b'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
 
-            <tr>
-              <td>All SecInfo Filter</td>
-              <td>
-                <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'feefe56b-e2da-4913-81cc-1a6ae3b36e64'"/>
-                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
+              <tr>
+                <td>All SecInfo Filter</td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                      <xsl:with-param name="uuid" select="'feefe56b-e2da-4913-81cc-1a6ae3b36e64'"/>
+                      <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                      <xsl:with-param name="filter"
+                                      select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
 
             <tr>
               <td colspan="2" style="text-align:right;">

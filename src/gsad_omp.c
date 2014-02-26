@@ -1161,79 +1161,86 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
-  /* Get the filters. */
-
-  g_string_append (xml, "<filters>");
-
-  if (openvas_server_sendf_xml (&session,
-                                "<get_filters"
-                                " filter=\"rows=-1 type=%s or type=\"/>",
-                                type)
-      == -1)
+  if (command_enabled (credentials, "GET_FILTERS"))
     {
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the filter list. "
-                           "The current list of filters is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      /* Get the filters. */
+
+      g_string_append (xml, "<filters>");
+
+      if (openvas_server_sendf_xml (&session,
+                                    "<get_filters"
+                                    " filter=\"rows=-1 type=%s or type=\"/>",
+                                    type)
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          g_string_free (type_many, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          g_string_free (type_many, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      g_string_append (xml, "</filters>");
     }
 
-  if (read_string (&session, &xml))
+  if (command_enabled (credentials, "GET_SETTINGS"))
     {
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the filter list. "
-                           "The current list of filters is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
+      /* Get the Wizard Rows setting. */
+
+      if (openvas_server_sendf_xml
+           (&session,
+            "<get_settings"
+            " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
+            type)
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          g_string_free (type_many, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          g_string_free (type_many, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
-  g_string_append (xml, "</filters>");
-
-  /* Get the Wizard Rows setting. */
-
-  if (openvas_server_sendf_xml
-       (&session,
-        "<get_settings"
-        " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
-        type)
-      == -1)
+  if (command_enabled (credentials, "GET_TAGS")
+      && params_value (params, "details"))
     {
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the filter list. "
-                           "The current list of filters is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
+      /* Get tag names */
 
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the filter list. "
-                           "The current list of filters is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get tag names */
-
-  if (params_value (params, "details"))
-    {
       if (openvas_server_sendf (&session,
                                 "<get_tags"
                                 " filter=\"attach_type=%s"
@@ -1268,6 +1275,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                               "/omp?cmd=get_resources");
         }
     }
+
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   openvas_server_close (socket, session);
@@ -5465,14 +5473,9 @@ edit_alert (credentials_t * credentials, params_t *params,
     }
 
   if (openvas_server_sendf (&session,
-                            "<commands>"
                             "<get_alerts"
                             " alert_id=\"%s\""
-                            " details=\"1\"/>"
-                            "<get_report_formats/>"
-                            "<get_filters"
-                            " filter=\"type=report\"/>"
-                            "</commands>",
+                            " details=\"1\"/>",
                             alert_id)
       == -1)
     {
@@ -5511,6 +5514,71 @@ edit_alert (credentials_t * credentials, params_t *params,
                            "An internal error occurred while getting alert info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_alerts");
+    }
+
+  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
+    {
+      /* Get the report formats. */
+
+      if (openvas_server_sendf (&session,
+                                "<get_report_formats/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting report formats. "
+                               "The current list of report formats is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_alerts");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting report formats. "
+                               "The current list of report formats is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_alerts");
+        }
+    }
+
+  if (command_enabled (credentials, "GET_FILTERS"))
+    {
+      /* Get target locators. */
+
+      if (openvas_server_send (&session,
+                              "<get_filters"
+                              " filter=\"type=report\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of filters. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_alerts");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of filters. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_filters");
+        }
     }
 
   /* Cleanup, and return transformed XML. */
@@ -7242,13 +7310,7 @@ edit_target (credentials_t * credentials, params_t *params,
                             "<get_targets"
                             " target_id=\"%s\""
                             " details=\"1\"/>"
-                            "<get_lsc_credentials"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
                             "<get_target_locators/>"
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
                             "</commands>",
                             target_id)
       == -1)
@@ -7291,6 +7353,72 @@ edit_target (credentials_t * credentials, params_t *params,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
+    }
+
+  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+    {
+      /* Get the credentials. */
+
+      if (openvas_server_sendf (&session,
+                                "<get_lsc_credentials"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting targets list. "
+                               "The current list of targets is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_targets");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting targets list. "
+                               "The current list of targets is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_targets");
+        }
+    }
+
+  if (command_enabled (credentials, "GET_PORT_LISTS"))
+    {
+      /* Get the port lists. */
+
+      if (openvas_server_sendf (&session,
+                                "<get_port_lists"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting targets list. "
+                               "The current list of targets is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting targets list. "
+                               "The current list of targets is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
   /* Cleanup, and return transformed XML. */

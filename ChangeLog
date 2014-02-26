@@ -1,3 +1,21 @@
+2014-02-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Show or hide edit dialog elements according to the availability of
+	commands.
+
+	* src/gsad_omp.c (get_many, edit_alert, edit_target): Only get resources
+	if the relevant commands are available.
+
+	* src/html/classic/omp.xsl (filter-window-part): Make fields depend on
+	command access.
+	(task [details]): Make import window depend on command access.
+	(html-edit-task-form): Hide optional fields according to availability
+	of commands.  Make import window depend on command access.
+	(html-create-alert-form): Correct op checks.
+	(html-edit-alert-form, html-edit-target-form): Hide optional fields
+	according to availability of commands.
+	(get_my_settings, edit_my_settings): Check for filter commands.
+
 2014-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-target-form)
