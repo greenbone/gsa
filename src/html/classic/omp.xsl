@@ -3060,8 +3060,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Permission to start task denied', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
+      <xsl:variable name="next_due_string">
+        <xsl:choose>
+          <xsl:when test="schedule/next_time = 'over'">
+<xsl:text>
+(</xsl:text>
+            <xsl:value-of select="gsa:i18n ('Next due: over', 'Task Table Row')"/>
+            <xsl:text>)</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+<xsl:text>
+(</xsl:text>
+            <xsl:value-of select="gsa:i18n ('Next due', 'Task Table Row')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>
+            <xsl:text>)</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Schedule Details', 'Schedule')}">
+         title="{concat (gsa:i18n ('#DETAILS_OF_PREFIX#', 'Table Row', 'View details of '), gsa:i18n ('Schedule', 'Schedule'), ' &quot;', schedule/name,'&quot;', gsa:i18n ('#DETAILS_OF_SUFFIX#', 'Table Row', ''), $next_due_string)}">
         <img style="margin-left: 3px" src="/img/scheduled.png" border="0" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
       </a>
     </xsl:when>
@@ -3274,10 +3290,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
               <xsl:choose>
                 <xsl:when test="schedule/next_time = 'over'">
-                  (<xsl:value-of select="gsa:i18n ('Next due: over', 'Report Window')"/>)
+                  (<xsl:value-of select="gsa:i18n ('Next due: over', 'Task Window')"/>)
                 </xsl:when>
                 <xsl:otherwise>
-                  (<xsl:value-of select="gsa:i18n ('Next due', 'Report Window')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
+                  (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>

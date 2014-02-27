@@ -1,5 +1,14 @@
 2014-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (task-icons): Add schedule name and due date
+	to schedule icon tooltip.
+	(task [details]): Change context of "Next due" text to "Task Window".
+
+	* src/html/classic/po/de.xml: Move "Next due" strings to Task views
+	contexts and remove extra colon.
+
+2014-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-schedule-form)
 	(html-edit-schedule-form): Add i18n.
 	(interval-with-unit): Add missing spaces.

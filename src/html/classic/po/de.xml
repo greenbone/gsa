@@ -993,6 +993,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Add Report</id>
       <str>Bericht hinzufügen</str>
     </msg>
+    <!-- Schedule due time -->
+    <msg>
+      <id>Next due</id>
+      <str>Fälligkeit</str>
+    </msg>
+    <msg>
+      <id>Next due: over</id>
+      <str>Fälligkeit: abgelaufen</str>
+    </msg>
     <!-- Slave -->
     <msg>
       <id>#TASK RUN ON SLAVE PREFIX#</id>
@@ -1355,15 +1364,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Filtered report</id>
       <str>Gefilterter Bericht</str>
-    </msg>
-    <!-- Schedule due time -->
-    <msg>
-      <id>Next due: </id>
-      <str>Fälligkeit:</str>
-    </msg>
-    <msg>
-      <id>Next due: over</id>
-      <str>Fälligkeit: abgelaufen</str>
     </msg>
     <!-- Task references -->
     <msg>
