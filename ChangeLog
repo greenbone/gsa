@@ -1,5 +1,10 @@
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_system_reports_omp): Add command check for
+	GET_SLAVES.
+
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_system_reports_response): Make "Reports
 	for slave" control depend on GET_SLAVES access.
 

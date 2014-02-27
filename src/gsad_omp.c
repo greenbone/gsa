@@ -13207,34 +13207,37 @@ get_system_reports_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_tasks");
     }
 
-  /* Get the slaves. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_slaves"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
+  if (command_enabled (credentials, "GET_SLAVES"))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the system reports. "
-                           "The current list of system reports is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
+      /* Get the slaves. */
 
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the system reports. "
-                           "The current list of system reports is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
+      if (openvas_server_sendf (&session,
+                                "<get_slaves"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the system reports. "
+                               "The current list of system reports is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the system reports. "
+                               "The current list of system reports is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
   /* Cleanup, and return transformed XML. */
