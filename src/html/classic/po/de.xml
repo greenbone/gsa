@@ -772,6 +772,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>always</id>
       <str>immer</str>
     </msg>
+    <msg>
+      <id>Once</id>
+      <str>Einmalig</str>
+    </msg>
+    <msg>
+      <id>Entire Operation</id>
+      <str>Gesamter Vorgang</str>
+    </msg>
   </grp>
 
   <!-- 3 Resource specific strings -->
@@ -2659,10 +2667,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Schedule</id>
       <str>Neuer Zeitplan</str>
     </msg>
-
+    <msg>
+      <id>Create Schedule</id>
+      <str>Zeitplan erstellen</str>
+    </msg>
     <msg>
       <id>Edit Schedule</id>
       <str>Zeitplan bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Schedule</id>
+      <str>Zeitplan speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -2687,6 +2702,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Schedule Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>First Run</id>
+      <str>Erster Lauf</str>
+    </msg>
+    <msg>
+      <id>First Time</id>
+      <str>Erster Zeitpunkt</str>
+    </msg>
+    <msg>
+      <id>Next Run</id>
+      <str>Nächster Lauf</str>
+    </msg>
+    <msg>
+      <id>Timezone</id>
+      <str>Zeitzone</str>
+    </msg>
+    <msg>
+      <id>Period</id>
+      <str>Periode</str>
+    </msg>
+    <msg>
+      <id>Duration</id>
+      <str>Dauer</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.18.4    Schedule actions and properties - table rows only -->

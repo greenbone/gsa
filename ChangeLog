@@ -1,3 +1,12 @@
+2014-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-schedule-form)
+	(html-edit-schedule-form): Add i18n.
+	(interval-with-unit): Add missing spaces.
+	(schedule, schedule [trash], schedule [details]): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for Schedules.
+
 2014-02-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl (i18n_language): Also try to get language

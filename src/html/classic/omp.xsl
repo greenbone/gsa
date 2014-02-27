@@ -12452,14 +12452,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Schedule
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Schedule', 'Schedule Window')"/>
       <a href="/help/new_schedule.html?token={/envelope/token}"
-         title="Help: New Schedule">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Schedule', 'Schedule'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_schedules&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Schedules" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Schedules"/>
+         title="{gsa:i18n ('Schedules', 'Schedule')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Schedules', 'Schedule')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -12472,20 +12472,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">First Time</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule Window')"/></td>
             <td>
               <select name="hour">
                 <xsl:call-template name="opt">
@@ -12854,7 +12854,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Timezone (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text"
                      name="timezone"
@@ -12864,7 +12864,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125">Period (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text"
                      name="period"
@@ -12872,15 +12872,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      size="3"
                      maxlength="80"/>
               <select name="period_unit">
-                <option value="hour" selected="1">hour(s)</option>
-                <option value="day">day(s)</option>
-                <option value="week">week(s)</option>
-                <option value="month">month(s)</option>
+                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
+                <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
               </select>
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Duration (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text"
                      name="duration"
@@ -12888,15 +12888,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      size="3"
                      maxlength="80"/>
               <select name="duration_unit">
-                <option value="hour" selected="1">hour(s)</option>
-                <option value="day">day(s)</option>
-                <option value="week">week(s)</option>
+                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
               </select>
             </td>
           </tr>
           <tr class="even">
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Schedule"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Schedule', 'Schedule')}"/>
             </td>
           </tr>
         </table>
@@ -13019,7 +13019,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Schedule
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Schedule', 'Schedule')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Schedule'"/>
         <xsl:with-param name="type" select="'schedule'"/>
@@ -13040,7 +13040,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -13050,14 +13050,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_schedules_response/schedule/comment}"/>
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">First Time</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule Window')"/></td>
             <td>
               <xsl:variable name="hour"
                             select="format-number (date:hour-in-day (commands_response/get_schedules_response/schedule/first_time), '00')"/>
@@ -13439,7 +13439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Timezone</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/></td>
             <td>
               <input type="text"
                      name="timezone"
@@ -13449,7 +13449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125">Period (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period/text() &gt; 0">
@@ -13459,7 +13459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          size="10"
                          maxlength="80"/>
                   <input type="hidden" name="period_unit" value="second"/>
-                  seconds
+                  <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
                 </xsl:when>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period_months/text() &gt; 0">
                   <input type="text"
@@ -13468,7 +13468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          size="10"
                          maxlength="80"/>
                   <input type="hidden" name="period_unit" value="month"/>
-                  months
+                  <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="text"
@@ -13479,34 +13479,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <select name="period_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'hour'">
-                        <option value="hour" selected="1">hour(s)</option>
+                        <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="hour">hour(s)</option>
+                        <option value="hour"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'day'">
-                        <option value="day" selected="1">day(s)</option>
+                        <option value="day" selected="1"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="day">day(s)</option>
+                        <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'week'">
-                        <option value="week" selected="1">week(s)</option>
+                        <option value="week" selected="1"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="week">week(s)</option>
+                        <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'month'">
-                        <option value="month" selected="1">month(s)</option>
+                        <option value="month" selected="1"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="month">month(s)</option>
+                        <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                   </select>
@@ -13515,7 +13515,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Duration (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/text() = 0 and commands_response/get_schedules_response/schedule/duration/text() &gt; 0">
@@ -13525,7 +13525,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          size="10"
                          maxlength="80"/>
                   <input type="hidden" name="duration_unit" value="second"/>
-                  seconds
+                  <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="text"
@@ -13536,26 +13536,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <select name="duration_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/unit = 'hour'">
-                        <option value="hour" selected="1">hour(s)</option>
+                        <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="hour">hour(s)</option>
+                        <option value="hour"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/unit = 'day'">
-                        <option value="day" selected="1">day(s)</option>
+                        <option value="day" selected="1"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="day">day(s)</option>
+                        <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/unit = 'week'">
-                        <option value="week" selected="1">week(s)</option>
+                        <option value="week" selected="1"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="week">week(s)</option>
+                        <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
                   </select>
@@ -13565,7 +13565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Schedule"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Schedule', 'Schedule')}"/>
             </td>
           </tr>
         </table>
@@ -13587,6 +13587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$interval mod (60 * 60 * 24 * 7) = 0">
       <xsl:value-of select="$interval div (60 * 60 * 24 * 7)"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="$interval = (60 * 60 * 24 * 7)">
           <xsl:value-of select="gsa:i18n ('week', 'Time')"/>
@@ -13598,6 +13599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$interval mod (60 * 60 * 24) = 0">
       <xsl:value-of select="$interval div (60 * 60 * 24)"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="$interval = (60 * 60 * 24)">
           <xsl:value-of select="gsa:i18n ('day', 'Time')"/>
@@ -13609,6 +13611,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$interval mod (60 * 60) = 0">
       <xsl:value-of select="$interval div (60 * 60)"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="$interval = (60 * 60)">
           <xsl:value-of select="gsa:i18n ('hour', 'Time')"/>
@@ -13620,6 +13623,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$interval mod (60) = 0">
       <xsl:value-of select="$interval div (60)"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="$interval = 60">
           <xsl:value-of select="gsa:i18n ('min', 'Time')"/>
@@ -13630,10 +13634,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:when test="$interval = 1">
-      <xsl:value-of select="$interval"/> <xsl:value-of select="gsa:i18n ('sec', 'Time')"/>
+      <xsl:value-of select="$interval"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="gsa:i18n ('sec', 'Time')"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="$interval"/> <xsl:value-of select="gsa:i18n ('secs', 'Time')"/>
+      <xsl:value-of select="$interval"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="gsa:i18n ('secs', 'Time')"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -13674,13 +13682,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="period = 0 and period_months = 0">
-          Once
+          <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
         </xsl:when>
         <xsl:when test="period = 0 and period_months = 1">
-          1 month
+          1 <xsl:value-of select="gsa:i18n ('month', 'Time')"/>
         </xsl:when>
         <xsl:when test="period = 0">
-          <xsl:value-of select="period_months"/> months
+          <xsl:value-of select="period_months"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="interval-with-unit">
@@ -13694,7 +13704,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="duration = 0">
-          Entire Operation
+          <xsl:value-of select="gsa:i18n ('Entire Operation', 'Time')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="interval-with-unit">
@@ -13741,13 +13751,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="period = 0 and period_months = 0">
-          Once
+          <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
         </xsl:when>
         <xsl:when test="period = 0 and period_months = 1">
-          1 month
+          1 <xsl:value-of select="gsa:i18n ('month', 'Time')"/>
         </xsl:when>
         <xsl:when test="period = 0">
-          <xsl:value-of select="period_months"/> months
+          <xsl:value-of select="period_months"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="interval-with-unit">
@@ -13761,7 +13773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="duration = 0">
-          Entire Operation
+          <xsl:value-of select="gsa:i18n ('Entire Operation', 'Time')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="interval-with-unit">
@@ -13800,7 +13812,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Schedule Details
+      <xsl:value-of select="gsa:i18n ('Schedule Details', 'Schedule')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Schedule'"/>
         <xsl:with-param name="type" select="'schedule'"/>
@@ -13810,19 +13822,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Schedule Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Schedule Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>First Run:</td>
+          <td><xsl:value-of select="gsa:i18n ('First Run', 'Schedule Window')"/>:</td>
           <td><xsl:value-of select="gsa:long-time-tz (first_time)"/></td>
         </tr>
         <tr>
-          <td>Next Run:</td>
+          <td><xsl:value-of select="gsa:i18n ('Next Run', 'Schedule Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="next_time = 'over'">
@@ -13835,21 +13847,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Timezone:</td>
+          <td><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/>:</td>
           <td><xsl:value-of select="timezone"/></td>
         </tr>
         <tr>
-          <td>Period:</td>
+          <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="period = 0 and period_months = 0">
-                Once
+                <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
               </xsl:when>
               <xsl:when test="period = 0 and period_months = 1">
-                1 month
+                1 <xsl:value-of select="gsa:i18n ('month', 'Time')"/>
               </xsl:when>
               <xsl:when test="period = 0">
-                <xsl:value-of select="period_months"/> months
+                <xsl:value-of select="period_months"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:call-template name="interval-with-unit">
@@ -13862,11 +13876,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Duration:</td>
+          <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="duration = 0">
-                Entire Operation
+                <xsl:value-of select="gsa:i18n ('Entire Operation', 'Time')"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:call-template name="interval-with-unit">
