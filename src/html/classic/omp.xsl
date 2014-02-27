@@ -3270,35 +3270,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/>:</td>
-          <td>
-            <xsl:for-each select="alert">
-              <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="name"/>
-              </a>
-              <xsl:if test="position() != last()">, </xsl:if>
-            </xsl:for-each>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/>:</td>
-          <td>
-            <xsl:if test="schedule">
-              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="schedule/name"/>
-              </a>
-              <xsl:choose>
-                <xsl:when test="schedule/next_time = 'over'">
-                  (<xsl:value-of select="gsa:i18n ('Next due: over', 'Task Window')"/>)
-                </xsl:when>
-                <xsl:otherwise>
-                  (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:if>
-          </td>
-        </tr>
+        <xsl:if test="gsa:may-op ('get_alerts') or count (alert) &gt; 0">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/>:</td>
+            <td>
+              <xsl:for-each select="alert">
+                <xsl:choose>
+                  <xsl:when test="gsa:may-op ('get_alerts')">
+                    <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="name"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="position() != last()">, </xsl:if>
+              </xsl:for-each>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_schedules') or boolean (schedule)">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/>:</td>
+            <td>
+              <xsl:if test="schedule">
+                <xsl:choose>
+                  <xsl:when test="gsa:may-op ('get_schedules')">
+                    <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="schedule/name"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="schedule/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="schedule/next_time = 'over'">
+                    (<xsl:value-of select="gsa:i18n ('Next due: over', 'Task Window')"/>)
+                  </xsl:when>
+                  <xsl:otherwise>
+                    (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:</td>
           <td>
@@ -3324,14 +3342,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="preferences/preference[scanner_name='source_iface']/value"/>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
-          <td>
-            <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="slave/name"/>
-            </a>
-          </td>
-        </tr>
+        <xsl:if test="gsa:may-op ('get_slaves') or string-length (slave/@id) &gt; 0">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="gsa:may-op ('get_slaves')">
+                  <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="slave/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="slave/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Status', 'Task Window')"/>:</td>
           <td>
@@ -3399,17 +3426,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="observers/text()"/>
               </td>
             </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/>:</td>
-              <td>
-                <xsl:for-each select="observers/group">
-                  <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="name"/>
-                  </a>
-                  <xsl:if test="position() != last()">, </xsl:if>
-                </xsl:for-each>
-              </td>
-            </tr>
+            <xsl:if test="gsa:may-op ('get_groups') or count (observers/group) &gt; 0">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Observer Groups', 'Task Window')"/>:</td>
+                <td>
+                  <xsl:for-each select="observers/group">
+                    <xsl:choose>
+                      <xsl:when test="gsa:may-op ('get_groups')">
+                        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+                          <xsl:value-of select="name"/>
+                        </a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="name"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="position() != last()">, </xsl:if>
+                  </xsl:for-each>
+                </td>
+              </tr>
+            </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
         <tr>
@@ -7269,7 +7305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Alert'"/>
         <xsl:with-param name="type" select="'alert'"/>
         <xsl:with-param name="id"
-                        select="commands_response/get_alerts_response/alert/@id"/>
+                        select="get_alerts_response/alert/@id"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -7279,7 +7315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="alert_id"
-               value="{commands_response/get_alerts_response/alert/@id}"/>
+               value="{get_alerts_response/alert/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="alert" value="{/envelope/params/alert}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -7291,14 +7327,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="165">Name</td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
-                     value="{commands_response/get_alerts_response/alert/name}"/>
+                     value="{get_alerts_response/alert/name}"/>
             </td>
           </tr>
           <tr class="even">
             <td valign="top" width="165">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_alerts_response/alert/comment}"/>
+                     value="{get_alerts_response/alert/comment}"/>
             </td>
           </tr>
           <tr class="odd">
@@ -7312,7 +7348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       Task run status changed to
                     </label>
                     <xsl:variable name="eventdata"
-                                  select="commands_response/get_alerts_response/alert/event/data/text()"/>
+                                  select="get_alerts_response/alert/event/data/text()"/>
                     <select name="event_data:status">
                       <xsl:if test="$eventdata = 'Delete Requested'">
                         <!-- In case the user has an alert with this state. -->
@@ -7353,7 +7389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr class="even">
             <xsl:variable name="condition"
-                          select="commands_response/get_alerts_response/alert/condition"/>
+                          select="get_alerts_response/alert/condition"/>
             <td valign="top" width="125">Condition</td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -7412,7 +7448,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <xsl:variable name="method"
-                        select="commands_response/get_alerts_response/alert/method"/>
+                        select="get_alerts_response/alert/method"/>
           <tr class="odd">
             <td valign="top" width="145">Method</td>
             <td colspan="2">
@@ -7662,7 +7698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
-                select="commands_response/get_alerts_response/alert/filter/name"/>
+                select="get_alerts_response/alert/filter/name"/>
             <tr>
               <td valign="top" width="145">Report Filter (optional)</td>
               <td colspan="2">
@@ -7770,7 +7806,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     ALERT -->
 
 <xsl:template match="alert">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -7824,9 +7859,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
-        <xsl:value-of select="filter/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_filters')">
+          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+            <xsl:value-of select="filter/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="filter/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
@@ -7845,7 +7887,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="alert" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -8111,22 +8152,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </table>
           </td>
         </tr>
-        <tr>
-          <td>Filter:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="string-length(filter/name) &gt; 0">
-                  <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}"
-                     title="Details">
-                  <xsl:value-of select="filter/name"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                None.
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
+        <xsl:if test="gsa:may-op ('get_filters') or string-length (filter/name) &gt; 0">
+          <tr>
+            <td>Filter:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (filter/name) &gt; 0">
+                  <xsl:choose>
+                    <xsl:when test="gsa:may-op ('get_filters')">
+                      <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}"
+                         title="Details">
+                        <xsl:value-of select="filter/name"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="filter/name"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  None
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
 
       <xsl:choose>
@@ -8624,19 +8674,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="token"/>
   <xsl:choose>
     <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='dfn_cert_adv'">
-      <a href="/omp?cmd=get_info&amp;info_type={$resource_type}&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
-        <xsl:value-of select="$resource_name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_info')">
+          <a href="/omp?cmd=get_info&amp;info_type={$resource_type}&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
+            <xsl:value-of select="$resource_name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$resource_name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:when test="$resource_type='nvt'">
-      <a href="/omp?cmd=get_nvts&amp;oid={$resource_id}&amp;details=1&amp;token={$token}">
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_nvts')">
+          <a href="/omp?cmd=get_nvts&amp;oid={$resource_id}&amp;details=1&amp;token={$token}">
+            <xsl:value-of select="$resource_name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$resource_name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="gsa:may-op (concat ('get_', $resource_type, 's'))">
+      <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
         <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
-        <xsl:value-of select="$resource_name"/>
-      </a>
+      <xsl:value-of select="$resource_name"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -8707,7 +8774,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="tag">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -8869,7 +8935,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="tag" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -9659,9 +9724,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="in_use" value="{commands_response/get_targets_response/target/in_use}"/>
         <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
-        </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
-          <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
@@ -10437,7 +10499,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     TARGET -->
 
 <xsl:template match="target">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -10469,19 +10530,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="max_hosts"/></td>
     <td>
-      <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
-        <xsl:value-of select="port_list/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_port_lists')">
+          <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="port_list/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="port_list/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-        <xsl:value-of select="ssh_lsc_credential/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="ssh_lsc_credential/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="ssh_lsc_credential/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
-        <xsl:value-of select="smb_lsc_credential/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="smb_lsc_credential/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="smb_lsc_credential/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
@@ -10494,7 +10576,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="target" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -10638,37 +10719,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Port List:</td>
           <td>
-            <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="port_list/name"/>
-            </a>
+            <xsl:choose>
+              <xsl:when test="gsa:may-op ('get_port_lists')">
+                <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="port_list/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="port_list/name"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
-        <tr>
-          <td>SSH Credential:</td>
-          <td>
-            <xsl:if test="string-length (ssh_lsc_credential/@id) &gt; 0">
-              <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="ssh_lsc_credential/name"/>
-              </a>
-              on port
-              <xsl:value-of select="ssh_lsc_credential/port"/>
-            </xsl:if>
-          </td>
-        </tr>
-        <tr>
-          <td>SMB Credential:</td>
-          <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="smb_lsc_credential/name"/>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td>Alive Test:</td>
-          <td>
-            <xsl:value-of select="alive_tests/text()"/>
-          </td>
-        </tr>
+        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (ssh_lsc_credential/@id) &gt; 0">
+          <tr>
+            <td>SSH Credential:</td>
+            <td>
+              <xsl:if test="string-length (ssh_lsc_credential/@id) &gt; 0">
+                <xsl:choose>
+                  <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+                    <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="ssh_lsc_credential/name"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="ssh_lsc_credential/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                on port
+                <xsl:value-of select="ssh_lsc_credential/port"/>
+              </xsl:if>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (smb_lsc_credential/@id) &gt; 0">
+          <tr>
+            <td>SMB Credential:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+                  <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="smb_lsc_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="smb_lsc_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>Alive Test:</td>
+            <td>
+              <xsl:value-of select="alive_tests/text()"/>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
 
       <xsl:choose>
@@ -19578,11 +19684,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="resource/trash = '1'">
           <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="gsa:may-op (concat ('get_', resource/type, 's'))">
           <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
              title="Details">
             <xsl:value-of select="resource/name"/>
           </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="resource/name"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -19593,6 +19702,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="subject/trash = '1'">
           <xsl:value-of select="subject/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+        </xsl:when>
+        <xsl:when test="gsa:may-op (concat ('get_', subject/type, 's'))">
+          <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
+             title="Details">
+            <xsl:value-of select="subject/name"/>
+          </a>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="subject/name"/>
@@ -19646,11 +19761,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="subject/trash = '1'">
                 <xsl:value-of select="subject/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
               </xsl:when>
-              <xsl:otherwise>
+              <xsl:when test="gsa:may-op (concat ('get_', subject/type, 's'))">
                 <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
                    title="Details">
                   <xsl:value-of select="subject/name"/>
                 </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="subject/name"/>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -19667,11 +19785,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="resource/trash = '1'">
                 <xsl:value-of select="resource/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
               </xsl:when>
-              <xsl:otherwise>
+              <xsl:when test="gsa:may-op (concat ('get_', resource/type, 's'))">
                 <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
                    title="Details">
                   <xsl:value-of select="resource/name"/>
                 </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="resource/name"/>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -26266,6 +26387,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
       <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
           <h1>Permissions: None</h1>
         </xsl:when>
@@ -27461,7 +27583,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     USER -->
 
 <xsl:template match="user">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -27479,17 +27600,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:for-each select="role">
-        <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
-          <xsl:value-of select="name"/>
-        </a>
+        <xsl:choose>
+          <xsl:when test="gsa:may-op ('get_roles')">
+            <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="name"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="name"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="position() != last()">, </xsl:if>
       </xsl:for-each>
     </td>
     <td>
       <xsl:for-each select="groups/group">
-        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
-          <xsl:value-of select="name"/>
-        </a>
+        <xsl:choose>
+          <xsl:when test="gsa:may-op ('get_groups')">
+            <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="name"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="name"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="position() != last()">, </xsl:if>
       </xsl:for-each>
     </td>

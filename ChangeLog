@@ -1,3 +1,21 @@
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Show or hide details and list dialog elements according to the
+	availability of commands.
+
+	* src/html/classic/omp.xsl (task [details]): Check for command access
+	for optional fields.
+	(html-edit-alert-form): Adjust paths for new location from last commit.
+	(alert): Check command access for link.
+	(alert [trash]): Remove extra line.
+	(alert [details], tagged_resource_link): Check for command access.
+	(tag, tag [trash], target [trash]): Remove extra line.
+	(html-edit-target-form): Remove duplicate input.
+	(target, target [details], permission, permission [details]): Check
+	command access for links.
+	(role [details]): Check command access for Permissions section.
+	(user): Check command access for links.
+
 2014-02-27  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post release version bump.
@@ -402,7 +420,7 @@
 	* src/html/classic/omp.xsl (gsa:date-diff): Mark for i18n.
 	(list-window-line-icons): Update i18n for Export.
 	(result-details-icon-img, task [details], report [report])
-	(interval-with-unit, result-details, report [result-header](
+	(interval-with-unit, result-details, report [result-header])
 	(report [result-headers], result [result-body], report [assets])
 	(report [section-list], report [ports], report [vulns], report [os])
 	(report [apps], report [prognostic_apps], full-report-export-form)
