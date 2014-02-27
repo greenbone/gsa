@@ -8881,12 +8881,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Value:</td>
-          <td><xsl:value-of select="value"/></td>
-        </tr>
-        <tr>
           <td>Comment:</td>
           <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Value:</td>
+          <td><xsl:value-of select="value"/></td>
         </tr>
         <xsl:choose>
           <xsl:when test="attach/name != '' and orphaned='0'">
@@ -9160,18 +9160,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Value (Optional)
-            </td>
-            <td>
-              <input type="text" name="tag_value" value="{tag_value}" size="30"
-                     maxlength="200"/>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="175">Comment (optional)</td>
             <td>
               <input type="text" name="comment" value="{comment}" size="30"
                      maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Value (optional)
+            </td>
+            <td>
+              <input type="text" name="tag_value" value="{tag_value}" size="30"
+                     maxlength="200"/>
             </td>
           </tr>
           <tr>
@@ -9317,18 +9317,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Value (Optional)
-            </td>
-            <td>
-              <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
-                     maxlength="200"/>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="175">Comment (optional)</td>
             <td>
               <input type="text" name="comment" value="{get_tags_response/tag/comment}" size="30"
                      maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Value (optional)
+            </td>
+            <td>
+              <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
+                     maxlength="200"/>
             </td>
           </tr>
           <tr>

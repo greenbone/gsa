@@ -1,5 +1,11 @@
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (tag [details], html-create-tag-form)
+	(html-edit-tag-form): Move comment up to match other pages.  Lowercase
+	optional on Value.
+
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (edit_alert): Improve messages.
 	(save_alert_omp, export_alert_omp): Correct spelling.
 
