@@ -26592,48 +26592,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </td>
         </tr>
-        <tr>
-          <td>
-            Reports for slave:
-          </td>
-          <td>
-            <div id="small_form" style="float:left;">
-              <form action="" method="get">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_system_reports"/>
-                <input type="hidden" name="duration" value="{$duration}"/>
-                <select name="slave_id">
-                  <xsl:variable name="slave_id">
-                    <xsl:value-of select="../slave/@id"/>
-                  </xsl:variable>
-                  <xsl:choose>
-                    <xsl:when test="string-length ($slave_id) &gt; 0">
-                      <option value="0">--</option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="0" selected="1">--</option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:for-each select="../get_slaves_response/slave">
+        <xsl:if test="gsa:may-op ('get_slaves')">
+          <tr>
+            <td>
+              Reports for slave:
+            </td>
+            <td>
+              <div id="small_form" style="float:left;">
+                <form action="" method="get">
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                  <input type="hidden" name="cmd" value="get_system_reports"/>
+                  <input type="hidden" name="duration" value="{$duration}"/>
+                  <select name="slave_id">
+                    <xsl:variable name="slave_id">
+                      <xsl:value-of select="../slave/@id"/>
+                    </xsl:variable>
                     <xsl:choose>
-                      <xsl:when test="@id = $slave_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      <xsl:when test="string-length ($slave_id) &gt; 0">
+                        <option value="0">--</option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                        <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="Update"
-                       title="Update"
-                       src="/img/refresh.png"
-                       alt="Update" style="margin-left:3px;margin-right:3px;"/>
-              </form>
-            </div>
-          </td>
-        </tr>
+                    <xsl:for-each select="../get_slaves_response/slave">
+                      <xsl:choose>
+                        <xsl:when test="@id = $slave_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <input type="image"
+                         name="Update"
+                         title="Update"
+                         src="/img/refresh.png"
+                         alt="Update" style="margin-left:3px;margin-right:3px;"/>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
       <xsl:choose>
         <xsl:when test="@status = '500'">
