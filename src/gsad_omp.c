@@ -5447,9 +5447,9 @@ edit_alert (credentials_t * credentials, params_t *params,
   if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a alert. "
+                         "An internal error occurred while editing an alert. "
                          "The alert remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
+                         "Diagnostics: Required parameter alert_id was NULL.",
                          "/omp?cmd=get_alerts");
 
   if (next == NULL)
@@ -5466,7 +5466,7 @@ edit_alert (credentials_t * credentials, params_t *params,
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a alert. "
+                             "An internal error occurred while editing an alert. "
                              "The alert remains as it was. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_alerts");
@@ -5603,7 +5603,7 @@ edit_alert_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Modify a alert, get all alerts, XSL transform the result.
+ * @brief Modify an alert, get all alerts, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -5802,7 +5802,7 @@ test_alert_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Export a alert.
+ * @brief Export an alert.
  *
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   alert_id            UUID of alert.

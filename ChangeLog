@@ -1,5 +1,10 @@
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_alert): Improve messages.
+	(save_alert_omp, export_alert_omp): Correct spelling.
+
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Show or hide details and list dialog elements according to the
 	availability of commands.
 
