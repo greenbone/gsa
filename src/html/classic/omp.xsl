@@ -5801,7 +5801,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="task" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -6340,7 +6339,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -6376,7 +6374,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -6714,7 +6711,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     AGENT -->
 
 <xsl:template match="agent">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -6762,7 +6758,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="agent" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -8286,7 +8281,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="filter">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -8318,7 +8312,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="filter" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -12349,7 +12342,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- CONFIG -->
 
 <xsl:template match="config">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -12434,7 +12426,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="config" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -13769,7 +13760,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="schedule">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -13848,7 +13838,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="schedule" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -14341,7 +14330,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     SLAVE -->
 
 <xsl:template match="slave">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -14374,7 +14362,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="slave" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -14636,7 +14623,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/cpe">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -14811,7 +14797,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/nvt">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -15002,7 +14987,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/dfn_cert_adv">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -19208,7 +19192,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="group">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -19235,7 +19218,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="group" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
@@ -19806,7 +19788,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="permission" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <div class="float_right">
@@ -20293,7 +20274,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     PORT_LIST -->
 
 <xsl:template match="port_list">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -20332,7 +20312,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="port_list" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -20978,7 +20957,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     REPORT_FORMAT -->
 
 <xsl:template match="report_format">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
@@ -21045,7 +21023,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report_format" mode="trash">
-
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -22657,7 +22634,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="result" mode="overview">
-
   <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="threat"/></td>
@@ -24683,6 +24659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:key name="key_report_ports" match="report/ports/port/text()" use="."/>
+
 <xsl:template match="report" mode="ports">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -24779,6 +24756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:key name="key_vulns_hosts" match="report/results/result" use="concat(nvt/@oid, '|', host)"/>
 <xsl:key name="key_report_vulns" match="report/results/result" use="nvt/@oid"/>
+
 <xsl:template match="report" mode="vulns">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -24868,6 +24846,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:key name="key_report_os" match="report/host/detail" use="concat(name, value)"/>
+
 <xsl:template match="report" mode="os">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="unknown_count"
@@ -25030,6 +25009,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:key name="k_report_apps" match="report/host/detail" use="concat(name, value)"/>
+
 <xsl:template match="report" mode="apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -25136,6 +25116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:key name="key_prog_apps" match="report/results/result" use="cve/cpe/@id"/>
+
 <xsl:template match="report" mode="prognostic_apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
@@ -25481,6 +25462,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:key name="key_report_cves" match="report/results/result/nvt" use="cve"/>
 <xsl:key name="key_report_cves_hosts" match="report/results/result" use="concat(host, '|', nvt/cve)"/>
+
 <xsl:template match="report" mode="cves">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -26242,7 +26224,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="port">
-
   <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="text()"/></td>
     <td><xsl:value-of select="threat"/></td>

@@ -1,5 +1,11 @@
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove extra space at beginning of templates
+	for consistency.  Put a space between key and template, so the template
+	is easier to find.
+
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (tag [details], html-create-tag-form)
 	(html-edit-tag-form): Move comment up to match other pages.  Lowercase
 	optional on Value.
