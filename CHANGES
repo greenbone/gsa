@@ -1,3 +1,22 @@
+gsa 5.0+beta7 (2014-02-27)
+
+This is the seventh beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set of
+OpenVAS Manager available in a web browser.
+
+This release adds numerous improvements to the user interface.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Hani Benhabiles and Timo Pollmeier.
+
+Main changes since 5.0+beta6:
+* Show or hide dialog elements according to the availability of commands.
+* Prevent targets currently used for being modified.
+* More translations to German language.
+* Improved i18n implementation.
+* Code cleanup and various small bug-fixes.
+
+
 gsa 5.0+beta6 (2014-02-16)
 
 This is the sixth beta version of the upcoming 5.0 release of the Greenbone

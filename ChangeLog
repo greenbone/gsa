@@ -1,3 +1,9 @@
+2014-02-27  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Preparing the 5.0+beta7 release.
+
+	* CHANGES: Update
+
 2014-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (task-icons): Add schedule name and due date
