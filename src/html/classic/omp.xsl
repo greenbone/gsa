@@ -71,7 +71,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:may">
   <xsl:param name="name"/>
   <xsl:param name="permissions" select="permissions"/>
-  <func:result select="boolean ($permissions/permission[name='Everything']) or boolean ($permissions/permission[name=$name])"/>
+  <func:result select="gsa:may-op ($name) and (boolean ($permissions/permission[name='Everything']) or boolean ($permissions/permission[name=$name]))"/>
 </func:function>
 
 <func:function name="gsa:may-op">
@@ -2023,26 +2023,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="toggle_tag"/>
-      <input type="hidden" name="enable" value="{$enable}"/>
-      <input type="hidden" name="tag_id" value="{$id}"/>
-      <xsl:choose>
-        <xsl:when test="$enable">
-          <input type="image" src="/img/enable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
-                 name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <input type="image" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
-                 name="Disable Tag" value="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:copy-of select="$params"/>
-    </form>
-  </div>
+  <xsl:if test="gsa:may-op ('modify_tag')">
+    <div style="display: inline">
+      <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="cmd" value="toggle_tag"/>
+        <input type="hidden" name="enable" value="{$enable}"/>
+        <input type="hidden" name="tag_id" value="{$id}"/>
+        <xsl:choose>
+          <xsl:when test="$enable">
+            <input type="image" src="/img/enable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
+                   name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="image" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
+                   name="Disable Tag" value="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:copy-of select="$params"/>
+      </form>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="user_tag_list">

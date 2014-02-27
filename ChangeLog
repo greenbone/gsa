@@ -1,5 +1,11 @@
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (gsa:may): Check if user may run command at
+	all.
+	(toggle-tag-icon): Check command access.
+
+2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove extra space at beginning of templates
 	for consistency.  Put a space between key and template, so the template
 	is easier to find.
