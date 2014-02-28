@@ -1,5 +1,13 @@
 2014-02-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (task [trash]): Add i18n for "... must be
+	restored first" tooltip.
+	(schedule [details]): Add i18n for "Tasks using this Schedule".
+
+	* src/html/classic/po/de.xml: Add "Tasks using this Schedule".
+
+2014-02-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-target-form)
 	(html-edit-target-form, target [trash], target [details])
 	(html-targets-trash-table): Add i18n.

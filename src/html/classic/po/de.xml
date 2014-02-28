@@ -2816,6 +2816,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Dauer</str>
     </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Schedule</id>
+      <str>Aufgaben, die diesen Zeitplan verwenden</str>
+    </msg>
   </grp>
   <!-- 3.18.4    Schedule actions and properties - table rows only -->
   <grp>

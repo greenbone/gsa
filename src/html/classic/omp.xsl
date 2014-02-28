@@ -5874,13 +5874,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | slave[trash!='0'] | (alert[trash!='0'])[0]"/>
           <xsl:variable name="resources_string">
             <xsl:for-each select="$resources_list">
-              <xsl:value-of select="gsa:type-name(name(.))"/>
+              <xsl:value-of select="gsa:i18n (gsa:type-name (name (.)), gsa:type-name (name (.)))"/>
               <xsl:if test="position() &lt; last()-1">, </xsl:if>
-              <xsl:if test="position() = last()-1"> and </xsl:if>
+              <xsl:if test="position() = last()-1">
+                <xsl:text> </xsl:text><xsl:value-of select="gsa:i18n ('and', 'Table Row')"/><xsl:text> </xsl:text>
+              </xsl:if>
             </xsl:for-each>
           </xsl:variable>
           <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore', 'Trashcan')}"
-               title="{$resources_string} must be restored first"
+               title="{$resources_string}{gsa:i18n (' must be restored first.', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -14020,10 +14022,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
-          <h1>Tasks using this Schedule: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Schedule', 'Schedule Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Tasks using this Schedule</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Schedule', 'Schedule Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>Name</td>
