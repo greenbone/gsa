@@ -1,3 +1,8 @@
+2014-02-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (target [details]): Move Alive Test out of
+	credential check.
+
 2014-02-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [details]): Fix report results list

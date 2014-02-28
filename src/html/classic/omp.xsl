@@ -10763,13 +10763,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
           </tr>
-          <tr>
-            <td>Alive Test:</td>
-            <td>
-              <xsl:value-of select="alive_tests/text()"/>
-            </td>
-          </tr>
         </xsl:if>
+        <tr>
+          <td>Alive Test:</td>
+          <td>
+            <xsl:value-of select="alive_tests/text()"/>
+          </td>
+        </tr>
       </table>
 
       <xsl:choose>
