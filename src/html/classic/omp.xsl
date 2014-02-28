@@ -22577,7 +22577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="$delta=0">
-          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
              title="{gsa:i18n ('Report', 'Report')}"
              style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
@@ -22732,6 +22732,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_result"/>
                 <input type="hidden" name="result_id" value="{@id}"/>
+                <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
+                <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
                 <input type="hidden" name="filter" value="{filters/term}"/>
                 <xsl:choose>
                   <xsl:when test="/envelope/params/apply_overrides = 0">

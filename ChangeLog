@@ -1,3 +1,8 @@
+2014-02-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [details]): Fix report results list
+	link. Add missing form parameters.
+
 2014-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_system_reports_omp): Add command check for
