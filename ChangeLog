@@ -1,3 +1,12 @@
+2014-02-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form, target [trash], target [details])
+	(html-targets-trash-table): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for target pages and
+	some trashcan messages.
+
 2014-02-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (target [details]): Move Alive Test out of

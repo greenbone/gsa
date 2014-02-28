@@ -294,6 +294,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Anwenden</str>
     </msg>
 
+    <!-- Conjunctions -->
+    <msg>
+      <id>and</id>
+      <str>und</str>
+    </msg>
+
     <!-- Delete -->
     <msg>
       <id>Delete</id>
@@ -2358,10 +2364,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Target</id>
       <str>Neues Ziel</str>
     </msg>
+    <msg>
+      <id>Create Target</id>
+      <str>Ziel erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Target</id>
       <str>Ziel bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Target</id>
+      <str>Ziel speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -2386,7 +2400,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Target Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>IPs</id>
+      <str>IPs</str>
+    </msg>
+    <msg>
+      <id>SSH Credential</id>
+      <str>SSH-Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>on port</id>
+      <str>auf Port</str>
+    </msg>
+    <msg>
+      <id>SMB Credential</id>
+      <str>SMB-Anmeldedaten</str>
+    </msg>
+
+    <!-- Hosts -->
+    <msg>
+      <id>Manual</id>
+      <str>Manuell</str>
+    </msg>
+    <msg>
+      <id>From file</id>
+      <str>Aus Datei</str>
+    </msg>
+    <msg>
+      <id>Import</id>
+      <str>Importieren</str>
+    </msg>
+    <msg>
+      <id>Import Authentication</id>
+      <str>Authentifizierung importieren</str>
+    </msg>
+    <msg>
+      <id>Username</id>
+      <str>Benutzername</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
+
+    <msg>
+      <id>Exclude Hosts</id>
+      <str>Hosts ausschließen</str>
+    </msg>
+
+    <msg>
+      <id>Reverse Lookup Unify</id>
+      <str>Invers-Lookup-Vereinheitlichung</str>
+    </msg>
+    <msg>
+      <id>Reverse Lookup Only</id>
+      <str>Nur Invers-Lookup</str>
+    </msg>
+
+    <msg>
+      <id>Maximum number of hosts</id>
+      <str>Maximale Anzahl Hosts</str>
+    </msg>
+
+    <msg>
+      <id>Alive Test</id>
+      <str>Erreichbarkeitstest</str>
+    </msg>
+    <msg>
+      <id>Scan Config Default</id>
+      <str>Standard der Scankonfiguration</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Target</id>
+      <str>Aufgaben, die dieses Ziel verwenden</str>
+    </msg>
+    
   </grp>
   <!-- 3.13.4    Target actions and properties - table rows only -->
   <grp>
@@ -3325,6 +3414,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>trashcan</id>
       <str>Mülleimer</str>
+    </msg>
+    <msg>
+      <id>in trashcan</id>
+      <str>im Mülleimer</str>
+    </msg>
+
+    <!-- [...] must be restored first -->
+    <msg>
+      <id> must be restored first.</id>
+      <str> noch nicht wiederhergestellt.</str>
     </msg>
   </grp>
 
