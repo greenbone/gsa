@@ -240,23 +240,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </func:function>
 
-<func:function name="gsa:newstyle-nvt">
-  <xsl:param name="nvt"/>
-  <xsl:choose>
-    <xsl:when test="string-length (gsa:get-nvt-tag ($nvt/tags, 'summary'))
-                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'affected'))
-                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'insight'))
-                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'vuldetect'))
-                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'impact'))
-                    and string-length (gsa:get-nvt-tag ($nvt/tags, 'solution'))">
-      <func:result select="1"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <func:result select="0"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</func:function>
-
 <func:function name="gsa:cvss-risk-factor">
   <xsl:param name="cvss_score"/>
   <xsl:variable name="type" select="/envelope/severity"/>
@@ -23148,15 +23131,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
       <!-- Summary -->
-      <xsl:if test="gsa:newstyle-nvt (nvt)">
-        <div class="result_section_top result_section">
-          <b><xsl:value-of select="gsa:i18n ('Summary', 'Result Window')"/></b>
-          <xsl:call-template name="structured-text">
-            <xsl:with-param name="string"
-                            select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
-          </xsl:call-template>
-        </div>
-      </xsl:if>
+      <div class="result_section_top result_section">
+        <b><xsl:value-of select="gsa:i18n ('Summary', 'Result Window')"/></b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string"
+                          select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
+        </xsl:call-template>
+      </div>
 
       <!-- Result -->
       <xsl:choose>
@@ -23176,78 +23157,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="gsa:newstyle-nvt (nvt)">
-              <div class="result_section">
-                <xsl:choose>
-                  <xsl:when test="delta/text() = 'changed'">
-                    <b><xsl:value-of select="gsa:i18n ('Result', 'Result Window')"/> 1</b>
-                    <p></p>
-                  </xsl:when>
-                </xsl:choose>
-                <b><xsl:value-of select="gsa:i18n ('Vulnerability Detection Result', 'Result Window')"/></b>
-                <xsl:choose>
-                  <xsl:when test="string-length(description) &lt; 2">
-                    <p>
-                    <xsl:value-of select="gsa:i18n ('Vulnerability was detected according to the Vulnerability Detection Method.', 'Result Window')"/>
-                    </p>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <pre>
-                      <xsl:call-template name="wrap">
-                        <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-                      </xsl:call-template>
-                    </pre>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </div>
-            </xsl:when>
-            <xsl:otherwise>
-              <div class="result_section_top result_section">
-                <xsl:choose>
-                  <xsl:when test="delta/text() = 'changed'">
-                    <b><xsl:value-of select="gsa:i18n ('Result', 'Result Window')"/> 1</b>
-                    <p></p>
-                  </xsl:when>
-                </xsl:choose>
+          <div class="result_section">
+            <xsl:choose>
+              <xsl:when test="delta/text() = 'changed'">
+                <b><xsl:value-of select="gsa:i18n ('Result', 'Result Window')"/> 1</b>
+                <p></p>
+              </xsl:when>
+            </xsl:choose>
+            <b><xsl:value-of select="gsa:i18n ('Vulnerability Detection Result', 'Result Window')"/></b>
+            <xsl:choose>
+              <xsl:when test="string-length(description) &lt; 2">
+                <p>
+                <xsl:value-of select="gsa:i18n ('Vulnerability was detected according to the Vulnerability Detection Method.', 'Result Window')"/>
+                </p>
+              </xsl:when>
+              <xsl:otherwise>
                 <pre>
                   <xsl:call-template name="wrap">
                     <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
                   </xsl:call-template>
                 </pre>
-              </div>
-            </xsl:otherwise>
-          </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
 
-      <xsl:if test="gsa:newstyle-nvt (nvt)">
-          <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
-            <div class="result_section">
-              <b><xsl:value-of select="gsa:i18n ('Impact', 'Result Window')"/></b>
-              <xsl:call-template name="structured-text">
-                <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
-              </xsl:call-template>
-            </div>
-          </xsl:if>
+      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
+        <div class="result_section">
+          <b><xsl:value-of select="gsa:i18n ('Impact', 'Result Window')"/></b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
 
-        <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
-          <div class="result_section">
-          <b><xsl:value-of select="gsa:i18n ('Solution', 'Result Window')"/></b>
-            <xsl:call-template name="structured-text">
-              <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
-            </xsl:call-template>
-          </div>
-        </xsl:if>
+      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
+        <div class="result_section">
+        <b><xsl:value-of select="gsa:i18n ('Solution', 'Result Window')"/></b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
 
-        <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
-          <div class="result_section">
-            <b><xsl:value-of select="gsa:i18n ('Vulnerability Insight', 'Result Window')"/></b>
-            <xsl:call-template name="structured-text">
-              <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
-            </xsl:call-template>
-          </div>
-        </xsl:if>
+      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
+        <div class="result_section">
+          <b><xsl:value-of select="gsa:i18n ('Vulnerability Insight', 'Result Window')"/></b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
+          </xsl:call-template>
+        </div>
       </xsl:if>
 
       <div class="result_section">

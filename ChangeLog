@@ -1,3 +1,9 @@
+2014-03-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-body]): Remove newstyle nvt's
+	checks.
+	(gsa:newstyle-nvt): Remove function.
+
 2014-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form)
