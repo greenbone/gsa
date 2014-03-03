@@ -1,3 +1,11 @@
+2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (tag_attach_types): Only offer types that the
+	user may GET, except when the type is selected.
+
+	* src/gsad_omp.c (new_tag): Default attach_type to "" because the
+	default now depends on the user's access rights.
+
 2014-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-lsc-credential-form)

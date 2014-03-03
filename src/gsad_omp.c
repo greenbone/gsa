@@ -6678,7 +6678,7 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
                                  "<active>1</active>"
                                  "</new_tag>",
                                  tag_id ? tag_id : "0",
-                                 attach_type ? attach_type : "agent",
+                                 attach_type ? attach_type : "",
                                  attach_id ? attach_id : "",
                                  tag_name ? tag_name : (attach_type
                                                           ? attach_type

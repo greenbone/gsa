@@ -8970,121 +8970,167 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="tag_attach_types">
   <xsl:param name="select_type"/>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'agent'"/>
-    <xsl:with-param name="content" select="'Agent'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'alert'"/>
-    <xsl:with-param name="content" select="'Alert'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'cpe'"/>
-    <xsl:with-param name="content" select="'CPE'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'lsc_credential'"/>
-    <xsl:with-param name="content" select="'Credential'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'cve'"/>
-    <xsl:with-param name="content" select="'CVE'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'dfn_cert_adv'"/>
-    <xsl:with-param name="content" select="'DFN-CERT Advisory'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'filter'"/>
-    <xsl:with-param name="content" select="'Filter'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'group'"/>
-    <xsl:with-param name="content" select="'Group'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'note'"/>
-    <xsl:with-param name="content" select="'Note'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'nvt'"/>
-    <xsl:with-param name="content" select="'NVT'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'ovaldef'"/>
-    <xsl:with-param name="content" select="'OVAL definition'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'override'"/>
-    <xsl:with-param name="content" select="'Override'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'permission'"/>
-    <xsl:with-param name="content" select="'Permission'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'port_list'"/>
-    <xsl:with-param name="content" select="'Port list'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'report'"/>
-    <xsl:with-param name="content" select="'Report'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'report_format'"/>
-    <xsl:with-param name="content" select="'Report Format'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
+  <xsl:if test="$select_type = 'agent' or gsa:may-op ('get_agents')">
     <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'result'"/>
-    <xsl:with-param name="content" select="'Result'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'config'"/>
-    <xsl:with-param name="content" select="'Scan Configuration'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'schedule'"/>
-    <xsl:with-param name="content" select="'Schedule'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'slave'"/>
-    <xsl:with-param name="content" select="'Slave'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'target'"/>
-    <xsl:with-param name="content" select="'Target'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'task'"/>
-    <xsl:with-param name="content" select="'Task'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
-  <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="'user'"/>
-    <xsl:with-param name="content" select="'User'"/>
-    <xsl:with-param name="select-value" select="$select_type"/>
-  </xsl:call-template>
+      <xsl:with-param name="value" select="'agent'"/>
+      <xsl:with-param name="content" select="'Agent'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'alert' or gsa:may-op ('get_alerts')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'alert'"/>
+      <xsl:with-param name="content" select="'Alert'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'cpe' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'cpe'"/>
+      <xsl:with-param name="content" select="'CPE'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'lsc_credential' or gsa:may-op ('get_lsc_credentials')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'lsc_credential'"/>
+      <xsl:with-param name="content" select="'Credential'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'cve' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'cve'"/>
+      <xsl:with-param name="content" select="'CVE'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'dfn_cert_adv' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'dfn_cert_adv'"/>
+      <xsl:with-param name="content" select="'DFN-CERT Advisory'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'filter' or gsa:may-op ('get_filters')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'filter'"/>
+      <xsl:with-param name="content" select="'Filter'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'group' or gsa:may-op ('get_groups')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'group'"/>
+      <xsl:with-param name="content" select="'Group'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'note' or gsa:may-op ('get_notes')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'note'"/>
+      <xsl:with-param name="content" select="'Note'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'nvt' or gsa:may-op ('get_nvts')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'nvt'"/>
+      <xsl:with-param name="content" select="'NVT'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'ovaldef' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'ovaldef'"/>
+      <xsl:with-param name="content" select="'OVAL definition'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'override' or gsa:may-op ('get_overrides')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'override'"/>
+      <xsl:with-param name="content" select="'Override'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'permission' or gsa:may-op ('get_permissions')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'permission'"/>
+      <xsl:with-param name="content" select="'Permission'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'port_list' or gsa:may-op ('get_port_lists')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'port_list'"/>
+      <xsl:with-param name="content" select="'Port list'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'report' or gsa:may-op ('get_reports')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'report'"/>
+      <xsl:with-param name="content" select="'Report'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'report_format' or gsa:may-op ('get_report_formats')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'report_format'"/>
+      <xsl:with-param name="content" select="'Report Format'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'result' or gsa:may-op ('get_results')">
+      <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'result'"/>
+      <xsl:with-param name="content" select="'Result'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'config' or gsa:may-op ('get_configs')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'config'"/>
+      <xsl:with-param name="content" select="'Scan Configuration'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'schedule' or gsa:may-op ('get_schedules')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'schedule'"/>
+      <xsl:with-param name="content" select="'Schedule'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'slave' or gsa:may-op ('get_slaves')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'slave'"/>
+      <xsl:with-param name="content" select="'Slave'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'target' or gsa:may-op ('get_targets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'target'"/>
+      <xsl:with-param name="content" select="'Target'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'task' or gsa:may-op ('get_tasks')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'task'"/>
+      <xsl:with-param name="content" select="'Task'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'user' or gsa:may-op ('get_users')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'user'"/>
+      <xsl:with-param name="content" select="'User'"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="new_tag">
