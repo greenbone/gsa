@@ -6043,14 +6043,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Credential
+      <xsl:value-of select="gsa:i18n ('New Credential', 'Credential')"/>
       <a href="/help/new_lsc_credential.html?token={/envelope/token}"
-         title="Help: New Credential">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Credential', 'Credential'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_lsc_credentials&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Credentials" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Credentials"/>
+         title="{gsa:i18n ('Credentials', 'Credential')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Credentials', 'Credential')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -6063,21 +6063,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Login</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login', 'Credential Window')"/></td>
             <td>
               <input type="text" name="credential_login" value="" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" value="" size="30"
                      maxlength="400"/>
@@ -6091,7 +6091,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td colspan="3">
                     <label>
                       <input type="radio" name="base" value="gen"/>
-                      Autogenerate credential
+                      <xsl:value-of select="gsa:i18n ('Autogenerate credential', 'Credential Window')"/>
                     </label>
                   </td>
                 </tr>
@@ -6099,7 +6099,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td colspan="2">
                     <label>
                       <input type="radio" name="base" value="pass" checked="1"/>
-                      Password
+                      <xsl:value-of select="gsa:i18n ('Password', 'Credential Window')"/>
                     </label>
                   </td>
                   <td>
@@ -6112,14 +6112,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td colspan="3">
                     <label>
                       <input type="radio" name="base" value="key"/>
-                      Key pair
+                      <xsl:value-of select="gsa:i18n ('Key pair', 'Credential Window')"/>
                     </label>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
                   <td>
-                    Public key
+                    <xsl:value-of select="gsa:i18n ('Public key', 'Credential Window')"/>
                   </td>
                   <td>
                     <input type="file" name="public_key" size="30"/>
@@ -6128,7 +6128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td width="45"></td>
                   <td>
-                    Private key
+                    <xsl:value-of select="gsa:i18n ('Private key', 'Credential Window')"/>
                   </td>
                   <td>
                     <input type="file" name="private_key" size="30"/>
@@ -6137,7 +6137,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td width="45"></td>
                   <td>
-                    Passphrase
+                    <xsl:value-of select="gsa:i18n ('Passphrase', 'Credential Window')"/>
                   </td>
                   <td>
                     <input type="password" autocomplete="off" name="passphrase"
@@ -6149,7 +6149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Credential"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Credential', 'Credential')}"/>
             </td>
           </tr>
         </table>
@@ -6215,7 +6215,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Credential
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Credential', 'Credential')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Credential'"/>
         <xsl:with-param name="type" select="'lsc_credential'"/>
@@ -6234,7 +6234,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -6244,14 +6244,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">Comment</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_lsc_credentials_response/lsc_credential/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top">Login</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Credential Window')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
@@ -6267,14 +6267,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">Password</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Credential Window')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
                   <label>
                     <input type="checkbox" name="enable_off" value="1"
                            disabled="1"/>
-                    Replace existing value with:
+                    <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Credential Window')"/>:
                     <br/>
                   </label>
                   <input type="password" name="password" size="30" maxlength="400"
@@ -6283,7 +6283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:otherwise>
                   <label>
                     <input type="checkbox" name="enable" value="1"/>
-                    Replace existing value with:
+                    <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Credential Window')"/>:
                     <br/>
                   </label>
                   <input type="password" autocomplete="off" name="password"
@@ -6294,7 +6294,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Credential"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Credential', 'Credential')}"/>
             </td>
           </tr>
         </table>
@@ -6325,20 +6325,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="lsc-credential-download-icons">
   <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
-     title="Download RPM package" style="margin-left:3px;">
-    <img src="/img/rpm.png" border="0" alt="Download RPM"/>
+     title="{gsa:i18n ('Download RPM package', 'Credential Table Row')}" style="margin-left:3px;">
+    <img src="/img/rpm.png" border="0" alt="{gsa:i18n ('Download RPM', 'Credential Table Row')}"/>
   </a>
   <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
-     title="Download Debian package" style="margin-left:3px;">
-    <img src="/img/deb.png" border="0" alt="Download Deb"/>
+     title="{gsa:i18n ('Download Debian package', 'Credential Table Row')}" style="margin-left:3px;">
+    <img src="/img/deb.png" border="0" alt="{gsa:i18n ('Download Deb', 'Credential Table Row')}"/>
   </a>
   <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
-     title="Download Exe package" style="margin-left:3px;">
-    <img src="/img/exe.png" border="0" alt="Download Exe"/>
+     title="{gsa:i18n ('Download Exe package', 'Credential Table Row')}" style="margin-left:3px;">
+    <img src="/img/exe.png" border="0" alt="{gsa:i18n ('Download Exe', 'Credential Table Row')}"/>
   </a>
   <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
-     title="Download Public Key" style="margin-left:3px;">
-    <img src="/img/key.png" border="0" alt="Download Public Key"/>
+     title="{gsa:i18n ('Download Public Key', 'Credential Table Row')}" style="margin-left:3px;">
+    <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Public Key', 'Credential Table Row')}"/>
   </a>
 </xsl:template>
 
@@ -6401,7 +6401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Credential is still in use"
+               title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' is still in use', 'Table Row')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -6414,7 +6414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Credential Details
+      <xsl:value-of select="gsa:i18n ('Credential Details', 'Credential')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Credential'"/>
         <xsl:with-param name="type" select="'lsc_credential'"/>
@@ -6427,29 +6427,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Login:</td>
+          <td><xsl:value-of select="gsa:i18n ('Login', 'Credential Window')"/>:</td>
           <td><xsl:value-of select="login"/></td>
         </tr>
       </table>
 
       <xsl:choose>
         <xsl:when test="count(targets/target) = 0">
-          <h1>Targets using this Credential: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Targets using this Credential</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="targets/target">
 
@@ -6457,10 +6457,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
-                     title="Target Details">
+                     title="{gsa:i18n ('Target Details', 'Target')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Table Row')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -26788,10 +26788,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Login</td>
-        <td>Comment</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Login', 'Credential Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="lsc_credential" mode="trash"/>
     </table>

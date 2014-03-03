@@ -2633,10 +2633,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Credential</id>
       <str>Neue Anmeldedaten</str>
     </msg>
+    <msg>
+      <id>Create Credential</id>
+      <str>Anmeldedaten erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Credential</id>
       <str>Anmeldedaten bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Credential</id>
+      <str>Anmeldedaten speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -2653,6 +2661,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Credential Table Row</ctxt>
     <ctxt>Credential Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Download RPM package</id>
+      <str>RPM-Paket herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download RPM</id>
+      <str>RPM herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Debian package</id>
+      <str>Debian-Paket herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Deb</id>
+      <str>Deb herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Exe package</id>
+      <str>Exe-Paket herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Exe</id>
+      <str>Exe herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Public Key</id>
+      <str>Öffentlichen Schlüssel herunterladen</str>
+    </msg>
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
   </grp>
@@ -2661,7 +2697,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Credential Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Login</id>
+      <str>Login</str>
+    </msg>
+
+    <msg>
+      <id>Autogenerate credential</id>
+      <str>Anmeldedaten automatisch generieren</str>
+    </msg>
+
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
+    <msg>
+      <id>Replace existing value with</id>
+      <str>Vorhandenen Wert ersetzen durch</str>
+    </msg>
+
+    <msg>
+      <id>Key pair</id>
+      <str>Schlüsselpaar</str>
+    </msg>
+    <msg>
+      <id>Public key</id>
+      <str>Öffentlicher Schlüssel</str>
+    </msg>
+    <msg>
+      <id>Private key</id>
+      <str>Privater Schlüssel</str>
+    </msg>
+    <msg>
+      <id>Passphrase</id>
+      <str>Passphrase</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Targets using this Credential</id>
+      <str>Ziele, die diese Anmeldedaten verwenden</str>
+    </msg>
   </grp>
   <!-- 3.15.4    Credential actions and properties - table rows only -->
   <grp>
