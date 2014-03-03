@@ -2506,11 +2506,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Port List</id>
       <str>Neue Portliste</str>
     </msg>
+    <msg>
+      <id>Create Port List</id>
+      <str>Portliste erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Port List</id>
       <str>Portliste bearbeiten</str>
     </msg>
+    <msg>
+      <id>Save Port List</id>
+      <str>Portliste bearbeiten</str>
+    </msg>
+
     <!-- - - Common references - - -->
     <msg>
       <id>Port List Details</id>
@@ -2533,8 +2542,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Port List Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Import Port List</id>
+      <str>Portliste importieren </str>
+    </msg>
+    <msg>
+      <id>Import XML Port List</id>
+      <str>XML-Portliste importieren </str>
+    </msg>
     <!-- - - Properties - - -->
+    <msg>
+      <id>Port Counts</id>
+      <str>Portanzahlen</str>
+    </msg>
+    <msg>
+      <id>Protocol</id>
+      <str>Protokoll</str>
+    </msg>
+
+    <msg>
+      <id>Port count</id>
+      <str>Anzahl Ports</str>
+    </msg>
+    <msg>
+      <id>TCP Port count</id>
+      <str>Anzahl TCP-Ports</str>
+    </msg>
+    <msg>
+      <id>UDP Port count</id>
+      <str>Anzahl UDP-Ports</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Targets using this Port List</id>
+      <str>Ziele, die diese Portliste verwenden</str>
+    </msg>
+    <!-- Port ranges -->
+    <msg>
+      <id>Port Ranges</id>
+      <str>Portbereiche</str>
+    </msg>
+    <msg>
+      <id>New Port Range</id>
+      <str>Neuer Portbereich</str>
+    </msg>
+    <msg>
+      <id>Create Port Range</id>
+      <str>Portbereich erstellen</str>
+    </msg>
+    <msg>
+      <id>From file</id>
+      <str>Aus Datei</str>
+    </msg>
+    <msg>
+      <id>Start</id>
+      <str>Anfang</str>
+    </msg>
+    <msg>
+      <id>End</id>
+      <str>Ende</str>
+    </msg>
   </grp>
   <!-- 3.14.4    Port List actions and properties - table rows only -->
   <grp>
@@ -2544,7 +2611,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - References and reference actions - - -->
   </grp>
 
-  
+
   <!-- 3.15 Credentials -->
 
   <!-- 3.15      Credentials -->

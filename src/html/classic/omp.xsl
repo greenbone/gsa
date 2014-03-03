@@ -20146,14 +20146,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Port List
+      <xsl:value-of select="gsa:i18n ('New Port List', 'Port List')"/>
       <a href="/help/new_port_list.html?token={/envelope/token}"
-         title="Help: New Port List">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Port Lists" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Port Lists"/>
+         title="{gsa:i18n ('Port Lists', 'Port List')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -20166,7 +20166,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -20174,13 +20174,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Port Ranges</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List Window')"/></td>
             <td>
               <label>
                 <input type="radio" name="from_file" value="0" checked="1"/>
@@ -20190,14 +20190,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <br/>
               <label>
                 <input type="radio" name="from_file" value="1"/>
-                From file
+                <xsl:value-of select="gsa:i18n ('From file', 'Port List Window')"/>
+                <xsl:text> </xsl:text>
                 <input type="file" name="file" size="30"/>
               </label>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Port List"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Port List', 'Port List')}"/>
             </td>
           </tr>
         </table>
@@ -20352,7 +20353,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Port list is still in use"
+               title="{gsa:i18n ('Port list', 'Port list')}{gsa:i18n (' is still in use', 'Table Row')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -20365,7 +20366,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Port List Details
+      <xsl:value-of select="gsa:i18n ('Port List Details', 'Port List')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Port List'"/>
         <xsl:with-param name="type" select="'port_list'"/>
@@ -20375,33 +20376,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Port count:</td>
+          <td><xsl:value-of select="gsa:i18n ('Port count', 'Port List Window')"/>:</td>
           <td><xsl:value-of select="port_count/all"/></td>
         </tr>
         <tr>
-          <td>TCP Port count:</td>
+          <td><xsl:value-of select="gsa:i18n ('TCP Port count', 'Port List Window')"/>:</td>
           <td><xsl:value-of select="port_count/tcp"/></td>
         </tr>
         <tr>
-          <td>UDP Port count:</td>
+          <td><xsl:value-of select="gsa:i18n ('UDP Port count', 'Port List Window')"/>:</td>
           <td><xsl:value-of select="port_count/udp"/></td>
         </tr>
       </table>
 
-      <h1>Port Ranges</h1>
+      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List Window')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
-          <td>Start</td>
-          <td>End</td>
-          <td>Protocol</td>
+          <td><xsl:value-of select="gsa:i18n ('Start', 'Port List Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('End', 'Port List Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port List Window')"/></td>
         </tr>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="in_use" select="in_use"/>
@@ -20417,24 +20418,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(targets/target) = 0">
-          <h1>Targets using this Port List: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Targets using this Port List</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="targets/target">
 
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Table Row')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Table Row')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -20456,7 +20457,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Port List
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Port List', 'Port List')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Port List'"/>
         <xsl:with-param name="type" select="'port_list'"/>
@@ -20477,14 +20478,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_port_lists_response/port_list/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165">Comment (optional)</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_port_lists_response/port_list/comment}"/>
@@ -20492,14 +20493,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Port List"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Port List', 'Port List Window')}"/>
             </td>
           </tr>
         </table>
         <br/>
       </form>
 
-      <h2>New port range</h2>
+      <h2><xsl:value-of select="gsa:i18n ('New Port Range', 'Port List Window')"/></h2>
 
       <xsl:variable name="id" select="commands_response/get_port_lists_response/port_list/@id"/>
       <xsl:variable name="in_use" select="commands_response/get_port_lists_response/port_list/in_use"/>
@@ -20512,7 +20513,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="edit_port_list"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top">Start</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Start', 'Port List Window')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -20527,7 +20528,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">End</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('End', 'Port List Window')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -20542,7 +20543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">Protocol</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Protocol', 'Port List Window')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -20574,10 +20575,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
-                  <input type="submit" name="submit" value="Create port range"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Port Range', 'Port List Window')}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="Create port range"
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Port Range', 'Port List Window')}"
                          disabled="1"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -20585,13 +20586,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </form>
-      <h1>Port Ranges</h1>
+      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List Window')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
-          <td>Start</td>
-          <td>End</td>
-          <td>Protocol</td>
-          <td>Actions</td>
+          <td><xsl:value-of select="gsa:i18n ('Start', 'Port List Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('End', 'Port List Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port List Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Actions', 'Port List Window')"/></td>
         </tr>
         <xsl:for-each select="commands_response/get_port_lists_response/port_list/port_ranges/port_range">
 
@@ -20615,7 +20616,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <img src="/img/delete_inactive.png"
                        border="0"
                        alt="{gsa:i18n ('Delete', 'Table Row')}"
-                       title="Port list is still in use"
+                       title="{gsa:i18n ('Port List', 'Port List')}{gsa:i18n (' is still in use', 'Table Row')}"
                        style="margin-left:3px;"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -20668,14 +20669,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Import Port List
+      <xsl:value-of select="gsa:i18n ('Import Port List', 'Port List Window')"/>
       <a href="/help/new_port_list.html?token={/envelope/token}#import_port_list"
-         title="Help: New Port List">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Port Lists" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Port Lists"/>
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -20686,13 +20687,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
-              Import XML port list
+              <xsl:value-of select="gsa:i18n ('Import XML Port List', 'Port List Window')"/>
             </td>
             <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Import Port List"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Import Port List', 'Port List Window')}"/>
             </td>
           </tr>
         </table>
@@ -26801,8 +26802,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="port_list" mode="trash"/>
     </table>

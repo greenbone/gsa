@@ -1,3 +1,11 @@
+2014-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-port-list-form)
+	(port_list [trash], port_list [details], html-edit-port-list-form)
+	(html-port-lists-trash-table): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for port list pages.
+
 2014-02-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [trash]): Add i18n for "... must be
