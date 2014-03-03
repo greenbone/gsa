@@ -1,5 +1,11 @@
 2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permission-form)
+	(html-edit-permission-form): Only offer commands the user may use.  This
+	hides disabled commands.
+
+2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (result [result-body]): Check if tags are
 	empty before adding section.
 

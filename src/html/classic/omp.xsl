@@ -19616,7 +19616,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="permission">
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
-                  <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                  <xsl:if test="gsa:may-op (name)">
+                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                  </xsl:if>
                 </xsl:for-each>
               </select>
             </td>
@@ -20040,7 +20042,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <option value="{$name}" selected="1"><xsl:value-of select="$name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                      <xsl:if test="gsa:may-op (name)">
+                        <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                      </xsl:if>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:for-each>
