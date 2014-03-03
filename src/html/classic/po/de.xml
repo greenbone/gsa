@@ -2840,10 +2840,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Alert</id>
       <str>Neue Benachrichtigung</str>
     </msg>
+    <msg>
+      <id>Create Alert</id>
+      <str>Benachrichtigung erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Alert</id>
       <str>Benachrichtigung bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Alert</id>
+      <str>Benachrichtigung speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -2860,15 +2868,170 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Alert Table Row</ctxt>
     <ctxt>Alert Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Test</id>
+      <str>Testen</str>
+    </msg>
     <!-- - - Properties - - -->
+    <!-- Event -->
+    <msg>
+      <id>Task run status changed to</id>
+      <str>Status der Aufgabe hat sich geändert zu</str>
+    </msg>
+    <msg>
+      <id>Task run status changed</id>
+      <str>Status der Aufgabe hat sich geändert</str>
+    </msg>
+    <msg>
+      <id>to</id>
+      <str>zu</str>
+    </msg>
+    <!-- Condition -->
+    <msg>
+      <id>Always</id>
+      <str>Immer</str>
+    </msg>
+    <msg>
+      <id>Severity is at least </id>
+      <str>Schweregrad ist mindstens </str>
+    </msg>
+    <msg>
+      <id>Severity at least</id>
+      <str>Schweregrad mindestens</str>
+    </msg>
+    <msg>
+      <id>Severity level </id>
+      <str>Schwereniveau </str>
+    </msg>
+    <msg>
+      <id>Severity changed</id>
+      <str>Schwere verändert</str>
+    </msg>
+    <msg>
+      <id>changed</id>
+      <str>verändert</str>
+    </msg>
+    <msg>
+      <id>increased</id>
+      <str>gestiegen</str>
+    </msg>
+    <msg>
+      <id>decreased</id>
+      <str>gesunken</str>
+    </msg>
+    <!-- Method -->
+    <msg>
+      <id>Email</id>
+      <str>E-Mail</str>
+    </msg>
+    <msg>
+      <id>To Address</id>
+      <str>An Adresse</str>
+    </msg>
+    <msg>
+      <id>To</id>
+      <str>An</str>
+    </msg>
+    <msg>
+      <id>From Address</id>
+      <str>Von Adresse</str>
+    </msg>
+    <msg>
+      <id>Content</id>
+      <str>Inhalt</str>
+    </msg>
+    <msg>
+      <id>Simple notice</id>
+      <str>Einfache Benachrichtigung</str>
+    </msg>
+    <msg>
+      <id>Include report</id>
+      <str>Bericht integrieren</str>
+    </msg>
+    <msg>
+      <id>Attach report</id>
+      <str>Bericht anhängen</str>
+    </msg>
+
+    <msg>
+      <id>System Logger</id>
+      <str>System-Logger</str>
+    </msg>
+
+    <msg>
+      <id>HTTP Get</id>
+      <str>HTTP-Get</str>
+    </msg>
+
+    <msg>
+      <id>Sourcefire Connector</id>
+      <str>Sourcefire-Schnittstelle</str>
+    </msg>
+    <msg>
+      <id>Defense Center IP</id>
+      <str>Defense Center IP</str>
+    </msg>
+    <msg>
+      <id>Defense Center Port</id>
+      <str>Defense Center Port</str>
+    </msg>
+    <msg>
+      <id>PKCS12 file</id>
+      <str>PKCS12-Datei</str>
+    </msg>
+
+    <msg>
+      <id>verinice.PRO Connector</id>
+      <str>verinice.PRO-Konnector</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO URL</id>
+      <str>verinice.PRO-URL</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO Username</id>
+      <str>verinice.PRO-Benutzername</str>
+    </msg>
+    <msg>
+      <id>Username</id>
+      <str>Benutzername</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO Password</id>
+      <str>verinice.PRO-Passwort</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>#Filter None#</id>
+      <str>Keiner</str>
+    </msg>
   </grp>
   <!-- 3.17.3    Alert actions and properties - window / headers only -->
   <grp>
     <ctxt>Alert Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Event</id>
+      <str>Ereignis</str>
+    </msg>
+    <msg>
+      <id>Condition</id>
+      <str>Bedingung</str>
+    </msg>
+    <msg>
+      <id>Method</id>
+      <str>Methode</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Report Result Filter</id>
+      <str>Ergebnisfilter für Bericht</str>
+    </msg>
+    <msg>
+      <id>Tasks using this Alert</id>
+      <str>Aufgaben, die diese Benachrichtigung benutzen</str>
+    </msg>
   </grp>
   <!-- 3.17.4    Alert actions and properties - table rows only -->
   <grp>

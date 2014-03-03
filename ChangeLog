@@ -1,3 +1,11 @@
+2014-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form, alert, alert [trash], alert [details])
+	(html-alerts-trash-table): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for alert pages.
+
 2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (tag_attach_types): Only offer types that the
