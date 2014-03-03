@@ -1,3 +1,8 @@
+2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-body]): Check if tags are
+	empty before adding section.
+
 2014-03-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-body]): Remove newstyle nvt's

@@ -23131,13 +23131,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
       <!-- Summary -->
-      <div class="result_section_top result_section">
-        <b><xsl:value-of select="gsa:i18n ('Summary', 'Result Window')"/></b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string"
-                          select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
-        </xsl:call-template>
-      </div>
+      <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'summary')) &gt; 0">
+        <div class="result_section_top result_section">
+          <b><xsl:value-of select="gsa:i18n ('Summary', 'Result Window')"/></b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string"
+                            select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
 
       <!-- Result -->
       <xsl:choose>
@@ -23183,7 +23185,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
 
-      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
+      <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'impact')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
         <div class="result_section">
           <b><xsl:value-of select="gsa:i18n ('Impact', 'Result Window')"/></b>
           <xsl:call-template name="structured-text">
@@ -23192,7 +23194,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
 
-      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
+      <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'solution')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
         <div class="result_section">
         <b><xsl:value-of select="gsa:i18n ('Solution', 'Result Window')"/></b>
           <xsl:call-template name="structured-text">
@@ -23201,7 +23203,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
 
-      <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
+      <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'insight')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
         <div class="result_section">
           <b><xsl:value-of select="gsa:i18n ('Vulnerability Insight', 'Result Window')"/></b>
           <xsl:call-template name="structured-text">
