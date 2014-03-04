@@ -1,3 +1,8 @@
+2014-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Specify the filter
+	for notes and overrides, so that it explicitly sorts by NVT.
+
 2014-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter, filter [trash], filter [details])

@@ -1431,13 +1431,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <item>
             <page>get_notes</page>
             <name><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></name>
+            <filter>sort=nvt permission=any</filter>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_OVERRIDES')">
           <item>
-<!-- filter=sort=nvt permission=any FIX -->
             <page>get_overrides</page>
             <name><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></name>
+            <filter>sort=nvt permission=any</filter>
           </item>
         </xsl:if>
       </xsl:variable>
@@ -1460,11 +1461,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="exslt:node-set ($items)/*">
               <xsl:if test="name (.) = 'item'">
                 <xsl:choose>
+                  <xsl:when test="position() = last() and boolean (filter)">
+                    <li class="last {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:when>
                   <xsl:when test="position() = last()">
                     <li class="last {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
+                  <xsl:when test="string-length (class) &gt; 0 and boolean (filter)">
+                    <li class="{class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:when>
                   <xsl:when test="string-length (class) &gt; 0">
                     <li class="{class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                  </xsl:when>
+                  <xsl:when test="boolean (filter)">
+                    <li><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:otherwise>
                     <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
