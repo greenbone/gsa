@@ -484,6 +484,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Datum</str>
     </msg>
     <msg>
+      <id>Description</id>
+      <str>Beschreibung</str>
+    </msg>
+    <msg>
       <id>ID</id>
       <str>ID</str>
     </msg>
@@ -581,6 +585,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>User Window</ctxt>
     <ctxt>Group Window</ctxt>
     <ctxt>Role Window</ctxt>
+    <ctxt>Report Format Table Row</ctxt>
 
     <!-- Boolean values -->
     <msg>
@@ -3159,6 +3164,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Edit Report Format</id>
       <str>Berichtformat bearbeiten</str>
     </msg>
+    <msg>
+      <id>Save Report Format</id>
+      <str>Berichtformat speichern</str>
+    </msg>
     <!-- - - Common references - - -->
     <msg>
       <id>Report Format Details</id>
@@ -3174,6 +3183,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Report Format Table Row</ctxt>
     <ctxt>Report Format Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Verify Report Format</id>
+      <str>Berichtformat verifizieren</str>
+    </msg>
+    <msg>
+      <id>Permission to verify Report Format denied</id>
+      <str>Keine Erlaubnis, Berichtformat zu verifizieren</str>
+    </msg>
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
   </grp>
@@ -3181,14 +3198,56 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Report Format Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Import XML report format</id>
+      <str>XML-Berichtformat importieren</str>
+    </msg>
+    <msg>
+      <id>Import Report Format</id>
+      <str>Berichtformat importieren</str>
+    </msg>
     <!-- - - Properties - - -->
+    <msg>
+      <id>Extension</id>
+      <str>Erweiterung</str>
+    </msg>
+    <msg>
+      <id>Content Type</id>
+      <str>Inhaltstyp</str>
+    </msg>
+    <msg>
+      <id>Trust</id>
+      <str>Vertrauen</str>
+    </msg>
+    <msg>
+      <id>Trust (Last Verified)</id>
+      <str>Vertrauen (Zuletzt Verifiziert)</str>
+    </msg>
+
+    <msg>
+      <id>Parameters</id>
+      <str>Parameter</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Alerts using this Report Format</id>
+      <str>Benachrichtigungen, die dieses Berichtformat verwenden</str>
+    </msg>
   </grp>
   <!-- 3.19.4    Report Format actions and properties - table rows only -->
   <grp>
     <ctxt>Report Format Table Row</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <!-- Trust -->
+    <msg>
+      <id>unknown</id>
+      <str>unbekannt</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
 

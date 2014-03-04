@@ -1,3 +1,12 @@
+2014-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-report-format-form)
+	(html-edit-report-format-form, report_format, report_format [trash])
+	(param-edit, param-details, report_format [details])
+	(html-report-formats-trash-table): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for report format pages.
+
 2014-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-permission-form)

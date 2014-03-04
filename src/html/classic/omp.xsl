@@ -20844,14 +20844,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Report Format
+      <xsl:value-of select="gsa:i18n ('New Report Format', 'Report Format')"/>
       <a href="/help/new_report_format.html?token={/envelope/token}"
-         title="Help: New Report Format">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'New Report Format'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Report Formats" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Report Formats"/>
+         title="{gsa:i18n ('Report Formats', 'Report Format')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report Formats', 'Report Format')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -20865,13 +20865,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
-              Import XML report format
+              <xsl:value-of select="gsa:i18n ('Import XML report format', 'Report Format Window')"/>
             </td>
             <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Import Report Format"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Import Report Format', 'Report Format Window')}"/>
             </td>
           </tr>
         </table>
@@ -20927,7 +20927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Report Format
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Report Format', 'Report Format')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Report Format'"/>
         <xsl:with-param name="type" select="'report_format'"/>
@@ -20949,7 +20949,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-           <td valign="top" width="165">Name</td>
+           <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
            <td>
              <input type="text"
                     name="name"
@@ -20959,34 +20959,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </td>
           </tr>
           <tr>
-            <td valign="top">Summary</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/></td>
             <td>
               <input type="text" name="summary" size="30" maxlength="400"
                      value="{commands_response/get_report_formats_response/report_format/summary}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top">Active</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Active', 'Window')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
                   <label>
                     <input type="radio" name="enable" value="1" checked="1"/>
-                    yes
+                    <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
                   </label>
                   <label>
                     <input type="radio" name="enable" value="0"/>
-                    no
+                    <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
                   <label>
                     <input type="radio" name="enable" value="1"/>
-                    yes
+                    <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
                   </label>
                   <label>
                     <input type="radio" name="enable" value="0" checked="1"/>
-                    no
+                    <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
                   </label>
                 </xsl:otherwise>
               </xsl:choose>
@@ -20997,10 +20997,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td valign="top" colspan="2">
                 <xsl:choose>
                   <xsl:when test="count(param) = 0">
-                    <h1>Parameters: None</h1>
+                    <h1><xsl:value-of select="gsa:i18n ('Parameters', 'Report Format Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
                   </xsl:when>
                   <xsl:otherwise>
-                    <h1>Parameters:</h1>
+                    <h1><xsl:value-of select="gsa:i18n ('Parameters', 'Report Format Window')"/>:</h1>
                     <xsl:call-template name="param-edit"/>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -21009,7 +21009,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Report Format"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Report Format', 'Report Format Window')}"/>
             </td>
           </tr>
         </table>
@@ -21060,7 +21060,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="extension"/></td>
     <td><xsl:value-of select="content_type"/></td>
     <td>
-      <xsl:value-of select="trust/text()"/>
+      <xsl:value-of select="gsa:i18n (trust/text(), 'Report Format Table Row')"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
           <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
@@ -21071,10 +21071,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="active='0'">
-          no
+          <xsl:value-of select="gsa:i18n ('no', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
-          yes
+          <xsl:value-of select="gsa:i18n ('yes', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -21087,16 +21087,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="gsa:may ('verify_report_format')">
           <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Verify Report Format"
+             title="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
              style="margin-left:3px;">
-            <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
+            <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/verify_inactive.png"
                border="0"
-               alt="Verify Report Format"
-               title="Permission to verify Report Format denied"
+               alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
+               title="{gsa:i18n ('Permission to verify Report Format denied', 'Report Format Table Row')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -21118,7 +21118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="extension"/></td>
     <td><xsl:value-of select="content_type"/></td>
     <td>
-      <xsl:value-of select="trust/text()"/>
+      <xsl:value-of select="gsa:i18n (trust/text(), 'Report Format Table Row')"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
           <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
@@ -21129,10 +21129,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="active='0'">
-          no
+          <xsl:value-of select="gsa:i18n ('no', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
-          yes
+          <xsl:value-of select="gsa:i18n ('yes', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -21152,8 +21152,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Value</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Report Format Window')"/></td>
       </tr>
       <xsl:for-each select="param">
 
@@ -21185,21 +21185,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:when test="value='0'">
                     <label>
                       <input type="radio" name="preference:nvt[radio]:{name}" value="1"/>
-                      yes
+                      <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
                     </label>
                     <label>
                       <input type="radio" name="preference:nvt[radio]:{name}" value="0" checked="1"/>
-                      no
+                      <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
                     </label>
                   </xsl:when>
                   <xsl:otherwise>
                     <label>
                       <input type="radio" name="preference:nvt[radio]:{name}" value="1" checked="1"/>
-                      yes
+                      <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
                     </label>
                     <label>
                       <input type="radio" name="preference:nvt[radio]:{name}" value="0"/>
-                      no
+                      <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
                     </label>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -21239,8 +21239,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="params">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Value</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Report Format Window')"/></td>
       </tr>
       <xsl:for-each select="param">
 
@@ -21254,10 +21254,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="type/text() = 'boolean'">
                 <xsl:choose>
                   <xsl:when test="value='0'">
-                    no
+                    <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    yes
+                    <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:when>
@@ -21284,7 +21284,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Report Format Details
+      <xsl:value-of select="gsa:i18n ('Report Format Details', 'Report Format')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Report Format'"/>
         <xsl:with-param name="type" select="'report_format'"/>
@@ -21294,71 +21294,71 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Extension:</td>
+          <td><xsl:value-of select="gsa:i18n ('Extension', 'Report Format Window')"/>:</td>
           <td><xsl:value-of select="extension"/></td>
         </tr>
         <tr>
-          <td>Content Type:</td>
+          <td><xsl:value-of select="gsa:i18n ('Content Type', 'Report Format Window')"/>:</td>
           <td><xsl:value-of select="content_type"/></td>
         </tr>
         <tr>
-          <td>Trust:</td>
+          <td><xsl:value-of select="gsa:i18n ('Trust', 'Report Format Window')"/>:</td>
           <td><xsl:value-of select="trust/text()"/></td>
         </tr>
         <tr>
-          <td>Active:</td>
+          <td><xsl:value-of select="gsa:i18n ('Active', 'Report Format Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="active='0'">
-                no
+                <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
               </xsl:when>
               <xsl:otherwise>
-                yes
+                <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
               </xsl:otherwise>
             </xsl:choose>
           </td>
         </tr>
         <tr>
-          <td>Summary:</td>
+          <td><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/>:</td>
           <td><xsl:value-of select="summary"/></td>
         </tr>
       </table>
-      <h1>Description:</h1>
+      <h1><xsl:value-of select="gsa:i18n ('Description', 'Window')"/>:</h1>
       <pre><xsl:value-of select="description"/></pre>
       <xsl:choose>
         <xsl:when test="count(param) = 0">
-          <h1>Parameters: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Parameters', 'Report Format Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Parameters:</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Parameters', 'Report Format Window')"/>:</h1>
           <xsl:call-template name="param-details"/>
         </xsl:otherwise>
       </xsl:choose>
 
       <xsl:choose>
         <xsl:when test="count(alerts/alert) = 0">
-          <h1>Alerts using this Report Format: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Alerts using this Report Format', 'Report Format Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Alerts using this Report Format</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Alerts using this Report Format', 'Report Format Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="alerts/alert">
 
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Window')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -26859,12 +26859,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Extension</td>
-        <td>Content Type</td>
-        <td>Trust (last verified)</td>
-        <td>Active</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Extension', 'Report Format Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Content Type', 'Report Format Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Trust (Last Verified)', 'Report Format Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Active', 'Report Format Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="report_format" mode="trash"/>
     </table>
