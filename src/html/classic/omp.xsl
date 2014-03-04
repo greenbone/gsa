@@ -8320,7 +8320,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td><xsl:value-of select="term"/></td>
-    <td><xsl:value-of select="type"/></td>
+    <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
     <td>
       <xsl:call-template name="list-window-line-icons">
         <xsl:with-param name="cap-type" select="'Filter'"/>
@@ -8345,7 +8345,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td><xsl:value-of select="term"/></td>
-    <td><xsl:value-of select="type"/></td>
+    <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
     <td>
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
@@ -8361,7 +8361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Filter is still in use"
+               title="{gsa:i18n ('Filter', 'Filter')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -8374,7 +8374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Filter Details
+      <xsl:value-of select="gsa:i18n ('Filter Details', 'Filter')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Filter'"/>
         <xsl:with-param name="type" select="'filter'"/>
@@ -8384,43 +8384,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Term:</td>
+          <td><xsl:value-of select="gsa:i18n ('Term', 'Filter Window')"/>:</td>
           <td><xsl:value-of select="term"/></td>
         </tr>
         <tr>
-          <td>Type:</td>
-          <td><xsl:value-of select="type"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Type', 'Filter Window')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
         </tr>
       </table>
 
       <xsl:choose>
         <xsl:when test="count(alerts/alert) = 0">
-          <h1>Alerts using this Filter: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Alerts using this Filter', 'Filter Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Alerts using this Filter</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Alerts using this Filter', 'Filter Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="alerts/alert">
 
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Window')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -8440,10 +8440,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Term</td>
-        <td>Type</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Term', 'Filter Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Type', 'Filter Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="filter" mode="trash"/>
     </table>
@@ -8480,14 +8480,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Filter
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Filter', 'Filter')"/>
       <a href="/help/new_filter.html?token={/envelope/token}"
-         title="Help: New Filter">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Filter', 'Filter'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Filters" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Filters"/>
+         title="{gsa:i18n ('Filters', 'Filter')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -8500,7 +8500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -8508,31 +8508,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Term</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Term', 'Filter Window')"/></td>
             <td>
               <input type="text" name="term" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Type</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Type', 'Filter Window')"/></td>
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
                 <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Result|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
-                  <option value="{.}"><xsl:value-of select="."/></option>
+                  <option value="{.}"><xsl:value-of select="gsa:i18n(., 'Type')"/></option>
                 </xsl:for-each>
               </select>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Filter"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Filter', 'Filter')}"/>
             </td>
           </tr>
         </table>
@@ -8554,7 +8554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Filter
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Filter', 'Filter')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Filter'"/>
         <xsl:with-param name="type" select="'filter'"/>
@@ -8575,7 +8575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -8585,14 +8585,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_filters_response/filter/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Term</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Term', 'Filter Window')"/></td>
             <td>
               <input type="text" name="term"
                      value="{commands_response/get_filters_response/filter/term}"
@@ -8601,7 +8601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Type</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Type', 'Filter Window')"/></td>
             <td>
               <select name="optional_resource_type">
                 <xsl:variable name="type">
@@ -8611,10 +8611,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Result|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
                   <xsl:choose>
                     <xsl:when test=". = $type">
-                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
+                      <option value="{.}" selected="1"><xsl:value-of select="gsa:i18n ($type, 'Type')"/></option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{.}"><xsl:value-of select="."/></option>
+                      <option value="{.}"><xsl:value-of select="gsa:i18n (., 'Type')"/></option>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:for-each>
@@ -8623,7 +8623,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Filter"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Filter', 'Filter')}"/>
             </td>
           </tr>
         </table>

@@ -794,6 +794,123 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
   </grp>
 
+  <!-- 2.5 Resource types -->
+  <grp>
+    <ctxt>Type</ctxt>
+    <msg>
+      <id>Task</id>
+      <str>Aufgabe</str>
+    </msg>
+    <msg>
+      <id>Report</id>
+      <str>Bericht</str>
+    </msg>
+    <msg>
+      <id>Result</id>
+      <str>Ergebnis</str>
+    </msg>
+    <msg>
+      <id>Note</id>
+      <str>Notiz</str>
+    </msg>
+    <msg>
+      <id>Override</id>
+      <str>Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>Host</id>
+      <str>Host</str>
+    </msg>
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>OVAL Definition</id>
+      <str>OVAL-Definition</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisory</id>
+      <str>DFN-CERT-Advisory</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>Sicherheitsinfo</str>
+    </msg>
+    <msg>
+      <id>Target</id>
+      <str>Ziel</str>
+    </msg>
+    <msg>
+      <id>Port List</id>
+      <str>Portliste</str>
+    </msg>
+    <msg>
+      <id>Credential</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>Scan Config</id>
+      <str>Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Config</id>
+      <str>Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Alert</id>
+      <str>Benachrichtigung</str>
+    </msg>
+    <msg>
+      <id>Schedule</id>
+      <str>Zeitplan</str>
+    </msg>
+    <msg>
+      <id>Report Format</id>
+      <str>Berichtformat</str>
+    </msg>
+    <msg>
+      <id>Slave</id>
+      <str>Slave</str>
+    </msg>
+    <msg>
+      <id>Agent</id>
+      <str>Agent</str>
+    </msg>
+    <msg>
+      <id>Filter</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>Tag</id>
+      <str>Tag</str>
+    </msg>
+    <msg>
+      <id>Permission</id>
+      <str>Berechtigung</str>
+    </msg>
+    <msg>
+      <id>User</id>
+      <str>Benutzer</str>
+    </msg>
+    <msg>
+      <id>Group</id>
+      <str>Gruppe</str>
+    </msg>
+    <msg>
+      <id>Role</id>
+      <str>Rolle</str>
+    </msg>
+  </grp>
+
   <!-- 3 Resource specific strings -->
 
   <!-- 3.1 Tasks -->
@@ -3446,10 +3563,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Filter</id>
       <str>Neuer Filter</str>
     </msg>
+    <msg>
+      <id>Create Filter</id>
+      <str>Filter erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Filter</id>
       <str>Filter bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Filter</id>
+      <str>Filter speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -3474,7 +3599,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Filter Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Term</id>
+      <str>Filterbefehl</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Alerts using this Filter</id>
+      <str>Benachrichtigungen, die diesen Filter verwenden</str>
+    </msg>
   </grp>
   <!-- 3.22.4    Filter actions and properties - table rows only -->
   <grp>
