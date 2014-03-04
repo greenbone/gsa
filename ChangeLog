@@ -1,3 +1,10 @@
+2014-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (new_alert.html, new_target.html): Note
+	availability of optional fields when commands are disabled.
+	(new_task.html): Add Observer Groups field.  Note availability of
+	optional fields when commands are disabled.
+
 2014-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-agent-form)

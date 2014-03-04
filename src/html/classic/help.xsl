@@ -1116,13 +1116,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Email</td>
         </tr>
         <tr class="even">
-          <td>Report Filter</td>
+          <td>
+            Report Filter
+            <xsl:if test="not (gsa:may-op ('get_filters'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>--</td>
           <td>Choice</td>
           <td></td>
         </tr>
       </table>
+      <xsl:if test="not (gsa:may-op ('get_filters'))">
+        <b>*</b> not available with the current OMP Server connection.
+      </xsl:if>
 
       <h2>Alert Methods</h2>
 
@@ -5319,7 +5325,7 @@ Public License instead of this License.
 
       <table class="gbntable">
         <tr class="gbntablehead2">
-          <td></td>
+          <td width="150"></td>
           <td>Mandatory</td>
           <td>Max Length</td>
           <td>Syntax</td>
@@ -5363,49 +5369,64 @@ Public License instead of this License.
           <td>Choice</td>
           <td>Yes (Scan only hosts that reverse-lookup.)</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Reverse Lookup Unify</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
           <td>Yes (Deduplicate hosts based on reverse-lookup value.)</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
           <td>Alphanumeric</td>
           <td>Covers both of our web staging systems</td>
         </tr>
-        <tr class="odd">
-          <td>Port List</td>
+        <tr class="even">
+          <td>
+            Port List
+            <xsl:if test="not (gsa:may-op ('get_port_lists'))">*</xsl:if>
+          </td>
           <td>yes</td>
           <td>--</td>
           <td>Any of the <a href="port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
           <td>All privileged TCP</td>
         </tr>
-        <tr class="even">
-          <td>SSH Credential</td>
+        <tr class="odd">
+          <td>
+            SSH Credential
+            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>--</td>
           <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SSH</td>
         </tr>
         <tr class="even">
-          <td>SSH Port</td>
+          <td>
+            SSH Port
+            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>400</td>
           <td>A port number.</td>
           <td>22</td>
         </tr>
-        <tr class="even">
-          <td>SMB Credential</td>
+        <tr class="odd">
+          <td>
+            SMB Credential
+            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>--</td>
           <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
       </table>
+      <xsl:if test="not (gsa:may-op ('get_port_lists')) or not (gsa:may-op ('get_lsc_credentials'))">
+        <b>*</b> not available with the current OMP Server connection.
+      </xsl:if>
 
       <p>
         If the backend is configured to support LDAP, additional fields for hosts will appear
@@ -5512,7 +5533,7 @@ Public License instead of this License.
           <td>Choice</td>
           <td>Localhost</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Order for target hosts</td>
           <td>no</td>
           <td>---</td>
@@ -5527,21 +5548,30 @@ Public License instead of this License.
           <td>eth1</td>
         </tr>
         <tr class="odd">
-          <td>Alert</td>
+          <td>
+            Alert
+            <xsl:if test="not (gsa:may-op ('get_alerts'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>---</td>
           <td>Choice</td>
           <td></td>
         </tr>
         <tr class="even">
-          <td>Schedule</td>
+          <td>
+            Schedule
+            <xsl:if test="not (gsa:may-op ('get_schedules'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>---</td>
           <td>Choice</td>
           <td></td>
         </tr>
         <tr class="odd">
-          <td>Slave</td>
+          <td>
+            Slave
+            <xsl:if test="not (gsa:may-op ('get_slaves'))">*</xsl:if>
+          </td>
           <td>no</td>
           <td>---</td>
           <td>Choice</td>
@@ -5555,13 +5585,23 @@ Public License instead of this License.
           <td>alice bob</td>
         </tr>
         <tr class="odd">
+          <td>
+            Observer Groups
+            <xsl:if test="not (gsa:may-op ('get_groups'))">*</xsl:if>
+          </td>
+          <td>no</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="even">
           <td>Add results to Asset Management</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
           <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Scan Intensity: Maximum concurrently executed NVTs per host</td>
           <td>no</td>
           <td>10</td>
@@ -5576,6 +5616,9 @@ Public License instead of this License.
           <td>10</td>
         </tr>
       </table>
+      <xsl:if test="not (gsa:may-op ('get_alerts')) or not (gsa:may-op ('get_schedules')) or not (gsa:may-op ('get_slaves')) or not (gsa:may-op ('get_groups'))">
+        <b>*</b> not available with the current OMP Server connection.
+      </xsl:if>
 
       <h1>New Container Task</h1>
 
