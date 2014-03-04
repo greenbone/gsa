@@ -6497,14 +6497,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Agent
+      <xsl:value-of select="gsa:i18n ('New Agent', 'Agent')"/>
       <a href="/help/new_agent.html?token={/envelope/token}"
-         title="Help: New Agent">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Agent', 'Agent'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Agents" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Agents"/>
+         title="{gsa:i18n ('Agents', 'Agent')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Agents', 'Agent')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -6517,24 +6517,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Installer</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Installer', 'Agent Window')"/></td>
             <td><input type="file" name="installer" size="30"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125">Installer signature (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Installer signature', 'Agent Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td><input type="file" name="installer_sig" size="30"/></td>
           </tr>
           <!--
@@ -6549,7 +6549,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           -->
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Agent"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Agent', 'Agent')}"/>
             </td>
           </tr>
         </table>
@@ -6592,7 +6592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Agent
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Agent', 'Agent')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Agent'"/>
         <xsl:with-param name="type" select="'agent'"/>
@@ -6613,14 +6613,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_agents_response/agent/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165">Comment (optional)</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_agents_response/agent/comment}"/>
@@ -6628,7 +6628,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Agent"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Agent', 'Agent')}"/>
             </td>
           </tr>
         </table>
@@ -6717,7 +6717,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="installer/trust/text()"/>
+      <xsl:value-of select="gsa:i18n (installer/trust/text(), 'Agent Table Row')"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
           (<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
@@ -6732,13 +6732,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
       <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
-         title="Download installer package" style="margin-left:3px;">
-        <img src="/img/agent.png" border="0" alt="Download Installer"/>
+         title="{gsa:i18n ('Download installer package', 'Agent Table Row')}" style="margin-left:3px;">
+        <img src="/img/agent.png" border="0" alt="{gsa:i18n ('Download Installer', 'Agent Table Row')}"/>
       </a>
       <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}"
-         title="Verify Agent"
+         title="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"
          style="margin-left:3px;">
-        <img src="/img/verify.png" border="0" alt="Verify Agent"/>
+        <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"/>
       </a>
     </td>
   </tr>
@@ -6756,7 +6756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="installer/trust/text()"/>
+      <xsl:value-of select="gsa:i18n (installer/trust/text(), 'Agent Table Row')"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
           <br/>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
@@ -6781,7 +6781,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Agent Details
+      <xsl:value-of select="gsa:i18n ('Agent Details', 'Agent')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Agent'"/>
         <xsl:with-param name="type" select="'agent'"/>
@@ -6791,17 +6791,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Trust:</td>
+          <td><xsl:value-of select="gsa:i18n ('Trust', 'Agent Window')"/>:</td>
           <td>
-            <xsl:value-of select="installer/trust/text()"/>
+            <xsl:value-of select="gsa:i18n (installer/trust/text(), 'Agent Window')"/>
             <xsl:choose>
               <xsl:when test="installer/trust/time != ''">
                 (<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
@@ -26784,9 +26784,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Trust</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Trust', 'Agent Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="agent" mode="trash"/>
     </table>

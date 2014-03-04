@@ -586,6 +586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Group Window</ctxt>
     <ctxt>Role Window</ctxt>
     <ctxt>Report Format Table Row</ctxt>
+    <ctxt>Agent Table Row</ctxt>
 
     <!-- Boolean values -->
     <msg>
@@ -3349,10 +3350,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Agent</id>
       <str>Neuer Agent</str>
     </msg>
+    <msg>
+      <id>Create Agent</id>
+      <str>Agent erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Agent</id>
       <str>Agent bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Agent</id>
+      <str>Agent speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -3369,7 +3378,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Agent Table Row</ctxt>
     <ctxt>Agent Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Download installer package</id>
+      <str>Installationspaket herunterladen</str>
+    </msg>
+    <msg>
+      <id>Download Installer</id>
+      <str>Installer herunterladen</str>
+    </msg>
+    <msg>
+      <id>Verify Agent</id>
+      <str>Agent verifizieren</str>
+    </msg>
     <!-- - - Properties - - -->
+    <!-- Trust -->
+    <msg>
+      <id>unknown</id>
+      <str>unbekannt</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.21.3    Agent actions and properties - window / headers only -->
@@ -3377,6 +3403,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Agent Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Installer</id>
+      <str>Installationsprogramm</str>
+    </msg>
+    <msg>
+      <id>Installer signature</id>
+      <str>Installationsprogramm-Signatur</str>
+    </msg>
+    <msg>
+      <id>Trust</id>
+      <str>Vertrauen</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.21.4    Agent actions and properties - table rows only -->
