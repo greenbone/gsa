@@ -14167,14 +14167,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Slave
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Slave', 'Slave')"/>
       <a href="/help/new_slave.html?token={/envelope/token}"
-         title="Help: New Slave">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Slave', 'Slave'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Slaves" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Slaves"/>
+         title="{gsa:i18n ('Slaves', 'Slave')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Slaves', 'Slave')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -14187,7 +14187,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -14195,34 +14195,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Host</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td>
               <input type="text" name="host" value="localhost" size="30"
                       maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Port</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Port', 'Window')"/></td>
             <td>
               <input type="text" name="port" value="9390" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Login</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login', 'Slave Window')"/></td>
             <td>
               <input type="text" name="login" value="" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Password</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Slave Window')"/></td>
             <td>
               <input type="password" autocomplete="off" name="password"
                      value="" size="30" maxlength="40"/>
@@ -14230,7 +14230,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Slave"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Slave', 'Slave')}"/>
             </td>
           </tr>
         </table>
@@ -14323,7 +14323,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Slave
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Slave', 'Slave')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Slave'"/>
         <xsl:with-param name="type" select="'slave'"/>
@@ -14344,21 +14344,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_slaves_response/slave/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165">Comment (optional)</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_slaves_response/slave/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Host</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td>
               <input type="text" name="host"
                      value="{commands_response/get_slaves_response/slave/host}"
@@ -14367,21 +14367,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Port</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port', 'Window')"/></td>
             <td>
               <input type="text" name="port" size="30" maxlength="1000"
                      value="{commands_response/get_slaves_response/slave/port}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Login</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Login', 'Slave Window')"/></td>
             <td>
               <input type="text" name="login" size="30" maxlength="1000"
                      value="{commands_response/get_slaves_response/slave/login}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Password</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Password', 'Slave Window')"/></td>
             <td>
               <input type="password" autocomplete="off" name="password"
                      size="30" maxlength="1000"/>
@@ -14389,7 +14389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Slave"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Slave', 'Slave')}"/>
             </td>
           </tr>
         </table>
@@ -14467,7 +14467,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Slave is still in use"
+               title="{gsa:i18n ('Slave', 'Slave')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -14490,47 +14490,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Host:</td>
+          <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/>:</td>
           <td><xsl:value-of select="host"/></td>
         </tr>
         <tr>
-          <td>Port:</td>
+          <td><xsl:value-of select="gsa:i18n ('Port', 'Window')"/>:</td>
           <td><xsl:value-of select="port"/></td>
         </tr>
         <tr>
-          <td>Login:</td>
+          <td><xsl:value-of select="gsa:i18n ('Login', 'Slave Window')"/>:</td>
           <td><xsl:value-of select="login"/></td>
         </tr>
       </table>
 
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
-          <h1>Tasks using this Slave: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Slave', 'Slave Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Tasks using this Slave</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Slave', 'Slave Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="tasks/task">
 
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Table Row')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Table Row')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -26891,11 +26891,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Host</td>
-        <td>Port</td>
-        <td>Login</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Port', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Login', 'Slave Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="slave" mode="trash"/>
     </table>

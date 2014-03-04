@@ -3271,10 +3271,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Slave</id>
       <str>Neuer Slave</str>
     </msg>
+    <msg>
+      <id>Create Slave</id>
+      <str>Slave erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Slave</id>
       <str>Slave bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Slave</id>
+      <str>Slave speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -3299,7 +3307,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Slave Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Login</id>
+      <str>Login</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Slave</id>
+      <str>Aufgaben, die diesen Slave verwenden</str>
+    </msg>
   </grp>
   <!-- 3.20.4    Slave actions and properties - table rows only -->
   <grp>
