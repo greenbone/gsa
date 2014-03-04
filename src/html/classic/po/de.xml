@@ -3641,10 +3641,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Tag</id>
       <str>Neuer Tag</str>
     </msg>
+    <msg>
+      <id>Create Tag</id>
+      <str>Tag erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Tag</id>
       <str>Tag bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Tag</id>
+      <str>Tag speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -3681,7 +3689,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Tag Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Orphaned</id>
+      <str>Verwaist</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Attached to resource</id>
+      <str>Angehängt an Ressource</str>
+    </msg>
+    <msg>
+      <id>Attached to resource type</id>
+      <str>Angehängt an Ressource - Typ</str>
+    </msg>
+    <msg>
+      <id>Attached to resource ID</id>
+      <str>Angehängt an Ressource - ID</str>
+    </msg>
+    <msg>
+      <id>Attach Type</id>
+      <str>Anhang für Typ</str>
+    </msg>
+    <msg>
+      <id>Attach to Type</id>
+      <str>Anhang für Typ</str>
+    </msg>
+    <msg>
+      <id>Attach ID</id>
+      <str>Anhang für ID</str>
+    </msg>
+    <msg>
+      <id>Attach to ID</id>
+      <str>Anhang für ID</str>
+    </msg>
+    <msg>
+      <id>Attach Name</id>
+      <str>Anhang für Name</str>
+    </msg>
   </grp>
   <!-- 3.23.4    Tag actions and properties - table rows only -->
   <grp>

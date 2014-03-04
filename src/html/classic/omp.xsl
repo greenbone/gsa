@@ -400,7 +400,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:type-name">
   <xsl:param name="type"/>
-  <func:result select="gsa:join-capital (str:split ($type, '_'))"/>
+  <xsl:choose>
+    <xsl:when test="$type = 'nvt' or $type = 'cve' or $type = 'cpe'">
+      <func:result select="gsa:upper-case ($type)"/>
+    </xsl:when>
+    <xsl:when test="$type = 'ovaldef'">
+      <func:result select="'OVAL Definition'"/>
+    </xsl:when>
+    <xsl:when test="$type = 'dfn_cert_adv'">
+      <func:result select="'DFN-CERT Advisory'"/>
+    </xsl:when>
+    <xsl:when test="$type = 'lsc_credential'">
+      <func:result select="'Credential'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="gsa:join-capital (str:split ($type, '_'))"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </func:function>
 
 <func:function name="gsa:alert-in-trash">
@@ -8811,15 +8827,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="active=0">
-          No
+          <xsl:value-of select="gsa:i18n ('No', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
-          Yes
+          <xsl:value-of select="gsa:i18n ('Yes', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="attach/type"/>
+      <xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/>
     </td>
     <td>
       <xsl:choose>
@@ -8832,7 +8848,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           <xsl:choose>
             <xsl:when test="attach/id != ''">
               <i> (ID: <xsl:value-of select="attach/id"/>)</i>
@@ -8880,7 +8896,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Tag Details
+      <xsl:value-of select="gsa:i18n ('Tag Details', 'Tag')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Tag'"/>
         <xsl:with-param name="type" select="'tag'"/>
@@ -8890,21 +8906,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Value:</td>
+          <td><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/>:</td>
           <td><xsl:value-of select="value"/></td>
         </tr>
         <xsl:choose>
           <xsl:when test="attach/name != '' and orphaned='0'">
             <tr>
-              <td>Attached to resource:</td>
+              <td><xsl:value-of select="gsa:i18n ('Attached to resource', 'Tag Window')"/>:</td>
               <td>
                 <xsl:call-template name="tagged_resource_link">
                   <xsl:with-param name="resource_type" select="attach/type"/>
@@ -8917,28 +8933,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
         </xsl:choose>
         <tr>
-          <td>Attached to resource type:</td>
-          <td><xsl:value-of select="attach/type"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Attached to resource type', 'Tag Window')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/></td>
         </tr>
         <tr>
-          <td>Attached to resource ID:</td>
+          <td><xsl:value-of select="gsa:i18n ('Attached to resource ID', 'Tag Window')"/>:</td>
           <td><xsl:value-of select="attach/id"/></td>
         </tr>
         <tr>
-          <td>Active:</td>
+          <td><xsl:value-of select="gsa:i18n ('Active', 'Tag Window')"/>:</td>
           <td>
             <xsl:choose>
-              <xsl:when test="active = 0">No</xsl:when>
-              <xsl:otherwise>Yes</xsl:otherwise>
+              <xsl:when test="active = 0"><xsl:value-of select="gsa:i18n ('No', 'Window')"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/></xsl:otherwise>
             </xsl:choose>
           </td>
         </tr>
         <tr>
-          <td>Orphaned:</td>
+          <td><xsl:value-of select="gsa:i18n ('Orphaned', 'Tag Window')"/>:</td>
           <td>
             <xsl:choose>
-              <xsl:when test="orphaned = 0">No</xsl:when>
-              <xsl:otherwise>Yes</xsl:otherwise>
+              <xsl:when test="orphaned = 0"><xsl:value-of select="gsa:i18n ('No', 'Window')"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/></xsl:otherwise>
             </xsl:choose>
           </td>
         </tr>
@@ -8959,7 +8975,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td><xsl:value-of select="value"/></td>
-    <td><xsl:value-of select="attach/type"/></td>
+    <td><xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/></td>
     <td><xsl:value-of select="attach/id"/></td>
     <td>
       <xsl:call-template name="restore-icon">
@@ -8976,7 +8992,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Tag is still in use"
+               title="{gsa:i18n ('Tag', 'Tag')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -8989,161 +9005,161 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:if test="$select_type = 'agent' or gsa:may-op ('get_agents')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'agent'"/>
-      <xsl:with-param name="content" select="'Agent'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Agent', 'Agent')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'alert' or gsa:may-op ('get_alerts')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'alert'"/>
-      <xsl:with-param name="content" select="'Alert'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Alert', 'Alert')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'cpe' or gsa:may-op ('get_info')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'cpe'"/>
-      <xsl:with-param name="content" select="'CPE'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('CPE', 'CPE')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'lsc_credential' or gsa:may-op ('get_lsc_credentials')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'lsc_credential'"/>
-      <xsl:with-param name="content" select="'Credential'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Credential', 'Credential')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'cve' or gsa:may-op ('get_info')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'cve'"/>
-      <xsl:with-param name="content" select="'CVE'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('CVE', 'CVE')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'dfn_cert_adv' or gsa:may-op ('get_info')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'dfn_cert_adv'"/>
-      <xsl:with-param name="content" select="'DFN-CERT Advisory'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('DFN-CERT Advisory', 'DFN-CERT Advisory')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'filter' or gsa:may-op ('get_filters')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'filter'"/>
-      <xsl:with-param name="content" select="'Filter'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Filter', 'Filter')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'group' or gsa:may-op ('get_groups')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'group'"/>
-      <xsl:with-param name="content" select="'Group'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Group', 'Group')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'note' or gsa:may-op ('get_notes')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'note'"/>
-      <xsl:with-param name="content" select="'Note'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Note', 'Note')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'nvt' or gsa:may-op ('get_nvts')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'nvt'"/>
-      <xsl:with-param name="content" select="'NVT'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('NVT', 'NVT')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'ovaldef' or gsa:may-op ('get_info')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'ovaldef'"/>
-      <xsl:with-param name="content" select="'OVAL definition'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'override' or gsa:may-op ('get_overrides')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'override'"/>
-      <xsl:with-param name="content" select="'Override'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Override', 'Override')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'permission' or gsa:may-op ('get_permissions')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'permission'"/>
-      <xsl:with-param name="content" select="'Permission'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Permission', 'Permission')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'port_list' or gsa:may-op ('get_port_lists')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'port_list'"/>
-      <xsl:with-param name="content" select="'Port list'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Port List', 'Port List')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'report' or gsa:may-op ('get_reports')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'report'"/>
-      <xsl:with-param name="content" select="'Report'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Report', 'Report')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'report_format' or gsa:may-op ('get_report_formats')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'report_format'"/>
-      <xsl:with-param name="content" select="'Report Format'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Report Format', 'Report Format')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'result' or gsa:may-op ('get_results')">
       <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'result'"/>
-      <xsl:with-param name="content" select="'Result'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Result', 'Result')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'config' or gsa:may-op ('get_configs')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'config'"/>
-      <xsl:with-param name="content" select="'Scan Configuration'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Scan Configuration', 'Scan Config')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'schedule' or gsa:may-op ('get_schedules')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'schedule'"/>
-      <xsl:with-param name="content" select="'Schedule'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Schedule', 'Schedule')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'slave' or gsa:may-op ('get_slaves')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'slave'"/>
-      <xsl:with-param name="content" select="'Slave'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Slave', 'Slave')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'target' or gsa:may-op ('get_targets')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'target'"/>
-      <xsl:with-param name="content" select="'Target'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Target', 'Target')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'task' or gsa:may-op ('get_tasks')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'task'"/>
-      <xsl:with-param name="content" select="'Task'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Task', 'Task')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
   <xsl:if test="$select_type = 'user' or gsa:may-op ('get_users')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'user'"/>
-      <xsl:with-param name="content" select="'User'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('User', 'User')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -9161,14 +9177,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Tag
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Tag', 'Tag')"/>
       <a href="/help/new_tag.html?token={/envelope/token}"
-         title="Help: New Tag">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Tag', 'Tag'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_tags&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Tags" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Tags"/>
+         title="{gsa:i18n ('Tags', 'Tag')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tags', 'Tag')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -9211,7 +9227,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="max" value="{/envelope/params/max}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="tag_name" value="{tag_name}" size="30"
@@ -9219,14 +9235,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" value="{comment}" size="30"
                      maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Value (optional)
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)
             </td>
             <td>
               <input type="text" name="tag_value" value="{tag_value}" size="30"
@@ -9234,7 +9250,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to Type</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to Type', 'Tag Window')"/></td>
             <td>
               <select name="attach_type">
                 <xsl:call-template name="tag_attach_types">
@@ -9246,14 +9262,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to ID (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="attach_id" value="{attach_id}" size="30"
                          maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td>Active</td>
+            <td><xsl:value-of select="gsa:i18n ('Active', 'Tag Window')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -9264,7 +9280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="active" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Yes
+                <xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
               </label>
               <label>
                 <xsl:choose>
@@ -9275,13 +9291,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="active" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                No
+                <xsl:value-of select="gsa:i18n ('No', 'Window')"/>
               </label>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Tag"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Tag', 'Tag')}"/>
             </td>
           </tr>
         </table>
@@ -9312,7 +9328,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Tag
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Tag', 'Tag')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Tag'"/>
         <xsl:with-param name="type" select="'tag'"/>
@@ -9368,7 +9384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="max" value="{limits/@max}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="tag_name" value="{get_tags_response/tag/name}" size="30"
@@ -9376,14 +9392,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" value="{get_tags_response/tag/comment}" size="30"
                      maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Value (optional)
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)
             </td>
             <td>
               <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
@@ -9391,7 +9407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to Type</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to Type', 'Tag Window')"/></td>
             <td>
               <select name="attach_type">
                 <xsl:call-template name="tag_attach_types">
@@ -9403,14 +9419,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to ID (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="attach_id" value="{get_tags_response/tag/attach/id}" size="30"
                          maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td>Active</td>
+            <td><xsl:value-of select="gsa:i18n ('Active', 'Window')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -9421,7 +9437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="active" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Yes
+                <xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
               </label>
               <label>
                 <xsl:choose>
@@ -9432,13 +9448,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="active" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                No
+                <xsl:value-of select="gsa:i18n ('No', 'Window')"/>
               </label>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Tag"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Tag', 'Tag')}"/>
             </td>
           </tr>
         </table>
@@ -26906,11 +26922,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Value</td>
-        <td>Attach type</td>
-        <td>Attach ID</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Attach Type', 'Tag Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Attach ID', 'Tag Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="tag" mode="trash"/>
     </table>

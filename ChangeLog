@@ -1,3 +1,13 @@
+2014-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (gsa:type-name): Add special cases for
+	nvt, cve, cpe, ovaldef, dfn_cert_adv and lsc_credential.
+	(tag, tag [details], tag [trash], tag_attach_types)
+	(html-create-tag-form, html-edit-tag-form, html-tags-trash-table): Add
+	i18n.
+
+	* src/html/classic/po/de.xml: Add translations for tag pages.
+
 2014-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Specify the filter
