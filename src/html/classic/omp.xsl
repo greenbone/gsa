@@ -29135,15 +29135,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
             <tr>
-              <td valign="top">Password</td>
+              <td valign="top">Password (optional)</td>
               <td>
-                <label>
-                  <input type="checkbox" name="enable" value="1"/>
-                  Replace existing value with:
-                </label>
-                <br/>
-                <input type="password" autocomplete="off" name="password"
-                       size="30" maxlength="400" value=""/>
+                <table>
+                  <tr>
+                    <td>Old</td>
+                    <td>
+                      <input type="password" autocomplete="off" name="old_password"
+                             size="30" maxlength="400" value=""/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>New</td>
+                    <td>
+                      <input type="password" autocomplete="off" name="password"
+                             size="30" maxlength="400" value=""/>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>

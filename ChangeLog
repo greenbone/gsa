@@ -1,3 +1,16 @@
+2014-03-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Require the user's existing password when changing password in My
+	Settings.
+
+	* src/gsad.c (init_validator): Add old_password.
+
+	* src/gsad_omp.c (save_my_settings_omp): Check old password before
+	setting new password.
+
+	* src/html/classic/omp.xsl (edit_my_settings): Add Old Password field
+	and remove "Replace existing value with:" checkbox.
+
 2014-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:type-name): Add special cases for

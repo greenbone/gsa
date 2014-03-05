@@ -14362,7 +14362,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *lang, *text, *passwd, *status, *max;
+  const char *lang, *text, *old_passwd, *passwd, *status, *max;
   gchar *lang_64, *text_64, *max_64;
   GString *xml;
   entity_t entity;
@@ -14375,11 +14375,13 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   *language = NULL;
 
   text = params_value (params, "text");
+  old_passwd = params_value (params, "old_password");
   passwd = params_value (params, "password");
   max = params_value (params, "max");
   lang = params_value (params, "lang");
   if ((text == NULL)
       || (passwd == NULL)
+      || (old_passwd == NULL)
       || (max == NULL)
       || (lang == NULL))
     return edit_my_settings (credentials, params,
@@ -14405,10 +14407,40 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if (params_value (params, "enable"))
+  if (strlen (passwd) || strlen (old_passwd))
     {
+      gchar *passwd_64;
+
       /* Send Password setting */
-      gchar *passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
+
+      switch (omp_authenticate (&session, credentials->username, old_passwd))
+        {
+          case 0:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving settings. "
+                                 "The settings remains the same. "
+                                 "Diagnostics: Manager closed connection during authenticate.",
+                                 "/omp?cmd=get_my_settings");
+          case 2:
+            return gsad_message (credentials,
+                                 "Authentication failure", __FUNCTION__, __LINE__,
+                                 "Authentication failed while saving settings. "
+                                 "The settings remains the same. "
+                                 "Diagnostics: Authentication with Old Password failed.",
+                                 "/omp?cmd=get_my_settings");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving settings. "
+                                 "The settings remains the same. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_my_settings");
+        }
+
+      passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
       if (openvas_server_sendf (&session,
                                 "<modify_setting>"
