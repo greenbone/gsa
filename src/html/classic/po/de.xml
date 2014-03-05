@@ -794,7 +794,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
   </grp>
 
-  <!-- 2.5 Resource types -->
+  <!-- 2.5      Resource types -->
+  <!-- 2.5.1    Resource types - capitalized singular -->
   <grp>
     <ctxt>Type</ctxt>
     <msg>
@@ -826,6 +827,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>NVT</str>
     </msg>
     <msg>
+      <id>NVT Family</id>
+      <str>NVT-Familie</str>
+    </msg>
+    <msg>
+      <id>Preference</id>
+      <str>Vorgabe</str>
+    </msg>
+    <msg>
       <id>CVE</id>
       <str>CVE</str>
     </msg>
@@ -850,7 +859,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Ziel</str>
     </msg>
     <msg>
+      <id>Target Locator</id>
+      <str>Ziel-Locator</str>
+    </msg>
+    <msg>
       <id>Port List</id>
+      <str>Portliste</str>
+    </msg>
+    <msg>
+      <id>Port Range</id>
       <str>Portliste</str>
     </msg>
     <msg>
@@ -898,6 +915,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Berechtigung</str>
     </msg>
     <msg>
+      <id>Setting</id>
+      <str>Einstellung</str>
+    </msg>
+    <msg>
+      <id>System Report</id>
+      <str>Systembericht</str>
+    </msg>
+    <msg>
       <id>User</id>
       <str>Benutzer</str>
     </msg>
@@ -908,6 +933,426 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Role</id>
       <str>Rolle</str>
+    </msg>
+  </grp>
+  <!-- 2.5.2    Resource types - capitalized plural -->
+  <grp>
+    <ctxt>Type Plural</ctxt>
+    <msg>
+      <id>Tasks</id>
+      <str>Aufgaben</str>
+    </msg>
+    <msg>
+      <id>Reports</id>
+      <str>Berichte</str>
+    </msg>
+    <msg>
+      <id>Results</id>
+      <str>Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>Notes</id>
+      <str>Notizen</str>
+    </msg>
+    <msg>
+      <id>Overrides</id>
+      <str>Übersteuerungen</str>
+    </msg>
+    <msg>
+      <id>Hosts</id>
+      <str>Hosts</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <msg>
+      <id>NVT Families</id>
+      <str>NVT-Familien</str>
+    </msg>
+    <msg>
+      <id>Preferences</id>
+      <str>Vorgaben</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL-Definitionen</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT-Advisories</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>Sicherheitsinfo</str>
+    </msg>
+    <msg>
+      <id>Targets</id>
+      <str>Ziele</str>
+    </msg>
+    <msg>
+      <id>Target Locators</id>
+      <str>Ziel-Locators</str>
+    </msg>
+    <msg>
+      <id>Port Lists</id>
+      <str>Portlisten</str>
+    </msg>
+    <msg>
+      <id>Port Ranges</id>
+      <str>Portbereiche</str>
+    </msg>
+    <msg>
+      <id>Credentials</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>Scan Configs</id>
+      <str>Scan-Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>Configs</id>
+      <str>Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>Alerts</id>
+      <str>Benachrichtigungen</str>
+    </msg>
+    <msg>
+      <id>Schedules</id>
+      <str>Zeitpläne</str>
+    </msg>
+    <msg>
+      <id>Report Formats</id>
+      <str>Berichtformate</str>
+    </msg>
+    <msg>
+      <id>Slaves</id>
+      <str>Slaves</str>
+    </msg>
+    <msg>
+      <id>Agents</id>
+      <str>Agenten</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>Tags</id>
+      <str>Tags</str>
+    </msg>
+    <msg>
+      <id>Permissions</id>
+      <str>Berechtigungen</str>
+    </msg>
+    <msg>
+      <id>Settings</id>
+      <str>Einstellungen</str>
+    </msg>
+    <msg>
+      <id>System Reports</id>
+      <str>Systemberichte</str>
+    </msg>
+    <msg>
+      <id>Users</id>
+      <str>Benutzer</str>
+    </msg>
+    <msg>
+      <id>Groups</id>
+      <str>Gruppen</str>
+    </msg>
+    <msg>
+      <id>Roles</id>
+      <str>Rollen</str>
+    </msg>
+  </grp>
+    <!-- 2.5.3    Resource types - lower case singular -->
+  <grp>
+    <ctxt>Type Lower</ctxt>
+    <msg>
+      <id>task</id>
+      <str>Aufgabe</str>
+    </msg>
+    <msg>
+      <id>report</id>
+      <str>Bericht</str>
+    </msg>
+    <msg>
+      <id>result</id>
+      <str>Ergebnis</str>
+    </msg>
+    <msg>
+      <id>note</id>
+      <str>Notiz</str>
+    </msg>
+    <msg>
+      <id>override</id>
+      <str>Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>host</id>
+      <str>Host</str>
+    </msg>
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>NVT family</id>
+      <str>NVT-Familie</str>
+    </msg>
+    <msg>
+      <id>preference</id>
+      <str>Vorgabe</str>
+    </msg>
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>OVAL definition</id>
+      <str>OVAL-Definition</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT advisory</id>
+      <str>DFN-CERT-Advisory</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>Sicherheitsinfo</str>
+    </msg>
+    <msg>
+      <id>target</id>
+      <str>Ziel</str>
+    </msg>
+    <msg>
+      <id>target locator</id>
+      <str>Ziel-Locator</str>
+    </msg>
+    <msg>
+      <id>port list</id>
+      <str>Portliste</str>
+    </msg>
+    <msg>
+      <id>port range</id>
+      <str>Portbereich</str>
+    </msg>
+    <msg>
+      <id>credential</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>scan config</id>
+      <str>Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>config</id>
+      <str>Konfiguration</str>
+    </msg>
+    <msg>
+      <id>alert</id>
+      <str>Benachrichtigung</str>
+    </msg>
+    <msg>
+      <id>schedule</id>
+      <str>Zeitplan</str>
+    </msg>
+    <msg>
+      <id>report format</id>
+      <str>Berichtformat</str>
+    </msg>
+    <msg>
+      <id>slave</id>
+      <str>Slave</str>
+    </msg>
+    <msg>
+      <id>agent</id>
+      <str>Agent</str>
+    </msg>
+    <msg>
+      <id>filter</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>tag</id>
+      <str>Tag</str>
+    </msg>
+    <msg>
+      <id>permission</id>
+      <str>Berechtigung</str>
+    </msg>
+    <msg>
+      <id>setting</id>
+      <str>Einstellung</str>
+    </msg>
+    <msg>
+      <id>system report</id>
+      <str>Systembericht</str>
+    </msg>
+    <msg>
+      <id>user</id>
+      <str>Benutzer</str>
+    </msg>
+    <msg>
+      <id>group</id>
+      <str>Gruppe</str>
+    </msg>
+    <msg>
+      <id>role</id>
+      <str>Rolle</str>
+    </msg>
+  </grp>
+  <!-- 2.5.4    Resource types - lower case plural -->
+  <grp>
+    <ctxt>Type Plural Lower</ctxt>
+    <msg>
+      <id>tasks</id>
+      <str>Aufgaben</str>
+    </msg>
+    <msg>
+      <id>reports</id>
+      <str>Berichte</str>
+    </msg>
+    <msg>
+      <id>results</id>
+      <str>Ergebnisse</str>
+    </msg>
+    <msg>
+      <id>notes</id>
+      <str>Notizen</str>
+    </msg>
+    <msg>
+      <id>overrides</id>
+      <str>Übersteuerungen</str>
+    </msg>
+    <msg>
+      <id>hosts</id>
+      <str>Hosts</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <msg>
+      <id>NVT families</id>
+      <str>NVT-Familien</str>
+    </msg>
+    <msg>
+      <id>preferences</id>
+      <str>Vorgaben</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL-Definitionen</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT-Advisories</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>Sicherheitsinfo</str>
+    </msg>
+    <msg>
+      <id>targets</id>
+      <str>Ziele</str>
+    </msg>
+    <msg>
+      <id>target locators</id>
+      <str>Ziel-Locators</str>
+    </msg>
+    <msg>
+      <id>port lists</id>
+      <str>Portlisten</str>
+    </msg>
+    <msg>
+      <id>port ranges</id>
+      <str>Portbereiche</str>
+    </msg>
+    <msg>
+      <id>credentials</id>
+      <str>Anmeldedaten</str>
+    </msg>
+    <msg>
+      <id>scan configs</id>
+      <str>Scan-Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>configs</id>
+      <str>Konfigurationen</str>
+    </msg>
+    <msg>
+      <id>alerts</id>
+      <str>Benachrichtigungen</str>
+    </msg>
+    <msg>
+      <id>schedules</id>
+      <str>Zeitpläne</str>
+    </msg>
+    <msg>
+      <id>report formats</id>
+      <str>Berichtformate</str>
+    </msg>
+    <msg>
+      <id>slaves</id>
+      <str>Slaves</str>
+    </msg>
+    <msg>
+      <id>agents</id>
+      <str>Agenten</str>
+    </msg>
+    <msg>
+      <id>filters</id>
+      <str>Filter</str>
+    </msg>
+    <msg>
+      <id>tags</id>
+      <str>Tags</str>
+    </msg>
+    <msg>
+      <id>permissions</id>
+      <str>Berechtigungen</str>
+    </msg>
+    <msg>
+      <id>settings</id>
+      <str>Einstellungen</str>
+    </msg>
+    <msg>
+      <id>system reports</id>
+      <str>Systemberichte</str>
+    </msg>
+    <msg>
+      <id>users</id>
+      <str>Benutzer</str>
+    </msg>
+    <msg>
+      <id>groups</id>
+      <str>Gruppen</str>
+    </msg>
+    <msg>
+      <id>roles</id>
+      <str>Rollen</str>
     </msg>
   </grp>
 
@@ -3770,10 +4215,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Permission</id>
       <str>Neue Berechtigung</str>
     </msg>
+    <msg>
+      <id>Create Permission</id>
+      <str>Berechtigung erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Permission</id>
       <str>Berechtigung bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Permission</id>
+      <str>Berechtigung speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -3792,12 +4245,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Orphan</id>
+      <str>Verwaist</str>
+    </msg>
+
+    <msg>
+      <id>Permission made visible for:</id>
+      <str>Berechtigung sichtbar gemacht für:</str>
+    </msg>
   </grp>
   <!-- 3.24.3    Permission actions and properties - window / headers only -->
   <grp>
     <ctxt>Permission Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Resource</id>
+      <str>Ressource</str>
+    </msg>
+    <msg>
+      <id>Resource ID</id>
+      <str>Ressourcen-ID</str>
+    </msg>
+    <msg>
+      <id>Resource Type</id>
+      <str>Ressourcen-Typ</str>
+    </msg>
+
+    <msg>
+      <id>Subject</id>
+      <str>Subjekt</str>
+    </msg>
+    <msg>
+      <id>Subject Type</id>
+      <str>Subjekt-Typ</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.24.4    Permission actions and properties - table rows only -->
@@ -3806,6 +4289,165 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.24.5 Permission descriptions -->
+  <grp>
+    <ctxt>Permission Description</ctxt>
+    <msg>
+      <id>may login</id>
+      <str>darf sich anmelden</str>
+    </msg>
+    <msg>
+      <id>may run multiple OMP commands in one</id>
+      <str>darf mehrere OMP-Befehle als einen ausführen</str>
+    </msg>
+    <msg>
+      <id>has all permissions</id>
+      <str>hat alle Berechtigungen</str>
+    </msg>
+    <msg>
+      <id>may empty the trashcan</id>
+      <str>darf den Mülleimer leeren</str>
+    </msg>
+    <msg>
+      <id>may get the dependencies of NVTs</id>
+      <str>darf die Abhängigkeiten von NVTs abrufen</str>
+    </msg>
+    <msg>
+      <id>may get the help text</id>
+      <str>darf den Hilfetext abrufen</str>
+    </msg>
+    <msg>
+      <id>has write access to the authentication configuration</id>
+      <str>hat Schreibzugriff auf die Authentifizierungskonfiguration</str>
+    </msg>
+    <msg>
+      <id>may restore items from the trashcan</id>
+      <str>darf Objekte aus dem Mülleimer wiederherstellen</str>
+    </msg>
+    <msg>
+      <id>may get NVT feed version information</id>
+      <str>darf Versionsinformationen des NVT-Feeds abrufen</str>
+    </msg>
+    <msg>
+      <id>may get version information</id>
+      <str>darf Versionsinformationen abrufen</str>
+    </msg>
+
+    <msg>
+      <id>may create a new </id>
+      <str>darf neue Objekte vom Typ </str>
+    </msg>
+    <msg>
+      <id>#may create suffix#</id>
+      <str> erstellen</str>
+    </msg>
+
+    <msg>
+      <id>has read access to SecInfo</id>
+      <str>hat Lesezugriff auf Sicherheitsinfos</str>
+    </msg>
+
+    <msg>
+      <id>may delete </id>
+      <str>darf </str>
+    </msg>
+    <msg>
+      <id>#may delete resource suffix#</id>
+      <str> löschen</str>
+    </msg>
+
+    <msg>
+      <id>may delete an existing </id>
+      <str>darf Objekte vom Typ </str>
+    </msg>
+    <msg>
+      <id>#may delete type suffix#</id>
+      <str> löschen</str>
+    </msg>
+
+    <msg>
+      <id>has read access to </id>
+      <str>hat Lesezugriff auf </str>
+    </msg>
+    <msg>
+      <id>has write access to </id>
+      <str>hat Schreibzugriff auf </str>
+    </msg>
+
+    <msg>
+      <id>may pause tasks</id>
+      <str>darf Aufgaben pausieren</str>
+    </msg>
+    <msg>
+      <id>may resume or start tasks</id>
+      <str>darf Aufgaben fortsetzen oder starten</str>
+    </msg>
+    <msg>
+      <id>may resume paused tasks</id>
+      <str>darf pausierte Aufgaben fortsetzen</str>
+    </msg>
+    <msg>
+      <id>may resume stopped tasks</id>
+      <str>darf gestoppte Aufgaben fortsetzen</str>
+    </msg>
+    <msg>
+      <id>may start tasks</id>
+      <str>darf Aufgaben starten</str>
+    </msg>
+    <msg>
+      <id>may stop tasks</id>
+      <str>darf Aufgaben stoppen</str>
+    </msg>
+
+    <msg>
+      <id>may run wizards</id>
+      <str>darf Wizards ausführen</str>
+    </msg>
+
+    <msg>
+      <id>may test alerts</id>
+      <str>darf Benachrichtigungen testen</str>
+    </msg>
+
+    <msg>
+      <id>may verify agents</id>
+      <str>darf Agenten verifizieren</str>
+    </msg>
+    <msg>
+      <id>may verify report formats</id>
+      <str>darf Berichtformate verifizieren</str>
+    </msg>
+
+    <msg>
+      <id>may get details about the authentication configuration</id>
+      <str>darf Details über die Authentifizierungskonfiguration abrufen</str>
+    </msg>
+    <msg>
+      <id>may get details about the CERT feed</id>
+      <str>darf Details über den CERT-Feed abrufen</str>
+    </msg>
+    <msg>
+      <id>may get details about the NVT feed</id>
+      <str>darf Details über den NVT-Feed abrufen</str>
+    </msg>
+    <msg>
+      <id>may get details about the SCAP feed</id>
+      <str>darf Details über den SCAP-Feed abrufen</str>
+    </msg>
+
+    <msg>
+      <id>may sync the CERT feed</id>
+      <str>darf den CERT-Feed synchronisieren</str>
+    </msg>
+    <msg>
+      <id>may sync the NVT feed</id>
+      <str>darf den NVT-Feed synchronisieren</str>
+    </msg>
+    <msg>
+      <id>may sync the SCAP feed</id>
+      <str>darf den SCAP-Feed synchronisieren</str>
+    </msg>
   </grp>
 
 
