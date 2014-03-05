@@ -1,5 +1,10 @@
 2014-03-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings_omp): Return to Edit page with an
+	error message, when authentication fails.
+
+2014-03-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Require the user's existing password when changing password in My
 	Settings.
 

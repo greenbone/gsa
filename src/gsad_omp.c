@@ -14425,12 +14425,18 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Manager closed connection during authenticate.",
                                  "/omp?cmd=get_my_settings");
           case 2:
-            return gsad_message (credentials,
-                                 "Authentication failure", __FUNCTION__, __LINE__,
-                                 "Authentication failed while saving settings. "
-                                 "The settings remains the same. "
-                                 "Diagnostics: Authentication with Old Password failed.",
-                                 "/omp?cmd=get_my_settings");
+            g_string_append (xml,
+                             "<gsad_msg"
+                             " status_text=\"Password error\""
+                             " operation=\"Save My Settings\">"
+                             "You tried to change your password, but the old"
+                             " password was not provided or was incorrect. "
+                             " You may use the Back button of your browser to"
+                             " adjust the form.  Please enter the correct old"
+                             " password or remove old and new passwords to"
+                             " apply any other changes of your settings."
+                             "</gsad_msg>");
+            return edit_my_settings (credentials, params, g_string_free (xml, FALSE));
           default:
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
