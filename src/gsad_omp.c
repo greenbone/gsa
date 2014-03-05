@@ -14436,7 +14436,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                              " password or remove old and new passwords to"
                              " apply any other changes of your settings."
                              "</gsad_msg>");
-            return edit_my_settings (credentials, params, g_string_free (xml, FALSE));
+            return edit_my_settings (credentials, params,
+                                     g_string_free (xml, FALSE));
           default:
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
