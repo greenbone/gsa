@@ -1,5 +1,12 @@
 2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-feed-form, html-scap-form)
+	(html-cert-form): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for feed sync pages.
+
+2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (group [trash], group [details])
 	(html-groups-trash-table, html-create-group-form, html-edit-group-form)
 	(role [trash], role [details], html-roles-trash-table)

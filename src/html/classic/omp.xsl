@@ -28508,9 +28508,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVT Feed Management
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Feed Management', 'Feed Sync')"/>
       <a href="/help/feed_management.html?token={/envelope/token}"
-         title="Help: NVT Feed Management">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Feed Management', 'Feed Sync'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -28521,13 +28521,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <b><xsl:value-of select="feed/name"/></b><br/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Feed Version</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
             <td>
               <xsl:value-of select="feed/version"/>
             </td>
@@ -28537,19 +28537,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  Synchronization
-                  <b>in progress</b>.  Started
+                  <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
+                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                  <xsl:text>. </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
                   <b>
                     <xsl:value-of select="feed/currently_syncing/timestamp"/>
                   </b>
-                  by
-                  <b><xsl:value-of select="feed/currently_syncing/user"/></b>.
+                  <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                  <b><xsl:value-of select="feed/currently_syncing/user"/></b>
+                  <xsl:text>.</xsl:text>
                 </td>
               </tr>
             </xsl:when>
           </xsl:choose>
           <tr>
-            <td valign="top" width="125">Description</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
             <td>
               <xsl:value-of select="feed/description"/>
             </td>
@@ -28559,10 +28562,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
+                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
                   <xsl:choose>
                     <xsl:when test="feed/sync_not_available/error/text()">
-                      The synchronization script returned the following error message: <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
+                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                      <xsl:text> </xsl:text>
+                      <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
                     </xsl:when>
                   </xsl:choose>
                 </td>
@@ -28573,17 +28580,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="2" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="feed/currently_syncing">
-                  <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:when test="feed/sync_not_available">
-                  <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="Synchronize with Feed now"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
                 </xsl:otherwise>
               </xsl:choose>
               <p>
-                <a style="background-color: #ff6;" href="/help/feed_management.html?token={/envelope/token}#side_effects" title="Help: Feed Management">Learn about the side effects of feed synchronization!</a>
+                <a style="background-color: #ff6;" href="/help/feed_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of Feed synchronization!', 'Feed Sync')"/></a>
               </p>
             </td>
           </tr>
@@ -28635,9 +28642,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">SCAP Feed Management
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('SCAP Feed Management', 'Feed Sync')"/>
       <a href="/help/scap_management.html?token={/envelope/token}"
-         title="Help: SCAP Feed Management">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -28648,13 +28655,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <b><xsl:value-of select="scap/name"/></b><br/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Feed Version</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
             <td>
               <xsl:value-of select="scap/version"/>
             </td>
@@ -28666,23 +28673,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:choose>
                     <xsl:when test="string-length (scap/currently_syncing/user) = 0">
-                      Migration
+                      <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      Synchronization
+                      <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <b>in progress</b>.  Started
+                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                  <xsl:text>. </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
                   <b>
                     <xsl:value-of select="scap/currently_syncing/timestamp"/>
                   </b>
                   <xsl:choose>
                     <xsl:when test="string-length (scap/currently_syncing/user) = 0">
-                      on the command line.
+                      <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
+                      <xsl:text>.</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                      by
-                      <b><xsl:value-of select="scap/currently_syncing/user"/></b>.
+                      <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                      <b><xsl:value-of select="scap/currently_syncing/user"/></b>
+                      <xsl:text>.</xsl:text>
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
@@ -28690,7 +28701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
           </xsl:choose>
           <tr>
-            <td valign="top" width="125">Description</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
             <td>
               <xsl:value-of select="scap/description"/>
             </td>
@@ -28700,10 +28711,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
+                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
                   <xsl:choose>
                     <xsl:when test="scap/sync_not_available/error/text()">
-                      The synchronization script returned the following error message: <i><xsl:value-of select="scap/sync_not_available/error/text()"/></i>
+                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                      <xsl:text> </xsl:text>
+                      <i><xsl:value-of select="scap/sync_not_available/error/text()"/></i>
                     </xsl:when>
                   </xsl:choose>
                 </td>
@@ -28714,17 +28729,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="2" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="scap/currently_syncing">
-                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:when test="scap/sync_not_available">
-                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}"/>
                 </xsl:otherwise>
               </xsl:choose>
               <p>
-                <a style="background-color: #ff6;" href="/help/scap_management.html?token={/envelope/token}#side_effects" title="Help: SCAP Feed Management">Learn about the side effects of SCAP Feed synchronization!</a>
+                <a style="background-color: #ff6;" href="/help/scap_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of SCAP Feed synchronization!', 'Feed Sync')"/></a>
               </p>
             </td>
           </tr>
@@ -28776,9 +28791,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CERT Feed Management
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CERT Feed Management', 'Feed Sync')"/>
       <a href="/help/cert_management.html?token={/envelope/token}"
-         title="Help: CERT Feed Management">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -28789,13 +28804,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <b><xsl:value-of select="cert/name"/></b><br/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Feed Version</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
             <td>
               <xsl:value-of select="cert/version"/>
             </td>
@@ -28807,23 +28822,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:choose>
                     <xsl:when test="string-length (cert/currently_syncing/user) = 0">
-                      Migration
+                      <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      Synchronization
+                      <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <b>in progress</b>.  Started
+                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                  <xsl:text>. </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
                   <b>
                     <xsl:value-of select="cert/currently_syncing/timestamp"/>
                   </b>
                   <xsl:choose>
                     <xsl:when test="string-length (cert/currently_syncing/user) = 0">
-                      on the command line.
+                      <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
+                      <xsl:text>.</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                      by
-                      <b><xsl:value-of select="cert/currently_syncing/user"/></b>.
+                      <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                      <b><xsl:value-of select="cert/currently_syncing/user"/></b>
+                      <xsl:text>.</xsl:text>
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
@@ -28831,7 +28850,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
           </xsl:choose>
           <tr>
-            <td valign="top" width="125">Description</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
             <td>
               <xsl:value-of select="cert/description"/>
             </td>
@@ -28841,10 +28860,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="top" width="125"></td>
                 <td>
-                  <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
+                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
                   <xsl:choose>
                     <xsl:when test="cert/sync_not_available/error/text()">
-                      The synchronization script returned the following error message: <i><xsl:value-of select="cert/sync_not_available/error/text()"/></i>
+                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                      <xsl:text> </xsl:text>
+                      <i><xsl:value-of select="cert/sync_not_available/error/text()"/></i>
                     </xsl:when>
                   </xsl:choose>
                 </td>
@@ -28855,17 +28878,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="2" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="cert/currently_syncing">
-                  <input type="submit" name="submit" value="Synchronize with CERT Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:when test="cert/sync_not_available">
-                  <input type="submit" name="submit" value="Synchronize with CERT Feed now" disabled="disabled"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="Synchronize with CERT Feed now"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}"/>
                 </xsl:otherwise>
               </xsl:choose>
               <p>
-                <a style="background-color: #ff6;" href="/help/cert_management.html?token={/envelope/token}#side_effects" title="Help: CERT Feed Management">Learn about the side effects of CERT Feed synchronization!</a>
+                <a style="background-color: #ff6;" href="/help/cert_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of CERT Feed synchronization!', 'Feed Sync')"/></a>
               </p>
             </td>
           </tr>

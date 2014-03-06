@@ -4809,16 +4809,101 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Feed Sync</ctxt>
     <msg>
+      <id>Feed Management</id>
+      <str>Feed-Management</str>
+    </msg>
+    <msg>
+      <id>CERT Feed</id>
+      <str>CERT-Feed</str>
+    </msg>
+    <msg>
+      <id>CERT Feed Management</id>
+      <str>CERT-Feed-Management</str>
+    </msg>
+    <msg>
       <id>NVT Feed</id>
       <str>NVT-Feed</str>
+    </msg>
+    <msg>
+      <id>NVT Feed Management</id>
+      <str>NVT-Feed-Management</str>
     </msg>
     <msg>
       <id>SCAP Feed</id>
       <str>SCAP-Feed</str>
     </msg>
     <msg>
-      <id>CERT Feed</id>
-      <str>CERT-Feed</str>
+      <id>SCAP Feed Management</id>
+      <str>SCAP-Feed-Management</str>
+    </msg>
+
+    <msg>
+      <id>Feed Version</id>
+      <str>Feedversion</str>
+    </msg>
+
+    <msg>
+      <id>Migration</id>
+      <str>Migration</str>
+    </msg>
+    <msg>
+      <id>Synchronization</id>
+      <str>Synchonisierung</str>
+    </msg>
+    <msg>
+      <id> in progress</id>
+      <str> läuft gerade</str>
+    </msg>
+    <msg>
+      <id>Started </id>
+      <str>Gestartet: </str>
+    </msg>
+    <msg>
+      <id> on the command line</id>
+      <str> auf der Kommandozeile</str>
+    </msg>
+    <msg>
+      <id> by </id>
+      <str>  von </str>
+    </msg>
+
+    <msg>
+      <id>Warning:</id>
+      <str>Warnung:</str>
+    </msg>
+    <msg>
+      <id>Synchronization with this feed is currently not possible.</id>
+      <str>Synchonisierung mit diesem Feed ist momentan nicht möglich.</str>
+    </msg>
+    <msg>
+      <id>The synchronization script returned the following error message:</id>
+      <str>Das Synchronisierungsscript gab folgende Fehlermeldung zurück:</str>
+    </msg>
+
+    <msg>
+      <id>Synchronize with Feed now</id>
+      <str>Jetzt mit Feed synchronisieren</str>
+    </msg>
+    <msg>
+      <id>Synchronize with CERT Feed now</id>
+      <str>Jetzt mit CERT-Feed synchronisieren</str>
+    </msg>
+    <msg>
+      <id>Synchronize with SCAP Feed now</id>
+      <str>Jetzt mit SCAP-Feed synchronisieren</str>
+    </msg>
+
+    <msg>
+      <id>Learn about the side effects of Feed synchronization!</id>
+      <str>Erfahren Sie mehr über die Nebeneffekte der Feed-Synchonisierung!</str>
+    </msg>
+    <msg>
+      <id>Learn about the side effects of CERT Feed synchronization!</id>
+      <str>Erfahren Sie mehr über die Nebeneffekte der CERT-Feed-Synchonisierung!</str>
+    </msg>
+    <msg>
+      <id>Learn about the side effects of SCAP Feed synchronization!</id>
+      <str>Erfahren Sie mehr über die Nebeneffekte der SCAP-Feed-Synchonisierung!</str>
     </msg>
   </grp>
 
