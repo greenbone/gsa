@@ -1,5 +1,10 @@
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings_omp): Remove sentence about Back
+	button, now that the input is preserved.
+
+2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-filter-form)
 	(html-edit-filter-form): Add missing type Role.
 

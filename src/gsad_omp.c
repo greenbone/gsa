@@ -14431,10 +14431,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                              " operation=\"Save My Settings\">"
                              "You tried to change your password, but the old"
                              " password was not provided or was incorrect. "
-                             " You may use the Back button of your browser to"
-                             " adjust the form.  Please enter the correct old"
-                             " password or remove old and new passwords to"
-                             " apply any other changes of your settings."
+                             " Please enter the correct old password or remove"
+                             " old and new passwords to apply any other changes"
+                             " of your settings."
                              "</gsad_msg>");
             return edit_my_settings (credentials, params,
                                      g_string_free (xml, FALSE));
