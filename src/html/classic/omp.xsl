@@ -29298,10 +29298,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>User Interface Language</td>
               <td>
+                <xsl:variable name="param-or-lang"
+                              select="gsa:param-or ('lang', get_settings_response/setting[name='User Interface Language']/value)"/>
                 <xsl:variable name="lang">
                   <xsl:choose>
-                    <xsl:when test="string-length (get_settings_response/setting[name='User Interface Language']/value) &gt; 0">
-                      <xsl:value-of select="get_settings_response/setting[name='User Interface Language']/value"/>
+                    <xsl:when test="string-length ($param-or-lang) &gt; 0">
+                      <xsl:value-of select="$param-or-lang"/>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:text>Browser Language</xsl:text>

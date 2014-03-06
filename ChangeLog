@@ -1,5 +1,10 @@
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (edit_my_settings): Preserve User Interface
+	Langauge too.
+
+2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Preserve user's input after error on Edit My Settings.
 
 	* src/html/classic/omp.xsl (gsa:param-or): Check for hashtable params
