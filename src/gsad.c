@@ -2002,9 +2002,10 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       const char *colon;
       gchar *prefix;
 
+      /* Hashtable param, like for radios. */
+
       colon = strchr (name, ':');
 
-      /* Hashtable param, like for radios. */
       if ((colon - name) == (strlen (name) - 1))
         {
           params_append_bin (params, name, value, strlen (value), 0);
