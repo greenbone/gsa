@@ -4587,10 +4587,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Group</id>
       <str>Neue Gruppe</str>
     </msg>
+    <msg>
+      <id>Create Group</id>
+      <str>Gruppe erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Group</id>
       <str>Gruppe bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Group</id>
+      <str>Gruppe speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -4614,7 +4622,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Group Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Save</id>
+      <str>Speichern</str>
+    </msg>
     <!-- - - Properties - - -->
+    <msg>
+      <id>ADS Authentication</id>
+      <str>ADS-Authentifizierung</str>
+    </msg>
+    <msg>
+      <id>LDAP Authentication and Authorization</id>
+      <str>LDAP-Authentifizierung und -Autorisierung</str>
+    </msg>
+    <msg>
+      <id>LDAP per-User Authentication</id>
+      <str>LDAP-Authentifizierung pro Benutzer</str>
+    </msg>
+
+    <msg>
+      <id>Setting</id>
+      <str>Einstellung</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
+    <msg>
+      <id>Enable</id>
+      <str>Aktivieren</str>
+    </msg>
+    <msg>
+      <id>Domain</id>
+      <str>Domain</str>
+    </msg>
+    <msg>
+      <id>Auth. DN</id>
+      <str>Auth. DN</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.26.4    Group actions and properties - table rows only -->
@@ -4675,6 +4720,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
+    <!-- Permissions -->
+    <msg>
+      <id>Role has Everything</id>
+      <str>Rolle hat alle (Everything)</str>
+    </msg>
   </grp>
   <!-- 3.27.4    Role actions and properties - table rows only -->
   <grp>

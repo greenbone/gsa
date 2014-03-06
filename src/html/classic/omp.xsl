@@ -19444,7 +19444,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Group is still in use"
+               title="{gsa:i18n ('Group', 'Group')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -19467,15 +19467,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Users:</td>
+          <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
           <td><xsl:value-of select="users/text()"/></td>
         </tr>
       </table>
@@ -19490,8 +19490,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="group" mode="trash"/>
     </table>
@@ -19522,14 +19522,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Group
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Group', 'Group')"/>
       <a href="/help/new_group.html?token={/envelope/token}"
-         title="Help: New Group">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Group', 'Group'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_groups&amp;group={/envelope/params/group}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Groups" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Groups"/>
+         title="{gsa:i18n ('Groups', 'Group')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Groups', 'Group')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -19544,7 +19544,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="group" value="{/envelope/params/group}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -19552,20 +19552,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Users</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
               <input type="text" name="users" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Group"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Group', 'Group')}"/>
             </td>
           </tr>
         </table>
@@ -19587,7 +19587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Group
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Group', 'Group')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Group'"/>
         <xsl:with-param name="type" select="'group'"/>
@@ -19608,7 +19608,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -19618,14 +19618,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_groups_response/group/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Users</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
               <input type="text" name="users"
                      value="{commands_response/get_groups_response/group/users}"
@@ -19635,7 +19635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Group"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Group', 'Group')}"/>
             </td>
           </tr>
         </table>
@@ -26521,7 +26521,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Role is still in use"
+               title="{gsa:i18n ('Role', 'Role')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -26534,7 +26534,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Role Details
+      <xsl:value-of select="gsa:i18n ('Role Details', 'Role')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
@@ -26546,30 +26546,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Comment:</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>Users:</td>
+          <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
           <td><xsl:value-of select="users/text()"/></td>
         </tr>
       </table>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
-          <h1>Permissions: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('Window', 'None')"/></h1>
         </xsl:when>
         <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
-          <h1>Permissions (Role has Everything)</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role Window')"/>)</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <xsl:variable name="id" select="../../get_permissions_response/permission/@id"/>
             <tr class="gbntablehead2">
-              <td>Description</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
               <tr class="{gsa:table-row-class(position())}">
@@ -26589,11 +26589,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Permissions</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Description</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="../../get_permissions_response/permission">
               <tr class="{gsa:table-row-class(position())}">
@@ -26621,8 +26621,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="role" mode="trash"/>
     </table>
@@ -28367,21 +28367,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:choose>
         <xsl:when test="@name='method:ads'">
-          ADS Authentication
+          <xsl:value-of select="gsa:i18n ('ADS Authentication', 'Group Window')"/>
           <a href="/help/users.html?token={/envelope/token}#adsauthentication"
-            title="Help: Users (ADS Authentication)">
+             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('', ''))}({gsa:i18n ('ADS Authentication', 'Group Window')})">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:when test="@name='method:ldap'">
-          LDAP Authentication and Authorization
+          <xsl:value-of select="gsa:i18n ('LDAP Authentication and Authorization', 'Group Window')"/>
           <a href="/help/users.html?token={/envelope/token}#ldapauthentication"
-            title="Help: Users (LDAP Authentication and Authorization)">
+             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('', ''))}({gsa:i18n ('LDAP Authentication and Authorization', 'Group Window')})">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:when test="@name='method:ldap_connect'">
-          LDAP per-User Authentication
+          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group Window')"/>
           <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
-            title="Help: Users (LDAP per-User Authentication)">
+             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('', ''))}({gsa:i18n ('LDAP per-User Authentication', 'Group Window')})">
           <img src="/img/help.png"/></a>
         </xsl:when>
       </xsl:choose>
@@ -28399,11 +28399,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="group" value="{@name}"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <tr class="gbntablehead2">
-              <td>Setting</td>
-              <td>Value</td>
+              <td><xsl:value-of select="gsa:i18n ('Setting', 'Group Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Value', 'Group Window')"/></td>
             </tr>
               <tr class="odd">
-                <td>Enable</td>
+                <td><xsl:value-of select="gsa:i18n ('Enable', 'Group Window')"/></td>
                 <td>
                   <xsl:choose>
                     <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
@@ -28428,19 +28428,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     LDAP
                   </xsl:when>
                 </xsl:choose>
-                Host</td>
+                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
                 <td><input type="text" name="ldaphost" size="30"
                      value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
               </tr>
               <tr class="odd">
               <xsl:choose>
                 <xsl:when test="@name='method:ads'">
-                  <td>Domain</td>
+                  <td><xsl:value-of select="gsa:i18n ('Domain', 'Group Window')"/></td>
                   <td><input type="text" name="domain" size="30"
                        value="{auth_conf_setting[@key='domain']/@value}"/></td>
                 </xsl:when>
                 <xsl:otherwise>
-                  <td>Auth. DN</td>
+                  <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group Window')"/></td>
                   <td><input type="text" name="authdn" size="30"
                        value="{auth_conf_setting[@key='authdn']/@value}"/></td>
                 </xsl:otherwise>
@@ -28448,7 +28448,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
-                <input type="submit" name="submit" value="Save"/>
+                <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group Window')}"/>
               </td>
             </tr>
           </table>
