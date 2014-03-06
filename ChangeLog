@@ -1,5 +1,10 @@
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-filter-form)
+	(html-edit-filter-form): Add missing type Role.
+
+2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (params_mhd_add): Move comment up becuase it applies to
 	the whole block.
 
