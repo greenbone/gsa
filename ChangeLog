@@ -1,5 +1,9 @@
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (edit_my_settings): Improve alignment.
+
+2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (edit_my_settings): Preserve User Interface
 	Langauge too.
 
