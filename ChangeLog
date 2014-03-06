@@ -1,3 +1,16 @@
+2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Preserve user's input after error on Edit My Settings.
+
+	* src/html/classic/omp.xsl (gsa:param-or): Check for hashtable params
+	too.
+	(edit_my_settings): Fill the fields with values from existing params if
+	they are given.
+
+	* src/gsad_omp.c (edit_my_settings): Get the filters, otherwise every
+	caller needs to.
+	(edit_my_settings_omp): Let edit_my_settings get the filters.
+
 2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-feed-form, html-scap-form)

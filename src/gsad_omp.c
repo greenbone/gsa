@@ -14173,8 +14173,43 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 {
   GString *xml;
   gnutls_session_t session;
-  int socket;
-  gchar *html;
+  int socket, ret;
+  gchar *html, *filters_xml;
+  entity_t entity;
+
+  /* Get the Filters. */
+
+  filters_xml = NULL;
+  entity = NULL;
+  ret = omp (credentials, &filters_xml, &entity, "<get_filters/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the Filters "
+                             "for the settings. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the Filters "
+                             "for the alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the Filters "
+                             "for the settings. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_my_settings");
+    }
+  free_entity (entity);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -14196,6 +14231,9 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  g_string_append (xml, filters_xml);
+  g_free (filters_xml);
 
   /* Get the settings. */
 
@@ -14243,45 +14281,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 char *
 edit_my_settings_omp (credentials_t * credentials, params_t *params)
 {
-  int ret;
-  entity_t entity;
-  gchar *response;
-
-  /* Get Filters. */
-  response = NULL;
-  entity = NULL;
-  ret = omp (credentials, &response, &entity, "<get_filters/>");
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Filters "
-                             "for the settings. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings");
-      case 2:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts");
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
-                             "It is unclear whether the task has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts");
-    }
-  free_entity (entity);
-
-  return edit_my_settings (credentials, params, response);
+  return edit_my_settings (credentials, params, NULL);
 }
 
 /**

@@ -216,6 +216,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="gsa:html-attribute-quote (/envelope/params/node()[name()=$name])"/>
       </func:result>
     </xsl:when>
+    <xsl:when test="/envelope/params/_param[name=$name]">
+      <func:result>
+        <xsl:value-of select="gsa:html-attribute-quote (/envelope/params/_param[name=$name]/value)"/>
+      </func:result>
+    </xsl:when>
     <xsl:otherwise>
       <func:result>
         <xsl:value-of select="$alternative"/>
@@ -29266,7 +29271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Timezone</td>
               <td>
                 <input type="text" name="text" size="40" maxlength="800"
-                       value="{/envelope/timezone}"/>
+                       value="{gsa:param-or ('text', /envelope/timezone)}"/>
               </td>
             </tr>
             <tr>
@@ -29326,14 +29331,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Rows Per Page</td>
               <td>
                 <input type="text" name="max" size="40" maxlength="800"
-                       value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
+                       value="{gsa:param-or ('max', get_settings_response/setting[name='Rows Per Page']/value)}"/>
               </td>
             </tr>
             <tr>
               <td>Wizard Rows</td>
               <td>
                 <input type="text" name="max_results" size="40" maxlength="800"
-                       value="{get_settings_response/setting[name='Wizard Rows']/value}"/>
+                       value="{gsa:param-or ('max_results', get_settings_response/setting[name='Wizard Rows']/value)}"/>
               </td>
             </tr>
             <tr>
@@ -29341,14 +29346,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <xsl:call-template name="severity-settings-list">
                     <xsl:with-param name="default"
-                                    select="get_settings_response/setting[name='Severity Class']/value"/>
+                                    select="gsa:param-or ('severity_class', get_settings_response/setting[name='Severity Class']/value)"/>
                 </xsl:call-template>
               </td>
             </tr>
             <tr>
               <td>Dynamic Severity</td>
               <td>
-                <xsl:variable name="current_dynamic_severity" select="get_settings_response/setting[name='Dynamic Severity']/value"/>
+                <xsl:variable name="current_dynamic_severity"
+                              select="gsa:param-or ('dynamic_severity', get_settings_response/setting[name='Dynamic Severity']/value)"/>
                 <select name="dynamic_severity" style="width:100px;">
                   <xsl:call-template name="opt">
                     <xsl:with-param name="value" select="'0'"/>
@@ -29371,7 +29377,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'4a1334c1-cb93-4a79-8634-103b0a50bdcd'"/>
                       <xsl:with-param name="filter-type" select="'Agent'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Agents Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '4a1334c1-cb93-4a79-8634-103b0a50bdcd'), get_settings_response/setting[name='Agents Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29382,7 +29388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'"/>
                       <xsl:with-param name="filter-type" select="'Alert'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Alerts Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'), get_settings_response/setting[name='Alerts Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29393,7 +29399,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'1a9fbd91-0182-44cd-bc88-a13a9b3b1bef'"/>
                       <xsl:with-param name="filter-type" select="'Config'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Configs Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '1a9fbd91-0182-44cd-bc88-a13a9b3b1bef'), get_settings_response/setting[name='Configs Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29404,7 +29410,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'186a5ac8-fe5a-4fb1-aa22-44031fb339f3'"/>
                       <xsl:with-param name="filter-type" select="'Credential'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Credentials Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '186a5ac8-fe5a-4fb1-aa22-44031fb339f3'), get_settings_response/setting[name='Credentials Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29415,7 +29421,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'f9691163-976c-47e7-ad9a-38f2d5c81649'"/>
                       <xsl:with-param name="filter-type" select="'Filter'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Filters Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'f9691163-976c-47e7-ad9a-38f2d5c81649'), get_settings_response/setting[name='Filters Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29426,7 +29432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'96abcd5a-9b6d-456c-80b8-c3221bfa499d'"/>
                       <xsl:with-param name="filter-type" select="'Note'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Notes Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '96abcd5a-9b6d-456c-80b8-c3221bfa499d'), get_settings_response/setting[name='Notes Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29437,7 +29443,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'eaaaebf1-01ef-4c49-b7bb-955461c78e0a'"/>
                       <xsl:with-param name="filter-type" select="'Override'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Overrides Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'eaaaebf1-01ef-4c49-b7bb-955461c78e0a'), get_settings_response/setting[name='Overrides Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29448,7 +29454,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'ffb16b28-538c-11e3-b8f9-406186ea4fc5'"/>
                       <xsl:with-param name="filter-type" select="'Permission'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Permissions Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'ffb16b28-538c-11e3-b8f9-406186ea4fc5'), get_settings_response/setting[name='Permissions Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29459,7 +29465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'7d52d575-baeb-4d98-bb68-e1730dbc6236'"/>
                       <xsl:with-param name="filter-type" select="'Port List'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '7d52d575-baeb-4d98-bb68-e1730dbc6236'), get_settings_response/setting[name='Port Lists Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29470,7 +29476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'48ae588e-9085-41bc-abcb-3d6389cf7237'"/>
                       <xsl:with-param name="filter-type" select="'Report'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Reports Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '48ae588e-9085-41bc-abcb-3d6389cf7237'), get_settings_response/setting[name='Reports Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29481,7 +29487,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'249c7a55-065c-47fb-b453-78e11a665565'"/>
                       <xsl:with-param name="filter-type" select="'Report Format'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '249c7a55-065c-47fb-b453-78e11a665565'), get_settings_response/setting[name='Report Formats Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29492,7 +29498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'739ab810-163d-11e3-9af6-406186ea4fc5'"/>
                       <xsl:with-param name="filter-type" select="'Result'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Results Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '739ab810-163d-11e3-9af6-406186ea4fc5'), get_settings_response/setting[name='Results Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29503,7 +29509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'f38e673a-bcd1-11e2-a19a-406186ea4fc5'"/>
                       <xsl:with-param name="filter-type" select="'Role'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Roles Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'f38e673a-bcd1-11e2-a19a-406186ea4fc5'), get_settings_response/setting[name='Roles Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29514,7 +29520,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'a83e321b-d994-4ae8-beec-bfb5fe3e7336'"/>
                       <xsl:with-param name="filter-type" select="'Schedule'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Schedules Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'a83e321b-d994-4ae8-beec-bfb5fe3e7336'), get_settings_response/setting[name='Schedules Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29525,7 +29531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'"/>
                       <xsl:with-param name="filter-type" select="'Slave'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Slaves Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'), get_settings_response/setting[name='Slaves Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29536,7 +29542,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'108eea3b-fc61-483c-9da9-046762f137a8'"/>
                       <xsl:with-param name="filter-type" select="'Tag'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Tags Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '108eea3b-fc61-483c-9da9-046762f137a8'), get_settings_response/setting[name='Tags Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29547,7 +29553,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'236e2e41-9771-4e7a-8124-c432045985e0'"/>
                       <xsl:with-param name="filter-type" select="'Target'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Targets Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '236e2e41-9771-4e7a-8124-c432045985e0'), get_settings_response/setting[name='Targets Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29558,7 +29564,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'1c981851-8244-466c-92c4-865ffe05e721'"/>
                       <xsl:with-param name="filter-type" select="'Task'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='Tasks Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '1c981851-8244-466c-92c4-865ffe05e721'), get_settings_response/setting[name='Tasks Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29569,7 +29575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'3414a107-ae46-4dea-872d-5c4479a48e8f'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='CPE Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '3414a107-ae46-4dea-872d-5c4479a48e8f'), get_settings_response/setting[name='CPE Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29580,7 +29586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'def63b5a-41ef-43f4-b9ef-03ef1665db5d'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='CVE Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'def63b5a-41ef-43f4-b9ef-03ef1665db5d'), get_settings_response/setting[name='CVE Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29591,7 +29597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'bef08b33-075c-4f8c-84f5-51f6137e40a3'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='NVT Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'bef08b33-075c-4f8c-84f5-51f6137e40a3'), get_settings_response/setting[name='NVT Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29602,7 +29608,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='OVAL Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'), get_settings_response/setting[name='OVAL Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29613,7 +29619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'312350ed-bc06-44f3-8b3f-ab9eb828b80b'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', '312350ed-bc06-44f3-8b3f-ab9eb828b80b'), get_settings_response/setting[name='DFN-CERT Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -29625,7 +29631,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="uuid" select="'feefe56b-e2da-4913-81cc-1a6ae3b36e64'"/>
                       <xsl:with-param name="filter-type" select="'SecInfo'"/>
                       <xsl:with-param name="filter"
-                                      select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+                                      select="gsa:param-or (concat ('settings_filter:', 'feefe56b-e2da-4913-81cc-1a6ae3b36e64'), get_settings_response/setting[name='All SecInfo Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
