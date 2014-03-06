@@ -4473,8 +4473,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Neuer Benutzer</str>
     </msg>
     <msg>
+      <id>Create User</id>
+      <str>Benutzer erstellen</str>
+    </msg>
+
+    <msg>
       <id>Edit User</id>
       <str>Benutzer bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save User</id>
+      <str>Benutzer speichern</str>
     </msg>
     <!-- - - Common references - - -->
     <msg>
@@ -4491,7 +4500,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>User Table Row</ctxt>
     <ctxt>User Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Currently logged in as this user</id>
+      <str>Momentan als dieser Benutzer eingeloggt</str>
+    </msg>
     <!-- - - Properties - - -->
+    <!-- Host Access -->
+    <msg>
+      <id>Allow all and deny</id>
+      <str>Erlaube alle und verweigere</str>
+    </msg>
+    <msg>
+      <id>Deny all and allow</id>
+      <str>Verweigere alle und erlaube</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.25.3    User actions and properties - window / headers only -->
@@ -4499,6 +4521,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>User Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Login Name</id>
+      <str>Loginname</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
+    <msg>
+      <id>Use existing value</id>
+      <str>Existierenden Wert verwenden</str>
+    </msg>
+
+    <msg>
+      <id>Host Access</id>
+      <str>Host-Zugriff</str>
+    </msg>
+    <msg>
+      <id>Interface Access</id>
+      <str>Interface-Zugriff</str>
+    </msg>
+
+    <msg>
+      <id>LDAP Authentication</id>
+      <str>LDAP-Authentifizierung</str>
+    </msg>
+    <msg>
+      <id>Authentication via LDAP</id>
+      <str>Authentifizierung via LDAP</str>
+    </msg>
+    <msg>
+      <id>Allow LDAP Authentication only</id>
+      <str>Nur LDAP-Authentifizierung erlauben</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.25.4    User actions and properties - table rows only -->

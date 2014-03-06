@@ -4139,7 +4139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="name=/envelope/login/text()">
             <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
-                 title="{gsa:i18n ('Currently logged in as this user', 'Table Row')}"
+                 title="{gsa:i18n ('Currently logged in as this user', 'User Table Row')}"
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
@@ -27440,9 +27440,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New User
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New User', 'User')"/>
       <a href="/help/users.html?token={/envelope/token}#newuser"
-         title="Help: Users (New User)">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Users', 'User'),' (',gsa:i18n ('New User', 'User'),')')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -27466,14 +27466,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="125">Login Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/></td>
             <td>
               <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
                      size="30" maxlength="80"/>
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125">Password</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User Window')"/></td>
             <td>
               <input type="password" name="password" value="" size="30"
                      maxlength="40"/>
@@ -27481,7 +27481,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
             <tr class="odd">
-              <td>Roles (optional)</td>
+              <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
               <td>
                 <xsl:variable name="roles"
                               select="get_roles_response/role"/>
@@ -27553,7 +27553,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="gsa:may-op ('get_groups')">
             <tr class="even">
-              <td>Groups (optional)</td>
+              <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
               <td>
                 <xsl:variable name="groups"
                               select="get_groups_response/group"/>
@@ -27605,15 +27605,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:if>
           <tr class="odd">
-            <td valign="top">Host Access</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User Window')"/></td>
             <td>
               <label>
                 <input type="radio" name="hosts_allow" value="0" checked="1"/>
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
               </label>
               <label>
                 <input type="radio" name="hosts_allow" value="1"/>
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
@@ -27621,15 +27621,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
-            <td valign="top">Interface Access</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User Window')"/></td>
             <td>
               <label>
                 <input type="radio" name="ifaces_allow" value="0" checked="1"/>
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
               </label>
               <label>
                 <input type="radio" name="ifaces_allow" value="1"/>
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
               </label>
               <br/>
               <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
@@ -27639,7 +27639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <!-- Only if ldap-connect is enabled, it is per-user. !-->
           <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
             <tr class="even">
-              <td valign="top">Allow LDAP- Authentication only</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Allow LDAP Authentication only', 'User Window')"/></td>
               <td>
                 <input type="checkbox" name="enable_ldap_connect" value="1" checked="1"/>
               </td>
@@ -27647,7 +27647,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create User"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create User', 'User Window')}"/>
             </td>
           </tr>
         </table>
@@ -27805,11 +27805,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="hosts/@allow = 0">
-          Allow all and deny:
+          <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Table Row')"/>:
           <xsl:value-of select="hosts/text()"/>
         </xsl:when>
         <xsl:when test="hosts/@allow = 1">
-          Deny all and allow:
+          <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Table Row')"/>:
           <xsl:value-of select="hosts/text()"/>
         </xsl:when>
       </xsl:choose>
@@ -27830,7 +27830,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="name=/envelope/login/text()">
           <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Currently logged in as this user"
+               title="{gsa:i18n ('Currently logged in as this user', 'User Table Row')}"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -27863,7 +27863,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       User Details
+       <xsl:value-of select="gsa:i18n ('User Details', 'User')"/>
        <xsl:call-template name="details-header-icons">
          <xsl:with-param name="cap-type" select="'User'"/>
          <xsl:with-param name="type" select="'user'"/>
@@ -27873,11 +27873,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <table>
         <tr>
-          <td><b>Login Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/>:</b></td>
           <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
-          <td>Roles:</td>
+          <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/>:</td>
           <td>
             <xsl:for-each select="role">
               <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
@@ -27888,7 +27888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Groups:</td>
+          <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/>:</td>
           <td>
             <xsl:for-each select="groups/group">
               <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
@@ -27899,30 +27899,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Host Access:</td>
+          <td><xsl:value-of select="gsa:i18n ('Host Access', 'User Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="hosts/@allow = 0">
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
                 <xsl:value-of select="hosts/text()"/>
               </xsl:when>
               <xsl:when test="hosts/@allow = 1">
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
                 <xsl:value-of select="hosts/text()"/>
               </xsl:when>
             </xsl:choose>
           </td>
         </tr>
         <tr>
-          <td>Interface Access:</td>
+          <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User Window')"/>:</td>
           <td>
             <xsl:choose>
               <xsl:when test="ifaces/@allow = 0">
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
                 <xsl:value-of select="ifaces/text()"/>
               </xsl:when>
               <xsl:when test="ifaces/@allow = 1">
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
                 <xsl:value-of select="ifaces/text()"/>
               </xsl:when>
             </xsl:choose>
@@ -27930,14 +27930,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
           <tr>
-            <td>LDAP-Authentication:</td>
+            <td><xsl:value-of select="gsa:i18n ('LDAP Authentication', 'User Window')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="sources/source/text() = 'ldap_connect'">
-                  Yes
+                  <xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  No
+                  <xsl:value-of select="gsa:i18n ('No', 'Window')"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -27993,7 +27993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Edit User
+       <xsl:value-of select="gsa:i18n ('Edit User', 'User')"/>
        <xsl:call-template name="edit-header-icons">
          <xsl:with-param name="cap-type" select="'User'"/>
          <xsl:with-param name="type" select="'user'"/>
@@ -28011,7 +28011,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="125"><b>Login Name:</b></td>
+            <td valign="top" width="125"><b><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/>:</b></td>
             <td>
               <input type="hidden" name="user_id" value="{@id}"/>
               <input type="hidden" name="login" value="{name}"/>
@@ -28019,11 +28019,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Password</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User Window')"/></td>
             <td>
               <label>
                 <input type="radio" name="modify_password" value="0" checked="1"/>
-                Use existing value
+                <xsl:value-of select="gsa:i18n ('Use existing value', 'User Window')"/>
               </label>
               <br/>
               <input type="radio" name="modify_password" value="1"/>
@@ -28032,7 +28032,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td>Roles (optional)</td>
+            <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <xsl:variable name="roles"
                             select="../../../get_roles_response/role"/>
@@ -28125,7 +28125,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td>Groups (optional)</td>
+            <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <xsl:variable name="groups"
                             select="../../../get_groups_response/group"/>
@@ -28218,7 +28218,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top">Host Access</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User Window')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -28229,7 +28229,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
               </label>
               <label>
                 <xsl:choose>
@@ -28240,7 +28240,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="hosts_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
@@ -28248,7 +28248,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
-            <td valign="top">Interface Access</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User Window')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -28259,7 +28259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Deny all and allow:
+                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User Window')"/>:
               </label>
               <label>
                 <xsl:choose>
@@ -28270,7 +28270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="ifaces_allow" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Allow all and deny:
+                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User Window')"/>:
               </label>
               <br/>
               <input type="text" name="access_ifaces" value="{ifaces}" size="30"
@@ -28280,7 +28280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <!-- Only if per-user ldap enabled. -->
           <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
             <tr>
-              <td valign="top">Authentication via LDAP</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Authentication via LDAP', 'User Window')"/></td>
               <td>
                <xsl:choose>
                  <xsl:when test="sources/source/text() = 'ldap_connect'">
@@ -28295,7 +28295,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save User"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
             </td>
           </tr>
         </table>

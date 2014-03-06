@@ -1,3 +1,11 @@
+2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (details-header-icons): Use correct context
+	for disabled user delete button.
+	(html-create-user-form, user, user [details], user [edit]): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for user pages.
+
 2014-03-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:command-type-plural): New function.
