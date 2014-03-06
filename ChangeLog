@@ -1,5 +1,21 @@
 2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (toggle-tag-icon): Use correct text for
+	enable icon tooltip.
+	(new_task): Use i18n context "Task" for submit buttons and add missing
+	i18n.
+	(html-edit-task-form): Use i18n context "Task" for submit buttons.
+	(alert [details]): Use correct i18n context for header text.
+	(slave [details]): Add i18n for header text.
+	(html-edit-port-list-form, html-edit-report-format-form): Use i18n
+	context "Port List" and "Report Format" respectively.
+	(user [edit], html-create-user-form): Add missing i18n.
+
+	* src/html/classic/po/de.xml: Make translation of "Tasks using this
+	Alert" more consistent with other "... using this ..." text.
+
+2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (details-header-icons): Use correct context
 	for disabled user delete button.
 	(html-create-user-form, user, user [details], user [edit]): Add i18n.

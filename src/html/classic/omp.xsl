@@ -2138,8 +2138,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="tag_id" value="{$id}"/>
         <xsl:choose>
           <xsl:when test="$enable">
-            <input type="image" src="/img/enable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
-                   name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"/>
+            <input type="image" src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag Table Row')}"
+                   name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Enable Tag', 'Tag Table Row')}"/>
           </xsl:when>
           <xsl:otherwise>
             <input type="image" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag Table Row')}"
@@ -4622,7 +4622,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
               <!-- Force the Create Task button to be the default. -->
               <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="Create Task"/>
+                     type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
               <input type="submit" name="submit_plus" value="+"/>
             </td>
           </tr>
@@ -4834,7 +4834,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
         <tr>
           <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task Window')}"/>
+            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
           </td>
         </tr>
       </table>
@@ -4884,7 +4884,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task Window')}"/>
+            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
           </td>
         </tr>
       </table>
@@ -5334,7 +5334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
                     <!-- Force the Create Task button to be the default. -->
                     <input style="position: absolute; left: -100%"
-                           type="submit" name="submit" value="Create Task"/>
+                           type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
                     <input type="submit" name="submit_plus" value="+"/>
 
                     <xsl:choose>
@@ -5646,7 +5646,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Task', 'Task Window')}"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Task', 'Task')}"/>
             </td>
           </tr>
         </table>
@@ -8116,7 +8116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Alert Details', 'Details')"/>
+      <xsl:value-of select="gsa:i18n ('Alert Details', 'Alert')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Alert'"/>
         <xsl:with-param name="type" select="'alert'"/>
@@ -14602,7 +14602,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Slave Details
+      <xsl:value-of select="gsa:i18n ('Slave Details', 'Slave')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Slave'"/>
         <xsl:with-param name="type" select="'slave'"/>
@@ -20687,7 +20687,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Port List', 'Port List Window')}"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Port List', 'Port List')}"/>
             </td>
           </tr>
         </table>
@@ -21137,7 +21137,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Report Format', 'Report Format Window')}"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Report Format', 'Report Format')}"/>
             </td>
           </tr>
         </table>
@@ -27546,7 +27546,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                 <!-- Force the Create User button to be the default. -->
                 <input style="position: absolute; left: -100%"
-                       type="submit" name="submit" value="Create User"/>
+                       type="submit" name="submit" value="{gsa:i18n ('Create User', 'User Window')}"/>
                 <input type="submit" name="submit_plus_role" value="+"/>
               </td>
             </tr>
@@ -27599,7 +27599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                 <!-- Force the Create User button to be the default. -->
                 <input style="position: absolute; left: -100%"
-                       type="submit" name="submit" value="Create User"/>
+                       type="submit" name="submit" value="{gsa:i18n ('Create User', 'User Window')}"/>
                 <input type="submit" name="submit_plus_group" value="+"/>
               </td>
             </tr>
@@ -28111,7 +28111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
               <!-- Force the Save User button to be the default. -->
               <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="Save User"/>
+                     type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
               <input type="submit" name="submit_plus_role" value="+"/>
 
               <xsl:choose>
@@ -28204,7 +28204,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
               <!-- Force the Save User button to be the default. -->
               <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="Save User"/>
+                     type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
               <input type="submit" name="submit_plus_group" value="+"/>
 
               <xsl:choose>

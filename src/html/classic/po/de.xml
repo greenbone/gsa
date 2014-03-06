@@ -3598,7 +3598,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Tasks using this Alert</id>
-      <str>Aufgaben, die diese Benachrichtigung benutzen</str>
+      <str>Aufgaben, die diese Benachrichtigung verwenden</str>
     </msg>
   </grp>
   <!-- 3.17.4    Alert actions and properties - table rows only -->
