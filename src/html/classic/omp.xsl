@@ -883,14 +883,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </form>
             </xsl:if>
             <xsl:if test="gsa:may-op ('get_filters')">
-              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter">
                 <div style="display: inline; padding: 2px; vertical-align:middle;">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
                   <xsl:for-each select="exslt:node-set($extra_params)/param">
                     <input type="hidden" name="{name}" value="{value}"/>
                   </xsl:for-each>
-                  <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
+                  <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
                     <option value="--">--</option>
                     <xsl:variable name="id" select="filters/@id"/>
                     <xsl:for-each select="../filters/get_filters_response/filter">
@@ -1129,7 +1129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="auto-refresh">
-  <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
+  <select style="margin-bottom: 0px;" name="refresh_interval" size="1" onchange="this.parentNode.submit()">
     <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='0'">
         <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No auto-refresh', 'Window')"/></option>
