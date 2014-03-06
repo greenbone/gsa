@@ -1,3 +1,25 @@
+gsa 5.0+beta8 (2014-03-06)
+
+This is the eighth beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set of
+OpenVAS Manager available in a web browser.
+
+This release now requires the user's existing password when changing passwords
+and expects NVT information to be in the new style. It also makes the interface
+more consistent with the commands available to the user and extends the German
+translation.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Hani Benhabiles and Timo Pollmeier.
+
+Main changes since 5.0+beta7:
+* Make interface more consistent with available commands.
+* More translations to German language.
+* NVT information is now expected to be in the new style.
+* GSA now requires the user's existing password when changing passwords.
+* Code cleanup.
+
+
 gsa 5.0+beta7 (2014-02-27)
 
 This is the seventh beta version of the upcoming 5.0 release of the Greenbone

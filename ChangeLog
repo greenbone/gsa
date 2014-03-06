@@ -1,3 +1,9 @@
+2014-03-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 5.0+beta8 release.
+
+	* CHANGES: Updated.
+
 2014-03-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (toggle-tag-icon): Use correct text for
