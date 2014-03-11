@@ -1,5 +1,15 @@
 2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_system_reports_response, get_trash)
+	(get_my_settings, edit_my_settings, cvss_calculator): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for trashcan contents
+	table, My Settings, Performance and CVSS Calculator pages. Add
+	"year" and variants to "Time" context and Filter names as used in
+	"My Settings" to resource types.
+
+2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-part): Add i18n for
 	"New Filter" icon alt text.
 	(task [details]): Add i18n to "Import Report" window.

@@ -788,6 +788,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>month(s)</id>
       <str>Monat(e)</str>
     </msg>
+    <msg>
+      <id>year</id>
+      <str>Jahr</str>
+    </msg>
+    <msg>
+      <id>years</id>
+      <str>Jahre</str>
+    </msg>
+    <msg>
+      <id>year(s)</id>
+      <str>Jahr(e)</str>
+    </msg>
 
     <msg>
       <id>until</id>
@@ -1424,6 +1436,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Task Filter</id>
       <str>Aufgaben-Filter</str>
     </msg>
+    <msg>
+      <id>Tasks Filter</id>
+      <str>Aufgaben-Filter</str>
+    </msg>
   </grp>
 
   <!-- 3.1.2    Task actions and properties - all views -->
@@ -1806,6 +1822,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Report Filter</id>
       <str>Bericht-Filter</str>
     </msg>
+    <msg>
+      <id>Reports Filter</id>
+      <str>Berichte-Filter</str>
+    </msg>
   </grp>
 
   <!-- 3.2.2    Report actions and properties - all views -->
@@ -2079,6 +2099,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Result Filter</id>
       <str>Ergebnis-Filter</str>
     </msg>
+    <msg>
+      <id>Results Filter</id>
+      <str>Ergebnisse-Filter</str>
+    </msg>
   </grp>
   <!-- 3.3.2    Result actions and properties - all views -->
   <grp>
@@ -2326,6 +2350,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Note Filter</id>
       <str>Notiz-Filter</str>
     </msg>
+    <msg>
+      <id>Notes Filter</id>
+      <str>Notizen-Filter</str>
+    </msg>
   </grp>
   <!-- 3.4.2    Note actions and properties - all views -->
   <grp>
@@ -2456,6 +2484,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Override Filter</id>
       <str>Übersteuerungs-Filter</str>
+    </msg>
+    <msg>
+      <id>Overrides Filter</id>
+      <str>Übersteuerungen-Filter</str>
     </msg>
   </grp>
   <!-- 3.5.2    Override actions and properties - all views -->
@@ -2663,6 +2695,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>NVT Details</id>
       <str>NVT-Details</str>
     </msg>
+
+    <msg>
+      <id>NVT Filter</id>
+      <str>NVT-Filter</str>
+    </msg>
   </grp>
   <!-- 3.7.2    NVT actions and properties - all views -->
   <grp>
@@ -2719,6 +2756,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>CVE Details</id>
       <str>CVE-Details</str>
     </msg>
+
+    <msg>
+      <id>CVE Filter</id>
+      <str>CVE-Filter</str>
+    </msg>
   </grp>
   <!-- 3.8.2    CVE actions and properties - all views -->
   <grp>
@@ -2766,6 +2808,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>CPE Details</id>
       <str>CPE-Details</str>
     </msg>
+
+    <msg>
+      <id>CPE Filter</id>
+      <str>CPE-Filter</str>
+    </msg>
   </grp>
   <!-- 3.9.2    CPE actions and properties - all views -->
   <grp>
@@ -2811,6 +2858,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>OVAL Definition Details</id>
       <str>OVAL-Definitions-Details</str>
+    </msg>
+
+    <msg>
+      <id>OVAL Filter</id>
+      <str>OVAL-Filter</str>
     </msg>
   </grp>
   <!-- 3.10.2    OVAL Definition actions and properties - all views -->
@@ -2858,6 +2910,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>DFN-CERT Advisory Details</id>
       <str>DFN-CERT-Advisory-Details</str>
     </msg>
+
+    <msg>
+      <id>DFN-CERT Filter</id>
+      <str>DFN-CERT-Filter</str>
+    </msg>
   </grp>
   <!-- 3.11.2    DFN-CERT Advisory actions and properties - all views -->
   <grp>
@@ -2904,6 +2961,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Info Filter</id>
       <str>Info-Filter</str>
+    </msg>
+    <msg>
+      <id>All SecInfo Filter</id>
+      <str>Alle-Sicherheitsinfos-Filter</str>
     </msg>
   </grp>
   <!-- 3.12.2    Info actions and properties - all views -->
@@ -2974,6 +3035,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Target Filter</id>
       <str>Ziel-Filter</str>
+    </msg>
+    <msg>
+      <id>Targets Filter</id>
+      <str>Ziele-Filter</str>
     </msg>
   </grp>
   <!-- 3.13.2    Target actions and properties - all views -->
@@ -3118,6 +3183,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Port List Filter</id>
       <str>Portlisten-Filter</str>
     </msg>
+    <msg>
+      <id>Port Lists Filter</id>
+      <str>Portlisten-Filter</str>
+    </msg>
   </grp>
   <!-- 3.14.2    Port List actions and properties - all views -->
   <grp>
@@ -3242,6 +3311,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Credential Filter</id>
+      <str>Anmeldedaten-Filter</str>
+    </msg>
+    <msg>
+      <id>Credentials Filter</id>
       <str>Anmeldedaten-Filter</str>
     </msg>
   </grp>
@@ -3404,6 +3477,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Scan Config Filter</id>
       <str>Scan-Konfigurations-Filter</str>
+    </msg>
+    <msg>
+      <id>Configs Filter</id>
+      <str>Konfigurationen-Filter</str>
     </msg>
   </grp>
   <!-- 3.16.2    Scan Config actions and properties - all views -->
@@ -3714,6 +3791,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Alert Filter</id>
       <str>Benachrichtigungs-Filter</str>
     </msg>
+    <msg>
+      <id>Alerts Filter</id>
+      <str>Benachrichtigungen-Filter</str>
+    </msg>
   </grp>
   <!-- 3.17.2    Alert actions and properties - all views -->
   <grp>
@@ -3934,6 +4015,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Schedule Filter</id>
       <str>Zeitplan-Filter</str>
     </msg>
+    <msg>
+      <id>Schedules Filter</id>
+      <str>Zeitpläne-Filter</str>
+    </msg>
   </grp>
   <!-- 3.18.2    Schedule actions and properties - all views -->
   <grp>
@@ -4023,6 +4108,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Report Format Filter</id>
       <str>Berichtformats-Filter</str>
+    </msg>
+    <msg>
+      <id>Report Formats Filter</id>
+      <str>Berichtformate-Filter</str>
     </msg>
   </grp>
   <!-- 3.19.2    Report Format actions and properties - all views -->
@@ -4140,6 +4229,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Slave Filter</id>
       <str>Slave-Filter</str>
     </msg>
+    <msg>
+      <id>Slaves Filter</id>
+      <str>Slaves-Filter</str>
+    </msg>
   </grp>
   <!-- 3.20.2    Slave actions and properties - all views -->
   <grp>
@@ -4216,6 +4309,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Agent Filter</id>
+      <str>Agenten-Filter</str>
+    </msg>
+    <msg>
+      <id>Agents Filter</id>
       <str>Agenten-Filter</str>
     </msg>
   </grp>
@@ -4314,6 +4411,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Filter Filter</id>
       <str>Filter-Filter</str>
     </msg>
+    <msg>
+      <id>Filters Filter</id>
+      <str>Filter-Filter</str>
+    </msg>
   </grp>
   <!-- 3.22.2    Filter actions and properties - all views -->
   <grp>
@@ -4391,6 +4492,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Tag Filter</id>
       <str>Tag-Filter</str>
+    </msg>
+    <msg>
+      <id>Tags Filter</id>
+      <str>Tags-Filter</str>
     </msg>
   </grp>
   <!-- 3.23.2    Tag actions and properties - all views -->
@@ -4520,6 +4625,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Permission Filter</id>
       <str>Berechtigungs-Filter</str>
+    </msg>
+    <msg>
+      <id>Permissions Filter</id>
+      <str>Berechtigungen-Filter</str>
     </msg>
   </grp>
   <!-- 3.24.2    Permission actions and properties - all views -->
@@ -4778,6 +4887,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>User Filter</id>
       <str>Benutzer-Filter</str>
     </msg>
+    <msg>
+      <id>Users Filter</id>
+      <str>Benutzer-Filter</str>
+    </msg>
   </grp>
   <!-- 3.25.2    User actions and properties - all views -->
   <grp>
@@ -4893,6 +5006,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Group Filter</id>
       <str>Gruppen-Filter</str>
     </msg>
+    <msg>
+      <id>Groups Filter</id>
+      <str>Gruppen-Filter</str>
+    </msg>
   </grp>
   <!-- 3.26.2    Group actions and properties - all views -->
   <grp>
@@ -4989,6 +5106,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Role Filter</id>
       <str>Rollen-Filter</str>
     </msg>
+    <msg>
+      <id>Roles Filter</id>
+      <str>Rollen-Filter</str>
+    </msg>
   </grp>
   <!-- 3.27.2    Role actions and properties - all views -->
   <grp>
@@ -5030,6 +5151,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Contents</id>
       <str>Inhalt</str>
+    </msg>
+
+    <msg>
+      <id>Type</id>
+      <str>Typ</str>
+    </msg>
+    <msg>
+      <id>Items</id>
+      <str>Objekte</str>
     </msg>
     <!-- 4.1.2 Trash actions -->
     <msg>
@@ -5090,6 +5220,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>My Settings</id>
       <str>Eigene Einstellungen</str>
     </msg>
+
+    <msg>
+      <id>Edit My Settings</id>
+      <str>Eigene Einstellungen bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save My Settings</id>
+      <str>Eigene Einstellungen speichern</str>
+    </msg>
+
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
+
+    <msg>
+      <id>Timezone</id>
+      <str>Zeitzone</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>Passwort</str>
+    </msg>
+    <msg>
+      <id>Old</id>
+      <str>Altes</str>
+    </msg>
+    <msg>
+      <id>New</id>
+      <str>Neues</str>
+    </msg>
+    <msg>
+      <id>User Interface Language</id>
+      <str>Sprache der Benutzeroberfläche</str>
+    </msg>
+    <msg>
+      <id>Rows Per Page</id>
+      <str>Zeilen pro Seite</str>
+    </msg>
+    <msg>
+      <id>Wizard Rows</id>
+      <str>Wizard-Zeilen</str>
+    </msg>
+    <msg>
+      <id>Severity Class</id>
+      <str>Schweregrad-Klasse</str>
+    </msg>
+    <msg>
+      <id>Dynamic Severity</id>
+      <str>Dynamischer Schweregrad</str>
+    </msg>
   </grp>
 
   <!-- 4.3. Performance -->
@@ -5099,6 +5280,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Performance</id>
       <str>Leistung</str>
     </msg>
+
+    <msg>
+      <id>Reports span the last</id>
+      <str>Bericht über die Zeitspanne:</str>
+    </msg>
+
+    <msg>
+      <id>Reports for slave</id>
+      <str>Berichte für Slave</str>
+    </msg>
+    <msg>
+      <id>The selected Scan Slave can currently not be reached for retrieval of performance data.</id>
+      <str>Der ausgewählte Scan-Slave ist momentan nicht verfügbar, um von ihm Leistungsdaten abzurufen.</str>
+    </msg>
+    <msg>
+      <id>Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.</id>
+      <str>Bitte prüfen Sie die Netzwerkverbindung oder Slave-Konfiguration.  Das Problem besteht auch möglicheweise nur vorübergehend, so dass sie es später noch einmal versuchen könnten.</str>
+    </msg>
   </grp>
 
   <!-- 4.4 CVSS Calculator -->
@@ -5107,6 +5306,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>CVSS Calculator</id>
       <str>CVSS-Rechner</str>
+    </msg>
+    <msg>
+      <id>CVSS Base Score Calculator</id>
+      <str>CVSS-Basisscore-Rechner</str>
+    </msg>
+
+    <msg>
+      <id>From Metrics</id>
+      <str>Aus Metriken</str>
+    </msg>
+    <msg>
+      <id>From Vector</id>
+      <str>Aus Vektor</str>
+    </msg>
+
+    <msg>
+      <id>Calculate</id>
+      <str>Berechnen</str>
+    </msg>
+
+    <msg>
+      <id>Base Vector</id>
+      <str>Basisvektor</str>
+    </msg>
+    <msg>
+      <id>Base Score</id>
+      <str>Basisscore</str>
     </msg>
   </grp>
 
