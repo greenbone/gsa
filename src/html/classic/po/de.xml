@@ -315,6 +315,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Edit</id>
       <str>Bearbeiten</str>
     </msg>
+    <msg>
+      <id>Permission to edit </id>
+      <str>Keine Berechtigung, </str>
+    </msg>
+    <msg>
+      <id>#edit denied#</id>
+      <str> zu bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Cannot modify </id>
+      <str>Kann </str>
+    </msg>
+    <msg>
+      <id>#cannot modify suffix#</id>
+      <str> nicht ändern</str>
+    </msg>
 
     <!-- Export -->
     <msg>
@@ -2660,6 +2676,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>NVT Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>OID</id>
+      <str>OID</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.7.4    NVT actions and properties - table rows only -->
@@ -3340,6 +3360,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Scan-Konfigurationen</str>
     </msg>
     <msg>
+      <id>Config</id>
+      <str>Konfiguration</str>
+    </msg>
+    <msg>
       <id>Configs</id>
       <str>Konfigurationen</str>
     </msg>
@@ -3349,10 +3373,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Scan Config</id>
       <str>Neue Scan-Konfig</str>
     </msg>
+    <msg>
+      <id>New Scan Configuration</id>
+      <str>Neue Scan-Konfiguration</str>
+    </msg>
+    <msg>
+      <id>Create Scan Config</id>
+      <str>Scan-Konfig erstellen</str>
+    </msg>
 
     <msg>
-      <id>Edit Scan Configs</id>
+      <id>Edit Scan Config</id>
       <str>Scan-Konfig bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Configuration</id>
+      <str>Scan-Konfiguration bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Save Config</id>
+      <str>Konfiguration speichern</str>
     </msg>
 
     <!-- - - Common references - - -->
@@ -3369,16 +3409,235 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <grp>
     <ctxt>Scan Config Table Row</ctxt>
     <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <!-- Trend -->
+    <msg>
+      <id>Grows</id>
+      <str>Wächst</str>
+    </msg>
+    <msg>
+      <id>Dynamic</id>
+      <str>Dynamisch</str>
+    </msg>
+    <msg>
+      <id>The family selection is DYNAMIC. New families will automatically be added and considered.</id>
+      <str>Die Familienauswahl ist DYNAMISCH. Neue Familien werden automatisch hinzugefügt und berücksichtigt.</str>
+    </msg>
+    <msg>
+      <id>The family selection is STATIC. New families will NOT automatically be added or considered.</id>
+      <str>Die Familienauswahl ist STATISCH. Neue Familien werden NICHT automatisch hinzugefügt oder berücksichtigt.</str>
+    </msg>
+
+    <msg>
+      <id>Static</id>
+      <str>Statisch</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.</id>
+      <str>Die NVT-Auswahl ist DYNAMISCH. Neue NVTs werden automatisch hinzugefügt und berücksichtigt.</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.</id>
+      <str>Die NVT-Auswahl ist DYNAMISCH. Neue NVTs ausgewählter Familien werden automatisch hinzugefügt und berücksichtigt.</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.</id>
+      <str>Die NVT-Auswahl ist STATISCH. Neue NVTs werden NICHT automatisch hinzugefügt oder berücksichtigt.</str>
+    </msg>
+
+    <!-- Family and NVT counts -->
+    <msg>
+      <id> of </id>
+      <str> von </str>
+    </msg>
+
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Cannot move Scan Config to trashcan</id>
+      <str>Scan-Konfig kann nicht in den Mülleimer verschoben werden</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config Family Details</id>
+      <str>Scan-Konfig-Familien-Details</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config Family</id>
+      <str>Scan-Konfig-Familie bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config NVT Details</id>
+      <str>Scan-Konfig-NVT-Details</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config NVT</id>
+      <str>Scan-Konfig-NVT bearbeiten</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config NVT Details</id>
+      <str>Scan-Konfig-NVT-Details bearbeiten</str>
+    </msg>
+
+    <!-- NVT Timeout -->
+    <msg>
+      <id>default</id>
+      <str>Standard</str>
+    </msg>
   </grp>
   <!-- 3.16.3    Scan Config actions and properties - window / headers only -->
   <grp>
     <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
     <!-- - - Actions - - -->
+    <msg>
+      <id>Import Scan Config</id>
+      <str>Scan-Konfig importieren</str>
+    </msg>
+    <msg>
+      <id>Import XML config</id>
+      <str>XML-Konfig importieren</str>
+    </msg>
+
     <!-- - - Properties - - -->
+    <msg>
+      <id>Base</id>
+      <str>Basis</str>
+    </msg>
+    <msg>
+      <id>Empty, static and fast</id>
+      <str>Leer, statisch und schnell (Empty)</str>
+    </msg>
+    <msg>
+      <id>Full and fast</id>
+      <str>Vollständig und schnell (Full and fast)</str>
+    </msg>
+
+    <msg>
+      <id>Trend</id>
+      <str>Trend</str>
+    </msg>
+
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Network Vulnerability Test Families</id>
+      <str>Familien von Network Vulnerability Tests</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Test Families</id>
+      <str>Familien von Network Vulnerability Tests bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config Family</id>
+      <str>Scan-Konfig-Familie</str>
+    </msg>
+    <msg>
+      <id>Family</id>
+      <str>Familie</str>
+    </msg>
+    <msg>
+      <id>Families</id>
+      <str>Familien</str>
+    </msg>
+
+    <msg>
+      <id>Scanner Preferences</id>
+      <str>Scanner-Vorgaben</str>
+    </msg>
+    <msg>
+      <id>Edit Scanner Preferences</id>
+      <str>Scanner-Vorgaben bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>NVTs selected</id>
+      <str>NVTs ausgewählt</str>
+    </msg>
+
+    <msg>
+      <id>Network Vulnerability Test Preferences</id>
+      <str>Vorgaben für Network Vulnerability Tests</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Test Preferences</id>
+      <str>Vorgaben für Network Vulnerability Tests bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>Network Vulnerability Tests</id>
+      <str>Network Vulnerability Tests</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Tests</id>
+      <str>Network Vulnerability Tests bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>Select all NVTs</id>
+      <str>Alle NVTs auswählen</str>
+    </msg>
+
+    <!-- NVT selection count -->
+    <msg>
+      <id> in selected families</id>
+      <str> in ausgewählten Familien</str>
+    </msg>
+    <msg>
+      <id> in total</id>
+      <str> insgesamt</str>
+    </msg>
+
+    <!-- NVT preferences -->
+    <msg>
+      <id>Timeout</id>
+      <str>Timeout</str>
+    </msg>
+    <msg>
+      <id>Apply default timeout</id>
+      <str>Standard-Timeout anwenden</str>
+    </msg>
+
+    <msg>
+      <id>Preferences</id>
+      <str>Vorgaben</str>
+    </msg>
+    <msg>
+      <id>Prefs</id>
+      <str>Vorgaben</str>
+    </msg>
+    <msg>
+      <id>Selected</id>
+      <str>Ausgewählt</str>
+    </msg>
+
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
+    <msg>
+      <id>Current Value</id>
+      <str>Aktueller Wert</str>
+    </msg>
+    <msg>
+      <id>Default Value</id>
+      <str>Standardwert</str>
+    </msg>
+    <msg>
+      <id>Default</id>
+      <str>Standard</str>
+    </msg>
+    <msg>
+      <id>New Value</id>
+      <str>Neuer Wert</str>
+    </msg>
+
+    <msg>
+      <id>Tasks using this Config</id>
+      <str>Aufgaben, die diese Konfiguration verwenden</str>
+    </msg>
   </grp>
   <!-- 3.16.4    Scan Config actions and properties - table rows only -->
   <grp>
@@ -3386,6 +3645,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
+    <!-- NVT preferences -->
+    <msg>
+      <id>Select and Edit NVT Details</id>
+      <str>Auswählen und NVT-Details bearbeiten</str>
+    </msg>
+
+    <msg>
+      <id>Upload file</id>
+      <str>Datei hochladen</str>
+    </msg>
+    <msg>
+      <id>File attached.</id>
+      <str>Datei angehängt.</str>
+    </msg>
+    <msg>
+      <id>Export File</id>
+      <str>Datei exportieren</str>
+    </msg>
+
+    <msg>
+      <id>Replace existing value with</id>
+      <str>Vorhandenen Wert ersetzen durch</str>
+    </msg>
+
   </grp>
 
 
@@ -4776,6 +5059,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id> must be restored first.</id>
       <str> noch nicht wiederhergestellt.</str>
     </msg>
+
+    <msg>
+      <id> is still in use</id>
+      <str> wird noch verwendet</str>
+    </msg>
+
+    <!-- Permission to move [...] to trashcan denied -->
+    <msg>
+      <id>Permission to move </id>
+      <str>Keine Berechtigung, </str>
+    </msg>
+    <msg>
+      <id> to trashcan denied</id>
+      <str> in den Mülleimer zu verschieben</str>
+    </msg>
+
+    <msg>
+      <id>Cannot move to trashcan</id>
+      <str>Kann nicht in den Mülleimer verschieben</str>
+    </msg>
+
   </grp>
 
   <!-- 4.2. My Settings -->

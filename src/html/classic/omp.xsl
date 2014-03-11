@@ -1290,15 +1290,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:variable name="inactive_text">
         <xsl:choose>
-          <xsl:when test="in_use != '0'"><xsl:value-of select="$cap-type"/> is still in use</xsl:when>
-          <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
-          <xsl:when test="not(gsa:may (concat ('delete_', $type)))">Permission to move <xsl:value-of select="$cap-type"/> to trashcan denied</xsl:when>
-          <xsl:otherwise>Cannot move to trashcan.</xsl:otherwise>
+          <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is still in use', 'Trashcan')"/></xsl:when>
+          <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Trashcan')"/></xsl:when>
+          <xsl:when test="not(gsa:may (concat ('delete_', $type)))"><xsl:value-of select="gsa:i18n ('Permission to move ', 'Trashcan')"/><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' to trashcan denied', 'Trashcan')"/></xsl:when>
+          <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move to trashcan.', 'Trashcan')"/></xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <img src="/img/trashcan_inactive.png"
            border="0"
-           alt="To Trashcan"
+           alt="{gsa:i18n ('To Trashcan', 'Trashcan')}"
            title="{$inactive_text}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
@@ -1312,18 +1312,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
              style="margin-left:3px;">
-            <img src="/img/edit.png" border="0" alt="Edit"/>
+            <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="inactive_text">
             <xsl:choose>
-              <xsl:when test="writable = '0'"><xsl:value-of select="$cap-type"/> is not writable</xsl:when>
-              <xsl:when test="not(gsa:may (concat ('delete_', $type)))">Permission to edit <xsl:value-of select="$cap-type"/> denied</xsl:when>
-              <xsl:otherwise>Cannot modify <xsl:value-of select="$cap-type"/></xsl:otherwise>
+              <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Window')"/></xsl:when>
+              <xsl:when test="not(gsa:may (concat ('delete_', $type)))"><xsl:value-of select="gsa:i18n ('Permission to edit ', 'Window')"/><xsl:value-of select="$cap-type"/><xsl:value-of select="gsa:i18n ('#edit denied#', 'Window', ' denied')"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot modify ', 'Window')"/><xsl:value-of select="$cap-type"/><xsl:value-of select="gsa:i18n ('#cannot modify suffix#', 'Window', '')"/></xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+          <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"
                title="{$inactive_text}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -11058,14 +11058,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Scan Config
+      <xsl:value-of select="gsa:i18n ('New Scan Config', 'Scan Config')"/>
       <a href="/help/new_config.html?token={/envelope/token}"
-         title="Help: New Scan Config">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scan Config', 'Scan Config'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Scan Config" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Scan Config"/>
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -11078,20 +11078,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top">Comment (optional)</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td>Base</td>
+            <td><xsl:value-of select="gsa:i18n ('Base', 'Scan Config Window')"/></td>
             <td>
               <table>
                 <tr>
@@ -11100,7 +11100,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="radio" name="base"
                              value="085569ce-73ed-11df-83c3-002264764cea"
                              checked="1"/>
-                      Empty, static and fast
+                      <xsl:value-of select="gsa:i18n ('Empty, static and fast', 'Scan Config Window')"/>
                     </label>
                   </td>
                 </tr>
@@ -11109,7 +11109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <label>
                       <input type="radio" name="base"
                              value="daba56c8-73ec-11df-a475-002264764cea"/>
-                      Full and fast
+                      <xsl:value-of select="gsa:i18n ('Full and fast', 'Scan Config Window')"/>
                     </label>
                   </td>
                 </tr>
@@ -11118,7 +11118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Scan Config"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Scan Config', 'Scan Config')}"/>
             </td>
           </tr>
         </table>
@@ -11133,14 +11133,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Import Scan Config
+      <xsl:value-of select="gsa:i18n ('Import Scan Config', 'Scan Config Window')"/>
       <a href="/help/new_config.html?token={/envelope/token}#importconfig"
-         title="Help: Import Scan Config">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Scan Config', 'Scan Config Window'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Scan Config" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Scan Config"/>
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -11152,13 +11152,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
-              Import XML config
+              <xsl:value-of select="gsa:i18n ('Import XML config', 'Scan Config Window')"/>
             </td>
             <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Import Scan Config"/>
+              <input type="submit" name="submit" value="{gsa:i18n('Import Scan Config', 'Scan Config Window')}"/>
             </td>
           </tr>
         </table>
@@ -11183,16 +11183,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">
     <xsl:choose>
       <xsl:when test="edit">
-        Edit Scan Config Family
+        <xsl:value-of select="gsa:i18n ('Edit Scan Config Family', 'Scan Config Window')"/>
         <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
-           title="Help: Scan Configs (Edit Scan Config Family Details)">
+           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Edit Scan Config Family', 'Scan Config Window'),')')}">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
-        Scan Config Family Details
+        <xsl:value-of select="gsa:i18n ('Scan Config Family Details', 'Scan Config Window')"/>
         <a href="/help/config_family_details.html?token={/envelope/token}"
-           title="Help: Scan Configs (Scan Config Family Details)">
+           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config Family Details', 'Scan Config Window'),')')}">
           <img src="/img/help.png"/>
         </a>
       </xsl:otherwise>
@@ -11200,14 +11200,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
-           title="Scan Config"
+           title="{gsa:i18n ('Scan Config', 'Scan Config')}"
            style="margin-left:3px;">
           <img src="/img/list.png" border="0" alt="Scan Config"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
-           title="Scan Config"
+           title="{gsa:i18n ('Scan Config', 'Scan Config')}"
            style="margin-left:3px;">
           <img src="/img/list.png" border="0" alt="Scan Config"/>
         </a>
@@ -11220,30 +11220,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:variable name="family" select="config/family"/>
 
     <table>
-    <tr><td>Config:</td><td><xsl:value-of select="$config_name"/></td></tr>
-    <tr><td><b>Family:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
+    <tr><td><b><xsl:value-of select="gsa:i18n ('Family', 'Scan Config Window')"/>:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
     </table>
 
     <xsl:choose>
       <xsl:when test="edit">
-        <h1>Edit Network Vulnerability Tests</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Tests', 'Scan Config Window')"/></h1>
       </xsl:when>
       <xsl:otherwise>
-        <h1>Network Vulnerability Tests</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Tests', 'Scan Config Window')"/></h1>
       </xsl:otherwise>
     </xsl:choose>
 
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>OID</td>
-        <td>Severity</td>
-        <td>Timeout</td>
-        <td>Prefs</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('OID', 'NVT Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Severity', 'NVT Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Timeout', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Prefs', 'Scan Config Window')"/></td>
         <xsl:if test="edit">
-          <td>Selected</td>
+          <td><xsl:value-of select="gsa:i18n ('Selected', 'Scan Config Window')"/></td>
         </xsl:if>
-        <td>Action</td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:choose>
         <xsl:when test="edit">
@@ -11277,7 +11277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="$timeout"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      default
+                      <xsl:value-of select="gsa:i18n ('default', 'Scan Config Table Row')"/>
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
@@ -11303,20 +11303,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
                 <td>
                   <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                     title="NVT Details" style="margin-left:3px;">
-                    <img src="/img/details.png" border="0" alt="Details"/>
+                     title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
+                    <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Table Row')}"/>
                   </a>
                   <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                     title="Select and Edit NVT Details"
+                     title="{gsa:i18n ('Select and Edit NVT Details', 'Scan Config Table Row')}"
                      style="margin-left:3px;">
-                    <img src="/img/edit.png" border="0" alt="Edit"/>
+                    <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
                   </a>
                 </td>
               </tr>
             </xsl:for-each>
             <tr>
               <td>
-                Total:
+                <xsl:value-of select="gsa:i18n ('Total', 'Window')"/>:
                 <xsl:value-of select="count(all/get_nvts_response/nvt)"/>
               </td>
               <td></td>
@@ -11325,7 +11325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td></td>
               <td></td>
               <td>
-                Total:
+                <xsl:value-of select="gsa:i18n ('Total', 'Window')"/>:
                 <xsl:value-of select="count(get_nvts_response/nvt)"/>
               </td>
               <td></td>
@@ -11334,8 +11334,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td colspan="8" style="text-align:right;">
                 <input type="submit"
                        name="submit"
-                       value="Save Config"
-                       title="Save Config"/>
+                       value="{gsa:i18n ('Save Config', 'Scan Config')}"
+                       title="{gsa:i18n ('Save Config', 'Scan Config')}"/>
               </td>
             </tr>
           </form>
@@ -11360,7 +11360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="timeout"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    default
+                    <xsl:value-of select="gsa:i18n ('default', 'Scan Config Table Row')"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </td>
@@ -11375,15 +11375,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                   title="NVT Details" style="margin-left:3px;">
-                  <img src="/img/details.png" border="0" alt="Details"/>
+                   title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
+                  <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Table Row')}"/>
                 </a>
               </td>
             </tr>
           </xsl:for-each>
           <tr>
             <td>
-              Total:
+              <xsl:value-of select="gsa:i18n ('Total', 'Window')"/>:
               <xsl:value-of select="count(get_nvts_response/nvt)"/>
             </td>
             <td></td>
@@ -11412,7 +11412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="type='file' and string-length(value) &gt; 0">
-          <i>File attached.</i>
+          <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="value"/>
@@ -11422,21 +11422,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:if test="string-length($config_id) &gt; 0">
         <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
-           title="Scan Config NVT Details" style="margin-left:3px;">
+           title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config Table Row')}" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
       </xsl:if>
       <xsl:if test="string-length($edit) &gt; 0">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
-           title="Edit Scan Config NVT Details" style="margin-left:3px;">
+           title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config Table Row')}" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
         <a href="/omp?cmd=export_preference_file&amp;config_id={$config_id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-           title="Export File"
+           title="{gsa:i18n ('Export File', 'Scan Config Table Row')}"
            style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export File"/>
+          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export File', 'Scan Config Table Row')}"/>
         </a>
       </xsl:if>
     </td>
@@ -11452,7 +11452,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <xsl:choose>
           <xsl:when test="type='file' and string-length(value) &gt; 0">
-            <i>File attached.</i>
+            <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="value"/>
@@ -11463,7 +11463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="type='file' and string-length(value) &gt; 0">
-          <i>File attached.</i>
+          <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
@@ -11473,9 +11473,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
         <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-           title="Export File"
+           title="{gsa:i18n ('Export File', 'Scan Config Table Row')}"
            style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export File"/>
+          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export File', 'Scan Config Table Row')}"/>
         </a>
       </xsl:if>
     </td>
@@ -11531,7 +11531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <label>
             <input type="checkbox" name="password:{nvt/name}[password]:{name}"
                    value="yes"/>
-            Replace existing value with:
+            <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Scan Config Table Row')"/>:
           </label>
           <br/>
           <input type="password" autocomplete="off"
@@ -11544,10 +11544,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="yes"/>
             <xsl:choose>
               <xsl:when test="string-length(value) &gt; 0">
-                Replace existing file with:
+                <xsl:value-of select="gsa:i18n ('Replace existing file with', 'Scan Config Table Row')"/>:
               </xsl:when>
               <xsl:otherwise>
-                Upload file:
+                <xsl:value-of select="gsa:i18n ('Upload file', 'Scan Config Table Row')"/>:
               </xsl:otherwise>
             </xsl:choose>
           </label>
@@ -11628,16 +11628,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:if test="$for_config_details">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}&amp;token={/envelope/token}"
-           title="Edit NVT Details" style="margin-left:3px;">
-          <img src="/img/edit.png" border="0" alt="Edit"/>
+           title="{gsa:i18n ('Edit NVT Details', 'Scan Config Table Row')}" style="margin-left:3px;">
+          <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
         </a>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$config and type='file' and (string-length(value) &gt; 0)">
           <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-             title="Export File"
+             title="{gsa:i18n ('Export File', 'Scan Config Table Row')}"
              style="margin-left:3px;">
-            <img src="/img/download.png" border="0" alt="Export File"/>
+            <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export File', 'Scan Config Table Row')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
@@ -11654,10 +11654,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>NVT</td>
-        <td>Name</td>
-        <td>Value</td>
-        <td width="{gsa:actions-width (1)}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Scan Config Window')"/></td>
+        <td width="{gsa:actions-width (1)}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:for-each select="preference[string-length(./nvt)&gt;0]">
         <xsl:call-template name="preference">
@@ -11675,29 +11675,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
         <xsl:if test="$config != ''">
-          <td>Current Value</td>
+          <td><xsl:value-of select="gsa:i18n ('Current Value', 'Scan Config Window')"/></td>
         </xsl:if>
-        <td>Default Value</td>
-        <td>Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Default Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
 
       <!-- Special case the NVT timeout. -->
       <tr class="even">
-        <td>Timeout</td>
+        <td><xsl:value-of select="gsa:i18n ('Timeout', 'Scan Config Window')"/></td>
         <td>
           <xsl:choose>
             <xsl:when test="string-length(timeout) &gt; 0">
               <xsl:value-of select="timeout"/>
             </xsl:when>
             <xsl:otherwise>
-              default
+              <xsl:value-of select="gsa:i18n ('default', 'Scan Config Window')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <xsl:if test="$config != ''">
-          <td>default</td>
+          <td><xsl:value-of select="gsa:i18n ('default', 'Scan Config Window')"/></td>
         </xsl:if>
         <td></td>
       </tr>
@@ -11716,15 +11716,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>New Value</td>
-        <td>Default Value</td>
-        <td>Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('New Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Default Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
 
       <!-- Special case the NVT timeout. -->
       <tr class="even">
-        <td>Timeout</td>
+        <td><xsl:value-of select="gsa:i18n ('Timeout', 'Scan Config Window')"/></td>
         <td>
           <label>
             <xsl:choose>
@@ -11740,7 +11740,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        checked="1"/>
               </xsl:otherwise>
             </xsl:choose>
-            Apply default timeout
+            <xsl:value-of select="gsa:i18n ('Apply default timeout', 'Scan Config Window')"/>
           </label>
           <br/>
           <xsl:choose>
@@ -11777,8 +11777,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td colspan="4" style="text-align:right;">
           <input type="submit"
                  name="submit"
-                 value="Save Config"
-                 title="Save Config"/>
+                 value="{gsa:i18n ('Save Config', 'Scan Config Window')}"
+                 title="{gsa:i18n ('Save Config', 'Scan Config Window')}"/>
         </td>
       </tr>
     </table>
@@ -11789,10 +11789,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Current Value</td>
-        <td>Default Value</td>
-        <td>Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Current Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Default Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates
         select="preference[string-length(nvt)=0]"
@@ -11805,10 +11805,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>Value</td>
-        <td>Default</td>
-        <td>Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Default', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates
         select="preference[string-length(nvt)=0]"
@@ -11817,8 +11817,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td colspan="4" style="text-align:right;">
           <input type="submit"
                  name="submit"
-                 value="Save Config"
-                 title="Save Config"/>
+                 value="{gsa:i18n ('Save Config', 'Scan Config Window')}"
+                 title="{gsa:i18n ('Save Config', 'Scan Config Window')}"/>
         </td>
       </tr>
     </table>
@@ -11837,16 +11837,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">
     <xsl:choose>
       <xsl:when test="edit">
-        Edit Scan Config NVT
+        <xsl:value-of select="gsa:i18n ('Edit Scan Config NVT', 'Scan Config Window')"/>
         <a href="/help/config_editor_nvt.html?token={/envelope/token}"
-           title="Help: Scan Configs (Edit Scan Config NVT Details)">
+           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Edit Scan Config NVT', 'Scan Config Window'),')')}">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
-        Scan Config NVT Details
+        <xsl:value-of select="gsa:i18n ('Scan Config NVT Details', 'Scan Config Window')"/>
         <a href="/help/config_nvt_details.html?token={/envelope/token}"
-           title="Help: Scan Configs (Scan Config NVT Details)">
+           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config NVT Details', 'Scan Config Window'),')')}">
           <img src="/img/help.png"/>
         </a>
       </xsl:otherwise>
@@ -11854,16 +11854,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
-           title="Scan Config Family"
+           title="{gsa:i18n ('Scan Config Family', 'Scan Config Window')}"
            style="margin-left:3px;">
           <img src="/img/list.png" border="0" alt="Scan Config Family"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
-           title="Scan Config Family"
+           title="{gsa:i18n ('Scan Config Family', 'Scan Config Window')}"
            style="margin-left:3px;">
-          <img src="/img/list.png" border="0" alt="Scan Config Family"/>
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Config Family', 'Scan Config Window')}"/>
         </a>
       </xsl:otherwise>
     </xsl:choose>
@@ -11873,7 +11873,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="config" select="config/name"/>
     </xsl:apply-templates>
 
-    <h2>Preferences</h2>
+    <h2><xsl:value-of select="gsa:i18n ('Preferences', 'Scan Config Window')"/></h2>
     <xsl:variable name="config" select="config"/>
     <xsl:choose>
       <xsl:when test="edit">
@@ -11939,7 +11939,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="max_nvt_count='-1'">
             </xsl:when>
             <xsl:otherwise>
-              of <xsl:value-of select="max_nvt_count"/>
+              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config Table Row')"/> <xsl:value-of select="max_nvt_count"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -11962,8 +11962,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
             <img src="/img/trend_more.png"
-                 alt="Grows"
-                 title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
+                 alt="{gsa:i18n ('Grows', 'Scan Config Table Row')}"
+                 title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config Table Row')}"/>
           </label>
           <label>
             <xsl:choose>
@@ -11984,8 +11984,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
             <img src="/img/trend_nochange.png"
-                 alt="Static"
-                 title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+                 alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+                 title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
           </label>
         </td>
         <td style="text-align:center;">
@@ -12002,8 +12002,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}&amp;token={/envelope/token}"
-             title="Edit Scan Config Family" style="margin-left:3px;">
-            <img src="/img/edit.png" border="0" alt="Edit"/>
+             title="{gsa:i18n ('Edit Scan Config Family', 'Scan Config Table Row')}" style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
           </a>
         </td>
       </tr>
@@ -12033,7 +12033,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="max_nvt_count='-1'">
             </xsl:when>
             <xsl:otherwise>
-              of <xsl:value-of select="max_nvt_count"/>
+              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config Table Row')"/>
+              <xsl:value-of select="max_nvt_count"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -12041,23 +12042,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="growing='1'">
               <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
+                   alt="{gsa:i18n ('Grows', 'Scan Config Table Row')}"
+                   title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config Table Row')}"/>
             </xsl:when>
             <xsl:when test="growing='0'">
               <img src="/img/trend_nochange.png"
-                   alt="Static"
-                   title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+                   alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+                   title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
             </xsl:when>
             <xsl:otherwise>
-              N/A
+              <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <td>
           <a href="/omp?cmd=get_config_family&amp;config_id={../../@id}&amp;name={../../name}&amp;family={$current_name}&amp;token={/envelope/token}"
-             title="Scan Config Family Details" style="margin-left:3px;">
-            <img src="/img/details.png" border="0" alt="Details"/>
+             title="{gsa:i18n ('Scan Config Family Details', 'Scan Config Table Row')}" style="margin-left:3px;">
+            <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Table Row')}"/>
           </a>
         </td>
       </tr>
@@ -12070,30 +12071,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td>
-          Family
+          <xsl:value-of select="gsa:i18n ('Family', 'Scan Config Window')"/>
           <xsl:choose>
             <xsl:when test="family_count/growing='1'">
               <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+                   alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
+                   title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:when test="family_count/growing='0'">
               <img src="/img/trend_nochange.png"
-                   alt="Static"
-                   title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+                   alt="{gsa:i18n ('Static', 'Scan Config Window')}"
+                   title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:otherwise>
-              N/A
+              <xsl:value-of select="gsa:i18n ('N/A', 'Window')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
-        <td>NVT's selected</td>
-        <td>Trend</td>
-        <td>Action</td>
+        <td><xsl:value-of select="gsa:i18n ('NVTs selected', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Trend', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="families/family"/>
       <tr>
-        <td>Total: <xsl:value-of select="count(families/family)"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Total', 'Window')"/>: <xsl:value-of select="count(families/family)"/></td>
         <td>
           <table>
             <tr>
@@ -12102,8 +12103,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <div style="margin-left:6px;">
-                  of <xsl:value-of select="max_nvt_count/text()"/> in selected families<br/>
-                  of <xsl:value-of select="sum(../../get_nvt_families_response/families/family/max_nvt_count)"/> in total
+                  <xsl:value-of select="gsa:i18n (' of ', 'Scan Config Window')"/>
+                  <xsl:value-of select="max_nvt_count/text()"/>
+                  <xsl:value-of select="gsa:i18n (' in selected families', 'Scan Config Window')"/><br/>
+                  <xsl:value-of select="gsa:i18n (' of ', 'Scan Config Window')"/>
+                  <xsl:value-of select="sum(../../get_nvt_families_response/families/family/max_nvt_count)"/>
+                  <xsl:value-of select="gsa:i18n (' in total', 'Scan Config Window')"/>
                 </div>
               </td>
             </tr>
@@ -12113,16 +12118,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="nvt_count/growing='1'">
               <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
+                   alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
+                   title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:when test="nvt_count/growing='0'">
               <img src="/img/trend_nochange.png"
                    alt="Static"
-                   title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+                   title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:otherwise>
-              N/A
+              <xsl:value-of select="gsa:i18n ('N/A', 'Window')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -12139,42 +12144,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td>
-          Family
+          <xsl:value-of select="gsa:i18n ('Family', 'Scan Config Window')"/>
           <xsl:choose>
             <xsl:when test="$config/family_count/growing=1">
               <label>
                 <input type="radio" name="trend:" value="1" checked="1"/>
                 <img src="/img/trend_more.png"
-                     alt="Grows"
-                     title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+                     alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
+                     title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Window')}"/>
               </label>
               <label>
                 <input type="radio" name="trend:" value="0"/>
                 <img src="/img/trend_nochange.png"
-                     alt="Static"
-                     title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+                     alt="{gsa:i18n ('Static', 'Scan Config Window')}"
+                     title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Window')}"/>
               </label>
             </xsl:when>
             <xsl:otherwise>
               <label>
                 <input type="radio" name="trend:" value="1"/>
                 <img src="/img/trend_more.png"
-                     alt="Grows"
-                     title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+                     alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
+                     title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Window')}"/>
               </label>
               <label>
                 <input type="radio" name="trend:" value="0" checked="0"/>
                 <img src="/img/trend_nochange.png"
-                     alt="Static"
-                     title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+                     alt="{gsa:i18n ('Static', 'Scan Config Window')}"
+                     title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Window')}"/>
               </label>
             </xsl:otherwise>
           </xsl:choose>
         </td>
-        <td>NVT's selected</td>
-        <td>Trend</td>
-        <td>Select all NVT's</td>
-        <td>Action</td>
+        <td><xsl:value-of select="gsa:i18n ('NVTs selected', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Trend', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Select all NVTs', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:for-each select="$families/family">
         <xsl:variable name="family_name">
@@ -12189,26 +12194,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
       <tr>
         <td>
-          Total: <xsl:value-of select="count($config/families/family)"/>
+          <xsl:value-of select="gsa:i18n ('Total', 'Window')"/>: <xsl:value-of select="count($config/families/family)"/>
         </td>
         <td>
           <xsl:value-of select="$config/known_nvt_count/text()"/>
-          of <xsl:value-of select="$config/max_nvt_count/text()"/>
+          <xsl:value-of select="gsa:i18n (' of ', 'Scan Config Window')"/>
+          <xsl:value-of select="$config/max_nvt_count/text()"/>
         </td>
         <td>
           <xsl:choose>
             <xsl:when test="$config/nvt_count/growing='1'">
               <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
+                   alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
+                   title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:when test="$config/nvt_count/growing='0'">
               <img src="/img/trend_nochange.png"
-                   alt="Static"
-                   title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+                   alt="{gsa:i18n ('Static', 'Scan Config Window')}"
+                   title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:otherwise>
-              N/A
+              <xsl:value-of select="gsa:i18n ('N/A', 'Scan Config Window')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -12219,8 +12225,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td colspan="5" style="text-align:right;">
           <input type="submit"
                  name="submit"
-                 value="Save Config"
-                 title="Save Config"/>
+                 value="{gsa:i18n ('Save Config', 'Scan Config Window')}"
+                 title="{gsa:i18n ('Save Config', 'Scan Config Window')}"/>
         </td>
       </tr>
     </table>
@@ -12237,27 +12243,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">
   <xsl:choose>
     <xsl:when test="edit">
-      Edit Scan Config
+      <xsl:value-of select="gsa:i18n ('Edit Scan Config', 'Scan Config')"/>
       <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Config'"/>
+        <xsl:with-param name="cap-type" select="'Scan Config'"/>
         <xsl:with-param name="type" select="'config'"/>
         <xsl:with-param name="id"
                         select="$config/@id"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      Scan Config Details
+      <xsl:value-of select="gsa:i18n ('Scan Config Details', 'Scan Config')"/>
       <a href="/help/config_details.html?token={/envelope/token}"
-         title="Help: Scan Config Details">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
-         title="New Scan Config">
+         title="{gsa:i18n ('New Scan Config', 'Scan Config')}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Scan Configs" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Scan Configs"/>
+         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
@@ -12274,9 +12280,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <xsl:variable name="inactive_text">
               <xsl:choose>
-                <xsl:when test="in_use != '0'">Scan Config is still in use</xsl:when>
-                <xsl:when test="writable = '0'">Scan Config is not writable</xsl:when>
-                <xsl:otherwise>Cannot move Scan Config to trashcan</xsl:otherwise>
+                <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/><xsl:value-of select="gsa:i18n (' is not writable', 'Table Row')"/></xsl:when>
+                <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/><xsl:value-of select="gsa:i18n (' is not writable', 'Table Row')"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config Window')"/></xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
             <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
@@ -12286,21 +12292,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="$config/writable='0'">
-            <img src="/img/edit_inactive.png" border="0" alt="Edit"
-                 title="Scan Config is not writable"
+            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"
+                 title="{gsa:i18n ('Scan Config', 'Scan Config')}{gsa:i18n (' is not writable', 'Table Row')}"
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="Edit Scan Config">
+               title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
               <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Export Scan Config XML"
+           title="{gsa:i18n ('Export ', 'Window')}{gsa:i18n ('Scan Config', 'Scan Config')}{gsa:i18n (' as XML', 'Window')}"
            style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
+          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Scan Config')}"/>
         </a>
       </div>
     </xsl:otherwise>
@@ -12319,14 +12325,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <table border="0" cellspacing="0" cellpadding="3" width="100%">
             <tr>
-              <td valign="top" width="125">Name</td>
+              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
               <td>
                 <input type="text" name="name" value="{$config/name}" size="30"
                        maxlength="80"/>
               </td>
             </tr>
             <tr>
-              <td valign="top">Comment (optional)</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
               <td>
                 <input type="text" name="comment" size="30" maxlength="400"
                        value="{$config/comment}"/>
@@ -12334,12 +12340,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
-                <input type="submit" name="submit" value="Save Config"/>
+                <input type="submit" name="submit" value="{gsa:i18n ('Save Config', 'Scan Config')}"/>
               </td>
             </tr>
           </table>
 
-          <h1>Edit Network Vulnerability Test Families</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config Window')"/></h1>
 
           <xsl:call-template name="edit-families">
             <xsl:with-param name="config" select="$config"/>
@@ -12350,17 +12356,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
-              <h1>Edit Scanner Preferences: None</h1>
-              <h1>Network Vulnerability Test Preferences: None</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
             </xsl:when>
             <xsl:otherwise>
-              <h1>Edit Scanner Preferences</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config Window')"/></h1>
 
               <xsl:apply-templates
                 select="$config/preferences"
                 mode="edit-scanner-details"/>
 
-              <h1>Network Vulnerability Test Preferences</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
               <xsl:for-each select="$config/preferences">
                 <xsl:call-template name="preferences">
                   <xsl:with-param name="config_id" select="$config/@id"/>
@@ -12377,45 +12383,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="float_right" style="font-size: 10px;">
           <table style="font-size: 10px;">
             <tr>
-              <td>ID:</td>
+              <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
               <td><xsl:value-of select="$config/@id"/></td>
             </tr>
             <tr>
-              <td>Created:</td>
+              <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
               <td><xsl:value-of select="gsa:long-time ($config/creation_time)"/></td>
             </tr>
             <tr>
-              <td>Last modified:</td>
+              <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
               <td><xsl:value-of select="gsa:long-time ($config/modification_time)"/></td>
             </tr>
           </table>
         </div>
         <table>
           <tr>
-            <td><b>Name:</b></td>
+            <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
             <td><b><xsl:value-of select="$config/name"/></b></td>
           </tr>
           <tr>
-            <td>Comment:</td><td><xsl:value-of select="$config/comment"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td><td><xsl:value-of select="$config/comment"/></td>
           </tr>
         </table>
 
         <br/>
 
-        <h1>Network Vulnerability Test Families</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config Window')"/></h1>
 
         <xsl:apply-templates select="$config" mode="families"/>
 
         <xsl:choose>
           <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
-            <h1>Scanner Preferences: None</h1>
-            <h1>Network Vulnerability Test Preferences: None</h1>
+            <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
           </xsl:when>
           <xsl:otherwise>
-            <h1>Scanner Preferences</h1>
+            <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config Window')"/></h1>
             <xsl:apply-templates select="$config/preferences" mode="scanner"/>
 
-            <h1>Network Vulnerability Test Preferences</h1>
+            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
             <xsl:for-each select="$config/preferences">
               <xsl:call-template name="preferences">
                 <xsl:with-param name="config_id" select="$config/@id"/>
@@ -12429,24 +12435,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:choose>
       <xsl:when test="count($config/tasks/task) = 0">
-        <h1>Tasks using this Config: None</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Tasks using this Config', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
       </xsl:when>
       <xsl:otherwise>
-        <h1>Tasks using this Config</h1>
+        <h1><xsl:value-of select="gsa:i18n ('Tasks using this Config', 'Scan Config Window')"/></h1>
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Actions</td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
           </tr>
           <xsl:for-each select="$config/tasks/task">
 
             <tr class="{gsa:table-row-class(position())}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
-                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                   <img src="/img/details.png"
                        border="0"
-                       alt="Details"
+                       alt="{gsa:i18n ('Details', 'Window')}"
                        style="margin-left:3px;"/>
                 </a>
               </td>
@@ -12459,7 +12465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="user_tags" select="$config/user_tags"/>
-    <xsl:with-param name="title" select="concat('User Tags for &quot;', $config/name,'&quot;:')"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n('User Tags for', 'Tag Window'), ' &quot;', $config/name,'&quot;:')"/>
     <xsl:with-param name="resource_type" select="'config'"/>
     <xsl:with-param name="next" select="'get_config'"/>
     <xsl:with-param name="resource_id"   select="$config/@id"/>
@@ -12568,7 +12574,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="family_count/text()='-1'">
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="family_count/text()"/>
@@ -12579,23 +12585,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="family_count/growing='1'">
           <img src="/img/trend_more.png"
-               alt="Grows"
-               title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+               alt="{gsa:i18n ('Grows', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:when test="family_count/growing='0'">
           <img src="/img/trend_nochange.png"
-               alt="Static"
-               title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+               alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
         <xsl:when test="nvt_count/text()='-1'">
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt_count/text()"/>
@@ -12606,16 +12612,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="nvt_count/growing='1'">
           <img src="/img/trend_more.png"
-               alt="Dynamic"
-               title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."/>
+               alt="{gsa:i18n ('Dynamic', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:when test="nvt_count/growing='0'">
           <img src="/img/trend_nochange.png"
-               alt="Static"
-               title="The NVT selection is STATIC. New NVTs will NOT automatically be added or considered."/>
+               alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -12644,7 +12650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="family_count/text()='-1'">
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="family_count/text()"/>
@@ -12655,23 +12661,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="family_count/growing='1'">
           <img src="/img/trend_more.png"
-               alt="Grows"
-               title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+               alt="{gsa:i18n ('Grows', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:when test="family_count/growing='0'">
           <img src="/img/trend_nochange.png"
-               alt="Static"
-               title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+               alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
         <xsl:when test="nvt_count/text()='-1'">
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt_count/text()"/>
@@ -12682,16 +12688,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="nvt_count/growing='1'">
           <img src="/img/trend_more.png"
-               alt="Dynamic"
-               title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."/>
+               alt="{gsa:i18n ('Grows', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:when test="nvt_count/growing='0'">
           <img src="/img/trend_nochange.png"
-               alt="Static"
-               title="The NVT selection is STATIC. New NVTs will NOT automatically be added or considered."/>
+               alt="{gsa:i18n ('Static', 'Scan Config Table Row')}"
+               title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Table Row')}"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -12708,7 +12714,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Scan Config is still in use"
+               title="{gsa:i18n ('Scan Config', 'Scan Config')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
