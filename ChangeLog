@@ -1,3 +1,17 @@
+2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (filter-window-part): Add i18n for
+	"New Filter" icon alt text.
+	(task [details]): Add i18n to "Import Report" window.
+	(html-edit-target-form): Apply i18n only to displayed text in
+	"Alive test" dropdown.
+	(result-body): Change context of "Details" to "Window".
+	(html-configs-trash-table, html-schedules-trash-table): Add i18n.
+	(html-create-user-form): Add i18n for list icon tooltip.
+
+	* src/html/classic/po/de.xml: Make "Details" strings available in
+	"Window" context.
+
 2013-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_config): Check if extra_xml is NULL before trying

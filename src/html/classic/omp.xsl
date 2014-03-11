@@ -881,7 +881,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="image"
                          name="New Filter"
                          src="/img/new.png"
-                         alt="New Filter"
+                         alt="{gsa:i18n ('New Filter', 'Filter')}"
                          title="{gsa:i18n ('New ', 'Filter Box')}{gsa:i18n (concat (gsa:type-name($type), ' Filter'), gsa:type-name($type))}{gsa:i18n (' from current term', 'Filter Box')}"
                          style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
                 </div>
@@ -3637,15 +3637,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center">Import Report
-        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="Help: Import Report">
+      <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Import Report', 'Task Window')"/>
+        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Report', 'Task Window'))}">
           <img src="/img/help.png"/>
         </a>
       </div>
       <div class="gb_window_part_content">
         <form action="/omp" method="post" enctype="multipart/form-data">
           <div style="float: right">
-            <input type="submit" name="submit" value="Add Report"/>
+            <input type="submit" name="submit" value="{gsa:i18n ('Add Report', 'Task Window')}"/>
           </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
@@ -10507,7 +10507,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
               <select name="alive_tests">
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="gsa:i18n ('Scan Config Default', 'Target Window')"/>
+                  <xsl:with-param name="value" select="'Scan Config Default'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Scan Config Default', 'Target Window')"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
@@ -23368,7 +23369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
         </xsl:call-template>
         <p>
-          <xsl:value-of select="gsa:i18n ('Details', 'Result Window')"/>:
+          <xsl:value-of select="gsa:i18n ('Details', 'Window')"/>:
           <xsl:choose>
             <xsl:when test="$prognostic=1">
               <xsl:call-template name="get_info_cve_lnk">
@@ -26936,16 +26937,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td rowspan="2">Name</td>
-        <td colspan="2">Families</td>
-        <td colspan="2">NVTs</td>
-        <td width="{$trash-actions-width}" rowspan="2">Actions</td>
+        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td colspan="2"><xsl:value-of select="gsa:i18n ('Families', 'Scan Config Window')"/></td>
+        <td colspan="2"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></td>
+        <td width="{$trash-actions-width}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <tr class="gbntablehead2">
-        <td width="1" style="font-size:10px;">Total</td>
-        <td width="1" style="font-size:10px;">Trend</td>
-        <td width="1" style="font-size:10px;">Total</td>
-        <td width="1" style="font-size:10px;">Trend</td>
+        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Window')"/></td>
+        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Trend', 'Scan Config Window')"/></td>
+        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Window')"/></td>
+        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Trend', 'Scan Config Window')"/></td>
       </tr>
       <xsl:apply-templates select="config" mode="trash"/>
     </table>
@@ -27014,12 +27015,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td>Name</td>
-        <td>First Run</td>
-        <td>Next Run</td>
-        <td>Period</td>
-        <td>Duration</td>
-        <td width="{$trash-actions-width}">Actions</td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('First Run', 'Schedule Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Next Run', 'Schedule Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="schedule" mode="trash"/>
     </table>
@@ -27457,8 +27458,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Users" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Users"/>
+         title="{gsa:i18n ('Users', 'User')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Users', 'User')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
