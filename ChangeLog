@@ -1,3 +1,8 @@
+2013-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_config): Check if extra_xml is NULL before trying
+	to parse it and before trying to free the entity.
+
 2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window-line-icons): Add i18n for

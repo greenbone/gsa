@@ -8068,7 +8068,8 @@ get_config (credentials_t * credentials, params_t *params,
 
       /* Check for an ID in a CREATE_CONFIG response in extra_xml. */
 
-      if ((parse_entity (extra_xml, &entity) == 0)
+      if (extra_xml
+          && (parse_entity (extra_xml, &entity) == 0)
           && (strcmp (entity_name (entity), "create_config_response") == 0))
         {
           param_t *param;
@@ -8082,7 +8083,9 @@ get_config (credentials_t * credentials, params_t *params,
         }
       else
         {
-          free_entity (entity);
+          if (extra_xml)
+            free_entity (entity);
+
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a config. "
