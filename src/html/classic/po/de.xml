@@ -2718,7 +2718,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>OID</id>
       <str>OID</str>
     </msg>
+    <msg>
+      <id>Family</id>
+      <str>Familie</str>
+    </msg>
+
+    <msg>
+      <id>Affected Software/OS</id>
+      <str>Betroffene Software/OS</str>
+    </msg>
+
+    <msg>
+      <id>Vulnerability Scoring</id>
+      <str>Schwachstellen-Bewertung</str>
+    </msg>
+    <msg>
+      <id>CVSS base</id>
+      <str>CVSS-Basisscore</str>
+    </msg>
+    <msg>
+      <id>CVSS base vector</id>
+      <str>CVSS-Basisvektor</str>
+    </msg>
+
+    <msg>
+      <id>Vulnerability Insight</id>
+      <str>Schwachstellen-Einblick</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Detection Method</id>
+      <str>Methode zur Schwachstellenerkennung</str>
+    </msg>
+    <msg>
+      <id>Impact</id>
+      <str>Auswirkungen</str>
+    </msg>
+    <msg>
+      <id>Solution</id>
+      <str>Lösung</str>
+    </msg>
+    <msg>
+      <id>Other tags</id>
+      <str>Weitere Tags</str>
+    </msg>
+
+    <msg>
+      <id>Preferences</id>
+      <str>Vorgaben</str>
+    </msg>
+
     <!-- - - References and reference actions - - -->
+    <!-- Notes -->
+    <msg>
+      <id>Notes on NVT</id>
+      <str>Notizen für NVT</str>
+    </msg>
+    <!-- Overrides -->
+    <msg>
+      <id>Overrides on NVT</id>
+      <str>Übersteuerungen für NVT</str>
+    </msg>
   </grp>
   <!-- 3.7.4    NVT actions and properties - table rows only -->
   <grp>

@@ -16406,9 +16406,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVT Details
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Details', 'NVT')"/>
       <a href="/help/nvt_details.html?token={/envelope/token}"
-        title="Help: NVT Details">
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -16814,47 +16814,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table style="font-size: 10px;">
       <xsl:if test="@oid != ''">
         <tr>
-          <td>ID:</td>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
           <td><xsl:value-of select="@oid"/></td>
         </tr>
       </xsl:if>
       <xsl:if test="modification_time != ''">
         <tr>
-          <td>Last modified:</td>
+          <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
           <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
       </xsl:if>
       <xsl:if test="creation_time != ''">
         <tr>
-          <td>Created:</td>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
           <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
         </tr>
       </xsl:if>
     </table>
   </div>
   <table>
-    <tr><td><b>Name:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
+    <tr><td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
     <xsl:if test="summary != 'NOSUMMARY'">
-      <tr><td>Summary:</td><td><xsl:value-of select="summary"/></td></tr>
+      <tr><td><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/>:</td><td><xsl:value-of select="summary"/></td></tr>
     </xsl:if>
-    <tr><td>Config:</td><td><xsl:value-of select="$config"/></td></tr>
-    <tr><td>Family:</td><td><xsl:value-of select="family"/></td></tr>
-    <tr><td>OID:</td><td><xsl:value-of select="@oid"/></td></tr>
-    <tr><td>Version:</td><td><xsl:value-of select="version"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT Window')"/>:</td><td><xsl:value-of select="family"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT Window')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Version', 'NVT Window')"/>:</td><td><xsl:value-of select="version"/></td></tr>
     <tr>
-      <td>Notes:</td>
+      <td><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>:</td>
       <td>
         <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Notes on NVT {name}">
+           title="{gsa:i18n ('Notes on NVT', 'NVT Window')} {name}">
           <xsl:value-of select="count (../../get_notes_response/note)"/>
         </a>
       </td>
     </tr>
     <tr>
-      <td>Overrides:</td>
+      <td><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>:</td>
       <td>
         <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Overrides on NVT {name}">
+           title="{gsa:i18n ('Overrides on NVT', 'NVT Window')} {name}">
           <xsl:value-of select="count (../../get_overrides_response/override)"/>
         </a>
       </td>
@@ -16863,7 +16863,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'summary=')">
-      <h2>Summary</h2>
+      <h2><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/></h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'summary' = substring-before (., '=')">
           <xsl:call-template name="structured-text">
@@ -16878,7 +16878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'affected=')">
-      <h2>Affected Software/OS</h2>
+      <h2><xsl:value-of select="gsa:i18n ('Affected Software/OS', 'NVT Window')"/></h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'affected' = substring-before (., '=')">
           <xsl:call-template name="structured-text">
@@ -16891,10 +16891,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
 
-  <h2>Vulnerability Scoring</h2>
+  <h2><xsl:value-of select="gsa:i18n ('Vulnerability Scoring', 'NVT Window')"/></h2>
   <table>
     <tr>
-      <td>CVSS base:</td>
+      <td><xsl:value-of select="gsa:i18n ('CVSS base', 'NVT Window')"/>:</td>
       <td>
         <xsl:choose>
           <xsl:when test="cvss_base &gt;= 0.0">
@@ -16915,7 +16915,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="'cvss_base_vector' = substring-before (., '=')">
         <xsl:variable name="cvss_vector" select="substring-after (., '=')"/>
         <tr>
-          <td>CVSS base vector:</td>
+          <td><xsl:value-of select="gsa:i18n ('CVSS base vector', 'NVT Window')"/>:</td>
           <td>
             <a href="/omp?cmd=cvss_calculator&amp;cvss_vector={$cvss_vector}&amp;token={$token}">
               <xsl:value-of select="$cvss_vector"/>
@@ -16929,7 +16929,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="contains(tags, 'insight=')">
       <xsl:if test="not (contains(tags, 'insight=N/A'))">
-        <h2>Vulnerability Insight</h2>
+        <h2><xsl:value-of select="gsa:i18n ('Vulnerability Insight', 'NVT Window')"/></h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'insight' = substring-before (., '=')">
             <xsl:call-template name="structured-text">
@@ -16945,7 +16945,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'vuldetect=')">
-      <h2>Vulnerability Detection Method</h2>
+      <h2><xsl:value-of select="gsa:i18n ('Vulnerability Detection Method', 'NVT Window')"/></h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'vuldetect' = substring-before (., '=')">
           <xsl:call-template name="structured-text">
@@ -16961,7 +16961,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when  test="contains(tags, 'impact=')">
       <xsl:if test="not (contains(tags, 'impact=N/A'))">
-        <h2>Impact</h2>
+        <h2><xsl:value-of select="gsa:i18n ('Impact', 'NVT Window')"/></h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'impact' = substring-before (., '=')">
             <xsl:call-template name="structured-text">
@@ -16978,7 +16978,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="contains(tags, 'solution=')">
       <xsl:if test="not (contains(tags, 'solution=N/A'))">
-        <h2>Solution</h2>
+        <h2><xsl:value-of select="gsa:i18n ('Solution', 'NVT Window')"/></h2>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'solution' = substring-before (., '=')">
             <xsl:call-template name="structured-text">
@@ -16997,7 +16997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
     </xsl:when>
     <xsl:otherwise>
-      <h2>Other tags</h2>
+      <h2><xsl:value-of select="gsa:i18n ('Other tags', 'NVT Window')"/></h2>
       <table>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution',substring-before (., '=')))">
@@ -17033,7 +17033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <xsl:choose>
     <xsl:when test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
-      <h2>References</h2>
+      <h2><xsl:value-of select="gsa:i18n ('References', 'Window')"/></h2>
       <table>
         <xsl:call-template name="ref_cve_list">
           <xsl:with-param name="cvelist" select="$cve_ref"/>
@@ -17089,30 +17089,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window">
         <div class="gb_window_part_left"></div>
         <div class="gb_window_part_right"></div>
-        <div class="gb_window_part_center">NVT Details
+        <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Details', 'NVT')"/>
           <a href="/help/nvt_details.html?token={/envelope/token}"
-             title="Help: NVT Details">
+             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
             <img src="/img/help.png"/>
           </a>
           <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="NVT" style="margin-left:3px;">
-            <img src="/img/list.png" border="0" alt="NVT"/>
+            title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
+            <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
           </a>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
             <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="Add Note" style="margin-left:3px;">
-              <img src="/img/new_note.png" border="0" alt="Add Note"/>
+               title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
+              <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
             </a>
             <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="Add Override" style="margin-left:3px;">
-              <img src="/img/new_override.png" border="0" alt="Add Override"/>
+               title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
+              <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
             </a>
           </div>
         </div>
         <div class="gb_window_part_content">
           <xsl:apply-templates
             select="commands_response/get_nvts_response/nvt"/>
-          <h2>Preferences</h2>
+          <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
           <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
             <xsl:call-template name="preferences-details">
             </xsl:call-template>
@@ -17121,7 +17121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
 
       <xsl:call-template name="user-tags-window">
-        <xsl:with-param name="title" select="concat('User Tags for &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
+        <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'),' &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
         <xsl:with-param name="user_tags" select="commands_response/get_nvts_response/nvt/user_tags"/>
         <xsl:with-param name="tag_names" select="get_tags_response"/>
         <xsl:with-param name="resource_type" select="'nvt'"/>
