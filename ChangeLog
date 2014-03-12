@@ -1,5 +1,21 @@
 2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (get-settings-filter)
+	(list-window-line-icons, user-tags-window-checked, trend_meter, task)
+	(alert, html-config-family-table, preference, html-config-nvt-table)
+	(config [families], html-config-table, schedule [trash])
+	(schedule [details], get_info_allinfo_action, note [trash])
+	(observers-icon, html-reports-table, result [result-body], report [os])
+	(report-help-icon, report [summary], role [details]): Add i18n for alt
+	and title (tooltip) text.
+
+	* src/html/classic/po/de.xml: Make clone related messages available
+	in all views and add generic denial messages. Add messages for "Global"
+	and "owned by". Add "Unknown" for report OS. Add "Product detection"
+	messages.
+
+2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (ref_cert_list, ref_xref_list, info/cpe)
 	(info/cve, info/nvt, info/ovaldef, info/dfn_cert_adv, info/allinfo)
 	(cve-details, cpe-details, nvt-details, ovaldef-details)

@@ -1197,7 +1197,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$filter">
       <a href="/omp?cmd=get_filter&amp;filter_id={$filter}&amp;token={/envelope/token}"
-         title="Filter Details">
+         title="{gsa:i18n ('Filter Details', 'Filter')}">
         <xsl:value-of select="get_filters_response/filter[@id=$filter]/name"/>
       </a>
     </xsl:when>
@@ -1344,23 +1344,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="id" value="{@id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="image" src="/img/clone.png" alt="Clone {$cap-type}"
-                 name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
+          <input type="image" src="/img/clone.png" alt="{gsa:i18n (concat ('Clone ', $cap-type))}"
+                 name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Window')}"/>
         </form>
       </div>
     </xsl:when>
     <xsl:when test="owner/name = /envelope/login/text() or string-length (owner/name) = 0">
       <img src="/img/clone_inactive.png"
-           alt="Clone"
+           alt="{gsa:i18n ('Clone', 'Window')}"
            value="Clone"
-           title="{$cap-type} must be owned or global"
+           title="{$cap-type}{gsa:i18n (' must be owned or global', 'Window')}"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:otherwise>
       <img src="/img/clone_inactive.png"
-           alt="Clone"
+           alt="{gsa:i18n ('Clone', 'Window')}"
            value="Clone"
-           title="Permission to clone denied"
+           title="{gsa:i18n ('Permission to clone denied', 'Window')}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -1867,7 +1867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
-            title=""
+            title="{gsa:i18n ('New tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
             </a>
@@ -3692,23 +3692,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="trend_meter">
   <xsl:choose>
     <xsl:when test="trend = 'up'">
-      <img src="/img/trend_up.png" alt="Severity increased"
+      <img src="/img/trend_up.png" alt="{gsa:i18n ('Severity increased', 'Task Table Row')}"
            title="{gsa:i18n ('Severity increased', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:when test="trend = 'down'">
-      <img src="/img/trend_down.png" alt="Severity decreased"
+      <img src="/img/trend_down.png" alt="{gsa:i18n ('Severity decreased', 'Task Table Row')}"
            title="{gsa:i18n ('Severity decreased', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:when test="trend = 'more'">
-      <img src="/img/trend_more.png" alt="Vulnerability count increased"
+      <img src="/img/trend_more.png" alt="{gsa:i18n ('Vulnerability count increased', 'Task Table Row')}"
            title="{gsa:i18n ('Vulnerability count increased', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:when test="trend = 'less'">
-      <img src="/img/trend_less.png" alt="Vulnerability count decreased"
+      <img src="/img/trend_less.png" alt="{gsa:i18n ('Vulnerability count decreased', 'Task Table Row')}"
            title="{gsa:i18n ('Vulnerability count decreased', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:when test="trend = 'same'">
-      <img src="/img/trend_nochange.png" alt="Vulnerabilities did not change"
+      <img src="/img/trend_nochange.png" alt="{gsa:i18n ('Vulnerabilities did not change', 'Task Table Row')}"
            title="{gsa:i18n ('Vulnerabilities did not change', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:otherwise>
@@ -5811,7 +5811,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:variable>
           <xsl:choose>
             <xsl:when test="$current_or_last_report_id != ''">
-              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="View last report for Task {name}">
+              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Window')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Window', '')}">
                 <xsl:call-template name="status_bar">
                   <xsl:with-param name="status">
                     <xsl:choose>
@@ -7997,7 +7997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="gsa:may-op ('get_filters')">
-          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Table Row', 'Window')}">
             <xsl:value-of select="filter/name"/>
           </a>
         </xsl:when>
@@ -11203,14 +11203,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Scan Config', 'Scan Config')}"
            style="margin-left:3px;">
-          <img src="/img/list.png" border="0" alt="Scan Config"/>
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Scan Config', 'Scan Config')}"
            style="margin-left:3px;">
-          <img src="/img/list.png" border="0" alt="Scan Config"/>
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
         </a>
       </xsl:otherwise>
     </xsl:choose>
@@ -11424,13 +11424,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="string-length($config_id) &gt; 0">
         <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config Table Row')}" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
+          <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Table Row')}"/>
         </a>
       </xsl:if>
       <xsl:if test="string-length($edit) &gt; 0">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config Table Row')}" style="margin-left:3px;">
-          <img src="/img/edit.png" border="0" alt="Edit"/>
+          <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
         </a>
       </xsl:if>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
@@ -11857,7 +11857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Scan Config Family', 'Scan Config Window')}"
            style="margin-left:3px;">
-          <img src="/img/list.png" border="0" alt="Scan Config Family"/>
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Config Family', 'Scan Config Window')}"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
@@ -12124,7 +12124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:when test="nvt_count/growing='0'">
               <img src="/img/trend_nochange.png"
-                   alt="Static"
+                   alt="{gsa:i18n ('Static', 'Scan Config Window')}"
                    title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config Window')}"/>
             </xsl:when>
             <xsl:otherwise>
@@ -12286,7 +12286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config Window')"/></xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+            <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('To Trashcan', 'Trashcan')}"
                  title="{$inactive_text}"
                  style="margin-left:3px;"/>
           </xsl:otherwise>
@@ -14121,7 +14121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="Schedule is still in use"
+               title="{gsa:i18n ('Schedule', 'Schedule')}{gsa:i18n (' is still in use', 'Trashcan')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -14232,10 +14232,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Window')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -15336,8 +15336,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="action"/>
   <a href="/omp?cmd=get_info&amp;info_type={$type}&amp;info_id={$info_id}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-     title="{$name} Details" style="margin-left:3px;">
-    <img src="/img/details.png" border="0" alt="{$name} Details"/>
+     title="{gsa:i18n (concat ($name, ' Details'))}" style="margin-left:3px;">
+    <img src="/img/details.png" border="0" alt="{gsa:i18n (concat ($name, ' Details'))}"/>
   </a>
 </xsl:template>
 
@@ -17872,7 +17872,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
-          <abbr title="Result was an open port.">None</abbr>
+          <abbr title="{gsa:i18n ('Result was an open port.', 'Note Table Row')}"><xsl:value-of select="gsa:i18n ('No NVT', 'Note Table Row', 'None')"/></abbr>
         </xsl:when>
         <xsl:when test="string-length(nvt/name) &gt; $max">
           <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
@@ -18928,15 +18928,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/view_other.png"
              style="margin-left:3px;"
              border="0"
-             alt="Global {$type}"
-             title="Global {$type}"/>
+             alt="{gsa:i18n ('#global prefix#', 'Table Row', 'Global ')}{gsa:i18n ($type, $type)}{gsa:i18n ('#global suffix#', 'Table Row', '')}"
+             title="{gsa:i18n ('#global prefix#', 'Table Row', 'Global ')}{gsa:i18n ($type, $type)}{gsa:i18n ('#global suffix#', 'Table Row', '')}"/>
       </xsl:when>
       <xsl:otherwise>
         <img src="/img/view_other.png"
              style="margin-left:3px;"
              border="0"
-             alt="{$type} owned by {owner/name}"
-             title="{$type} owned by {owner/name}"/>
+             alt="{$type}{gsa:i18n (' owned by ', 'Table Row')}{owner/name}"
+             title="{$type}{gsa:i18n (' owned by ', 'Table Row')}{owner/name}"/>
       </xsl:otherwise>
     </xsl:choose>
   </div>
@@ -22102,9 +22102,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="image"
                            name="No Overrides"
                            src="/img/overrides_disabled.png"
-                           alt="No Overrides"
+                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
                            value="No Overrides"
-                           title="No Overrides"
+                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
                            style="margin-left:3px;margin-right:3px;"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -22112,9 +22112,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="image"
                            name="Overrides are Applied"
                            src="/img/overrides_enabled.png"
-                           alt="Overrides are Applied"
+                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
                            value="Overrides are Applied"
-                           title="Overrides are Applied"
+                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
                            style="margin-left:3px;margin-right:3px;"/>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -23424,7 +23424,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr><td><xsl:value-of select="gsa:i18n ('Log', 'Result Window')"/>:</td><td>
           <!-- TODO This needs a case for delta reports. -->
           <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Product detection results">
+           title="{gsa:i18n ('Product detection results', 'Result Window')}">
             <xsl:value-of select="gsa:i18n ('View details of product detection', 'Result Window')"/>
           </a>
           </td></tr></table>
@@ -25124,8 +25124,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="$unknown_count">
           <tr class="{gsa:table-row-class($known_count + 1)}">
             <td>
-              <img style="margin-left: 2px;" src="/img/os_unknown.png" alt="Unknown" title="Unknown"/>
-              Unknown
+              <img style="margin-left: 2px;" src="/img/os_unknown.png" alt="{gsa:i18n ('Unknown', 'Report Table Row')}" title="{gsa:i18n ('Unknown', 'Report Table Row')}"/>
+              <xsl:value-of select="gsa:i18n ('Unknown', 'Report Table Row')"/>
             </td>
             <td>
             </td>
@@ -25386,7 +25386,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-     title="Help: View Report">
+     title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('View Report', 'Report Window'))}">
     <img style="vertical-align: text-top; margin-left: 3px" border="0" src="/img/help.png"/>
   </a>
 </xsl:template>
@@ -26384,7 +26384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="esc_result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <select name="alert_id" title="Alert">
+                    <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
                       <xsl:for-each select="../../get_alerts_response/alert">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
@@ -26585,10 +26585,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name), false ()))"/>
                 </td>
                 <td width="100">
-                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Window')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -26609,10 +26609,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
                 </td>
                 <td width="100">
-                  <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Details"
+                         alt="{gsa:i18n ('Details', 'Window')}"
                          style="margin-left:3px;"/>
                   </a>
                 </td>

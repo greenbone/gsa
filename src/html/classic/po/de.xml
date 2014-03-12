@@ -294,6 +294,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Anwenden</str>
     </msg>
 
+    <!-- Clone -->
+    <msg>
+      <id>Clone</id>
+      <str>Clonen</str>
+    </msg>
+    <msg>
+      <id> must be owned or global</id>
+      <str> muss aktuellem Benutzer gehören oder global sein</str>
+    </msg>
+    <msg>
+      <id>Permission to clone denied</id>
+      <str>Keine Berechtigung zum Clonen</str>
+    </msg>
+
     <!-- Conjunctions -->
     <msg>
       <id>and</id>
@@ -385,6 +399,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id> cannot be moved to Trashcan</id>
       <str> kann nicht in den Mülleimer verschoben werden</str>
     </msg>
+
+    <!-- Observer icon (global or owned)-->
+    <msg>
+      <id>#global prefix#</id>
+      <str></str>
+    </msg>
+    <msg>
+      <id>#global suffix#</id>
+      <str> ist global</str>
+    </msg>
+    <msg>
+      <id> owned by </id>
+      <str> gehört </str>
+    </msg>
   </grp>
 
   <!-- 2.3.2    Actions not available in table rows (e.g. only in headers) -->
@@ -424,12 +452,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- 2.3.3    Actions available only in table rows -->
   <grp>
     <ctxt>Table Row</ctxt>
-
-    <!-- Clone -->
-    <msg>
-      <id>Clone</id>
-      <str>Clonen</str>
-    </msg>
 
   </grp>
   <!-- 2.3.4    Actions in Forms -->
@@ -1853,6 +1875,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
 
     <!-- - - Properties - - -->
+    <!-- OS -->
+    <msg>
+      <id>Unknown</id>
+      <str>Unbekannt</str>
+    </msg>
 
     <!-- - - References and reference actions - - -->
   </grp>
@@ -2247,6 +2274,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Product Detection Result</id>
       <str>Ergebnis zur Produkterkennung</str>
+    </msg>
+    <msg>
+      <id>Product detection results</id>
+      <str>Ergebnisse zur Produkterkennung</str>
+    </msg>
+    <msg>
+      <id>View details of product detection</id>
+      <str>Details der Produkterkennung anzeigen</str>
     </msg>
     <msg>
       <id>Product</id>
