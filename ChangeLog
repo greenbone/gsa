@@ -1,5 +1,14 @@
 2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [filterbox], report-image): Add i18n.
+	(cvss_calculator): Add i18n for error message.
+
+	* src/html/classic/po/de.xml: Add translations for Report Filter,
+	Report Image and error message in CVSS calculator. Fix typo in
+	Performance report error message.
+
+2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get-settings-filter)
 	(list-window-line-icons, user-tags-window-checked, trend_meter, task)
 	(alert, html-config-family-table, preference, html-config-nvt-table)

@@ -2739,7 +2739,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="../../delta">
           <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
           <div style="float: right;">
-            <div style="padding: 2px;">Show delta results:</div>
+            <div style="padding: 2px;"><xsl:value-of select="gsa:i18n ('Show delta results', 'Report Filter')"/>:</div>
             <div style="margin-left: 8px;">
               <label>
                 <xsl:choose>
@@ -2751,7 +2751,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                = same
+                = <xsl:value-of select="gsa:i18n ('same', 'Report Filter')"/>
               </label>
             </div>
             <div style="margin-left: 8px;">
@@ -2765,7 +2765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                + new
+                + <xsl:value-of select="gsa:i18n ('new', 'Report Filter')"/>
               </label>
             </div>
             <div style="margin-left: 8px;">
@@ -2779,7 +2779,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                &#8722; gone
+                &#8722; <xsl:value-of select="gsa:i18n ('gone', 'Report Filter')"/>
               </label>
             </div>
             <div style="margin-left: 8px;">
@@ -2793,13 +2793,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                ~ changed
+                ~ <xsl:value-of select="gsa:i18n ('changed', 'Report Filter')"/>
               </label>
             </div>
           </div>
         </xsl:if>
         <div style="padding: 2px;">
-          Results per page:
+          <xsl:value-of select="gsa:i18n ('Results per page', 'Filter Box')"/>:
           <input type="text" name="max_results" size="5"
                  value="{report/results/@max}"
                  maxlength="400"/>
@@ -2810,7 +2810,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <div style="padding: 2px;">
-              Auto-FP:
+              <xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:
               <div style="margin-left: 30px">
                 <label>
                   <xsl:choose>
@@ -2821,7 +2821,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <input type="checkbox" name="autofp" value="1" checked="1"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  Trust vendor security updates
+                  <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
                 </label>
                 <div style="margin-left: 30px">
                   <label>
@@ -2833,7 +2833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <input type="radio" name="autofp_value" value="1" checked="1"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    Full CVE match
+                    <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
                   </label>
                   <br/>
                   <label>
@@ -2845,7 +2845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <input type="radio" name="autofp_value" value="2"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    Partial CVE match
+                    <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
                   </label>
                 </div>
               </div>
@@ -2867,7 +2867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="checkbox" name="notes" value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Show notes
+                <xsl:value-of select="gsa:i18n ('Show Notes', 'Report Filter')"/>
               </label>
             </div>
           </xsl:otherwise>
@@ -2883,7 +2883,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="checkbox" name="overrides" value="1" checked="1"/>
               </xsl:otherwise>
             </xsl:choose>
-            Show Overrides
+            <xsl:value-of select="gsa:i18n ('Show Overrides', 'Report Filter')"/>
           </label>
         </div>
 
@@ -2892,13 +2892,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="report/filters/result_hosts_only = 0">
               <label>
                 <input type="checkbox" name="result_hosts_only" value="1"/>
-                Only show hosts that have results
+                <xsl:value-of select="gsa:i18n ('Only show hosts that have results', 'Report Filter')"/>
               </label>
             </xsl:when>
             <xsl:otherwise>
               <label>
                 <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
-                Only show hosts that have results
+                <xsl:value-of select="gsa:i18n ('Only show hosts that have results', 'Report Filter')"/>
               </label>
             </xsl:otherwise>
           </xsl:choose>
@@ -2974,7 +2974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </select>
         </div>
         <div style="padding: 2px;">
-          Text phrase:
+          <xsl:value-of select="gsa:i18n ('Text phrase', 'Report Filter')"/>:
           <input type="text" name="search_phrase" size="50"
                  value="{report/filters/phrase}"
                  maxlength="400"/>
@@ -2983,7 +2983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="submit" value="{gsa:i18n ('Apply', 'Window')}" title="{gsa:i18n ('Apply', 'Window')}"/>
         </div>
         <div style="padding: 2px;">
-          Severity:
+          <xsl:value-of select="gsa:i18n ('Severity', 'Window')"/>:
           <table style="display: inline">
             <tr>
               <td class="threat_info_table_h">
@@ -25779,22 +25779,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="count($available_report_formats/report_format) = 0">
       <div class="error">
-        ERROR: List of available report formats missing!
+        <xsl:value-of select="gsa:i18n ('ERROR: List of available report formats missing!', 'Report Image')"/>
       </div>
     </xsl:when>
     <xsl:when test="count($available_report_formats/report_format[@id = $report_format]) = 0">
       <div class="error">
-        Cannot find report format: <xsl:value-of select="$report_format"/>
+        <xsl:value-of select="gsa:i18n ('Cannot find report format: ', 'Report Image')"/>
+        <xsl:value-of select="$report_format"/>
       </div>
     </xsl:when>
     <xsl:when test="$available_report_formats/report_format[@id = $report_format]/trust/text() != 'yes'">
       <div class="error">
-        Report format <xsl:value-of select="$report_format"/> is not trusted.
+        <xsl:value-of select="gsa:i18n ('Report format ', 'Report Image')"/>
+        <xsl:value-of select="$report_format"/>
+        <xsl:value-of select="gsa:i18n (' is not trusted.', 'Report Image')"/>
       </div>
     </xsl:when>
     <xsl:when test="$available_report_formats/report_format[@id = $report_format]/active/text() != 1">
       <div class="error">
-        Report format <xsl:value-of select="$report_format"/> is not active.
+        <xsl:value-of select="gsa:i18n ('Report format ', 'Report Image')"/>
+        <xsl:value-of select="$report_format"/>
+        <xsl:value-of select="gsa:i18n (' is not active.', '')"/>
       </div>
     </xsl:when>
     <xsl:otherwise>
@@ -29933,8 +29938,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </table>
           </xsl:if>
           <xsl:if test="cvss_score = '-1.0'">
-            <br/>Invalid CVSS Base Vector value provided.
-            Use back button of your browser to edit the vector.<br/><br/>
+            <br/><xsl:value-of select="gsa:i18n ('Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.', 'CVSS Calculator')"/><br/><br/>
           </xsl:if>
         </xsl:when>
       </xsl:choose>

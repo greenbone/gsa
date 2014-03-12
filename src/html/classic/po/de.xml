@@ -2099,6 +2099,88 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
   </grp>
 
+  <!-- 3.2.6    Report filter -->
+  <grp>
+    <ctxt>Report Filter</ctxt>
+    <msg>
+      <id>Show delta results</id>
+      <str>Delta-Ergebnisse zeigen</str>
+    </msg>
+    <msg>
+      <id>same</id>
+      <str>gleich</str>
+    </msg>
+    <msg>
+      <id>new</id>
+      <str>neu</str>
+    </msg>
+    <msg>
+      <id>gone</id>
+      <str>verschwunden</str>
+    </msg>
+    <msg>
+      <id>changed</id>
+      <str>verändert</str>
+    </msg>
+
+    <msg>
+      <id>Auto-FP</id>
+      <str>Auto-FP</str>
+    </msg>
+    <msg>
+      <id>Trust vendor security updates</id>
+      <str>Sicherheitsupdates des Anbieters vertrauen</str>
+    </msg>
+    <msg>
+      <id>Full CVE match</id>
+      <str>Vollständige CVE-Übereinstimmung</str>
+    </msg>
+    <msg>
+      <id>Partial CVE match</id>
+      <str>Teilweise CVE-Übereinstimmung</str>
+    </msg>
+
+    <msg>
+      <id>Show Notes</id>
+      <str>Notizen zeigen</str>
+    </msg>
+    <msg>
+      <id>Show Overrides</id>
+      <str>Übersteuerungen zeigen</str>
+    </msg>
+
+    <msg>
+      <id>Only show hosts that have results</id>
+      <str>Nur Hosts mit Ergebnissen zeigen</str>
+    </msg>
+
+    <msg>
+      <id>Text phrase</id>
+      <str>Textphrase</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.7    Report image -->
+  <grp>
+    <ctxt>Report Image</ctxt>
+
+    <msg>
+      <id>ERROR: List of available report formats missing!</id>
+      <str>FEHLER: Liste der verfügbaren Berichtformate fehlt!</str>
+    </msg>
+    <msg>
+      <id>Report format </id>
+      <str>Berichtformat </str>
+    </msg>
+    <msg>
+      <id> is not trusted.</id>
+      <str> wird nicht vertraut.</str>
+    </msg>
+    <msg>
+      <id> is not active.</id>
+      <str> ist nicht aktiv.</str>
+    </msg>
+  </grp>
 
   <!-- 3.3      Results -->
   <!-- 3.3.1    Result type name and common strings -->
@@ -5534,7 +5616,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.</id>
-      <str>Bitte prüfen Sie die Netzwerkverbindung oder Slave-Konfiguration.  Das Problem besteht auch möglicheweise nur vorübergehend, so dass sie es später noch einmal versuchen könnten.</str>
+      <str>Bitte prüfen Sie die Netzwerkverbindung oder Slave-Konfiguration.  Das Problem besteht auch möglicherweise nur vorübergehend, so dass sie es später noch einmal versuchen könnten.</str>
     </msg>
   </grp>
 
@@ -5571,6 +5653,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Base Score</id>
       <str>Basisscore</str>
+    </msg>
+
+    <msg>
+      <id>Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.</id>
+      <str>Ungültiger CVSS Basisvektor angegeben.  Benutzen Sie den Zurück-Button ihres Browsers, um den Vektor bearbeiten zu können.</str>
     </msg>
   </grp>
 
