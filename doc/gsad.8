@@ -10,62 +10,66 @@ Together, OpenVAS Scanner (openvassd(8)) and OpenVAS Manager (openvasmd(8)) prov
 The Greenbone Security Assistant Daemon (gsad) is a web application that connects to the OpenVAS Manager and OpenVAS Administrator to provide for a full-featured user interface for vulnerability management. 
 .SH OPTIONS
 .TP
-\fB-f, --foreground\f1
+.BR -f ", " --foreground
 Run in foreground.
 .TP
-\fB--http-only\f1
+.BR --http-only
 Serve HTTP only, without SSL.
 .TP
-\fB--listen=\fIADDRESS\fB\f1
+.BR --listen=\fIADDRESS\fR
 Listen on ADDRESS.
 .TP
-\fB--alisten=\fIADDRESS\fB\f1
+.BR --alisten=\fIADDRESS\fR
 Administrator address.
 .TP
-\fB--mlisten=\fIADDRESS\fB\f1
+.BR --mlisten=\fIADDRESS\fR
 Manager address.
 .TP
-\fB-p, --port=\fIPORT\fB\f1
+.BR -p ", " --port=\fIPORT\fR
 Listen on port number PORT.
 .TP
-\fB-a, --aport=\fIPORT\fB\f1
+.BR -a ", " --aport=\fIPORT\fR
 Use administrator port number PORT.
 .TP
-\fB-m, --mport=\fIPORT\fB\f1
+.BR -m ", " --mport=\fIPORT\fR
 Use manager port number PORT.
 .TP
-\fB-r, --rport=\fIPORT\fB\f1
+.BR -r ", " --rport=\fIPORT\fR
 Redirect HTTP from port number PORT.
 .TP
-\fB-R, --redirect\f1
+.BR -R ", " --redirect
 Redirect HTTP to HTTPS.
 .TP
-\fB-k, --ssl-private-key=\fIFILE\fB\f1
+.BR -k ", " --ssl-private-key=\fIFILE\fR
 Use FILE as the private key for HTTPS
 .TP
-\fB-c, --ssl-certificate=\fIFILE\fB\f1
+.BR -c ", " --ssl-certificate=\fIFILE\fR
 Use FILE as the certificate for HTTPS
 .TP
-\fB--do-chroot\f1
+.BR --do-chroot
 Do chroot and drop privileges.
 .TP
-\fB--gnutls-priorities=\fIPRIORITIES\fB\f1
+.BR --gnutls-priorities=\fIPRIORITIES\fR
 GnuTLS priorities string.
 .TP
-\fB-v, --verbose\f1
+.BR -v ", " --verbose
 Print progress messages.
 .TP
-\fB-V, --version\f1
+.BR -V ", " --version
 Print version.
 .TP
-\fB-?, --help\f1
+.BR -? ", " --help
 Show help.
 .SH EXAMPLES
 gsad
 
 Start gsad with the default port configuration and listen on port 443 for HTTPS requests. 
 .SH SEE ALSO
-\fBopenvassd(8)\f1 \fBopenvasad(8)\f1 \fBomp(8)\f1 \fBopenvasmd(8)\f1 \fBgsd(8)\f1
+.BR openvassd (8),
+.BR Bopenvasad (8),
+.BR omp (8),
+.BR openvasmd (8),
+.BR gsd (8)
 .SH MORE INFORMATION ABOUT THE OPENVAS PROJECT
 The canonical places where you will find more information about the OpenVAS project are: \fBhttp://www.openvas.org/\f1 (Official site) \fBhttp://wald.intevation.org/projects/openvas/\f1 (Development Platform) 
 .SH COPYRIGHT

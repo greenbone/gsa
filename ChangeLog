@@ -1,5 +1,9 @@
 2014-03-12  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* doc/gsad.8: Fix issues raported by lintian.
+
+2014-03-12  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Post release version bump.
 
 	* CMakeLists.txt, src/html/classic/help.xsl: Set version to 5.0+beta10.
