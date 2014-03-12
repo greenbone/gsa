@@ -1,3 +1,20 @@
+gsa 5.0+beta9 (2014-03-12)
+
+This is the ninth beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set of
+OpenVAS Manager available in a web browser.
+
+This release now preserves the user's input upon errors during Setting editing, and extends the German translation.
+
+Many thanks to everyone who has contributed to this release:
+Timo Pollmeier and Matthew Mundell.
+
+Main changes since 5.0+beta7:
+* Preserve user's input after error on `Edit My Settings`.
+* More translations to German language.
+* Code cleanup.
+
+
 gsa 5.0+beta8 (2014-03-06)
 
 This is the eighth beta version of the upcoming 5.0 release of the Greenbone

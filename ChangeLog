@@ -1,3 +1,9 @@
+2014-03-12  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Preparing the gsa 5.0+beta9 release.
+
+	* CHANGES: Updated.
+
 2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (nvt-details, nvt, get_nvts): Add i18n.
@@ -61,7 +67,7 @@
 
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad.c (params_mhd_add): Move comment up becuase it applies to
+	* src/gsad.c (params_mhd_add): Move comment up because it applies to
 	the whole block.
 
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
@@ -71,7 +77,7 @@
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit_my_settings): Preserve User Interface
-	Langauge too.
+	Language too.
 
 2014-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
