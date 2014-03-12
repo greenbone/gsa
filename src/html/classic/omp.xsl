@@ -14780,7 +14780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:for-each select="$certlist/warning">
       <tr valign="top">
         <td>CERT:</td>
-        <td><i>Warning: <xsl:value-of select="text()"/></i></td>
+        <td><i><xsl:value-of select="gsa:i18n ('Warning', 'Reference List')"/>: <xsl:value-of select="text()"/></i></td>
       </tr>
     </xsl:for-each>
   </xsl:if>
@@ -14819,7 +14819,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:if test="$xrefcount &gt; 0">
     <xsl:for-each select="str:split($xreflist, ',')">
       <tr valign="top">
-        <td><xsl:if test="position()=1">Other:</xsl:if></td>
+        <td><xsl:if test="position()=1"><xsl:value-of select="gsa:i18n ('Other', 'Reference List')"/>:</xsl:if></td>
         <xsl:choose>
           <xsl:when test="contains(., 'URL:')">
             <td><xsl:value-of select="substring-after(., 'URL:')"/></td>
@@ -14855,7 +14855,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="title"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -14865,7 +14865,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:date (../modification_time)"/>
         </xsl:when>
         <xsl:otherwise>
-          N/A
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -14882,7 +14882,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
-            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
             <xsl:with-param name="scale" select="7"/>
           </xsl:call-template>
         </xsl:otherwise>
@@ -14915,7 +14915,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="vector"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14925,7 +14925,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="complexity"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14935,7 +14935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="authentication"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14945,7 +14945,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="confidentiality_impact"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14955,7 +14955,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="integrity_impact"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14965,7 +14965,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="availability_impact"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14975,7 +14975,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:date (../creation_time)"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -14989,7 +14989,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="severity-bar">
-              <xsl:with-param name="extra_text" select="'N/A'"/>
+              <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
               <xsl:with-param name="scale" select="7"/>
             </xsl:call-template>
           </xsl:otherwise>
@@ -15072,7 +15072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
-            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
             <xsl:with-param name="scale" select="7"/>
           </xsl:call-template>
         </xsl:otherwise>
@@ -15116,7 +15116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="version"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15126,7 +15126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="status"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15136,7 +15136,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="class"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15146,7 +15146,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:date (../creation_time)"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15156,7 +15156,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:date (../modification_time)"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15173,7 +15173,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="severity-bar">
-              <xsl:with-param name="extra_text" select="'N/A'"/>
+              <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
               <xsl:with-param name="scale" select="7"/>
             </xsl:call-template>
           </xsl:otherwise>
@@ -15232,7 +15232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="severity-bar">
-            <xsl:with-param name="extra_text" select="'N/A'"/>
+            <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
             <xsl:with-param name="scale" select="7"/>
           </xsl:call-template>
         </xsl:otherwise>
@@ -15266,7 +15266,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="type"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15276,7 +15276,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:date (../creation_time)"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15286,7 +15286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:date (../modification_time)"/>
           </xsl:when>
           <xsl:otherwise>
-            N/A
+            <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -15299,7 +15299,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="severity-bar">
-              <xsl:with-param name="extra_text" select="'N/A'"/>
+              <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -15922,21 +15922,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CVE Details
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CVE Details', 'CVE')"/>
       <a href="/help/cve_details.html?token={/envelope/token}"
-        title="Help: CVE (CVE Details)">
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVE', 'CVE'),' (',gsa:i18n('CVE Details', 'CVE'),')')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="CVE" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="CVE"/>
+        title="{gsa:i18n ('CVEs', 'CVE')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td>ID:</td>
+            <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="info/cve">
@@ -15949,15 +15949,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td>Published:</td>
+            <td><xsl:value-of select="gsa:i18n ('Published', 'CVE Window')"/>:</td>
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
           </tr>
           <tr>
-            <td>Last modified:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
           </tr>
           <tr>
-            <td>Last updated:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Info Window')"/>:</td>
             <td><xsl:value-of select="info/update_time"/></td>
           </tr>
         </table>
@@ -15965,7 +15965,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <table>
         <tr>
-          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
           <td>
             <b>
               <xsl:choose>
@@ -15980,14 +15980,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>CWE ID:</td>
+          <td><xsl:value-of select="gsa:i18n ('CWE ID', 'CVE Window')"/>:</td>
           <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
         </tr>
       </table>
 
       <xsl:choose>
         <xsl:when test="info/cve">
-          <h1>Description</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></h1>
           <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
 
           <xsl:choose>
@@ -15995,7 +15995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <h1>CVSS</h1>
               <table>
                 <tr>
-                  <td>Base score</td>
+                  <td><xsl:value-of select="gsa:i18n ('Base score', 'CVE Window')"/></td>
                   <td>
                     <div style="float: left;">
                       <xsl:call-template name="severity-bar">
@@ -16088,10 +16088,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
-              <h1>References: None</h1>
+              <h1><xsl:value-of select="gsa:i18n ('References', 'CVE Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
             </xsl:when>
             <xsl:otherwise>
-              <h1>References</h1>
+              <h1><xsl:value-of select="gsa:i18n ('References', 'CVE Window')"/></h1>
               <table>
                 <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
                   <tr>
@@ -16114,12 +16114,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="count(info/cve/cert/cert_ref) = 0">
             </xsl:when>
             <xsl:otherwise>
-              <h1>CERT Advisories referencing this CVE</h1>
+              <h1><xsl:value-of select="gsa:i18n ('CERT Advisories referencing this CVE', 'CVE Window')"/></h1>
               <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
-                  <td>Name</td>
-                  <td>Title</td>
-                  <td>Actions</td>
+                  <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Title', 'Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
                 </tr>
                 <xsl:for-each select="info/cve/cert/cert_ref">
 
@@ -16129,15 +16129,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <td width="100">
                       <xsl:choose>
                         <xsl:when test="@type='DFN-CERT'">
-                        <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="Details">
+                        <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                           <img src="/img/details.png"
                           border="0"
-                          alt="Details"
+                          alt="{gsa:i18n ('Details', 'Window')}"
                           style="margin-left:3px;"/>
                         </a>
                         </xsl:when>
                         <xsl:otherwise>
-                          <div class="error">Unknown CERT type!</div>
+                          <div class="error"><xsl:value-of select="gsa:i18n ('Unknown CERT type!', 'CVE Window')"/></div>
                         </xsl:otherwise>
                       </xsl:choose>
                     </td>
@@ -16149,14 +16149,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
-              <h1>Vulnerable products: None</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
             </xsl:when>
             <xsl:otherwise>
-              <h1>Vulnerable products</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE Window')"/></h1>
               <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
-                  <td>Name</td>
-                  <td>Actions</td>
+                  <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
                 </tr>
                 <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
                   <xsl:sort select="text()"/>
@@ -16169,10 +16169,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                     <td width="100">
                       <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={str:decode-uri(text())}&amp;details=1&amp;token={/envelope/token}"
-                        title="Details">
+                        title="{gsa:i18n ('Details', 'Window')}">
                         <img src="/img/details.png"
                           border="0"
-                          alt="Details"
+                          alt="{gsa:i18n ('Details', 'Window')}"
                           style="margin-left:3px;"/>
                       </a>
                     </td>
@@ -16184,24 +16184,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/cve/nvts/nvt) = 0">
-              <h1>NVTs addressing this CVE: None</h1>
+              <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
             </xsl:when>
             <xsl:otherwise>
-              <h1>NVTs addressing this CVE</h1>
+              <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE Window')"/></h1>
               <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
-                  <td>Name</td>
-                  <td>Actions</td>
+                  <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
                 </tr>
                 <xsl:for-each select="info/cve/nvts/nvt">
 
                   <tr class="{gsa:table-row-class(position())}">
                     <td><xsl:value-of select="name"/></td>
                     <td width="100">
-                      <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="Details">
+                      <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                         <img src="/img/details.png"
                           border="0"
-                          alt="Details"
+                          alt="{gsa:i18n ('Details', 'Window')}"
                           style="margin-left:3px;"/>
                       </a>
                     </td>
@@ -16212,19 +16212,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Description</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></h1>
           <p>
-            This CVE was not found in the database.  This is not necessarily
-            an error, because the CVE number might have been assigned for the
-            issue, but the CVE not yet published.  Eventually the CVE content
-            will appear in the database.
+            <xsl:value-of select="gsa:i18n ('This CVE was not found in the database.  This is not necessarily an error, because the CVE number might have been assigned for the issue, but the CVE not yet published.  Eventually the CVE content will appear in the database.', 'CVE Window')"/>
           </p>
         </xsl:otherwise>
       </xsl:choose>
     </div>
   </div>
   <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'),' &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
     <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
@@ -16237,14 +16234,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CPE Details
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CPE Details', 'CPE')"/>
       <a href="/help/cpe_details.html?token={/envelope/token}"
-        title="Help: CPE (CPE Details)">
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CPE', 'CPE'),' (',gsa:i18n('CPE Details', 'CPE'),')')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="CPE" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="CPE"/>
+        title="{gsa:i18n ('CPEs', 'CPE')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -16252,24 +16249,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table style="font-size: 10px;">
           <xsl:if test="info/@id != ''">
             <tr>
-              <td>ID:</td>
+              <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
               <td><xsl:value-of select="info/@id"/></td>
             </tr>
           </xsl:if>
           <xsl:if test="info/modification_time != ''">
             <tr>
-              <td>Last modified:</td>
+              <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
               <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
             </tr>
           </xsl:if>
           <xsl:if test="info/creation_time != ''">
             <tr>
-              <td>Created:</td>
+              <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
               <td><xsl:value-of select="gsa:long-time (info/creation_time)"/></td>
             </tr>
           </xsl:if>
           <tr>
-            <td>Last updated:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Info Window')"/>:</td>
             <td><xsl:value-of select="info/update_time"/></td>
           </tr>
         </table>
@@ -16277,7 +16274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table>
         <tr>
           <xsl:if test="info/name">
-            <td width="100"><b>Name:</b></td>
+            <td width="100"><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
             <td>
               <b>
                 <xsl:call-template name="cpe-icon">
@@ -16291,43 +16288,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <xsl:if test="info/cpe/title">
           <tr>
-            <td>Title:</td>
+            <td><xsl:value-of select="gsa:i18n ('Title', 'Window')"/>:</td>
             <td><xsl:value-of select="info/cpe/title"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/@id != ''">
           <tr>
-            <td>NVD ID:</td>
+            <td><xsl:value-of select="gsa:i18n ('NVD ID', 'CPE Window')"/>:</td>
             <td><xsl:value-of select="info/cpe/nvd_id"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/modification_time != ''">
           <tr>
-            <td>Last modified:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
             <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/deprecated_by">
           <tr>
-            <td>Deprecated by:</td>
+            <td><xsl:value-of select="gsa:i18n ('Deprecated by', 'CPE Window')"/>:</td>
             <td><xsl:value-of select="info/cpe/deprecated_by"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/update_time">
           <tr>
-            <td>Last updated:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Info Window')"/>:</td>
             <td><xsl:value-of select="info/cpe/update_time"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/status != ''">
           <tr>
-            <td>Status:</td>
+            <td><xsl:value-of select="gsa:i18n ('Status', 'CPE Window')"/>:</td>
             <td><xsl:value-of select="info/cpe/status"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe != ''">
           <tr>
-            <td>Severity:</td>
+            <td><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="info/cpe/max_cvss &gt;= 0.0">
@@ -16337,7 +16334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="extra_text" select="'N/A'"/>
+                    <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Window')"/>
                   </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
@@ -16347,22 +16344,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
       <xsl:if test="count(info/cpe/title) = 0">
         <p>
-          This CPE does not appear in the CPE dictionary but is referenced by one
-          or more CVE.
+          <xsl:value-of select="gsa:i18n ('This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.', 'CPE Window')"/>
         </p>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="count(details) = 0 or details = '0' or not(info/cpe)"/>
         <xsl:when test="count(info/cpe/cves/cve) = 0">
-          <h1>Reported vulnerabilites: None</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Reported vulnerabilites</h1>
+          <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE Window')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>Name</td>
-              <td width="104">Severity</td>
-              <td>Actions</td>
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+              <td width="104"><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="info/cpe/cves/cve">
 
@@ -16378,10 +16374,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </td>
                 <td width="100">
-                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;details=1&amp;token={/envelope/token}" title="Details">
+                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                     <img src="/img/details.png"
                       border="0"
-                      alt="Details"
+                      alt="{gsa:i18n ('Details', 'Window')}"
                       style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -16393,7 +16389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for','Tag Window'),' &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
     <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
@@ -16422,31 +16418,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">OVAL Definition Details
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('OVAL Definition Details', 'OVAL Definition')"/>
       <a href="/help/ovaldef_details.html?token={/envelope/token}"
-        title="Help: OVALDEF (OVAL Definition Details)">
+        title="{concat(gsa:i18n('Help', 'Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details', 'OVAL Definition'),')')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
-        title="OVAL definitions" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="OVAL"/>
+        title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td>ID:</td>
+            <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
             <td>
               <xsl:value-of select="info/@id"/>
             </td>
           </tr>
           <tr>
-            <td>Created:</td>
+            <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td>Last modified:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
           </tr>
         </table>
@@ -16456,29 +16452,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="info/ovaldef">
           <table>
             <tr>
-              <td><b>Name&#160;(OVAL&#160;ID):</b></td>
+              <td width="130px"><b><xsl:value-of select="gsa:i18n ('Name (OVAL ID)', 'OVAL Definition Window')"/>:</b></td>
               <td><b><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></b></td>
             </tr>
             <tr>
-              <td valign="top">Title:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Window')"/>:</td>
               <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></td>
             </tr>
             <tr>
-              <td>Version:</td>
+              <td><xsl:value-of select="gsa:i18n ('Version', 'Window')"/>:</td>
               <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@version"/></td>
             </tr>
             <tr>
-              <td>Definition&#160;class:</td>
+              <td><xsl:value-of select="gsa:i18n ('Definition class', 'OVAL Definition Window')"/>:</td>
               <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td>
             </tr>
             <tr>
-              <td>Referenced CVEs:</td>
+              <td><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'OVAL Definition Window')"/>:</td>
               <td>
                 <xsl:value-of name="cvss" select="info/ovaldef/cve_refs"/>
               </td>
             </tr>
             <tr>
-              <td>Severity:</td>
+              <td><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/>:</td>
               <td>
                 <xsl:choose>
                   <xsl:when test="info/ovaldef/max_cvss &gt;= 0.0">
@@ -16488,7 +16484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="extra_text" select="'N/A'"/>
+                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Window')"/>
                     </xsl:call-template>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -16497,39 +16493,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <xsl:choose>
               <xsl:when test="info/ovaldef/raw_data/oval_definitions:definition/@deprecated != ''">
-              <td>Deprecated:</td>
+              <td><xsl:value-of select="gsa:i18n ('Deprecated', 'OVAL Definition Window')"/>:</td>
               <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@deprecated"/></td>
               </xsl:when>
               <xsl:otherwise />
               </xsl:choose>
             </tr>
             <tr>
-              <td>File:</td>
+              <td><xsl:value-of select="gsa:i18n ('File', 'OVAL Definition Window')"/>:</td>
               <td><xsl:value-of select="info/ovaldef/file"/></td>
             </tr>
           </table>
 
           <xsl:choose>
             <xsl:when test ="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description) > 0">
-              <h2>Description</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></h2>
               <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description"/>
             </xsl:when>
             <xsl:otherwise>
-              <h2>Description: None</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Description', 'Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
             </xsl:otherwise>
           </xsl:choose>
 
           <xsl:choose>
             <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected) > 0">
-              <h2>Affected</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition Window')"/></h2>
               <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected">
                 <h3>
-                <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if>Family: <xsl:value-of select="./@family"/>
+                <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if><xsl:value-of select="gsa:i18n ('Family', 'OVAL Definition Window')"/>: <xsl:value-of select="./@family"/>
                 </h3>
                 <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
-                  <td>Type</td>
-                  <td>Name</td>
+                  <td><xsl:value-of select="gsa:i18n ('Type', 'Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
                 </tr>
                 <xsl:for-each select="./*">
 
@@ -16542,29 +16538,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
-              <h2>Affected: None</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
             </xsl:otherwise>
           </xsl:choose>
 
           <xsl:choose>
             <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria) > 0">
-              <h2>Criteria</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition Window')"/></h2>
               <ul>
               <xsl:apply-templates select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria"/>
               </ul>
             </xsl:when>
             <xsl:otherwise>
-              <h2>Criteria: None</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
             </xsl:otherwise>
           </xsl:choose>
 
           <xsl:choose>
             <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference) > 0">
-              <h2>References</h2>
+              <h2><xsl:value-of select="gsa:i18n ('References', 'Window')"/></h2>
               <table class="gbntable" cellspacing="2" cellpadding="4">
                 <tr class="gbntablehead2">
-                  <td>Source</td>
-                  <td>Ref.ID</td>
+                  <td><xsl:value-of select="gsa:i18n ('Source', 'OVAL Definition Window')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Ref.ID', 'OVAL Definition Window')"/></td>
                   <td>URL</td>
                 </tr>
                 <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference">
@@ -16595,21 +16591,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </xsl:when>
             <xsl:otherwise>
-              <h2>References: None</h2>
+              <h2><xsl:value-of select="gsa:i18n ('References', 'Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
             </xsl:otherwise>
           </xsl:choose>
 
           <xsl:choose>
             <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository) > 0">
-            <h2>Repository history</h2>
+            <h2><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition Window')"/></h2>
             <p><b>Status: </b>
               <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:status"/>
             </p>
             <table class="gbntable" cellspacing="2" cellpadding="4">
               <tr class="gbntablehead2">
-                <td>Status</td>
-                <td>Date</td>
-                <td>Contributors</td>
+                <td><xsl:value-of select="gsa:i18n ('Status', 'Window')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Date', 'Window')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Contributors', 'OVAL Definition Window')"/></td>
               </tr>
               <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:dates/*">
 
@@ -16631,19 +16627,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </table>
             </xsl:when>
             <xsl:otherwise>
-              <h1>Repository history: None</h1>
+              <h1><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <h1>OVAL definition not found</h1>
-          No OVAL definition with the requested ID could be found in the SCAP database.
+          <h1><xsl:value-of select="gsa:i18n ('OVAL definition not found', 'OVAL Definition Window')"/></h1>
+          <xsl:value-of select="gsa:i18n ('No OVAL definition with the requested ID could be found in the SCAP database.', 'OVAL Definition Window')"/>
         </xsl:otherwise>
       </xsl:choose>
     </div>
   </div>
   <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for','Tag Window'),' &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
     <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>
@@ -16677,31 +16673,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">DFN-CERT Advisory Details
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisory Details', 'DFN-CERT Advisory')"/>
       <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}"
-        title="Help: DFN_CERT_ADV (DFN-CERT Advisory Details)">
+        title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details', 'DFN-CERT Advisory'),')')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
-        title="DFN-CERT Advisories" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="OVAL"/>
+        title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td>ID:</td>
+            <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
             <td>
               <xsl:value-of select="info/name"/>
             </td>
           </tr>
           <tr>
-            <td>Created:</td>
+            <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td>Last modified:</td>
+            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
           </tr>
         </table>
@@ -16711,23 +16707,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="info/dfn_cert_adv">
           <table>
             <tr>
-              <td valign="top"><b>Name:</b></td>
+              <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
               <td>
                 <b><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:refnum"/></b>
               </td>
             </tr>
             <tr>
-              <td valign="top">Title:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Window')"/>:</td>
               <td>
                 <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/>
               </td>
             </tr>
             <tr>
-              <td valign="top">Advisory&#160;link:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Advisory link', 'DFN-CERT Advisory Window')"/>:</td>
               <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
             </tr>
             <tr>
-              <td valign="top">Severity:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/>:</td>
               <td valign="top">
                 <xsl:choose>
                   <xsl:when test="info/dfn_cert_adv/max_cvss &gt;= 0.0">
@@ -16737,7 +16733,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="extra_text" select="'N/A'"/>
+                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Window')"/>
                     </xsl:call-template>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -16747,17 +16743,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:summary) > 0">
-              <h2>Summary</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/></h2>
               <p><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/></p>
             </xsl:when>
             <xsl:otherwise>
-              <h2>Summary: None</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
             </xsl:otherwise>
           </xsl:choose>
 
           <xsl:choose>
             <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']) > 0">
-              <h2>Other links:</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory Window')"/>:</h2>
               <ul>
               <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']">
                 <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
@@ -16771,7 +16767,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
-              <h2>Referenced CVEs</h2>
+              <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'DFN-CERT Advisory Window')"/></h2>
               <ul>
               <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
                 <li>
@@ -16784,19 +16780,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </ul>
             </xsl:when>
             <xsl:otherwise>
-            <h2>Referenced CVEs: None</h2>
+            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'DFN-CERT Advisory Window')"/>: None</h2>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <h1>DFN-CERT Advisory not found</h1>
-          No DFN-CERT advisory with the requested ID could be found in the CERT database.
+          <h1><xsl:value-of select="gsa:i18n ('DFN-CERT advisory not found', 'DFN-CERT Advisory Window')"/></h1>
+          <xsl:value-of select="gsa:i18n ('No DFN-CERT advisory with the requested ID could be found in the SCAP database.', 'DFN-CERT Advisory Window')"/>
         </xsl:otherwise>
       </xsl:choose>
     </div>
   </div>
   <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="title" select="concat('User Tags for &quot;',info/name,'&quot;:')"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for','Tag Window'),' &quot;',info/name,'&quot;:')"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
     <xsl:with-param name="tag_names" select="../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'info'"/>

@@ -1,3 +1,13 @@
+2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (ref_cert_list, ref_xref_list, info/cpe)
+	(info/cve, info/nvt, info/ovaldef, info/dfn_cert_adv, info/allinfo)
+	(cve-details, cpe-details, nvt-details, ovaldef-details)
+	(dfn_cert_adv-details): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for CVE, CPE,
+	OVAL Definition, DFN-CERT Advisory and general SecInfo pages.
+
 2014-03-12  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* doc/gsad.8: Fix issues raported by lintian.

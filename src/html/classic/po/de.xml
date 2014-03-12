@@ -2786,7 +2786,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
   </grp>
-
+  <!-- 3.7.5    List of references -->
+  <grp>
+    <ctxt>Reference List</ctxt>
+    <msg>
+      <id>Warning</id>
+      <str>Warnung</str>
+    </msg>
+    <msg>
+      <id>Other</id>
+      <str>Anderer</str>
+    </msg>
+  </grp>
 
   <!-- 3.8      CVEs -->
   <!-- 3.8.1    CVE type name and common strings -->
@@ -2834,6 +2845,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>CVE Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Published</id>
+      <str>Veröffentlicht</str>
+    </msg>
+
+    <msg>
+      <id>CWE ID</id>
+      <str>CWE-ID</str>
+    </msg>
+
+    <msg>
+      <id>CERT Advisories referencing this CVE</id>
+      <str>CERT-Advisories, die auf diese CVE verweisen</str>
+    </msg>
+    <msg>
+      <id>Unknown CERT type!</id>
+      <str>Unbekannter CERT-Typ!</str>
+    </msg>
+    <msg>
+      <id>Vulnerable products</id>
+      <str>Verwundbare Produkte</str>
+    </msg>
+    <msg>
+      <id>NVTs addressing this CVE</id>
+      <str>NVTs, die diese CVE ansprechen</str>
+    </msg>
+
+    <msg>
+      <id>This CVE was not found in the database.  This is not necessarily an error, because the CVE number might have been assigned for the issue, but the CVE not yet published.  Eventually the CVE content will appear in the database.</id>
+      <str>Diese CVE wurde nicht in der Datenbank gefunden.  Dies ist nicht unbedingt ein Fehler, da die CVE-Nummer dem Problem zugewiesen, aber die CVE noch nicht veröffentlicht sein kann.  Der CVE-Inhalt wird dann später in der Datenbank erscheinen.</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.8.4    CVE actions and properties - table rows only -->
@@ -2886,6 +2928,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>CPE Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>NVD ID</id>
+      <str>NVD-ID</str>
+    </msg>
+    <msg>
+      <id>Deprecated by</id>
+      <str>Veraltet durch</str>
+    </msg>
+
+    <msg>
+      <id>This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.</id>
+      <str>Diese CPE erscheint nicht im CPE Dictionary, aber es existieren Verweise von einer oder mehr CVEs.</str>
+    </msg>
+
+    <msg>
+      <id>Reported vulnerabilites</id>
+      <str>Gemeldete Schwachstellen</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.9.4    CPE actions and properties - table rows only -->
@@ -2937,7 +2997,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>OVAL Definition Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Name (OVAL ID)</id>
+      <str>Name (OVAL-ID)</str>
+    </msg>
+
+    <msg>
+      <id>Definition class</id>
+      <str>Definitions-Klasse</str>
+    </msg>
+    <msg>
+      <id>Class</id>
+      <str>Klasse</str>
+    </msg>
+    <msg>
+      <id>Deprecated</id>
+      <str>Veraltet</str>
+    </msg>
+
+    <msg>
+      <id>File</id>
+      <str>Datei</str>
+    </msg>
+
+    <msg>
+      <id>Affected</id>
+      <str>Betroffen</str>
+    </msg>
+    <msg>
+      <id>Family</id>
+      <str>Familie</str>
+    </msg>
+
+    <msg>
+      <id>Criteria</id>
+      <str>Kriterien</str>
+    </msg>
+
+    <msg>
+      <id>Source</id>
+      <str>Quelle</str>
+    </msg>
+    <msg>
+      <id>Ref.ID</id>
+      <str>Verw.-ID</str>
+    </msg>
+
+    <msg>
+      <id>Repository history</id>
+      <str>Repository-Verlauf</str>
+    </msg>
+    <msg>
+      <id>Contributors</id>
+      <str>Beitragende</str>
+    </msg>
+
+    <msg>
+      <id>OVAL definition not found</id>
+      <str>OVAL-Definition nicht gefunden</str>
+    </msg>
+    <msg>
+      <id>No OVAL definition with the requested ID could be found in the SCAP database.</id>
+      <str>Es wurde keine OVAL-Definition mit der gewünschten ID in der SCAP-Datenbank gefunden.</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Referenced CVEs</id>
+      <str>CVE-Verweise</str>
+    </msg>
   </grp>
   <!-- 3.10.4    OVAL Definition actions and properties - table rows only -->
   <grp>
@@ -2988,6 +3115,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>DFN-CERT Advisory Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Advisory link</id>
+      <str>Advisory-Link</str>
+    </msg>
+    <msg>
+      <id>Other links</id>
+      <str>Weitere Links</str>
+    </msg>
+
+    <msg>
+      <id>Referenced CVEs</id>
+      <str>CVE-Verweise</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.11.4    DFN-CERT Advisory actions and properties - table rows only -->
@@ -3042,6 +3182,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Info Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Last updated</id>
+      <str>Zuletzt aktualisiert</str>
+    </msg>
     <!-- - - References and reference actions - - -->
   </grp>
   <!-- 3.12.4    Info actions and properties - table rows only -->
