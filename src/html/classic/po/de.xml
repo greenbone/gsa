@@ -2761,6 +2761,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Hosts</str>
     </msg>
     <!-- - - Common actions - - -->
+    <msg>
+      <id>Host Details</id>
+      <str>Host-Details</str>
+    </msg>
     <!-- - - Common references - - -->
   </grp>
   <!-- 3.6.2    Host actions and properties - all views -->
@@ -2769,14 +2773,180 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Host Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Open Ports</id>
+      <str>Offene Ports</str>
+    </msg>
+    <msg>
+      <id>Open TCP Ports</id>
+      <str>Offene TCP-Ports</str>
+    </msg>
+    <msg>
+      <id>Open UDP Ports</id>
+      <str>Offene UDP-Ports</str>
+    </msg>
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Prognostic Report</id>
+      <str>Vorhersage-Bericht</str>
+    </msg>
+    <msg>
+      <id>No hosts available for Prognostic Report</id>
+      <str>Keine Hosts für Vorhersage-Bericht verfügbar</str>
+    </msg>
+    <msg>
+      <id>No SCAP data available for Prognostic Report</id>
+      <str>Keine SCAP-Daten für Vorhersage-Bericht verfügbar</str>
+    </msg>
+    <msg>
+      <id>No Apps detected for Prognostic Report</id>
+      <str>Keine Anwendungen für Vorhersage-Bericht erkannt</str>
+    </msg>
+    <msg>
+      <id>not finished</id>
+      <str>nicht abgeschlossen</str>
+    </msg>
+
+    <!-- OS icon -->
+    <msg>
+      <id>OS conflict</id>
+      <str>OS-Konflikt</str>
+    </msg>
+    <msg>
+      <id>No information on Operating System was gathered during scan.</id>
+      <str>Während des Scans wurden keine Informationen zum Betriebssystem gesammelt.</str>
+    </msg>
   </grp>
   <!-- 3.6.3    Host actions and properties - window / headers only -->
   <grp>
     <ctxt>Host Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
+    <msg>
+      <id>Host Filtering</id>
+      <str>Host-Filterung</str>
+    </msg>
+    <msg>
+      <id>Filtered Hosts</id>
+      <str>Gefilterte Hosts</str>
+    </msg>
+
+    <msg>
+      <id>OS</id>
+      <str>OS</str>
+    </msg>
+    <msg>
+      <id>Ports</id>
+      <str>Ports</str>
+    </msg>
+    <msg>
+      <id>#Apps short#</id>
+      <str>Anw.</str>
+    </msg>
+    <msg>
+      <id>Apps</id>
+      <str>Anwendungen</str>
+    </msg>
+    <msg>
+      <id>Detected Applications</id>
+      <str>Gefundene Anwendungen</str>
+    </msg>
+    <msg>
+      <id>Distance</id>
+      <str>Distanz</str>
+    </msg>
+    <msg>
+      <id>Prognosis</id>
+      <str>Vorhersage</str>
+    </msg>
+
+    <msg>
+      <id>Host Identification</id>
+      <str>Host-Identifizierung</str>
+    </msg>
+    <msg>
+      <id>Identifier</id>
+      <str>Bezeichner</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>Wert</str>
+    </msg>
+    <msg>
+      <id>Scanned IP</id>
+      <str>Gescannte IP</str>
+    </msg>
+    <msg>
+      <id>Hostname</id>
+      <str>Hostname</str>
+    </msg>
+    <msg>
+      <id>target definition</id>
+      <str>Ziel-Definition</str>
+    </msg>
+    <msg>
+      <id>reverse lookup</id>
+      <str>Invers-Lookup</str>
+    </msg>
+    <msg>
+      <id>WMI, Standalone</id>
+      <str>WMI, Standalone</str>
+    </msg>
+    <msg>
+      <id>WMI, Domain</id>
+      <str>WMI, Domain</str>
+    </msg>
+
+    <msg>
+      <id>Hardware</id>
+      <str>Hardware</str>
+    </msg>
+    <msg>
+      <id>Component</id>
+      <str>Komponente</str>
+    </msg>
+    <msg>
+      <id>Values</id>
+      <str>Werte</str>
+    </msg>
+    <msg>
+      <id>CPU</id>
+      <str>CPU</str>
+    </msg>
+    <msg>
+      <id>Memory</id>
+      <str>Speicher</str>
+    </msg>
+    <msg>
+      <id>Target-Interface</id>
+      <str>Ziel-Interface</str>
+    </msg>
+
+    <msg>
+      <id>Other MACs</id>
+      <str>Weitere MACs</str>
+    </msg>
+
+    <msg>
+      <id>Netinfo dump</id>
+      <str>Netinfo-Dump</str>
+    </msg>
+
+    <msg>
+      <id>Information not available</id>
+      <str>Informationen nicht verfügbar</str>
+    </msg>
+
     <!-- - - References and reference actions - - -->
+    <msg>
+      <id>0 hosts</id>
+      <str>0 Hosts</str>
+    </msg>
+
+    <msg>
+      <id>Last Report</id>
+      <str>Letzter Bericht</str>
+    </msg>
   </grp>
   <!-- 3.6.4    Host actions and properties - table rows only -->
   <grp>

@@ -1,3 +1,13 @@
+2014-03-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (assets): Add i18n.
+	(host): Add i18n. Rename last column of Apps column to "CVEs" and
+	add details parameter to links to ensure the list of CVEs is shown.
+	(os-icon, report [assets])
+	(get_reports_response/report/report [report-assets]): Add i18n.
+
+	* src/html/classic/po/de.xml: Add translations for host pages.
+
 2014-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [filterbox], report-image): Add i18n.
