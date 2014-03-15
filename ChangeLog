@@ -1,3 +1,8 @@
+2014-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [summary]): Skip Slave and Network
+	Source Interface fields if we don't know what they were.
+
 2014-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [summary]): Add Slave and Network

@@ -26202,21 +26202,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
               </td>
             </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Slave', 'Report Window')"/>:</td>
-              <td>
-                <xsl:if test="string-length (report/scan/task/slave/name) &gt; 0">
-                  <xsl:value-of select="report/scan/task/slave/name"/>
-                  (<xsl:value-of select="report/scan/task/slave/host"/>:<xsl:value-of select="report/scan/task/slave/port"/>)
-                </xsl:if>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Report Window')"/>:</td>
-              <td>
-                <xsl:value-of select="report/scan/task/preferences/preference[scanner_name='source_iface']/value"/>
-              </td>
-            </tr>
+            <xsl:if test="boolean (report/scan/task/slave)">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Slave', 'Report Window')"/>:</td>
+                <td>
+                  <xsl:if test="string-length (report/scan/task/slave/name) &gt; 0">
+                    <xsl:value-of select="report/scan/task/slave/name"/>
+                    (<xsl:value-of select="report/scan/task/slave/host"/>:<xsl:value-of select="report/scan/task/slave/port"/>)
+                  </xsl:if>
+                </td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="boolean (report/scan/task/preferences/preference[scanner_name='source_iface'])">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Report Window')"/>:</td>
+                <td>
+                  <xsl:value-of select="report/scan/task/preferences/preference[scanner_name='source_iface']/value"/>
+                </td>
+              </tr>
+            </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
       </table>
