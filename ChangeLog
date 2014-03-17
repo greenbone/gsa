@@ -1,3 +1,8 @@
+2014-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (task-icons): Check permission of the actual
+	operation being used, for the resume icon.
+
 2014-03-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/wizard.xsl: Add i18n contexts and missing i18n
