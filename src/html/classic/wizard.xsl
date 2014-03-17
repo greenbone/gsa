@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="name (..) = 'get_tasks'">
       <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Wizard">
+         title="{gsa:i18n ('Wizard', 'Wizard')}">
         <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
       </a>
     </xsl:when>
@@ -65,44 +65,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a name="wizard"></a>
   <table>
     <tr>
-      <td valign="top"><b><xsl:value-of select="gsa:i18n('Welcome dear new user!')"/></b>
+      <td valign="top"><b><xsl:value-of select="gsa:i18n('Welcome dear new user!', 'Task Wizard')"/></b>
         <p>
-          <xsl:value-of select="gsa:i18n('To explore this powerful application and to
-          have a quick start for doing things the first time,
-          I am here to assist you with some hints and short-cuts.')"/>
+          <xsl:value-of select="gsa:i18n('To explore this powerful application and to have a quick start for doing things the first time, I am here to assist you with some hints and short-cuts.', 'Task Wizard')"/>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n('I will appear automatically in areas where you have
-          created no or only a few objects. And disappear when you
-          have more than')"/>
+          <xsl:value-of select="gsa:i18n('I will appear automatically in areas where you have created no or only a few objects. And disappear when you have more than', 'Task Wizard')"/>
           <xsl:text> </xsl:text>
           <xsl:value-of select="../get_settings_response/setting[@id='20f3034c-e709-11e1-87e7-406186ea4fc5']/value"/>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('objects. You can call me with this
-          icon')"/>
+          <xsl:value-of select="gsa:i18n('objects. You can call me with this icon', 'Task Wizard')"/>
           <xsl:text> </xsl:text>
           <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Wizard">
+             title="{gsa:i18n ('Wizard', 'Wizard')}">
             <img src="img/wizard.png"/>
           </a>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('any time later on.')"/>
+          <xsl:value-of select="gsa:i18n('any time later on.', 'Task Wizard')"/>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n('For more detailed information
-          on functionality, please try the integrated help system. It is
-          always available as a context sensitive link as icon')"/>
+          <xsl:value-of select="gsa:i18n('For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon', 'Task Wizard')"/>
           <xsl:text> </xsl:text>
           <a href="/help/contents.html?token={/envelope/token}"
-             title="Help: Contents">
+             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Contents', 'Help'))}">
             <img src="/img/help.png"/>
           </a>.
         </p>
       </td>
       <td valign="top"><img src="img/enchantress.png"/></td>
-      <td valign="top"><b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address')"/> </b>
+      <td valign="top"><b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address', 'Task Wizard')"/> </b>
         <p>
-          <xsl:value-of select="gsa:i18n('IP address or hostname:')"/>
+          <xsl:value-of select="gsa:i18n('IP address or hostname:', 'Task Wizard')"/>
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="run_wizard"/>
@@ -114,34 +107,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="next" value="get_tasks"/>
             <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
-            <input type="submit" name="submit" value="Start Scan"/>
+            <input type="submit" name="submit" value="{gsa:i18n ('Start Scan', 'Task Wizard')}"/>
           </form>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:')"/>
+          <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:', 'Task Wizard')"/>
           <ol>
-            <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Start this scan task right away')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List', 'Task Wizard')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration', 'Task Wizard')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Start this scan task right away', 'Task Wizard')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress', 'Task Wizard')"/></li>
           </ol>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n('In fact, you must not lean back.
-          As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the link in the Reports Total column')"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('and review the results collected so far.')"/>
+          <xsl:value-of select="gsa:i18n('In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.', 'Task Wizard')"/>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n('By clicking the New Task icon')"/>
+          <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
           <xsl:text> </xsl:text>
           <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="New Task">
+            title="{gsa:i18n ('New Task', 'Task')}">
             <img src="/img/new.png" border="0"/>
           </a>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.')"/>
+          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.', 'Task Wizard')"/>
         </p>
       </td>
     </tr>
@@ -153,17 +142,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('Task Wizard')"/>
-    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="Help: Task Wizard">
+  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('Task Wizard', 'Task Wizard')"/>
+    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="New Task">
+       title="{gsa:i18n ('New Task', 'Task')}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Tasks" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tasks"/>
+       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
   </div>
   <div class="gb_window_part_content">

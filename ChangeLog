@@ -1,5 +1,13 @@
 2014-03-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/wizard.xsl: Add i18n contexts and missing i18n
+	function calls. Remove extra whitespaces to ensure matching of i18n.
+
+	* src/html/classic/po/de.xml: Adjust Task Wizard messages to new
+	formatting and add "Start Scan" message. Fix a typo and missing commas.
+
+2014-03-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsad.xsl (indicator, command_result_dialog): Add
 	TODO comments.
 

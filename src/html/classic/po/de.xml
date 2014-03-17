@@ -5984,24 +5984,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Willkommen neue Anwender!</str>
     </msg>
     <msg>
-      <id>
-        To explore this powerful application and to
-        have a quick start for doing things the first time,
-        I am here to assist you with some hints and short-cuts.
-      </id>
-      <str>
-        Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen
-        und um schnell erste Ergebnisse zu erzielen, helfe ich
-        mit Hinweisen und Abkürzungen.
-      </str>
+      <id>To explore this powerful application and to have a quick start for doing things the first time, I am here to assist you with some hints and short-cuts.</id>
+      <str>Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen und um schnell erste Ergebnisse zu erzielen, helfe ich mit Hinweisen und Abkürzungen.</str>
     </msg>
     <msg>
-      <id>I will appear automatically in areas where you have
-            created no or only a few objects. And disappear when you
-            have more than
-      </id>
-      <str>Ich erscheine automatisch dort wo noch keine oder nur wenige
-              Objekte vorliegen. Und verschwinde wieder wenn mehr als</str>
+      <id>I will appear automatically in areas where you have created no or only a few objects. And disappear when you have more than</id>
+      <str>Ich erscheine automatisch dort, wo noch keine oder nur wenige Objekte vorliegen. Und verschwinde wieder, wenn mehr als</str>
     </msg>
     <msg>
       <id>objects. You can call me with this icon</id>
@@ -6012,14 +6000,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>jederzeit wieder aktiviert werden.</str>
     </msg>
     <msg>
-      <id>For more detailed information
-            on functionality, please try the integrated help system. It is
-            always available as a context sensitive link as icon
-      </id>
-      <str>Für detaillierte Information zu den Funktionen steht das
-              integrierte Hilfe-System zur Verfügung. Diese steht jederzeit
-              kontext-bezogen über das Hilfe-Icon bereit:
-              </str>
+      <id>For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon</id>
+      <str>Für detaillierte Information zu den Funktionen steht das integrierte Hilfe-System zur Verfügung. Dieses steht jederzeit kontext-bezogen über das Hilfe-Icon bereit:</str>
     </msg>
     <msg>
       <id>Quick start: Immediately scan an IP address</id>
@@ -6028,6 +6010,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>IP address or hostname:</id>
       <str>IP-Adresse oder Hostname:</str>
+    </msg>
+    <msg>
+      <id>Start Scan</id>
+      <str>Scan starten</str>
     </msg>
     <msg>
       <id>For this short-cut I will do the following for you:</id>
@@ -6050,23 +6036,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</str>
     </msg>
     <msg>
-      <id>In fact, you must not lean back.
-            As soon as the scan progress is beyond 1%,
-            you can already jump into the scan report via the link in the name column</id>
-      <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
-              über 1% liegt kann man bereits in die Details des Scan-Berichts</str>
-    </msg>
-    <msg>
-      <id>and review the results collected so far.</id>
-      <str>springen</str>
+      <id>In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.</id>
+      <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt über 1% liegt kann man bereits über den Link in der Spalte "Berichte Gesamt" in die Details des Scan-Berichts springen und die bisher gesammelten Ergebisse einsehen.</str>
     </msg>
     <msg>
       <id>By clicking the New Task icon</id>
       <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
     </msg>
     <msg>
-      <id>you can also create a new Task yourself. However, you will also need a Target first, which you can create by going to the Targets page found in the Configuration menu and clicking the New Target icon</id>
-      <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt</str>
+      <id>you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.</id>
+      <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt.</str>
     </msg>
   </grp>
 </i18n>
