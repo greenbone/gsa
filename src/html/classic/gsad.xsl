@@ -93,6 +93,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<!-- TODO: Add i18n for fixed "Result of " string and $command -->
 <xsl:template name="indicator">
   <xsl:param name="status"/>
   <xsl:param name="status_text"/>
@@ -1879,6 +1880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- COMMON TEMPLATES -->
 
+<!-- TODO: Add i18n for fixed strings and $operation -->
 <xsl:template name="command_result_dialog">
   <xsl:param name="operation">(Operation description is missing)</xsl:param>
   <xsl:param name="status">(Status code is missing)</xsl:param>

@@ -27,6 +27,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+<!--
+  TODO:
+  - Reorganize to have a generic context for common commands like "Delete Task"
+     that can be used for status indicators.
+  - Create contexts for common commands like "Create ...", "Delete ...",
+     including adding a "Clone" context and command names only used
+     in status indicators.
+  - Reorganize some common properties like "username", "password" to reduce
+     redundancy.
+-->
+
 <i18n>
   <!-- 1. Common interface strings -->
   <!-- 1.1 Logo header (logged in user, JS info, response indicators)-->
@@ -1767,7 +1778,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Ultimate Delete Requested</id>
-      <str>Entgültiges Löschen Angefordert</str>
+      <str>Endgültiges Löschen Angefordert</str>
     </msg>
     <msg>
       <id>Done</id>

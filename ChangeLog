@@ -1,3 +1,11 @@
+2014-03-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (indicator, command_result_dialog): Add
+	TODO comments.
+
+	* src/html/classic/po/de.xml: Add TODO list and fix typo in translated
+	"Ultimate Delete Requested" message.
+
 2014-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [summary]): Skip Slave and Network
