@@ -7876,6 +7876,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_alert">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_alert_response"/>
   <xsl:call-template name="html-edit-alert-form">
     <xsl:with-param
       name="report-formats"
@@ -8774,6 +8775,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_filter">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_filter_response"/>
   <xsl:call-template name="html-edit-filter-form"/>
 </xsl:template>
 

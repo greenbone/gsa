@@ -5487,14 +5487,12 @@ edit_alert (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_alerts");
     }
 
-  xml = g_string_new ("");
+  xml = g_string_new ("<edit_alert>");
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-
-  edit = g_markup_printf_escaped ("<edit_alert>"
-                                  "<alert id=\"%s\"/>"
+  edit = g_markup_printf_escaped ("<alert id=\"%s\"/>"
                                   /* Page that follows. */
                                   "<next>%s</next>"
                                   /* Passthroughs. */
@@ -5553,7 +5551,7 @@ edit_alert (credentials_t * credentials, params_t *params,
 
       if (openvas_server_send (&session,
                               "<get_filters"
-                              " filter=\"type=report\"/>")
+                              " filter=\"type=result\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);

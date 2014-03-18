@@ -1,3 +1,15 @@
+2014-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch filters associated with alerts from "report" to "result".
+
+	* src/gsad_omp.c (edit_alert): Put the extra_xml inside the EDIT_ALERT,
+	like in the other pages.  Get result filters instead of report filters.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Add missing indicators.
+
+	* src/html/classic/omp.xsl (edit_alert, edit_filter): Match modify
+	responses.
+
 2014-03-18  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post-release version bump.
