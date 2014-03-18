@@ -1,3 +1,9 @@
+2014-03-18  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Prepare the 5.0+beta10 release.
+
+	* CHANGES: Updated
+
 2014-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task-icons): Check permission of the actual
