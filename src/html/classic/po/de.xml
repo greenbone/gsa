@@ -6000,6 +6000,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>jederzeit wieder aktiviert werden.</str>
     </msg>
     <msg>
+      <id>If you want help creating new scan tasks but also more options, you can select &quot;Advanced Task Wizard&quot; from the wizard selection menu at the top of this window where it currently says &quot;Task Wizard&quot; marked with a small arrow.</id>
+      <str>Wenn Sie Hilfe bei der Erstellung neuer Scanaufgaben aber auch mehr Optionen wünschen, können Sie &quot;Erweiterter Aufgaben-Wizard&quot; oben in diesem Fenster auswählen, wo momentan &quot;Aufgaben-Wizard&quot;, markiert mit einem kleinen Pfeil, steht.</str>
+    </msg>
+    <msg>
       <id>For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon</id>
       <str>Für detaillierte Information zu den Funktionen steht das integrierte Hilfe-System zur Verfügung. Dieses steht jederzeit kontext-bezogen über das Hilfe-Icon bereit:</str>
     </msg>
@@ -6046,6 +6050,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.</id>
       <str>kann man Aufgaben auch selbst erstellen. Hierfür wird jedoch auch ein Ziel benötigt, welches erstellt werden kann, indem man auf der Ziele-Seite aus den Konfigurations-Menü auf das Icon &quot;Neues Ziel&quot; klickt.</str>
+    </msg>
+  </grp>
+
+  <!-- Advanced Task Wizard -->
+  <grp>
+    <ctxt>Advanced Task Wizard</ctxt>
+    <msg>
+      <id>Advanced Task Wizard</id>
+      <str>Erweiterter Aufgaben-Wizard</str>
+    </msg>
+    <msg>
+      <id>I can help you by creating a new scan task and automatically starting it.</id>
+      <str>Ich kann Ihnen helfen, indem eine neue Scanaufgabe zu erstelle und sie automatisch starte.</str>
+    </msg>
+    <msg>
+      <id>All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.</id>
+      <str>Sie müssen hierfür nur einen Namen der neuen Aufgabe und die IP-Adresse oder den Hostnamen des Ziels eingeben, sowie eine Scan-Konfiguration wählen.</str>
+    </msg>
+    <msg>
+      <id>You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.</id>
+      <str>Sie können auswählen, ob ich den Scan sofort starten, den Scan für einen späteren Termin planen oder nur die Aufgabe erstellen soll, so dass Sie sie später manuell starten können.</str>
+    </msg>
+    <msg>
+      <id>In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.</id>
+      <str>Für einen authentifizierten Scan müssen sie SSH- und/oder SMB-Anmeldedaten auswählen, aber Sie können auch einen Scan ohne Authentifizierung laufen lassen, indem Sie keine Anmeldedaten auswählen.</str>
+    </msg>
+    <msg>
+      <id>If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.</id>
+      <str>Wenn Sie eine Email-Adresse in das Feld &quot;Email-Bericht an&quot; eintragen, wird ein Bericht des Scans an diese Adresse gesendet, sobald der Scan abschlossenen ist.</str>
+    </msg>
+    <msg>
+      <id>Finally, you can select a slave which will run the scan.</id>
+      <str>Schließlich können sie auch einen Slave wählen, auf dem der Scan laufen soll.</str>
+    </msg>
+
+    <msg>
+      <id>Quick start: Create a new task</id>
+      <str>Schnellstart: Neue Aufgabe erstellen</str>
+    </msg>
+    <msg>
+      <id>Task Name</id>
+      <str>Name der Aufgabe</str>
+    </msg>
+    <msg>
+      <id>Target Host(s)</id>
+      <str>Ziel-Host(s)</str>
+    </msg>
+    <msg>
+      <id>Start time</id>
+      <str>Startzeit</str>
+    </msg>
+    <msg>
+      <id>Start immediately</id>
+      <str>Sofort starten</str>
+    </msg>
+    <msg>
+      <id>Do not start automatically</id>
+      <str>Nicht automatisch starten</str>
+    </msg>
+    <msg>
+      <id>Email report to</id>
+      <str>Email-Bericht an</str>
     </msg>
   </grp>
 </i18n>

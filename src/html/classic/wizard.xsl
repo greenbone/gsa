@@ -84,6 +84,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:text> </xsl:text>
           <xsl:value-of select="gsa:i18n('any time later on.', 'Task Wizard')"/>
         </p>
+        <p><xsl:value-of select="gsa:i18n('If you want help creating new scan tasks but also more options, you can select &quot;Advanced Task Wizard&quot; from the wizard selection menu at the top of this window where it currently says &quot;Task Wizard&quot; marked with a small arrow.', 'Task Wizard')"/></p>
         <p>
           <xsl:value-of select="gsa:i18n('For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon', 'Task Wizard')"/>
           <xsl:text> </xsl:text>
@@ -143,7 +144,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('Task Wizard', 'Task Wizard')"/>
+  <div class="gb_window_part_center">
+    <xsl:call-template name="wizard_list">
+      <xsl:with-param name="title" select="'Task Wizard'"/>
+    </xsl:call-template>
+
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
     </a>
@@ -177,23 +182,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table>
       <tr>
         <td valign="top" rowspan="15" width="250px">
-          <p><xsl:value-of select="'I can help you by creating a new scan task and automatically starting it.'"/></p>
-          <p><xsl:value-of select="'All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.'"/></p>
-          <p><xsl:value-of select="'You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.'"/></p>
-          <p><xsl:value-of select="'In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.'"/>
-          <br/><xsl:value-of select="'If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.'"/><br/>
-          <xsl:value-of select="' Finally, you can select a slave which will run the scan.'"/></p>
+          <p><xsl:value-of select="gsa:i18n ('I can help you by creating a new scan task and automatically starting it.', 'Advanced Task Wizard')"/></p>
+          <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.', 'Advanced Task Wizard')"/></p>
+          <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
+          <p><xsl:value-of select="gsa:i18n ('In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.', 'Advanced Task Wizard')"/>
+          <br/><xsl:value-of select="gsa:i18n ('If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.', 'Advanced Task Wizard')"/><br/>
+          <xsl:value-of select="gsa:i18n ('Finally, you can select a slave which will run the scan.', 'Advanced Task Wizard')"/></p>
         </td>
         <td valign="center" rowspan="15">
           <img src="img/enchantress.png"/>
         </td>
         <td valign="top" colspan="2">
-          <b><xsl:value-of select="'Quick start: Create a new task'"/></b>
+          <b><xsl:value-of select="gsa:i18n ('Quick start: Create a new task', 'Advanced Task Wizard')"/></b>
         </td>
       </tr>
       <tr>
         <td width="125px">
-          <xsl:value-of select="'Task Name'"/>:
+          <xsl:value-of select="gsa:i18n ('Task Name', 'Advanced Task Wizard')"/>:
         </td>
         <td>
           <input type="text" name="event_data:task_name" value="New Quick Task" size="30" maxlength="80"/>
@@ -201,7 +206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="'Scan Config'"/>:
+          <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
         </td>
         <td>
           <select name="event_data:config_id">
@@ -220,7 +225,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="'Target Host(s)'"/>:
+          <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Advanced Task Wizard')"/>:
         </td>
         <td>
           <input type="text" name="event_data:target_hosts" value="" size="30" maxlength="80"/>
@@ -228,12 +233,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="'Start time'"/>:
+          <xsl:value-of select="gsa:i18n ('Start time', 'Advanced Task Wizard')"/>:
         </td>
         <td>
           <label>
             <input type="radio" name="event_data:auto_start" value="2" checked="1"/>
-            <xsl:value-of select="'Start immediately'"/>
+            <xsl:value-of select="gsa:i18n ('Start immediately', 'Advanced Task Wizard')"/>
           </label>
           <br/>
           <label>
@@ -597,14 +602,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <br/>
           <label>
             <input type="radio" name="event_data:auto_start" value="0"/>
-            <xsl:value-of select="'Do not start automatically'"/>
+            <xsl:value-of select="gsa:i18n ('Do not start automatically', 'Advanced Task Wizard')"/>
           </label>
         </td>
       </tr>
       <xsl:if test="../run_wizard_response/response/commands_response/get_lsc_credentials_response">
         <tr>
           <td>
-            <xsl:value-of select="'SSH Credential (optional):'"/>
+            <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:text>):</xsl:text>
           </td>
           <td>
             <select name="event_data:ssh_credential">
@@ -619,7 +627,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <xsl:value-of select="'SMB Credential (optional)'"/>:
+            <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:text>)</xsl:text>
           </td>
           <td>
             <select name="event_data:smb_credential">
@@ -633,7 +644,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <tr>
         <td>
-          <xsl:value-of select="'Email report to (optional):'"/>
+          <xsl:value-of select="gsa:i18n ('Email report to', 'Advanced Task Wizard')"/>
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+          <xsl:text>):</xsl:text>
         </td>
         <td>
           <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
@@ -641,7 +655,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="'Slave (optional)'"/>:
+          <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+          <xsl:text>):</xsl:text>
         </td>
         <td>
           <select name="event_data:slave_id">
@@ -654,7 +671,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td colspan="2" align="right">
-          <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task Wizard')}"/>
+          <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
         </td>
       </tr>
     </table>
@@ -667,7 +684,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('Advanced Task Wizard', 'Advanced Task Wizard')"/>
+  <div class="gb_window_part_center">
+    <xsl:call-template name="wizard_list">
+      <xsl:with-param name="title" select="'Advanced Task Wizard'"/>
+    </xsl:call-template>
+
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
     </a>
@@ -684,5 +705,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="quick-task-wizard"/>
   </div>
 </xsl:template>
+
+<xsl:template name="wizard_list">
+  <xsl:param name="title" select="'(Missing Title)'"/>
+
+  <div id="wizard_list">
+    <ul>
+      <li>
+        <a id="section_list_first"><xsl:value-of select="gsa:i18n($title, $title)"/></a>
+        <ul>
+          <li>
+            <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Task Wizard', 'Task Wizard')"/></a>
+          </li>
+          <li class="last">
+            <a href="/omp?cmd=wizard&amp;name=quick_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+</xsl:template>
+
 
 </xsl:stylesheet>

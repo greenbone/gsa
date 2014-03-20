@@ -1,5 +1,22 @@
 2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsa-style.css: Add styles for id wizard_list.
+
+	* src/html/classic/wizard.xsl (quick-first-scan-wizard): Describe
+	how to find Advanced Task Wizard (quick_task).
+	(wizard/quick_first_scan): Replace static window title with wizard
+	selection menu.
+	(quick-task-wizard): Add i18n.
+	(wizard/quick_task): Replace static window title with wizard
+	selection menu.
+	(wizard_list): New template: Menu to select wizards similar to the one
+	for report sections.
+
+	* src/html/classic/po/de.xml: Add translations for Advanced Task Wizard
+	and new paragraph in Task Wizard.
+
+2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (alert): Fix title text for filter link.
 	(alert [details]): Add missing spaces before Email report format.
 	(role [details]): Fix swapped i18n text and context.
