@@ -8010,7 +8010,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="gsa:may-op ('get_filters')">
-          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Table Row', 'Window')}">
+          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Table Row')}">
             <xsl:value-of select="filter/name"/>
           </a>
         </xsl:when>
@@ -8227,12 +8227,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           <xsl:value-of select="gsa:i18n ('Include report', 'Alert Window')"/>
                           <xsl:variable name="id"
                                         select="method/data[name='notice_report_format']/text()"/>
+                          <xsl:text> </xsl:text>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
                         <xsl:when test="method/data[name='notice']/text() = '2'">
                           <xsl:value-of select="gsa:i18n ('Attach report', 'Alert Window')"/>
                           <xsl:variable name="id"
                                         select="method/data[name='notice_attach_format']/text()"/>
+                          <xsl:text> </xsl:text>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -26607,7 +26609,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('Window', 'None')"/></h1>
+          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
         </xsl:when>
         <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
           <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role Window')"/>)</h1>
