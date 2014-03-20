@@ -18848,7 +18848,7 @@ save_auth_omp (credentials_t* credentials, params_t *params)
 char *
 wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  GString *xml, *init_response;
+  GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
@@ -18870,7 +18870,6 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   xml = g_string_new ("");
-  init_response = g_string_new ("");
   g_string_append_printf (xml,
                           "<wizard>%s<%s/>",
                           extra_xml ? extra_xml : "",
@@ -18886,7 +18885,6 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
       == -1)
     {
       g_string_free (xml, TRUE);
-      g_string_free (init_response, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18895,10 +18893,9 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
                            "/omp?cmd=get_tasks");
     }
 
-  if (read_string (&session, &init_response))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
-      g_string_free (init_response, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18908,16 +18905,6 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
                            " manager daemon.",
                            "/omp?cmd=get_tasks");
     }
-
-  /* ignore missing "init" mode */
-  if (strcmp (init_response->str,
-              "<run_wizard_response status=\"400\""
-              " status_text=\"Wizard mode not found: 'init'\"/>"))
-    {
-      xml_string_append (xml, init_response->str);
-    }
-
-  g_string_free (init_response, TRUE);
 
   /* Get the setting. */
 
