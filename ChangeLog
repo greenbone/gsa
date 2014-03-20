@@ -1,3 +1,11 @@
+2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (wizard): Try to get initial data for wizards
+	by running the wizard in "init" mode.
+
+	* src/html/classic/wizard.xsl: Update copyright and authors.
+	(quick-task-wizard, wizard/quick_task): New templates.
+
 2014-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch filters associated with alerts from "report" to "result".
