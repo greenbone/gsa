@@ -1749,7 +1749,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="notext"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
   <xsl:param name="threat"><xsl:value-of select="gsa:cvss-risk-factor($cvss)"/></xsl:param>
-  <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
+  <xsl:param name="title"><xsl:value-of select="gsa:i18n($threat, 'Severity')"/></xsl:param>
   <xsl:param name="scale">10</xsl:param>
 
   <xsl:variable name="fill">
@@ -24827,10 +24827,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <col/>
         <col width="100px"/>
         <tr class="gbntablehead2">
-          <td>Host</td>
-          <td>Ports</td>
-          <td>Distance</td>
-          <td>Severity</td>
+          <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Ports', 'Host Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Distance', 'Host Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/></td>
         </tr>
         <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>

@@ -1,5 +1,10 @@
 2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (severity-bar): Add i18n for default title.
+	(prognostic_hosts): Add i18n for table headers.
+
+2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsa-style.css: Add styles for id wizard_list.
 
 	* src/html/classic/wizard.xsl (quick-first-scan-wizard): Describe
