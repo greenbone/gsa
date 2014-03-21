@@ -852,7 +852,7 @@ init_validator ()
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP Service Ping|ARP Ping|ICMP & TCP Service Ping|ICMP & ARP Ping|TCP Service & ARP Ping|ICMP, TCP Service & ARP Ping)$");
+  openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP Service Ping|ARP Ping|ICMP & TCP Service Ping|ICMP & ARP Ping|TCP Service & ARP Ping|ICMP, TCP Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "attach_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "attach_type",  "^(agent|alert|config|cpe|cve|dfn_cert_adv|filter|group|lsc_credential|note|nvt|ovaldef|override|permission|port_list|report|report_format|result|schedule|slave|target|task|user)$");
   /* Defined in RFC 2253. */

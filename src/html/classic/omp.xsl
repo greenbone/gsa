@@ -9884,6 +9884,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="ICMP &amp; ARP Ping">ICMP &amp; ARP Ping</option>
                 <option value="TCP Service &amp; ARP Ping">TCP Service &amp; ARP Ping</option>
                 <option value="ICMP, TCP Service &amp; ARP Ping">ICMP, TCP Service &amp; ARP Ping</option>
+                <option value="Consider Alive">Consider Alive</option>
               </select>
             </td>
           </tr>
@@ -10553,6 +10554,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'ICMP, TCP Service &amp; ARP Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Consider Alive'"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
               </select>

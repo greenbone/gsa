@@ -1,4 +1,11 @@
-2014-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
+2014-03-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add Consider Alive to alive_tests.
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Add Consider Alive to alive test.
+
+2014-03-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_target_omp): Use xml_string_append for
 	CREATE_TARGET so that ampersands in ALIVE_TESTS are escaped.
