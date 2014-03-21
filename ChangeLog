@@ -1,3 +1,8 @@
+2014-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_target_omp): Use xml_string_append for
+	CREATE_TARGET so that ampersands in ALIVE_TESTS are escaped.
+
 2014-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (wizard): Remove now obsolete check for error message

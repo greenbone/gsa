@@ -6039,6 +6039,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar* comment_element = NULL;
   const char *username, *password;
   entity_t entity;
+  GString *xml;
 
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
@@ -6116,32 +6117,38 @@ create_target_omp (credentials_t * credentials, params_t *params)
 
   /* Create the target. */
 
+  xml = g_string_new ("");
+
+  xml_string_append (xml,
+                     "<name>%s</name>"
+                     "<hosts>%s</hosts>"
+                     "<exclude_hosts>%s</exclude_hosts>"
+                     "<reverse_lookup_only>%s</reverse_lookup_only>"
+                     "<reverse_lookup_unify>%s</reverse_lookup_unify>"
+                     "<port_list id=\"%s\"/>"
+                     "<alive_tests>%s</alive_tests>",
+                     name,
+                     (strcmp (source_element, "") == 0)
+                       ? ((strcmp (target_source, "file") == 0)
+                            ? params_value (params, "file")
+                            : hosts)
+                       : "",
+                     exclude_hosts ? exclude_hosts : "",
+                     reverse_lookup_only ? reverse_lookup_only : "0",
+                     reverse_lookup_unify ? reverse_lookup_unify : "0",
+                     port_list_id,
+                     alive_tests);
+
   command = g_strdup_printf ("<create_target>"
-                             "<name>%s</name>"
-                             "<hosts>%s</hosts>"
-                             "<exclude_hosts>%s</exclude_hosts>"
-                             "<reverse_lookup_only>%s</reverse_lookup_only>"
-                             "<reverse_lookup_unify>%s</reverse_lookup_unify>"
-                             "<port_list id=\"%s\"/>"
-                             "%s%s%s%s"
-                             "<alive_tests>%s</alive_tests>"
+                             "%s%s%s%s%s"
                              "</create_target>",
-                             name,
-                             (strcmp (source_element, "") == 0)
-                               ? ((strcmp (target_source, "file") == 0)
-                                    ? params_value (params, "file")
-                                    : hosts)
-                               : "",
-                             exclude_hosts ? exclude_hosts : "",
-                             reverse_lookup_only ? reverse_lookup_only : "0",
-                             reverse_lookup_unify ? reverse_lookup_unify : "0",
-                             port_list_id,
+                             xml->str,
                              comment_element,
                              source_element,
                              credentials_element,
-                             smb_credentials_element,
-                             alive_tests);
+                             smb_credentials_element);
 
+  g_string_free (xml, TRUE);
   g_free (comment_element);
   g_free (credentials_element);
   g_free (smb_credentials_element);
