@@ -1,5 +1,10 @@
 2014-03-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/po/de.xml: Move "Orphan" to make it available in
+	Tag table rows.
+
+2014-03-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Adjust tags pages to new OMP syntax that uses "resource" instead of
 	"attach" and "orphan" instead of "orphaned". Add markers for orphaned
 	tags and resources in trash. Make tags trash more consistent with

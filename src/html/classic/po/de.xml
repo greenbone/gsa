@@ -5014,6 +5014,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- - - Properties - - -->
     <msg>
+      <id>Orphan</id>
+      <str>Verwaist</str>
+    </msg>
+    <msg>
       <id>Value</id>
       <str>Wert</str>
     </msg>
@@ -5024,10 +5028,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Tag Window</ctxt>
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
-    <msg>
-      <id>Orphan</id>
-      <str>Verwaist</str>
-    </msg>
     <!-- - - References and reference actions - - -->
     <msg>
       <id>Attached to Resource</id>
