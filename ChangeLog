@@ -1,3 +1,40 @@
+2014-03-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Adjust tags pages to new OMP syntax that uses "resource" instead of
+	"attach" and "orphan" instead of "orphaned". Add markers for orphaned
+	tags and resources in trash. Make tags trash more consistent with
+	normal table.
+
+	* src/gsad_omp.c (get_one, get_many, get_nvts, get_task): Filter by
+	resource_type instead of attach_type when getting tag names.
+	(new_tag, create_tag_omp, save_tag_omp): Use new "resource" OMP syntax
+	for specifying resources instead of old the "attach" one and rename
+	parameters accordingly.
+	(get_report, get_result): Filter by resource_type instead of
+	attach_type when getting tag names.
+
+	* src/gsad.c (init_validator): Remove attach_type, rename attach_id
+	to resource_id, add SecInfo types to resource_type.
+
+	* src/html/classic/omp.xsl (user-tags-window-checked): Rename attach_id
+	and attach_type to resource_id and resource_type.
+	(tagged_resource_link): If the resource is in the trashcan, show name
+	without link and with "in trashcan" message.
+	(html-tags-table): Rename "Attach Type" and "Attach Name" to
+	"Resource Type" and "Resource Name".
+	(tag): Add "Orphan" to name if tag is orphaned. Use new OMP syntax for
+	get_tags.
+	(tag [details]): Apply new resource syntax and change "Attach" field
+	labels to their "Resource" equivalents.
+	(tag [trash]): Apply new resource syntax and show resource name with
+	link instead of ID if possible.
+	(tag_attach_types): Remove. Renamed to tag_resource_types.
+	(tag_resource_types): New. Renamed tag_attach_types.
+	(html-create-tag-form, html-edit-tag-form): Apply new resource syntax
+	and change "Attach" field labels to their "Resource" equivalents.
+
+	* src/html/classic/po/de.xml: Adjust label texts for tags.
+
 2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-roles-table): Correct replacement typo.

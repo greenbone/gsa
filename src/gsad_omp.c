@@ -903,7 +903,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_tags"
-                            " filter=\"attach_type=%s"
+                            " filter=\"resource_type=%s"
                             "          first=1"
                             "          rows=-1\""
                             " names_only=\"1\""
@@ -1243,7 +1243,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_tags"
-                                " filter=\"attach_type=%s"
+                                " filter=\"resource_type=%s"
                                 "          first=1"
                                 "          rows=-1\""
                                 " names_only=\"1\""
@@ -3231,7 +3231,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   if (openvas_server_sendf (&session,
                             "<get_tags"
-                            " filter=\"attach_type=nvt"
+                            " filter=\"resource_type=nvt"
                             "          first=1"
                             "          rows=-1\""
                             " names_only=\"1\""
@@ -3589,7 +3589,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   if (openvas_server_sendf (&session,
                             "<get_tags"
-                            " filter=\"attach_type=task"
+                            " filter=\"resource_type=task"
                             "          first=1"
                             "          rows=-1\""
                             " names_only=\"1\""
@@ -6645,10 +6645,10 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *attach_type, *attach_id, *tag_id, *tag_name;
+  const char *resource_type, *resource_id, *tag_id, *tag_name;
 
-  attach_type = params_value (params, "attach_type");
-  attach_id = params_value (params, "attach_id");
+  resource_type = params_value (params, "resource_type");
+  resource_id = params_value (params, "resource_id");
 
   tag_id = params_value (params, "tag_id");
   tag_name = params_value (params, "tag_name");
@@ -6675,18 +6675,18 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   g_string_append (xml, extra_xml);
 
   end = g_markup_printf_escaped ("<tag id=\"%s\"/>"
-                                 "<attach_type>%s</attach_type>"
-                                 "<attach_id>%s</attach_id>"
+                                 "<resource_type>%s</resource_type>"
+                                 "<resource_id>%s</resource_id>"
                                  "<tag_name>%s%s</tag_name>"
                                  "<tag_value></tag_value>"
                                  "<comment></comment>"
                                  "<active>1</active>"
                                  "</new_tag>",
                                  tag_id ? tag_id : "0",
-                                 attach_type ? attach_type : "",
-                                 attach_id ? attach_id : "",
-                                 tag_name ? tag_name : (attach_type
-                                                          ? attach_type
+                                 resource_type ? resource_type : "",
+                                 resource_id ? resource_id : "",
+                                 tag_name ? tag_name : (resource_type
+                                                          ? resource_type
                                                           : "default"),
                                  tag_name ? "" : ":unnamed");
   g_string_append (xml, end);
@@ -6723,21 +6723,21 @@ create_tag_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
   gchar *response;
-  const char *name, *comment, *value, *attach_type, *attach_id, *active;
+  const char *name, *comment, *value, *resource_type, *resource_id, *active;
   entity_t entity;
 
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
   value = params_value (params, "tag_value");
-  attach_type = params_value (params, "attach_type");
-  attach_id = params_value (params, "attach_id");
+  resource_type = params_value (params, "resource_type");
+  resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
   CHECK_PARAM (name, "Create Tag", new_tag)
   CHECK_PARAM (comment, "Create Tag", new_tag)
   CHECK_PARAM (value, "Create Tag", new_tag)
-  CHECK_PARAM (attach_type, "Create Tag", new_tag)
-  CHECK_PARAM (attach_id, "Create Tag", new_tag)
+  CHECK_PARAM (resource_type, "Create Tag", new_tag)
+  CHECK_PARAM (resource_id, "Create Tag", new_tag)
   CHECK_PARAM (active, "Create Tag", new_tag)
 
   response = NULL;
@@ -6749,17 +6749,16 @@ create_tag_omp (credentials_t *credentials, params_t *params)
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<value>%s</value>"
-                "<attach>"
+                "<resource id=\"%s\">"
                 "<type>%s</type>"
-                "<id>%s</id>"
-                "</attach>"
+                "</resource>"
                 "<active>%s</active>"
                 "</create_tag>",
                 name,
                 comment,
                 value,
-                attach_type,
-                attach_id,
+                resource_id,
+                resource_type,
                 active))
     {
       case 0:
@@ -6947,7 +6946,7 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *comment, *value, *attach_type, *attach_id, *active;
+  const char *name, *comment, *value, *resource_type, *resource_id, *active;
   const char *tag_id;
   entity_t entity;
   char* ret;
@@ -6956,16 +6955,16 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
   value = params_value (params, "tag_value");
-  attach_type = params_value (params, "attach_type");
-  attach_id = params_value (params, "attach_id");
+  resource_type = params_value (params, "resource_type");
+  resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
   CHECK_PARAM (tag_id, "Save Tag", edit_tag)
   CHECK_PARAM (name, "Save Tag", edit_tag)
   CHECK_PARAM (comment, "Save Tag", edit_tag)
   CHECK_PARAM (value, "Save Tag", edit_tag)
-  CHECK_PARAM (attach_type, "Save Tag", edit_tag)
-  CHECK_PARAM (attach_id, "Save Tag", edit_tag)
+  CHECK_PARAM (resource_type, "Save Tag", edit_tag)
+  CHECK_PARAM (resource_id, "Save Tag", edit_tag)
   CHECK_PARAM (active, "Save Tag", edit_tag)
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -6995,18 +6994,17 @@ save_tag_omp (credentials_t * credentials, params_t *params)
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<value>%s</value>"
-                "<attach>"
+                "<resource id=\"%s\">"
                 "<type>%s</type>"
-                "<id>%s</id>"
-                "</attach>"
+                "</resource>"
                 "<active>%s</active>"
                 "</modify_tag>",
                 tag_id,
                 name,
                 comment,
                 value,
-                attach_type,
-                attach_id,
+                resource_id,
+                resource_type,
                 active))
     {
       case 0:
@@ -10599,7 +10597,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (openvas_server_sendf (&session,
                                 "<get_tags"
-                                " filter=\"attach_type=report"
+                                " filter=\"resource_type=report"
                                 "          first=1"
                                 "          rows=-1\""
                                 " names_only=\"1\""
@@ -11024,7 +11022,7 @@ get_result (credentials_t *credentials, const char *result_id,
 
   if (openvas_server_sendf (&session,
                             "<get_tags"
-                            " filter=\"attach_type=result"
+                            " filter=\"resource_type=result"
                             "          first=1"
                             "          rows=-1\""
                             " names_only=\"1\""

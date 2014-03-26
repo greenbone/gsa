@@ -5025,41 +5025,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Actions - - -->
     <!-- - - Properties - - -->
     <msg>
-      <id>Orphaned</id>
+      <id>Orphan</id>
       <str>Verwaist</str>
     </msg>
     <!-- - - References and reference actions - - -->
     <msg>
-      <id>Attached to resource</id>
+      <id>Attached to Resource</id>
       <str>Angehängt an Ressource</str>
     </msg>
     <msg>
-      <id>Attached to resource type</id>
-      <str>Angehängt an Ressource - Typ</str>
+      <id>Resource Type</id>
+      <str>Ressourcen-Typ</str>
     </msg>
     <msg>
-      <id>Attached to resource ID</id>
-      <str>Angehängt an Ressource - ID</str>
+      <id>Resource ID</id>
+      <str>Ressourcen-ID</str>
     </msg>
     <msg>
-      <id>Attach Type</id>
-      <str>Anhang für Typ</str>
-    </msg>
-    <msg>
-      <id>Attach to Type</id>
-      <str>Anhang für Typ</str>
-    </msg>
-    <msg>
-      <id>Attach ID</id>
-      <str>Anhang für ID</str>
-    </msg>
-    <msg>
-      <id>Attach to ID</id>
-      <str>Anhang für ID</str>
-    </msg>
-    <msg>
-      <id>Attach Name</id>
-      <str>Anhang für Name</str>
+      <id>Resource Name</id>
+      <str>Ressourcen-Name</str>
     </msg>
   </grp>
   <!-- 3.23.4    Tag actions and properties - table rows only -->

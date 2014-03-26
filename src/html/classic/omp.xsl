@@ -1866,21 +1866,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
-            <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$resource_subtype != ''">
-            <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New Tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New Tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
@@ -1927,16 +1927,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="caller" value="{/envelope/caller}"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="create_tag"/>
-              <input type="hidden" name="attach_id" value="{$resource_id}"/>
+              <input type="hidden" name="resource_id" value="{$resource_id}"/>
               <xsl:choose>
                 <xsl:when test="$resource_subtype!=''">
-                  <input type="hidden" name="attach_type" value="{$resource_subtype}"/>
+                  <input type="hidden" name="resource_type" value="{$resource_subtype}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="hidden" name="attach_type" value="{$resource_type}"/>
+                  <input type="hidden" name="resource_type" value="{$resource_type}"/>
                 </xsl:otherwise>
               </xsl:choose>
-              <input type="hidden" name="attach_id" value="{$resource_id}"/>
+              <input type="hidden" name="resource_id" value="{$resource_id}"/>
               <input type="hidden" name="next" value="{$next}"/>
               <xsl:choose>
                 <xsl:when test="$resource_type='nvt'">
@@ -8826,11 +8826,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_type"/>
   <xsl:param name="resource_id"/>
   <xsl:param name="resource_name"/>
+  <xsl:param name="resource_location" select="0"/>
   <xsl:param name="token"/>
   <xsl:choose>
     <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='dfn_cert_adv'">
       <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_info')">
+        <xsl:when test="gsa:may-op ('get_info') and $resource_location = '0'">
           <a href="/omp?cmd=get_info&amp;info_type={$resource_type}&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
             <xsl:value-of select="$resource_name"/>
           </a>
@@ -8840,9 +8841,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
-    <xsl:when test="$resource_type='nvt'">
+    <xsl:when test="$resource_type='nvt' and not ($resource_location)">
       <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_nvts')">
+        <xsl:when test="gsa:may-op ('get_nvts') and $resource_location = '0'">
           <a href="/omp?cmd=get_nvts&amp;oid={$resource_id}&amp;details=1&amp;token={$token}">
             <xsl:value-of select="$resource_name"/>
           </a>
@@ -8852,7 +8853,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
-    <xsl:when test="gsa:may-op (concat ('get_', $resource_type, 's'))">
+    <xsl:when test="gsa:may-op (concat ('get_', $resource_type, 's')) and $resource_location = '0'">
       <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
         <xsl:value-of select="$resource_name"/>
       </a>
@@ -8860,6 +8861,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:value-of select="$resource_name"/>
     </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$resource_location != 0">
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>
+      <xsl:text>)</xsl:text>
+    </xsl:when>
+    <xsl:otherwise/>
   </xsl:choose>
 </xsl:template>
 
@@ -8914,10 +8923,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Active</name>
       </column>
       <column>
-        <name>Attach Type</name>
+        <name>Resource Type</name>
       </column>
       <column>
-        <name>Attach Name</name>
+        <name>Resource Name</name>
       </column>
       <column>
         <name>Modified</name>
@@ -8934,12 +8943,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="observers-icon">
         <xsl:with-param name="type" select="'Tag'"/>
       </xsl:call-template>
-      <b>
-        <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}"
-           title="{gsa:view_details_title ('Tag', name)}">
-          <xsl:value-of select="name"/>
-        </a>
-      </b>
+      <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}"
+          title="{gsa:view_details_title ('Tag', name)}">
+        <xsl:if test="orphan = 1"><b><xsl:value-of select="gsa:i18n ('Orphan', 'Tag Table Row')"/></b><br/></xsl:if>
+        <xsl:value-of select="name"/>
+      </a>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -8961,23 +8969,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/>
+      <xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="orphaned='0' and attach/name!=''">
+        <xsl:when test="orphan='0'">
           <xsl:call-template name="tagged_resource_link">
-            <xsl:with-param name="resource_type" select="attach/type"/>
-            <xsl:with-param name="resource_id" select="attach/id"/>
-            <xsl:with-param name="resource_name" select="attach/name"/>
+            <xsl:with-param name="resource_type" select="resource/type"/>
+            <xsl:with-param name="resource_id" select="resource/@id"/>
+            <xsl:with-param name="resource_name" select="resource/name"/>
+            <xsl:with-param name="resource_location" select="resource/trash"/>
             <xsl:with-param name="token" select="/envelope/token"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
+          <xsl:text> </xsl:text>
           <xsl:choose>
-            <xsl:when test="attach/id != ''">
-              <i> (ID: <xsl:value-of select="attach/id"/>)</i>
+            <xsl:when test="resource/@id != ''">
+              <i>(<xsl:value-of select="resource/@id"/>)</i>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -9044,14 +9054,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="value"/></td>
         </tr>
         <xsl:choose>
-          <xsl:when test="attach/name != '' and orphaned='0'">
+          <xsl:when test="resource/name != '' and orphan='0'">
             <tr>
-              <td><xsl:value-of select="gsa:i18n ('Attached to resource', 'Tag Window')"/>:</td>
+              <td><xsl:value-of select="gsa:i18n ('Attached to Resource', 'Tag Window')"/>:</td>
               <td>
                 <xsl:call-template name="tagged_resource_link">
-                  <xsl:with-param name="resource_type" select="attach/type"/>
-                  <xsl:with-param name="resource_id" select="attach/id"/>
-                  <xsl:with-param name="resource_name" select="attach/name"/>
+                  <xsl:with-param name="resource_type" select="resource/type"/>
+                  <xsl:with-param name="resource_id" select="resource/@id"/>
+                  <xsl:with-param name="resource_name" select="resource/name"/>
+                  <xsl:with-param name="resource_location" select="resource/trash"/>
                   <xsl:with-param name="token" select="/envelope/token"/>
                 </xsl:call-template>
               </td>
@@ -9059,12 +9070,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
         </xsl:choose>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Attached to resource type', 'Tag Window')"/>:</td>
-          <td><xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Tag Window')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/></td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Attached to resource ID', 'Tag Window')"/>:</td>
-          <td><xsl:value-of select="attach/id"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Tag Window')"/>:</td>
+          <td><xsl:value-of select="resource/@id"/></td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Active', 'Tag Window')"/>:</td>
@@ -9076,10 +9087,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Orphaned', 'Tag Window')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n ('Orphan', 'Tag Window')"/>:</td>
           <td>
             <xsl:choose>
-              <xsl:when test="orphaned = 0"><xsl:value-of select="gsa:i18n ('No', 'Window')"/></xsl:when>
+              <xsl:when test="orphan = 0"><xsl:value-of select="gsa:i18n ('No', 'Window')"/></xsl:when>
               <xsl:otherwise><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/></xsl:otherwise>
             </xsl:choose>
           </td>
@@ -9101,8 +9112,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td><xsl:value-of select="value"/></td>
-    <td><xsl:value-of select="gsa:i18n (gsa:type-name (attach/type), gsa:type-name (attach/type))"/></td>
-    <td><xsl:value-of select="attach/id"/></td>
+    <td><xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="orphan='0'">
+          <xsl:call-template name="tagged_resource_link">
+            <xsl:with-param name="resource_type" select="resource/type"/>
+            <xsl:with-param name="resource_id" select="resource/@id"/>
+            <xsl:with-param name="resource_name" select="resource/name"/>
+            <xsl:with-param name="resource_location" select="resource/trash"/>
+            <xsl:with-param name="token" select="/envelope/token"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('N/A', 'Table Row')"/>
+          <xsl:text> </xsl:text>
+          <xsl:choose>
+            <xsl:when test="resource/@id != ''">
+              <i>(<xsl:value-of select="resource/@id"/>)</i>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
@@ -9126,7 +9159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template name="tag_attach_types">
+<xsl:template name="tag_resource_types">
   <xsl:param name="select_type"/>
   <xsl:if test="$select_type = 'agent' or gsa:may-op ('get_agents')">
     <xsl:call-template name="opt">
@@ -9376,21 +9409,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to Type', 'Tag Window')"/></td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Tag Window')"/></td>
             <td>
-              <select name="attach_type">
-                <xsl:call-template name="tag_attach_types">
+              <select name="resource_type">
+                <xsl:call-template name="tag_resource_types">
                   <xsl:with-param name="select_type">
-                    <xsl:value-of select="attach_type"/>
+                    <xsl:value-of select="resource_type"/>
                   </xsl:with-param>
                 </xsl:call-template>
               </select>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
-              <input type="text" name="attach_id" value="{attach_id}" size="30"
+              <input type="text" name="resource_id" value="{resource_id}" size="30"
                          maxlength="80"/>
             </td>
           </tr>
@@ -9533,21 +9566,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to Type', 'Tag Window')"/></td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Tag Window')"/></td>
             <td>
-              <select name="attach_type">
-                <xsl:call-template name="tag_attach_types">
+              <select name="resource_type">
+                <xsl:call-template name="tag_resource_types">
                   <xsl:with-param name="select_type">
-                    <xsl:value-of select="get_tags_response/tag/attach/type"/>
+                    <xsl:value-of select="get_tags_response/tag/resource/type"/>
                   </xsl:with-param>
                 </xsl:call-template>
               </select>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Attach to ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Tag Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
-              <input type="text" name="attach_id" value="{get_tags_response/tag/attach/id}" size="30"
+              <input type="text" name="resource_id" value="{get_tags_response/tag/resource/@id}" size="30"
                          maxlength="80"/>
             </td>
           </tr>
@@ -27274,8 +27307,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Attach Type', 'Tag Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Attach ID', 'Tag Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Tag Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Tag Window')"/></td>
         <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="tag" mode="trash"/>
