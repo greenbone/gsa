@@ -1,3 +1,9 @@
+2014-03-26  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Prepare the 5.0+beta11 release.
+
+	* CHANGES: Updated
+
 2014-03-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (send_redirect_header): Provide the full url in the

@@ -1,3 +1,26 @@
+gsa 5.0+beta11 (2014-03-26)
+
+This is the eleventh beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set of
+OpenVAS Manager available through a web browser.
+
+This release adds a new role editor, extends the German translation as well as
+makes the interface more consistent with the commands available to the user.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Timo Pollmeier and Hani Benhabiles.
+
+Main changes since 5.0+beta10:
+* Adjust tags pages to new OMP syntax that uses "resource" instead of "attach"
+  and "orphan" instead of "orphaned". Add markers for orphaned tags and
+  resources in trash. Make tags trash more consistent with normal table.
+* Add creating of roles, and basis for deleting and editing roles.
+* Improvement to the wizard
+* Switch filters associated with alerts from "report" to "result".
+* More translations to German language.
+* Code cleanup.
+
+
 gsa 5.0+beta10 (2014-03-18)
 
 this is the tenth beta version of the upcoming 5.0 release of the Greenbone
