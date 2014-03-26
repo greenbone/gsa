@@ -1,5 +1,9 @@
 2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-roles-table): Correct replacement typo.
+
+2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add creating of roles, and basis for deleting and editing roles.
 
 	* src/gsad.c (init_validator, exec_omp_post): Add role commands.

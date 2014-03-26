@@ -26877,7 +26877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources-summary" select="roles"/>
     <xsl:with-param name="resources" select="role"/>
     <xsl:with-param name="count" select="count (role)"/>
-    <xsl:with-param name="roleed-count" select="role_count/roleed"/>
+    <xsl:with-param name="filtered-count" select="role_count/filtered"/>
     <xsl:with-param name="full-count" select="role_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
