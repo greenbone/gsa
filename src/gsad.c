@@ -2657,7 +2657,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
 {
   int ret;
   struct MHD_Response *response;
-  char *body;
+  char *body, *url, address[INET_ADDRSTRLEN];
 
   /* Some libmicrohttp versions get into an endless loop in https mode
      if an empty body is passed.  As a workaround and because it is
@@ -2672,7 +2672,14 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
   if (!response)
     return MHD_NO;
 
-  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, location);
+  inet_ntop (AF_INET, &gsad_address.sin_addr, address, sizeof (address));
+  if (!strcmp (address, "0.0.0.0"))
+    strcpy (address, "localhost");
+  url = g_strdup_printf ("http%s://%s:%d%s", use_secure_cookie ? "s": "",
+                         address, ntohs (gsad_address.sin_port), location);
+
+  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, url);
+  g_free (url);
   if (!ret)
     {
       MHD_destroy_response (response);
