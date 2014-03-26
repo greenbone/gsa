@@ -1,3 +1,8 @@
+2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): Get apply_overrides from the filter
+	if there is no "overrides" param.
+
 2014-02-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task): Pass override param for details icon, to

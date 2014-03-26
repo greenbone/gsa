@@ -2663,7 +2663,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="task" mode="details">
-  <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
+  <xsl:variable name="apply-overrides">
+    <xsl:choose>
+      <xsl:when test="boolean (/envelope/params/overrides)">
+        <xsl:value-of select="/envelope/params/overrides"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Get the value from the filter. -->
+        <xsl:variable name="value">
+          <xsl:for-each select="str:split(/envelope/params/filter, ' ')">
+            <xsl:if test="substring-before (., '=') = 'apply_overrides'">
+              <xsl:value-of select="substring-after (., '=')"/>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="string-length ($value) &gt; 0">
+            <xsl:value-of select="substring ($value, 1, 1)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            1
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
