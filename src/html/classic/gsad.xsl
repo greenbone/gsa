@@ -220,6 +220,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_role_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Role'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_schedule_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -1315,6 +1323,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="new_group/create_group_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_permission/create_permission_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="new_role/create_role_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_report_format/create_report_format_response"
                              mode="response-indicator"/>

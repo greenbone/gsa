@@ -1,3 +1,23 @@
+2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add creating of roles, and basis for deleting and editing roles.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add role commands.
+
+	* src/gsad_omp.c (new_role, new_role_omp, delete_role_omp)
+	(create_role_omp): New function.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/classic/gsad.xsl (create_role_response): New template.
+	(html-gsa-logo): Match Create Role indicator.
+
+	* src/html/classic/omp.xsl (list-window): Enable new icon for roles.
+	(html-create-role-form, new_role, html-edit-role-form, edit_role)
+	(create_role_response, delete_role_response, modify_role_response): New
+	templates.
+	(role): Enable clone icon.
+
 2014-03-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add Consider Alive to alive_tests.

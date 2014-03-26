@@ -3930,7 +3930,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="wizard-icon"/>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="$type = 'role'"/>
         <xsl:when test="$type = 'report'"/>
         <xsl:when test="$type = 'info'"/>
         <xsl:when test="$new-icon">
@@ -26502,7 +26501,197 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN ROLES MANAGEMENT -->
 
+<!-- NEW_ROLE -->
+
+<xsl:template name="html-create-role-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Role
+      <a href="/help/new_role.html?token={/envelope/token}"
+         title="Help: New Role">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_roles&amp;role={/envelope/params/role}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Roles" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Roles"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_role"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="role_id" value="{/envelope/params/role_id}"/>
+        <input type="hidden" name="role" value="{/envelope/params/role}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Users</td>
+            <td>
+              <input type="text" name="users" size="30" maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Role"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_role">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_role_response"/>
+  <xsl:apply-templates select="create_role_response"/>
+  <xsl:call-template name="html-create-role-form"/>
+</xsl:template>
+
+<!--     EDIT_ROLE -->
+
+<xsl:template name="html-edit-role-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Role
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Role'"/>
+        <xsl:with-param name="type" select="'role'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_roles_response/role/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_role"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="role_id"
+               value="{commands_response/get_roles_response/role/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="role" value="{/envelope/params/role}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text"
+                     name="name"
+                     value="{commands_response/get_roles_response/role/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_roles_response/role/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Term</td>
+            <td>
+              <input type="text" name="term"
+                     value="{commands_response/get_roles_response/role/term}"
+                     size="50"
+                     maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <xsl:variable name="type">
+                  <xsl:value-of select="commands_response/get_roles_response/role/type"/>
+                </xsl:variable>
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Role|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
+                  <xsl:choose>
+                    <xsl:when test=". = $type">
+                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{.}"><xsl:value-of select="."/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Role"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_role">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-role-form"/>
+</xsl:template>
+
+<!--     GET_ROLE AND GET_ROLES -->
+
 <xsl:template match="roles">
+</xsl:template>
+
+<xsl:template match="create_role_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Role</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_role_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Delete Role</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_role_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Role</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="role">
@@ -26534,7 +26723,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noedit" select="1"/>
         <xsl:with-param name="notrash" select="1"/>
-        <xsl:with-param name="noclone" select="1"/>
       </xsl:call-template>
     </td>
   </tr>

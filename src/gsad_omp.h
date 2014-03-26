@@ -242,12 +242,18 @@ char * export_port_lists_omp (credentials_t *, params_t *, enum content_type *,
                               char **, gsize *);
 char * import_port_list_omp (credentials_t *, params_t *);
 
+char * create_role_omp (credentials_t *, params_t *);
+char * delete_role_omp (credentials_t *, params_t *);
+char * delete_trash_role_omp (credentials_t *, params_t *);
+char * edit_role_omp (credentials_t *, params_t *);
 char * export_role_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *);
 char * export_roles_omp (credentials_t *, params_t *, enum content_type *,
                            char **, gsize *);
 char * get_role_omp (credentials_t *, params_t *);
 char * get_roles_omp (credentials_t *, params_t *);
+char * new_role_omp (credentials_t *, params_t *);
+char * save_role_omp (credentials_t *, params_t *);
 
 char * get_overrides_omp (credentials_t *, params_t *);
 char * get_override_omp (credentials_t *, params_t *);

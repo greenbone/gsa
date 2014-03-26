@@ -631,6 +631,7 @@ init_validator ()
                          "|(create_port_list)"
                          "|(create_port_range)"
                          "|(create_report)"
+                         "|(create_role)"
                          "|(create_schedule)"
                          "|(create_slave)"
                          "|(create_tag)"
@@ -651,6 +652,7 @@ init_validator ()
                          "|(delete_port_range)"
                          "|(delete_report)"
                          "|(delete_report_format)"
+                         "|(delete_role)"
                          "|(delete_schedule)"
                          "|(delete_slave)"
                          "|(delete_tag)"
@@ -803,6 +805,7 @@ init_validator ()
                          "|(new_permission)"
                          "|(new_port_list)"
                          "|(new_report_format)"
+                         "|(new_role)"
                          "|(new_slave)"
                          "|(new_schedule)"
                          "|(new_tag)"
@@ -1832,6 +1835,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_report)
   ELSE (create_task)
   ELSE (create_user)
+  ELSE (create_role)
   ELSE (create_schedule)
   ELSE (create_slave)
   ELSE (create_tag)
@@ -1852,6 +1856,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_port_range)
   ELSE (delete_report)
   ELSE (delete_report_format)
+  ELSE (delete_role)
   ELSE (delete_schedule)
   ELSE (delete_slave)
   ELSE (delete_user)
@@ -2141,6 +2146,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_user)
   ELSE (new_alert)
   ELSE (new_group)
+  ELSE (new_role)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_agent)
