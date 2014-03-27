@@ -1,3 +1,20 @@
+2014-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Complete deleting of roles.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add delete_trash_role.
+
+	* src/gsad_omp.c (get_trash): Add roles.
+	(delete_trash_role_omp): New function.
+
+	* src/html/classic/gsad.xsl (delete_role_response): New template.
+	(html-gsa-logo): Match delete indicators.
+
+	* src/html/classic/omp.xsl (role): Enable trash icon.
+	(role [details]): Enable new icon.
+	(html-roles-table): Update icon count.
+	(get_trash): Add roles.
+
 2014-03-27  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/help.xsl: Fix mispelling of 'beta12'

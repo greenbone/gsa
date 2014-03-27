@@ -14006,6 +14006,8 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
   GET_TRASH_RESOURCE ("GET_REPORT_FORMATS", "get_report_formats",
                       "report formats");
 
+  GET_TRASH_RESOURCE ("GET_ROLES", "get_roles", "roles");
+
   GET_TRASH_RESOURCE ("GET_SCHEDULES", "get_schedules", "schedules");
 
   GET_TRASH_RESOURCE ("GET_SLAVES", "get_slaves", "slaves");
@@ -16573,6 +16575,20 @@ char *
 new_role_omp (credentials_t *credentials, params_t *params)
 {
   return new_role (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete a role from trash, get all roles, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_role_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("role", credentials, params, 1, get_trash);
 }
 
 /**

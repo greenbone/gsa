@@ -669,6 +669,7 @@ init_validator ()
                          "|(delete_trash_permission)"
                          "|(delete_trash_port_list)"
                          "|(delete_trash_report_format)"
+                         "|(delete_trash_role)"
                          "|(delete_trash_schedule)"
                          "|(delete_trash_slave)"
                          "|(delete_trash_tag)"
@@ -1872,6 +1873,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_permission)
   ELSE (delete_trash_port_list)
   ELSE (delete_trash_report_format)
+  ELSE (delete_trash_role)
   ELSE (delete_trash_schedule)
   ELSE (delete_trash_slave)
   ELSE (delete_trash_tag)

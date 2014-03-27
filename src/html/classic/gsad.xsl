@@ -372,6 +372,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="delete_role_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Role'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="delete_schedule_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -1148,7 +1156,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/modify_tag_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_role/delete_role_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_roles/create_filter_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_roles/delete_role_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_schedule/commands_response/delete_schedule_response"
                              mode="response-indicator"/>
@@ -1276,11 +1288,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_lsc_credential_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_group_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_note_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_override_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_role_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_schedule_response"
                              mode="response-indicator"/>

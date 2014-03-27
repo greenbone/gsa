@@ -26755,7 +26755,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'role'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noedit" select="1"/>
-        <xsl:with-param name="notrash" select="1"/>
       </xsl:call-template>
     </td>
   </tr>
@@ -26813,7 +26812,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
         <xsl:with-param name="noedit" select="1"/>
-        <xsl:with-param name="nonew" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -26917,7 +26915,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Name</name>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="1"/>
+    <xsl:with-param name="icon-count" select="3"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -27367,6 +27365,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_permission_response"/>
   <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
+  <xsl:apply-templates select="delete_role_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
   <xsl:apply-templates select="delete_slave_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
@@ -27470,6 +27469,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <item>
               <type>report_format</type>
               <count><xsl:value-of select="count(get_report_formats_response/report_format)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
+            <item>
+              <type>role</type>
+              <count><xsl:value-of select="count(get_roles_response/role)"/></count>
             </item>
           </xsl:if>
           <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
@@ -27607,6 +27612,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_report_formats_response the current node. -->
         <xsl:for-each select="get_report_formats_response">
           <xsl:call-template name="html-report-formats-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
+        <a name="roles"></a>
+        <h1><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></h1>
+        <!-- The for-each makes the get_roles_response the current node. -->
+        <xsl:for-each select="get_roles_response">
+          <xsl:call-template name="html-roles-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 
