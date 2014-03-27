@@ -1,3 +1,7 @@
+2014-03-27  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/help.xsl: Fix mispelling of 'beta12'
+
 2014-03-26  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post release version bump.
