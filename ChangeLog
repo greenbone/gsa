@@ -1,5 +1,12 @@
 2014-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_role_omp): Use new style.
+
+	* src/html/classic/omp.xsl (html-create-role-form): Add next and remove
+	role params.
+
+2014-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Complete deleting of roles.
 
 	* src/gsad.c (init_validator, exec_omp_post): Add delete_trash_role.

@@ -26555,8 +26555,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_role"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
-        <input type="hidden" name="role_id" value="{/envelope/params/role_id}"/>
-        <input type="hidden" name="role" value="{/envelope/params/role}"/>
+        <input type="hidden" name="next" value="get_role"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name

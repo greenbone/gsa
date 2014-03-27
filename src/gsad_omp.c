@@ -16616,27 +16616,10 @@ delete_role_omp (credentials_t * credentials, params_t *params)
 char *
 create_role_omp (credentials_t *credentials, params_t *params)
 {
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *response;
-  const char *name, *comment, *users, *role_id;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new role. "
-                             "No new role was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_roles");
-    }
+  char *ret;
+  gchar *response;
+  const char *name, *comment, *users;
+  entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -16646,92 +16629,57 @@ create_role_omp (credentials_t *credentials, params_t *params)
   CHECK_PARAM (comment, "Create Role", new_role);
   CHECK_PARAM (users, "Create Role", new_role);
 
-  // FIX use ompf?
-  {
-    int ret;
-    const char *status;
-    entity_t entity;
-
-    /* Create the role. */
-
-    ret = openvas_server_sendf (&session,
-                                "<create_role>"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "<users>%s</users>"
-                                "</create_role>",
-                                name,
-                                comment,
-                                users);
-
-    if (ret == -1)
-      {
-        openvas_server_close (socket, session);
+  response = NULL;
+  entity = NULL;
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_role>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<users>%s</users>"
+                "</create_role>",
+                name,
+                comment,
+                users))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "No new role was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_roles");
-      }
-
-    entity = NULL;
-    if (read_entity_and_text (&session, &entity, &response))
-      {
-        openvas_server_close (socket, session);
+                             "/omp?cmd=get_targets");
+      case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_roles");
-      }
-
-    status = entity_attribute (entity, "status");
-    if ((status == NULL)
-        || (strlen (status) == 0))
-      {
-        openvas_server_close (socket, session);
+      default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "Diagnostics: Internal Error.",
                              "/omp?cmd=get_roles");
-      }
+    }
 
-    if (status[0] != '2')
-      {
-        openvas_server_close (socket, session);
-        html = next_page (credentials, params, response);
-        if (html == NULL)
-          html = new_role (credentials, params, response);
-        g_free (response);
-        free_entity (entity);
-        return html;
-      }
-
-    role_id = params_value (params, "role_id");
-    if (role_id && strcmp (role_id, "0"))
-      {
-        gchar *ret;
-        openvas_server_close (socket, session);
-        ret = get_role (credentials, params, response);
-        g_free (response);
-        free_entity (entity);
-        return ret;
-      }
-
-    free_entity (entity);
-  }
-
-  openvas_server_close (socket, session);
-
-  html = next_page (credentials, params, response);
-  if (html == NULL)
-    html = get_roles (credentials, params, response);
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_roles (credentials, params, response);
+    }
+  else
+    ret = new_role (credentials, params, response);
+  free_entity (entity);
   g_free (response);
-  return html;
+  return ret;
 }
 
 /**
