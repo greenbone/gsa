@@ -1,3 +1,9 @@
+2014-03-28  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Prepare release of gsa 5.0+beta12 release
+
+	* CHANGES: Update
+
 2014-03-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (send_redirect_header): Use the Host header from the client
