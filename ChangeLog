@@ -1,3 +1,9 @@
+2014-03-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (send_redirect_header): Use the Host header from the client
+	request to determine the Location response header value. Drop back to
+	relative if not provided.
+
 2014-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_role_omp): Use new style.
