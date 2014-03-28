@@ -844,6 +844,49 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_%s>", type);
 
+  if (strcmp (type, "role") == 0
+      && command_enabled (credentials, "GET_PERMISSIONS")
+      && params_value (params, "role_id"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (ompf (credentials, &response, &entity,
+                    "<get_permissions"
+                    " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
+                    params_value (params, "role_id")))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting permissions. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_roles");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting permissions. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_roles");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting permissins. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_roles");
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   /* Pass through params for get_resources. */
   filter = params_value (params, "filter");
   first = params_value (params, "first");
@@ -16695,56 +16738,7 @@ static char *
 get_role (credentials_t * credentials, params_t *params,
           const char *extra_xml)
 {
-  gchar *html;
-  GString *extra;
-
-  extra = g_string_new ("");
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  if (command_enabled (credentials, "GET_PERMISSIONS")
-      && params_value (params, "role_id"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (ompf (credentials, &response, &entity,
-                    "<get_permissions"
-                    " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
-                    params_value (params, "role_id")))
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissions. "
-                                 "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles");
-          case 2:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissions. "
-                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles");
-          default:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissins. "
-                                 "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles");
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-  html = get_one ("role", credentials, params, extra->str, NULL);
-  g_string_free (extra, TRUE);
-  return html;
+  return get_one ("role", credentials, params, extra_xml, NULL);
 }
 
 /**
