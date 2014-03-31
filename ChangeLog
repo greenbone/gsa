@@ -1,3 +1,22 @@
+2014-03-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Replace the "Observer" fields on the task details page with a table
+	with all permissions applying to the task.
+
+	* src/gsad_omp.c (get_task): Add permissions for the task to response.
+	(delete_permission_omp): Change get to NULL to allow setting the next
+	page with the parameter "next".
+	(create_permission_omp): Add selection of subject by subject_name
+	parameter.
+
+	* src/gsad_omp.c (init_validator): Add subject_name as alias for name.
+
+	* src/html/classic/omp.xsl (resource-permissions-window): New template.
+	(task [details]): Remove "Observer" and "Observer Group" fields.
+	Add window with table of permissions.
+
+	* src/html/classic/po/de.xml: Add messages for new permissions window.
+
 2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Add logger for libmicrohttpd errors.

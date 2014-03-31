@@ -3661,6 +3661,43 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                            "/omp?cmd=get_resources");
     }
 
+  /* Get permissions */
+
+  g_string_append (xml, "<permissions>");
+
+  if (openvas_server_sendf (&session,
+                            "<get_permissions"
+                            " filter=\"name=get_tasks and resource_uuid=%s"
+                            "          or name=get_tasks and resource_uuid= "
+                            "          or name=Everything\""
+                            "/>",
+                            task_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting permissions list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag names list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  g_string_append (xml, "</permissions>");
+
   g_string_append (xml, "</get_task>");
 
   openvas_server_close (socket, session);
@@ -15499,8 +15536,7 @@ delete_trash_permission_omp (credentials_t * credentials, params_t *params)
 char *
 delete_permission_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("permission", credentials, params, 0,
-                          get_permissions);
+  return delete_resource ("permission", credentials, params, 0, NULL);
 }
 
 /**
@@ -15679,20 +15715,88 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   int ret;
   gchar *html, *response;
   const char *name, *comment, *resource_id;
-  const char *subject_id, *subject_type;
+  const char *subject_id, *subject_type, *subject_name;
   entity_t entity;
+
+  gchar *subject_response;
+  entity_t get_subject_entity = NULL;
+  entity_t subject_entity;
 
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
   subject_type = params_value (params, "subject_type");
+  subject_name = params_value (params, "subject_name");
 
   CHECK_PARAM (name, "Create Permission", new_permission);
   CHECK_PARAM (comment, "Create Permission", new_permission);
   CHECK_PARAM (resource_id, "Create Permission", new_permission);
   CHECK_PARAM (subject_type, "Create Permission", new_permission);
 
-  if (strcmp (subject_type, "user") == 0)
+  if (params_given (params, "subject_name"))
+    {
+      CHECK_PARAM (subject_name, "Create Permission", new_permission);
+      subject_id = NULL;
+      ret = ompf (credentials,
+                  &subject_response,
+                  &get_subject_entity,
+                  "<get_%ss filter=\"rows=1 name=%s\">"
+                  "</get_%ss>",
+                  subject_type,
+                  subject_name,
+                  subject_type);
+
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to send command"
+                                " to manager daemon.",
+                                "/omp?cmd=get_permissions");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to receive response"
+                                " from manager daemon.",
+                                "/omp?cmd=get_permissions");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_permissions");
+        }
+
+      subject_entity = entity_child (get_subject_entity, subject_type);
+
+      if (subject_entity)
+        subject_id = entity_attribute (subject_entity, "id");
+
+      if (subject_id == NULL)
+        {
+          gchar *msg;
+          msg = g_strdup_printf ("<gsad_msg status_text=\"Subject not found\""
+                                 "          operation=\"create_permission\">"
+                                 "Could not find a %s with name '%s'."
+                                 "</gsad_msg>",
+                                 subject_type,
+                                 subject_name ? subject_name : "");
+          return next_page (credentials, params, msg);
+        }
+    }
+  else if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
   else if (strcmp (subject_type, "group") == 0)
     subject_id = params_value (params, "group_id");
@@ -15720,6 +15824,9 @@ create_permission_omp (credentials_t *credentials, params_t *params)
               resource_id,
               subject_id,
               subject_type);
+
+  if (get_subject_entity)
+    free_entity (get_subject_entity);
 
   switch (ret)
     {

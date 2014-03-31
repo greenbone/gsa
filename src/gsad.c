@@ -1129,6 +1129,7 @@ init_validator ()
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
+  openvas_validator_alias (validator, "subject_name",   "name");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
   openvas_validator_alias (validator, "task_filter",  "filter");
