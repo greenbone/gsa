@@ -1,3 +1,11 @@
+2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport 18346.
+
+	* src/gsad.c (main): Add --gnutls-priorities option with NORMAL as
+	default value. Add MHD_OPTION_HTTPS_PRIORITIES to MHD_start_daemon calls
+	accordingly.
+
 2014-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task [details]): Get apply_overrides from the filter

@@ -3481,6 +3481,7 @@ main (int argc, char **argv)
   static gchar *gsad_manager_port_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
+  static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
   GError *error = NULL;
   GOptionContext *option_context;
@@ -3540,6 +3541,9 @@ main (int argc, char **argv)
     {"debug-tls", 0,
      0, G_OPTION_ARG_INT, &debug_tls,
      "Enable TLS debugging at <level>", "<level>"},
+    {"gnutls-priorities", '\0',
+     0, G_OPTION_ARG_STRING, &gnutls_priorities,
+     "GnuTLS priorities string.", "<string>"},
     {NULL}
   };
 
@@ -3926,6 +3930,8 @@ main (int argc, char **argv)
                               MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
                               MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
                               MHD_OPTION_SOCK_ADDR, &gsad_address,
+                              MHD_OPTION_HTTPS_PRIORITIES,
+                              gnutls_priorities,
                               /* End marker option. */
                               MHD_OPTION_END);
 
@@ -3963,6 +3969,8 @@ main (int argc, char **argv)
                                   MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
                                   MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
                                   MHD_OPTION_SOCK_ADDR, &gsad_address,
+                                  MHD_OPTION_HTTPS_PRIORITIES,
+                                  gnutls_priorities,
                                   /* End marker option. */
                                   MHD_OPTION_END);
             }
