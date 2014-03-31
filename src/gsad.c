@@ -3975,6 +3975,15 @@ register_signal_handlers ()
   return 0;
 }
 
+static void
+mhd_logger (void *arg, const char *fmt, va_list ap)
+{
+  char buf[1024];
+  vsnprintf (buf, sizeof (buf), fmt, ap);
+  va_end (ap);
+  g_warning ("MHD: %s\n", buf);
+}
+
 /**
  * @brief Main routine of Greenbone Security Assistant daemon.
  *
@@ -4278,7 +4287,9 @@ main (int argc, char **argv)
       gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
                                       gsad_redirect_port, NULL, NULL, &redirect_handler,
                                       NULL, MHD_OPTION_NOTIFY_COMPLETED,
-                                      free_resources, NULL, MHD_OPTION_END);
+                                      MHD_OPTION_EXTERNAL_LOGGER, mhd_logger,
+                                      NULL, free_resources, NULL,
+                                      MHD_OPTION_END);
 
       if (gsad_daemon == NULL)
         {
@@ -4328,6 +4339,7 @@ main (int argc, char **argv)
                               /* Option value(s) pairs. */
                               MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
                               MHD_OPTION_SOCK_ADDR, &gsad_address,
+                              MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                               /* End marker option. */
                               MHD_OPTION_END);
 
@@ -4362,6 +4374,7 @@ main (int argc, char **argv)
                                   /* Option value(s) pairs. */
                                   MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
                                   MHD_OPTION_SOCK_ADDR, &gsad_address,
+                                  MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                                   /* End marker option. */
                                   MHD_OPTION_END);
             }
@@ -4411,6 +4424,7 @@ main (int argc, char **argv)
                               MHD_OPTION_SOCK_ADDR, &gsad_address,
                               MHD_OPTION_HTTPS_PRIORITIES,
                               gnutls_priorities,
+                              MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                               /* End marker option. */
                               MHD_OPTION_END);
 
@@ -4450,6 +4464,7 @@ main (int argc, char **argv)
                                   MHD_OPTION_SOCK_ADDR, &gsad_address,
                                   MHD_OPTION_HTTPS_PRIORITIES,
                                   gnutls_priorities,
+                                  MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                                   /* End marker option. */
                                   MHD_OPTION_END);
             }

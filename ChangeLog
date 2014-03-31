@@ -1,5 +1,13 @@
 2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Add logger for libmicrohttpd errors.
+
+	* src/gsad.c (mhd_logger): New function.
+	(main): Add MHD_OPTION_EXTERNAL_LOGGER option to MHD_start_daemon()
+	calls.
+
+2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Handle SIGPIPE as recommended by libmicrohttpd. Refactor other handlers.
 
 	* src/gsad.c (handle_sigterm, handle_sighup, handle_sigint): Delete function.
