@@ -93,6 +93,8 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
+static char *edit_role (credentials_t *, params_t *, const char *);
+
 static char *get_alert (credentials_t *, params_t *, const char *);
 
 static char *get_alerts (credentials_t *, params_t *, const char *);
@@ -615,6 +617,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   next = params_value (params, "next");
   if (next == NULL)
     return NULL;
+
+  if (strcmp (next, "edit_role") == 0)
+    return edit_role (credentials, params, response);
 
   if (strcmp (next, "get_alerts") == 0)
     return get_alerts (credentials, params, response);
@@ -16833,6 +16838,86 @@ create_role_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_role XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_role (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+
+  if (command_enabled (credentials, "GET_PERMISSIONS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (ompf (credentials, &response, &entity,
+                    "<get_permissions"
+                    " filter=\"rows=-1 ubject_type=role and subject_uuid=%s\"/>",
+                    params_value (params, "role_id")))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the permission list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_roles");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the permission list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_roles");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the permission list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_roles");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = edit_resource ("role", credentials, params, extra->str);
+  g_string_free (extra, TRUE);
+  return html;
+}
+
+/**
+ * @brief Setup edit_role XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_role_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_role (credentials, params, NULL);
+}
+
+/**
  * @brief Get one role, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -16931,6 +17016,90 @@ export_roles_omp (credentials_t * credentials, params_t *params,
 {
   return export_many ("role", credentials, params, content_type,
                       content_disposition, content_length);
+}
+
+/**
+ * @brief Modify a role, return the next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_role_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *role_id, *name, *comment, *users;
+  entity_t entity;
+
+  role_id = params_value (params, "role_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  users = params_value (params, "users");
+
+  CHECK_PARAM (role_id, "Save Role", edit_role);
+  CHECK_PARAM (name, "Save Role", edit_role);
+  CHECK_PARAM (comment, "Save Role", edit_role);
+  CHECK_PARAM (users, "Save Role", edit_role);
+
+  /* Modify the Role. */
+
+  response = NULL;
+  entity = NULL;
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              "<modify_role role_id=\"%s\">"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<users>%s</users>"
+              "</modify_role>",
+              role_id,
+              name,
+              comment,
+              users);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a role. "
+                             "The role was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_roles");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a role. "
+                             "It is unclear whether the role has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_roles");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a role. "
+                             "It is unclear whether the role has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_roles");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_roles (credentials, params, response);
+    }
+  else
+    html = edit_role (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 

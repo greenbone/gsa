@@ -693,6 +693,7 @@ init_validator ()
                          "|(edit_permission)"
                          "|(edit_port_list)"
                          "|(edit_report_format)"
+                         "|(edit_role)"
                          "|(edit_schedule)"
                          "|(edit_slave)"
                          "|(edit_tag)"
@@ -835,6 +836,7 @@ init_validator ()
                          "|(save_permission)"
                          "|(save_port_list)"
                          "|(save_report_format)"
+                         "|(save_role)"
                          "|(save_schedule)"
                          "|(save_slave)"
                          "|(save_tag)"
@@ -1936,6 +1938,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_permission)
   ELSE (save_port_list)
   ELSE (save_report_format)
+  ELSE (save_role)
   ELSE (save_schedule)
   ELSE (save_slave)
   ELSE (save_tag)
@@ -2165,6 +2168,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_permission)
   ELSE (edit_port_list)
   ELSE (edit_report_format)
+  ELSE (edit_role)
   ELSE (edit_schedule)
   ELSE (edit_slave)
   ELSE (edit_tag)

@@ -1,3 +1,21 @@
+2014-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add role editing.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add edit_role and
+	save_role.
+
+	* src/gsad_omp.c (next_page): Add edit_role.
+	(edit_role, edit_role_omp, save_role_omp): New functions.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Match indicators for ops on
+	edit_role page.
+
+	* src/html/classic/omp.xsl (html-edit-role-form): Add i18n.  Add actual
+	role fields, including permissions.
+	(edit_role): Match op responses.
+	(role, role [details], html-roles-table): Enable edit icon.
+
 2014-03-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Replace the "Observer" fields on the task details page with a table

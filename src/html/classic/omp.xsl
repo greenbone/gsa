@@ -26690,7 +26690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Edit Role
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Role', 'Role')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
@@ -26699,19 +26699,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
+      <xsl:variable name="role_id" select="commands_response/get_roles_response/role/@id"/>
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_role"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="role_id"
-               value="{commands_response/get_roles_response/role/@id}"/>
+               value="{$role_id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="role" value="{/envelope/params/role}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165">Name</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -26721,56 +26722,114 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_roles_response/role/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Term</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
-              <input type="text" name="term"
-                     value="{commands_response/get_roles_response/role/term}"
-                     size="50"
+              <input type="text" name="users"
+                     value="{commands_response/get_roles_response/role/users}"
+                     size="30"
                      maxlength="1000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Type</td>
-            <td>
-              <select name="optional_resource_type">
-                <xsl:variable name="type">
-                  <xsl:value-of select="commands_response/get_roles_response/role/type"/>
-                </xsl:variable>
-                <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Role|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
-                  <xsl:choose>
-                    <xsl:when test=". = $type">
-                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{.}"><xsl:value-of select="."/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Save Role"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Role', 'Role')}"/>
             </td>
           </tr>
         </table>
         <br/>
       </form>
+      <h2><xsl:value-of select="gsa:i18n ('New Permission', 'Role Window')"/></h2>
+
+      <xsl:variable name="in_use" select="commands_response/get_roles_response/role/in_use"/>
+
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_permission"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="role_id" value="{$role_id}"/>
+        <input type="hidden" name="next" value="edit_role"/>
+        <input type="hidden" name="comment" value=""/>
+        <input type="hidden" name="subject_type" value="role"/>
+        <input type="hidden" name="id_or_empty" value=""/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+            <td>
+              <select name="permission">
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
+                  <xsl:if test="gsa:may-op (name)">
+                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                  </xsl:if>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="$in_use = 0">
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Window')}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Window')}"
+                         disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
+        </tr>
+        <xsl:for-each select="get_permissions_response/permission">
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+            </td>
+            <td width="100">
+              <xsl:choose>
+                <xsl:when test="in_use = 0">
+                  <xsl:call-template name="trashcan-icon">
+                    <xsl:with-param name="type">permission</xsl:with-param>
+                    <xsl:with-param name="id" select="@id"/>
+                    <xsl:with-param name="params">
+                      <input type="hidden" name="role_id" value="{$role_id}"/>
+                      <input type="hidden" name="next" value="edit_role"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/trashcan_inactive.png"
+                       border="0"
+                       alt="{gsa:i18n ('To Trashcan', 'Trashcan')}"
+                       title="{gsa:i18n ('Permission', 'Permission')}{gsa:i18n (' is still in use', 'Table Row')}"
+                       style="margin-left:3px;"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
     </div>
   </div>
 </xsl:template>
 
 <xsl:template match="edit_role">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_role_response"/>
+  <xsl:apply-templates select="delete_permission_response"/>
+  <xsl:apply-templates select="create_permission_response"/>
   <xsl:call-template name="html-edit-role-form"/>
 </xsl:template>
 
@@ -26842,7 +26901,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </td>
   </tr>
@@ -26899,7 +26957,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Role'"/>
         <xsl:with-param name="type" select="'role'"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -27003,7 +27060,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Name</name>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="3"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
