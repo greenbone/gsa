@@ -3943,35 +3943,36 @@ gsad_cleanup ()
 }
 
 /**
- * @brief Handle a SIGTERM signal.
- *
- * @param[in]  signal  The signal that caused this function to run.
- */
-void
-handle_sigterm (int signal)
-{
-  exit (EXIT_SUCCESS);
-}
-
-/**
- * @brief Handle a SIGHUP signal.
- *
- * @param[in]  signal  The signal that caused this function to run.
- */
-void
-handle_sighup (int signal)
-{
-}
-
-/**
  * @brief Handle a SIGINT signal.
  *
  * @param[in]  signal  The signal that caused this function to run.
  */
 void
-handle_sigint (int signal)
+handle_signal_exit (int signal)
 {
+  g_critical ("Received Signal: %s. Exiting.\n", strsignal (signal));
   exit (EXIT_SUCCESS);
+}
+
+/**
+ * @brief Register the signal handlers.
+ *
+ * @return 0 on success, -1 on failure.
+ */
+static int
+register_signal_handlers ()
+{
+  if (signal (SIGTERM, handle_signal_exit) == SIG_ERR
+      || signal (SIGINT, handle_signal_exit) == SIG_ERR
+      || signal (SIGHUP, SIG_IGN) == SIG_ERR
+      || signal (SIGPIPE, SIG_IGN) == SIG_ERR
+#ifdef USE_LIBXSLT
+      || signal (SIGCHLD, SIG_IGN) == SIG_ERR)
+#else
+      || signal (SIGCHLD, SIG_DFL) == SIG_ERR)
+#endif
+    return -1;
+  return 0;
 }
 
 /**
@@ -4091,6 +4092,12 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
   g_option_context_free (option_context);
+
+  if (register_signal_handlers ())
+    {
+      g_critical ("Failed to register signal handlers!\n");
+      exit (EXIT_FAILURE);
+    }
 
   if (print_version)
     {
@@ -4253,21 +4260,6 @@ main (int argc, char **argv)
   if (atexit (&gsad_cleanup))
     {
       g_critical ("%s: Failed to register cleanup function!\n", __FUNCTION__);
-      exit (EXIT_FAILURE);
-    }
-
-  /* Register the signal handlers. */
-
-  if (signal (SIGTERM, handle_sigterm) == SIG_ERR   /* RATS: ignore, only one function per signal */
-      || signal (SIGINT, handle_sigint) == SIG_ERR  /* RATS: ignore, only one function per signal */
-      || signal (SIGHUP, handle_sighup) == SIG_ERR  /* RATS: ignore, only one function per signal */
-#ifdef USE_LIBXSLT
-      || signal (SIGCHLD, SIG_IGN) == SIG_ERR)      /* RATS: ignore, only one function per signal */
-#else
-      || signal (SIGCHLD, SIG_DFL) == SIG_ERR)      /* RATS: ignore, only one function per signal */
-#endif
-    {
-      g_critical ("%s: Failed to register signal handlers!\n", __FUNCTION__);
       exit (EXIT_FAILURE);
     }
 

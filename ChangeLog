@@ -1,3 +1,12 @@
+2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Handle SIGPIPE as recommended by libmicrohttpd. Refactor other handlers.
+
+	* src/gsad.c (handle_sigterm, handle_sighup, handle_sigint): Delete function.
+	(handle_signal_exit, register_signal_handlers): New functions.
+	(main): Call register_signal_handlers() function. Remove signal handlers
+	registering code.
+
 2014-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_one): Get permissions in role case, after adding
