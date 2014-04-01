@@ -9369,6 +9369,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
+  <xsl:if test="$select_type = 'role' or gsa:may-op ('get_roles')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'role'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Role', 'Role')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
   <xsl:if test="$select_type = 'config' or gsa:may-op ('get_configs')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'config'"/>
@@ -27034,6 +27041,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="resource_type" select="'role'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-roles-trash-table">
