@@ -1,3 +1,8 @@
+2014-04-01  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl (full-report-export-form,
+	  filtered-report-export-form): Fix some logical mistakes.
+
 2014-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add role editing.

@@ -25546,13 +25546,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="levels" value="hmlgf"/>
     <input type="hidden" name="autofp"
             value="{report/filters/autofp}"/>
+    <xsl:variable name="outer_type" select="@type"/>
     <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report Window')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
-          <xsl:when test="@type='prognostic' and name='PDF'">
+          <xsl:when test="$outer_type='prognostic' and name='PDF'">
             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
           </xsl:when>
-          <xsl:when test="@type='../../delta' and name='PDF'">
+          <xsl:when test="../../delta and name='PDF'">
             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
           </xsl:when>
           <xsl:when test="name='PDF'">
@@ -25626,13 +25627,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             value="{report/filters/result_hosts_only}"/>
     <input type="hidden" name="autofp"
             value="{report/filters/autofp}"/>
+    <xsl:variable name="outer_type" select="@type"/>
     <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report Window')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
-          <xsl:when test="@type='prognostic' and name='PDF'">
+          <xsl:when test="$outer_type='prognostic' and name='PDF'">
             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
           </xsl:when>
-          <xsl:when test="@type='../../delta' and name='PDF'">
+          <xsl:when test="../../delta and name='PDF'">
             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
           </xsl:when>
           <xsl:when test="name='PDF'">
