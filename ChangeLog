@@ -1,5 +1,15 @@
 2014-04-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Update Role help.
+
+	* src/html/classic/help.xsl (roles.html): Enable trash, edit and clone
+	icons.
+	(contents.html): Add "New Role".
+	(glossary.html): Add Role.
+	(new_role.html): New template.
+
+2014-04-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (tag_resource_types): Add role.
 	(role [details]): Add tags window.
 

@@ -3162,9 +3162,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Role'"/>
-        <xsl:with-param name="notrashcan" select="1"/>
-        <xsl:with-param name="noedit" select="1"/>
-        <xsl:with-param name="noclone" select="1"/>
       </xsl:call-template>
     </div>
   </div>
@@ -3354,6 +3351,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </ul>
             <li> <a href="roles.html?token={/envelope/token}">Roles</a></li>
               <ul>
+                <li> <a href="new_role.html?token={/envelope/token}">New Role</a></li>
                 <li> <a href="role_details.html?token={/envelope/token}">Role Details</a></li>
               </ul>
             <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
@@ -4076,6 +4074,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        An example is "TXT", which has content type "text/plain", meaning that
        the report is a plain text document.
+      </p>
+
+      <a name="role"></a>
+      <h2>Role</h2>
+      <p>
+       A role defines a set of permissions that can be applied to a user or
+       a <a href="#group">group</a>.
       </p>
 
       <a name="slave"></a>
@@ -5204,6 +5209,73 @@ Public License instead of this License.
        Pressing the list icon
        <img src="/img/list.png" alt="Overrides" title="Overrides"/>
        will switch to the overrides page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_role.html">
+  <div class="gb_window_part_center">Help: New Role
+    <a href="/omp?cmd=new_role&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_ROLE'"/>
+      </xsl:call-template>
+
+      <h1>New Role</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#role">Role</a>
+        the dialog offers these entries.
+        Hit the button "Create Role" to submit the new role.
+        The Roles page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Testing Team</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>All testers</td>
+        </tr>
+        <tr class="odd">
+          <td>Users</td>
+          <td>--</td>
+          <td>1000</td>
+          <td>Space or comma separated list of users</td>
+          <td>alice bob</td>
+        </tr>
+      </table>
+
+      <h4>Roles</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Roles" title="Roles"/>
+       will switch to the <a href="roles.html?token={/envelope/token}">Roles</a>
+       page.
       </p>
     </div>
   </div>
