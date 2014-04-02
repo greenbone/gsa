@@ -27463,7 +27463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Tag Window')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Tag Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Tag Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Resource Name', 'Tag Window')"/></td>
         <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates select="tag" mode="trash"/>

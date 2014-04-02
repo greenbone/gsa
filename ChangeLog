@@ -1,5 +1,10 @@
 2014-04-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-tags-trash-table): Change table header
+	from "Resource ID" to "Resource Name".
+
+2014-04-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/wizard.xsl (quick-task-wizard): Hide Email field
 	and instructions if user cannot get or create alerts. Hide Slave
 	field and instructions if user cannot get slaves.
