@@ -186,8 +186,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.', 'Advanced Task Wizard')"/></p>
           <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
           <p><xsl:value-of select="gsa:i18n ('In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.', 'Advanced Task Wizard')"/>
-          <br/><xsl:value-of select="gsa:i18n ('If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.', 'Advanced Task Wizard')"/><br/>
-          <xsl:value-of select="gsa:i18n ('Finally, you can select a slave which will run the scan.', 'Advanced Task Wizard')"/></p>
+          <xsl:if test="gsa:may-op ('get_alerts') and gsa:may-op ('create_alert')">
+            <br/>
+            <xsl:value-of select="gsa:i18n ('If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.', 'Advanced Task Wizard')"/>
+          </xsl:if>
+          <xsl:if test="gsa:may-op ('get_slaves')">
+            <br/>
+            <xsl:value-of select="gsa:i18n ('Finally, you can select a slave which will run the scan.', 'Advanced Task Wizard')"/>
+          </xsl:if></p>
         </td>
         <td valign="center" rowspan="15">
           <img src="img/enchantress.png"/>
@@ -642,33 +648,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </xsl:if>
-      <tr>
-        <td>
-          <xsl:value-of select="gsa:i18n ('Email report to', 'Advanced Task Wizard')"/>
-          <xsl:text> (</xsl:text>
-          <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
-          <xsl:text>):</xsl:text>
-        </td>
-        <td>
-          <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
-          <xsl:text> (</xsl:text>
-          <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
-          <xsl:text>):</xsl:text>
-        </td>
-        <td>
-          <select name="event_data:slave_id">
-            <option value="" selected="1">--</option>
-            <xsl:for-each select="../run_wizard_response/response/commands_response/get_slaves_response/slave">
-              <option value="{@id}"><xsl:value-of select="name"/></option>
-            </xsl:for-each>
-          </select>
-        </td>
-      </tr>
+      <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Email report to', 'Advanced Task Wizard')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:text>):</xsl:text>
+          </td>
+          <td>
+            <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="gsa:may-op ('get_slaves')">
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:text>):</xsl:text>
+          </td>
+          <td>
+            <select name="event_data:slave_id">
+              <option value="" selected="1">--</option>
+              <xsl:for-each select="../run_wizard_response/response/commands_response/get_slaves_response/slave">
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+      </xsl:if>
       <tr>
         <td colspan="2" align="right">
           <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
