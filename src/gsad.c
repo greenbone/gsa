@@ -943,7 +943,6 @@ init_validator ()
   openvas_validator_add (validator, "details", "^[0-1]$");
   /* Number is special cased in params_mhd_validate to remove the space. */
   openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
-  openvas_validator_add (validator, "observers",       "^[-_ [:alnum:],]*$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
@@ -1019,6 +1018,7 @@ init_validator ()
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
+  openvas_validator_add (validator, "users",       "^[-_ [:alnum:],]*$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
 
@@ -1141,7 +1141,6 @@ init_validator ()
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "user_id",      "id");
   openvas_validator_alias (validator, "user_id_optional", "id_optional");
-  openvas_validator_alias (validator, "users",        "observers");
   openvas_validator_alias (validator, "xml",          "boolean");
 
   openvas_validator_alias (validator, "esc_notes",        "notes");

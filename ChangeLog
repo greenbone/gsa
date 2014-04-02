@@ -1,3 +1,21 @@
+2014-04-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Remove "Observer" and "Observer Groups" from Create Task and Edit Task
+	pages. Hide the "Everything" permission for the Admin role and remove
+	limit on number of permissions.
+
+	* src/gsad_omp.c (create_task_omp, edit_task, save_task_omp)
+	(save_container_task_omp): Remove handling of observer and groups
+	parameters, which are no longer used.
+	(get_task): Adjust permissions filter to exclude "Everything"
+	permission for the Admin role and get all filtered permissions.
+
+	* src/gsad.c (init_validator): Remove "observers" parameter and adjust
+	"users" which was an alias of this.
+
+	* src/html/classic/omp.xsl (new_task, html-edit-task-form): Remove
+	form elements for "Observer" and "Observer Groups".
+
 2014-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Ensure that Edit Port List and Edit Role always return to the previous
