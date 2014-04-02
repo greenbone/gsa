@@ -20824,7 +20824,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="port_list_id"
                value="{commands_response/get_port_lists_response/port_list/@id}"/>
-        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/next_next) &gt; 0">
+            <input type="hidden" name="next" value="{/envelope/params/next_next}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="hidden" name="next" value="{/envelope/params/next}"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <input type="hidden" name="port_list" value="{/envelope/params/port_list}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -20862,6 +20869,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="port_list_id" value="{$id}"/>
         <input type="hidden" name="next" value="edit_port_list"/>
+        <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Start', 'Port List Window')"/></td>
@@ -20960,6 +20968,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="params">
                       <input type="hidden" name="port_list_id" value="{../../@id}"/>
                       <input type="hidden" name="next" value="edit_port_list"/>
+                      <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
                     </xsl:with-param>
                   </xsl:call-template>
                 </xsl:when>
@@ -26716,7 +26725,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="role_id"
                value="{$role_id}"/>
-        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/next_next) &gt; 0">
+            <input type="hidden" name="next" value="{/envelope/params/next_next}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="hidden" name="next" value="{/envelope/params/next}"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <input type="hidden" name="role" value="{/envelope/params/role}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -26764,6 +26780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="role_id" value="{$role_id}"/>
         <input type="hidden" name="next" value="edit_role"/>
+        <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
         <input type="hidden" name="comment" value=""/>
         <input type="hidden" name="subject_type" value="role"/>
         <input type="hidden" name="id_or_empty" value=""/>
@@ -26815,6 +26832,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="params">
                       <input type="hidden" name="role_id" value="{$role_id}"/>
                       <input type="hidden" name="next" value="edit_role"/>
+                      <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
                     </xsl:with-param>
                   </xsl:call-template>
                 </xsl:when>

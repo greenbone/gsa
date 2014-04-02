@@ -1094,6 +1094,7 @@ init_validator ()
   openvas_validator_alias (validator, "new_severity_from_list", "severity_optional");
   openvas_validator_alias (validator, "new_threat",   "threat");
   openvas_validator_alias (validator, "next",         "page");
+  openvas_validator_alias (validator, "next_next",    "page");
   openvas_validator_alias (validator, "next_id",      "info_id");
   openvas_validator_alias (validator, "next_type",    "resource_type");
   openvas_validator_alias (validator, "next_subtype", "info_type");

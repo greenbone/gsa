@@ -1,3 +1,15 @@
+2014-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Ensure that Edit Port List and Edit Role always return to the previous
+	page.
+
+	* src/gsad.c (init_validator): Add next_next.
+
+	* src/html/classic/omp.xsl (html-edit-port-list-form)
+	(html_edit_role_form): Pass the next param for the current page in the
+	next_next param of the add and delete forms, because these forms are
+	already using the next param to return to the current page.
+
 2014-04-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-tags-trash-table): Change table header
