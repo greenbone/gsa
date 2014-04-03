@@ -1,3 +1,10 @@
+2014-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): When the user does
+	not have access to a top level menu, display an empty spacer instead of
+	skipping the menu.  This looks more uniform and keeps the menu positions
+	consistent.
+
 2014-04-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Get only permissions specific to the task.

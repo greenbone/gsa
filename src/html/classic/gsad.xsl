@@ -1488,7 +1488,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
+        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+          <div class="empty_top_button"/>
+        </xsl:when>
+        <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Scan Management', 'MM')"/>
@@ -1528,54 +1531,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </xsl:for-each>
           </ul>
-        </xsl:when>
+        </xsl:otherwise>
       </xsl:choose>
     </li>
-    <xsl:if test="gsa:may-op ('GET_REPORTS')">
-      <li>
-        <a class="top_button"
-           href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">
-          <xsl:value-of select="gsa:i18n ('Asset Management', 'MM')"/>
-          <div class="first_button_overlay">
-            <ul class="first_button_overlay">
-              <li class="pointy"></li>
-              <li class="first_button_overlay overlay_last">
-                <xsl:value-of select="gsa:i18n('Hosts', 'Host')"/>
-              </li>
-            </ul>
-          </div>
-        </a>
-        <ul>
-          <li class="pointy"></li>
-          <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
-        </ul>
-      </li>
-    </xsl:if>
-    <xsl:if test="gsa:may-op ('GET_INFO')">
-      <li>
-        <a class="top_button"
-           href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
-          <xsl:value-of select="gsa:i18n ('SecInfo Management', 'MM')"/>
-          <div class="first_button_overlay">
-            <ul class="first_button_overlay">
-              <li class="pointy"></li>
-              <li class="first_button_overlay">
-                <xsl:value-of select="gsa:i18n('NVTs', 'Info')"/>
-              </li>
-            </ul>
-          </div>
-        </a>
-        <ul>
-          <li class="pointy"></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'Info')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'Info')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
-          <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'Info')"/></a></li>
-          <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
-        </ul>
-      </li>
-    </xsl:if>
+    <li>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('GET_REPORTS')">
+          <a class="top_button"
+             href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">
+            <xsl:value-of select="gsa:i18n ('Asset Management', 'MM')"/>
+            <div class="first_button_overlay">
+              <ul class="first_button_overlay">
+                <li class="pointy"></li>
+                <li class="first_button_overlay overlay_last">
+                  <xsl:value-of select="gsa:i18n('Hosts', 'Host')"/>
+                </li>
+              </ul>
+            </div>
+          </a>
+          <ul>
+            <li class="pointy"></li>
+            <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
+          </ul>
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="empty_top_button"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </li>
+    <li>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('GET_INFO')">
+          <a class="top_button"
+             href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
+            <xsl:value-of select="gsa:i18n ('SecInfo Management', 'MM')"/>
+            <div class="first_button_overlay">
+              <ul class="first_button_overlay">
+                <li class="pointy"></li>
+                <li class="first_button_overlay">
+                  <xsl:value-of select="gsa:i18n('NVTs', 'Info')"/>
+                </li>
+              </ul>
+            </div>
+          </a>
+          <ul>
+            <li class="pointy"></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'Info')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'Info')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'Info')"/></a></li>
+            <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
+          </ul>
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="empty_top_button"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </li>
     <li>
       <xsl:variable name="items">
         <xsl:if test="gsa:may-op ('GET_TARGETS')">
@@ -1656,7 +1669,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
+        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+          <div class="empty_top_button"/>
+        </xsl:when>
+        <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_targets&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Configuration', 'MM')"/>
@@ -1692,7 +1708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </xsl:for-each>
           </ul>
-        </xsl:when>
+        </xsl:otherwise>
       </xsl:choose>
     </li>
     <li>
@@ -1758,7 +1774,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) &gt; 0">
+        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+          <div class="empty_top_button"/>
+        </xsl:when>
+        <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_users&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Administration', 'MM')"/>
@@ -1787,7 +1806,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
             <br/>
           </ul>
-        </xsl:when>
+        </xsl:otherwise>
       </xsl:choose>
     </li>
     <li class="last_button">
