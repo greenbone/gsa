@@ -1,5 +1,10 @@
 2014-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/gsa-style.css (div.empty_top_button): New rule.
+	Defines the empty spacer for last commit.
+
+2014-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): When the user does
 	not have access to a top level menu, display an empty spacer instead of
 	skipping the menu.  This looks more uniform and keeps the menu positions
