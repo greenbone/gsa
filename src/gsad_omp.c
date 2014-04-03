@@ -3516,10 +3516,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
   if (openvas_server_sendf (&session,
                             "<get_permissions"
                             " filter=\"name=get_tasks and resource_uuid=%s"
-                            "          or name=get_tasks and resource_uuid= "
-                            "          or name=Everything"
-                            "             and not subject_type=role"
-                            "             and not subject_name=Admin"
                             "          first=1 rows=-1\"/>",
                             task_id)
       == -1)
