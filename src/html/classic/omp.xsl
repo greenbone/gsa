@@ -26635,7 +26635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="permission">
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:if test="gsa:may-op (name)">
-                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:capitalise (gsa:permission-description (name, false ()))"/></option>
                   </xsl:if>
                 </xsl:for-each>
               </select>
