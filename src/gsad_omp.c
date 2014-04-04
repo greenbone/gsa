@@ -3116,7 +3116,8 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     }
 
   /* Append extra_xml */
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get tag names */
 
@@ -3579,7 +3580,8 @@ new_lsc_credential (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_lsc_credential>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_lsc_credential>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -4225,7 +4227,8 @@ new_agent (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_agent>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -4884,7 +4887,8 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
   gchar *response;
 
   xml = g_string_new ("<new_alert>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get Report Formats. */
   response = NULL;
@@ -5815,7 +5819,8 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   xml = g_string_new ("<new_target>");
 
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
     {
@@ -6598,7 +6603,8 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   xml = g_string_new ("<new_tag>");
 
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   end = g_markup_printf_escaped ("<tag id=\"%s\"/>"
                                  "<resource_type>%s</resource_type>"
@@ -7776,7 +7782,8 @@ new_config (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_config>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_config>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -12449,7 +12456,8 @@ new_slave (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_slave>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_slave>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -12908,7 +12916,8 @@ new_schedule (credentials_t *credentials, params_t *params,
                           (now_broken->tm_mon + 1),
                           (now_broken->tm_year + 1900));
 
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -13355,7 +13364,8 @@ new_report_format (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_report_format>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -15015,7 +15025,8 @@ new_group (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   xml = g_string_new ("<new_group>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -16037,7 +16048,8 @@ new_port_list (credentials_t *credentials, params_t *params,
 {
   GString *xml;
   xml = g_string_new ("<new_port_list>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -16554,7 +16566,8 @@ new_role (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   xml = g_string_new ("<new_role>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -17434,7 +17447,8 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   xml = g_string_new ("<new_filter>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -17997,7 +18011,8 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
   GString *xml;
 
   xml = g_string_new ("<new_user>");
-  g_string_append (xml, extra_xml);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   if (command_enabled (credentials, "DESCRIBE_AUTH"))
     {

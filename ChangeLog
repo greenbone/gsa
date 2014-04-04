@@ -1,5 +1,12 @@
 2014-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_nvts, new_lsc_credential, new_agent, new_alert)
+	(new_target, new_tag, new_config, new_slave, new_schedule)
+	(new_report_format, new_group, new_port_list, new_role, new_user): Check
+	extra_xml before appending, for consistency.
+
+2014-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/wizard.xsl (quick-task-wizard): Rework English of
 	two sentences slightly.
 
