@@ -3630,7 +3630,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Tasks using this Target</id>
       <str>Aufgaben, die dieses Ziel verwenden</str>
     </msg>
-    
+
   </grp>
   <!-- 3.13.4    Target actions and properties - table rows only -->
   <grp>
@@ -5954,8 +5954,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Über GSA</str>
     </msg>
   </grp>
-  
-
 
   <!-- 5. Wizards (wizard.xsl) -->
   <grp>
@@ -6058,11 +6056,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Ich kann Ihnen helfen, indem eine neue Scanaufgabe zu erstelle und sie automatisch starte.</str>
     </msg>
     <msg>
-      <id>All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.</id>
+      <id>All you need to do is enter a name for the new task and the IP address or host name of the target, and select a scan configuration.</id>
       <str>Sie müssen hierfür nur einen Namen der neuen Aufgabe und die IP-Adresse oder den Hostnamen des Ziels eingeben, sowie eine Scan-Konfiguration wählen.</str>
     </msg>
     <msg>
-      <id>You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.</id>
+      <id>You can choose if you want me to run the scan immediately, schedule the task for a later date and time, or just create the task so you can run it manually later.</id>
       <str>Sie können auswählen, ob ich den Scan sofort starten, den Scan für einen späteren Termin planen oder nur die Aufgabe erstellen soll, so dass Sie sie später manuell starten können.</str>
     </msg>
     <msg>

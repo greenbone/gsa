@@ -1,5 +1,12 @@
 2014-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/wizard.xsl (quick-task-wizard): Rework English of
+	two sentences slightly.
+
+	* src/html/classic/po/de.xml: Adjust po sentences to match.
+
+2014-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-role-form): Use permission
 	description instead of name in New Permission dropdown.
 

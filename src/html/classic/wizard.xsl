@@ -183,8 +183,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr>
         <td valign="top" rowspan="15" width="250px">
           <p><xsl:value-of select="gsa:i18n ('I can help you by creating a new scan task and automatically starting it.', 'Advanced Task Wizard')"/></p>
-          <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task, the IP address or host name of the target and select a scan configuration.', 'Advanced Task Wizard')"/></p>
-          <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
+          <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task and the IP address or host name of the target, and select a scan configuration.', 'Advanced Task Wizard')"/></p>
+          <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time, or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
           <p><xsl:value-of select="gsa:i18n ('In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.', 'Advanced Task Wizard')"/>
           <xsl:if test="gsa:may-op ('get_alerts') and gsa:may-op ('create_alert')">
             <br/>
