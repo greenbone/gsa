@@ -2240,11 +2240,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
-            <td><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
             <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
           </tr>
           <xsl:for-each select="$permissions/permission">
             <tr class="{gsa:table-row-class(position())}">
+              <td>
+                <xsl:value-of select="gsa:lower-case (name)"/>
+              </td>
               <td>
                 <xsl:value-of select="gsa:i18n (gsa:type-name (subject/type), gsa:type-name (subject/type))"/>
                 <xsl:text> </xsl:text>
@@ -19740,7 +19744,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="permission">
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:if test="gsa:may-op (name)">
-                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                    <option value="{gsa:lower-case (name)}">
+                      <xsl:value-of select="gsa:lower-case (name)"/>
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                      <xsl:text>)</xsl:text>
+                    </option>
                   </xsl:if>
                 </xsl:for-each>
               </select>
@@ -19859,6 +19868,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
     </td>
     <td>
       <xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/>
@@ -20096,6 +20108,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Name</name>
       </column>
       <column>
+        <name>Description</name>
+      </column>
+      <column>
         <name>Resource Type</name>
         <field>type</field>
       </column>
@@ -20165,11 +20180,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:choose>
                     <xsl:when test="gsa:lower-case (name) = $name">
-                      <option value="{$name}" selected="1"><xsl:value-of select="$name"/></option>
+                      <option value="{$name}" selected="1">
+                        <xsl:value-of select="$name"/>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="gsa:capitalise (gsa:permission-description ($name, resource))"/>
+                        <xsl:text>)</xsl:text>
+                      </option>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:if test="gsa:may-op (name)">
-                        <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:lower-case (name)"/></option>
+                        <option value="{gsa:lower-case (name)}">
+                          <xsl:value-of select="gsa:lower-case (name)"/>
+                          <xsl:text> (</xsl:text>
+                          <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                          <xsl:text>)</xsl:text>
+                        </option>
                       </xsl:if>
                     </xsl:otherwise>
                   </xsl:choose>
