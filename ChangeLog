@@ -1,3 +1,15 @@
+2014-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make role permissions more consistent with others.
+
+	* src/html/classic/omp.xsl (cababilities): New variable.
+	(gsa:may-op): Test capabilities from variable, in case caller is in
+	restricted context.
+	(gsa:permission-description): Get name from param instead of element.
+	(html-edit-role-form): In the New Permission dropdown skip permissions
+	the user already has.  Add a name column to the Permissions table.
+	(role [details]): Add name column to Permissions table.
+
 2014-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* doc/i18n-howto.txt: Add notes about UTF-8 encoding and rephrase

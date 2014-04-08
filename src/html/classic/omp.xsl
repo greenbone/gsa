@@ -74,9 +74,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="gsa:may-op ($name) and (boolean ($permissions/permission[name='Everything']) or boolean ($permissions/permission[name=$name]))"/>
 </func:function>
 
+<xsl:variable name="capabilities" select="/envelope/capabilities/help_response/schema"/>
+
 <func:function name="gsa:may-op">
   <xsl:param name="name"/>
-  <func:result select="boolean (/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) = gsa:lower-case ($name)])"/>
+  <func:result select="boolean ($capabilities/command[gsa:lower-case (name) = gsa:lower-case ($name)])"/>
 </func:function>
 
 <func:function name="gsa:build-levels">
@@ -554,7 +556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:permission-description">
   <xsl:param name="name"/>
   <xsl:param name="resource"/>
-  <xsl:variable name="lower" select="gsa:lower-case (name)"/>
+  <xsl:variable name="lower" select="gsa:lower-case ($name)"/>
   <xsl:variable name="has-resource" select="boolean ($resource) and string-length ($resource/type) &gt; 0"/>
   <func:result>
     <xsl:choose>
@@ -26657,11 +26659,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
+              <xsl:variable name="permissions"
+                            select="get_permissions_response/permission[string-length (resource/@id) = 0]"/>
               <select name="permission">
-                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
-                  <xsl:if test="gsa:may-op (name)">
-                    <option value="{gsa:lower-case (name)}"><xsl:value-of select="gsa:capitalise (gsa:permission-description (name, false ()))"/></option>
-                  </xsl:if>
+                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']/name">
+                  <xsl:variable name="command_name" select="gsa:lower-case (text ())"/>
+                  <xsl:choose>
+                    <xsl:when test="boolean ($permissions[name = $command_name])">
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:if test="gsa:may-op ($command_name)">
+                        <option value="{$command_name}">
+                          <xsl:value-of select="$command_name"/>
+                          <xsl:text> (</xsl:text>
+                          <xsl:value-of select="gsa:capitalise (gsa:permission-description ($command_name, false ()))"/>
+                          <xsl:text>)</xsl:text>
+                        </option>
+                      </xsl:if>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -26684,11 +26700,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
         </tr>
         <xsl:for-each select="get_permissions_response/permission">
           <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <xsl:value-of select="gsa:lower-case (name)"/>
+            </td>
             <td>
               <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
             </td>
@@ -26881,11 +26901,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <xsl:variable name="id" select="../../get_permissions_response/permission/@id"/>
             <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
               <tr class="{gsa:table-row-class(position())}">
+                <td>
+                  <xsl:value-of select="gsa:lower-case (name)"/>
+                </td>
                 <td>
                   <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name), false ()))"/>
                 </td>
@@ -26905,11 +26929,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="../../get_permissions_response/permission">
               <tr class="{gsa:table-row-class(position())}">
+                <td>
+                  <xsl:value-of select="gsa:lower-case (name)"/>
+                </td>
                 <td>
                   <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
                 </td>
