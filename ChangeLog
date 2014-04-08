@@ -1,3 +1,12 @@
+2014-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Rename "TCP Service Ping" to "TCP-ACK
+	Service Ping".  Add "TCP-SYN Service Ping".
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Rename "TCP Service Ping" to "TCP-ACK Service
+	Ping".  Add "TCP-SYN Service Ping".
+
 2014-04-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Starting to add an alternative face for GSA. It is
@@ -6,7 +15,7 @@
 	The title in english would be "IT vulnerability traffic light".
 	The ITS will not disturb the regular installation.
 	Without explicit using --face=its when starting gsad it will
-	not be available at all to a user. 
+	not be available at all to a user.
 
 	* src/html/its/, src/html/its/favicon.gif, src/html/its/img/,
 	src/html/its/gsa-style.css: New.

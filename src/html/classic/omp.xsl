@@ -9856,12 +9856,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="alive_tests">
                 <option value="Scan Config Default"><xsl:value-of select="gsa:i18n ('Scan Config Default', 'Target Window')"/></option>
                 <option value="ICMP Ping">ICMP Ping</option>
-                <option value="TCP Service Ping">TCP Service Ping</option>
+                <option value="TCP-ACK Service Ping">TCP-ACK Service Ping</option>
+                <option value="TCP-SYN Service Ping">TCP-SYN Service Ping</option>
                 <option value="ARP Ping">ARP Ping</option>
-                <option value="ICMP &amp; TCP Service Ping">ICMP &amp; TCP Service Ping</option>
+                <option value="ICMP &amp; TCP-ACK Service Ping">ICMP &amp; TCP-ACK Service Ping</option>
                 <option value="ICMP &amp; ARP Ping">ICMP &amp; ARP Ping</option>
-                <option value="TCP Service &amp; ARP Ping">TCP Service &amp; ARP Ping</option>
-                <option value="ICMP, TCP Service &amp; ARP Ping">ICMP, TCP Service &amp; ARP Ping</option>
+                <option value="TCP-ACK Service &amp; ARP Ping">TCP-ACK Service &amp; ARP Ping</option>
+                <option value="ICMP, TCP-ACK Service &amp; ARP Ping">ICMP, TCP-ACK Service &amp; ARP Ping</option>
                 <option value="Consider Alive">Consider Alive</option>
               </select>
             </td>
@@ -10511,7 +10512,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'TCP Service Ping'"/>
+                  <xsl:with-param name="value" select="'TCP-ACK Service Ping'"/>
+                  <xsl:with-param name="select-value" select="$alive_tests"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'TCP-SYN Service Ping'"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
@@ -10519,7 +10524,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP &amp; TCP Service Ping'"/>
+                  <xsl:with-param name="value" select="'ICMP &amp; TCP-ACK Service Ping'"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
@@ -10527,11 +10532,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'TCP Service &amp; ARP Ping'"/>
+                  <xsl:with-param name="value" select="'TCP-ACK Service &amp; ARP Ping'"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP, TCP Service &amp; ARP Ping'"/>
+                  <xsl:with-param name="value" select="'ICMP, TCP-ACK Service &amp; ARP Ping'"/>
                   <xsl:with-param name="select-value" select="$alive_tests"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">

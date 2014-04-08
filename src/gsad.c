@@ -858,7 +858,7 @@ init_validator ()
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP Service Ping|ARP Ping|ICMP & TCP Service Ping|ICMP & ARP Ping|TCP Service & ARP Ping|ICMP, TCP Service & ARP Ping|Consider Alive)$");
+  openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
