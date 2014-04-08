@@ -465,15 +465,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Table Row</ctxt>
 
   </grp>
-  <!-- 2.3.4    Actions in Forms -->
-  <grp>
-    <ctxt>Form</ctxt>
-    <msg>
-      <id>Apply</id>
-      <str>Anwenden</str>
-    </msg>
-  </grp>
-  <!-- 2.3.5    Actions with special availability rules -->
+
+  <!-- 2.3.4    Actions with special availability rules -->
 
   <!-- 2.4      Common resource properties -->
   <!-- 2.4.1    Common property names / table headers -->
