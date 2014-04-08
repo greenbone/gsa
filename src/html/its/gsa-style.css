@@ -1,0 +1,484 @@
+/*
+ * IT Schwachstellenampel
+ * $Id$
+ * Description: HTML stylesheet
+ *
+ * Authors:
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2014 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * or, at your option, any later version as published by the Free
+ * Software Foundation
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+ margin: 0;
+ padding: 0;
+ border: 0;
+ font-size: 100%;
+ font: inherit;
+ vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+ display: block;
+}
+
+body {
+ line-height: 1;
+}
+
+
+ol, ul {
+ list-style: none;
+}
+
+blockquote, q {
+ quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+ content: '';
+ content: none;
+}
+
+table {
+ border-collapse: collapse;
+ border-spacing: 0;
+ margin: auto;
+}
+
+/* ------------- */
+
+body, html {
+         margin: 0;
+         padding: 0;
+         font: normal 13px arial;
+         line-height: 20px;
+         background: #f7f7f7;
+}
+
+html {
+         overflow: -moz-scrollbars-vertical;
+         overflow-y: scroll;
+}
+
+h1, h2, h3, h4 {margin: 0 0 10px 0;}
+
+h1 {font:bold 20px arial; color: #000}
+
+h2 {font:bold 17px arial; color: #000}
+
+h3 {font:bold 15px arial; color: #000}
+
+h4 {font:bold 13px arial; color: #000}
+
+p {margin: 20px 0;}
+
+img {border: 0}
+
+a {text-decoration: none; color:#3866a3;}
+
+
+hr {
+         border:solid 1px #ccc;
+         border-width: 0 0 1px 0;
+}
+
+td {vertical-align: middle}
+
+#header_back {
+         display: block;
+         width: 100%;
+         height: 80px;
+         border:solid 1px #555;
+         border-width: 0 0 1px 0;
+         padding: 10px 0;
+         background: #fff;
+}
+
+#header {
+         width: 650px;
+         margin: 0px auto;
+}
+
+
+#wrapper {
+         width: 650px;
+         margin: 20px auto;
+}
+
+
+#help_icon {
+         float: right;
+         margin: 10px;
+}
+
+#logo_icon {
+         float: right;
+         margin: 10px;
+         margin-top: 300px;
+}
+
+#help_text {
+         margin-right: 180px;
+}
+
+
+#main {
+         margin-bottom: 20px;
+}
+
+#controls {
+         width: 480px;
+         margin: auto;
+}
+
+#right {
+         width: 260px;
+         float: right;
+         margin-bottom: 20px;
+}
+
+#footer_logos {
+         display: block;
+         width: 100%;
+         text-align: left;
+         clear: both;
+}
+
+#footer_logos img {
+         margin-right: 50px;
+}
+
+#ampellogo {
+         margin: 20px 0;
+}
+
+#login {
+  width: 400px;
+  margin: 50px auto;
+}
+
+.box {
+         display: block;
+         border-radius: 6px;
+         padding: 10px;
+         margin-bottom: 13px;
+         box-shadow: 0 0 5px #333;
+         text-align: center;
+         box-shadow:inset 0px 1px 0px 0px #ffffff;
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f0f0f0), color-stop(1, #dfdfdf) );
+         background:-moz-linear-gradient( center top, #f0f0f0 5%, #dfdfdf 100% );
+         background-image: -ms-linear-gradient( center top , #f0f0f0 5%, #dfdfdf 100%);
+         background-color:#ededed;
+         text-indent:0;
+         border:2px solid #dcdcdc;
+         color:#555;
+         text-shadow:1px 1px 0px #ffffff;
+}
+
+.box p {
+         font-size: 12px;
+         line-height: 15px;
+}
+
+.content {
+         text-align: left;
+         color: #000;
+}
+
+.content table {
+         width: 100%;
+}
+.content td {
+         height: 25px;
+}
+
+.errorbox {
+         display: block;
+         border-radius: 6px;
+         padding: 10px;
+         margin-bottom: 13px;
+         box-shadow: 0 0 5px #333;
+         box-shadow:inset 0px 1px 0px 0px #ffffff;
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f0e8c0), color-stop(1, #dfd8af) );
+         background:-moz-linear-gradient( center top, #f0e8c0 5%, #dfd8af 100% );
+         background-image: -ms-linear-gradient( center top , #f0e8c0 5%, #dfd8af 100%);
+         background-color:#edcdbd;
+         text-indent:0;
+         border:2px solid #dcdcac;
+         color:#555;
+         text-shadow:1px 1px 0px #FFEFCF;
+}
+
+.innerbox
+{
+  border:2px solid #dcdcdc;
+  border-radius: 6px;
+
+  padding: 10px;
+}
+
+.date {
+         text-align: right;
+         color: #333;
+         text-shadow: none;
+         font:normal 12px arial;
+      }
+
+#internet {
+         display: block;
+         width: 120px;
+         text-align: center;
+         float: left;
+}
+
+#network {
+         display: block;
+         width: 120px;
+         margin-left: 120px;
+         text-align: center;
+}
+
+.button {
+         display:block;
+         width: 40px;
+         height: 40px;
+         border-radius: 6px;
+         padding: 5px;
+         box-shadow:inset 0px 1px 0px 0px #bee2f9;
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A6D2ED), color-stop(1, #789CFF) );
+         background:-moz-linear-gradient( center top, #A6D2ED 5%, #789CFF 100% );
+         background-image: -ms-linear-gradient(top , #A6D2ED 5%, #789CFF 100%);
+         background-color:#A6D2ED;
+         border:2px solid #468CCF;
+}
+
+.button:hover, .button:focus{
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #789CFF), color-stop(1, #A6D2ED) );
+         background:-moz-linear-gradient( center top, #789CFF 5%, #A6D2ED 100% );
+         background-image: -ms-linear-gradient(top , #789CFF 5%, #A6D2ED 100%);
+         background-color:#789CFF;
+         color: #fff;
+         text-shadow:1px 1px 0px #0000aa;
+}
+
+.play {
+         text-indent:0;
+         margin: 0 10px 0 0;
+         padding: 0;
+         float: left;
+         font:bold 23px arial;
+         text-align: center;
+         height:35px;
+         line-height:35px;
+         width:40px;
+}
+
+.stop {
+         text-indent:0;
+         margin: 0 10px 0 0;
+         padding: 0;
+         float: left;
+         font:bold 23px arial;
+         text-align: center;
+         height:35px;
+         line-height:30px;
+         width:40px;
+}
+
+.clear {
+        text-indent:0;
+        margin: 0 10px 0 0;
+        padding: 0;
+        float: left;
+        font:bold 16px arial;
+        text-align: center;
+        height:35px;
+        line-height:36px;
+        width:40px;
+}
+
+.greyed, .greyed:hover, .greyed:focus {
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #CCCCCC), color-stop(1, #AAAAAA) );
+         background:-moz-linear-gradient( center top, #CCCCCC 5%, #AAAAAA 100% );
+         background-image: -ms-linear-gradient(top , #CCCCCC 5%, #AAAAAA 100%);
+         box-shadow:inset 0px 1px 0px 0px #EEEEEE;
+         border-color: #999999;
+         color: #888888;
+         text-shadow: 1px 1px 0px #EEEEEE;
+}
+
+.progress {
+         display: block;
+         border-radius: 6px;
+         padding: 0px;
+         margin: 0 0 0 174px;
+         box-shadow:inset 0px 1px 0px 0px #caefab;
+         background-color:#77d42a;
+         border:2px solid #268a16;
+         display: block;
+         color: #306108;
+         font-family:Arial;
+         font-size:15px;
+         font-weight:bold;
+         font-style:normal;
+         height:35px;
+         line-height:35px;
+         text-align: center;
+         text-shadow:1px 1px 0px #aade7c;
+}
+
+.progress {
+         display: block;
+         margin: 0 0 0 174px;
+         height: 35px;
+         border-radius: 6px;
+         background: #333;
+         border:2px solid #999;
+         box-shadow:inset 0px 1px 0px 0px #aaa;
+}
+
+.progress p {
+         display: block;
+         position: absolute;
+         height: 35px;
+         border-radius: 6px;
+         padding: 0px;
+         margin: -2px 0 0 -2px;
+         box-shadow:inset 0px 1px 0px 0px #caefab;
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );
+         background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );
+         background-image: -ms-linear-gradient(top , #77d42a 5%, #5cb811 100%);
+         background-color:#77d42a;
+         border:2px solid #268a16;
+}
+
+.progress span {
+         color: #F2FFE8;
+         font:bold 16px arial;
+         line-height:35px;
+         text-align: center;
+         text-shadow:1px 1px 0px #306108;
+         position: relative;
+         left: 0;
+         top: 0;
+}
+
+
+.on {font-weight: bold; color: #00aa00;}
+.off {font-weight: bold; color: #dd0000;}
+
+.inputfield {
+         border:solid 1px #aaa;
+         border-radius: 4px;
+         padding: 2px 4px 2px 4px;
+         width: 150px;
+}
+
+.inputfield:hover, .inputfield:focus {
+         border:solid 1px #3866a3;
+}
+
+.tooltip {outline:none; text-decoration: none}
+.tooltip span {
+         z-index:10;
+         display:none;
+         padding:10px;
+         margin-top:88px;
+         margin-left: -73px;
+         line-height:16px;
+         border-radius: 5px;
+         font:normal 12px arial;
+         text-align: left;
+         color:#14396a;
+         text-shadow: none;
+}
+
+.tooltip:hover span{
+         display: block;
+         position:absolute;
+         background-color:#A6D2ED;
+         border:2px solid #468CCF;
+         box-shadow: 4px 4px 5px #555;
+}
+
+.tooltip p{
+         color: #14396a;
+         font:bold 13px arial;
+         margin: 3px 0 0 0;
+         padding: 0;
+         }
+
+.callout {
+         z-index:20;
+         position:absolute;
+         border:0;
+         top:-14px;
+         left:25px;
+}
+
+#ampel_details table{
+         width: 780px;
+         border-collapse:collapse;
+
+}
+
+#ampel_details table td, th{
+         border:solid 1px #000;
+         padding: 2px;
+         height: 25px;
+         text-align: center;
+         color: #000;
+         vertical-align: middle;
+}
+
+#ampel_details th {
+         font-weight: bold;
+         background: #CEE1ED;
+         text-shadow: none;
+}
+
+#ampel_details .header {
+         background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A6D2ED), color-stop(1, #789CFF) );
+         background:-moz-linear-gradient( center top, #A6D2ED 5%, #789CFF 100% );
+         background-image: -ms-linear-gradient(top , #A6D2ED 5%, #789CFF 100%);
+         font-size: 17px;
+}
+
+#ampel_details a img {margin: 2px 0 0 0;}
+
+.debug {
+  background: yellow;
+  color: black;
+  display: none; /* set to none to hide debug text */
+}
