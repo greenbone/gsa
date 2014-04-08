@@ -1,3 +1,15 @@
+2014-04-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Next bunch for ITS. The whole ITS was developed by
+	Timo Pollmeier.
+
+	* src/html/its/gsad.xsl: New.
+
+	* src/html/its/img/callout_blue.gif,
+	src/html/its/img/shutdown.png, src/html/its/img/info.png,
+	src/html/its/img/its_logo.png, src/html/its/img/datensicherheit.png:
+	New.
+
 2014-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Rename "TCP Service Ping" to "TCP-ACK
