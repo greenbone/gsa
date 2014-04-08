@@ -1,5 +1,11 @@
 2014-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* doc/i18n-howto.txt: Update list of contexts. Add new section
+	"Creating new GSA page translations". Add info on install directory
+	for help.
+
+2014-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/po/de.xml: Remove unused "Form" context.
 
 2014-04-07  Matthew Mundell <matthew.mundell@greenbone.net>

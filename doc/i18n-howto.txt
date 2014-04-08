@@ -51,17 +51,28 @@ When grouping strings, you should look for a compromise between the following:
 
 Currently used contexts:
 ------------------------
-"Logo" : Strings used in the the logo header
-"MM"   : (Top level) main menu items
-"Help" : Item labels for the Help menu / "Help: <Resource Type>"
+"Logo"  : Strings used in the the logo header
+"MM"    : (Top level) main menu items
+"Login" : The login page
+"Help"  : Item labels for the Help menu / "Help: <Resource Type>"
+
 "Pagination" : Strings used for pagination labels
 "Filter Box" : The filter box at the top of table pages.
 "Time"       : Time related strings.
+"Severity"   : Severity related strings like the levels "High", "Medium", etc.
+"Status"     : Task status strings like "Running" or "Stop Requested"
+
+"Type"        : Capitalized singular resource type names, e.g. "Task"
+"Type Plural" : Capitalized plural resource type names, e.g. "Tasks"
+"Type Lower"        : Lower case singular resource type names, e.g. "task"
+"Type Plural Lower" : Lower case plural resource type names, e.g. "tasks"
+
 "Table Row"  : Generic actions, properties, etc. used inside table rows.
                To be used many times on a single page.
 "Window"     : Generic actions, properties, etc. used everywhere except
-               table rows.
+                table rows.
                To be used sparsely, e.g. on details pages.
+
 "<RT>"           : The type name of the resource type <RT> as well as
                    variants of very common terms like "New <RT>" or
                    "<RT> Details".
@@ -71,13 +82,15 @@ Currently used contexts:
 "<RT> Window"    : Actions, properties, etc. specific to the resource type
                    <RT> used everywhere except table rows.
                    To be used sparsely, e.g. on details pages.
+
 "Trashcan"        : Strings used by the Trashcan page.
 "My Settings"     : Strings used by the "My Settings" page.
 "Performance"     : Strings used by the Performance page.
 "CVSS Calculator" : Strings used by the Performance page.
 "Feed Sync"       : Strings used by feed sync page like "NVT Sync"
-"Wizard"      : Strings shared by all wizards.
-"Task Wizard" : Strings used by the Task Wizard.
+"Wizard"      : Strings shared by all wizards
+"Task Wizard" : Strings used by the Task Wizard
+"Advanced Task Wizard" : Strings used by the Advanced Task Wizard
 
 
 Structure of translation files
@@ -132,6 +145,32 @@ Template for new resource types
   <!-- 3.X.5    (Groups of special specific strings like Task Status) -->
 
 
+Creating new GSA page translations
+==================================
+The easiest way to create a new translation for GSA is to copy an existing,
+up-to-date language file (like de.xml) in the src/html/classic/po directory
+and replace the existing translated strings with ones in the language you are
+translating to.
+If you don't plan to translate all of GSA at once, you can also copy only
+the parts of the language file that contain the elements you wish to
+translate at the time. In this case the untranslated sections will fall back
+to the default language (English).
+
+The new file must be named "<lc>.xml" where <lc> is the ISO 639‑1 two-letter
+language code as it is used in the first part of of the HTTP Accept-Language
+header.
+You also have to add the language to the xsl:choose element of the xsl variable
+i18n_po_path, which is found in src/html/classic/gsad.html .
+The line added should look like this, "lc" again being the language code:
+
+    <xsl:when test="$i18n_language = 'lc'">po/lc.xml</xsl:when>
+
+Finally, your new language file has to be installed in
+${GSA_DATA_DIR}/classic/po. To make it part of the standard installation,
+add it to the appropriate list of files in the CMakeList.txt file in the base
+GSA source directory.
+
+
 Translating help pages
 ======================
 Translations for the help pages are contained in a file called "help_<lc>.xsl",
@@ -151,3 +190,5 @@ For example "availability" becomes "availability_de" if the language code is
 
 After this the "Page not found" template should be placed, followed by the
 individual page templates.
+
+The new help page has to be installed in the directory ${GSA_DATA_DIR}/classic.
