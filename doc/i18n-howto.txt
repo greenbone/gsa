@@ -156,9 +156,9 @@ the parts of the language file that contain the elements you wish to
 translate at the time. In this case the untranslated sections will fall back
 to the default language (English).
 
-The new file must be named "<lc>.xml" where <lc> is the ISO 639‑1 two-letter
-language code as it is used in the first part of of the HTTP Accept-Language
-header.
+The new file must be UTF-8 encoded and named "<lc>.xml" where <lc> is the
+ISO 639‑1 two-letter language code like it is also used by HTTP Accept-Language
+headers (e.g. "fr" for French or "nl" for Dutch).
 You also have to add the language to the xsl:choose element of the xsl variable
 i18n_po_path, which is found in src/html/classic/gsad.html .
 The line added should look like this, "lc" again being the language code:
@@ -191,4 +191,5 @@ For example "availability" becomes "availability_de" if the language code is
 After this the "Page not found" template should be placed, followed by the
 individual page templates.
 
-The new help page has to be installed in the directory ${GSA_DATA_DIR}/classic.
+The new help file should also be UTF-8 encoded and has to be installed in the
+directory ${GSA_DATA_DIR}/classic.

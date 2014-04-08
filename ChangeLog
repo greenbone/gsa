@@ -1,5 +1,10 @@
 2014-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* doc/i18n-howto.txt: Add notes about UTF-8 encoding and rephrase
+	part about language code.
+
+2014-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* doc/i18n-howto.txt: Update list of contexts. Add new section
 	"Creating new GSA page translations". Add info on install directory
 	for help.
