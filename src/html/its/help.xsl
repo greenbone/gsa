@@ -147,7 +147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
       Die darauf aufsetzende IT-Schwachstellenampel wurde in Zusammenarbeit
-      mit der Allianz für Cybersicherheit und dem 
+      mit der Allianz für Cyber-Sicherheit und dem 
       Bundesamt für Sicherheit in der Informationstechnik (BSI)
       entwickelt. Mit dieser Anwendung soll ein einfacher und sehr praxisorientierter
       Einstieg in die Thematik der Schwachstellen-Problematik ermöglicht werden. 

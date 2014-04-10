@@ -1,5 +1,17 @@
 2014-04-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Final part of ITS.
+
+	* CMakeLists.txt: Add handling of new face "its".
+
+	* src/html/its/CMakeLists.txt: New. Installs face "its".
+
+	* doc/readme-its.txt: New.
+
+	* src/html/its/help.xsl: Fixed typo.
+
+2014-04-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Next bunch for ITS.
 
 	* src/html/its/img/details.png,

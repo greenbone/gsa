@@ -515,4 +515,11 @@ add_subdirectory (src)
 
 add_subdirectory (doc)
 
+## Additional faces
+
+if (INSTALL_FACE_ITS MATCHES "yes")
+  message ("-- Additional face 'its' will be installed.")
+  add_subdirectory (src/html/its)
+endif (INSTALL_FACE_ITS MATCHES "yes")
+
 ## End
