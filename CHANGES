@@ -1,3 +1,27 @@
+gsa 5.0+beta13 (2014-04-10)
+
+This is the thirteenth beta version of the upcoming 5.0 release of the Greenbone
+Security Assistant (GSA). It is a web client that makes the full feature set of
+OpenVAS Manager available through a web browser.
+
+This release adds support for an alternative GSA face called
+"IT-Schwachstellenampel" ("IT vulnerability traffic light") and improves support
+for role editing. It also improves the handling of signals and libmicrohttpd
+error messages.
+
+Many thanks to everyone who has contributed to this release:
+Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver
+Wagner and Michael Wiegand.
+
+Main changes since 5.0+beta12:
+* Signal handling has been improved.
+* Logging of libmicrohttpd error messages has been improved.
+* Support for role editing has been added.
+* The display of permissions for tasks has been improved.
+* The i18n documentation has been updated and improved.
+* Support for the alternative face "IT-Schwachstellenampel" has been added.
+
+
 gsa 5.0+beta12 (2014-03-28)
 
 This is the twelfth beta version of the upcoming 5.0 release of the Greenbone
