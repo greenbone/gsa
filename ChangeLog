@@ -2,6 +2,25 @@
 
 	Next bunch for ITS.
 
+	* src/html/its/img/details.png,
+	src/html/its/img/tl_off_off_off.png,
+	src/html/its/img/tl_on_off_off.png,
+	src/html/its/img/tl_off_off_on.png,
+	src/html/its/img/tl_off_on_off.png,
+	src/html/its/img/tl_flash_off_off.gif,
+	src/html/its/img/tl_flash_on_off.gif,
+	src/html/its/img/tl_flash_flash_flash.gif,
+	src/html/its/img/printer.png: New.
+
+	* src/html/its/login/,
+	src/html/its/login/login.html: New.
+
+	* src/html/its/omp.xsl: New.
+
+2014-04-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Next bunch for ITS.
+
 	* src/html/its/img/greenbone-logo.png,
 	src/html/its/img/datensicherheit_big.png,
 	src/html/its/img/acs_logo.png, src/html/its/img/OpenVAS-logo.png,
