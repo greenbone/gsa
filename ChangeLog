@@ -1,5 +1,11 @@
 2014-04-10  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Post release version bump.
+
+	* src/html/classic/help.xsl, CMakeLists.txt: 5.0+beta14
+
+2014-04-10  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Prepare release of gsa 5.0+beta13 release (patch from Michael
 	Wiegand)
 
