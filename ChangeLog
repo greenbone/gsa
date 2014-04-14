@@ -1,3 +1,9 @@
+2014-04-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* CMakeLists.txt, src/CMakeLists.txt: Remove linking against gthread.
+
+	* src/gsad.c: Remove useless include and initialization.
+
 2014-04-10  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post release version bump.
