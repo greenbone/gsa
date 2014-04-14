@@ -1,3 +1,8 @@
+2014-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp-doc.xsl (changes): Restrict to changes in current
+	version.
+
 2014-04-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* CMakeLists.txt, src/CMakeLists.txt: Remove linking against gthread.

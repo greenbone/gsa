@@ -669,7 +669,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h2 id="changes">
       8 Compatibility Changes in Version <xsl:value-of select="version"/>
     </h2>
-    <xsl:apply-templates select="change"/>
+    <xsl:apply-templates select="change[version=../version]"/>
   </xsl:template>
 
   <!-- Root. -->
