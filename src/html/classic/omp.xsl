@@ -28691,8 +28691,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_users">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="../modify_auth_response" mode="show"/>
-  <!-- If any describe_auth was found, match it here -->
-  <xsl:call-template name="describe_auth_response" mode="show"/>
   <xsl:apply-templates select="delete_user_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_user_response"/>
@@ -28718,6 +28716,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:for-each>
+  <!-- If any describe_auth was found, match it here -->
+  <xsl:call-template name="describe_auth_response" mode="show"/>
 </xsl:template>
 
 <!-- AUTHENTICATION DESCRIPTION -->
