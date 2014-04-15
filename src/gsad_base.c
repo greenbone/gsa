@@ -378,7 +378,7 @@ params_new ()
 /**
  * @brief Make a params.
  *
- * @param[in]  Params.
+ * @param[in]  params  Params.
  */
 void
 params_free (params_t *params)
@@ -390,8 +390,8 @@ params_free (params_t *params)
 /**
  * @brief Get param.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Param if present, else NULL.
  */
@@ -406,8 +406,8 @@ params_get (params_t *params, const char *name)
 /**
  * @brief Get whether a param was given at all.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return 1 if given, else 0.
  */
@@ -422,8 +422,8 @@ params_given (params_t *params, const char *name)
 /**
  * @brief Get value of param.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Value if param present, else NULL.
  */
@@ -438,8 +438,8 @@ params_value (params_t *params, const char *name)
 /**
  * @brief Get the size of the value of param.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Size if param present, else -1.
  */
@@ -456,8 +456,8 @@ params_value_size (params_t *params, const char *name)
  *
  * Only set if validation failed.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Value if param present, else NULL.
  */
@@ -472,8 +472,8 @@ params_original_value (params_t *params, const char *name)
 /**
  * @brief Get filename of param.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Filename if param present and has a filename, else NULL.
  */
@@ -488,8 +488,8 @@ params_filename (params_t *params, const char *name)
 /**
  * @brief Get values of param.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return Values if param present, else NULL.
  */
@@ -504,8 +504,8 @@ params_values (params_t *params, const char *name)
 /**
  * @brief Get whether a param is valid.
  *
- * @param[in]  Params.
- * @param[in]  Name.
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
  *
  * @return 1 if param present and valid, else 0.
  */

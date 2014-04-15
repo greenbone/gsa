@@ -1428,8 +1428,9 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
 /**
  * @brief Export a resource.
  *
+ * @param[in]   type                 Type of resource.
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   resource_id              UUID of resource.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -2616,12 +2617,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
  * @brief Setup edit_task XML, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
- * @param[in]  task_id           UUID of task.
- * @param[in]  next              Name of next page.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -2924,7 +2920,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
  * @brief Export a task.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   task_id              UUID of task.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -4397,7 +4393,6 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
- * @param[in]   format       Format of result
  * @param[out]  result_len   Length of result.
  * @param[out]  html         Result of XSL transformation.  Required.
  * @param[out]  filename     Agent filename return.  NULL to skip.  Only set
@@ -4832,7 +4827,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
  * @brief Export a agent.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   agent_id             UUID of agent.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -4841,8 +4836,8 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
  */
 char *
 export_agent_omp (credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
 {
   return export_resource ("agent", credentials, params, content_type,
                           content_disposition, content_length);
@@ -5733,7 +5728,7 @@ test_alert_omp (credentials_t * credentials, params_t *params)
  * @brief Export an alert.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   alert_id            UUID of alert.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -8123,7 +8118,6 @@ get_config (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
@@ -8576,12 +8570,7 @@ edit_config_family_omp (credentials_t * credentials, params_t *params)
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
- * @param[in]  name         Name of config.
- * @param[in]  family       Name of family.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  nvts         NVT's.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -9100,7 +9089,7 @@ export_configs_omp (credentials_t * credentials, params_t *params,
  * @brief Export a note.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   note_id              UUID of note.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -9141,7 +9130,7 @@ export_notes_omp (credentials_t * credentials, params_t *params,
  * @brief Export an override.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   override_id              UUID of override.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -9182,7 +9171,7 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
  * @brief Export a Port List.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   port_list_id         UUID of Port List.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -9341,7 +9330,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
  * @brief Export a report format.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   report_format_id     UUID of report format.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -10792,6 +10781,7 @@ get_report_section_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  response_size  Size of cert.
  *
  * @return SSL Certificate.
  */
@@ -11057,6 +11047,7 @@ get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
  * @brief Get all notes, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -11737,6 +11728,7 @@ get_overrides (credentials_t *credentials, params_t *params, const char *extra_x
  * @brief Get all overrides, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -12782,7 +12774,7 @@ save_slave_omp (credentials_t * credentials, params_t *params)
  * @brief Export a slave.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   slave_id             UUID of slave.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -13196,7 +13188,6 @@ get_system_reports_omp (credentials_t * credentials, params_t *params)
  * @param[in]   duration             Duration of report, in seconds.
  * @param[in]   slave_id             ID of slave.
  * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
  *
  * @return Image, or NULL.
@@ -15184,7 +15175,7 @@ edit_group_omp (credentials_t * credentials, params_t *params)
  * @brief Export a group.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   group_id            UUID of group.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -15892,7 +15883,7 @@ edit_permission_omp (credentials_t * credentials, params_t *params)
  * @brief Export a permission.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   permission_id        UUID of permission.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -16835,7 +16826,7 @@ get_roles_omp (credentials_t * credentials, params_t *params)
  * @brief Export a role.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   role_id            UUID of role.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -17613,7 +17604,7 @@ edit_filter_omp (credentials_t * credentials, params_t *params)
  * @brief Export a filter.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   filter_id            UUID of filter.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -17827,7 +17818,7 @@ edit_schedule_omp (credentials_t * credentials, params_t *params)
  * @brief Export a schedule.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   schedule_id          UUID of the schedule.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -18889,7 +18880,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
  * @brief Export a user.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   user_id              UUID of user.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.

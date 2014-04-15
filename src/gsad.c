@@ -587,7 +587,7 @@ token_user (const gchar *token, user_t **user_return)
 /**
  * @brief Remove a user from the session "database", releasing the user_t too.
  *
- * @param[in]  user  User.
+ * @param[in]  token  User's token.
  *
  * @return 0 success, -1 error.
  */
@@ -1393,7 +1393,8 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 /**
  * @brief Validate param values.
  *
- * @param[in]  params  Values.
+ * @param[in]  parent_name  Name of the parent param.
+ * @param[in]  params       Values.
  */
 void
 params_mhd_validate_values (const char *parent_name, void *params)

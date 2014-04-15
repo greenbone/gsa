@@ -50,7 +50,7 @@
 /**
  * @brief Create a new validator rule.
  *
- * The validator must be freed with \ref validator_rule_free.
+ * The validator must be freed with \ref openvas_validator_rule_free.
  *
  * @return A newly allocated validator.
  */

@@ -1,5 +1,10 @@
 2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c, src/gsad_base.c, src/gsad_omp.c, src/validator.c: Sort out
+	Doxygen warnings.
+
+2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_auth_omp): Go to get_users instead of edit_user
 	on error, because that's the page the form is on.
 
