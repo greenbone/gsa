@@ -2649,45 +2649,35 @@ send_response (struct MHD_Connection *connection, const char *page,
 }
 
 /**
- * @brief Sends a HTTP redirection.
+ * @brief Sends a HTTP redirection to an uri.
  *
  * @param[in]  connection  The connection handle.
- * @param[in]  location    The URL to redirect to.
+ * @param[in]  uri         The full URI to redirect to.
  * @param[in]  user        User to add cookie for, or NULL.
  *
  * @return MHD_NO in case of a problem. Else MHD_YES.
  */
 int
-send_redirect_header (struct MHD_Connection *connection, const char *location,
+send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
                       user_t *user)
 {
   int ret;
   struct MHD_Response *response;
-  char *body, *url;
-  const char *host;
+  char *body;
 
   /* Some libmicrohttp versions get into an endless loop in https mode
      if an empty body is passed.  As a workaround and because it is
      anyway suggested by the HTTP specs, we provide a short body.  We
-     assume that location does not need to be quoted.  */
+     assume that uri does not need to be quoted.  */
   body = g_strdup_printf ("<html><body>Code 303 - Redirecting to"
                           " <a href=\"%s\">%s<a/></body></html>\n",
-                          location, location);
+                          uri, uri);
   response = MHD_create_response_from_data (2, body, MHD_NO, MHD_YES);
   g_free (body);
 
   if (!response)
     return MHD_NO;
-  host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
-                                      MHD_HTTP_HEADER_HOST);
-  if (host)
-    url = g_strdup_printf ("http%s://%s%s", use_secure_cookie ? "s": "",
-                           host, location);
-  else
-    url = g_strdup (location);
-
-  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, url);
-  g_free (url);
+  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, uri);
   if (!ret)
     {
       MHD_destroy_response (response);
@@ -2711,10 +2701,38 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
   return ret;
 }
 
+#undef MAX_HOST_LEN
+
 /**
  * @brief Maximum length of the host portion of the redirect address.
  */
 #define MAX_HOST_LEN 1000
+
+/**
+ * @brief Sends an HTTP redirection response to an urn.
+ *
+ * @param[in]  connection   The connection handle.
+ * @param[in]  urn          The full urn to redirect to.
+ * @param[in]  user         User to add cookie for, or NULL.
+ *
+ * @return MHD_NO in case of a problem. Else MHD_YES.
+ */
+int
+send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
+                      user_t *user)
+{
+  const char *host;
+  char uri[MAX_HOST_LEN];
+
+  host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
+                                      MHD_HTTP_HEADER_HOST);
+  if (host == NULL)
+    return MHD_NO;
+
+  snprintf (uri, sizeof (uri), "http%s://%s%s", use_secure_cookie ? "s" : "",
+            host, urn);
+  return send_redirect_to_uri (connection, uri, user);
+}
 
 /**
  * @brief HTTP request handler for GSAD.
@@ -2785,7 +2803,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
     location = g_strdup_printf (redirect_location, name);
   else
     location = g_strdup_printf (redirect_location, host);
-  if (send_redirect_header (connection, location, NULL) == MHD_NO)
+  if (send_redirect_to_uri (connection, location, NULL) == MHD_NO)
     {
       g_free (location);
       return MHD_NO;
@@ -2793,8 +2811,6 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   g_free (location);
   return MHD_YES;
 }
-
-#undef MAX_HOST_LEN
 
 /**
  * @brief Adds content-type header fields to a response.
@@ -3201,7 +3217,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (&url[0], url_base))
     {
-      send_redirect_header (connection, default_file, NULL);
+      send_redirect_to_urn (connection, default_file, NULL);
       return MHD_YES;
     }
 
@@ -3210,7 +3226,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                                     it is a const str */
         && ! url[strlen ("/login/")])
     {
-      send_redirect_header (connection, default_file, NULL);
+      send_redirect_to_urn (connection, default_file, NULL);
       return MHD_YES;
     }
 
@@ -3710,7 +3726,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  params_value (con_info->params, "text"),
                                  user->token);
           user_release (user);
-          send_redirect_header (connection, url, user);
+          send_redirect_to_urn (connection, url, user);
           g_free (url);
           return MHD_YES;
         }

@@ -1,4 +1,12 @@
-2014-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+2014-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (send_redirect_header): Rename to send_redirect_to_uri. Use
+	provided location directly.
+	(send_redirect_to_urn): New function.
+	(redirect_handler): Adjust renamed function call and call
+	send_redirect_to_urn where adequate.
+
+2014-04-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp-doc.xsl (changes): Restrict to changes in current
 	version.
