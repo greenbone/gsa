@@ -1,5 +1,13 @@
 2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_auth_omp): Go to get_users instead of edit_user
+	on error, because that's the page the form is on.
+
+	* src/html/classic/omp.xsl (get_users): Correct path of
+	modify_auth_response.
+
+2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_users): Move Authentication windows
 	to underneath the Users window.
 

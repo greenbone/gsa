@@ -19098,7 +19098,7 @@ save_auth_omp (credentials_t* credentials, params_t *params)
         html = get_users (credentials, params, response);
     }
   else
-    html = edit_user (credentials, params, response);
+    html = get_users (credentials, params, response);
   free_entity (entity);
   g_free (response);
   return html;
