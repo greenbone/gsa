@@ -4306,8 +4306,8 @@ main (int argc, char **argv)
       gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
                                       gsad_redirect_port, NULL, NULL, &redirect_handler,
                                       NULL, MHD_OPTION_NOTIFY_COMPLETED,
-                                      MHD_OPTION_EXTERNAL_LOGGER, mhd_logger,
-                                      NULL, free_resources, NULL,
+                                      free_resources, NULL,
+                                      MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                                       MHD_OPTION_END);
 
       if (gsad_daemon == NULL)
