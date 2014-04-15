@@ -1,5 +1,9 @@
 2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* README: Update usage.
+
+2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c, src/gsad_base.c, src/gsad_omp.c, src/validator.c: Sort out
 	Doxygen warnings.
 

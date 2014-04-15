@@ -29,16 +29,15 @@ The program usage message follows.
       gsad [OPTION...] - Greenbone Security Assistant Daemon
 
     Help Options:
-      -?, --help                       Show help options
+      -h, --help                       Show help options
 
     Application Options:
+      --drop-privileges                Drop privileges.
       -f, --foreground                 Run in foreground.
       --http-only                      Serve HTTP only, without SSL.
       --listen=<address>               Listen on <address>.
-      --alisten=<address>              Administrator address.
       --mlisten=<address>              Manager address.
       -p, --port=<number>              Use port number <number>.
-      -a, --aport=<number>             Use administrator port number <number>.
       -m, --mport=<number>             Use manager port number <number>.
       -r, --rport=<number>             Redirect HTTP from this port number <number>.
       -R, --redirect                   Redirect HTTP to HTTPS.
@@ -46,4 +45,9 @@ The program usage message follows.
       -V, --version                    Print version and exit.
       -k, --ssl-private-key=<file>     Use <file> as the private key for HTTPS
       -c, --ssl-certificate=<file>     Use <file> as the certificate for HTTPS
-      --do-chroot                      Do chroot and drop privileges.
+      --do-chroot                      Do chroot.
+      --secure-cookie                  Use a secure cookie (implied when using HTTPS).
+      --timeout=<number>               Minutes of user idle time before session expires.
+      --debug-tls=<level>              Enable TLS debugging at <level>
+      --gnutls-priorities=<string>     GnuTLS priorities string.
+      --face=<dir>                     Use interface files from subdirectory <dir>
