@@ -1712,21 +1712,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </li>
     <li>
+     <xsl:variable name="page">
+       <xsl:choose>
+         <xsl:when test="gsa:may-get-trash ()">
+           <xsl:value-of select="'get_trash'"/>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:value-of select="'get_my_settings'"/>
+         </xsl:otherwise>
+       </xsl:choose>
+     </xsl:variable>
      <a class="top_button"
-        href="/omp?cmd=get_trash&amp;token={/envelope/token}">
+        href="/omp?cmd={$page}&amp;token={/envelope/token}">
        <xsl:value-of select="gsa:i18n ('Extras', 'MM')"/>
        <div class="first_button_overlay">
          <ul class="first_button_overlay">
            <li class="pointy"></li>
            <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/>
+             <xsl:choose>
+               <xsl:when test="gsa:may-get-trash ()">
+                 <xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <xsl:value-of select="gsa:i18n('My Settings', 'My Settings')"/>
+               </xsl:otherwise>
+             </xsl:choose>
            </li>
          </ul>
        </div>
      </a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/></a></li>
+      <xsl:if test="gsa:may-get-trash ()">
+        <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/></a></li>
+      </xsl:if>
       <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/></a></li>
       <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
         <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/></a></li>

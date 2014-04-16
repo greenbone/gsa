@@ -54,6 +54,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="trashcan-availability">
+  <xsl:choose>
+    <xsl:when test="gsa:may-get-trash ()">
+    </xsl:when>
+    <xsl:otherwise>
+      <p>
+        <b>Note:</b> This feature is not available with the current OMP Server connection.
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="list-window-line-actions">
   <xsl:param name="type"/>
   <xsl:param name="used_by"/>
@@ -8550,6 +8562,9 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="trashcan-availability"/>
+
       <h1>Trashcan</h1>
       <p>
         This page lists all resources that are currently in the trashcan.

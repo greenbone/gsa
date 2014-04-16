@@ -1,4 +1,16 @@
-2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+2014-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add permission-style check for Trashcan menu item.
+
+	* src/html/classic/omp.xsl (gsa:may-get-trash): New function.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Only show the
+	trashcan item if the user can get trash.
+
+	* src/html/classic/help.xsl (trashcan-availability): New template.
+	(trashcan.html): Add availability note.
+
+2014-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Add more default landing pages between
 	get_reports and get_my_settings.
