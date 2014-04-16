@@ -1,5 +1,12 @@
 2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Add more default landing pages between
+	get_reports and get_my_settings.
+
+	* src/gsad_omp.c (get_info): Default to NVTs if info_type is missing.
+
+2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* README: Update usage.
 
 2014-04-15  Matthew Mundell <matthew.mundell@greenbone.net>

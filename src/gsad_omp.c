@@ -3172,11 +3172,13 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   info_type = params_value (params, "info_type");
   if (info_type == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting SecInfo. "
-                         "Diagnostics: Required parameter info_type not provided.",
-                         "/omp?cmd=get_info");
+    {
+      param_t *param;
+      param = params_add (params, "info_type", "nvt");
+      param->valid = 1;
+      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+      info_type = params_value (params, "info_type");
+    }
 
   if (strcmp (info_type, "nvt")
       && strcmp (info_type, "cve")
