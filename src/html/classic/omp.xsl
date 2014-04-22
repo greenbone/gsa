@@ -16306,12 +16306,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="info/cpe/nvd_id"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="info/modification_time != ''">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
-            <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
-          </tr>
-        </xsl:if>
         <xsl:if test="info/cpe/deprecated_by">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Deprecated by', 'CPE Window')"/>:</td>
@@ -16366,7 +16360,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
               <td width="104"><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="info/cpe/cves/cve">
 
@@ -16380,14 +16373,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:call-template name="severity-bar">
                     <xsl:with-param name="cvss" select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
                   </xsl:call-template>
-                </td>
-                <td width="100">
-                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
-                    <img src="/img/details.png"
-                      border="0"
-                      alt="{gsa:i18n ('Details', 'Window')}"
-                      style="margin-left:3px;"/>
-                  </a>
                 </td>
               </tr>
             </xsl:for-each>

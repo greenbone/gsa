@@ -1,3 +1,9 @@
+2014-04-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (cpe-details): Remove redundant
+	"Last Modified" item and Actions column in "Reported Vulnerabilities"
+	list.
+
 2014-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add permission-style check for Trashcan menu item.
