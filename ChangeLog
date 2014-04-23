@@ -1,3 +1,10 @@
+2014-04-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport a small part of r17494.
+
+	* src/gsad_omp.c (get_task): Default apply_overrides to 1 like
+	everywhere.
+
 2014-03-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport 18346.

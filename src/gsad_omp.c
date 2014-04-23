@@ -2898,7 +2898,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
         params_add (params, "filter", "apply_overrides=0");
     }
 
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
   if (task_id == NULL)
     return gsad_message (credentials,
