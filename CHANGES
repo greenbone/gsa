@@ -1,3 +1,51 @@
+gsa 5.0.0 (2014-04-23)
+
+This is the first release of the Greenbone Security Assistant (GSA) 5.0 module
+for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+GSA 5.0 implements all of the new features of the protocol OMP 5.0.
+This includes the Groups, Roles and Permissions management and Tags.
+Further major changes are the new results browser, multi-language support
+and the switch from "threat" to "severity" concept. For a complete list of
+changes, please refer to the list below.
+
+Many thanks to everyone who has contributed to this release:
+Benoît Allard, Hani Benhabiles, Michael Meyer, Matthew Mundell, Timo Pollmeier,
+Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 4.0.x:
+* New: CVSS Score calculator.
+* New: User, group, role and permission management.
+* New: Tags and tag management.
+* New: Internationalization support.
+* New: Support for app icons.
+* New: Support for displaying gathered SSL certificates.
+* New: Support for Alterable Tasks.
+* New: Setting of the Source Interface for Tasks.
+* New: Alive Test for Tasks.
+* Changed: The default result filter now includes "low" and "log" messages as well.
+* Changed: GSA now requires the user's existing password when changing passwords.
+* The concept of "Threat" is replaced by "Severity".
+* Improved: Display of prognostic results.
+* The interface has been simplified, improved and made more consistent in a
+  number of places.
+* Support for the alternative face "IT-Schwachstellenampel" has been added.
+* The required minimum GnuTLS version has increased to 2.8.
+* The required minimum libmicrohttpd version has increased to 0.9.0.
+* Added support for setting the priorities for cipher suites when using HTTPS.
+* Add --drop option to drop privileges once the chroot is established.
+  Attention: This action was previously part of the --chroot parameter, if
+  required, this now needs to be explicitely set.
+* Add --face to support switching between different layouts.
+* Code cleanup.
+
+And additionally changes compared to last release candidate 5.0+beta13:
+* Added permission-style check for Trashcan menu item.
+* Improved package configuration.
+* Various bug-fixes, cleanups and improvements, especially for consistency.
+
 gsa 5.0+beta13 (2014-04-10)
 
 This is the thirteenth beta version of the upcoming 5.0 release of the Greenbone

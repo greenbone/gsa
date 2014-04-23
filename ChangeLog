@@ -1,3 +1,13 @@
+2014-04-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 5.0.0 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Set version to 5.0.0. Switch version scheme.
+
+	* src/html/classic/help.xsl: Updated version number.
+
 2014-04-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (cpe-details): Remove redundant
@@ -10868,7 +10878,7 @@
 
 2012-04-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	Preparing the gsa 3.0+beta1 release.
+	Preparing the gsa 4.0+beta1 release.
 
 	* CHANGES: Updated.
 
