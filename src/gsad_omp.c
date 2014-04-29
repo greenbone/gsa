@@ -173,6 +173,10 @@ static char *get_role (credentials_t *, params_t *, const char *);
 
 static char *get_roles (credentials_t *, params_t *, const char *);
 
+static char *get_scanner (credentials_t *, params_t *, const char *);
+
+static char *get_scanners (credentials_t *, params_t *, const char *);
+
 static char *get_schedule (credentials_t *, params_t *, const char *);
 
 static char *get_schedules (credentials_t *, params_t *, const char *);
@@ -736,6 +740,12 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_roles") == 0)
     return get_roles (credentials, params, response);
+
+  if (strcmp (next, "get_scanner") == 0)
+    return get_scanner (credentials, params, response);
+
+  if (strcmp (next, "get_scanners") == 0)
+    return get_scanners (credentials, params, response);
 
   if (strcmp (next, "get_schedule") == 0)
     return get_schedule (credentials, params, response);
@@ -12811,6 +12821,397 @@ export_slaves_omp (credentials_t * credentials, params_t *params,
 {
   return export_many ("slave", credentials, params, content_type,
                       content_disposition, content_length);
+}
+
+/**
+ * @brief Get all scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_scanners (credentials_t *credentials, params_t *params,
+               const char *extra_xml)
+{
+  return get_many ("scanner", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_scanners_omp (credentials_t * credentials, params_t *params)
+{
+  return get_scanners (credentials, params, NULL);
+}
+
+/**
+ * @brief Get one scanner, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_scanner (credentials_t * credentials, params_t *params,
+              const char *extra_xml)
+{
+  return get_one ("scanner", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get one scanner, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  return get_scanner (credentials, params, NULL);
+}
+
+/**
+ * @brief Export a scanner.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Scanner XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_scanner_omp (credentials_t * credentials, params_t *params,
+                     enum content_type * content_type,
+                     char **content_disposition, gsize *content_length)
+{
+  return export_resource ("scanner", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of scanners.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Scanners XML on success. HTML result of XSL transformation on error.
+ */
+char *
+export_scanners_omp (credentials_t * credentials, params_t *params,
+                      enum content_type * content_type,
+                      char **content_disposition, gsize *content_length)
+{
+  return export_many ("scanner", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
+/**
+ * @brief Returns page to create a new scanner.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_scanner (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_scanner>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_scanner>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new scanner page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_scanner_omp (credentials_t *credentials, params_t *params)
+{
+  return new_scanner (credentials, params, NULL);
+}
+
+/**
+ * @brief Verify scanner, get scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+verify_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *scanner_id;
+  char *ret;
+
+  scanner_id = params_value (params, "scanner_id");
+  CHECK_PARAM (scanner_id, "Verify Scanner", get_scanners);
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while verifying an scanner. "
+                 "The scanner is not verified. "
+                 "Diagnostics: Failure to connect to manager daemon.",
+                 "/omp?cmd=get_scanners");
+    }
+
+  if (openvas_server_sendf (&session, "<verify_scanner scanner_id=\"%s\"/>",
+                            scanner_id) == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while verifying an scanner. "
+               "The scanner is not verified. "
+               "Diagnostics: Failure to send command to manager daemon.",
+               "/omp?cmd=get_scanners");
+    }
+
+  xml = g_string_new ("");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while verifying an scanner. "
+               "It is unclear whether the scanner has been verified or not. "
+               "Diagnostics: Failure to receive response from manager daemon.",
+               "/omp?cmd=get_scanners");
+    }
+
+  ret = get_scanners (credentials, params, xml->str);
+  openvas_server_close (socket, session);
+  g_string_free (xml, TRUE);
+  return ret;
+}
+
+/**
+ * @brief Create a scanner, get all scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  char *ret;
+  gchar *response = NULL;
+  const char *name, *comment, *host, *port, *type;
+  entity_t entity = NULL;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  host = params_value (params, "host");
+  port = params_value (params, "port");
+  type = params_value (params, "scanner_type");
+  CHECK_PARAM (name, "Create Scanner", new_scanner);
+  CHECK_PARAM (host, "Create Scanner", new_scanner);
+  CHECK_PARAM (port, "Create Scanner", new_scanner);
+  CHECK_PARAM (type, "Create Scanner", new_scanner);
+
+  switch (ompf (credentials, &response, &entity,
+                "<create_scanner><name>%s</name><comment>%s</comment>"
+                "<host>%s</host><port>%s</port><type>%s</type>"
+                "</create_scanner>",
+                name, comment ? comment : "", host, port, type))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while creating a new scanner. "
+                 "No new scanner was created. "
+                 "Diagnostics: Failure to send command to manager daemon.",
+                 "/omp?cmd=get_scanners");
+      case 2:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while creating a new scanner. "
+                 "It is unclear whether the scanner has been created or not. "
+                 "Diagnostics: Failure to receive response from manager daemon.",
+                 "/omp?cmd=get_scanners");
+      default:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while creating a new scanner. "
+                 "It is unclear whether the scanner has been created or not. "
+                 "Diagnostics: Internal Error.", "/omp?cmd=get_scanners");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_scanners (credentials, params, response);
+    }
+  else
+    ret = new_scanner (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
+ * @brief Delete a scanner, get all scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("scanner", credentials, params, 0, get_scanners);
+}
+
+/**
+ * @brief Setup edit_scanner XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_scanner (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return edit_resource ("scanner", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_scanner XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_scanner (credentials, params, NULL);
+}
+
+/**
+ * @brief Save scanner, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials     Username and password for authentication.
+ * @param[in]  params          Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const char *scanner_id, *name, *comment, *port, *host, *type;
+  char *ret;
+
+  scanner_id = params_value (params, "scanner_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  host = params_value (params, "host");
+  port = params_value (params, "port");
+  type = params_value (params, "scanner_type");
+  CHECK_PARAM (scanner_id, "Edit Scanner", edit_scanner);
+  CHECK_PARAM (name, "Edit Scanner", edit_scanner);
+  CHECK_PARAM (host, "Edit Scanner", edit_scanner);
+  CHECK_PARAM (port, "Edit Scanner", edit_scanner);
+  CHECK_PARAM (type, "Edit Scanner", edit_scanner);
+
+  switch (ompf (credentials, &response, &entity,
+                "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
+                "<comment>%s</comment><host>%s</host>"
+                "<port>%s</port><type>%s</type></modify_scanner>",
+                scanner_id, name, comment ?: "", host, port, type))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while saving a scanner. "
+                 "The scanner remains the same. "
+                 "Diagnostics: Failure to send command to manager daemon.",
+                 "/omp?cmd=get_scanners");
+      case 2:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while saving a scanner. "
+                 "It is unclear whether the scanner has been saved or not. "
+                 "Diagnostics: Failure to receive response from manager daemon.",
+                 "/omp?cmd=get_scanners");
+      default:
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while saving a scanner. "
+                 "It is unclear whether the scanner has been saved or not. "
+                 "Diagnostics: Internal Error.", "/omp?cmd=get_scanners");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_scanners_omp (credentials, params);
+    }
+  else
+    ret = edit_scanner (credentials, params, response);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
 }
 
 /**

@@ -1,3 +1,35 @@
+2014-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add Scanners object.
+
+	* src/gsad.c (init_validator): Add create_scanner, delete_scanner,
+	edit_scanner, export_scanner, export_scanners, get_scanner,
+	get_scanners, new_scanner, save_scanner, verify_scanner omp argument
+	valid values. Add scanner and Scanner resource_type and
+	optional_resource_type arguments valid values. Add scanner_id and
+	scanner_type arguments.
+	(exec_omp_post, exec_omp_get): Handle new requests for scanner object
+	type.
+
+	* src/gsad_omp.c (next_page): Handle get_scanner and get_scanners
+	values.
+	(get_scanners, get_scanners_omp, get_scanner, get_scanner_omp)
+	(export_scanner_omp, export_scanners_omp, new_scanner, new_scanner_omp)
+	(verify_scanner_omp, create_scanner_omp, delete_scanner_omp)
+	(edit_scanner, edit_scanner_omp, save_scanner_omp): New functions.
+
+	* src/gsad_omp.h: Add new functions prototypes.
+
+	* src/html/classic/gsad.xsl (modify_scanner_response)
+	(verify_scanner_response): New templates.
+	(html-gsa-navigation): Add Scanners sub-menu entry.
+
+	* src/html/classic/omp.xsl (scanner-type-name, scanner-type-list)
+	(html-scanner-create-form, create_scanner_response, new_scanner)
+	(delete_scanner_repsonse, modify_scanner_response, html-scanners-table)
+	(html-edit-scanner-table, edit_scanner, scanner [details], get_scanner)
+	(get_scanners, verify_scanner_response, scanner): New tempaltes.
+
 2014-04-28  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post branch version bump.

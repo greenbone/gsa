@@ -119,6 +119,18 @@ char * export_agent_omp (credentials_t *, params_t *, enum content_type *,
 char * export_agents_omp (credentials_t *, params_t *, enum content_type *,
                             char **, gsize *);
 
+char * create_scanner_omp (credentials_t *, params_t *);
+char * new_scanner_omp (credentials_t *, params_t *);
+char * get_scanner_omp (credentials_t *, params_t *);
+char * get_scanners_omp (credentials_t *, params_t *);
+char * save_scanner_omp (credentials_t *, params_t *);
+char * delete_scanner_omp (credentials_t *, params_t *);
+char * edit_scanner_omp (credentials_t *, params_t *);
+char * export_scanner_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
+char * export_scanners_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
+char * verify_scanner_omp (credentials_t *, params_t *);
 
 char * create_schedule_omp (credentials_t *, params_t *);
 char * new_schedule_omp (credentials_t *, params_t *);
@@ -131,7 +143,7 @@ char * save_schedule_omp (credentials_t *, params_t *);
 char * export_schedule_omp (credentials_t *, params_t *, enum content_type *,
                             char **, gsize *);
 char * export_schedules_omp (credentials_t *, params_t *, enum content_type *,
-                            char **, gsize *);
+                             char **, gsize *);
 
 char * create_tag_omp (credentials_t *, params_t *);
 char * delete_tag_omp (credentials_t *, params_t *);

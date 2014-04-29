@@ -631,6 +631,7 @@ init_validator ()
                          "|(create_port_range)"
                          "|(create_report)"
                          "|(create_role)"
+                         "|(create_scanner)"
                          "|(create_schedule)"
                          "|(create_slave)"
                          "|(create_tag)"
@@ -652,6 +653,7 @@ init_validator ()
                          "|(delete_report)"
                          "|(delete_report_format)"
                          "|(delete_role)"
+                         "|(delete_scanner)"
                          "|(delete_schedule)"
                          "|(delete_slave)"
                          "|(delete_tag)"
@@ -693,6 +695,7 @@ init_validator ()
                          "|(edit_port_list)"
                          "|(edit_report_format)"
                          "|(edit_role)"
+                         "|(edit_scanner)"
                          "|(edit_schedule)"
                          "|(edit_slave)"
                          "|(edit_tag)"
@@ -728,6 +731,8 @@ init_validator ()
                          "|(export_result)"
                          "|(export_role)"
                          "|(export_roles)"
+                         "|(export_scanner)"
+                         "|(export_scanners)"
                          "|(export_schedule)"
                          "|(export_schedules)"
                          "|(export_slave)"
@@ -777,6 +782,8 @@ init_validator ()
                          "|(get_result)"
                          "|(get_role)"
                          "|(get_roles)"
+                         "|(get_scanner)"
+                         "|(get_scanners)"
                          "|(get_schedule)"
                          "|(get_schedules)"
                          "|(get_slave)"
@@ -807,8 +814,9 @@ init_validator ()
                          "|(new_port_list)"
                          "|(new_report_format)"
                          "|(new_role)"
-                         "|(new_slave)"
+                         "|(new_scanner)"
                          "|(new_schedule)"
+                         "|(new_slave)"
                          "|(new_tag)"
                          "|(new_target)"
                          "|(new_task)"
@@ -836,6 +844,7 @@ init_validator ()
                          "|(save_port_list)"
                          "|(save_report_format)"
                          "|(save_role)"
+                         "|(save_scanner)"
                          "|(save_schedule)"
                          "|(save_slave)"
                          "|(save_tag)"
@@ -850,6 +859,7 @@ init_validator ()
                          "|(toggle_tag)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
+                         "|(verify_scanner)"
                          "|(wizard)"
                          "|(wizard_get)$");
 
@@ -974,12 +984,12 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|dfn_cert_adv|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|DFN-CERT Advisory)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|dfn_cert_adv|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|DFN-CERT Advisory)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
@@ -1010,6 +1020,7 @@ init_validator ()
   openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
@@ -1128,6 +1139,7 @@ init_validator ()
   openvas_validator_alias (validator, "roles",             "optional_number");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
+  openvas_validator_alias (validator, "scanner_type", "number");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
@@ -1839,6 +1851,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_task)
   ELSE (create_user)
   ELSE (create_role)
+  ELSE (create_scanner)
   ELSE (create_schedule)
   ELSE (create_slave)
   ELSE (create_tag)
@@ -1860,6 +1873,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_report)
   ELSE (delete_report_format)
   ELSE (delete_role)
+  ELSE (delete_scanner)
   ELSE (delete_schedule)
   ELSE (delete_slave)
   ELSE (delete_user)
@@ -1939,6 +1953,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_port_list)
   ELSE (save_report_format)
   ELSE (save_role)
+  ELSE (save_scanner)
   ELSE (save_schedule)
   ELSE (save_slave)
   ELSE (save_tag)
@@ -2175,6 +2190,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_port_list)
   ELSE (edit_report_format)
   ELSE (edit_role)
+  ELSE (edit_scanner)
   ELSE (edit_schedule)
   ELSE (edit_slave)
   ELSE (edit_tag)
@@ -2319,6 +2335,14 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_roles_omp (credentials, params, content_type,
                              content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_scanner"))
+    return export_scanner_omp (credentials, params, content_type,
+                                content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_scanners"))
+    return export_scanners_omp (credentials, params, content_type,
+                                 content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_schedule"))
     return export_schedule_omp (credentials, params, content_type,
                                 content_disposition, response_size);
@@ -2446,6 +2470,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_report_section)
   ELSE (get_role)
   ELSE (get_roles)
+  ELSE (get_scanner)
+  ELSE (get_scanners)
   ELSE (get_schedule)
   ELSE (get_schedules)
   ELSE (get_slave)
@@ -2475,10 +2501,12 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_permission)
   ELSE (new_port_list)
   ELSE (new_report_format)
-  ELSE (new_slave)
+  ELSE (new_scanner)
   ELSE (new_schedule)
+  ELSE (new_slave)
   ELSE (verify_agent)
   ELSE (verify_report_format)
+  ELSE (verify_scanner)
   ELSE (wizard)
   ELSE (wizard_get)
 

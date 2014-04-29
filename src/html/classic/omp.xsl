@@ -1830,6 +1830,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="scanner-type-name">
+  <xsl:param name="type"/>
+  <xsl:choose>
+    <xsl:when test="$type = '1'">OSP Ovaldi</xsl:when>
+    <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="scanner-type-list">
+  <xsl:param name="default"/>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="1"/>
+    <xsl:with-param name="content" select="'OSP Ovaldi'"/>
+    <xsl:with-param name="select-value" select="$default"/>
+  </xsl:call-template>
+</xsl:template>
 
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
@@ -14300,6 +14316,367 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:for-each>
+</xsl:template>
+
+<!--    BEGIN SCANNERS MANAGEMENT -->
+
+<xsl:template name="html-create-scanner-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('New Scanner', 'Scanner')"/>
+      <a href="/help/new_scanner.html?token={/envelope/token}"
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scanner', 'Scanner'))}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_scanners&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Scanners', 'Scanner')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scanners', 'Scanner')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_scanner"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="next" value="get_scanner"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Host', 'Scanner Window')"/></td>
+            <td><input type="text" name="host" value="localhost" size="30"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Port', 'Scanner Window')"/></td>
+            <td><input type="text" name="port" value="1234" size="30"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/></td>
+            <td>
+              <select name="scanner_type">
+                <xsl:call-template name="scanner-type-list"/>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Scanner', 'Scanner')}"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="create_scanner_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Scanner</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_scanner_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Scanner
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_scanner_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Scanner</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="new_scanner">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_scanner_response"/>
+  <xsl:apply-templates select="commands_response/delete_scanner_response"/>
+  <xsl:call-template name="html-create-scanner-form"/>
+</xsl:template>
+
+<xsl:template name="html-scanners-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'scanner'"/>
+    <xsl:with-param name="cap-type" select="'Scanner'"/>
+    <xsl:with-param name="resources-summary" select="scanners"/>
+    <xsl:with-param name="resources" select="scanner"/>
+    <xsl:with-param name="count" select="count (scanner)"/>
+    <xsl:with-param name="filtered-count" select="scanner_count/filtered"/>
+    <xsl:with-param name="full-count" select="scanner_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Host</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Port</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Type</name>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="5"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-edit-scanner-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Scanner', 'Scanner')"/>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Scanner'"/>
+        <xsl:with-param name="type" select="'scanner'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_scanners_response/scanner/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_scanner"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="scanner_id"
+               value="{commands_response/get_scanners_response/scanner/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="scanner" value="{/envelope/params/scanner}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+            <td>
+              <input type="text" name="name" size="30" maxlength="80"
+                     value="{commands_response/get_scanners_response/scanner/name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_scanners_response/scanner/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Host', 'Window')"/></td>
+            <td>
+              <input type="text" name="host" size="30" maxlength="400"
+                     value="{commands_response/get_scanners_response/scanner/host}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Port', 'Window')"/></td>
+            <td>
+              <input type="text" name="port" size="30" maxlength="400"
+                     value="{commands_response/get_scanners_response/scanner/port}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Type', 'Window')"/></td>
+            <td>
+              <select name="scanner_type">
+                <xsl:call-template name="scanner-type-list">
+                  <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/host"/>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Scanner', 'Scanner')}"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_scanner">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-scanner-form"/>
+</xsl:template>
+
+<xsl:template match="scanner" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('Scanner Details', 'Scanner')"/>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="cap-type" select="'Scanner'"/>
+        <xsl:with-param name="type" select="'scanner'"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/>:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Host', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="host"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Port', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="port"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/>:</td>
+          <td>
+            <xsl:call-template name="scanner-type-name">
+              <xsl:with-param name="type" select="type"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="resource_type" select="'scanner'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_scanner">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_scanner_response"/>
+  <xsl:apply-templates select="modify_scanner_response"/>
+  <xsl:apply-templates select="verify_scanner_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="modify_tag_response"/>
+  <xsl:apply-templates select="get_scanners_response/scanner" mode="details"/>
+</xsl:template>
+
+<xsl:template match="get_scanners">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_scanner_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
+  <xsl:apply-templates select="create_scanner_response"/>
+  <xsl:apply-templates select="modify_scanner_response"/>
+  <!-- The for-each makes the get_scanners_response the current node. -->
+  <xsl:for-each select="get_scanners_response | commands_response/get_scanners_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Scanners
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-scanners-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="verify_scanner_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Verify Scanner</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="scanner">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Scanner'"/>
+      </xsl:call-template>
+      <b>
+        <a href="/omp?cmd=get_scanner&amp;scanner_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="{gsa:view_details_title ('Scanner', name)}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="host"/>
+    </td>
+    <td>
+      <xsl:value-of select="port"/>
+    </td>
+    <td>
+      <xsl:call-template name="scanner-type-name">
+        <xsl:with-param name="type" select="type"/>
+      </xsl:call-template>
+    </td>
+    <td>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Scanner'"/>
+        <xsl:with-param name="type" select="'scanner'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <a href="/omp?cmd=verify_scanner&amp;scanner_id={@id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
+         style="margin-left:3px;">
+        <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
+      </a>
+    </td>
+  </tr>
 </xsl:template>
 
 

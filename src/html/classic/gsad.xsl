@@ -564,6 +564,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="modify_scanner_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Scanner'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_schedule_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -681,6 +689,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
     <xsl:with-param name="command" select="'Verify Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="verify_scanner_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Verify Scanner'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -1141,6 +1157,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_report_format/modify_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_formats/verify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_scanners/verify_scanner_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_summary_response/create_tag_response"
                              mode="response-indicator"/>
@@ -1649,6 +1667,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
         <divider/>
+        <xsl:if test="gsa:may-op ('GET_SCANNERS')">
+          <item>
+            <page>get_scanners</page>
+            <name><xsl:value-of select="gsa:i18n ('Scanners', 'Scanner')"/></name>
+          </item>
+        </xsl:if>
         <xsl:if test="gsa:may-op ('GET_FILTERS')">
           <item>
             <page>get_filters</page>
