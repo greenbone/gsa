@@ -13112,6 +13112,20 @@ delete_scanner_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Delete a trash scanner, get all scanners, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_scanner_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("scanner", credentials, params, 1, get_trash);
+}
+
+/**
  * @brief Setup edit_scanner XML, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -14337,6 +14351,8 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
                       "report formats");
 
   GET_TRASH_RESOURCE ("GET_ROLES", "get_roles", "roles");
+
+  GET_TRASH_RESOURCE ("GET_SCANNERS", "get_scanners", "scanners");
 
   GET_TRASH_RESOURCE ("GET_SCHEDULES", "get_schedules", "schedules");
 

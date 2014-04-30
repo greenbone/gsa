@@ -14679,6 +14679,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="scanner" mode="trash">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="host"/>
+    </td>
+    <td>
+      <xsl:value-of select="port"/>
+    </td>
+    <td>
+      <xsl:call-template name="scanner-type-name">
+        <xsl:with-param name="type" select="type"/>
+      </xsl:call-template>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'scanner'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
+               title="{gsa:i18n ('Scanner', 'Scanner')}{gsa:i18n (' is still in use', 'Trashcan')}"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
 
 <!-- BEGIN SLAVES MANAGEMENT -->
 
@@ -27711,6 +27755,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-scanners-trash-table">
+  <div>
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Host', 'Scanner Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Port', 'Scanner Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
+      </tr>
+      <xsl:apply-templates select="scanner" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-schedules-trash-table">
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -27809,6 +27868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="delete_role_response"/>
+  <xsl:apply-templates select="delete_scanner_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
   <xsl:apply-templates select="delete_slave_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
@@ -27918,6 +27978,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <item>
               <type>role</type>
               <count><xsl:value-of select="count(get_roles_response/role)"/></count>
+            </item>
+          </xsl:if>
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
+            <item>
+              <type>scanner</type>
+              <count><xsl:value-of select="count(get_scanners_response/scanner)"/></count>
             </item>
           </xsl:if>
           <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
@@ -28064,6 +28130,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_roles_response the current node. -->
         <xsl:for-each select="get_roles_response">
           <xsl:call-template name="html-roles-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
+        <a name="scanners"></a>
+        <h1><xsl:value-of select="gsa:i18n ('Scanners', 'Scanner')"/></h1>
+        <!-- The for-each makes the get_scanners_response the current node. -->
+        <xsl:for-each select="get_scanners_response">
+          <xsl:call-template name="html-scanners-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 

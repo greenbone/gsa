@@ -1,3 +1,19 @@
+2014-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate delete_trash_scanner omp
+	argument value.
+	(exec_omp_post): Handle delete_trash_scanner omp post request.
+
+	* src/gsad_omp.c (delete_trash_scanner_omp): New function.
+	(get_trash): Get scanners in trash.
+
+	* src/gsad_omp.h: Add new function prototype.
+
+	* src/html/classic/omp.xsl (scanner [trash], html-scanners-trash-table):
+	new tempaltes.
+	(get_trash): Apply delete_scanner_response template. Show scanners in
+	trash.
+
 2014-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Add Scanners object.

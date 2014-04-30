@@ -125,6 +125,7 @@ char * get_scanner_omp (credentials_t *, params_t *);
 char * get_scanners_omp (credentials_t *, params_t *);
 char * save_scanner_omp (credentials_t *, params_t *);
 char * delete_scanner_omp (credentials_t *, params_t *);
+char * delete_trash_scanner_omp (credentials_t *, params_t *);
 char * edit_scanner_omp (credentials_t *, params_t *);
 char * export_scanner_omp (credentials_t *, params_t *, enum content_type *,
                            char **, gsize *);
