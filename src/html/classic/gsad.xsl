@@ -2147,6 +2147,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="password_warning">
+  <div class="gb_window">
+    <div class="gb_window_part_left_error"></div>
+    <div class="gb_window_part_right_error"></div>
+    <div class="gb_window_part_center_error">
+      <xsl:value-of select="gsa:i18n ('Warning', 'Login')"/>
+    </div>
+    <div class="gb_window_part_content_error">
+      <p>
+        <xsl:value-of select="gsa:i18n ('Your current password does not comply with the password policy:', 'Login')"/><br/>
+        <xsl:value-of select="text()"/>
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="/">
   <html xmlns="http://www.w3.org/1999/xhtml">
     <xsl:call-template name="html-head"/>

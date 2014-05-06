@@ -73,6 +73,7 @@ typedef struct
   char *capabilities; ///< Capabilites of manager.
   char *language;     ///< Accept-Language browser header.
   char *severity;     ///< Severity class.
+  char *pw_warning;   ///< Password policy warning message
   params_t *params;   ///< Request parameters.
 } credentials_t;
 

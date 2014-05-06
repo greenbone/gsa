@@ -1,3 +1,25 @@
+2014-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add warning if login password does not comply with password policy.
+
+	* src/gsad_base.h (credentials_t): Add pw_warning field.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add password warning if one was
+	returned at login.
+	(authenticate_omp): Add pw_warning parameter and use new function
+	omp_authenticate_info_ext.
+
+	* src/gsad_omp.h (authenticate_omp): Add new parameter.
+
+	* src/gsad.c (user): Add pw_warning field.
+	(user_add): Add parameter pw_warning.
+	(user_set_password): Reset password warning for user.
+	(exec_omp_post, request_handler): Get password policy warnings.
+
+	* src/html/classic/gsad.xsl (password_warning): New template.
+
+	* src/html/classic/po/de.xml: Add password warning messages.
+
 2014-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate delete_trash_scanner omp

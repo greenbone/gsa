@@ -90,7 +90,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- 1.3 Error box -->
   <!-- TODO -->
 
-  <!-- 1.4 Login page -->
+  <!-- 1.4 Login page and password warning -->
   <grp>
     <ctxt>Login</ctxt>
     <!-- Form fields -->
@@ -142,6 +142,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Token missing or bad..  Please login again.</id>
       <str>Token fehlt oder ist fehlerhaft.  Bitte melden Sie sich erneut an.</str>
+    </msg>
+
+    <msg>
+      <id>Warning</id>
+      <str>Warnung</str>
+    </msg>
+    <msg>
+      <id>Your current password does not comply with the password policy:</id>
+      <str>Ihr aktuelles Passwort hält nicht die Passwortrichlinien ein:</str>
     </msg>
   </grp>
 

@@ -271,6 +271,17 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   g_string_append (string, res);
   g_free (res);
 
+  if (credentials->pw_warning)
+    {
+      gchar *warning_elem;
+      warning_elem = g_markup_printf_escaped ("<password_warning>"
+                                              "%s"
+                                              "</password_warning>",
+                                              credentials->pw_warning);
+      g_string_append (string, warning_elem);
+      g_free (warning_elem);
+    }
+
   refresh_interval = params_value (credentials->params, "refresh_interval");
   if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
     g_string_append_printf (string, "<autorefresh interval=\"0\" />");
@@ -19759,13 +19770,14 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
  * @param[out] severity      Severity class.
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
+ * @param[out] pw_warning    Password warning message, NULL if password is OK.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_omp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language)
+                  gchar **capabilities, gchar **language, gchar **pw_warning)
 {
   gnutls_session_t session;
   int socket;
@@ -19794,8 +19806,15 @@ authenticate_omp (const gchar * username, const gchar * password,
   sleep (20);
 #endif
 
-  auth = omp_authenticate_info (&session, username, password, role,
-                                severity, timezone);
+  omp_authenticate_info_opts_t auth_opts;
+  auth_opts.username = username;
+  auth_opts.password = password;
+  auth_opts.role = role;
+  auth_opts.severity = severity;
+  auth_opts.timezone = timezone;
+  auth_opts.pw_warning = pw_warning;
+
+  auth = omp_authenticate_info_ext (&session, auth_opts);
   if (auth == 0)
     {
       entity_t entity;

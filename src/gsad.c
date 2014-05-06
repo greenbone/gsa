@@ -226,6 +226,7 @@ struct user
   gchar *severity;     ///< Severity class.
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language, in short form like "en".
+  gchar *pw_warning;   ///< Password policy warning.
   time_t time;         ///< Login time.
 };
 
@@ -251,13 +252,14 @@ static GMutex *mutex = NULL;
  * @param[in]  role          Role of user.
  * @param[in]  capabilities  Capabilities of manager.
  * @param[in]  language      User Interface Language setting.
+ * @param[in]  pw_warning    Password policy warning.
  *
  * @return Added user.
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language)
+          const gchar *language, const gchar *pw_warning)
 {
   user_t *user = NULL;
   int index;
@@ -287,6 +289,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_free (user->capabilities);
       user->capabilities = g_strdup (capabilities);
       g_free (user->language);
+      g_free (user->pw_warning);
+      user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
     }
   else
     {
@@ -300,6 +304,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->severity = g_strdup (severity);
       user->capabilities = g_strdup (capabilities);
       user->language = language ? g_strdup (language) : NULL;
+      user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -417,7 +422,9 @@ user_set_password (const gchar *name, const gchar *password)
       if (strcmp (item->username, name) == 0)
         {
           g_free (item->password);
+          g_free (item->pw_warning);
           item->password = g_strdup (password);
+          item->pw_warning = NULL;
           ret = 0;
           break;
         }
@@ -1575,13 +1582,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         {
           int ret;
           gchar *timezone, *role, *capabilities, *severity, *language;
+          gchar *pw_warning;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
                                   &timezone,
                                   &severity,
                                   &capabilities,
-                                  &language);
+                                  &language,
+                                  &pw_warning);
           if (ret)
             {
               time_t now;
@@ -1622,7 +1631,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                severity,
                                role,
                                capabilities,
-                               language);
+                               language,
+                               pw_warning);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -1630,6 +1640,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (capabilities);
               g_free (language);
               g_free (role);
+              g_free (pw_warning);
               return 1;
             }
         }
@@ -1798,6 +1809,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                ? strdup (user->capabilities)
                                : NULL;
   credentials->token = strdup (user->token);
+  credentials->pw_warning = credentials->pw_warning ? strdup (user->pw_warning)
+                                                    : NULL;
   credentials->params = con_info->params;
 
   credentials->language = user->language
@@ -3496,6 +3509,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
+      credentials->pw_warning = user->pw_warning ? strdup (user->pw_warning)
+                                                 : NULL;
       if (user->language)
         credentials->language = g_strdup (user->language);
       else
