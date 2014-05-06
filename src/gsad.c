@@ -976,7 +976,6 @@ init_validator ()
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
-  openvas_validator_add (validator, "public_key",       "(?s)^.*$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");

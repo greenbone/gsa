@@ -6199,15 +6199,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td width="45"></td>
                   <td>
-                    <xsl:value-of select="gsa:i18n ('Public key', 'Credential Window')"/>
-                  </td>
-                  <td>
-                    <input type="file" name="public_key" size="30"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td>
                     <xsl:value-of select="gsa:i18n ('Private key', 'Credential Window')"/>
                   </td>
                   <td>

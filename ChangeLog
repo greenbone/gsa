@@ -1,3 +1,14 @@
+2014-04-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Remove Public key requirement from Credentials creation.
+
+	* src/gsad.c (init_validator): Remove public_key argument validation.
+	(create_lsc_credentials_omp): Don't send public_key argument value. Fix
+	code style.
+
+	* src/html/classic/omp.xsl (html-create-lsc-credential-form): Remove
+	Pulibc Key file input field.
+
 2014-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add warning if login password does not comply with password policy.

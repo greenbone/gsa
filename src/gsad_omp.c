@@ -3619,7 +3619,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   int ret;
   gchar *html, *response;
   const char *name, *comment, *login, *type, *password, *passphrase;
-  const char *public_key, *private_key;
+  const char *private_key;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -3628,7 +3628,6 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   type = params_value (params, "base");
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
-  public_key = params_value (params, "public_key");
   private_key = params_value (params, "private_key");
 
   CHECK_PARAM (name, "Create LSC Credential", new_lsc_credential);
@@ -3641,7 +3640,6 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   if (type && (strcmp (type, "key") == 0))
     {
       CHECK_PARAM (passphrase, "Create LSC Credential", new_lsc_credential);
-      CHECK_PARAM (public_key, "Create LSC Credential", new_lsc_credential);
       CHECK_PARAM (private_key, "Create LSC Credential", new_lsc_credential);
     }
 
@@ -3660,25 +3658,18 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
                 comment ? comment : "",
                login);
   else if (type && strcmp (type, "key") == 0)
-    ret = ompf (credentials,
-                &response,
-                &entity,
+    ret = ompf (credentials, &response, &entity,
                 "<create_lsc_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
                 "<key>"
-                "<public>%s</public>"
                 "<private>%s</private>"
                 "<phrase>%s</phrase>"
                 "</key>"
                 "</create_lsc_credential>",
-                name,
-                comment ? comment : "",
-                login,
-                public_key ? public_key : "",
-                private_key ? private_key : "",
-                passphrase ? passphrase : "");
+                name, comment ?: "", login, private_key ?: "",
+                passphrase ?: "");
   else
     ret = ompf (credentials,
                 &response,
