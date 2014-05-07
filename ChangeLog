@@ -1,3 +1,21 @@
+2014-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add settings page and password warning to IT-Schwachstellenampel
+	and change version number to 1.1.
+
+	* src/html/its/CMakeLists.txt: Add installation of img/settings.png
+
+	* src/html/its/img/settings.png: New image file.
+
+	* src/html/its/omp.xsl (edit_my_settings, modify_setting_response)
+	(get_my_settings, gsad_msg): New templates.
+
+	* src/html/its/gsad.xsl (login_page): Change version number to 1.1
+	(html-its-header): Add settings icon.
+	(html-footer): Change version number to 1.1
+	(command_result_dialog): Add messages for password change.
+	(password_warning, pw_warning_text): New templates.
+
 2014-04-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Remove Public key requirement from Credentials creation.

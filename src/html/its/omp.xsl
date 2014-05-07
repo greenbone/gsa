@@ -84,6 +84,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="edit_my_settings">
+  <div class="box content" id="main">
+    <xsl:apply-templates select="gsad_msg"/>
+    <xsl:apply-templates select="modify_setting_response"/>
+
+    <h1>Einstellungen</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="save_my_settings"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="next" value="edit_my_settings"/>
+
+      <input type="hidden" name="text" value="{/envelope/timezone}"/>
+      <input type="hidden" name="lang" value="{get_settings_response/setting[name='User Interface Language']/value}"/>
+      <input type="hidden" name="max" value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
+
+      <table cellspacing="2" cellpadding="4" border="0">
+        <tr>
+          <td valign="top" colspan="2"><h3>ITS-Anmeldepasswort ändern</h3></td>
+        </tr>
+        <tr>
+          <td>
+            <table>
+              <tr>
+                <td>Bisheriges Passwort:</td>
+                <td>
+                  <input type="password" autocomplete="off" name="old_password"
+                          size="30" maxlength="400" value=""/>
+                </td>
+              </tr>
+              <tr>
+                <td>Neues Passwort:</td>
+                <td>
+                  <input type="password" autocomplete="off" name="password"
+                          size="30" maxlength="400" value=""/>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="Passwort jetzt ändern"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template match="modify_setting_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Einstellungen Speichern</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_my_settings">
+  <xsl:if test="./modify_setting_response">
+    <h1>Einstellungen gespeichert</h1>
+    <a href="{$main_page_link}&amp;token={/envelope/token}">Klicken Sie hier, um zur Hauptseite zurückzukehren,</a> oder
+    <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}">hier, um wieder zu den Einstellungen zu gelangen.</a>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="wizard/get_tasks_deep" mode="main-box">
   <xsl:variable name="response" select="../run_wizard_response/response" />
   <xsl:variable name="cmd_response" select="$response/commands_response/commands_response[get_tasks_response/task/name = 'Schwachstellenampel']"/>
@@ -1032,6 +1102,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:if test="/envelope/params/cmd = get_task or /envelope/params/cmd = get_tasks">
     <xsl:call-template name="command_unavailable"/>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="gsad_msg">
+  <div class="errorbox">
+    <xsl:choose test="">
+      <xsl:when test="@operation = 'Save My Settings'">
+        <h2>Speichern der Einstellungen fehlgeschlagen</h2>
+        <xsl:choose>
+          <xsl:when test="@status_text = 'Password error'">
+            Fehlerhaftes Passwort<br/>
+            <xsl:choose>
+              <xsl:when test="starts-with (text(), 'You tried to change your password, but the old password was not provided or was incorrect.')">
+                Sie haben versucht, Ihr Passwort zu ändern, doch das bisherige Passwort fehlt oder es wurde ein falsches angegeben.
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="text()"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@status_text"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <h2>Aktion fehlgeschlagen: <xsl:value-of select="@operation"/></h2>
+        <xsl:value-of select="text()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
 </xsl:template>
 
 <xsl:template match="get_filters_response"/>

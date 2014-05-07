@@ -48,6 +48,7 @@ install (FILES img/acs_logo.png
                img/printer.png
                img/datensicherheit_big.png
                img/datensicherheit.png
+               img/settings.png
                img/shutdown.png
                img/tl_flash_flash_flash.gif
                img/tl_flash_off_off.gif

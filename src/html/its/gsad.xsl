@@ -124,7 +124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
           <div style="text-align:center;float:center; padding: 10px"><input type="submit" value="Anmelden" /></div>
           <br clear="all" />
-          <div style="text-align:right">IT Schwachstellenampel Version 1.0</div>
+          <div style="text-align:right">IT Schwachstellenampel Version 1.1</div>
         </form>
       </center>
     </div>
@@ -176,6 +176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <col width="*"/>
         <col width="60"/>
         <col width="70"/>
+        <col width="70"/>
         <col width="0"/>
       </colgroup>
 
@@ -213,7 +214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/help/info.html?token={/envelope/token}" class="button tooltip">
             <img src="/img/info.png"/>
             <span style="width: 240px; margin-top: 26px; margin-left: -8px">
-              <img class="callout" src="/img/callout_blue.gif" />
+              <img class="callout" style="left:12px" src="/img/callout_blue.gif" />
               <h3>Über die Anwendung</h3>
               Die IT Schwachstellenampel ist ein Assistent um die
               allgemeine Cyber-Sicherheitslage der konkreten Lage im eigenen
@@ -228,8 +229,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <a href="/help/datensicherheit.html?token={/envelope/token}" class="button tooltip" align="center">
             <img src="/img/datensicherheit.png"/>
-            <span style="width: 240px; margin-top: 26px; margin-left: -99px">
-              <img class="callout" style="left:114px" src="/img/callout_blue.gif" />
+            <span style="width: 240px; margin-top: 26px; margin-left: -68px">
+              <img class="callout" style="left:70px" src="/img/callout_blue.gif" />
               <h3>Datensicherheit</h3>
               Für die Anwendung der IT Schwachstellenampel wird besonderer Wert
               auf Sicherheit Ihrer Daten gelegt:<br/>
@@ -240,16 +241,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
 
         <td>
+          <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}" class="button tooltip" align="center">
+            <img src="/img/settings.png"/>
+            <span style="width: 240px; margin-top: 26px; margin-left: -138px">
+              <img class="callout" style="left:140px" src="/img/callout_blue.gif" />
+              <h3>Einstellungen</h3>
+              Hier können Sie Einstellungen wie Ihr ITS-Anmeldepasswort ändern.
+              <p><b>[Klick auf Icon: Einstellungen ...]</b></p>
+            </span>
+          </a>
+        </td>
+
+        <td>
           <a href="/logout?token={/envelope/token}" class="button tooltip"><img src="/img/shutdown.png"/>
-          <span style="width: 240px; margin-top: 26px; margin-left: -190px"> <img class="callout" style="left: 205px" src="/img/callout_blue.gif" />
-          <h3>Abmelden</h3>
-          Sie melden sich von der IT Schwachstellenampel ab, setzten die
-          Prüfergebnisse aber nicht zurück. Eine laufende Prüfung wird nicht
-          abgebrochen sondern wird im Hintergrund weitergeführt.
-          Auch Daten des Benutzerkontos
-          für das Zielsystem bleiben bis zur nächsten Anmeldung erhalten.
-          Diese Daten können durch das Zurücksetzen gelöscht werden.
-          </span>
+          <span style="width: 240px; margin-top: 26px; margin-left: -208px">
+            <img class="callout" style="left: 210px" src="/img/callout_blue.gif" />
+            <h3>Abmelden</h3>
+            Sie melden sich von der IT Schwachstellenampel ab, setzten die
+            Prüfergebnisse aber nicht zurück. Eine laufende Prüfung wird nicht
+            abgebrochen sondern wird im Hintergrund weitergeführt.
+            Auch Daten des Benutzerkontos
+            für das Zielsystem bleiben bis zur nächsten Anmeldung erhalten.
+            Diese Daten können durch das Zurücksetzen gelöscht werden.
+            </span>
           </a>
         </td>
       </tr>
@@ -260,7 +274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-footer">
   <div id="footer_logos">
     <hr/>
-    <p align="right">IT Schwachstellenampel Version 1.0</p>
+    <p align="right">IT Schwachstellenampel Version 1.1</p>
   </div>
 </xsl:template>
 
@@ -346,10 +360,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="errorbox">
         <xsl:choose>
           <xsl:when test="$operation = ''">
-            <h2>Aktion fehlgeschlagen:</h2>
+            <h2>Aktion fehlgeschlagen</h2>
+          </xsl:when>
+          <xsl:when test="$operation = 'Einstellungen Speichern'">
+            <h2>Speichern der Einstellungen fehlgeschlagen</h2>
           </xsl:when>
           <xsl:otherwise>
-            <h2>Aktion &quot;<xsl:value-of select="$operation"/>&quot; fehlgeschlagen:</h2>
+            <h2>Aktion &quot;<xsl:value-of select="$operation"/>&quot; fehlgeschlagen</h2>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -361,6 +378,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:when test="$msg = 'Task is active already'">
             Die Überprüfung wurde bereits gestartet.
+          </xsl:when>
+          <xsl:when test="starts-with (@status_text, 'Weak password')">
+            Nicht zulässiges neues Passwort:<br/>
+            <xsl:call-template name="pw_warning_text">
+              <xsl:with-param name="text" select="@status_text"/>
+            </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
             Meldung: <xsl:value-of select="$msg"/><br/>
@@ -453,6 +476,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="password_warning">
+  <div class="errorbox">
+    <h4>Achtung:</h4>
+    <xsl:call-template name="pw_warning_text">
+      <xsl:with-param name="text" select="text()"/>
+    </xsl:call-template>
+    <br/>
+    Bitte gehen Sie in die Einstellungen und ändern Sie das Passwort.
+  </div>
+</xsl:template>
+
+<xsl:template name="pw_warning_text">
+  <xsl:param name="text" select="''"/>
+  <xsl:variable name="desc" select="substring-after (substring ($text, 1, string-length ($text)-1), '(')"/>
+
+  <xsl:choose>
+    <xsl:when test="$desc = ''"/>
+    <xsl:when test="$desc = 'ITS default password'">
+      Sie verwenden noch das Auslieferungs-Passwort.
+    </xsl:when>
+    <xsl:when test="$desc = 'user name matches password'">
+      Ihr Benutzername und Passwort stimmen überein.
+    </xsl:when>
+    <xsl:when test="$desc = 'user name is part of the password'">
+      Ihr Benutzername ist Teil des Passworts.
+    </xsl:when>
+    <xsl:when test="$desc = 'password is part of the user name'">
+      Ihr Passwort ist Teil des Benutzernamen.
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$desc"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <xsl:template match="/">
   <html xmlns="http://www.w3.org/1999/xhtml">
