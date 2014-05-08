@@ -1,3 +1,8 @@
+2014-04-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (edit_agent): Apply modify_agent_response to
+	properly show responses from manager.
+
 2014-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add settings page and password warning to IT-Schwachstellenampel
