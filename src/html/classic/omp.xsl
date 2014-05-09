@@ -21299,10 +21299,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <xsl:call-template name="trash-delete-icon">
-        <xsl:with-param name="type" select="'report_format'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'report_format'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="{gsa:i18n ('Delete', 'Table Row')}"
+               title="{gsa:i18n ('Report Formats', 'Report Format')}{gsa:i18n (' is still in use', 'Table Row')}"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
