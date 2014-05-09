@@ -1,4 +1,9 @@
-2014-04-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2014-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report_format [trash]): Add in_use check for
+	delete icon.
+
+2014-05-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit_agent): Apply modify_agent_response to
 	properly show responses from manager.
@@ -21,7 +26,7 @@
 	(command_result_dialog): Add messages for password change.
 	(password_warning, pw_warning_text): New templates.
 
-2014-04-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2014-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Remove Public key requirement from Credentials creation.
 
