@@ -96,9 +96,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="next" value="edit_my_settings"/>
 
+      <!-- Parameters unused by the ITS face but needed by GSA -->
       <input type="hidden" name="text" value="{/envelope/timezone}"/>
       <input type="hidden" name="lang" value="{get_settings_response/setting[name='User Interface Language']/value}"/>
       <input type="hidden" name="max" value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
+      <input type="hidden" name="max_results" value="{get_settings_response/setting[name='Wizard Rows']/value}"/>
+      <input type="hidden" name="severity_class" value="{get_settings_response/setting[name='Severity Class']/value}"/>
+      <input type="hidden" name="dynamic_severity" value="{get_settings_response/setting[name='Dynamic Severity']/value}"/>
 
       <table cellspacing="2" cellpadding="4" border="0">
         <tr>
@@ -148,9 +152,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_my_settings">
   <xsl:if test="./modify_setting_response">
-    <h1>Einstellungen gespeichert</h1>
-    <a href="{$main_page_link}&amp;token={/envelope/token}">Klicken Sie hier, um zur Hauptseite zurückzukehren,</a> oder
-    <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}">hier, um wieder zu den Einstellungen zu gelangen.</a>
+    <div class="box content" id="main">
+      <h1>Einstellungen gespeichert</h1>
+      <a href="{$main_page_link}&amp;token={/envelope/token}">Klicken Sie hier, um zur Hauptseite zu gelangen,</a> oder
+      <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}">hier, um zu den Einstellungen zurückzukehren.</a>
+    </div>
   </xsl:if>
 </xsl:template>
 

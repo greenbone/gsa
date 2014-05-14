@@ -379,10 +379,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$msg = 'Task is active already'">
             Die Überprüfung wurde bereits gestartet.
           </xsl:when>
-          <xsl:when test="starts-with (@status_text, 'Weak password')">
+          <xsl:when test="starts-with ($msg, 'Weak password')">
             Nicht zulässiges neues Passwort:<br/>
             <xsl:call-template name="pw_warning_text">
-              <xsl:with-param name="text" select="@status_text"/>
+              <xsl:with-param name="text" select="$msg"/>
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
@@ -494,7 +494,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$desc = ''"/>
     <xsl:when test="$desc = 'ITS default password'">
-      Sie verwenden noch das Auslieferungs-Passwort.
+      Sie verwenden das Auslieferungs-Passwort.
     </xsl:when>
     <xsl:when test="$desc = 'user name matches password'">
       Ihr Benutzername und Passwort stimmen überein.

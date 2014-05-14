@@ -1,3 +1,15 @@
+2014-05-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/its/gsad.xsl (command_result_dialog): Use $msg instead of
+	@status_text.
+	(pw_warning_text): Reword text for default password case to also fit
+	settings page.
+
+	* src/html/its/omp.xsl (edit_my_settings): Add missing hidden fields
+	for settings so they are not overwritten with empty strings.
+	(get_my_settings): Put the message text a box div and shorten text
+	to make it fit into one line.
+
 2014-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report_format [trash]): Add in_use check for
