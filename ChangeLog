@@ -1,3 +1,11 @@
+2014-05-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add --dh-params option for PFS support. Requires LibMicroHTTPD >= 0.9.35
+
+	* src/gsad.c (main): Add --dh-params option. Add check for libmicrohttpd
+	version when using MHD_OPTION_HTTPS_MEM_DHPARAMS option.
+	* doc/gsad.8: Update documentation for new option.
+
 2014-05-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/its/gsad.xsl (command_result_dialog): Use $msg instead of

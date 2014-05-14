@@ -4095,6 +4095,7 @@ main (int argc, char **argv)
   static gchar *gsad_manager_port_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
+  static gchar *dh_params_filename = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
   static gchar *face_name = NULL;
@@ -4141,6 +4142,9 @@ main (int argc, char **argv)
     {"ssl-certificate", 'c',
      0, G_OPTION_ARG_FILENAME, &ssl_certificate_filename,
      "Use <file> as the certificate for HTTPS", "<file>"},
+    {"dh-params", '\0',
+     0, G_OPTION_ARG_FILENAME, &dh_params_filename,
+     "Diffie-Hellman parameters file", "<file>"},
     {"do-chroot", '\0',
      0, G_OPTION_ARG_NONE, &do_chroot,
      "Do chroot.", NULL},
@@ -4453,6 +4457,7 @@ main (int argc, char **argv)
         {
           gchar *ssl_private_key = NULL;
           gchar *ssl_certificate = NULL;
+          gchar *dh_params = NULL;
 
           use_secure_cookie = 1;
 
@@ -4478,6 +4483,16 @@ main (int argc, char **argv)
               exit (EXIT_FAILURE);
             }
 
+          if (dh_params_filename &&
+              !g_file_get_contents (dh_params_filename, &dh_params, NULL,
+                                    &error))
+            {
+              g_critical ("%s: Could not load SSL certificate from %s: %s\n",
+                          __FUNCTION__, dh_params_filename, error->message);
+              g_error_free (error);
+              exit (EXIT_FAILURE);
+            }
+
           gsad_daemon =
             MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
                               | MHD_USE_DEBUG
@@ -4495,6 +4510,11 @@ main (int argc, char **argv)
                               MHD_OPTION_HTTPS_PRIORITIES,
                               gnutls_priorities,
                               MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
+/* LibmicroHTTPD 0.9.35 and higher. */
+#if MHD_VERSION >= 0x00093500
+                              dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS
+                                        : MHD_OPTION_END, dh_params,
+#endif
                               /* End marker option. */
                               MHD_OPTION_END);
 
@@ -4535,6 +4555,11 @@ main (int argc, char **argv)
                                   MHD_OPTION_HTTPS_PRIORITIES,
                                   gnutls_priorities,
                                   MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
+/* LibmicroHTTPD 0.9.35 and higher. */
+#if MHD_VERSION >= 0x00093500
+                                  dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS
+                                            : MHD_OPTION_END, dh_params,
+#endif
                                   /* End marker option. */
                                   MHD_OPTION_END);
             }
