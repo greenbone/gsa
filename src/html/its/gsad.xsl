@@ -89,7 +89,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:text>Anmeldung fehlgeschlagen.</xsl:text>
             </xsl:when>
             <xsl:when test="message='Already logged out.'">
-              <xsl:text>Anmeldung bereits erfolgt.</xsl:text>
+              <xsl:text>Abmeldung bereits erfolgt.</xsl:text>
             </xsl:when>
             <xsl:when test="message='Login failed.  OMP service is down.'">
               <xsl:text>Anmeldung fehlgeschlagen.  OMP-Dienst ist nicht verfügbar.</xsl:text>

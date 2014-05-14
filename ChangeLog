@@ -1,3 +1,7 @@
+2014-04-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/its/gsad.xsl (login_page): Fixed typo.
+
 2014-05-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Add --dh-params option for PFS support. Requires LibMicroHTTPD >= 0.9.35
