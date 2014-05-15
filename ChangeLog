@@ -1,3 +1,10 @@
+2014-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (edit_schedule): Apply template to handle
+	modify_schedule response.
+
+	* INSTALL: Add note on LibMicroHTTPD version.
+
 2014-05-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/its/img/settings.png: Update the placeholder with real icon.
