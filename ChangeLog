@@ -1,3 +1,19 @@
+2014-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r19444 + r19449.
+
+	Add --dh-params option for PFS support. Requires LibMicroHTTPD >= 0.9.35
+
+	* src/gsad.c (main): Add --dh-params option. Add check for libmicrohttpd
+	version when using MHD_OPTION_HTTPS_MEM_DHPARAMS option.
+
+	* doc/gsad.8: Update documentation for new option.
+
+	* src/html/classic/omp.xsl (edit_schedule): Apply template to handle
+	modify_schedule response.
+
+	* INSTALL: Add note on LibMicroHTTPD version.
+
 2014-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r19412.

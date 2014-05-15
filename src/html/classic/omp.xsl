@@ -13909,6 +13909,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_schedule">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_schedule_response"/>
   <xsl:call-template name="html-edit-schedule-form"/>
 </xsl:template>
 

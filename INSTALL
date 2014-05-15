@@ -95,3 +95,10 @@ The tool will provide a hint on how to launch a web browser with the results.
 
 It is recommended to do this analysis in a separate, empty build directory and
 to empty the build directory before "scan-build" call.
+
+
+Specifying Diffie-Hellman parameters file
+---------------------------------------------------
+
+For --dh-params' value to take effect, LibmicroHTTPD version 0.9.35 or higher is
+required.
