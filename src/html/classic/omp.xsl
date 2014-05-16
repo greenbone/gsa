@@ -30547,7 +30547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
-          <form action="/omp" method="get" enctype="multipart/form-data">
+          <form action="/omp" method="get" enctype="multipart/form-data" name="calc_from_metrics">
             <input type="hidden" name="cmd" value="cvss_calculator"/>
               <td valign="top" width="125">
                 <b><xsl:value-of select="gsa:i18n ('From Metrics', 'CVSS Calculator')"/>:</b>
@@ -30557,7 +30557,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Access Vector:</td>
                     <td>
-                      <select name="cvss_av" style="width:100px;">
+                      <select name="cvss_av" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'L'"/>
                           <xsl:with-param name="content" select="'Local'"/>
@@ -30579,7 +30579,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Access Complexity:</td>
                     <td>
-                      <select name="cvss_ac" style="width:100px;">
+                      <select name="cvss_ac" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'H'"/>
                           <xsl:with-param name="content" select="'High'"/>
@@ -30601,7 +30601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Authentication:</td>
                     <td>
-                      <select name="cvss_au" style="width:100px;">
+                      <select name="cvss_au" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'M'"/>
                           <xsl:with-param name="content" select="'Multiple'"/>
@@ -30623,7 +30623,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Confidentiality:</td>
                     <td>
-                      <select name="cvss_c" style="width:100px;">
+                      <select name="cvss_c" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'N'"/>
                           <xsl:with-param name="content" select="'None'"/>
@@ -30645,7 +30645,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Integrity:</td>
                     <td>
-                      <select name="cvss_i" style="width:100px;">
+                      <select name="cvss_i" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'N'"/>
                           <xsl:with-param name="content" select="'None'"/>
@@ -30667,7 +30667,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Availability:</td>
                     <td>
-                      <select name="cvss_a" style="width:100px;">
+                      <select name="cvss_a" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
                           <xsl:with-param name="value" select="'N'"/>
                           <xsl:with-param name="content" select="'None'"/>
@@ -30690,7 +30690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td style="text-align:right; vertical-align:bottom;">
                 <input type="hidden" name="name" value="metrics"/>
-                <input type="submit" name="submit" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
+                <input type="submit" name="submit_button" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
               </td>
             <input type="hidden" name="token" value="{/envelope/token}"/>
           </form>
