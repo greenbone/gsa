@@ -1,3 +1,8 @@
+2014-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-config-table): Adjust output for
+	OSP Ovaldi type configs.
+
 2014-05-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (cvss_calculator): Automatically submit the

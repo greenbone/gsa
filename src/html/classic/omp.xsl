@@ -12362,35 +12362,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </table>
 
-          <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config Window')"/></h1>
+          <xsl:if test="$config/type = 0">
+            <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config Window')"/></h1>
 
-          <xsl:call-template name="edit-families">
-            <xsl:with-param name="config" select="$config"/>
-            <xsl:with-param
-              name="families"
-              select="get_nvt_families_response/families"/>
-          </xsl:call-template>
+            <xsl:call-template name="edit-families">
+              <xsl:with-param name="config" select="$config"/>
+              <xsl:with-param
+                name="families"
+                select="get_nvt_families_response/families"/>
+            </xsl:call-template>
+          </xsl:if>
 
           <xsl:choose>
             <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
               <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
-              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+              <xsl:if test="$config/type = 0">
+                <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+              </xsl:if>
             </xsl:when>
             <xsl:otherwise>
               <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config Window')"/></h1>
 
-              <xsl:apply-templates
-                select="$config/preferences"
-                mode="edit-scanner-details"/>
+              <xsl:apply-templates select="$config/preferences" mode="edit-scanner-details"/>
 
-              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
-              <xsl:for-each select="$config/preferences">
-                <xsl:call-template name="preferences">
-                  <xsl:with-param name="config_id" select="$config/@id"/>
-                  <xsl:with-param name="config_name" select="$config/name"/>
-                  <xsl:with-param name="edit">yes</xsl:with-param>
-                </xsl:call-template>
-              </xsl:for-each>
+              <xsl:if test="$config/type = 0">
+                <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
+                <xsl:for-each select="$config/preferences">
+                  <xsl:call-template name="preferences">
+                    <xsl:with-param name="config_id" select="$config/@id"/>
+                    <xsl:with-param name="config_name" select="$config/name"/>
+                    <xsl:with-param name="edit">yes</xsl:with-param>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
 
@@ -12425,26 +12429,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
         <br/>
 
-        <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config Window')"/></h1>
-
-        <xsl:apply-templates select="$config" mode="families"/>
+        <xsl:if test="$config/type = 0">
+          <h1>
+            <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config Window')"/>
+          </h1>
+          <xsl:apply-templates select="$config" mode="families"/>
+        </xsl:if>
 
         <xsl:choose>
           <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
             <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
-            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+            <xsl:if test="$config/type = 0">
+              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+            </xsl:if>
           </xsl:when>
           <xsl:otherwise>
             <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config Window')"/></h1>
             <xsl:apply-templates select="$config/preferences" mode="scanner"/>
 
-            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
-            <xsl:for-each select="$config/preferences">
-              <xsl:call-template name="preferences">
-                <xsl:with-param name="config_id" select="$config/@id"/>
-                <xsl:with-param name="config_name" select="$config/name"/>
-              </xsl:call-template>
-            </xsl:for-each>
+            <xsl:if test="$config/type = 0">
+              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config Window')"/></h1>
+              <xsl:for-each select="$config/preferences">
+                <xsl:call-template name="preferences">
+                  <xsl:with-param name="config_id" select="$config/@id"/>
+                  <xsl:with-param name="config_name" select="$config/name"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
