@@ -3631,6 +3631,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
+        <xsl:if test="gsa:may-op ('get_scanners') or string-length (scanner/@id) &gt; 0">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="gsa:may-op ('get_scanners')">
+                  <a href="/omp?cmd=get_scanner&amp;scanner_id={scanner/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="scanner/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="scanner/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Status', 'Task Window')"/>:</td>
           <td>
@@ -4817,6 +4834,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
+        <xsl:if test="gsa:may-op ('get_scanners')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td>
+              <select name="scanner_id_optional">
+                <xsl:variable name="scanner_id">
+                  <xsl:value-of select="/envelope/params/scanner_id_optional"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="string-length ($scanner_id) &gt; 0">
+                    <option value="--">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="--" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="get_scanners_response/scanner">
+                  <xsl:choose>
+                    <xsl:when test="@id = $scanner_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Add results to Asset Management', 'Task Window')"/></td>
           <td>
@@ -5485,6 +5532,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:for-each select="commands_response/get_slaves_response/slave">
                         <xsl:choose>
                           <xsl:when test="@id = $slave_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </xsl:if>
+              <xsl:if test="gsa:may-op ('get_scanners')">
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td>
+                    <select name="scanner_id">
+                      <xsl:variable name="scanner_id">
+                        <xsl:choose>
+                          <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+                            <xsl:value-of select="/envelope/params/scanner_id"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($scanner_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="commands_response/get_scanners_response/scanner">
+                        <xsl:choose>
+                          <xsl:when test="@id = $scanner_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>

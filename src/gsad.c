@@ -1028,6 +1028,7 @@ init_validator ()
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "scanner_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");

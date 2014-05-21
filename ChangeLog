@@ -1,5 +1,17 @@
 2014-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (new_task, edit_task): Get the scanners list.
+	(create_task_omp, save_task_omp): Send the chosen scanner id
+	accordingly.
+
+	* src/gsad.c (init_validator): Validate scanner_id_optional parameter.
+
+	* src/html/classic/omp.xsl (task [details]): Show the task's associated
+	scanner.
+	(new_task, html-edit-task-form): Add scanners choice list.
+
+2014-05-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-config-table): Adjust output for
 	OSP Ovaldi type configs.
 

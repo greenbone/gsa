@@ -2111,6 +2111,36 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         }
     }
 
+  if (command_enabled (credentials, "GET_SCANNERS"))
+    {
+      /* Get scanners to select in new task UI. */
+      if (openvas_server_send (&session, "<get_scanners/>") == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the"
+                               " scanner list. "
+                               "The current list of scanners is not available. "
+                               "Diagnostics: Failure to send command to manager"
+                               " daemon.", "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting"
+                               " the scanner list."
+                               "The current list of scanners is not available. "
+                               "Diagnostics: Failure to receive response from"
+                               " manager daemon.", "/omp?cmd=get_tasks");
+        }
+    }
+
   if (command_enabled (credentials, "GET_GROUPS"))
     {
       /* Get groups for Observer Groups. */
@@ -2294,10 +2324,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   int ret;
-  gchar *schedule_element, *slave_element, *command;
+  gchar *schedule_element, *slave_element, *scanner_element, *command;
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id;
-  const char *slave_id, *schedule_id, *max_checks, *max_hosts;
+  const char *slave_id, *scanner_id, *schedule_id, *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
   params_t *alerts;
   GString *alert_element;
@@ -2308,6 +2338,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   target_id = params_value (params, "target_id");
   hosts_ordering = params_value (params, "hosts_ordering");
   slave_id = params_value (params, "slave_id_optional");
+  scanner_id = params_value (params, "scanner_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
   in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
@@ -2335,6 +2366,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
       CHECK (config_id);
       CHECK (target_id);
       CHECK (slave_id);
+      CHECK (scanner_id);
       CHECK (schedule_id);
       CHECK (in_assets);
       CHECK (max_checks);
@@ -2350,6 +2382,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (target_id);
   CHECK (hosts_ordering);
   CHECK (slave_id);
+  CHECK (scanner_id);
   CHECK (schedule_id);
   CHECK (in_assets);
   CHECK (max_checks);
@@ -2383,11 +2416,14 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
+  if (scanner_id == NULL || strcmp (scanner_id, "--") == 0)
+    scanner_element = g_strdup ("");
+  else
+    scanner_element = g_strdup_printf ("<scanner id=\"%s\"/>", scanner_id);
+
   command = g_strdup_printf ("<create_task>"
                              "<config id=\"%s\"/>"
-                             "%s"
-                             "%s"
-                             "%s"
+                             "%s%s%s%s"
                              "<target id=\"%s\"/>"
                              "<hosts_ordering>%s</hosts_ordering>"
                              "<name>%s</name>"
@@ -2416,6 +2452,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              schedule_element,
                              alert_element->str,
                              slave_element,
+                             scanner_element,
                              target_id,
                              hosts_ordering,
                              name,
@@ -2435,6 +2472,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
   g_free (slave_element);
+  g_free (scanner_element);
 
   switch (ret)
     {
@@ -2577,6 +2615,8 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             command_enabled (credentials, "GET_SLAVES")
                              ? "<get_slaves/>"
                              : "",
+                            command_enabled (credentials, "GET_SCANNERS")
+                             ? "<get_scanners/>" : "",
                             command_enabled (credentials, "GET_GROUPS")
                              ? "<get_groups/>"
                              : "")
@@ -2661,7 +2701,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
-  const char *slave_id, *task_id, *max_checks, *max_hosts;
+  const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   int ret;
   params_t *alerts;
@@ -2678,6 +2718,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
+  scanner_id = params_value (params, "scanner_id");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
@@ -2704,6 +2745,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
       CHECK_PARAM (config_id, "Edit Task", edit_task);
       CHECK_PARAM (schedule_id, "Edit Task", edit_task);
       CHECK_PARAM (slave_id, "Edit Task", edit_task);
+      CHECK_PARAM (scanner_id, "Edit Task", edit_task);
       CHECK_PARAM (next, "Edit Task", edit_task);
       CHECK_PARAM (task_id, "Edit Task", edit_task);
       CHECK_PARAM (max_checks, "Edit Task", edit_task);
@@ -2721,6 +2763,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (config_id, "Save Task", edit_task);
   CHECK_PARAM (schedule_id, "Save Task", edit_task);
   CHECK_PARAM (slave_id, "Save Task", edit_task);
+  CHECK_PARAM (scanner_id, "Save Task", edit_task);
   CHECK_PARAM (next, "Save Task", edit_task);
   CHECK_PARAM (task_id, "Save Task", edit_task);
   CHECK_PARAM (max_checks, "Save Task", edit_task);
@@ -2753,6 +2796,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "<config id=\"%%s\"/>"
                             "<schedule id=\"%%s\"/>"
                             "<slave id=\"%%s\"/>"
+                            "<scanner id=\"%%s\"/>"
                             "<preferences>"
                             "<preference>"
                             "<scanner_name>max_checks</scanner_name>"
@@ -2791,6 +2835,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
               config_id,
               schedule_id,
               slave_id,
+              scanner_id,
               max_checks,
               max_hosts,
               strcmp (in_assets, "0") ? "yes" : "no",
