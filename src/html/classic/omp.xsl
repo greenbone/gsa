@@ -23631,8 +23631,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:otherwise>
+              <xsl:variable name="vuln_name">
+                <xsl:choose>
+                  <xsl:when test="string-length(nvt/name) &gt; 1">
+                    <xsl:value-of select="nvt/name"/>
+                  </xsl:when>
+                  <xsl:when test="string-length(description) &gt; 50">
+                    <xsl:value-of select="substring (description, 0, 50)"/>...
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="description"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
               <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="nvt/name"/>
+                <xsl:value-of select="$vuln_name"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
@@ -23915,12 +23928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cve" select="cve/@id"/>
               </xsl:call-template>
             </xsl:when>
-            <xsl:when test="nvt/@oid = 0">
-              <xsl:if test="delta/text()">
-                <br/>
-              </xsl:if>
-            </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="string-length(nvt/@oid) &gt; 1">
               <xsl:variable name="max" select="80"/>
               <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:choose>
@@ -23933,6 +23941,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                (OID: <xsl:value-of select="nvt/@oid"/>)
               </a>
+            </xsl:when>
+            <xsl:otherwise test="nvt/@oid = 0">
+              <xsl:if test="delta/text()">
+                <br/>
+              </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
         </p>
