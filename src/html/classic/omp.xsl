@@ -30236,6 +30236,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="content" select="'German'"/>
                     <xsl:with-param name="select-value" select="$lang"/>
                   </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'Chinese'"/>
+                    <xsl:with-param name="content" select="'Chinese'"/>
+                    <xsl:with-param name="select-value" select="$lang"/>
+                  </xsl:call-template>
                 </select>
               </td>
             </tr>

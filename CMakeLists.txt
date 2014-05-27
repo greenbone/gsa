@@ -327,9 +327,11 @@ install (FILES src/html/classic/img/gsa_splash.png
          DESTINATION ${GSA_DATA_DIR}/classic/login/img)
 
 install (FILES src/html/classic/po/de.xml
+               src/html/classic/po/zh.xml
          DESTINATION ${GSA_DATA_DIR}/classic/po)
 
 install (FILES src/html/classic/help_de.xsl
+               src/html/classic/help_zh.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)
 
 install (FILES src/html/classic/img/style/window_dec_a.png
