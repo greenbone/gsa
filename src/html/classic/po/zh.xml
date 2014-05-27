@@ -1,0 +1,6104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Greenbone Security Assistant
+$Id$
+Description: Chinese translations of strings.
+
+Authors:
+Winland Q. Yang <winland0704@126.com>
+
+Copyright:
+Copyright (C) 2014 Greenbone Networks GmbH
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2,
+or, at your option, any later version as published by the Free
+Software Foundation
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<!--
+  TODO:
+  - Reorganize to have a generic context for common commands like "Delete Task"
+     that can be used for status indicators.
+  - Create contexts for common commands like "Create ...", "Delete ...",
+     including adding a "Clone" context and command names only used
+     in status indicators.
+  - Reorganize some common properties like "username", "password" to reduce
+     redundancy.
+-->
+
+<i18n>
+  <!-- 1. Common interface strings -->
+  <!-- 1.1 Logo header (logged in user, JS info, response indicators)-->
+  <grp>
+    <ctxt>Logo</ctxt>
+    <msg>
+      <id>Logged in as</id>
+      <str>登录为</str>
+    </msg>
+    <msg>
+      <id>Logout</id>
+      <str>注销</str>
+    </msg>
+    <msg>
+      <id>JavaScript is active</id>
+      <str>JavaScript 活跃中</str>
+    </msg>
+  </grp>
+
+  <!-- 1.2 Main Menu items -->
+  <grp>
+    <ctxt>MM</ctxt>
+    <msg>
+      <id>Scan Management</id>
+      <str>扫描管理</str>
+    </msg>
+    <msg>
+      <id>Asset Management</id>
+      <str>资产管理</str>
+    </msg>
+    <msg>
+      <id>SecInfo Management</id>
+      <str>SecInfo 管理</str>
+    </msg>
+    <msg>
+      <id>Configuration</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>Extras</id>
+      <str>附加功能</str>
+    </msg>
+    <msg>
+      <id>Administration</id>
+      <str>管理本软件</str>
+    </msg>
+  </grp>
+    <!-- "Help" has its own context -->
+
+  <!-- 1.3 Error box -->
+  <!-- TODO -->
+
+  <!-- 1.4 Login page -->
+  <grp>
+    <ctxt>Login</ctxt>
+    <!-- Form fields -->
+    <msg>
+      <id>Username</id>
+      <str>用户名</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+    <msg>
+      <id>Login</id>
+      <str>登录</str>
+    </msg>
+    <!-- Messages -->
+    <msg>
+      <id>Successfully logged out.</id>
+      <str>注销成功。</str>
+    </msg>
+    <msg>
+      <id>Already logged out.</id>
+      <str>已经注销。</str>
+    </msg>
+    <msg>
+      <id>Logged out. OMP service is down.</id>
+      <str>注销，OMP 服务挂了。</str>
+    </msg>
+    <msg>
+      <id>Login failed.</id>
+      <str>登录失败。</str>
+    </msg>
+    <msg>
+      <id>Login failed.  OMP service is down..</id>
+      <str>登录失败，OMP 服务挂了.</str>
+    </msg>
+    <msg>
+      <id>Login failed.  Error during authentication.</id>
+      <str>登录失败，鉴定故障。</str>
+    </msg>
+    <msg>
+      <id>Session has expired.  Please login again.</id>
+      <str>会话已过期，请重新登录。</str>
+    </msg>
+    <msg>
+      <id>Cookie missing or bad..  Please login again.</id>
+      <str>Cookie 丢失或损坏，请重新登录。</str>
+    </msg>
+    <msg>
+      <id>Token missing or bad..  Please login again.</id>
+      <str>Token 丢失或损坏，请重新登录。</str>
+    </msg>
+  </grp>
+
+  <!-- 2        Resource display common strings -->
+  <!-- 2.1      Pagination -->
+  <grp>
+    <ctxt>Pagination</ctxt>
+    <msg>
+      <id> of </id>
+      <str> / </str>
+    </msg>
+    <msg>
+      <id>total</id>
+      <str>总计</str>
+    </msg>
+
+    <msg>
+      <id>First</id>
+      <str>首页</str>
+    </msg>
+    <msg>
+      <id>Previous</id>
+      <str>上页</str>
+    </msg>
+    <msg>
+      <id>Next</id>
+      <str>下页</str>
+    </msg>
+    <msg>
+      <id>Last</id>
+      <str>末页</str>
+    </msg>
+    <msg>
+      <id>Already on first page</id>
+      <str>已经是首页</str>
+    </msg>
+    <msg>
+      <id>Already on last page</id>
+      <str>已经是末页</str>
+    </msg>
+  </grp>
+
+  <!-- 2.2      Filter Box -->
+  <grp>
+    <ctxt>Filter Box</ctxt>
+
+    <msg>
+      <id>Powerfilter</id>
+      <str>超强过滤器</str>
+    </msg>
+
+    <msg>
+      <id>Filter</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>过滤器</str>
+    </msg>
+
+    <msg>
+      <id>Update Filter</id>
+      <str>更新过滤器</str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>更新</str>
+    </msg>
+
+    <msg>
+      <id>New </id>
+      <str>新建 </str>
+    </msg>
+    <!-- For filter type name like "Task Filter" see:
+          3. Resource specific strings -->
+    <msg>
+      <id> from current term</id>
+      <str> --从当前条目</str>
+    </msg>
+
+    <msg>
+      <id>Switch Filter</id>
+      <str>切换过滤器</str>
+    </msg>
+    <msg>
+      <id>Switch</id>
+      <str>切换</str>
+    </msg>
+    <msg>
+      <id>Fold filter</id>
+      <str>折叠过滤器</str>
+    </msg>
+    <msg>
+      <id>Unfold filter</id>
+      <str>展开过滤器</str>
+    </msg>
+
+    <msg>
+      <id>Applied filter</id>
+      <str>应用的过滤器</str>
+    </msg>
+
+    <msg>
+      <id>First result</id>
+      <str>结果起始号</str>
+    </msg>
+    <msg>
+      <id>Results per page</id>
+      <str>每页结果数</str>
+    </msg>
+    <msg>
+      <id>Sort by</id>
+      <str>排序</str>
+    </msg>
+    <msg>
+      <id>Ascending</id>
+      <str>升序</str>
+    </msg>
+    <msg>
+      <id>Descending</id>
+      <str>降序</str>
+    </msg>
+    <msg>
+      <id>Simple search terms</id>
+      <str>简单搜索条目</str>
+    </msg>
+    <msg>
+      <id>Additional filter commands</id>
+      <str>附加过滤器命令</str>
+    </msg>
+
+    <!-- Special Report filters -->
+    <msg>
+      <id>All results</id>
+      <str>所有结果</str>
+    </msg>
+    <msg>
+      <id>Results filtered with:</id>
+      <str>结果过滤命令：</str>
+    </msg>
+  </grp>
+
+  <!-- 2.3      Actions and selectors -->
+  <!-- 2.3.1    Actions available in content windows, header and table rows -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+    <ctxt>Window</ctxt>
+    <!-- Action denied strings (generic) -->
+    <msg>
+      <id> is still in use</id>
+      <str> 正在使用中</str>
+    </msg>
+    <msg>
+      <id> is not writable</id>
+      <str> 不可写</str>
+    </msg>
+
+    <!-- Apply button -->
+    <msg>
+      <id>Apply</id>
+      <str>应用</str>
+    </msg>
+
+    <!-- Clone -->
+    <msg>
+      <id>Clone</id>
+      <str>克隆</str>
+    </msg>
+    <msg>
+      <id> must be owned or global</id>
+      <str> 必须是自己拥有的或全局的</str>
+    </msg>
+    <msg>
+      <id>Permission to clone denied</id>
+      <str>克隆权限被拒绝</str>
+    </msg>
+
+    <!-- Conjunctions -->
+    <msg>
+      <id>and</id>
+      <str>和</str>
+    </msg>
+
+    <!-- Delete -->
+    <msg>
+      <id>Delete</id>
+      <str>删除</str>
+    </msg>
+    <msg>
+      <id> cannot be deleted</id>
+      <str> 不能被删除</str>
+    </msg>
+
+    <!-- Details -->
+    <msg>
+      <id>Details</id>
+      <str>详情</str>
+    </msg>
+    <msg>
+      <id>#DETAILS_OF_PREFIX#</id>
+      <str>#前缀详情# </str>
+    </msg>
+    <msg>
+      <id>#DETAILS_OF_SUFFIX#</id>
+      <str> #后缀详情#</str>
+    </msg>
+
+    <!-- Edit -->
+    <msg>
+      <id>Edit</id>
+      <str>编辑</str>
+    </msg>
+    <msg>
+      <id>Permission to edit </id>
+      <str>编辑的权限 </str>
+    </msg>
+    <msg>
+      <id>#edit denied#</id>
+      <str> #编辑被拒绝#</str>
+    </msg>
+    <msg>
+      <id>Cannot modify </id>
+      <str>不能修改 </str>
+    </msg>
+    <msg>
+      <id>#cannot modify suffix#</id>
+      <str> #不能修改前缀#</str>
+    </msg>
+
+    <!-- Export -->
+    <msg>
+      <id>Export XML</id>
+      <str>导出 XML</str>
+    </msg>
+    <msg>
+      <id>Export</id>
+      <str>导出</str>
+    </msg>
+    <msg>
+      <id>Export </id>
+      <str>导出 </str>
+    </msg>
+    <msg>
+      <id> filtered </id>
+      <str> 个过滤后的 </str>
+    </msg>
+    <msg>
+      <id>#EXPORT_SUFFIX#</id>
+      <str> #导出后缀#</str>
+    </msg>
+    <msg>
+      <id> as XML</id>
+      <str> 为 XML</str>
+    </msg>
+
+    <!-- Move to Trashcan-->
+    <msg>
+      <id>Move To Trashcan</id>
+      <str>移到回收站</str>
+    </msg>
+    <msg>
+      <id>To Trashcan</id>
+      <str>至回收站</str>
+    </msg>
+    <msg>
+      <id> cannot be moved to Trashcan</id>
+      <str> 不能被移到回收站</str>
+    </msg>
+
+    <!-- Observer icon (global or owned)-->
+    <msg>
+      <id>#global prefix#</id>
+      <str>#全局前缀# </str>
+    </msg>
+    <msg>
+      <id>#global suffix#</id>
+      <str> #全局后缀#</str>
+    </msg>
+    <msg>
+      <id> owned by </id>
+      <str> 归属于 </str>
+    </msg>
+  </grp>
+
+  <!-- 2.3.2    Actions not available in table rows (e.g. only in headers) -->
+  <grp>
+    <ctxt>Window</ctxt>
+    <!-- Auto-refresh -->
+    <msg>
+      <id>No auto-refresh</id>
+      <str>不自动刷新</str>
+    </msg>
+    <msg>
+      <id>Refresh every</id>
+      <str>刷新--每过</str>
+    </msg>
+    <msg>
+      <id>Sec.</id>
+      <str>秒 </str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>更新</str>
+    </msg>
+    <msg>
+      <id>Update auto-refresh</id>
+      <str>更新自动刷新</str>
+    </msg>
+    <!-- Return to Default filter -->
+    <msg>
+      <id>Return to default filter view</id>
+      <str>返回到默认过滤器视图</str>
+    </msg>
+    <msg>
+      <id>Return</id>
+      <str>返回</str>
+    </msg>
+  </grp>
+  <!-- 2.3.3    Actions available only in table rows -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+
+  </grp>
+
+  <!-- 2.3.4    Actions with special availability rules -->
+
+  <!-- 2.4      Common resource properties -->
+  <!-- 2.4.1    Common property names / table headers -->
+  <grp>
+    <ctxt>Window</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+
+    <msg>
+      <id>Actions</id>
+      <str>动作</str>
+    </msg>
+
+    <msg>
+      <id>Active</id>
+      <str>活跃的</str>
+    </msg>
+    <msg>
+      <id>Comment</id>
+      <str>注释</str>
+    </msg>
+    <msg>
+      <id>Created</id>
+      <str>创建于</str>
+    </msg>
+    <msg>
+      <id>Current</id>
+      <str>当前的</str>
+    </msg>
+    <msg>
+      <id>Date</id>
+      <str>日期</str>
+    </msg>
+    <msg>
+      <id>Description</id>
+      <str>描述</str>
+    </msg>
+    <msg>
+      <id>ID</id>
+      <str>ID</str>
+    </msg>
+    <msg>
+      <id>Last modified</id>
+      <str>最后修改</str>
+    </msg>
+    <msg>
+      <id>Modified</id>
+      <str>修改于</str>
+    </msg>
+    <msg>
+      <id>Name</id>
+      <str>名称</str>
+    </msg>
+    <msg>
+      <id>Owner</id>
+      <str>属主</str>
+    </msg>
+    <msg>
+      <id>Port</id>
+      <str>端口</str>
+    </msg>
+    <msg>
+      <id>Ports</id>
+      <str>端口</str>
+    </msg>
+    <msg>
+      <id>References</id>
+      <str>参考</str>
+    </msg>
+    <msg>
+      <id>Severity</id>
+      <str>严重性</str>
+    </msg>
+    <msg>
+      <id>Status</id>
+      <str>状态</str>
+    </msg>
+    <msg>
+      <id>Summary</id>
+      <str>摘要</str>
+    </msg>
+    <msg>
+      <id>Text</id>
+      <str>文本</str>
+    </msg>
+    <msg>
+      <id>Title</id>
+      <str>标题</str>
+    </msg>
+    <msg>
+      <id>Total</id>
+      <str>总计</str>
+    </msg>
+    <msg>
+      <id>Type</id>
+      <str>类型</str>
+    </msg>
+    <msg>
+      <id>Version</id>
+      <str>版本</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.2    Generic values -->
+  <grp>
+    <ctxt>Table Row</ctxt>
+    <ctxt>Window</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+    <ctxt>Report Format Table Row</ctxt>
+    <ctxt>Agent Table Row</ctxt>
+
+    <!-- Boolean values -->
+    <msg>
+      <id>yes</id>
+      <str>是</str>
+    </msg>
+    <msg>
+      <id>Yes</id>
+      <str>是</str>
+    </msg>
+    <msg>
+      <id>no</id>
+      <str>否</str>
+    </msg>
+    <msg>
+      <id>No</id>
+      <str>否</str>
+    </msg>
+    <!-- Determiners -->
+    <msg>
+      <id>All</id>
+      <str>全部</str>
+    </msg>
+    <msg>
+      <id>Any</id>
+      <str>任意</str>
+    </msg>
+    <msg>
+      <id>N/A</id>
+      <str>N/A</str>
+    </msg>
+      <msg>
+      <id>None</id>
+      <str>无</str>
+    </msg>
+      <msg>
+      <id>none</id>
+      <str>无</str>
+    </msg>
+    <!-- Property qualifiers -->
+    <msg>
+      <id>optional</id>
+      <str>可选</str>
+    </msg>
+    <msg>
+      <id>immutable</id>
+      <str>固定</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.3    Severity -->
+  <grp>
+    <ctxt>Severity</ctxt>
+
+    <msg>
+      <id>N/A</id>
+      <str>N/A</str>
+    </msg>
+    <msg>
+      <id>Any</id>
+      <str>任意</str>
+    </msg>
+    <msg>
+      <id>All</id>
+      <str>所有</str>
+    </msg>
+
+    <msg>
+      <id>Error</id>
+      <str>错误</str>
+    </msg>
+    <msg>
+      <id>Debug</id>
+      <str>Debug</str>
+    </msg>
+    <msg>
+      <id>False Positive</id>
+      <str>假阳性</str>
+    </msg>
+    <msg>
+      <id>False Pos.</id>
+      <str>假阳性</str>
+    </msg>
+    <msg>
+      <id>Log</id>
+      <str>记录</str>
+    </msg>
+    <msg>
+      <id>Low</id>
+      <str>低</str>
+    </msg>
+    <msg>
+      <id>Medium</id>
+      <str>中</str>
+    </msg>
+    <msg>
+      <id>High</id>
+      <str>高</str>
+    </msg>
+  </grp>
+
+  <!-- 2.4.4    Time units -->
+  <grp>
+    <ctxt>Time</ctxt>
+    <msg>
+      <id>sec</id>
+      <str>秒</str>
+    </msg>
+    <msg>
+      <id>secs</id>
+      <str>秒</str>
+    </msg>
+    <msg>
+      <id>sec(s)</id>
+      <str>秒</str>
+    </msg>
+    <msg>
+      <id>seconds</id>
+      <str>秒</str>
+    </msg>
+    <msg>
+      <id>min</id>
+      <str>分</str>
+    </msg>
+    <msg>
+      <id>mins</id>
+      <str>分</str>
+    </msg>
+    <msg>
+      <id>min(s)</id>
+      <str>分</str>
+    </msg>
+    <msg>
+      <id>minutes</id>
+      <str>分</str>
+    </msg>
+    <msg>
+      <id>hour</id>
+      <str>小时</str>
+    </msg>
+    <msg>
+      <id>hours</id>
+      <str>小时</str>
+    </msg>
+    <msg>
+      <id>hour(s)</id>
+      <str>小时</str>
+    </msg>
+    <msg>
+      <id>day</id>
+      <str>天</str>
+    </msg>
+    <msg>
+      <id>days</id>
+      <str>天</str>
+    </msg>
+    <msg>
+      <id>day(s)</id>
+      <str>天</str>
+    </msg>
+    <msg>
+      <id>week</id>
+      <str>周</str>
+    </msg>
+    <msg>
+      <id>weeks</id>
+      <str>周</str>
+    </msg>
+    <msg>
+      <id>week(s)</id>
+      <str>周</str>
+    </msg>
+    <msg>
+      <id>month</id>
+      <str>月</str>
+    </msg>
+    <msg>
+      <id>months</id>
+      <str>月</str>
+    </msg>
+    <msg>
+      <id>month(s)</id>
+      <str>月</str>
+    </msg>
+    <msg>
+      <id>year</id>
+      <str>年</str>
+    </msg>
+    <msg>
+      <id>years</id>
+      <str>年</str>
+    </msg>
+    <msg>
+      <id>year(s)</id>
+      <str>年</str>
+    </msg>
+
+    <msg>
+      <id>until</id>
+      <str>直到</str>
+    </msg>
+    <msg>
+      <id>for the next</id>
+      <str>为接下来的</str>
+    </msg>
+    <msg>
+      <id>always</id>
+      <str>总是</str>
+    </msg>
+    <msg>
+      <id>Once</id>
+      <str>一次</str>
+    </msg>
+    <msg>
+      <id>Entire Operation</id>
+      <str>整个操作</str>
+    </msg>
+  </grp>
+
+  <!-- 2.5      Resource types -->
+  <!-- 2.5.1    Resource types - capitalized singular -->
+  <grp>
+    <ctxt>Type</ctxt>
+    <msg>
+      <id>Task</id>
+      <str>任务</str>
+    </msg>
+    <msg>
+      <id>Report</id>
+      <str>报告</str>
+    </msg>
+    <msg>
+      <id>Result</id>
+      <str>结果</str>
+    </msg>
+    <msg>
+      <id>Note</id>
+      <str>批注</str>
+    </msg>
+    <msg>
+      <id>Override</id>
+      <str>覆盖</str>
+    </msg>
+    <msg>
+      <id>Host</id>
+      <str>主机</str>
+    </msg>
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>NVT Family</id>
+      <str>NVT 家族</str>
+    </msg>
+    <msg>
+      <id>Preference</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>OVAL Definition</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisory</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>SecInfo</str>
+    </msg>
+    <msg>
+      <id>Target</id>
+      <str>目标</str>
+    </msg>
+    <msg>
+      <id>Target Locator</id>
+      <str>目标定位器</str>
+    </msg>
+    <msg>
+      <id>Port List</id>
+      <str>端口列表</str>
+    </msg>
+    <msg>
+      <id>Port Range</id>
+      <str>端口范围</str>
+    </msg>
+    <msg>
+      <id>Credential</id>
+      <str>证书</str>
+    </msg>
+    <msg>
+      <id>Scan Config</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Config</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>Alert</id>
+      <str>警报</str>
+    </msg>
+    <msg>
+      <id>Schedule</id>
+      <str>计划</str>
+    </msg>
+    <msg>
+      <id>Report Format</id>
+      <str>报告格式</str>
+    </msg>
+    <msg>
+      <id>Slave</id>
+      <str>从属</str>
+    </msg>
+    <msg>
+      <id>Agent</id>
+      <str>代理</str>
+    </msg>
+    <msg>
+      <id>Filter</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>Tag</id>
+      <str>标签</str>
+    </msg>
+    <msg>
+      <id>Permission</id>
+      <str>权限</str>
+    </msg>
+    <msg>
+      <id>Setting</id>
+      <str>设置</str>
+    </msg>
+    <msg>
+      <id>System Report</id>
+      <str>系统报告</str>
+    </msg>
+    <msg>
+      <id>User</id>
+      <str>用户</str>
+    </msg>
+    <msg>
+      <id>Group</id>
+      <str>组</str>
+    </msg>
+    <msg>
+      <id>Role</id>
+      <str>角色</str>
+    </msg>
+  </grp>
+  <!-- 2.5.2    Resource types - capitalized plural -->
+  <grp>
+    <ctxt>Type Plural</ctxt>
+    <msg>
+      <id>Tasks</id>
+      <str>任务</str>
+    </msg>
+    <msg>
+      <id>Reports</id>
+      <str>报告</str>
+    </msg>
+    <msg>
+      <id>Results</id>
+      <str>结果</str>
+    </msg>
+    <msg>
+      <id>Notes</id>
+      <str>批注</str>
+    </msg>
+    <msg>
+      <id>Overrides</id>
+      <str>覆盖</str>
+    </msg>
+    <msg>
+      <id>Hosts</id>
+      <str>主机</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <msg>
+      <id>NVT Families</id>
+      <str>NVT 家族</str>
+    </msg>
+    <msg>
+      <id>Preferences</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>SecInfo</str>
+    </msg>
+    <msg>
+      <id>Targets</id>
+      <str>目标</str>
+    </msg>
+    <msg>
+      <id>Target Locators</id>
+      <str>目标定位器</str>
+    </msg>
+    <msg>
+      <id>Port Lists</id>
+      <str>端口列表</str>
+    </msg>
+    <msg>
+      <id>Port Ranges</id>
+      <str>端口范围</str>
+    </msg>
+    <msg>
+      <id>Credentials</id>
+      <str>证书</str>
+    </msg>
+    <msg>
+      <id>Scan Configs</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Configs</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>Alerts</id>
+      <str>警报</str>
+    </msg>
+    <msg>
+      <id>Schedules</id>
+      <str>计划</str>
+    </msg>
+    <msg>
+      <id>Report Formats</id>
+      <str>报告格式</str>
+    </msg>
+    <msg>
+      <id>Slaves</id>
+      <str>从属</str>
+    </msg>
+    <msg>
+      <id>Agents</id>
+      <str>代理</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>Tags</id>
+      <str>标签</str>
+    </msg>
+    <msg>
+      <id>Permissions</id>
+      <str>权限</str>
+    </msg>
+    <msg>
+      <id>Settings</id>
+      <str>设置</str>
+    </msg>
+    <msg>
+      <id>System Reports</id>
+      <str>系统报告</str>
+    </msg>
+    <msg>
+      <id>Users</id>
+      <str>用户</str>
+    </msg>
+    <msg>
+      <id>Groups</id>
+      <str>组</str>
+    </msg>
+    <msg>
+      <id>Roles</id>
+      <str>角色</str>
+    </msg>
+  </grp>
+    <!-- 2.5.3    Resource types - lower case singular -->
+  <grp>
+    <ctxt>Type Lower</ctxt>
+    <msg>
+      <id>task</id>
+      <str>任务</str>
+    </msg>
+    <msg>
+      <id>report</id>
+      <str>报告</str>
+    </msg>
+    <msg>
+      <id>result</id>
+      <str>结果</str>
+    </msg>
+    <msg>
+      <id>note</id>
+      <str>批注</str>
+    </msg>
+    <msg>
+      <id>override</id>
+      <str>覆盖</str>
+    </msg>
+    <msg>
+      <id>host</id>
+      <str>主机</str>
+    </msg>
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>NVT family</id>
+      <str>NVT 家族</str>
+    </msg>
+    <msg>
+      <id>preference</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>OVAL definition</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT advisory</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>SecInfo</str>
+    </msg>
+    <msg>
+      <id>target</id>
+      <str>目标</str>
+    </msg>
+    <msg>
+      <id>target locator</id>
+      <str>目标定位器</str>
+    </msg>
+    <msg>
+      <id>port list</id>
+      <str>端口列表</str>
+    </msg>
+    <msg>
+      <id>port range</id>
+      <str>端口范围</str>
+    </msg>
+    <msg>
+      <id>credential</id>
+      <str>证书</str>
+    </msg>
+    <msg>
+      <id>scan config</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>config</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>alert</id>
+      <str>警报</str>
+    </msg>
+    <msg>
+      <id>schedule</id>
+      <str>计划</str>
+    </msg>
+    <msg>
+      <id>report format</id>
+      <str>报告格式</str>
+    </msg>
+    <msg>
+      <id>slave</id>
+      <str>从属</str>
+    </msg>
+    <msg>
+      <id>agent</id>
+      <str>代理</str>
+    </msg>
+    <msg>
+      <id>filter</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>tag</id>
+      <str>标签</str>
+    </msg>
+    <msg>
+      <id>permission</id>
+      <str>权限</str>
+    </msg>
+    <msg>
+      <id>setting</id>
+      <str>设置</str>
+    </msg>
+    <msg>
+      <id>system report</id>
+      <str>系统报告</str>
+    </msg>
+    <msg>
+      <id>user</id>
+      <str>用户</str>
+    </msg>
+    <msg>
+      <id>group</id>
+      <str>组</str>
+    </msg>
+    <msg>
+      <id>role</id>
+      <str>角色</str>
+    </msg>
+  </grp>
+  <!-- 2.5.4    Resource types - lower case plural -->
+  <grp>
+    <ctxt>Type Plural Lower</ctxt>
+    <msg>
+      <id>tasks</id>
+      <str>任务</str>
+    </msg>
+    <msg>
+      <id>reports</id>
+      <str>报告</str>
+    </msg>
+    <msg>
+      <id>results</id>
+      <str>结果</str>
+    </msg>
+    <msg>
+      <id>notes</id>
+      <str>批注</str>
+    </msg>
+    <msg>
+      <id>overrides</id>
+      <str>覆盖</str>
+    </msg>
+    <msg>
+      <id>hosts</id>
+      <str>主机</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <msg>
+      <id>NVT families</id>
+      <str>NVT 家族</str>
+    </msg>
+    <msg>
+      <id>preferences</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <msg>
+      <id>SecInfo</id>
+      <str>SecInfo</str>
+    </msg>
+    <msg>
+      <id>targets</id>
+      <str>目标</str>
+    </msg>
+    <msg>
+      <id>target locators</id>
+      <str>目标定位器</str>
+    </msg>
+    <msg>
+      <id>port lists</id>
+      <str>端口列表</str>
+    </msg>
+    <msg>
+      <id>port ranges</id>
+      <str>端口范围</str>
+    </msg>
+    <msg>
+      <id>credentials</id>
+      <str>证书</str>
+    </msg>
+    <msg>
+      <id>scan configs</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>configs</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>alerts</id>
+      <str>警报</str>
+    </msg>
+    <msg>
+      <id>schedules</id>
+      <str>计划</str>
+    </msg>
+    <msg>
+      <id>report formats</id>
+      <str>报告格式</str>
+    </msg>
+    <msg>
+      <id>slaves</id>
+      <str>从属</str>
+    </msg>
+    <msg>
+      <id>agents</id>
+      <str>代理</str>
+    </msg>
+    <msg>
+      <id>filters</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>tags</id>
+      <str>标签</str>
+    </msg>
+    <msg>
+      <id>permissions</id>
+      <str>权限</str>
+    </msg>
+    <msg>
+      <id>settings</id>
+      <str>设置</str>
+    </msg>
+    <msg>
+      <id>system reports</id>
+      <str>系统报告</str>
+    </msg>
+    <msg>
+      <id>users</id>
+      <str>用户</str>
+    </msg>
+    <msg>
+      <id>groups</id>
+      <str>组</str>
+    </msg>
+    <msg>
+      <id>roles</id>
+      <str>角色</str>
+    </msg>
+  </grp>
+
+  <!-- 3 Resource specific strings -->
+
+  <!-- 3.1 Tasks -->
+  <!-- 3.1.1 Task type name and common strings -->
+  <grp>
+    <ctxt>Task</ctxt>
+    <ctxt>Task Window</ctxt>
+    <ctxt>Report Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Task</id>
+      <str>任务</str>
+    </msg>
+    <msg>
+      <id>Tasks</id>
+      <str>任务</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Task</id>
+      <str>新建任务</str>
+    </msg>
+    <msg>
+      <id>Create Task</id>
+      <str>创建任务</str>
+    </msg>
+
+    <msg>
+      <id>Edit Task</id>
+      <str>编辑任务</str>
+    </msg>
+    <msg>
+      <id>Save Task</id>
+      <str>保存任务</str>
+    </msg>
+
+    <msg>
+      <id>Delete Task</id>
+      <str>删除任务</str>
+    </msg>
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Task Details</id>
+      <str>任务详情</str>
+    </msg>
+    <msg>
+      <id>Task Filter</id>
+      <str>任务过滤器</str>
+    </msg>
+    <msg>
+      <id>Tasks Filter</id>
+      <str>任务过滤器</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.2    Task actions and properties - all views -->
+  <grp>
+    <ctxt>Task Table Row</ctxt>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- Status change actions -->
+    <msg>
+      <id>Start</id>
+      <str>开始</str>
+    </msg>
+    <msg>
+      <id>Resume</id>
+      <str>继续</str>
+    </msg>
+    <msg>
+      <id>Stop</id>
+      <str>停止</str>
+    </msg>
+    <msg>
+      <id>Pause</id>
+      <str>暂停</str>
+    </msg>
+    <!-- Task status action tooltips -->
+    <msg>
+      <id>Task is a container</id>
+      <str>任务是一个容器</str>
+    </msg>
+    <msg>
+      <id>Permission to start task denied</id>
+      <str>开始任务的权限被拒绝</str>
+    </msg>
+    <msg>
+      <id>Permission to resume task denied</id>
+      <str>继续任务的权限被拒绝</str>
+    </msg>
+    <msg>
+      <id>Permission to stop task denied</id>
+      <str>停止任务的权限被拒绝</str>
+    </msg>
+    <msg>
+      <id>Task is already active or paused</id>
+      <str>任务已经活跃或暂停</str>
+    </msg>
+    <msg>
+      <id>Task is scheduled</id>
+      <str>任务已进行计划</str>
+    </msg>
+    <msg>
+      <id>Task is not paused or stopped</id>
+      <str>任务没被暂停或停止</str>
+    </msg>
+    <msg>
+      <id>Tasks can only be be stopped when running or paused</id>
+      <str>任务只能在运行或暂停时被停止</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Alterable -->
+    <msg>
+      <id>Alterable</id>
+      <str>可变</str>
+    </msg>
+    <msg>
+      <id>Task is alterable</id>
+      <str>任务是可变的</str>
+    </msg>
+    <msg>
+      <id>This is an Alterable Task. Reports may not relate to current Scan Config or Target!</id>
+      <str>这是一个可变的任务。报告可能与当前的扫描配置或目标无关！</str>
+    </msg>
+    <msg>
+      <id>Alterable Task</id>
+      <str>可变的任务</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Observers and observer groups -->
+    <msg>
+      <id>Observers</id>
+      <str>监视员</str>
+    </msg>
+    <msg>
+      <id>Observer Groups</id>
+      <str>监视组</str>
+    </msg>
+
+    <msg>
+      <id>Task made visible for:</id>
+      <str>对任务可见的用户：</str>
+    </msg>
+    <msg>
+      <id>Task made visible for Groups:</id>
+      <str>对任务可见的组：</str>
+    </msg>
+    <msg>
+      <id>Task made visible for Roles:</id>
+      <str>对任务可见的角色：</str>
+    </msg>
+    <msg>
+      <id>Observing task owned by</id>
+      <str>受监视任务的所有者为</str>
+    </msg>
+    <!-- Reports -->
+    <!-- generic Reports -->
+    <msg>
+      <id>Reports on Task</id>
+      <str>任务报告</str>
+    </msg>
+    <!-- all current Reports-->
+    <msg>
+      <id>View list of all reports for Task </id>
+      <str>显示任务所有报告的列表 </str>
+    </msg>
+    <msg>
+      <id>, including unfinished ones</id>
+      <str>，包括未完成的报告</str>
+    </msg>
+    <!-- current Report-->
+    <msg>
+      <id>Go to the current report</id>
+      <str>转到当前报告</str>
+    </msg>
+    <!-- finished Reports -->
+    <msg>
+      <id>Finished</id>
+      <str>已完成</str>
+    </msg>
+    <!-- all finished Reports-->
+    <msg>
+      <id>View list of all finished reports for Task </id>
+      <str>显示任务所有已完成报告的列表 </str>
+    </msg>
+    <msg>
+      <id>#TASK FINSISHED REPORTS SUFFIX#</id>
+      <str> #任务已完成的报告的后缀#</str>
+    </msg>
+    <!-- last finished Report -->
+    <msg>
+      <id>Last</id>
+      <str>最后的</str>
+    </msg>
+    <msg>
+      <id>View last report for Task </id>
+      <str>显示任务最后的报告 </str>
+    </msg>
+    <msg>
+      <id>#TASK LAST REPORT SUFFIX#</id>
+      <str> #任务最后的报告的后缀#</str>
+    </msg>
+    <!-- import Report -->
+    <msg>
+      <id>Import Report</id>
+      <str>导入报告</str>
+    </msg>
+    <msg>
+      <id>Add Report</id>
+      <str>添加报告</str>
+    </msg>
+    <!-- Schedule due time -->
+    <msg>
+      <id>Next due</id>
+      <str>下个的预期</str>
+    </msg>
+    <msg>
+      <id>Next due: over</id>
+      <str>下个的预期：结束</str>
+    </msg>
+    <!-- Slave -->
+    <msg>
+      <id>#TASK RUN ON SLAVE PREFIX#</id>
+      <str>#从属机运行任务的前缀# </str>
+    </msg>
+    <msg>
+      <id>#TASK RUN ON SLAVE SUFFIX#</id>
+      <str> #从属机运行任务的后缀#</str>
+    </msg>
+    <!-- Trend -->
+    <msg>
+      <id>Trend</id>
+      <str>趋势</str>
+    </msg>
+    <msg>
+      <id>Severity increased</id>
+      <str>严重性增加</str>
+    </msg>
+    <msg>
+      <id>Severity decreased</id>
+      <str>严重性减少</str>
+    </msg>
+    <msg>
+      <id>Vulnerability count increased</id>
+      <str>漏洞计数增加</str>
+    </msg>
+    <msg>
+      <id>Vulnerability count decreased</id>
+      <str>漏洞计数减少</str>
+    </msg>
+    <msg>
+      <id>Vulnerabilities did not change</id>
+      <str>漏洞未变化</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.3    Task actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>New Container Task</id>
+      <str>新建容器任务</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Order of target hosts -->
+    <msg>
+      <id>Order for target hosts</id>
+      <str>目标主机排序</str>
+    </msg>
+    <msg>
+      <id>Sequential</id>
+      <str>顺序</str>
+    </msg>
+    <msg>
+      <id>Random</id>
+      <str>随机</str>
+    </msg>
+    <msg>
+      <id>Reverse</id>
+      <str>逆序</str>
+    </msg>
+    <!-- Scan Intensity -->
+    <msg>
+      <id>Scan Intensity</id>
+      <str>扫描强度</str>
+    </msg>
+    <msg>
+      <id>Maximum concurrently executed NVTs per host</id>
+      <str>每台主机同时执行 NVT 的最大数目</str>
+    </msg>
+    <msg>
+      <id>Maximum concurrently scanned hosts</id>
+      <str>同时扫描主机的最大数目</str>
+    </msg>
+    <!-- Source Interface -->
+    <msg>
+      <id>Network Source Interface</id>
+      <str>网络源接口</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Asset Management settings -->
+    <msg>
+      <id>Add to Assets</id>
+      <str>添加到资产</str>
+    </msg>
+    <msg>
+      <id>Add results to Asset Management</id>
+      <str>添加结果到资产管理</str>
+    </msg>
+    <!-- Notes -->
+    <msg>
+      <id>Notes on Task</id>
+      <str>任务的批注</str>
+    </msg>
+    <!-- Overrides -->
+    <msg>
+      <id>Overrides on Task</id>
+      <str>任务的覆盖</str>
+    </msg>
+
+    <!-- Targets -->
+    <msg>
+      <id>Scan Targets</id>
+      <str>扫描目标</str>
+    </msg>
+  </grp>
+
+  <!-- 3.1.4    Task actions and properties - table rows only -->
+  <!--
+  <grp>
+    <ctxt>Task Table Row</ctxt>
+
+  </grp>
+  -->
+
+  <!-- 3.1.5    Task status -->
+  <grp>
+    <ctxt>Status</ctxt>
+
+    <msg>
+      <id>Container</id>
+      <str>容器</str>
+    </msg>
+    <msg>
+      <id>Uploading</id>
+      <str>上传中</str>
+    </msg>
+    <msg>
+      <id>Delete Requested</id>
+      <str>已请求删除</str>
+    </msg>
+    <msg>
+      <id>Ultimate Delete Requested</id>
+      <str>已请求彻底删除</str>
+    </msg>
+    <msg>
+      <id>Done</id>
+      <str>已完成</str>
+    </msg>
+    <msg>
+      <id>New</id>
+      <str>新建</str>
+    </msg>
+    <msg>
+      <id>Pause Requested</id>
+      <str>已请求暂停</str>
+    </msg>
+    <msg>
+      <id>Paused</id>
+      <str>已暂停</str>
+    </msg>
+    <msg>
+      <id>Requested</id>
+      <str>已请求</str>
+    </msg>
+    <msg>
+      <id>Resume Requested</id>
+      <str>已请求继续</str>
+    </msg>
+    <msg>
+      <id>Running</id>
+      <str>运行中</str>
+    </msg>
+    <msg>
+      <id>Stop Requested</id>
+      <str>已请求停止</str>
+    </msg>
+    <msg>
+      <id>Stopped</id>
+      <str>已停止</str>
+    </msg>
+    <msg>
+      <id>Internal Error</id>
+      <str>内部错误</str>
+    </msg>
+    <!-- Status: "at" for progress bar -->
+    <msg>
+      <id> at </id>
+      <str>在 </str>
+    </msg>
+  </grp>
+
+  <!-- 3.2. Reports -->
+  <!-- 3.2.1. Report type name and common strings -->
+  <grp>
+    <ctxt>Report</ctxt>
+    <ctxt>Task Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Report</id>
+      <str>报告</str>
+    </msg>
+    <msg>
+      <id>Reports</id>
+      <str>报告</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>Delete Report</id>
+      <str>删除报告</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Report Details</id>
+      <str>报告详情</str>
+    </msg>
+    <msg>
+      <id>Report Filter</id>
+      <str>报告过滤器</str>
+    </msg>
+    <msg>
+      <id>Reports Filter</id>
+      <str>报告过滤器</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.2    Report actions and properties - all views -->
+  <grp>
+    <ctxt>Report Table Row</ctxt>
+    <ctxt>Report Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- Delete restrictions -->
+    <msg>
+      <id>Report is observed</id>
+      <str>报告被监视</str>
+    </msg>
+    <!-- Delta reports -->
+    <msg>
+      <id>Compare</id>
+      <str>比较</str>
+    </msg>
+    <msg>
+      <id>Report is already selected for delta</id>
+      <str>报告已经为增量选中</str>
+    </msg>
+    <msg>
+      <id>Filter must be limited to a single Task to allow delta reports</id>
+      <str>过滤器必须限定在单一的任务中以允许增量报告</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- OS -->
+    <msg>
+      <id>Unknown</id>
+      <str>未知</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.2.3    Report actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Report Window</ctxt>
+
+    <!-- - - Actions - - -->
+    <!-- Download full / filtered report -->
+    <msg>
+      <id>Download Format</id>
+      <str>下载格式</str>
+    </msg>
+    <msg>
+      <id>Download full Report</id>
+      <str>下载完整报告</str>
+    </msg>
+    <msg>
+      <id>Download filtered Report</id>
+      <str>下载过滤后的报告</str>
+    </msg>
+    <msg>
+      <id>Download</id>
+      <str>下载</str>
+    </msg>
+    <!-- Run Alert -->
+    <msg>
+      <id>Run Alert</id>
+      <str>运行警报</str>
+    </msg>
+    <!-- View report = details -->
+    <msg>
+      <id>View Report</id>
+      <str>显示报告</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <!-- Scan data -->
+    <msg>
+      <id>Scan initiated</id>
+      <str>扫描初始化</str>
+    </msg>
+    <msg>
+      <id>Scan 1 initiated</id>
+      <str>扫描 1 初始化</str>
+    </msg>
+    <msg>
+      <id>Scan 2 initiated</id>
+      <str>扫描 2 初始化</str>
+    </msg>
+
+    <msg>
+      <id>Scan started</id>
+      <str>扫描开始</str>
+    </msg>
+    <msg>
+      <id>Scan 1 started</id>
+      <str>扫描 1 开始</str>
+    </msg>
+    <msg>
+      <id>Scan 2 started</id>
+      <str>扫描 2 开始</str>
+    </msg>
+
+    <msg>
+      <id>Scan ended</id>
+      <str>扫描结束</str>
+    </msg>
+    <msg>
+      <id>Scan 1 ended</id>
+      <str>扫描 1 结束</str>
+    </msg>
+    <msg>
+      <id>Scan 2 ended</id>
+      <str>扫描 2 结束</str>
+    </msg>
+
+    <msg>
+      <id>Scan duration</id>
+      <str>扫描时间</str>
+    </msg>
+    <msg>
+      <id>Scan 1 duration</id>
+      <str>扫描 1 时间</str>
+    </msg>
+    <msg>
+      <id>Scan 2 duration</id>
+      <str>扫描 2 时间</str>
+    </msg>
+
+    <msg>
+      <id>Scan status</id>
+      <str>扫描状态</str>
+    </msg>
+    <msg>
+      <id>Scan 1 status</id>
+      <str>扫描 1 状态</str>
+    </msg>
+    <msg>
+      <id>Scan 2 status</id>
+      <str>扫描 2 状态</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Hosts references -->
+    <msg>
+      <id>Multiple hosts</id>
+      <str>多个主机</str>
+    </msg>
+    <!-- Result Counts -->
+    <msg>
+      <id>Scan Results</id>
+      <str>扫描结果</str>
+    </msg>
+    <msg>
+      <id>Full report</id>
+      <str>完整报告</str>
+    </msg>
+    <msg>
+      <id>Filtered report</id>
+      <str>过滤后的报告</str>
+    </msg>
+    <!-- Task references -->
+    <msg>
+      <id>Result of Task</id>
+      <str>任务结果</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.4      Report actions and properties - table rows only -->
+  <!-- None -->
+  <!--
+  <grp>
+    <ctxt>Report Table Row</ctxt>
+  </grp>
+  -->
+
+  <!-- 3.2.5    Report sections -->
+  <grp>
+    <ctxt>Report Section</ctxt>
+    <msg>
+      <id>Report: Prognostic Results</id>
+      <str>报告：预测结果</str>
+    </msg>
+    <msg>
+      <id>Report: Delta Results</id>
+      <str>报告：增量结果</str>
+    </msg>
+    <msg>
+      <id>Report: Results</id>
+      <str>报告：结果</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Summary and Download</id>
+      <str>报告：预测结果摘要和下载</str>
+    </msg>
+    <msg>
+      <id>Report: Delta Summary and Download</id>
+      <str>报告：增量结果摘要和下载</str>
+    </msg>
+    <msg>
+      <id>Report: Summary and Download</id>
+      <str>报告：结果摘要和下载</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Hosts</id>
+      <str>报告：预测的主机</str>
+    </msg>
+    <msg>
+      <id>Report: Hosts</id>
+      <str>报告：主机</str>
+    </msg>
+    <msg>
+      <id>Report: Ports</id>
+      <str>报告：端口</str>
+    </msg>
+    <msg>
+      <id>Report: Operating Systems</id>
+      <str>报告：操作系统</str>
+    </msg>
+    <msg>
+      <id>Report: Prognostic Applications</id>
+      <str>报告：预测的应用程序</str>
+    </msg>
+    <msg>
+      <id>Report: Applications</id>
+      <str>报告：应用程序</str>
+    </msg>
+    <msg>
+      <id>Report: Vulnerabilities</id>
+      <str>报告：漏洞</str>
+    </msg>
+    <msg>
+      <id>Report: CVEs</id>
+      <str>报告：CVE</str>
+    </msg>
+    <msg>
+      <id>Report: Closed CVEs</id>
+      <str>报告：相近的CVE</str>
+    </msg>
+    <msg>
+      <id>Report: Topology</id>
+      <str>报告：拓扑</str>
+    </msg>
+    <msg>
+      <id>Report: SSL Certificates</id>
+      <str>报告：SSL 证书</str>
+    </msg>
+    <msg>
+      <id>Report: Error Messages</id>
+      <str>报告：错误信息</str>
+    </msg>
+    <msg>
+      <id>Task: Details</id>
+      <str>任务：详情</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.6    Report filter -->
+  <grp>
+    <ctxt>Report Filter</ctxt>
+    <msg>
+      <id>Show delta results</id>
+      <str>显示增量结果</str>
+    </msg>
+    <msg>
+      <id>same</id>
+      <str>相同</str>
+    </msg>
+    <msg>
+      <id>new</id>
+      <str>新增</str>
+    </msg>
+    <msg>
+      <id>gone</id>
+      <str>消失</str>
+    </msg>
+    <msg>
+      <id>changed</id>
+      <str>变化</str>
+    </msg>
+
+    <msg>
+      <id>Auto-FP</id>
+      <str>Auto-FP</str>
+    </msg>
+    <msg>
+      <id>Trust vendor security updates</id>
+      <str>信任厂商的安全更新</str>
+    </msg>
+    <msg>
+      <id>Full CVE match</id>
+      <str>完全 CVE 匹配</str>
+    </msg>
+    <msg>
+      <id>Partial CVE match</id>
+      <str>部分 CVE 匹配</str>
+    </msg>
+
+    <msg>
+      <id>Show Notes</id>
+      <str>显示批注</str>
+    </msg>
+    <msg>
+      <id>Show Overrides</id>
+      <str>显示覆盖</str>
+    </msg>
+
+    <msg>
+      <id>Only show hosts that have results</id>
+      <str>只显示有结果的主机</str>
+    </msg>
+
+    <msg>
+      <id>Text phrase</id>
+      <str>文本短句筛选</str>
+    </msg>
+  </grp>
+
+  <!-- 3.2.7    Report image -->
+  <grp>
+    <ctxt>Report Image</ctxt>
+
+    <msg>
+      <id>ERROR: List of available report formats missing!</id>
+      <str>错误： 可用报告格式列表缺失！</str>
+    </msg>
+    <msg>
+      <id>Report format </id>
+      <str>报告格式 </str>
+    </msg>
+    <msg>
+      <id> is not trusted.</id>
+      <str> 不可信。</str>
+    </msg>
+    <msg>
+      <id> is not active.</id>
+      <str> 未激活。</str>
+    </msg>
+  </grp>
+
+  <!-- 3.3      Results -->
+  <!-- 3.3.1    Result type name and common strings -->
+  <grp>
+    <ctxt>Result</ctxt>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Result</id>
+      <str>结果</str>
+    </msg>
+    <msg>
+      <id>Results</id>
+      <str>结果</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Result Details</id>
+      <str>结果详情</str>
+    </msg>
+    <msg>
+      <id>Result Filter</id>
+      <str>结果过滤器</str>
+    </msg>
+    <msg>
+      <id>Results Filter</id>
+      <str>结果过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.3.2    Result actions and properties - all views -->
+  <grp>
+    <ctxt>Result Table Row</ctxt>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.3.3    Result actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Collapse details of all vulnerabilities</id>
+      <str>折叠所有漏洞详情</str>
+    </msg>
+    <msg>
+      <id>Expand to full details of all vulnerabilities</id>
+      <str>展开所有漏洞详情</str>
+    </msg>
+
+    <msg>
+      <id>This report contains at least one Error message</id>
+      <str>这个报告至少包含一个错误（Error）消息</str>
+    </msg>
+    <msg>
+      <id>Click here to go to the Errors page</id>
+      <str>点击这里到错误（Error）消息页面</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>0 results</id>
+      <str>0 个结果</str>
+    </msg>
+
+    <msg>
+      <id>Apps</id>
+      <str>应用</str>
+    </msg>
+    <msg>
+      <id>Application CPE</id>
+      <str>应用程序 CPE</str>
+    </msg>
+    <msg>
+      <id>Distance</id>
+      <str>距离</str>
+    </msg>
+    <msg>
+      <id>DN</id>
+      <str>识别名（Distinguished Name，DN）</str>
+    </msg>
+    <msg>
+      <id>End</id>
+      <str>结束</str>
+    </msg>
+    <msg>
+      <id>Error Message</id>
+      <str>错误消息</str>
+    </msg>
+    <msg>
+      <id>IANA</id>
+      <str>IANA</str>
+    </msg>
+    <msg>
+      <id>Impact</id>
+      <str>影响</str>
+    </msg>
+    <msg>
+      <id>Not valid before</id>
+      <str>生效开始</str>
+    </msg>
+    <msg>
+      <id>Not valid after</id>
+      <str>生效结束</str>
+    </msg>
+    <msg>
+      <id>NVT Severity</id>
+      <str>NVT 严重性</str>
+    </msg>
+    <msg>
+      <id>Occurrences</id>
+      <str>出现</str>
+    </msg>
+    <msg>
+      <id>Operating System</id>
+      <str>操作系统</str>
+    </msg>
+    <msg>
+      <id>OS</id>
+      <str>OS</str>
+    </msg>
+    <msg>
+      <id>Location</id>
+      <str>位置</str>
+    </msg>
+    <msg>
+      <id>Serial</id>
+      <str>序列号</str>
+    </msg>
+    <msg>
+      <id>Solution</id>
+      <str>解决方案</str>
+    </msg>
+    <msg>
+      <id>Start</id>
+      <str>开始</str>
+    </msg>
+    <msg>
+      <id>Vulnerability</id>
+      <str>漏洞</str>
+    </msg>
+    <!-- Details -->
+    <msg>
+      <id>Vulnerability Detection Result</id>
+      <str>漏洞检测结果</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Insight</id>
+      <str>漏洞察看</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Detection Method</id>
+      <str>漏洞的检测方法</str>
+    </msg>
+    <msg>
+      <id>Vulnerability was detected according to the Vulnerability Detection Method.</id>
+      <str>根据漏洞检测方法已经检测到漏洞。</str>
+    </msg>
+    <msg>
+      <id>Log</id>
+      <str>记录</str>
+    </msg>
+    <msg>
+      <id>Log Method</id>
+      <str>记录的检测方法</str>
+    </msg>
+    <msg>
+      <id>Version used</id>
+      <str>使用的版本</str>
+    </msg>
+    <msg>
+      <id>Product Detection Result</id>
+      <str>产品检测结果</str>
+    </msg>
+    <msg>
+      <id>Product detection results</id>
+      <str>产品检测结果</str>
+    </msg>
+    <msg>
+      <id>View details of product detection</id>
+      <str>显示产品检测详情</str>
+    </msg>
+    <msg>
+      <id>Product</id>
+      <str>产品</str>
+    </msg>
+    <msg>
+      <id>Method</id>
+      <str>方法</str>
+    </msg>
+    <!-- Delta results -->
+    <msg>
+      <id>Different Lines</id>
+      <str>不同的行</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- Result Overrides -->
+    <msg>
+      <id>Overridden from </id>
+      <str>覆盖自 </str>
+    </msg>
+    <!-- Result Tags -->
+    <msg>
+      <id>Result Tags</id>
+      <str>结果标签</str>
+    </msg>
+    <msg>
+      <id>User Tags for this Result</id>
+      <str>该结果的用户标签</str>
+    </msg>
+  </grp>
+  <!-- 3.3.4    Result actions and properties - table rows only -->
+  <grp>
+    <ctxt>Result Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- SSL Cert -->
+    <msg>
+      <id>Download SSL Cert</id>
+      <str>SSL 证书下载</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+    <!-- Results - Missing CPE detail -->
+    <msg>
+      <id>Includes </id>
+      <str>包括 </str>
+    </msg>
+    <msg>
+      <id> host(s) where CPE was found in inventory, but number of installations could not be determined</id>
+      <str> 个主机是清单中存在 CPE 的主机，但是安装数目无法确定</str>
+    </msg>
+    <!-- Results for App -->
+    <msg>
+      <id>for App</id>
+      <str>--应用程序</str>
+    </msg>
+  </grp>
+
+
+  <!-- 3.4      Notes -->
+  <!-- 3.4.1    Note type name and common strings -->
+  <grp>
+    <ctxt>Note</ctxt>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Note</id>
+      <str>批注</str>
+    </msg>
+    <msg>
+      <id>Notes</id>
+      <str>批注</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Note</id>
+      <str>新建批注</str>
+    </msg>
+    <msg>
+      <id>Add Note</id>
+      <str>添加批注</str>
+    </msg>
+    <msg>
+      <id>Create Note</id>
+      <str>创建批注</str>
+    </msg>
+
+    <msg>
+      <id>Edit Note</id>
+      <str>编辑批注</str>
+    </msg>
+    <msg>
+      <id>Save Note</id>
+      <str>保存批注</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Note Details</id>
+      <str>批注详情</str>
+    </msg>
+    <msg>
+      <id>Note Filter</id>
+      <str>批注过滤器</str>
+    </msg>
+    <msg>
+      <id>Notes Filter</id>
+      <str>批注过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.4.2    Note actions and properties - all views -->
+  <grp>
+    <ctxt>Note Table Row</ctxt>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- Orphan -->
+    <msg>
+      <id>Orphan</id>
+      <str>孤立</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- NVT: None -->
+    <msg>
+      <id>None.  Result was an open port.</id>
+      <str>无。结果是一个开放端口。</str>
+    </msg>
+    <msg>
+      <id>No NVT</id>
+      <str>无 NVT</str>
+    </msg>
+    <msg>
+      <id>Result was an open port.</id>
+      <str>结果是一个开放端口。</str>
+    </msg>
+  </grp>
+  <!-- 3.4.3    Note actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Note Window</ctxt>
+    <!-- - - Actions - - -->
+
+    <!-- - - Properties - - -->
+    <!-- Active -->
+    <msg>
+      <id>Active until</id>
+      <str>活跃直到</str>
+    </msg>
+    <!-- Application -->
+    <msg>
+      <id>Application</id>
+      <str>应用</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- Result -->
+    <msg>
+      <id>Only the selected one</id>
+      <str>仅选择的结果</str>
+    </msg>
+    <msg>
+      <id>Associated Result</id>
+      <str>关联的结果</str>
+    </msg>
+    <!-- NVT -->
+    <msg>
+      <id>NVT Name</id>
+      <str>NVT 名称</str>
+    </msg>
+    <msg>
+      <id>NVT OID</id>
+      <str>NVT OID</str>
+    </msg>
+    <!-- Tags -->
+    <msg>
+      <id>User Tags for this Note</id>
+      <str>该批注的用户标签</str>
+    </msg>
+    <!-- - - Other - - -->
+    <msg>
+      <id>Appearance</id>
+      <str>外观</str>
+    </msg>
+    <msg>
+      <id>Appearance when active</id>
+      <str>活跃时外观</str>
+    </msg>
+  </grp>
+  <!-- 3.4.4    Note actions and properties - table rows only -->
+  <grp>
+    <ctxt>Note Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.5      Overrides -->
+  <!-- 3.5.1    Override type name and common strings -->
+  <grp>
+    <ctxt>Override</ctxt>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Override</id>
+      <str>覆盖</str>
+    </msg>
+    <msg>
+      <id>Overrides</id>
+      <str>覆盖</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Override</id>
+      <str>新建覆盖</str>
+    </msg>
+    <msg>
+      <id>Add Override</id>
+      <str>添加覆盖</str>
+    </msg>
+    <msg>
+      <id>Create Override</id>
+      <str>创建覆盖</str>
+    </msg>
+
+    <msg>
+      <id>Edit Override</id>
+      <str>编辑覆盖</str>
+    </msg>
+    <msg>
+      <id>Save Override</id>
+      <str>保存覆盖</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Override Details</id>
+      <str>覆盖详情</str>
+    </msg>
+    <msg>
+      <id>Override Filter</id>
+      <str>覆盖过滤器</str>
+    </msg>
+    <msg>
+      <id>Overrides Filter</id>
+      <str>覆盖过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.5.2    Override actions and properties - all views -->
+  <grp>
+    <ctxt>Override Table Row</ctxt>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- Orphan -->
+    <msg>
+      <id>Orphan</id>
+      <str>孤立</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- NVT: None -->
+    <msg>
+      <id>None.  Result was an open port.</id>
+      <str>无。结果是一个开放端口。</str>
+    </msg>
+    <msg>
+      <id>No NVT</id>
+      <str>无 NVT</str>
+    </msg>
+    <msg>
+      <id>Result was an open port.</id>
+      <str>结果是一个开放端口。</str>
+    </msg>
+  </grp>
+  <!-- 3.5.3    Override actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Override Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- Active -->
+    <msg>
+      <id>Active until</id>
+      <str>活跃直到</str>
+    </msg>
+    <!-- Application -->
+    <msg>
+      <id>Application</id>
+      <str>应用</str>
+    </msg>
+    <!-- From ... To .. -->
+    <msg>
+      <id>From</id>
+      <str>从</str>
+    </msg>
+    <msg>
+      <id>To</id>
+      <str>到</str>
+    </msg>
+
+    <msg>
+      <id>Override from </id>
+      <str>覆盖自 </str>
+    </msg>
+    <msg>
+      <id> to </id>
+      <str> 到 </str>
+    </msg>
+    <!-- New Severity -->
+    <msg>
+      <id>New Severity</id>
+      <str>新严重性</str>
+    </msg>
+    <msg>
+      <id>Other</id>
+      <str>其他</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <!-- Result -->
+    <msg>
+      <id>Only the selected one</id>
+      <str>仅选择的结果</str>
+    </msg>
+    <msg>
+      <id>Associated Result</id>
+      <str>关联的结果</str>
+    </msg>
+    <!-- NVT -->
+    <msg>
+      <id>NVT Name</id>
+      <str>NVT 名称</str>
+    </msg>
+    <msg>
+      <id>NVT OID</id>
+      <str>NVT OID</str>
+    </msg>
+    <!-- Tags -->
+    <msg>
+      <id>User Tags for this Note</id>
+      <str>该批注的用户标签</str>
+    </msg>
+    <!-- - - Other - - -->
+    <msg>
+      <id>Appearance</id>
+      <str>外观</str>
+    </msg>
+    <msg>
+      <id>Appearance when active</id>
+      <str>活跃时外观</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>User Tags for this Override</id>
+      <str>该覆盖的用户标签</str>
+    </msg>
+  </grp>
+  <!-- 3.5.4    Override actions and properties - table rows only -->
+  <grp>
+    <ctxt>Override Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.5.5    Override controls -->
+  <grp>
+    <ctxt>Override Controls</ctxt>
+    <msg>
+      <id>Apply overrides</id>
+      <str>应用覆盖</str>
+    </msg>
+    <msg>
+    <id>Overrides are Applied</id>
+    <str>覆盖已应用</str>
+    </msg>
+    <msg>
+      <id>No overrides</id>
+      <str>无覆盖</str>
+    </msg>
+    <msg>
+      <id>No Overrides</id>
+      <str>无覆盖</str>
+    </msg>
+    <msg>
+      <id>Update</id>
+      <str>更新</str>
+    </msg>
+  </grp>
+
+  <!-- 3.6      Hosts -->
+  <!-- 3.6.1    Host type name and common strings -->
+  <grp>
+    <ctxt>Host</ctxt>
+    <ctxt>Host Window</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Host</id>
+      <str>主机</str>
+    </msg>
+    <msg>
+      <id>Hosts</id>
+      <str>主机</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>Host Details</id>
+      <str>主机详情</str>
+    </msg>
+    <!-- - - Common references - - -->
+  </grp>
+  <!-- 3.6.2    Host actions and properties - all views -->
+  <grp>
+    <ctxt>Host Table Row</ctxt>
+    <ctxt>Host Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Open Ports</id>
+      <str>开放端口</str>
+    </msg>
+    <msg>
+      <id>Open TCP Ports</id>
+      <str>TCP 开放端口</str>
+    </msg>
+    <msg>
+      <id>Open UDP Ports</id>
+      <str>UDP 开放端口</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Prognostic Report</id>
+      <str>预测报告</str>
+    </msg>
+    <msg>
+      <id>No hosts available for Prognostic Report</id>
+      <str>预测报告无可用的主机</str>
+    </msg>
+    <msg>
+      <id>No SCAP data available for Prognostic Report</id>
+      <str>预测报告无可用的 SCAP 数据</str>
+    </msg>
+    <msg>
+      <id>No Apps detected for Prognostic Report</id>
+      <str>预测报告未检测到应用程序</str>
+    </msg>
+    <msg>
+      <id>not finished</id>
+      <str>未完成</str>
+    </msg>
+
+    <!-- OS icon -->
+    <msg>
+      <id>OS conflict</id>
+      <str>OS 冲突</str>
+    </msg>
+    <msg>
+      <id>No information on Operating System was gathered during scan.</id>
+      <str>扫描时未收集到操作系统信息。</str>
+    </msg>
+  </grp>
+  <!-- 3.6.3    Host actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Host Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Host Filtering</id>
+      <str>主机过滤</str>
+    </msg>
+    <msg>
+      <id>Filtered Hosts</id>
+      <str>过滤后的主机</str>
+    </msg>
+
+    <msg>
+      <id>OS</id>
+      <str>OS</str>
+    </msg>
+    <msg>
+      <id>Ports</id>
+      <str>端口</str>
+    </msg>
+    <msg>
+      <id>#Apps short#</id>
+      <str>应用</str>
+    </msg>
+    <msg>
+      <id>Apps</id>
+      <str>应用程序</str>
+    </msg>
+    <msg>
+      <id>Detected Applications</id>
+      <str>检测到的应用程序</str>
+    </msg>
+    <msg>
+      <id>Distance</id>
+      <str>距离</str>
+    </msg>
+    <msg>
+      <id>Prognosis</id>
+      <str>预测</str>
+    </msg>
+
+    <msg>
+      <id>Host Identification</id>
+      <str>主机标识</str>
+    </msg>
+    <msg>
+      <id>Identifier</id>
+      <str>标识</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+    <msg>
+      <id>Scanned IP</id>
+      <str>扫描的 IP</str>
+    </msg>
+    <msg>
+      <id>Hostname</id>
+      <str>主机名</str>
+    </msg>
+    <msg>
+      <id>target definition</id>
+      <str>目标定义</str>
+    </msg>
+    <msg>
+      <id>reverse lookup</id>
+      <str>逆序查看</str>
+    </msg>
+    <msg>
+      <id>WMI, Standalone</id>
+      <str>WMI, 单独的</str>
+    </msg>
+    <msg>
+      <id>WMI, Domain</id>
+      <str>WMI, 域的</str>
+    </msg>
+
+    <msg>
+      <id>Hardware</id>
+      <str>硬件</str>
+    </msg>
+    <msg>
+      <id>Component</id>
+      <str>组件</str>
+    </msg>
+    <msg>
+      <id>Values</id>
+      <str>值</str>
+    </msg>
+    <msg>
+      <id>CPU</id>
+      <str>CPU</str>
+    </msg>
+    <msg>
+      <id>Memory</id>
+      <str>内存</str>
+    </msg>
+    <msg>
+      <id>Target-Interface</id>
+      <str>目标接口</str>
+    </msg>
+
+    <msg>
+      <id>Other MACs</id>
+      <str>其他 MAC 地址</str>
+    </msg>
+
+    <msg>
+      <id>Netinfo dump</id>
+      <str>网络信息转储</str>
+    </msg>
+
+    <msg>
+      <id>Information not available</id>
+      <str>信息不可用</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>0 hosts</id>
+      <str>0 个主机</str>
+    </msg>
+
+    <msg>
+      <id>Last Report</id>
+      <str>最后的报告</str>
+    </msg>
+  </grp>
+  <!-- 3.6.4    Host actions and properties - table rows only -->
+  <grp>
+    <ctxt>Host Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.7      NVTs -->
+  <!-- 3.7.1    NVT type name and common strings -->
+  <grp>
+    <ctxt>NVT</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>Note Window</ctxt>
+    <ctxt>Override Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>NVT</id>
+      <str>NVT</str>
+    </msg>
+    <msg>
+      <id>NVTs</id>
+      <str>NVTs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>NVT Details</id>
+      <str>NVT 详情</str>
+    </msg>
+
+    <msg>
+      <id>NVT Filter</id>
+      <str>NVT 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.7.2    NVT actions and properties - all views -->
+  <grp>
+    <ctxt>NVT Table Row</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.7.3    NVT actions and properties - window / headers only -->
+  <grp>
+    <ctxt>NVT Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>OID</id>
+      <str>OID</str>
+    </msg>
+    <msg>
+      <id>Family</id>
+      <str>家族</str>
+    </msg>
+
+    <msg>
+      <id>Affected Software/OS</id>
+      <str>影响的软件/操作系统</str>
+    </msg>
+
+    <msg>
+      <id>Vulnerability Scoring</id>
+      <str>漏洞评分</str>
+    </msg>
+    <msg>
+      <id>CVSS base</id>
+      <str>CVSS 基准评分</str>
+    </msg>
+    <msg>
+      <id>CVSS base vector</id>
+      <str>CVSS 基准向量</str>
+    </msg>
+
+    <msg>
+      <id>Vulnerability Insight</id>
+      <str>漏洞察看</str>
+    </msg>
+    <msg>
+      <id>Vulnerability Detection Method</id>
+      <str>漏洞检测方法</str>
+    </msg>
+    <msg>
+      <id>Impact</id>
+      <str>影响</str>
+    </msg>
+    <msg>
+      <id>Solution</id>
+      <str>解决方案</str>
+    </msg>
+    <msg>
+      <id>Other tags</id>
+      <str>其他标签</str>
+    </msg>
+
+    <msg>
+      <id>Preferences</id>
+      <str>首选项</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <!-- Notes -->
+    <msg>
+      <id>Notes on NVT</id>
+      <str>NVT 批注</str>
+    </msg>
+    <!-- Overrides -->
+    <msg>
+      <id>Overrides on NVT</id>
+      <str>NVT 覆盖</str>
+    </msg>
+  </grp>
+  <!-- 3.7.4    NVT actions and properties - table rows only -->
+  <grp>
+    <ctxt>NVT Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.7.5    List of references -->
+  <grp>
+    <ctxt>Reference List</ctxt>
+    <msg>
+      <id>Warning</id>
+      <str>警告</str>
+    </msg>
+    <msg>
+      <id>Other</id>
+      <str>其他</str>
+    </msg>
+  </grp>
+
+  <!-- 3.8      CVEs -->
+  <!-- 3.8.1    CVE type name and common strings -->
+  <grp>
+    <ctxt>CVE</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <ctxt>NVT Window</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>CVE</id>
+      <str>CVE</str>
+    </msg>
+    <msg>
+      <id>CVEs</id>
+      <str>CVEs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>CVE Details</id>
+      <str>CVE 详情</str>
+    </msg>
+
+    <msg>
+      <id>CVE Filter</id>
+      <str>CVE 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.8.2    CVE actions and properties - all views -->
+  <grp>
+    <ctxt>CVE Table Row</ctxt>
+    <ctxt>CVE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.8.3    CVE actions and properties - window / headers only -->
+  <grp>
+    <ctxt>CVE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Published</id>
+      <str>公布日期</str>
+    </msg>
+
+    <msg>
+      <id>CWE ID</id>
+      <str>CWE ID</str>
+    </msg>
+
+    <msg>
+      <id>CERT Advisories referencing this CVE</id>
+      <str>引用该 CVE 的 CERT 公告</str>
+    </msg>
+    <msg>
+      <id>Unknown CERT type!</id>
+      <str>未知 CERT 类型！</str>
+    </msg>
+    <msg>
+      <id>Vulnerable products</id>
+      <str>存在漏洞的产品</str>
+    </msg>
+    <msg>
+      <id>NVTs addressing this CVE</id>
+      <str>检测该 CVE 的 NVT</str>
+    </msg>
+
+    <msg>
+      <id>This CVE was not found in the database.  This is not necessarily an error, because the CVE number might have been assigned for the issue, but the CVE not yet published.  Eventually the CVE content will appear in the database.</id>
+      <str>该 CVE 不在数据库中。这可能不是个错误，因为 CVE 编号可能是分配给这个事件，但该 CVE 却还没被公开。</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.8.4    CVE actions and properties - table rows only -->
+  <grp>
+    <ctxt>CVE Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.9      CPE -->
+  <!-- 3.9.1    CPE type name and common strings -->
+  <grp>
+    <ctxt>CPE</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Result Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>CPE</id>
+      <str>CPE</str>
+    </msg>
+    <msg>
+      <id>CPEs</id>
+      <str>CPEs</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>CPE Details</id>
+      <str>CPE 详情</str>
+    </msg>
+
+    <msg>
+      <id>CPE Filter</id>
+      <str>CPE 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.9.2    CPE actions and properties - all views -->
+  <grp>
+    <ctxt>CPE Table Row</ctxt>
+    <ctxt>CPE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.9.3    CPE actions and properties - window / headers only -->
+  <grp>
+    <ctxt>CPE Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>NVD ID</id>
+      <str>NVD ID</str>
+    </msg>
+    <msg>
+      <id>Deprecated by</id>
+      <str>弃用</str>
+    </msg>
+
+    <msg>
+      <id>This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.</id>
+      <str>该 CPE 未出现在 CPE 字典里， 但可能有一个或多个 CVE 引用。</str>
+    </msg>
+
+    <msg>
+      <id>Reported vulnerabilites</id>
+      <str>已报告的漏洞</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.9.4    CPE actions and properties - table rows only -->
+  <grp>
+    <ctxt>CPE Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.10      OVAL Definitions -->
+  <!-- 3.10.1    OVAL Definition type name and common strings -->
+  <grp>
+    <ctxt>OVAL Definition</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>Info</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>OVAL Definition</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <msg>
+      <id>OVAL Definitions</id>
+      <str>OVAL 定义</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>OVAL Definition Details</id>
+      <str>OVAL 定义详情</str>
+    </msg>
+
+    <msg>
+      <id>OVAL Filter</id>
+      <str>OVAL 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.10.2    OVAL Definition actions and properties - all views -->
+  <grp>
+    <ctxt>OVAL Definition Table Row</ctxt>
+    <ctxt>OVAL Definition Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.10.3    OVAL Definition actions and properties - window / headers only -->
+  <grp>
+    <ctxt>OVAL Definition Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Name (OVAL ID)</id>
+      <str>名称 (OVAL-ID)</str>
+    </msg>
+
+    <msg>
+      <id>Definition class</id>
+      <str>定义的分类</str>
+    </msg>
+    <msg>
+      <id>Class</id>
+      <str>分类</str>
+    </msg>
+    <msg>
+      <id>Deprecated</id>
+      <str>弃用</str>
+    </msg>
+
+    <msg>
+      <id>File</id>
+      <str>文件</str>
+    </msg>
+
+    <msg>
+      <id>Affected</id>
+      <str>影响</str>
+    </msg>
+    <msg>
+      <id>Family</id>
+      <str>家族</str>
+    </msg>
+
+    <msg>
+      <id>Criteria</id>
+      <str>条件</str>
+    </msg>
+
+    <msg>
+      <id>Source</id>
+      <str>源</str>
+    </msg>
+    <msg>
+      <id>Ref.ID</id>
+      <str>引用 ID</str>
+    </msg>
+
+    <msg>
+      <id>Repository history</id>
+      <str>知识库历史</str>
+    </msg>
+    <msg>
+      <id>Contributors</id>
+      <str>贡献者</str>
+    </msg>
+
+    <msg>
+      <id>OVAL definition not found</id>
+      <str>OVAL 定义未找到</str>
+    </msg>
+    <msg>
+      <id>No OVAL definition with the requested ID could be found in the SCAP database.</id>
+      <str>该请求 ID 的 OVAL 定义未在 SCAP 数据库中找到。</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Referenced CVEs</id>
+      <str>引用的 CVE</str>
+    </msg>
+  </grp>
+  <!-- 3.10.4    OVAL Definition actions and properties - table rows only -->
+  <grp>
+    <ctxt>OVAL Definition Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.11      DFN-CERT Advisories -->
+  <!-- 3.11.1    DFN-CERT Advisory type name and common strings -->
+  <grp>
+    <ctxt>DFN-CERT Advisory</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <ctxt>Info</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>DFN-CERT Advisory</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <msg>
+      <id>DFN-CERT Advisories</id>
+      <str>DFN-CERT 公告</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>DFN-CERT Advisory Details</id>
+      <str>DFN-CERT 公告详情</str>
+    </msg>
+
+    <msg>
+      <id>DFN-CERT Filter</id>
+      <str>DFN-CERT 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.11.2    DFN-CERT Advisory actions and properties - all views -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Table Row</ctxt>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.3    DFN-CERT Advisory actions and properties - window / headers only -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Advisory link</id>
+      <str>公告链接</str>
+    </msg>
+    <msg>
+      <id>Other links</id>
+      <str>其他链接</str>
+    </msg>
+
+    <msg>
+      <id>Referenced CVEs</id>
+      <str>引用的 CVE</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.4    DFN-CERT Advisory actions and properties - table rows only -->
+  <grp>
+    <ctxt>DFN-CERT Advisory Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.12      Info (All Info)-->
+  <!-- 3.12.1    Info type name and common strings -->
+  <grp>
+    <ctxt>All SecInfo Information</ctxt>
+    <ctxt>All SecInfo Information Window</ctxt>
+    <ctxt>Info</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>All SecInfo</id>
+      <str>所有的 SecInfo</str>
+    </msg>
+    <msg>
+      <id>All SecInfo Information</id>
+      <str>所有的 SecInfo 信息</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Info Filter</id>
+      <str>Info 过滤器</str>
+    </msg>
+    <msg>
+      <id>All SecInfo Filter</id>
+      <str>所有的 SecInfo 过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.12.2    Info actions and properties - all views -->
+  <grp>
+    <ctxt>All SecInfo Table Row</ctxt>
+    <ctxt>All SecInfo Window</ctxt>
+    <ctxt>Info Table Row</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.12.3    Info actions and properties - window / headers only -->
+  <grp>
+    <ctxt>All SecInfo Window</ctxt>
+    <ctxt>Info Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Last updated</id>
+      <str>最后更新</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.12.4    Info actions and properties - table rows only -->
+  <grp>
+    <ctxt>All SecInfo Table Row</ctxt>
+    <ctxt>Info Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.13      Targets -->
+  <!-- 3.13.1    Target type name and common strings -->
+  <grp>
+    <ctxt>Target</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Target</id>
+      <str>目标</str>
+    </msg>
+    <msg>
+      <id>Targets</id>
+      <str>目标</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Target</id>
+      <str>新建目标</str>
+    </msg>
+    <msg>
+      <id>Create Target</id>
+      <str>创建目标</str>
+    </msg>
+
+    <msg>
+      <id>Edit Target</id>
+      <str>编辑目标</str>
+    </msg>
+    <msg>
+      <id>Save Target</id>
+      <str>保存目标</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Target Details</id>
+      <str>目标详情</str>
+    </msg>
+    <msg>
+      <id>Target Filter</id>
+      <str>目标过滤器</str>
+    </msg>
+    <msg>
+      <id>Targets Filter</id>
+      <str>目标过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.13.2    Target actions and properties - all views -->
+  <grp>
+    <ctxt>Target Table Row</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.13.3    Target actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>IPs</id>
+      <str>IPs</str>
+    </msg>
+    <msg>
+      <id>SSH Credential</id>
+      <str>SSH 证书</str>
+    </msg>
+    <msg>
+      <id>on port</id>
+      <str>端口</str>
+    </msg>
+    <msg>
+      <id>SMB Credential</id>
+      <str>SMB 证书</str>
+    </msg>
+
+    <!-- Hosts -->
+    <msg>
+      <id>Manual</id>
+      <str>手动</str>
+    </msg>
+    <msg>
+      <id>From file</id>
+      <str>从文件</str>
+    </msg>
+    <msg>
+      <id>Import</id>
+      <str>导入</str>
+    </msg>
+    <msg>
+      <id>Import Authentication</id>
+      <str>导入认证</str>
+    </msg>
+    <msg>
+      <id>Username</id>
+      <str>用户名</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+
+    <msg>
+      <id>Exclude Hosts</id>
+      <str>排除主机</str>
+    </msg>
+
+    <msg>
+      <id>Reverse Lookup Unify</id>
+      <str>归一逆向查询</str>
+    </msg>
+    <msg>
+      <id>Reverse Lookup Only</id>
+      <str>仅逆向查询</str>
+    </msg>
+
+    <msg>
+      <id>Maximum number of hosts</id>
+      <str>最大主机数</str>
+    </msg>
+
+    <msg>
+      <id>Alive Test</id>
+      <str>存活测试</str>
+    </msg>
+    <msg>
+      <id>Scan Config Default</id>
+      <str>默认配置扫描</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Target</id>
+      <str>使用该目标的任务</str>
+    </msg>
+
+  </grp>
+  <!-- 3.13.4    Target actions and properties - table rows only -->
+  <grp>
+    <ctxt>Target Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.14      Port Lists -->
+  <!-- 3.14.1    Port List type name and common strings -->
+  <grp>
+    <ctxt>Port List</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <ctxt>Target Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Port List</id>
+      <str>端口列表</str>
+    </msg>
+    <msg>
+      <id>Port Lists</id>
+      <str>端口列表</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Port List</id>
+      <str>新建端口列表</str>
+    </msg>
+    <msg>
+      <id>Create Port List</id>
+      <str>创建端口列表</str>
+    </msg>
+
+    <msg>
+      <id>Edit Port List</id>
+      <str>编辑端口列表</str>
+    </msg>
+    <msg>
+      <id>Save Port List</id>
+      <str>保存端口列表</str>
+    </msg>
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Port List Details</id>
+      <str>端口列表详情</str>
+    </msg>
+    <msg>
+      <id>Port List Filter</id>
+      <str>端口列表过滤器</str>
+    </msg>
+    <msg>
+      <id>Port Lists Filter</id>
+      <str>端口列表过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.14.2    Port List actions and properties - all views -->
+  <grp>
+    <ctxt>Port List Table Row</ctxt>
+    <ctxt>Port List Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.14.3    Port List actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Port List Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Import Port List</id>
+      <str>导入端口列表 </str>
+    </msg>
+    <msg>
+      <id>Import XML Port List</id>
+      <str>导入 XML 端口列表 </str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Port Counts</id>
+      <str>端口计数</str>
+    </msg>
+    <msg>
+      <id>Protocol</id>
+      <str>协议</str>
+    </msg>
+
+    <msg>
+      <id>Port count</id>
+      <str>端口计数</str>
+    </msg>
+    <msg>
+      <id>TCP Port count</id>
+      <str>TCP 端口计数</str>
+    </msg>
+    <msg>
+      <id>UDP Port count</id>
+      <str>UDP 端口计数</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Targets using this Port List</id>
+      <str>使用该端口列表的目标</str>
+    </msg>
+    <!-- Port ranges -->
+    <msg>
+      <id>Port Ranges</id>
+      <str>端口范围</str>
+    </msg>
+    <msg>
+      <id>New Port Range</id>
+      <str>新建端口范围</str>
+    </msg>
+    <msg>
+      <id>Create Port Range</id>
+      <str>创建端口范围</str>
+    </msg>
+    <msg>
+      <id>From file</id>
+      <str>从文件</str>
+    </msg>
+    <msg>
+      <id>Start</id>
+      <str>开始</str>
+    </msg>
+    <msg>
+      <id>End</id>
+      <str>结束</str>
+    </msg>
+  </grp>
+  <!-- 3.14.4    Port List actions and properties - table rows only -->
+  <grp>
+    <ctxt>Port List Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.15 Credentials -->
+
+  <!-- 3.15      Credentials -->
+  <!-- 3.15.1    Credential type name and common strings -->
+  <grp>
+    <ctxt>Credential</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Credential</id>
+      <str>证书</str>
+    </msg>
+    <msg>
+      <id>Credentials</id>
+      <str>证书</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Credential</id>
+      <str>新建证书</str>
+    </msg>
+    <msg>
+      <id>Create Credential</id>
+      <str>创建证书</str>
+    </msg>
+
+    <msg>
+      <id>Edit Credential</id>
+      <str>编辑证书</str>
+    </msg>
+    <msg>
+      <id>Save Credential</id>
+      <str>保存证书</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Credential Details</id>
+      <str>证书详情</str>
+    </msg>
+    <msg>
+      <id>Credential Filter</id>
+      <str>证书过滤器</str>
+    </msg>
+    <msg>
+      <id>Credentials Filter</id>
+      <str>证书过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.15.2    Credential actions and properties - all views -->
+  <grp>
+    <ctxt>Credential Table Row</ctxt>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Download RPM package</id>
+      <str>下载 RPM 包</str>
+    </msg>
+    <msg>
+      <id>Download RPM</id>
+      <str>下载 RPM</str>
+    </msg>
+    <msg>
+      <id>Download Debian package</id>
+      <str>下载 Debian 包</str>
+    </msg>
+    <msg>
+      <id>Download Deb</id>
+      <str>下载 Deb</str>
+    </msg>
+    <msg>
+      <id>Download Exe package</id>
+      <str>下载 Exe 包</str>
+    </msg>
+    <msg>
+      <id>Download Exe</id>
+      <str>下载 Exe</str>
+    </msg>
+    <msg>
+      <id>Download Public Key</id>
+      <str>下载公钥</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.15.3    Credential actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Credential Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Login</id>
+      <str>登录名</str>
+    </msg>
+
+    <msg>
+      <id>Autogenerate credential</id>
+      <str>自动生成证书</str>
+    </msg>
+
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+    <msg>
+      <id>Replace existing value with</id>
+      <str>替换现有的值为</str>
+    </msg>
+
+    <msg>
+      <id>Key pair</id>
+      <str>密钥对</str>
+    </msg>
+    <msg>
+      <id>Public key</id>
+      <str>公钥</str>
+    </msg>
+    <msg>
+      <id>Private key</id>
+      <str>私钥</str>
+    </msg>
+    <msg>
+      <id>Passphrase</id>
+      <str>密码短语</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Targets using this Credential</id>
+      <str>使用该证书的目标</str>
+    </msg>
+  </grp>
+  <!-- 3.15.4    Credential actions and properties - table rows only -->
+  <grp>
+    <ctxt>Credential Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.16      Scan Configs -->
+  <!-- 3.16.1    Scan Config type name and common strings -->
+  <grp>
+    <ctxt>Config</ctxt>
+    <ctxt>Scan Config</ctxt>
+    <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Scan Config</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Scan Configs</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Scan Configuration</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Scan Configurations</id>
+      <str>扫描配置</str>
+    </msg>
+    <msg>
+      <id>Config</id>
+      <str>配置</str>
+    </msg>
+    <msg>
+      <id>Configs</id>
+      <str>配置</str>
+    </msg>
+
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Scan Config</id>
+      <str>新建扫描配置</str>
+    </msg>
+    <msg>
+      <id>New Scan Configuration</id>
+      <str>新建扫描配置</str>
+    </msg>
+    <msg>
+      <id>Create Scan Config</id>
+      <str>创建扫描配置</str>
+    </msg>
+
+    <msg>
+      <id>Edit Scan Config</id>
+      <str>编辑扫描配置</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Configuration</id>
+      <str>编辑扫描配置</str>
+    </msg>
+    <msg>
+      <id>Save Config</id>
+      <str>保存配置</str>
+    </msg>
+
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Scan Config Details</id>
+      <str>扫描配置详情</str>
+    </msg>
+    <msg>
+      <id>Scan Config Filter</id>
+      <str>扫描配置过滤器</str>
+    </msg>
+    <msg>
+      <id>Configs Filter</id>
+      <str>配置过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.16.2    Scan Config actions and properties - all views -->
+  <grp>
+    <ctxt>Scan Config Table Row</ctxt>
+    <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- Trend -->
+    <msg>
+      <id>Grows</id>
+      <str>增长</str>
+    </msg>
+    <msg>
+      <id>Dynamic</id>
+      <str>动态</str>
+    </msg>
+    <msg>
+      <id>The family selection is DYNAMIC. New families will automatically be added and considered.</id>
+      <str>家族的选择是动态。新的家族会自动被添加并考虑。</str>
+    </msg>
+    <msg>
+      <id>The family selection is STATIC. New families will NOT automatically be added or considered.</id>
+      <str>家族的选择是静态。新的家族不会被自动添加或考虑。</str>
+    </msg>
+
+    <msg>
+      <id>Static</id>
+      <str>静态</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.</id>
+      <str>NVT 的选择是动态。新的 NVT 将被自动添加并考虑。</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.</id>
+      <str>NVT 的选择是动态。所选家族的新 NVT 将被自动添加并考虑。</str>
+    </msg>
+    <msg>
+      <id>The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.</id>
+      <str>NVT 的选择是静态。新的 NVT 不会被自动添加或考虑。</str>
+    </msg>
+
+    <!-- Family and NVT counts -->
+    <msg>
+      <id> of </id>
+      <str> / </str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Cannot move Scan Config to trashcan</id>
+      <str>不能移动扫描配置到回收站</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config Family Details</id>
+      <str>扫描配置家族详情</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config Family</id>
+      <str>编辑扫描配置家族</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config NVT Details</id>
+      <str>扫描配置 NVT 详情</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config NVT</id>
+      <str>编辑扫描配置 NVT</str>
+    </msg>
+    <msg>
+      <id>Edit Scan Config NVT Details</id>
+      <str>编辑扫描配置 NVT 详情</str>
+    </msg>
+
+    <!-- NVT Timeout -->
+    <msg>
+      <id>default</id>
+      <str>默认</str>
+    </msg>
+  </grp>
+  <!-- 3.16.3    Scan Config actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Scan Config Window</ctxt>
+    <ctxt>Scan Configuration Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Import Scan Config</id>
+      <str>导入扫描配置</str>
+    </msg>
+    <msg>
+      <id>Import XML config</id>
+      <str>导入 XML 配置</str>
+    </msg>
+
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Base</id>
+      <str>基于</str>
+    </msg>
+    <msg>
+      <id>Empty, static and fast</id>
+      <str>空的，静态和快速</str>
+    </msg>
+    <msg>
+      <id>Full and fast</id>
+      <str>完全和快速</str>
+    </msg>
+
+    <msg>
+      <id>Trend</id>
+      <str>趋势</str>
+    </msg>
+
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Network Vulnerability Test Families</id>
+      <str>网络漏洞测试（NVT）家族</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Test Families</id>
+      <str>编辑网络漏洞测试家族</str>
+    </msg>
+
+    <msg>
+      <id>Scan Config Family</id>
+      <str>扫描配置家族</str>
+    </msg>
+    <msg>
+      <id>Family</id>
+      <str>家族</str>
+    </msg>
+    <msg>
+      <id>Families</id>
+      <str>家族</str>
+    </msg>
+
+    <msg>
+      <id>Scanner Preferences</id>
+      <str>扫描器首选项</str>
+    </msg>
+    <msg>
+      <id>Edit Scanner Preferences</id>
+      <str>编辑扫描器首选项</str>
+    </msg>
+
+    <msg>
+      <id>NVTs selected</id>
+      <str>NVT 选取</str>
+    </msg>
+
+    <msg>
+      <id>Network Vulnerability Test Preferences</id>
+      <str>网络漏洞测试首选项</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Test Preferences</id>
+      <str>编辑网络漏洞测试首选项</str>
+    </msg>
+
+    <msg>
+      <id>Network Vulnerability Tests</id>
+      <str>网络漏洞测试</str>
+    </msg>
+    <msg>
+      <id>Edit Network Vulnerability Tests</id>
+      <str>编辑网络漏洞测试</str>
+    </msg>
+
+    <msg>
+      <id>Select all NVTs</id>
+      <str>选择所有的 NVT</str>
+    </msg>
+
+    <!-- NVT selection count -->
+    <msg>
+      <id> in selected families</id>
+      <str>（所选家族包含数目）</str>
+    </msg>
+    <msg>
+      <id> in total</id>
+      <str>（总共的数目）</str>
+    </msg>
+
+    <!-- NVT preferences -->
+    <msg>
+      <id>Timeout</id>
+      <str>超时</str>
+    </msg>
+    <msg>
+      <id>Apply default timeout</id>
+      <str>应用默认超时</str>
+    </msg>
+
+    <msg>
+      <id>Preferences</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>Prefs</id>
+      <str>首选项</str>
+    </msg>
+    <msg>
+      <id>Selected</id>
+      <str>选取</str>
+    </msg>
+
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+    <msg>
+      <id>Current Value</id>
+      <str>当前值</str>
+    </msg>
+    <msg>
+      <id>Default Value</id>
+      <str>默认值</str>
+    </msg>
+    <msg>
+      <id>Default</id>
+      <str>默认</str>
+    </msg>
+    <msg>
+      <id>New Value</id>
+      <str>新建值</str>
+    </msg>
+
+    <msg>
+      <id>Tasks using this Config</id>
+      <str>使用该配置的任务</str>
+    </msg>
+  </grp>
+  <!-- 3.16.4    Scan Config actions and properties - table rows only -->
+  <grp>
+    <ctxt>Scan Config Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+    <!-- NVT preferences -->
+    <msg>
+      <id>Select and Edit NVT Details</id>
+      <str>选择并编辑 NVT 详情</str>
+    </msg>
+
+    <msg>
+      <id>Upload file</id>
+      <str>上传文件</str>
+    </msg>
+    <msg>
+      <id>File attached.</id>
+      <str>文件已加载</str>
+    </msg>
+    <msg>
+      <id>Export File</id>
+      <str>导出文件</str>
+    </msg>
+
+    <msg>
+      <id>Replace existing value with</id>
+      <str>替换现有的值为</str>
+    </msg>
+
+  </grp>
+
+
+  <!-- 3.17      Alerts -->
+  <!-- 3.17.1    Alert type name and common strings -->
+  <grp>
+    <ctxt>Alert</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Alert</id>
+      <str>警报</str>
+    </msg>
+    <msg>
+      <id>Alerts</id>
+      <str>警报</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Alert</id>
+      <str>新建警报</str>
+    </msg>
+    <msg>
+      <id>Create Alert</id>
+      <str>创建警报</str>
+    </msg>
+
+    <msg>
+      <id>Edit Alert</id>
+      <str>编辑警报</str>
+    </msg>
+    <msg>
+      <id>Save Alert</id>
+      <str>保存警报</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Alert Details</id>
+      <str>警报详情</str>
+    </msg>
+    <msg>
+      <id>Alert Filter</id>
+      <str>警报过滤器</str>
+    </msg>
+    <msg>
+      <id>Alerts Filter</id>
+      <str>警报过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.17.2    Alert actions and properties - all views -->
+  <grp>
+    <ctxt>Alert Table Row</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Test</id>
+      <str>测试</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- Event -->
+    <msg>
+      <id>Task run status changed to</id>
+      <str>任务运行状态变为</str>
+    </msg>
+    <msg>
+      <id>Task run status changed</id>
+      <str>任务运行状态变化</str>
+    </msg>
+    <msg>
+      <id>to</id>
+      <str>为</str>
+    </msg>
+    <!-- Condition -->
+    <msg>
+      <id>Always</id>
+      <str>总是</str>
+    </msg>
+    <msg>
+      <id>Severity is at least </id>
+      <str>严重性至少 </str>
+    </msg>
+    <msg>
+      <id>Severity at least</id>
+      <str>严重性至少</str>
+    </msg>
+    <msg>
+      <id>Severity level </id>
+      <str>严重性级别 </str>
+    </msg>
+    <msg>
+      <id>Severity changed</id>
+      <str>严重性变化</str>
+    </msg>
+    <msg>
+      <id>changed</id>
+      <str>变化</str>
+    </msg>
+    <msg>
+      <id>increased</id>
+      <str>增加</str>
+    </msg>
+    <msg>
+      <id>decreased</id>
+      <str>减少</str>
+    </msg>
+    <!-- Method -->
+    <msg>
+      <id>Email</id>
+      <str>Email</str>
+    </msg>
+    <msg>
+      <id>To Address</id>
+      <str>收信地址</str>
+    </msg>
+    <msg>
+      <id>To</id>
+      <str>到</str>
+    </msg>
+    <msg>
+      <id>From Address</id>
+      <str>发信地址</str>
+    </msg>
+    <msg>
+      <id>Content</id>
+      <str>内容</str>
+    </msg>
+    <msg>
+      <id>Simple notice</id>
+      <str>简单通告</str>
+    </msg>
+    <msg>
+      <id>Include report</id>
+      <str>包含报告</str>
+    </msg>
+    <msg>
+      <id>Attach report</id>
+      <str>附上报告</str>
+    </msg>
+
+    <msg>
+      <id>System Logger</id>
+      <str>系统日志软件</str>
+    </msg>
+
+    <msg>
+      <id>HTTP Get</id>
+      <str>HTTP Get</str>
+    </msg>
+
+    <msg>
+      <id>Sourcefire Connector</id>
+      <str>Sourcefire 连接器</str>
+    </msg>
+    <msg>
+      <id>Defense Center IP</id>
+      <str>防御中心 IP</str>
+    </msg>
+    <msg>
+      <id>Defense Center Port</id>
+      <str>防御中心端口</str>
+    </msg>
+    <msg>
+      <id>PKCS12 file</id>
+      <str>PKCS12 文件</str>
+    </msg>
+
+    <msg>
+      <id>verinice.PRO Connector</id>
+      <str>verinice.PRO 连接器</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO URL</id>
+      <str>verinice.PRO URL</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO Username</id>
+      <str>verinice.PRO 用户名</str>
+    </msg>
+    <msg>
+      <id>Username</id>
+      <str>用户名</str>
+    </msg>
+    <msg>
+      <id>verinice.PRO Password</id>
+      <str>verinice.PRO 密码</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>#Filter None#</id>
+      <str>#过滤器--无#</str>
+    </msg>
+  </grp>
+  <!-- 3.17.3    Alert actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Event</id>
+      <str>事件</str>
+    </msg>
+    <msg>
+      <id>Condition</id>
+      <str>条件</str>
+    </msg>
+    <msg>
+      <id>Method</id>
+      <str>方式</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Report Result Filter</id>
+      <str>报告结果过滤器</str>
+    </msg>
+    <msg>
+      <id>Tasks using this Alert</id>
+      <str>使用该警报的任务</str>
+    </msg>
+  </grp>
+  <!-- 3.17.4    Alert actions and properties - table rows only -->
+  <grp>
+    <ctxt>Alert Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.18      Schedules -->
+  <!-- 3.18.1    Schedule type name and common strings -->
+  <grp>
+    <ctxt>Schedule</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Schedule</id>
+      <str>计划</str>
+    </msg>
+    <msg>
+      <id>Schedules</id>
+      <str>计划</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Schedule</id>
+      <str>新建计划</str>
+    </msg>
+    <msg>
+      <id>Create Schedule</id>
+      <str>创建计划</str>
+    </msg>
+    <msg>
+      <id>Edit Schedule</id>
+      <str>编辑计划</str>
+    </msg>
+    <msg>
+      <id>Save Schedule</id>
+      <str>保存计划</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Schedule Details</id>
+      <str>计划详情</str>
+    </msg>
+    <msg>
+      <id>Schedule Filter</id>
+      <str>计划过滤器</str>
+    </msg>
+    <msg>
+      <id>Schedules Filter</id>
+      <str>计划过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.18.2    Schedule actions and properties - all views -->
+  <grp>
+    <ctxt>Schedule Table Row</ctxt>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.18.3    Schedule actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Schedule Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>First Run</id>
+      <str>首次运行</str>
+    </msg>
+    <msg>
+      <id>First Time</id>
+      <str>首次时间</str>
+    </msg>
+    <msg>
+      <id>Next Run</id>
+      <str>下次运行</str>
+    </msg>
+    <msg>
+      <id>Timezone</id>
+      <str>时区</str>
+    </msg>
+    <msg>
+      <id>Period</id>
+      <str>运行间隔</str>
+    </msg>
+    <msg>
+      <id>Duration</id>
+      <str>持续期</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Schedule</id>
+      <str>使用该计划的任务</str>
+    </msg>
+  </grp>
+  <!-- 3.18.4    Schedule actions and properties - table rows only -->
+  <grp>
+    <ctxt>Schedule Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.19      Report Formats -->
+  <!-- 3.19.1    Report Format type name and common strings -->
+  <grp>
+    <ctxt>Report Format</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Report Format</id>
+      <str>报告格式</str>
+    </msg>
+    <msg>
+      <id>Report Formats</id>
+      <str>报告格式</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Report Format</id>
+      <str>新建报告格式</str>
+    </msg>
+
+    <msg>
+      <id>Edit Report Format</id>
+      <str>编辑报告格式</str>
+    </msg>
+    <msg>
+      <id>Save Report Format</id>
+      <str>保存报告格式</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Report Format Details</id>
+      <str>报告格式详情</str>
+    </msg>
+    <msg>
+      <id>Report Format Filter</id>
+      <str>报告格式过滤器</str>
+    </msg>
+    <msg>
+      <id>Report Formats Filter</id>
+      <str>报告格式过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.19.2    Report Format actions and properties - all views -->
+  <grp>
+    <ctxt>Report Format Table Row</ctxt>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Verify Report Format</id>
+      <str>验证报告格式</str>
+    </msg>
+    <msg>
+      <id>Permission to verify Report Format denied</id>
+      <str>验证报告格式的权限被拒绝</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.19.3    Report Format actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Report Format Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Import XML report format</id>
+      <str>导入 XML 文件中的报告格式</str>
+    </msg>
+    <msg>
+      <id>Import Report Format</id>
+      <str>导入报告格式</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Extension</id>
+      <str>扩展名</str>
+    </msg>
+    <msg>
+      <id>Content Type</id>
+      <str>内容类型</str>
+    </msg>
+    <msg>
+      <id>Trust</id>
+      <str>信任</str>
+    </msg>
+    <msg>
+      <id>Trust (Last Verified)</id>
+      <str>信任（最后验证）</str>
+    </msg>
+
+    <msg>
+      <id>Parameters</id>
+      <str>参数</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Alerts using this Report Format</id>
+      <str>使用该报告格式的警报</str>
+    </msg>
+  </grp>
+  <!-- 3.19.4    Report Format actions and properties - table rows only -->
+  <grp>
+    <ctxt>Report Format Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- Trust -->
+    <msg>
+      <id>unknown</id>
+      <str>未知</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.20      Slaves -->
+  <!-- 3.20.1    Slave type name and common strings -->
+  <grp>
+    <ctxt>Slave</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Slave</id>
+      <str>从属</str>
+    </msg>
+    <msg>
+      <id>Slaves</id>
+      <str>从属</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Slave</id>
+      <str>新建从属</str>
+    </msg>
+    <msg>
+      <id>Create Slave</id>
+      <str>创建从属</str>
+    </msg>
+
+    <msg>
+      <id>Edit Slave</id>
+      <str>编辑从属</str>
+    </msg>
+    <msg>
+      <id>Save Slave</id>
+      <str>保存从属</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Slave Details</id>
+      <str>从属详情</str>
+    </msg>
+    <msg>
+      <id>Slave Filter</id>
+      <str>从属过滤器</str>
+    </msg>
+    <msg>
+      <id>Slaves Filter</id>
+      <str>从属过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.20.2    Slave actions and properties - all views -->
+  <grp>
+    <ctxt>Slave Table Row</ctxt>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.20.3    Slave actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Slave Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Login</id>
+      <str>登录名</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Tasks using this Slave</id>
+      <str>使用该从属的任务</str>
+    </msg>
+  </grp>
+  <!-- 3.20.4    Slave actions and properties - table rows only -->
+  <grp>
+    <ctxt>Slave Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.21      Agents -->
+  <!-- 3.21.1    Agent type name and common strings -->
+  <grp>
+    <ctxt>Agent</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Agent</id>
+      <str>代理</str>
+    </msg>
+    <msg>
+      <id>Agents</id>
+      <str>代理</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Agent</id>
+      <str>新建代理</str>
+    </msg>
+    <msg>
+      <id>Create Agent</id>
+      <str>创建代理</str>
+    </msg>
+
+    <msg>
+      <id>Edit Agent</id>
+      <str>编辑代理</str>
+    </msg>
+    <msg>
+      <id>Save Agent</id>
+      <str>保存代理</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Agent Details</id>
+      <str>代理详情</str>
+    </msg>
+    <msg>
+      <id>Agent Filter</id>
+      <str>代理过滤器</str>
+    </msg>
+    <msg>
+      <id>Agents Filter</id>
+      <str>代理过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.21.2    Agent actions and properties - all views -->
+  <grp>
+    <ctxt>Agent Table Row</ctxt>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Download installer package</id>
+      <str>下载安装程序包</str>
+    </msg>
+    <msg>
+      <id>Download Installer</id>
+      <str>下载安装程序</str>
+    </msg>
+    <msg>
+      <id>Verify Agent</id>
+      <str>验证代理</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- Trust -->
+    <msg>
+      <id>unknown</id>
+      <str>未知</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.21.3    Agent actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Agent Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Installer</id>
+      <str>安装程序</str>
+    </msg>
+    <msg>
+      <id>Installer signature</id>
+      <str>安装程序签名</str>
+    </msg>
+    <msg>
+      <id>Trust</id>
+      <str>信任</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.21.4    Agent actions and properties - table rows only -->
+  <grp>
+    <ctxt>Agent Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.22      Filters -->
+  <!-- 3.22.1    Filter type name and common strings -->
+  <grp>
+    <ctxt>Filter</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <ctxt>Alert Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Filter</id>
+      <str>过滤器</str>
+    </msg>
+    <msg>
+      <id>Filters</id>
+      <str>过滤器</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Filter</id>
+      <str>新建过滤器</str>
+    </msg>
+    <msg>
+      <id>Create Filter</id>
+      <str>创建过滤器</str>
+    </msg>
+
+    <msg>
+      <id>Edit Filter</id>
+      <str>编辑过滤器</str>
+    </msg>
+    <msg>
+      <id>Save Filter</id>
+      <str>保存过滤器</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Filter Details</id>
+      <str>过滤器详情</str>
+    </msg>
+    <msg>
+      <id>Filter Filter</id>
+      <str>对过滤器的过滤</str>
+    </msg>
+    <msg>
+      <id>Filters Filter</id>
+      <str>对过滤器的过滤</str>
+    </msg>
+  </grp>
+  <!-- 3.22.2    Filter actions and properties - all views -->
+  <grp>
+    <ctxt>Filter Table Row</ctxt>
+    <ctxt>Filter Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.22.3    Filter actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Filter Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Term</id>
+      <str>条件</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Alerts using this Filter</id>
+      <str>使用该过滤器的警报</str>
+    </msg>
+  </grp>
+  <!-- 3.22.4    Filter actions and properties - table rows only -->
+  <grp>
+    <ctxt>Filter Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.23      Tags -->
+  <!-- 3.23.1    Tag type name and common strings -->
+  <grp>
+    <ctxt>Tag</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Tag</id>
+      <str>标签</str>
+    </msg>
+    <msg>
+      <id>Tags</id>
+      <str>标签</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>Add Tag</id>
+      <str>添加标签</str>
+    </msg>
+    <msg>
+      <id>New Tag</id>
+      <str>新建标签</str>
+    </msg>
+    <msg>
+      <id>Create Tag</id>
+      <str>创建标签</str>
+    </msg>
+
+    <msg>
+      <id>Edit Tag</id>
+      <str>编辑标签</str>
+    </msg>
+    <msg>
+      <id>Save Tag</id>
+      <str>保存标签</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Tag Details</id>
+      <str>标签详情</str>
+    </msg>
+    <msg>
+      <id>Tag Filter</id>
+      <str>标签过滤器</str>
+    </msg>
+    <msg>
+      <id>Tags Filter</id>
+      <str>标签过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.23.2    Tag actions and properties - all views -->
+  <grp>
+    <ctxt>Tag Table Row</ctxt>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Disable Tag</id>
+      <str>禁用标签</str>
+    </msg>
+    <msg>
+      <id>Enable Tag</id>
+      <str>启用标签</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Orphan</id>
+      <str>孤立</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.23.3    Tag actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Tag Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Attached to Resource</id>
+      <str>关联到资源</str>
+    </msg>
+    <msg>
+      <id>Resource Type</id>
+      <str>资源类型</str>
+    </msg>
+    <msg>
+      <id>Resource ID</id>
+      <str>资源 ID</str>
+    </msg>
+    <msg>
+      <id>Resource Name</id>
+      <str>资源名称</str>
+    </msg>
+  </grp>
+  <!-- 3.23.4    Tag actions and properties - table rows only -->
+  <grp>
+    <ctxt>Tag Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.23.5    User Tags window on other resources -->
+  <grp>
+    <ctxt>Tag Window</ctxt>
+    <msg>
+      <id>User Tags list</id>
+      <str>用户标签列表</str>
+    </msg>
+    <msg>
+      <id>User Tags for</id>
+      <str>用户标签 --</str>
+    </msg>
+    <msg>
+      <id>with Value</id>
+      <str>值为</str>
+    </msg>
+  </grp>
+
+  <!-- 3.24      Permissions -->
+  <!-- 3.24.1    Permission type name and common strings -->
+  <grp>
+    <ctxt>Permission</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Permission</id>
+      <str>权限</str>
+    </msg>
+    <msg>
+      <id>Permissions</id>
+      <str>权限</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Permission</id>
+      <str>新建权限</str>
+    </msg>
+    <msg>
+      <id>Create Permission</id>
+      <str>创建权限</str>
+    </msg>
+
+    <msg>
+      <id>Edit Permission</id>
+      <str>编辑权限</str>
+    </msg>
+    <msg>
+      <id>Save Permission</id>
+      <str>保存权限</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Permission Details</id>
+      <str>权限详情</str>
+    </msg>
+    <msg>
+      <id>Permission Filter</id>
+      <str>权限过滤器</str>
+    </msg>
+    <msg>
+      <id>Permissions Filter</id>
+      <str>权限过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.24.2    Permission actions and properties - all views -->
+  <grp>
+    <ctxt>Permission Table Row</ctxt>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+    <msg>
+      <id>Orphan</id>
+      <str>孤立</str>
+    </msg>
+
+    <msg>
+      <id>Permission made visible for:</id>
+      <str>权限可见于：</str>
+    </msg>
+  </grp>
+  <!-- 3.24.3    Permission actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Permission Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Grant read permissions to </id>
+      <str>将读权限授给 </str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Permissions for</id>
+      <str>权限 --</str>
+    </msg>
+
+    <msg>
+      <id>Resource</id>
+      <str>资源</str>
+    </msg>
+    <msg>
+      <id>Resource ID</id>
+      <str>资源 ID</str>
+    </msg>
+    <msg>
+      <id>Resource Type</id>
+      <str>资源类型</str>
+    </msg>
+
+    <msg>
+      <id>Subject</id>
+      <str>对象</str>
+    </msg>
+    <msg>
+      <id>Subject Type</id>
+      <str>对象类型</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.24.4    Permission actions and properties - table rows only -->
+  <grp>
+    <ctxt>Permission Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.24.5 Permission descriptions -->
+  <grp>
+    <ctxt>Permission Description</ctxt>
+    <msg>
+      <id>may login</id>
+      <str>允许登录</str>
+    </msg>
+    <msg>
+      <id>may run multiple OMP commands in one</id>
+      <str>允许一次运行多个 OMP 命令</str>
+    </msg>
+    <msg>
+      <id>has all permissions</id>
+      <str>拥有全部权限</str>
+    </msg>
+    <msg>
+      <id>may empty the trashcan</id>
+      <str>允许清空回收站</str>
+    </msg>
+    <msg>
+      <id>may get the dependencies of NVTs</id>
+      <str>允许获取 NVT 的依赖</str>
+    </msg>
+    <msg>
+      <id>may get the help text</id>
+      <str>允许获取帮助文本</str>
+    </msg>
+    <msg>
+      <id>has write access to the authentication configuration</id>
+      <str>允许写入访问认证配置</str>
+    </msg>
+    <msg>
+      <id>may restore items from the trashcan</id>
+      <str>允许从回收站还原条目</str>
+    </msg>
+    <msg>
+      <id>may get NVT feed version information</id>
+      <str>允许获取 NVT 订阅版本信息</str>
+    </msg>
+    <msg>
+      <id>may get version information</id>
+      <str>允许获取版本信息</str>
+    </msg>
+
+    <msg>
+      <id>may create a new </id>
+      <str>允许创建新的 </str>
+    </msg>
+    <msg>
+      <id>#may create suffix#</id>
+      <str> #允许创建的后缀#</str>
+    </msg>
+
+    <msg>
+      <id>has read access to SecInfo</id>
+      <str>允许读取 SecInfo</str>
+    </msg>
+
+    <msg>
+      <id>may delete </id>
+      <str>允许删除 </str>
+    </msg>
+    <msg>
+      <id>#may delete resource suffix#</id>
+      <str> #允许删除资源的后缀#</str>
+    </msg>
+
+    <msg>
+      <id>may delete an existing </id>
+      <str>允许删除一个现有的 </str>
+    </msg>
+    <msg>
+      <id>#may delete type suffix#</id>
+      <str> #允许删除类型的后缀#</str>
+    </msg>
+
+    <msg>
+      <id>has read access to </id>
+      <str>允许读取 </str>
+    </msg>
+    <msg>
+      <id>has write access to </id>
+      <str>允许写入 </str>
+    </msg>
+
+    <msg>
+      <id>may pause tasks</id>
+      <str>允许暂停任务</str>
+    </msg>
+    <msg>
+      <id>may resume or start tasks</id>
+      <str>允许继续或开始任务</str>
+    </msg>
+    <msg>
+      <id>may resume paused tasks</id>
+      <str>允许继续已暂停的任务</str>
+    </msg>
+    <msg>
+      <id>may resume stopped tasks</id>
+      <str>允许继续已停止的任务</str>
+    </msg>
+    <msg>
+      <id>may start tasks</id>
+      <str>允许开始任务</str>
+    </msg>
+    <msg>
+      <id>may stop tasks</id>
+      <str>允许停止任务</str>
+    </msg>
+
+    <msg>
+      <id>may run wizards</id>
+      <str>允许运行向导</str>
+    </msg>
+
+    <msg>
+      <id>may test alerts</id>
+      <str>允许测试警报</str>
+    </msg>
+
+    <msg>
+      <id>may verify agents</id>
+      <str>允许验证代理</str>
+    </msg>
+    <msg>
+      <id>may verify report formats</id>
+      <str>允许验证报告格式</str>
+    </msg>
+
+    <msg>
+      <id>may get details about the authentication configuration</id>
+      <str>允许获取关于认证配置的详情</str>
+    </msg>
+    <msg>
+      <id>may get details about the CERT feed</id>
+      <str>允许获取关于 CERT 订阅的详情</str>
+    </msg>
+    <msg>
+      <id>may get details about the NVT feed</id>
+      <str>允许获取关于 NVT 订阅的详情</str>
+    </msg>
+    <msg>
+      <id>may get details about the SCAP feed</id>
+      <str>允许获取关于 SCAP 订阅的详情</str>
+    </msg>
+
+    <msg>
+      <id>may sync the CERT feed</id>
+      <str>允许同步 CERT 订阅</str>
+    </msg>
+    <msg>
+      <id>may sync the NVT feed</id>
+      <str>允许同步 NVT 订阅</str>
+    </msg>
+    <msg>
+      <id>may sync the SCAP feed</id>
+      <str>允许同步 SCAP 订阅</str>
+    </msg>
+  </grp>
+
+
+  <!-- 3.25      Users -->
+  <!-- 3.25.1    User type name and common strings -->
+  <grp>
+    <ctxt>User</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>User</id>
+      <str>用户</str>
+    </msg>
+    <msg>
+      <id>Users</id>
+      <str>用户</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New User</id>
+      <str>新建用户</str>
+    </msg>
+    <msg>
+      <id>Create User</id>
+      <str>创建用户</str>
+    </msg>
+
+    <msg>
+      <id>Edit User</id>
+      <str>编辑用户</str>
+    </msg>
+    <msg>
+      <id>Save User</id>
+      <str>保存用户</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>User Details</id>
+      <str>用户详情</str>
+    </msg>
+    <msg>
+      <id>User Filter</id>
+      <str>用户过滤器</str>
+    </msg>
+    <msg>
+      <id>Users Filter</id>
+      <str>用户过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.25.2    User actions and properties - all views -->
+  <grp>
+    <ctxt>User Table Row</ctxt>
+    <ctxt>User Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Currently logged in as this user</id>
+      <str>当前正作为这个用户登录</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <!-- Host Access -->
+    <msg>
+      <id>Allow all and deny</id>
+      <str>允许全部的但拒绝</str>
+    </msg>
+    <msg>
+      <id>Deny all and allow</id>
+      <str>拒绝全部的但允许</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.25.3    User actions and properties - window / headers only -->
+  <grp>
+    <ctxt>User Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Login Name</id>
+      <str>登录名</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+    <msg>
+      <id>Use existing value</id>
+      <str>使用现有的值</str>
+    </msg>
+
+    <msg>
+      <id>Host Access</id>
+      <str>主机访问</str>
+    </msg>
+    <msg>
+      <id>Interface Access</id>
+      <str>接口访问</str>
+    </msg>
+
+    <msg>
+      <id>LDAP Authentication</id>
+      <str>LDAP 认证</str>
+    </msg>
+    <msg>
+      <id>Authentication via LDAP</id>
+      <str>通过 LDAP 认证</str>
+    </msg>
+    <msg>
+      <id>Allow LDAP Authentication only</id>
+      <str>仅允许 LDAP 认证</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.25.4    User actions and properties - table rows only -->
+  <grp>
+    <ctxt>User Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+
+  <!-- 3.26      Groups -->
+  <!-- 3.26.1    Group type name and common strings -->
+  <grp>
+    <ctxt>Group</ctxt>
+    <ctxt>Group Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Group</id>
+      <str>组</str>
+    </msg>
+    <msg>
+      <id>Groups</id>
+      <str>组</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Group</id>
+      <str>新建组</str>
+    </msg>
+    <msg>
+      <id>Create Group</id>
+      <str>创建组</str>
+    </msg>
+
+    <msg>
+      <id>Edit Group</id>
+      <str>编辑组</str>
+    </msg>
+    <msg>
+      <id>Save Group</id>
+      <str>保存组</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Group Details</id>
+      <str>组的详情</str>
+    </msg>
+    <msg>
+      <id>Group Filter</id>
+      <str>组的过滤器</str>
+    </msg>
+    <msg>
+      <id>Groups Filter</id>
+      <str>组的过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.26.2    Group actions and properties - all views -->
+  <grp>
+    <ctxt>Group Table Row</ctxt>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.26.3    Group actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Actions - - -->
+    <msg>
+      <id>Save</id>
+      <str>保存</str>
+    </msg>
+    <!-- - - Properties - - -->
+    <msg>
+      <id>ADS Authentication</id>
+      <str>ADS 认证</str>
+    </msg>
+    <msg>
+      <id>LDAP Authentication and Authorization</id>
+      <str>LDAP 认证和授权</str>
+    </msg>
+    <msg>
+      <id>LDAP per-User Authentication</id>
+      <str>LDAP per-User 认证</str>
+    </msg>
+
+    <msg>
+      <id>Setting</id>
+      <str>设置</str>
+    </msg>
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+    <msg>
+      <id>Enable</id>
+      <str>启用</str>
+    </msg>
+    <msg>
+      <id>Domain</id>
+      <str>域</str>
+    </msg>
+    <msg>
+      <id>Auth. DN</id>
+      <str>认证识别名（Auth. DN）</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.26.4    Group actions and properties - table rows only -->
+  <grp>
+    <ctxt>Group Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.27      Roles -->
+  <!-- 3.27.1    Role type name and common strings -->
+  <grp>
+    <ctxt>Role</ctxt>
+    <ctxt>Role Window</ctxt>
+    <ctxt>User Window</ctxt>
+    <ctxt>Group Window</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>Role</id>
+      <str>角色</str>
+    </msg>
+    <msg>
+      <id>Roles</id>
+      <str>角色</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <msg>
+      <id>New Role</id>
+      <str>新建角色</str>
+    </msg>
+
+    <msg>
+      <id>Edit Role</id>
+      <str>编辑角色</str>
+    </msg>
+    <!-- - - Common references - - -->
+    <msg>
+      <id>Role Details</id>
+      <str>角色详情</str>
+    </msg>
+    <msg>
+      <id>Role Filter</id>
+      <str>角色过滤器</str>
+    </msg>
+    <msg>
+      <id>Roles Filter</id>
+      <str>角色过滤器</str>
+    </msg>
+  </grp>
+  <!-- 3.27.2    Role actions and properties - all views -->
+  <grp>
+    <ctxt>Role Table Row</ctxt>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.27.3    Role actions and properties - window / headers only -->
+  <grp>
+    <ctxt>Role Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+    <!-- Permissions -->
+    <msg>
+      <id>Role has Everything</id>
+      <str>角色拥有全部权限（Everything）</str>
+    </msg>
+  </grp>
+  <!-- 3.27.4    Role actions and properties - table rows only -->
+  <grp>
+    <ctxt>Role Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 4. Special menu items -->
+  <!-- 4.1. Trashcan -->
+  <grp>
+    <ctxt>Trashcan</ctxt>
+    <!-- 4.1.1 Page name and general text -->
+    <msg>
+      <id>Trashcan</id>
+      <str>回收站</str>
+    </msg>
+    <msg>
+      <id>Contents</id>
+      <str>回收站目录</str>
+    </msg>
+
+    <msg>
+      <id>Type</id>
+      <str>类型</str>
+    </msg>
+    <msg>
+      <id>Items</id>
+      <str>条目</str>
+    </msg>
+    <!-- 4.1.2 Trash actions -->
+    <msg>
+      <id>Empty Trashcan</id>
+      <str>清空回收站</str>
+    </msg>
+    <msg>
+      <id>Restore</id>
+      <str>还原</str>
+    </msg>
+    <!-- 4.1.3 References from resources -->
+    <!-- "in trashcan" -->
+    <msg>
+      <id>in </id>
+      <str>在 </str>
+    </msg>
+    <msg>
+      <id>trashcan</id>
+      <str>回收站</str>
+    </msg>
+    <msg>
+      <id>in trashcan</id>
+      <str>在回收站</str>
+    </msg>
+
+    <!-- [...] must be restored first -->
+    <msg>
+      <id> must be restored first.</id>
+      <str> 必须先被还原。</str>
+    </msg>
+
+    <msg>
+      <id> is still in use</id>
+      <str> 正在使用中</str>
+    </msg>
+
+    <!-- Permission to move [...] to trashcan denied -->
+    <msg>
+      <id>Permission to move </id>
+      <str>移动的权限 </str>
+    </msg>
+    <msg>
+      <id> to trashcan denied</id>
+      <str> 到回收站被拒绝</str>
+    </msg>
+
+    <msg>
+      <id>Cannot move to trashcan</id>
+      <str>不能移到回收站</str>
+    </msg>
+
+  </grp>
+
+  <!-- 4.2. My Settings -->
+  <grp>
+    <ctxt>My Settings</ctxt>
+    <msg>
+      <id>My Settings</id>
+      <str>我的设置</str>
+    </msg>
+
+    <msg>
+      <id>Edit My Settings</id>
+      <str>编辑我的设置</str>
+    </msg>
+    <msg>
+      <id>Save My Settings</id>
+      <str>保存我的设置</str>
+    </msg>
+
+    <msg>
+      <id>Value</id>
+      <str>值</str>
+    </msg>
+
+    <msg>
+      <id>Timezone</id>
+      <str>时区</str>
+    </msg>
+    <msg>
+      <id>Password</id>
+      <str>密码</str>
+    </msg>
+    <msg>
+      <id>Old</id>
+      <str>旧的</str>
+    </msg>
+    <msg>
+      <id>New</id>
+      <str>新的</str>
+    </msg>
+    <msg>
+      <id>User Interface Language</id>
+      <str>用户界面语言</str>
+    </msg>
+    <msg>
+      <id>Rows Per Page</id>
+      <str>每页行数</str>
+    </msg>
+    <msg>
+      <id>Wizard Rows</id>
+      <str>向导行限</str>
+    </msg>
+    <msg>
+      <id>Severity Class</id>
+      <str>严重性分类</str>
+    </msg>
+    <msg>
+      <id>Dynamic Severity</id>
+      <str>动态严重性</str>
+    </msg>
+  </grp>
+
+  <!-- 4.3. Performance -->
+  <grp>
+    <ctxt>Performance</ctxt>
+    <msg>
+      <id>Performance</id>
+      <str>性能</str>
+    </msg>
+
+    <msg>
+      <id>Reports span the last</id>
+      <str>回顾报告 -- 距上个</str>
+    </msg>
+
+    <msg>
+      <id>Reports for slave</id>
+      <str>从属机的报告</str>
+    </msg>
+    <msg>
+      <id>The selected Scan Slave can currently not be reached for retrieval of performance data.</id>
+      <str>为获取性能数据选取的扫描从属机目前联系不上。</str>
+    </msg>
+    <msg>
+      <id>Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.</id>
+      <str>请检查网络连接或从属配置。问题可能是暂时的，请您过一会儿再尝试。</str>
+    </msg>
+  </grp>
+
+  <!-- 4.4 CVSS Calculator -->
+  <grp>
+    <ctxt>CVSS Calculator</ctxt>
+    <msg>
+      <id>CVSS Calculator</id>
+      <str>CVSS 计算器</str>
+    </msg>
+    <msg>
+      <id>CVSS Base Score Calculator</id>
+      <str>CVSS基准评分计算器</str>
+    </msg>
+
+    <msg>
+      <id>From Metrics</id>
+      <str>从度量</str>
+    </msg>
+    <msg>
+      <id>From Vector</id>
+      <str>从向量</str>
+    </msg>
+
+    <msg>
+      <id>Calculate</id>
+      <str>计算</str>
+    </msg>
+
+    <msg>
+      <id>Base Vector</id>
+      <str>基准向量</str>
+    </msg>
+    <msg>
+      <id>Base Score</id>
+      <str>基准评分</str>
+    </msg>
+
+    <msg>
+      <id>Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.</id>
+      <str>提供的 CVSS 基准向量值不可用。请使用浏览器的“后退”按钮以重新编辑向量。</str>
+    </msg>
+  </grp>
+
+  <!-- 4.5. Feeds -->
+  <grp>
+    <ctxt>Feed Sync</ctxt>
+    <msg>
+      <id>Feed Management</id>
+      <str>订阅管理</str>
+    </msg>
+    <msg>
+      <id>CERT Feed</id>
+      <str>CERT 订阅</str>
+    </msg>
+    <msg>
+      <id>CERT Feed Management</id>
+      <str>CERT 订阅管理</str>
+    </msg>
+    <msg>
+      <id>NVT Feed</id>
+      <str>NVT 订阅</str>
+    </msg>
+    <msg>
+      <id>NVT Feed Management</id>
+      <str>NVT 订阅管理</str>
+    </msg>
+    <msg>
+      <id>SCAP Feed</id>
+      <str>SCAP 订阅</str>
+    </msg>
+    <msg>
+      <id>SCAP Feed Management</id>
+      <str>SCAP 订阅管理</str>
+    </msg>
+
+    <msg>
+      <id>Feed Version</id>
+      <str>订阅版本</str>
+    </msg>
+
+    <msg>
+      <id>Migration</id>
+      <str>迁移</str>
+    </msg>
+    <msg>
+      <id>Synchronization</id>
+      <str>同步</str>
+    </msg>
+    <msg>
+      <id> in progress</id>
+      <str> 正在进行中</str>
+    </msg>
+    <msg>
+      <id>Started </id>
+      <str>开始 </str>
+    </msg>
+    <msg>
+      <id> on the command line</id>
+      <str> 在命令行里</str>
+    </msg>
+    <msg>
+      <id> by </id>
+      <str> 通过 </str>
+    </msg>
+
+    <msg>
+      <id>Warning:</id>
+      <str>警告：</str>
+    </msg>
+    <msg>
+      <id>Synchronization with this feed is currently not possible.</id>
+      <str>同步这个订阅目前是不可能的。</str>
+    </msg>
+    <msg>
+      <id>The synchronization script returned the following error message:</id>
+      <str>同步脚本返回了如下错误信息：</str>
+    </msg>
+
+    <msg>
+      <id>Synchronize with Feed now</id>
+      <str>立即同步订阅</str>
+    </msg>
+    <msg>
+      <id>Synchronize with CERT Feed now</id>
+      <str>立即同步 CERT 订阅</str>
+    </msg>
+    <msg>
+      <id>Synchronize with SCAP Feed now</id>
+      <str>立即同步 SCAP 订阅</str>
+    </msg>
+
+    <msg>
+      <id>Learn about the side effects of Feed synchronization!</id>
+      <str>获悉关于订阅同步的副作用!</str>
+    </msg>
+    <msg>
+      <id>Learn about the side effects of CERT Feed synchronization!</id>
+      <str>获悉关于 CERT 订阅同步的副作用！</str>
+    </msg>
+    <msg>
+      <id>Learn about the side effects of SCAP Feed synchronization!</id>
+      <str>获悉关于 SCAP 订阅同步的副作用！</str>
+    </msg>
+  </grp>
+
+  <!-- 4.6. Help menu -->
+  <grp>
+    <ctxt>Help</ctxt>
+    <msg>
+      <id>Help</id>
+      <str>帮助</str>
+    </msg>
+
+    <msg>
+      <id>Contents</id>
+      <str>帮助目录</str>
+    </msg>
+    <msg>
+      <id>About</id>
+      <str>关于 GSA</str>
+    </msg>
+  </grp>
+
+  <!-- 5. Wizards (wizard.xsl) -->
+  <grp>
+    <ctxt>Wizard</ctxt>
+    <msg>
+      <id>Wizard</id>
+      <str>向导</str>
+    </msg>
+  </grp>
+  <!-- 5.1 Task wizard -->
+  <grp>
+    <ctxt>Task Wizard</ctxt>
+    <msg>
+      <id>Task Wizard</id>
+      <str>任务向导</str>
+    </msg>
+    <msg>
+      <id>Welcome dear new user!</id>
+      <str>亲，欢迎您!</str>
+    </msg>
+    <msg>
+      <id>To explore this powerful application and to have a quick start for doing things the first time, I am here to assist you with some hints and short-cuts.</id>
+      <str>为了探索这个强力的应用程序和首次来快速开始工作，我在这里辅助您一些提示和快捷操作。</str>
+    </msg>
+    <msg>
+      <id>I will appear automatically in areas where you have created no or only a few objects. And disappear when you have more than</id>
+      <str>我将自动出现在您没创建或创建了少量对象的地方，并且在您创建了多于 </str>
+    </msg>
+    <msg>
+      <id>objects. You can call me with this icon</id>
+      <str>个对象的时候消失。您可以通过这个向导图标呼叫我</str>
+    </msg>
+    <msg>
+      <id>any time later on.</id>
+      <str>，在以后任何时间都行。</str>
+    </msg>
+    <msg>
+      <id>If you want help creating new scan tasks but also more options, you can select &quot;Advanced Task Wizard&quot; from the wizard selection menu at the top of this window where it currently says &quot;Task Wizard&quot; marked with a small arrow.</id>
+      <str>如果您希望创建新的扫描任务但也要更多的选项，您可以选择 &quot;高级任务向导 &quot; ，其位于本窗口顶部的向导选择菜单，目前该位置显示为 &quot;任务向导&quot; ，左边有一个小箭头标志的。（点击向导图标之后可以看到 &quot;任务向导&quot; 窗口）</str>
+    </msg>
+    <msg>
+      <id>For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon</id>
+      <str>为查阅更多详尽的功能信息，请尝试集成的帮助系统。它总是可用的，是作为一个环境敏感的链接，图标为</str>
+    </msg>
+    <msg>
+      <id>Quick start: Immediately scan an IP address</id>
+      <str>快速开始：立即扫描一个 IP 地址</str>
+    </msg>
+    <msg>
+      <id>IP address or hostname:</id>
+      <str>IP 地址或主机名：</str>
+    </msg>
+    <msg>
+      <id>Start Scan</id>
+      <str>开始扫描</str>
+    </msg>
+    <msg>
+      <id>For this short-cut I will do the following for you:</id>
+      <str>对于这个快捷操作，我将为您做如下事情：</str>
+    </msg>
+    <msg>
+      <id>Create a new Target with default Port List</id>
+      <str>用默认端口列表创建一个新的目标</str>
+    </msg>
+    <msg>
+      <id>Create a new Task using this target with default Scan Configuration</id>
+      <str>以默认的扫描配置，用这个目标创建一个新的任务</str>
+    </msg>
+    <msg>
+      <id>Start this scan task right away</id>
+      <str>立即开始这个扫描任务</str>
+    </msg>
+    <msg>
+      <id>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</id>
+      <str>每30秒重新加载以更新视图，这样您就能潇洒靠着并观看扫描进度</str>
+    </msg>
+    <msg>
+      <id>In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.</id>
+      <str>实际上，您可能不是在潇洒地靠着。一旦扫描进度超过了 1%，您就已经可以跳到扫描报告页面，是通过点击 &quot;报告-->总计&quot; 列，然后就可检阅目前收集到的结果。</str>
+    </msg>
+    <msg>
+      <id>By clicking the New Task icon</id>
+      <str>通过点击 &quot;新建任务&quot; 图标</str>
+    </msg>
+    <msg>
+      <id>you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.</id>
+      <str>您也可以自己创建一个新的任务。 但是，您首先需要一个目标，这个目标您可以通过 &quot;配置&quot; 菜单的 &quot;目标&quot; 页面创建，点击 &quot;新建&quot; 的图标来实现。</str>
+    </msg>
+  </grp>
+
+  <!-- Advanced Task Wizard -->
+  <grp>
+    <ctxt>Advanced Task Wizard</ctxt>
+    <msg>
+      <id>Advanced Task Wizard</id>
+      <str>高级任务向导</str>
+    </msg>
+    <msg>
+      <id>I can help you by creating a new scan task and automatically starting it.</id>
+      <str>我将帮助您创建一个新的扫描任务并自动开始该任务。</str>
+    </msg>
+    <msg>
+      <id>All you need to do is enter a name for the new task and the IP address or host name of the target, and select a scan configuration.</id>
+      <str>所有您需做的就是为新任务输入一个名字，目标的 IP 地址或主机名，以及选择一个扫描配置。</str>
+    </msg>
+    <msg>
+      <id>You can choose if you want me to run the scan immediately, schedule the task for a later date and time, or just create the task so you can run it manually later.</id>
+      <str>您可以选择让我立即运行这个扫描、计划这个任务在以后的日期时间运行，或者仅创建这个任务以便您以后手动运行它。</str>
+    </msg>
+    <msg>
+      <id>In order to run an authenticated scan, you have to select SSH and/or SMB credentials, but you can also run an unauthenticated scan by not selecting any credentials.</id>
+      <str>为了运行一个经过身份认证的扫描，您需要选择 SSH 和/或 SMB 证书，但您也可以通过不选任何证书来运行一个未经身份认证的扫描。</str>
+    </msg>
+    <msg>
+      <id>If you enter an email address in the &quot;Email report to&quot; field, a report of the scan will be sent to this address once it is finished.</id>
+      <str>如果您输入了一个电子邮箱地址在 &quot;Email 报告给&quot; 区域，这个扫描的一份报告将会被发送给该地址，一旦这个扫描完成的话。</str>
+    </msg>
+    <msg>
+      <id>Finally, you can select a slave which will run the scan.</id>
+      <str>最后，您可以选择一个从属来运行这个扫描。</str>
+    </msg>
+
+    <msg>
+      <id>Quick start: Create a new task</id>
+      <str>快速开始：创建一个新任务</str>
+    </msg>
+    <msg>
+      <id>Task Name</id>
+      <str>任务名字</str>
+    </msg>
+    <msg>
+      <id>Target Host(s)</id>
+      <str>目标主机</str>
+    </msg>
+    <msg>
+      <id>Start time</id>
+      <str>开始时间</str>
+    </msg>
+    <msg>
+      <id>Start immediately</id>
+      <str>立即开始</str>
+    </msg>
+    <msg>
+      <id>Do not start automatically</id>
+      <str>不要自动开始</str>
+    </msg>
+    <msg>
+      <id>Email report to</id>
+      <str>Email 报告给</str>
+    </msg>
+  </grp>
+</i18n>

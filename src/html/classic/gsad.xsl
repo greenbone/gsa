@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:variable name="i18n_po_path">
   <xsl:choose>
     <xsl:when test="$i18n_language = 'de'">po/de.xml</xsl:when>
+    <xsl:when test="$i18n_language = 'zh'">po/zh.xml</xsl:when>
     <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
 </xsl:variable>

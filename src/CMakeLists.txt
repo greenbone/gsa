@@ -7,7 +7,7 @@
 # Michael Wiegand <michael.wiegand@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009 Greenbone Networks GmbH
+# Copyright (C) 2009, 2014 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2,
@@ -126,6 +126,10 @@ if (PATH_TO_XSLTPROC)
                                      COMMENT "Checking syntax of help.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl
                                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl)
+  add_custom_target (help_zh-xsl-syntax ALL
+                                     COMMENT "Checking syntax of help_zh.xsl"
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_zh.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_zh.xsl)
   add_custom_target (rnc-xsl-syntax ALL
                                     COMMENT "Checking syntax of rnc.xsl"
                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl

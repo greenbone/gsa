@@ -1,3 +1,29 @@
+2014-05-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Bakport r19529.
+
+	Adding support for Chinese language (zh). The translation
+        is a contribution by Winland Q. Yang.
+
+	* src/html/classic/help_zh.xsl: New.
+
+	* src/html/classic/po/zh.xml: New.
+
+	* CMakeLists.txt: Install chinese (zh) translation file
+	and help page.
+
+	* src/CMakeLists.txt: Added check target for help_zh.
+
+	* src/html/classic/gsad.xsl (i18n_po_path): Added zh
+	as available language. 
+
+	* src/html/classic/omp.xsl (edit_my_settings): Added Chinese
+	as language.
+
+	* src/gsad.c (init_validator): Added Chinese as language.
+
+	* src/gsad_base (set_language_code) Added Chinese as language.
+
 2014-05-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r19444 + r19449.

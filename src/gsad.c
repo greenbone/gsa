@@ -920,7 +920,7 @@ init_validator ()
   openvas_validator_add (validator, "ifaces_allow", "^0|1$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
-  openvas_validator_add (validator, "lang",         "^(Browser Language|English|German)$");
+  openvas_validator_add (validator, "lang",         "^(Browser Language|Chinese|English|German)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   /* Used for Administrator users, LSC credentials, login for target
    * locator and slave login name.  Needs to match validate_username in
