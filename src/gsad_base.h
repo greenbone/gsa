@@ -74,6 +74,7 @@ typedef struct
   char *language;     ///< Accept-Language browser header.
   char *severity;     ///< Severity class.
   char *pw_warning;   ///< Password policy warning message
+  int charts;         ///< Whether to show charts for this user.
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
@@ -102,6 +103,7 @@ enum content_type
   GSAD_CONTENT_TYPE_IMAGE_PNG,
   GSAD_CONTENT_TYPE_TEXT_CSS,
   GSAD_CONTENT_TYPE_TEXT_HTML,
+  GSAD_CONTENT_TYPE_TEXT_JS,
   GSAD_CONTENT_TYPE_TEXT_PLAIN,
   GSAD_CONTENT_TYPE_OCTET_STREAM
 } ;
@@ -157,5 +159,8 @@ param_t *params_append_bin (params_t *, const char *, const char *, int, int);
 #define params_iterator_init g_hash_table_iter_init
 
 gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
+
+/* temporary setting to show charts - defined in gsad.c */
+int user_set_charts (const gchar*, const int);
 
 #endif /* not _GSAD_BASE_H */

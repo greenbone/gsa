@@ -227,6 +227,7 @@ struct user
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language, in short form like "en".
   gchar *pw_warning;   ///< Password policy warning.
+  int charts;          ///< Whether to show charts for this user.
   time_t time;         ///< Login time.
 };
 
@@ -309,6 +310,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
     }
   set_language_code (&user->language, language);
   user->time = time (NULL);
+  user->charts = 0;
   return user;
 }
 
@@ -524,6 +526,35 @@ user_set_language_code (const gchar *name, const gchar *language)
 }
 
 /**
+ * @brief Set charts setting of user.
+ *
+ * @param[in]   name      User name.
+ * @param[in]   charts    Whether to show charts.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_charts (const gchar *name, const int charts)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          item->charts = charts;
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
  * @brief Release a user_t returned by user_add or user_find.
  *
  * @param[in]  user  User.
@@ -646,6 +677,7 @@ init_validator ()
                          "|(create_task)"
                          "|(cvss_calculator)"
                          "|(create_user)"
+                         "|(dashboard)"
                          "|(delete_agent)"
                          "|(delete_config)"
                          "|(delete_alert)"
@@ -755,6 +787,7 @@ init_validator ()
                          "|(export_users)"
                          "|(get_agent)"
                          "|(get_agents)"
+                         "|(get_aggregate)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -900,6 +933,7 @@ init_validator ()
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
+  openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
@@ -920,6 +954,7 @@ init_validator ()
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
+  openvas_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
@@ -1042,6 +1077,7 @@ init_validator ()
 
   /* Beware, the rule must be defined before the alias. */
 
+  openvas_validator_alias (validator, "aggregate_type", "resource_type");
   openvas_validator_alias (validator, "alert_id_2", "alert_id");
   openvas_validator_alias (validator, "alert_id_optional:name",  "number");
   openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
@@ -1052,7 +1088,9 @@ init_validator ()
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
+  openvas_validator_alias (validator, "charts", "boolean");
   openvas_validator_alias (validator, "custom_severity", "boolean");
+  openvas_validator_alias (validator, "dashboard_name", "name");
   openvas_validator_alias (validator, "debug",           "boolean");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
@@ -1819,6 +1857,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                         ? con_info->language
                                         : DEFAULT_GSAD_LANGUAGE);
 
+  credentials->charts = user->charts;
+
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
@@ -2178,6 +2218,9 @@ exec_omp_get (struct MHD_Connection *connection,
   if (!strcmp (cmd, "cvss_calculator"))
     return cvss_calculator (credentials, params);
 
+  else if (!strcmp (cmd, "dashboard"))
+    return dashboard (credentials, params);
+
   else if (!strcmp (cmd, "new_filter"))
     return new_filter_omp (credentials, params);
 
@@ -2440,6 +2483,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return download_ssl_cert (credentials, params, response_size);
     }
 
+  ELSE (get_aggregate)
   ELSE (get_alert)
   ELSE (get_alerts)
   ELSE (get_filter)
@@ -2928,6 +2972,10 @@ gsad_add_content_type_header (struct MHD_Response *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/html; charset=utf-8");
         break;
+      case GSAD_CONTENT_TYPE_TEXT_JS:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/javascript");
+        break;
       case GSAD_CONTENT_TYPE_TEXT_PLAIN:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/plain; charset=utf-8");
@@ -3044,6 +3092,8 @@ file_content_response (credentials_t *credentials,
     *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   else if (strstr (path, ".css"))
     *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
+  else if (strstr (path, ".js"))
+    *content_type = GSAD_CONTENT_TYPE_TEXT_JS;
   /** @todo Set content disposition? */
 
   struct stat buf;
@@ -3333,9 +3383,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         0);
         }
 
-      /* Allow the decorative images to anyone. */
+      /* Allow the decorative images and scripts to anyone. */
 
-      if (strncmp (url, "/img/", strlen ("/img/")) == 0)
+      if (strncmp (url, "/img/", strlen ("/img/")) == 0
+          || strncmp (url, "/js/", strlen ("/js/")) == 0)
         {
           response = file_content_response (credentials,
                                             connection, url,
@@ -3509,6 +3560,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
+      credentials->charts = user->charts;
       credentials->pw_warning = user->pw_warning ? strdup (user->pw_warning)
                                                  : NULL;
       if (user->language)
@@ -3640,12 +3692,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                              "<login>%s</login>"
                                              "<role>%s</role>"
                                              "<i18n>%s</i18n>"
+                                             "<charts>%i</charts>"
                                              "<help><%s/></help>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
                                              credentials->role,
                                              credentials->language,
+                                             credentials->charts,
                                              page);
               xml = g_strdup_printf ("%s"
                                      "<capabilities>%s</capabilities>"

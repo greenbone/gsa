@@ -119,6 +119,8 @@ char * export_agent_omp (credentials_t *, params_t *, enum content_type *,
 char * export_agents_omp (credentials_t *, params_t *, enum content_type *,
                             char **, gsize *);
 
+char * get_aggregate_omp (credentials_t *, params_t *);
+
 char * create_scanner_omp (credentials_t *, params_t *);
 char * new_scanner_omp (credentials_t *, params_t *);
 char * get_scanner_omp (credentials_t *, params_t *);
@@ -346,6 +348,7 @@ char * wizard_omp (credentials_t *, params_t *);
 char * wizard_get_omp (credentials_t *, params_t *);
 
 char * cvss_calculator (credentials_t *, params_t *);
+char * dashboard (credentials_t *, params_t *);
 
 char * get_trash_omp (credentials_t *, params_t *params);
 char * restore_omp (credentials_t *, params_t *);

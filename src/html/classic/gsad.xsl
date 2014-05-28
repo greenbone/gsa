@@ -1581,21 +1581,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <li>
       <xsl:choose>
         <xsl:when test="gsa:may-op ('GET_INFO')">
-          <a class="top_button"
+          <a class="top_button" id="secinfo_button"
              href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('SecInfo Management', 'MM')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
-                <li class="first_button_overlay">
-                  <xsl:value-of select="gsa:i18n('NVTs', 'Info')"/>
+                <li class="first_button_overlay" id="secinfo_button_overlay">
+                  <xsl:value-of select="gsa:i18n('NVTs', 'Dashboard')"/>
                 </li>
               </ul>
             </div>
           </a>
           <ul>
             <li class="pointy"></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
+            <li id="secinfo_dashboard_button" style="display:none;"><a href="/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/></a></li>
+            <li id="secinfo_nvts_button"><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'Info')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'Info')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
@@ -1607,6 +1608,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="empty_top_button"/>
         </xsl:otherwise>
       </xsl:choose>
+      <script type="text/javascript">
+        document.getElementById ("secinfo_button").setAttribute ("href", "/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token=<xsl:value-of select="/envelope/token"/>");
+        document.getElementById ("secinfo_button_overlay").innerHTML="SecInfo Dashboard";
+        document.getElementById ("secinfo_dashboard_button").setAttribute ("style", "");
+        document.getElementById ("secinfo_nvts_button").setAttribute ("class", "section_start");
+      </script>
     </li>
     <li>
       <xsl:variable name="items">
@@ -2059,6 +2066,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:include href="wizard.xsl"/>
 
+<!-- Graphics -->
+
+<xsl:include href="graphics.xsl"/>
+
 <!-- Login page -->
 
 <xsl:template match="login_page">
@@ -2127,6 +2138,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="severity">
+</xsl:template>
+
+<xsl:template match="charts">
 </xsl:template>
 
 <xsl:template match="help_response">

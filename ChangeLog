@@ -1,3 +1,57 @@
+2014-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add SecInfo dashboard functionality.
+
+	* CMakeLists.txt: Install new files src/html/classic/graphics.xsl,
+	src/html/classic/js/d3.tip.min.js, src/html/classic/js/d3.v3.min.js,
+	src/html/classic/js/gsa_bar_chart.js
+
+	* src/gsad_base.h (credentials_t): Add charts field.
+	(content_type): Add GSAD_CONTENT_TYPE_TEXT_JS.
+	(user_set_charts): New function prototype.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add temporary "charts" setting
+	to envelope.
+	(get_many): Set temporary "charts" setting if parameter is present.
+	(get_aggregate_omp, dashboard): New functions.
+
+	* src/gsad_omp.h (get_aggregate_omp, dashboard): New prototypes.
+
+	* src/gsad.c (user): Add charts field.
+	(user_add): Initialise charts field.
+	(user_set_charts): New function.
+	(init_validator): Add commands dashboard and get_aggregate. Add
+	parameters data_column, group_column, aggregate_type, charts,
+	dashboard_name.
+	(exec_omp_post): Get charts setting for credentials from user on login.
+	(exec_omp_get): Add cases for dashboard and get_aggregate commands.
+	(gsad_add_content_type_header, file_content_response):  Add cases for
+	GSAD_CONTENT_TYPE_TEXT_JS.
+	(request_handler): Allow js for all users. Get charts setting for
+	credentials from user. Add temporary "charts" setting to envelope.
+
+	* src/html/classic/graphics.xsl: New stylesheet for charts and
+	other info graphics.
+	
+	* src/html/classic/gsa-style.css: Add styles for dashboard and charts.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add menu item
+	"SecInfo Dashboard" if JavaScript is enabled. Include graphics.xsl.
+
+	* src/html/classic/omp.xsl (gsa:type-name-plural): New function.
+	(list-window, html-cpe-table, html-cve-table, html-nvt-table)
+	(html-ovaldef-table, html-dfn_cert_adv-table): Add visualizations on
+	top of table.
+
+	* src/html/classic/js/d3.tip.min.js: New JavaScript, d3 tooltips
+	library by Justin Palmer.
+
+	* src/html/classic/js/d3.v3.min.js: New JavaScript, d3 (Data Driven
+	Documents) library by Michael Bostock.
+
+	* src/html/classic/js/gsa_bar_chart.js: New JavaScript for generating
+	simple bar charts using d3.
+
 2014-05-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Adding support for Chinese language (zh). The translation

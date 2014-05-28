@@ -258,7 +258,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<login>%s</login>"
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
-                                 "<i18n>%s</i18n>",
+                                 "<i18n>%s</i18n>"
+                                 "<charts>%d</charts>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
@@ -267,7 +268,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->username,
                                  credentials->role,
                                  credentials->severity,
-                                 credentials->language);
+                                 credentials->language,
+                                 credentials->charts);
   g_string_append (string, res);
   g_free (res);
 
@@ -1030,7 +1032,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   int socket;
   gchar *html, *request, *built_filter;
   const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
-  const char *replace_task_id;
+  const char *replace_task_id, *charts;
 
   filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
@@ -1039,6 +1041,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   replace_task_id = params_value (params, "replace_task_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
+
+  charts = params_value (params, "charts");
+
+  if (params_given (params, "charts"))
+    {
+      credentials->charts = atoi (charts);
+      user_set_charts (credentials->username, credentials->charts);
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4921,6 +4931,80 @@ export_agents_omp (credentials_t * credentials, params_t *params,
 {
   return export_many ("agent", credentials, params, content_type,
                       content_disposition, content_length);
+}
+
+/**
+ * @brief Get an aggregate of resources.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return The aggregate.
+ */
+char *
+get_aggregate_omp (credentials_t * credentials, params_t *params)
+{
+  const char *data_column, *group_column, *type, *filter;
+  gchar *filter_escaped, *command_escaped, *response;
+  entity_t entity;
+  GString *xml, *command;
+  int ret;
+
+  data_column = params_value (params, "data_column");
+  group_column = params_value (params, "group_column");
+  type = params_value (params, "aggregate_type");
+  filter = params_value (params, "filter");
+  filter_escaped = filter ? g_strescape (filter, NULL) : NULL;
+  xml = g_string_new ("<get_aggregate>");
+
+  command = g_string_new ("<get_aggregates");
+  g_string_append_printf (command, " type=\"%s\"", type);
+  if (data_column)
+    g_string_append_printf (command, " data_column=\"%s\"", data_column);
+  if (group_column)
+    g_string_append_printf (command, " group_column=\"%s\"", group_column);
+  if (filter && strcmp (filter, ""))
+    g_string_append_printf (command, " filter=\"%s\"", filter);
+  g_string_append (command, "/>");
+
+  g_free (filter_escaped);
+
+  command_escaped = g_markup_escape_text (command->str, -1);
+  g_string_append (xml, command_escaped);
+  g_free (command_escaped);
+
+  ret = omp (credentials, &response, &entity, command->str);
+  g_string_free (command, TRUE);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting aggregates. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting aggregates. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting aggregates. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  g_string_append (xml, response);
+
+  g_string_append (xml, "</get_aggregate>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));;
 }
 
 /**
@@ -19461,6 +19545,28 @@ cvss_calculator (credentials_t * credentials, params_t *params)
     }
 
   g_string_append (xml, "</cvss_calculator>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Show a dashboard.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  params        Request parameters.
+ *
+ * @return XSL transformed dashboard.
+ */
+char *
+dashboard (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  const char *name;
+
+  name = params_value (params, "dashboard_name");
+
+  xml = g_string_new ("<dashboard>");
+  g_string_append_printf (xml, "<name>%s</name>", name ? name : "");
+  g_string_append (xml, "</dashboard>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
