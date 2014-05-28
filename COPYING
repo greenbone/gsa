@@ -1,0 +1,26 @@
+License information about Greenbone Security Assistant
+------------------------------------------------------
+
+Th effective license of the modules as a whole is the GNU General Public
+License Version 2 or any later version (GNU GPLv2+).
+
+Most files, are licensed under GNU General Public License Version 2
+or any later version (GNU GPLv2+). Some files have a different, but
+compatible licenses (BSD 3-clause and MIT).
+
+GPLv2: See file COPYING.GPLv2
+BSD-3: See file COPYING.BSD3
+MIT: See file COPYING.MIT
+
+These are the files that are not licensed GPLv2+, any others
+are licensed und GPLv2+:
+
+src/html/classic/js/d3.v3.min.js:
+  License: BSD-3
+  Copyright: Michael Bostock
+  Origin: http://d3js.org/
+
+src/html/classic/js/d3.tip.min.js:
+  License: MIT
+  Copyright: Justin Palmer
+  Origin: https://github.com/Caged/d3-tip

@@ -1,5 +1,9 @@
 2014-05-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* COPYING, COPYING.MIT, COPYING.BSD3: New.
+
+2014-05-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* COPYING: Renamed to COPYING.GPL.
 
 	* COPYING.GPL: New, former COPYING.
