@@ -1,3 +1,16 @@
+2014-05-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_osp_prefs): New function.
+	(save_config_omp): Save osp specific preferences when provided.
+
+	* src/gsad.c (init_validator): Validate definitions_file argument.
+
+	* src/html/classic/omp.xsl  (preference [edit-details]): Handle osp_file
+	preference type.
+	(preferences [edit-scanner-details]): Adjust column header for OSP
+	config type.
+	(html-config-table): Set form enctype.
+
 2014-05-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* COPYING, COPYING.MIT, COPYING.BSD3: New.

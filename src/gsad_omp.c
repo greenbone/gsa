@@ -8299,6 +8299,54 @@ edit_config_omp (credentials_t * credentials, params_t *params)
   return edit_config (credentials, params, NULL);
 }
 
+
+/**
+ * @brief Save OSP file preferences.
+ *
+ * @param[in]   session     GNUTLS session.
+ * @param[in]   params      Request parameters.
+ *
+ * @return NULL success.  HTML result of XSL transformation on error.
+ */
+static char *
+save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
+                params_t *params)
+{
+  gchar *value;
+  size_t psize;
+  char *ret;
+  const char *pvalue, *pname = "definitions_file";
+
+  pvalue = params_value (params, pname);
+  if (pvalue == NULL || *pvalue == '\0')
+    return NULL;
+
+  psize = params_value_size (params, pname);
+  if (psize == 0)
+    return NULL;
+  value = psize ? g_base64_encode ((guchar *) pvalue, psize) : g_strdup ("");
+
+  if (openvas_server_sendf (&session,
+                            "<modify_config config_id=\"%s\">"
+                            "<preference>"
+                            "<name>%s</name>"
+                            "<value>%s</value>"
+                            "</preference>"
+                            "</modify_config>",
+                            params_value (params, "config_id"), pname, value)
+      == -1)
+    return gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a config. "
+                         "It is unclear whether the entire config has been saved. "
+                         "Diagnostics: Failure to send command to manager daemon.",
+                         "/omp?cmd=get_configs");
+
+  ret = check_modify_config (credentials, &session);
+  if (ret)
+    return ret;
+  return NULL;
+}
+
 /**
  * @brief Save details of an NVT for a config and return the next page.
  *
@@ -8420,6 +8468,14 @@ save_config_omp (credentials_t * credentials, params_t *params)
               return ret;
             }
         }
+    }
+
+  /* OSP config file preference. */
+  ret = save_osp_prefs (credentials, session, params);
+  if (ret)
+    {
+      openvas_server_close (socket, session);
+      return ret;
     }
 
   /* Update the config. */

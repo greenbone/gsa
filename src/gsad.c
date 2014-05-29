@@ -1013,6 +1013,7 @@ init_validator ()
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
+  openvas_validator_add (validator, "definitions_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_section",

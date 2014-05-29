@@ -11641,6 +11641,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- TODO: Is name enough to make the preference unique, or is
            type required too? -->
       <xsl:choose>
+        <xsl:when test="type='osp_file'">
+          <label>
+            <xsl:choose>
+              <xsl:when test="string-length(value) &gt; 0">
+                <xsl:value-of select="gsa:i18n ('Replace existing file with', 'Scan Config Table Row')"/>:
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('Upload file', 'Scan Config Table Row')"/>:
+              </xsl:otherwise>
+            </xsl:choose>
+          </label>
+          <br/>
+          <input type="file" name="{name}" size="30"/>
+        </xsl:when>
         <xsl:when test="type='checkbox'">
           <xsl:choose>
             <xsl:when test="value='yes'">
@@ -11948,8 +11962,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Value', 'Scan Config Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Default', 'Scan Config Window')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('New Value', 'Scan Config Window')"/></td>
+        <xsl:choose>
+          <xsl:when test="../type != 1">
+            <td><xsl:value-of select="gsa:i18n ('Default', 'Scan Config Window')"/></td>
+          </xsl:when>
+          <xsl:otherwise>
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Scan Config Window')"/></td>
+          </xsl:otherwise>
+        </xsl:choose>
         <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
       </tr>
       <xsl:apply-templates
@@ -12458,7 +12479,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:choose>
       <xsl:when test="edit">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
