@@ -1,7 +1,7 @@
 License information about Greenbone Security Assistant
 ------------------------------------------------------
 
-Th effective license of the modules as a whole is the GNU General Public
+The effective license of the module as a whole is the GNU General Public
 License Version 2 or any later version (GNU GPLv2+).
 
 Most files, are licensed under GNU General Public License Version 2
@@ -13,7 +13,7 @@ BSD-3: See file COPYING.BSD3
 MIT: See file COPYING.MIT
 
 These are the files that are not licensed GPLv2+, any others
-are licensed und GPLv2+:
+are licensed under GPLv2+:
 
 src/html/classic/js/d3.v3.min.js:
   License: BSD-3
