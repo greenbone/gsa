@@ -1,3 +1,14 @@
+2014-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Adjust new task page style for OSP Scanner case.
+
+	* src/gsad.c (init_validator): Remove config_id_optional and
+	scanner_id_optional. Add osp_config_id and osp_scanner_id.
+
+	* src/gsad_omp.c (create_task_omp): Add choice button for Scanner type.
+	Move specific options for each type to relevant section and keep common
+	options outside.
+
 2014-05-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* COPYING: Fixed some typos spotted by Timo Pollmeier.

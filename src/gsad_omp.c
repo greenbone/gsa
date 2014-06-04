@@ -2336,7 +2336,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   int ret;
   gchar *schedule_element, *slave_element, *scanner_element, *command;
   gchar *response, *html;
-  const char *name, *comment, *config_id, *target_id;
+  const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *slave_id, *scanner_id, *schedule_id, *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
   params_t *alerts;
@@ -2344,17 +2344,32 @@ create_task_omp (credentials_t * credentials, params_t *params)
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  config_id = params_value (params, "config_id");
   target_id = params_value (params, "target_id");
+  scanner_type = params_value (params, "scanner_type");
   hosts_ordering = params_value (params, "hosts_ordering");
   slave_id = params_value (params, "slave_id_optional");
-  scanner_id = params_value (params, "scanner_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
   in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
+  CHECK (scanner_type);
+  if (!strcmp (scanner_type, "1"))
+    {
+      scanner_id = params_value (params, "osp_scanner_id");
+      config_id = params_value (params, "osp_config_id");
+      slave_id = "";
+      hosts_ordering = "";
+      max_checks = "";
+      source_iface = "";
+      max_hosts = "";
+    }
+  else
+    {
+      scanner_id = params_value (params, "scanner_id");
+      config_id = params_value (params, "config_id");
+    }
 
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))

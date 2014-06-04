@@ -917,7 +917,7 @@ init_validator ()
   openvas_validator_add (validator, "caller",     "^.*$");
   openvas_validator_add (validator, "comment",    "^[-_;'()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "config_id_optional", "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
@@ -1064,7 +1064,7 @@ init_validator ()
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "scanner_id_optional",   "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
