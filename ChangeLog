@@ -1,5 +1,10 @@
 2014-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (task [details]): Adjust displayed details
+	for tasks using OSP configs.
+
+2014-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Adjust new task page style for OSP Scanner case.
 
 	* src/gsad.c (init_validator): Remove config_id_optional and

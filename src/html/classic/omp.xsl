@@ -3609,39 +3609,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="hosts_ordering = 'sequential'"><xsl:value-of select="gsa:i18n ('Sequential', 'Task Window')"/></xsl:when>
-              <xsl:when test="hosts_ordering = 'random'"><xsl:value-of select="gsa:i18n ('Random', 'Task Window')"/></xsl:when>
-              <xsl:when test="hosts_ordering = 'reverse'"><xsl:value-of select="gsa:i18n ('Reverse', 'Task Window')"/></xsl:when>
-              <xsl:otherwise><xsl:value-of select="gsa:i18n ('N/A', 'Task Window')"/></xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/>:</td>
-          <td>
-            <xsl:value-of select="preferences/preference[scanner_name='source_iface']/value"/>
-          </td>
-        </tr>
-        <xsl:if test="gsa:may-op ('get_slaves') or string-length (slave/@id) &gt; 0">
+        <xsl:if test="config/type = 0">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/>:</td>
             <td>
               <xsl:choose>
-                <xsl:when test="gsa:may-op ('get_slaves')">
-                  <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="slave/name"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="slave/name"/>
-                </xsl:otherwise>
+                <xsl:when test="hosts_ordering = 'sequential'"><xsl:value-of select="gsa:i18n ('Sequential', 'Task Window')"/></xsl:when>
+                <xsl:when test="hosts_ordering = 'random'"><xsl:value-of select="gsa:i18n ('Random', 'Task Window')"/></xsl:when>
+                <xsl:when test="hosts_ordering = 'reverse'"><xsl:value-of select="gsa:i18n ('Reverse', 'Task Window')"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="gsa:i18n ('N/A', 'Task Window')"/></xsl:otherwise>
               </xsl:choose>
             </td>
           </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/>:</td>
+            <td>
+              <xsl:value-of select="preferences/preference[scanner_name='source_iface']/value"/>
+            </td>
+          </tr>
+          <xsl:if test="gsa:may-op ('get_slaves') or string-length (slave/@id) &gt; 0">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="gsa:may-op ('get_slaves')">
+                    <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="slave/name"/>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="slave/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
         </xsl:if>
         <xsl:if test="gsa:may-op ('get_scanners') or string-length (scanner/@id) &gt; 0">
           <tr>
@@ -3760,27 +3762,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <xsl:choose>
-        <xsl:when test="target/@id=''">
-        </xsl:when>
-        <xsl:otherwise>
-          <h4><xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/></h4>
-          <table>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_checks']/name), 'Task Window')"/>:</td>
-              <td>
-                <xsl:value-of select="preferences/preference[scanner_name='max_checks']/value"/>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_hosts']/name), 'Task Window')"/>:</td>
-              <td>
-                <xsl:value-of select="preferences/preference[scanner_name='max_hosts']/value"/>
-              </td>
-            </tr>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:if test="config/type = 0">
+        <h4><xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/></h4>
+        <table>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_checks']/name), 'Task Window')"/>:</td>
+            <td>
+              <xsl:value-of select="preferences/preference[scanner_name='max_checks']/value"/>
+            </td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_hosts']/name), 'Task Window')"/>:</td>
+            <td>
+              <xsl:value-of select="preferences/preference[scanner_name='max_hosts']/value"/>
+            </td>
+          </tr>
+        </table>
+      </xsl:if>
     </div>
   </div>
   <xsl:if test="target/@id='' and gsa:may-op ('create_report')">
