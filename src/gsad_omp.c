@@ -41,6 +41,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -242,6 +243,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   params_iterator_t iter;
   param_t *param;
   const char *refresh_interval, *xml_flag;
+  struct timeval tv;
 
   assert (credentials);
 
@@ -250,6 +252,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
 
   string = g_string_new ("");
 
+  gettimeofday (&tv, NULL);
   res = g_markup_printf_escaped ("<envelope>"
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
@@ -259,7 +262,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
-                                 "<charts>%d</charts>",
+                                 "<charts>%d</charts>"
+                                 "<backend_operation>%.2f</backend_operation>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
@@ -269,7 +273,13 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->role,
                                  credentials->severity,
                                  credentials->language,
-                                 credentials->charts);
+                                 credentials->charts,
+                                 (double) ((tv.tv_sec
+                                            - credentials->cmd_start.tv_sec)
+                                           * 1000000L
+                                           + tv.tv_usec
+                                           - credentials->cmd_start.tv_usec)
+                                 / 1000000.0);
   g_string_append (string, res);
   g_free (res);
 

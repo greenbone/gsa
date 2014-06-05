@@ -1449,6 +1449,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-footer">
   <div class="gsa_footer">
+    <div style="float: left">
+      <xsl:choose>
+        <xsl:when test="not (boolean (/envelope/backend_operation))"/>
+        <xsl:when test="/envelope/backend_operation = 0"/>
+        <xsl:otherwise>
+          Backend operation: <xsl:value-of select="/envelope/backend_operation"/>s
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
     Greenbone Security Assistant (GSA) Copyright 2009-2014 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>
   </div>
@@ -2112,6 +2121,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- ROOT, ENVELOPE -->
+
+<xsl:template match="backend_operation">
+</xsl:template>
 
 <xsl:template match="params">
 </xsl:template>

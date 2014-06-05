@@ -1,3 +1,18 @@
+2014-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add "Backend operation" in the page footer where it is available.  This
+	is the time taken to get from the start of the page handler to the start
+	of the XSL transform.
+
+	* src/gsad_omp.h (credentials_t): Add cmd_start.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get): Record operation start time.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add BACKEND_OPERATION to ENVELOPE.
+
+	* src/html/classic/omp.xsl (html-footer): Add "Backend operation" text.
+	(backend_operation): New template.
+
 2014-06-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Make the Scanner section
@@ -86,7 +101,7 @@
 
 	* src/html/classic/graphics.xsl: New stylesheet for charts and
 	other info graphics.
-	
+
 	* src/html/classic/gsa-style.css: Add styles for dashboard and charts.
 
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Add menu item
@@ -121,7 +136,7 @@
 	* src/CMakeLists.txt: Added check target for help_zh.
 
 	* src/html/classic/gsad.xsl (i18n_po_path): Added zh
-	as available language. 
+	as available language.
 
 	* src/html/classic/omp.xsl (edit_my_settings): Added Chinese
 	as language.

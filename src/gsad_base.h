@@ -33,6 +33,7 @@
 #define _GSAD_BASE_H
 
 #include <glib.h>
+#include <sys/time.h>
 
 /**
  * @brief Initial filtered results per page on the report summary.
@@ -64,6 +65,7 @@
  */
 typedef struct
 {
+  struct timeval cmd_start; ///< Seconds since command page handler started.
   char *username;     ///< Name of user.
   char *password;     ///< User's password.
   char *role;         ///< User's role.

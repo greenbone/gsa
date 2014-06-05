@@ -1860,6 +1860,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   credentials->charts = user->charts;
 
+  gettimeofday (&credentials->cmd_start, NULL);
+
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
@@ -2211,6 +2213,8 @@ exec_omp_get (struct MHD_Connection *connection,
         }
       tzset ();
     }
+
+  gettimeofday (&credentials->cmd_start, NULL);
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
