@@ -4862,6 +4862,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </td>
         </tr>
+      </table>
+
+      <table>
         <tr>
           <td>
             <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
@@ -4950,7 +4953,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td></td>
             <td>
-              <h4><xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/></h4>
+              <xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/>:
             </td>
             <td></td>
           </tr>
