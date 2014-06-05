@@ -1,3 +1,8 @@
+2014-06-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (new_task): Make the Scanner section
+	the last part of the dialog.
+
 2014-06-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Adjust displayed details
