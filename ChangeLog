@@ -1,9 +1,16 @@
+2014-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r19617.
+
+	* src/gsad_omp.c (init_validator): Add email_list.  Validate
+	"to_address" as a list of addresses.
+
 2014-05-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Bakport r19529.
 
 	Adding support for Chinese language (zh). The translation
-        is a contribution by Winland Q. Yang.
+	is a contribution by Winland Q. Yang.
 
 	* src/html/classic/help_zh.xsl: New.
 
@@ -15,7 +22,7 @@
 	* src/CMakeLists.txt: Added check target for help_zh.
 
 	* src/html/classic/gsad.xsl (i18n_po_path): Added zh
-	as available language. 
+	as available language.
 
 	* src/html/classic/omp.xsl (edit_my_settings): Added Chinese
 	as language.
