@@ -1,3 +1,8 @@
+2014-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (init_validator): Add email_list.  Validate
+	"to_address" as a list of addresses.
+
 2014-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add "Backend operation" in the page footer where it is available.  This

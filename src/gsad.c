@@ -937,6 +937,7 @@ init_validator ()
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
+  openvas_validator_add (validator, "email_list", "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
   openvas_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
@@ -1145,7 +1146,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_false_positive", "boolean");
   openvas_validator_alias (validator, "lsc_smb_credential_id",
                            "lsc_credential_id");
-  openvas_validator_alias (validator, "method_data:to_address:", "email");
+  openvas_validator_alias (validator, "method_data:to_address:", "email_list");
   openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_severity", "severity_optional");
   openvas_validator_alias (validator, "new_severity_from_list", "severity_optional");
