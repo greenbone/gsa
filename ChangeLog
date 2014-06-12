@@ -1,7 +1,14 @@
 2014-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad_omp.c (init_validator): Add email_list.  Validate
-	"to_address" as a list of addresses.
+	* src/html/classic/omp.xsl (task-icons): Add show-start-when-scheduled
+	param.
+	(task [details]): Show start icon alongside scheduled icon, to give the
+	user the option to manually start the task.
+
+2014-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add email_list.  Validate "to_address" as
+	a list of addresses.
 
 2014-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
