@@ -22,7 +22,7 @@
 
 	* src/gsad_omp.c (xsl_transform_omp): Add BACKEND_OPERATION to ENVELOPE.
 
-	* src/html/classic/omp.xsl (html-footer): Add "Backend operation" text.
+	* src/html/classic/gsad.xsl (html-footer): Add "Backend operation" text.
 	(backend_operation): New template.
 
 2014-06-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
