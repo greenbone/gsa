@@ -1,4 +1,4 @@
-2014-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+2014-06-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task-icons): Add show-start-when-scheduled
 	param.
