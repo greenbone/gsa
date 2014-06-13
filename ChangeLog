@@ -1,3 +1,8 @@
+2014-06-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/its/gsad.xsl (backend_operation, charts): Added empty match
+	to silence the new objects.
+
 2014-06-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task-icons): Add show-start-when-scheduled
