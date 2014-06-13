@@ -1,3 +1,12 @@
+2014-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r19638.
+
+	* src/html/classic/omp.xsl (task-icons): Add show-start-when-scheduled
+	param.
+	(task [details]): Show start icon alongside scheduled icon, to give the
+	user the option to manually start the task.
+
 2014-04-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport a small part of r17494.
