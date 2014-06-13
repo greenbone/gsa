@@ -1,5 +1,12 @@
 2014-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r19639.
+
+	* src/html/classic/omp.xsl (task-icons): In the Task Details case, grey
+	the start icon when the task is active instead of hiding it.
+
+2014-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r19638.
 
 	* src/html/classic/omp.xsl (task-icons): Add show-start-when-scheduled
