@@ -3296,6 +3296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
+  <xsl:param name="show-start-when-scheduled" select="false ()"/>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Task is a container', 'Task Table Row')}"/>
@@ -3324,6 +3325,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat (gsa:i18n ('#DETAILS_OF_PREFIX#', 'Table Row', 'View details of '), gsa:i18n ('Schedule', 'Schedule'), ' &quot;', schedule/name,'&quot;', gsa:i18n ('#DETAILS_OF_SUFFIX#', 'Table Row', ''), $next_due_string)}">
         <img style="margin-left: 3px" src="/img/scheduled.png" border="0" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
       </a>
+      <xsl:if test="boolean ($show-start-when-scheduled) and status!='Running' and status!='Stop Requested' and status!='Delete Requested' and status!='Ultimate Delete Requested' and status!='Pause Requested' and status!='Paused' and status!='Resume Requested' and status!='Requested'">
+        <xsl:call-template name="start-icon">
+          <xsl:with-param name="type">task</xsl:with-param>
+          <xsl:with-param name="id" select="@id"/>
+          <xsl:with-param name="params">
+            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+            <input type="hidden" name="next" value="{$next}"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:when>
     <xsl:when test="status='Running'">
       <xsl:call-template name="pause-icon">
@@ -3481,6 +3494,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:call-template name="task-icons">
           <xsl:with-param name="next" select="'get_task'"/>
+          <xsl:with-param name="show-start-when-scheduled" select="1"/>
         </xsl:call-template>
       </div>
       <div id="small_inline_form" style="margin-left:40px; display: inline">
