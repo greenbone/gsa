@@ -1,3 +1,24 @@
+gsa 5.0.1 (2014-06-16)
+
+This is the first maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release adds support for Perfect Forward Secrecy (PFS) as well as
+translations for the chinese language.
+
+Many thanks to everyone who contributed to this release:
+Matthew Mundell, Hani Benhabiles and Winland Q. Yang.
+
+Main changes since 5.0.0:
+* Add --dh-params option for PFS support. Requires LibMicroHTTPD >= 0.9.35
+* Add support for Chinese language (zh).
+* Allow to start scheduled tasks manually via task details dialog.
+* Allow multiple email address for a single email alert.
+* Various bug-fixes, cleanups and improvements, especially for consistency.
+
+
 gsa 5.0.0 (2014-04-23)
 
 This is the first release of the Greenbone Security Assistant (GSA) 5.0 module

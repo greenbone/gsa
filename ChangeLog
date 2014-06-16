@@ -1,3 +1,7 @@
+2014-06-16  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* CHANGES: Prepare release of gsa 5.0.1
+
 2014-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r19639.
