@@ -1,5 +1,10 @@
 2014-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Fix scanner type in openvas
+	scanners list.
+
+2014-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (scanner-type-name, scanner-type-list):
 	Handle OpenVAS Scanner type case.
 	(html-create-scanner-form): Set default parameter value for

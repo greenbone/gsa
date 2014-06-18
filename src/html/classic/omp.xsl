@@ -4908,7 +4908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="scanner_id">
                 <option value="--">--</option>
-                <xsl:for-each select="get_scanners_response/scanner[type = 0]">
+                <xsl:for-each select="get_scanners_response/scanner[type = 2]">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
               </select>
