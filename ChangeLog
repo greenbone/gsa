@@ -1,3 +1,10 @@
+2014-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner-type-name, scanner-type-list):
+	Handle OpenVAS Scanner type case.
+	(html-create-scanner-form): Set default parameter value for
+	scanner-type-list template call.
+
 2014-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Add missing entry for last commit yesterday.

@@ -1846,6 +1846,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:choose>
     <xsl:when test="$type = '1'">OSP Ovaldi</xsl:when>
+    <xsl:when test="$type = '2'">OpenVAS Scanner</xsl:when>
     <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -1855,6 +1856,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="opt">
     <xsl:with-param name="value" select="1"/>
     <xsl:with-param name="content" select="'OSP Ovaldi'"/>
+    <xsl:with-param name="select-value" select="$default"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="2"/>
+    <xsl:with-param name="content" select="'OpenVAS Scanner'"/>
     <xsl:with-param name="select-value" select="$default"/>
   </xsl:call-template>
 </xsl:template>
@@ -14557,7 +14563,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/></td>
             <td>
               <select name="scanner_type">
-                <xsl:call-template name="scanner-type-list"/>
+                <xsl:call-template name="scanner-type-list">
+                  <xsl:with-param name="default" select="2"/>
+                </xsl:call-template>
               </select>
             </td>
           </tr>
