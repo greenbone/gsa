@@ -1,5 +1,10 @@
 2014-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (new_lsc_credential.html): Change Mandatory
+	column for Login to "yes".
+
+2014-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (user [edit]): Remove colon from "Login Name"
 	to match everywhere else.
 

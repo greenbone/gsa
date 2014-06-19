@@ -930,7 +930,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="even">
           <td>Login</td>
-          <td>no</td>
+          <td>yes</td>
           <td>80</td>
           <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
           <td>jsmith<br/>
