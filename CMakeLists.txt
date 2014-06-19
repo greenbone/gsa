@@ -322,6 +322,7 @@ install (FILES src/html/classic/favicon.gif
 install (FILES src/html/classic/js/d3.tip.min.js
                src/html/classic/js/d3.v3.min.js
                src/html/classic/js/gsa_bar_chart.js
+               src/html/classic/js/gsa_graphics_base.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
 install (FILES src/html/classic/login/login.html
@@ -495,6 +496,9 @@ install (FILES src/html/classic/img/cpe/other.png
                src/html/classic/img/cpe/a:typo3:typo3.png
                src/html/classic/img/cpe/a:wordpress:wordpress.png
          DESTINATION ${GSA_DATA_DIR}/classic/img/cpe)
+
+install (FILES src/html/classic/img/charts/severity-bar-chart.png
+         DESTINATION ${GSA_DATA_DIR}/classic/img/charts)
 
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})

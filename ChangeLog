@@ -1,3 +1,62 @@
+2014-06-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Rewrite dashboard to make chart components like containers and
+	generator functions more reusable. Add chart switcher to SecInfo pages.
+	Add CSV and SVG export options to charts. Fix some escaping issues
+	in get_aggregate filter.
+
+	* CMakeLists.txt: Install new files
+	src/html/classic/js/gsa_graphics_base.js and
+	src/html/classic/img/charts/severity-bar-chart.png.
+
+	* src/gsad_omp.c (get_aggregate_omp): Fix some escaping issues with
+	the filter parameter.
+
+	* src/html/classic/graphics.xsl (): Use exslt strings. Update copyright
+	year.
+	(init-d3charts): Load new file /js/gsa_graphics_base.js. Add global
+	variable declarations and initializations.
+	(js-create-chart-box, js-create-chart-selector): New templates for
+	creating chart container and selector HTML.
+	(severity-chart): Rename to to js-severity-chart.
+	(js-severity-chart): New: Renamed severity-chart. Remove script tag and
+	use reusable chart components.
+	(counts-chart): Rename to js-counts-chart
+	(js-counts-chart): New: Renamed counts-chart. Remove script tag and
+	use reusable chart components.
+	(js-secinfo-top-visualization): New template for creating the top
+	charts for secinfo pages.
+	(dashboard [secinfo]): Adjust to new templates and JS functions.
+
+	* src/html/classic/gsa-style.css: Add menu style rules for id
+	chart_list and subelements. Add rules for chart-foot class.
+	Change size of chart axes and labels to 8pt.
+
+	* src/html/classic/omp.xsl (list-window): Escape caller in scripts
+	creating the charts bar.
+	(html-cpe-table, html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-dfn_cert_adv-table): Use new js-secinfo-top-visualization
+	template to create charts.
+
+	* src/html/classic/js/gsa_bar_chart.js (): Add copyright / license.
+	(severity_bar_style): Add parameter to select field.
+	(title_static): New function. Returns static title texts.
+	(title_y_total): Rename to title_total.
+	(title_total): New. Renamed title_y_total. Make field selectable and
+	change parameter order.
+	(data_severity_histogram): Add parameters for x and y fields.
+	(gsa_bar_chart): Rename to BarChartGenerator.
+	(BarChartGenerator): Renamed gsa_bar_chart. Adjust to reusable chart
+	components: Calculate chart size from display size. Add callbacks
+	"show_loading" and "generate" instead of managing Ajax request here.
+	Add menu items for exporting CSV and SVG files to chart container.
+	Add transitions.
+
+	* src/html/classic/js/gsa_graphics_base.js: New file. Shared JavaScript
+	for dashboard charts and chart switchers.
+
+	* src/html/classic/img/charts/severity-bar-chart.png: New icon.
+
 2014-06-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Fix scanner type in openvas

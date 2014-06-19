@@ -4162,10 +4162,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
+      <xsl:variable name="caller_escaped" select="str:replace (str:replace (/envelope/caller, '&quot;', '\&quot;'), '\', '\\')"/>
       <xsl:choose>
         <xsl:when test="$top-visualization = ''"/>
         <xsl:when test="/envelope/charts = '1'">
-          <xsl:copy-of select="$top-visualization"/>
+          <div id="top-visualization">
+            <xsl:copy-of select="$top-visualization"/>
+          </div>
           <xsl:choose>
             <xsl:when test="/envelope/params/charts = '1'">
               <a class="charts-bar" href="{substring-before (/envelope/caller, '&amp;charts=1')}{substring-after (/envelope/caller, '&amp;charts=1')}&amp;charts=0&amp;token={/envelope/token}" title="Hide Charts">&#9650; &#9650; &#9650;</a>
@@ -4179,12 +4182,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="/envelope/params/charts = '0'">
               <script type="text/javascript">
-                document.write ("&lt;a class=\"charts-bar\" href=\"<xsl:value-of select="substring-before (/envelope/caller, '&amp;charts=0')"/><xsl:value-of select="substring-after (/envelope/caller, '&amp;charts=0')"/>&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>\" title=\"Show Charts\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
+                document.write ("&lt;a class=\"charts-bar\" href=\"" + encodeURI ("<xsl:value-of select="substring-before ($caller_escaped, '&amp;charts=0')"/><xsl:value-of select="substring-after ($caller_escaped, '&amp;charts=0')"/>&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>") + "\" title=\"Show Charts\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
               </script>
             </xsl:when>
             <xsl:otherwise>
               <script type="text/javascript">
-                document.write ("&lt;a class=\"charts-bar\" href=\"<xsl:value-of select="/envelope/caller"/>&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>\" title=\"Show Charts\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
+                document.write ("&lt;a class=\"charts-bar\" href=\"" + encodeURI ("<xsl:value-of select="$caller_escaped"/>") + "&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>\" title=\"Show Charts\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
               </script>
             </xsl:otherwise>
           </xsl:choose>
@@ -16134,14 +16137,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="severity-chart">
+      <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'cpe'"/>
-        <xsl:with-param name="id" select="'severity_chart'"/>
-      </xsl:call-template>
-      <xsl:call-template name="severity-chart">
-        <xsl:with-param name="type" select="'cpe'"/>
-        <xsl:with-param name="filter" select="filters/term"/>
-        <xsl:with-param name="id" select="'filtered_severity_chart'"/>
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="columns">
@@ -16193,14 +16190,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="severity-chart">
+      <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'cve'"/>
-        <xsl:with-param name="id" select="'severity_chart'"/>
-      </xsl:call-template>
-      <xsl:call-template name="severity-chart">
-        <xsl:with-param name="type" select="'cve'"/>
-        <xsl:with-param name="filter" select="filters/term"/>
-        <xsl:with-param name="id" select="'filtered_severity_chart'"/>
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="columns">
@@ -16263,14 +16254,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="severity-chart">
+      <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'nvt'"/>
-        <xsl:with-param name="id" select="'severity_chart'"/>
-      </xsl:call-template>
-      <xsl:call-template name="severity-chart">
-        <xsl:with-param name="type" select="'nvt'"/>
-        <xsl:with-param name="filter" select="filters/term"/>
-        <xsl:with-param name="id" select="'filtered_severity_chart'"/>
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="columns">
@@ -16328,14 +16313,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="severity-chart">
+      <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'ovaldef'"/>
-        <xsl:with-param name="id" select="'severity_chart'"/>
-      </xsl:call-template>
-      <xsl:call-template name="severity-chart">
-        <xsl:with-param name="type" select="'ovaldef'"/>
-        <xsl:with-param name="filter" select="filters/term"/>
-        <xsl:with-param name="id" select="'filtered_severity_chart'"/>
+        <xsl:with-param name="extra_charts">
+          <xsl:call-template name="js-counts-chart">
+            <xsl:with-param name="type" select="'ovaldef'"/>
+            <xsl:with-param name="group_column" select="'status'"/>
+            <xsl:with-param name="id" select="'top-visualization-left'"/>
+            <xsl:with-param name="chart_name" select="'test-left'"/>
+            <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+            <xsl:with-param name="auto_load" select="0"/>
+          </xsl:call-template>
+          <xsl:call-template name="js-counts-chart">
+            <xsl:with-param name="type" select="'ovaldef'"/>
+            <xsl:with-param name="group_column" select="'class'"/>
+            <xsl:with-param name="id" select="'top-visualization-left'"/>
+            <xsl:with-param name="chart_name" select="'test-right'"/>
+            <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+            <xsl:with-param name="auto_load" select="0"/>
+          </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="extra_selections">
+          {chart_left:  charts ["test-left"],
+            chart_right: charts ["test-right"],
+            label: "Demo charts",
+            icon: "/img/charts/severity-bar-chart.png" },
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="columns">
@@ -16398,14 +16401,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="severity-chart">
+      <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-        <xsl:with-param name="id" select="'severity_chart'"/>
-      </xsl:call-template>
-      <xsl:call-template name="severity-chart">
-        <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-        <xsl:with-param name="filter" select="filters/term"/>
-        <xsl:with-param name="id" select="'filtered_severity_chart'"/>
       </xsl:call-template>
     </xsl:with-param>
 

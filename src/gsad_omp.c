@@ -4979,7 +4979,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   group_column = params_value (params, "group_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
-  filter_escaped = filter ? g_strescape (filter, NULL) : NULL;
+  filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
   xml = g_string_new ("<get_aggregate>");
 
   command = g_string_new ("<get_aggregates");
@@ -4988,8 +4988,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
     g_string_append_printf (command, " data_column=\"%s\"", data_column);
   if (group_column)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
-  if (filter && strcmp (filter, ""))
-    g_string_append_printf (command, " filter=\"%s\"", filter);
+  if (filter_escaped && strcmp (filter_escaped, ""))
+    g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
   g_string_append (command, "/>");
 
   g_free (filter_escaped);
