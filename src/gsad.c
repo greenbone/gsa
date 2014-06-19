@@ -2772,7 +2772,8 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   body = g_strdup_printf ("<html><body>Code 303 - Redirecting to"
                           " <a href=\"%s\">%s<a/></body></html>\n",
                           uri, uri);
-  response = MHD_create_response_from_data (2, body, MHD_NO, MHD_YES);
+  response = MHD_create_response_from_data (strlen (body), body, MHD_NO,
+                                            MHD_YES);
   g_free (body);
 
   if (!response)
