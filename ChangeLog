@@ -1,3 +1,8 @@
+2014-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (user [edit]): Remove colon from "Login Name"
+	to match everywhere else.
+
 2014-06-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (send_redirect_to_uri): Correctly calculate the redirect

@@ -29094,7 +29094,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="125"><b><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/>:</b></td>
+            <td valign="top" width="125"><b><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/></b></td>
             <td>
               <input type="hidden" name="user_id" value="{@id}"/>
               <input type="hidden" name="login" value="{name}"/>
