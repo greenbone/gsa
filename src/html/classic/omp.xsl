@@ -6549,6 +6549,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_lsc_credential">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_lsc_credential_response"/>
   <xsl:call-template name="html-edit-lsc-credential-form"/>
 </xsl:template>
 
