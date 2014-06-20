@@ -1,3 +1,30 @@
+2014-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Change chart selectors so charts can be selected for each display box
+	individually. Remove the word "Filtered" from default chart titles.
+	Remove charts that count OVAL definitions by status.
+
+	* src/html/classic/graphics.xsl (js-create-chart-selector): Remove.
+	(js-severity-chart, js-counts-chart): Remove the word "Filtered" from
+	default chart titles. Add chart_label and add_to_display parameters.
+	Add new parameters for chart creation.
+	(js-secinfo-top-visualization): Replace shared chart selector with
+	ones for individual chart boxes. Add parameters auto_load_left and
+	auto_load_right.
+
+	* src/html/classic/omp.xsl (html-ovaldef-table): Remove charts counting
+	by status and adjust to chart selectors being for individual displays.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_box): Remove
+	commented test code.
+	(create_chart_selector): Remove global function. Replaced with new
+	function of Display.
+	(Chart): Add property and accessors for icon and label. Add parameter
+	to constructor for automatically adding to the display.
+	(Display): Add name property and getter. New function
+	create_chart_selector which creates a chart selector for the display.
+	Add chart selection functions select_chart, prev_chart and next_chart.
+
 2014-06-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit_lsc_credential): Apply

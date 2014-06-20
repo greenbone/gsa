@@ -73,13 +73,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="$height"/>)
 </xsl:template>
 
-<xsl:template name="js-create-chart-selector">
-  <xsl:param name="parent_id" select="'top-visualization'"/>
-  <xsl:param name="charts" select="'[]'"/>
-  create_chart_selector ("<xsl:value-of select="$parent_id"/>",
-                         <xsl:value-of select="$charts"/>);
-</xsl:template>
-
 <xsl:template name="js-severity-chart">
   <xsl:param name="type" />
   <xsl:param name="id" select="'severity_chart'"/>
@@ -87,7 +80,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title_prefix">
     <xsl:choose>
       <xsl:when test="$filter">
-        <xsl:value-of select="concat('Filtered ', gsa:type-name-plural ($type), ' by severity (Total: ')"/>
+        <xsl:value-of select="concat(gsa:type-name-plural ($type), ' by severity (Total: ')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('All ', gsa:type-name-plural ($type), ' by severity (Total: ')"/>
@@ -98,7 +91,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title_loading">
     <xsl:choose>
       <xsl:when test="$filter">
-        <xsl:value-of  select="concat('Filtered ', gsa:type-name-plural ($type), ' by severity (loading...)')"/>
+        <xsl:value-of  select="concat(gsa:type-name-plural ($type), ' by severity (loading...)')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('All ', gsa:type-name-plural ($type),' by severity (loading...)')"/>
@@ -106,9 +99,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:param>
   <xsl:param name="chart_name"/>
+  <xsl:param name="chart_label" select="'Severity bar chart'"/>
   <xsl:param name="display_name" select="concat ($chart_name, '_display')"/>
   <xsl:param name="generator_name" select="concat ($chart_name, '_gen')"/>
   <xsl:param name="data_source_name" select="concat ($chart_name, '_src')"/>
+  <xsl:param name="add_to_display" select="1"/>
   <xsl:param name="auto_load" select="0"/>
 
   if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
@@ -143,7 +138,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   charts ["<xsl:value-of select="$chart_name"/>"] =
     Chart (data_sources ["<xsl:value-of select="$data_source_name"/>"],
            generators ["<xsl:value-of select="$generator_name"/>"],
-           displays ["<xsl:value-of select="$display_name"/>"]);
+           displays ["<xsl:value-of select="$display_name"/>"],
+           "<xsl:value-of select="$chart_label"/>",
+           "/img/charts/severity-bar-chart.png",
+           <xsl:value-of select="$add_to_display"/>);
 
   <xsl:if test="$auto_load">
     charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
@@ -159,7 +157,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title_prefix">
     <xsl:choose>
       <xsl:when test="$filter">
-        <xsl:value-of select="concat('Filtered ', gsa:type-name-plural ($type), ' by ', $group_label,' (Total: ')"/>
+        <xsl:value-of select="concat(gsa:type-name-plural ($type), ' by ', $group_label,' (Total: ')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('All ', gsa:type-name-plural ($type), ' by ', $group_label,' (Total: ')"/>
@@ -170,7 +168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title_loading">
     <xsl:choose>
       <xsl:when test="$filter">
-        <xsl:value-of  select="concat('Filtered ', gsa:type-name-plural ($type), ' by ', $group_label,' (loading...)')"/>
+        <xsl:value-of  select="concat(gsa:type-name-plural ($type), ' by ', $group_label,' (loading...)')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('All ', gsa:type-name-plural ($type),' by ', $group_label, ' (loading...)')"/>
@@ -179,9 +177,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:param>
 
   <xsl:param name="chart_name"/>
+  <xsl:param name="chart_label" select="concat (gsa:type-name ($type),' counts by ', $group_label)"/>
   <xsl:param name="display_name" select="concat ($chart_name, '_display')"/>
   <xsl:param name="generator_name" select="concat ($chart_name, '_gen')"/>
   <xsl:param name="data_source_name" select="concat ($chart_name, '_src')"/>
+  <xsl:param name="add_to_display" select="1"/>
   <xsl:param name="auto_load" select="0"/>
 
   if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
@@ -212,7 +212,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   charts ["<xsl:value-of select="$chart_name"/>"] =
     Chart (data_sources ["<xsl:value-of select="$data_source_name"/>"],
            generators ["<xsl:value-of select="$generator_name"/>"],
-           displays ["<xsl:value-of select="$display_name"/>"]);
+           displays ["<xsl:value-of select="$display_name"/>"],
+           "<xsl:value-of select="$chart_label"/>",
+           "/img/charts/severity-bar-chart.png",
+           <xsl:value-of select="$add_to_display"/>);
 
   <xsl:if test="$auto_load">
     charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
@@ -222,7 +225,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
   <xsl:param name="extra_charts" select="''"/>
-  <xsl:param name="extra_selections" select="''"/>
+  <xsl:param name="auto_load_left" select="0"/>
+  <xsl:param name="auto_load_right" select="1"/>
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
@@ -231,34 +235,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
     </xsl:call-template>
+
     <xsl:call-template name="js-severity-chart">
       <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="id" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_filtered'"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
       <xsl:with-param name="filter" select="filters/term"/>
-      <xsl:with-param name="auto_load" select="1"/>
+      <xsl:with-param name="chart_name" select="'severity_bar_chart_filtered_left'"/>
+      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+      <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
+      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
+      <xsl:with-param name="chart_label" select="'Severity bar chart'"/>
     </xsl:call-template>
     <xsl:call-template name="js-severity-chart">
       <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="id" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_all'"/>
+      <xsl:with-param name="filter" select="filters/term"/>
+      <xsl:with-param name="chart_name" select="'severity_bar_chart_filtered_right'"/>
       <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-      <xsl:with-param name="auto_load" select="1"/>
+      <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
+      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
+      <xsl:with-param name="chart_label" select="'Severity bar chart'"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="js-severity-chart">
+      <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="chart_name" select="'severity_bar_chart_all_left'"/>
+      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+      <xsl:with-param name="generator_name" select="'severity_bar_chart_all'"/>
+      <xsl:with-param name="data_source_name" select="'severity_all'"/>
+      <xsl:with-param name="chart_label" select="'Severity bar chart (all)'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-severity-chart">
+      <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="chart_name" select="'severity_bar_chart_all_right'"/>
+      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:with-param name="generator_name" select="'severity_bar_chart_all'"/>
+      <xsl:with-param name="data_source_name" select="'severity_all'"/>
+      <xsl:with-param name="chart_label" select="'Severity bar chart (all)'"/>
     </xsl:call-template>
 
     <xsl:copy-of select="$extra_charts"/>
 
-    <xsl:call-template name="js-create-chart-selector">
-      <xsl:with-param name="charts">
-        [{chart_left:  charts ["severity_bar_chart_filtered"],
-          chart_right: charts ["severity_bar_chart_all"],
-          label: "Severity bar charts",
-          icon: "/img/charts/severity-bar-chart.png" }
-          <xsl:if test="$extra_selections != ''">,</xsl:if>
-          <xsl:copy-of select="$extra_selections"/>]
-      </xsl:with-param>
-    </xsl:call-template>
+    displays ["top-visualization-left"].create_chart_selector ();
+    displays ["top-visualization-right"].create_chart_selector ();
+
+    <xsl:if test="$auto_load_left != ''">
+    displays ["top-visualization-left"].select_chart (<xsl:value-of select="$auto_load_left"/>);
+    </xsl:if>
+    <xsl:if test="$auto_load_left != ''">
+    displays ["top-visualization-right"].select_chart (<xsl:value-of select="$auto_load_right"/>);
+    </xsl:if>
   </script>
 </xsl:template>
 

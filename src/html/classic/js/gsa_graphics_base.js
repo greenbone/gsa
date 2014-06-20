@@ -59,79 +59,8 @@ function create_chart_box (parent_id, container_id, width, height)
   container.append ("div")
       .attr ("class", "chart-foot")
       .attr ("id", container_id + "-foot")
-/*      FIXME: Remove
-      .append ("input")
-        .attr ("type", "button")
-        .attr ("value", "TEST")
-        .attr ("onclick", "test_button_click (\"" + container_id + "\");");
-*/
+
   displays [container_id] = new Display (container);
-}
-
-/*
- * Creates a chart selector 
- */
-function create_chart_selector (parent_id, charts)
-{
-  var parent = d3.select ("#" + parent_id);
-  var selection = {current_i: 0, charts: charts}
-  var selection_i = chart_selections.length;
-  var list;
-  chart_selections.push (selection)
-
-  selection.prev_button
-    = parent.append ("a")
-        .attr ("href", "#");
-  selection.prev_button
-        .append ("img")
-          .attr ("src", "img/previous.png")
-          .attr ("onclick", "chart_selections [" + selection_i + "].prev ()");
-
-  list = parent.append ("ul")
-          .style ("display", "inline")
-          .style ("padding", "0 5px");
-
-  for (var i = 0; i < charts.length; i++)
-    {
-      list.append ("li")
-            .style ("display", "inline")
-            .append ("a")
-              .attr ("href", "#")
-              .attr ("title", charts [i].label)
-              .attr ("onclick",
-                     "chart_selections ["+ selection_i + "].select (" + i + ")")
-              .append ("img")
-                .attr ("src", charts [i].icon)
-                .attr ("alt", charts [i].label)
-    }
-
-  selection.next_button
-    = parent.append ("a")
-        .attr ("href", "#")
-  selection.next_button
-        .append ("img")
-          .attr ("src", "img/next.png")
-          .attr ("onclick", "chart_selections [" + selection_i + "].next ()");
-
-  selection.select = function (index)
-                      {
-                        this.charts [index].chart_left.request_data ();
-                        this.charts [index].chart_right.request_data ();
-                        this.current_i = index;
-                      }
-
-  selection.prev = function ()
-                    {
-                      if (this.current_i > 0)
-                        this.select (this.current_i - 1);
-                    }
-
-  selection.next = function ()
-                    {
-                      if (this.current_i < this.charts.length - 1)
-                        this.select (this.current_i + 1);
-                    }
-
 }
 
 /*
@@ -143,14 +72,20 @@ function create_chart_selector (parent_id, charts)
  *  p_generator: The chart generator to use
  *  p_display:   The Display to use
  */
-function Chart (p_data_src, p_generator, p_display)
+function Chart (p_data_src, p_generator, p_display,
+                p_label, p_icon, add_to_display)
 {
   var data_src = p_data_src;
   var generator = p_generator;
   var display = p_display;
+  var label = p_label ? p_label : "Unnamed chart";
+  var icon = p_icon ? p_icon : "/img/help.png";
   var current_request = null;
 
   function my () {};
+
+  if (add_to_display)
+    display.add_chart (my);
 
   /* Gets or sets the data source */
   my.data_src = function (value)
@@ -176,6 +111,24 @@ function Chart (p_data_src, p_generator, p_display)
       if (!arguments.length)
         return display;
       display = value;
+      return my;
+    }
+
+  /* Gets or sets the label */
+  my.label = function (value)
+    {
+      if (!arguments.length)
+        return label;
+      label = value;
+      return my;
+    }
+
+  /* Gets or sets the icon */
+  my.icon = function (value)
+    {
+      if (!arguments.length)
+        return icon;
+      icon = value;
       return my;
     }
 
@@ -356,15 +309,26 @@ function DataSource (command, params, prefix)
 function Display (p_container)
 {
   var container = p_container;
+  var name = container.attr ("id");
   var menu = container.select ("#" + container.attr ("id") + "-menu");
   var header = container.select ("#" + container.attr ("id") + "-head");
   var svg = container.select ("#" + container.attr ("id") + "-svg");
   var footer = container.select ("#" + container.attr ("id") + "-foot");
+  var select_elem = null;
+
+  var charts = [];
+  var chart_i = 0;
 
   var last_generator = null;
   var last_gen_params = null;
 
   function my() {};
+
+  /* Gets the Display name */
+  my.name = function ()
+    {
+      return name;
+    }
 
   /* Gets the header element */
   my.header = function ()
@@ -382,6 +346,12 @@ function Display (p_container)
   my.footer = function ()
     {
       return footer;
+    }
+
+  /* Adds a new chart to the list */
+  my.add_chart = function (new_chart)
+    {
+      charts.push (new_chart);
     }
 
   /* Gets the last successful generator */
@@ -412,18 +382,74 @@ function Display (p_container)
       svg.text ("");
     }
 
+  /* Gets a menu item or creates it if it does not exist */
   my.create_or_get_menu_item = function (id)
     {
-      var item = menu.select ("li #" + container.attr ("id") + "_" + id)
+      var item = menu.select ("li #" + name + "_" + id)
                       .select ("a");
 
       if (item.empty ())
         item = menu.append ("li")
-                     .attr ("id", container.attr ("id") + "_" + id)
+                     .attr ("id", name + "_" + id)
                      .append ("a")
 
       return item;
     }
+
+  /* Adds a chart selector to the footer */
+  my.create_chart_selector = function ()
+  {
+    footer.append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick", "displays [\"" + name + "\"].prev_chart ()")
+          .append ("img")
+            .attr ("src", "img/previous.png")
+
+    select_elem = footer.append ("select")
+                          .style ("margin-left", "5px")
+                          .style ("margin-right", "5px")
+
+    for (var i = 0; i < charts.length; i++)
+      {
+        select_elem.append ("option")
+                      .attr ("onclick",
+                             "displays [\""+ name + "\"].select_chart (" + i + ")")
+                      .attr ("id", name + "_chart_opt_" + i)
+                      .text (charts [i].label ())
+      }
+
+    footer.append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick", "displays [\"" + name + "\"].next_chart ()")
+          .append ("img")
+            .attr ("src", "img/next.png")
+  }
+
+  /* Selects and shows a chart from the charts list by index */
+  my.select_chart = function (index)
+                      {
+                        if (typeof (index) != "number" || index < 0 || index >= charts.length)
+                          return console.error ("Invalid chart index: " + index);
+                        charts [index].request_data ();
+                        chart_i = index;
+                        select_elem.select ("option#" + name + "_chart_opt_" + (index))
+                                    .property ("selected", "selected")
+                      }
+
+  /* Selects and shows the previous chart from the charts list if possible */
+  my.prev_chart = function ()
+                    {
+                      if (chart_i > 0)
+                        my.select_chart (chart_i - 1);
+
+                    }
+
+  /* Selects and shows the next chart from the charts list if possible */
+  my.next_chart = function ()
+                    {
+                      if (chart_i < charts.length - 1)
+                        my.select_chart (chart_i + 1);
+                    }
 
   return my;
 }

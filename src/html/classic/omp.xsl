@@ -16319,26 +16319,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="extra_charts">
           <xsl:call-template name="js-counts-chart">
             <xsl:with-param name="type" select="'ovaldef'"/>
-            <xsl:with-param name="group_column" select="'status'"/>
+            <xsl:with-param name="filter" select="filters/term"/>
+            <xsl:with-param name="group_column" select="'class'"/>
             <xsl:with-param name="id" select="'top-visualization-left'"/>
-            <xsl:with-param name="chart_name" select="'test-left'"/>
+            <xsl:with-param name="chart_name" select="'ovaldef-by-class-left'"/>
             <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-            <xsl:with-param name="auto_load" select="0"/>
+            <xsl:with-param name="data_source_name" select="'ovaldef-by-class'"/>
+            <xsl:with-param name="generator_name" select="'ovaldef-by-class'"/>
           </xsl:call-template>
           <xsl:call-template name="js-counts-chart">
             <xsl:with-param name="type" select="'ovaldef'"/>
+            <xsl:with-param name="filter" select="filters/term"/>
             <xsl:with-param name="group_column" select="'class'"/>
             <xsl:with-param name="id" select="'top-visualization-left'"/>
-            <xsl:with-param name="chart_name" select="'test-right'"/>
+            <xsl:with-param name="chart_name" select="'ovaldef-by-class-right'"/>
             <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-            <xsl:with-param name="auto_load" select="0"/>
+            <xsl:with-param name="data_source_name" select="'ovaldef-by-class'"/>
+            <xsl:with-param name="generator_name" select="'ovaldef-by-class'"/>
           </xsl:call-template>
-        </xsl:with-param>
-        <xsl:with-param name="extra_selections">
-          {chart_left:  charts ["test-left"],
-            chart_right: charts ["test-right"],
-            label: "Demo charts",
-            icon: "/img/charts/severity-bar-chart.png" },
         </xsl:with-param>
       </xsl:call-template>
     </xsl:with-param>
