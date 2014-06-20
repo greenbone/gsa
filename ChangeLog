@@ -1,3 +1,10 @@
+2014-06-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r19710 by Hani Benhabiles.
+
+	* src/gsad.c (send_redirect_to_uri): Correctly calculate the redirect
+	body's length.
+
 2014-06-16  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post release version bump.
