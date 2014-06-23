@@ -1,3 +1,10 @@
+2014-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(Display [create_chart_selector]): Select new chart on change of
+	select element instead of click on option for better browser support.
+	Center selector elements vertically.
+
 2014-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (new_schedule.html): Add Timezone field.

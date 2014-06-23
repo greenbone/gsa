@@ -404,16 +404,18 @@ function Display (p_container)
           .attr ("onclick", "displays [\"" + name + "\"].prev_chart ()")
           .append ("img")
             .attr ("src", "img/previous.png")
+            .style ("vertical-align", "middle")
 
     select_elem = footer.append ("select")
                           .style ("margin-left", "5px")
                           .style ("margin-right", "5px")
+                          .style ("vertical-align", "middle")
+                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (parseInt (this.value))");
 
     for (var i = 0; i < charts.length; i++)
       {
         select_elem.append ("option")
-                      .attr ("onclick",
-                             "displays [\""+ name + "\"].select_chart (" + i + ")")
+                      .attr ("value", i)
                       .attr ("id", name + "_chart_opt_" + i)
                       .text (charts [i].label ())
       }
@@ -423,6 +425,7 @@ function Display (p_container)
           .attr ("onclick", "displays [\"" + name + "\"].next_chart ()")
           .append ("img")
             .attr ("src", "img/next.png")
+            .style ("vertical-align", "middle")
   }
 
   /* Selects and shows a chart from the charts list by index */
