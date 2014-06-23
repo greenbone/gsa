@@ -2314,19 +2314,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>First Run</td>
-          <td>Yes</td>
+          <td>yes</td>
           <td>--</td>
           <td>Choice</td>
           <td>05:30 10 Jan 2013</td>
         </tr>
         <tr class="even">
+          <td>Timezone</td>
+          <td>no</td>
+          <td>80</td>
+          <td>Timezone (<a href="my_settings.html?token={/envelope/token}#timezone">details</a>)</td>
+          <td>Europe/Berlin</td>
+        </tr>
+        <tr class="odd">
           <td>Period</td>
           <td>no</td>
           <td>--</td>
           <td>Choice</td>
           <td>5 Days</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Duration</td>
           <td>no</td>
           <td>--</td>
@@ -4702,6 +4709,7 @@ Public License instead of this License.
         This table provides an editable version of the current user's settings.
       </p>
 
+      <a name="timezone"></a>
       <h3>Timezone</h3>
       <p>
         The format of the timezone is the same as that of the TZ environment
