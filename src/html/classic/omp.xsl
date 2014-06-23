@@ -4278,8 +4278,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:apply-templates select="$resources"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
             <tr>
-              <!-- + 1 for Action column. -->
-              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + 1}">
+              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
                 <div class="float_right">
                   <xsl:call-template name="filter-window-pager">
                     <xsl:with-param name="type" select="$type"/>
