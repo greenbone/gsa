@@ -1,5 +1,10 @@
 2014-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_my_settings): Put the abbreviated
+	timezone name next to the full name, to make the connection clearer.
+
+2014-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (task-icons, task [details]): Use short time
 	format, because the timezone is the same as in the header.  This is
 	consistent with the Created and Last Modified times, for example.

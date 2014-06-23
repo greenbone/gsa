@@ -30052,7 +30052,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Timezone', 'My Settings')"/></td>
-            <td><xsl:value-of select="/envelope/timezone"/></td>
+            <td>
+              <xsl:variable name="abbrev"
+                            select="(str:split (/envelope/time, ' '))[last ()]"/>
+              <xsl:value-of select="/envelope/timezone"/>
+              <xsl:if test="$abbrev != /envelope/timezone">
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="(str:split (/envelope/time, ' '))[last ()]"/>
+                <xsl:text>)</xsl:text>
+              </xsl:if>
+            </td>
           </tr>
           <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Password', 'My Settings')"/></td>
