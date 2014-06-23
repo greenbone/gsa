@@ -1,3 +1,11 @@
+2014-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r19726.
+
+	* src/html/classic/omp.xsl (list-window): Do not add extra column to
+	table footer's colspan if there are no action icons, which would break
+	the table header layout in newer versions of Chromium.
+
 2014-06-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r19710 by Hani Benhabiles.
