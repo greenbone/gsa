@@ -1,5 +1,12 @@
 2014-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r19734.
+
+	* src/html/classic/omp.xsl (get_my_settings): Put the abbreviated
+	timezone name next to the full name, to make the connection clearer.
+
+2014-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r19733.
 
 	* src/html/classic/omp.xsl (task-icons, task [details]): Use short time
