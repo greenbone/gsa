@@ -3316,7 +3316,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
 <xsl:text>
 (</xsl:text>
-            <xsl:value-of select="gsa:i18n ('Next due', 'Task Table Row')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>
+            <xsl:value-of select="gsa:i18n ('Next due', 'Task Table Row')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>
             <xsl:text>)</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
@@ -3587,7 +3587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     (<xsl:value-of select="gsa:i18n ('Next due: over', 'Task Window')"/>)
                   </xsl:when>
                   <xsl:otherwise>
-                    (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
+                    (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>)
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:if>
@@ -14019,7 +14019,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:long-time-tz (first_time)"/>
+      <xsl:value-of select="gsa:long-time (first_time)"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="timezone_abbrev"/>
     </td>
     <td>
       <xsl:choose>
@@ -14027,7 +14029,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           -
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="gsa:long-time-tz (next_time)"/>
+          <xsl:value-of select="gsa:long-time (next_time)"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="timezone_abbrev"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -14182,7 +14186,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('First Run', 'Schedule Window')"/>:</td>
-          <td><xsl:value-of select="gsa:long-time-tz (first_time)"/></td>
+          <td>
+            <xsl:value-of select="gsa:long-time (first_time)"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="timezone_abbrev"/>
+          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Next Run', 'Schedule Window')"/>:</td>
@@ -14192,14 +14200,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 -
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="gsa:long-time-tz (next_time)"/>
+                <xsl:value-of select="gsa:long-time (next_time)"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="timezone_abbrev"/>
               </xsl:otherwise>
             </xsl:choose>
           </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/>:</td>
-          <td><xsl:value-of select="timezone"/></td>
+          <td>
+            <xsl:value-of select="timezone"/>
+            <xsl:if test="timezone != timezone_abbrev">
+              (<xsl:value-of select="timezone_abbrev"/>)
+            </xsl:if>
+          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule Window')"/>:</td>

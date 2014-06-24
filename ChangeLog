@@ -1,3 +1,13 @@
+2014-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r19733.
+
+	* src/html/classic/omp.xsl (task-icons, task [details]): Use short time
+	format, because the timezone is the same as in the header.  This is
+	consistent with the Created and Last Modified times, for example.
+	(schedule, schedule [details]): Use the timezone abbreviation from OMP
+	instead of using a numeric offset.
+
 2014-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r19728.
