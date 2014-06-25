@@ -1275,6 +1275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"/>
   <xsl:param name="noedit"/>
   <xsl:param name="noclone"/>
+  <xsl:param name="grey-clone"/>
   <xsl:param name="noexport"/>
   <xsl:param name="notrash"/>
   <xsl:param name="params" select="''"/>
@@ -1338,6 +1339,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <xsl:choose>
     <xsl:when test="$noclone">
+    </xsl:when>
+    <xsl:when test="$grey-clone">
+      <img src="/img/clone_inactive.png"
+           alt="{gsa:i18n ('Clone', 'Window')}"
+           value="Clone"
+           title="{$cap-type}{gsa:i18n (' must be owned or global', 'Window')}"
+           style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or (string-length (owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))">
       <div style="display: inline">
@@ -19950,6 +19958,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Permission'"/>
         <xsl:with-param name="type" select="'permission'"/>
         <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="grey-clone" select="writable='0'"/>
       </xsl:call-template>
     </td>
   </tr>
