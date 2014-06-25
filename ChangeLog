@@ -1,3 +1,9 @@
+2014-06-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Add grey-clone arg.
+	(permission): Grey out clone icon when permission is not writable, as
+	these are the permissions of the predefined roles.
+
 2014-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_my_settings): Put the abbreviated
