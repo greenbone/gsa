@@ -1,3 +1,7 @@
+2014-06-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c (init_validator): Accept "AU" for "Au" as well for CVSS.
+
 2014-06-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window-line-icons): Add grey-clone arg.
