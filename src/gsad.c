@@ -878,7 +878,7 @@ init_validator ()
   openvas_validator_add (validator, "cvss_c",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_i",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
-  openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/Au:(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
+  openvas_validator_add (validator, "cvss_vector",  "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
