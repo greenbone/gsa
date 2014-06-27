@@ -4917,7 +4917,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <select name="scanner_id">
-                <option value="--">--</option>
                 <xsl:for-each select="get_scanners_response/scanner[type = 2]">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
@@ -5653,14 +5652,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           </xsl:otherwise>
                         </xsl:choose>
                       </xsl:variable>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($scanner_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
                       <xsl:for-each select="commands_response/get_scanners_response/scanner">
                         <xsl:choose>
                           <xsl:when test="@id = $scanner_id">

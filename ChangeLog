@@ -1,3 +1,11 @@
+2014-06-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (create_task_omp): Remove default scanner value
+	handling.
+
+	* src/html/classic/omp.xsl (new_task, html-edit-task-form): Remove no
+	scanner option choice.
+
 2014-06-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (cvss_calculator): Accept "AU" for "Au" as well

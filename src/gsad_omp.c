@@ -2344,7 +2344,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   int ret;
-  gchar *schedule_element, *slave_element, *scanner_element, *command;
+  gchar *schedule_element, *slave_element, *command;
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *slave_id, *scanner_id, *schedule_id, *max_checks, *max_hosts;
@@ -2451,15 +2451,11 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
-  if (scanner_id == NULL || strcmp (scanner_id, "--") == 0)
-    scanner_element = g_strdup ("");
-  else
-    scanner_element = g_strdup_printf ("<scanner id=\"%s\"/>", scanner_id);
-
   command = g_strdup_printf ("<create_task>"
                              "<config id=\"%s\"/>"
-                             "%s%s%s%s"
+                             "%s%s%s"
                              "<target id=\"%s\"/>"
+                             "<scanner id=\"%s\"/>"
                              "<hosts_ordering>%s</hosts_ordering>"
                              "<name>%s</name>"
                              "<comment>%s</comment>"
@@ -2487,8 +2483,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              schedule_element,
                              alert_element->str,
                              slave_element,
-                             scanner_element,
                              target_id,
+                             scanner_id,
                              hosts_ordering,
                              name,
                              comment,
@@ -2507,7 +2503,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
   g_free (slave_element);
-  g_free (scanner_element);
 
   switch (ret)
     {
