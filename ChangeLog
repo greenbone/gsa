@@ -1,5 +1,12 @@
 2014-06-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Backport r19771.
+
+	* src/gsad_omp.c (cvss_calculator): Accept "AU" for "Au" as well
+	when splitting CVSS vector string into components.
+
+2014-06-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Backport r19770.
 
 	* src/gsad.c (init_validator): Accept "AU" for "Au" as well for CVSS.

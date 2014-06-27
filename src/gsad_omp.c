@@ -18974,6 +18974,8 @@ cvss_calculator (credentials_t * credentials, params_t *params)
             cvss_av = strstr (cvss_vector, "AV:");
             cvss_ac = strstr (cvss_vector, "/AC:");
             cvss_au = strstr (cvss_vector, "/Au:");
+            if (cvss_au == NULL)
+              cvss_au = strstr (cvss_vector, "/AU:");
             cvss_c = strstr (cvss_vector, "/C:");
             cvss_i = strstr (cvss_vector, "/I:");
             cvss_a = strstr (cvss_vector, "/A:");
