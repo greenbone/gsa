@@ -1,3 +1,8 @@
+2014-06-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (cvss_calculator): Accept "AU" for "Au" as well
+	when splitting CVSS vector string into components.
+
 2014-06-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c (init_validator): Accept "AU" for "Au" as well for CVSS.
