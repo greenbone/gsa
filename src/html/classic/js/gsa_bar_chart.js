@@ -88,7 +88,7 @@ function data_severity_histogram (raw_data, x_field, y_field)
 
   var bin_func = function (val)
                   {
-                    if (val != "" && Number (val) <= 0.0)
+                    if (val !== "" && Number (val) <= 0.0)
                       return 1;
                     else if (Number (val) >= 10.0)
                       return 11;

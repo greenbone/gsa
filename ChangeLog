@@ -1,5 +1,10 @@
 2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js (data_severity_histogram): Count
+	empty values as "N/A", not as 0.
+
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [filterbox]): Fix check to show
 	"Results per page" when viewing results page via get_report command.
 
