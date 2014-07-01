@@ -1,3 +1,16 @@
+2014-07-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Adding a feedback button option which is not active by default.
+	It requires to be configured right in the omp.xsl for the time being,
+	if desired so.
+	Based on a patch by Timo Pollmeier.
+
+	* src/html/classic/omp.xsl (feedback-icon): New template, but content
+	commented out by default.
+	(result_details): Added Feedback Icon via above template.
+
+	* src/html/classic/po/de.xml: Added new strings and translation accordingly.
+
 2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add donut charts as SecInfo visualizations and replace the unfiltered
