@@ -2947,7 +2947,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:if>
 
-        <xsl:if test="/envelope/params/report_section = '' or /envelope/params/report_section = 'results'">
+        <xsl:if test="not (/envelope/params/report_section) or /envelope/params/report_section = 'results'">
           <div style="padding: 2px;">
             <xsl:value-of select="gsa:i18n ('Results per page', 'Filter Box')"/>:
             <input type="text" name="max_results" size="5"

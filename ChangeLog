@@ -1,5 +1,12 @@
 2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r19788.
+
+	* src/html/classic/omp.xsl (report [filterbox]): Fix check to show
+	"Results per page" when viewing results page via get_report command.
+
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r19787.
 
 	* src/html/classic/omp.xsl (report [filterbox]): Allow filter box to be
