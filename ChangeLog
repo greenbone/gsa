@@ -1,3 +1,10 @@
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [filterbox]): Allow filter box to be
+	shown on report_section pages.
+	(report [section-filter]): Show fold icon on summary page.
+	(report [summary]): Add filterbox.
+
 2014-07-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Install the feedback icon.
