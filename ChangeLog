@@ -1,5 +1,25 @@
 2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add donut charts as SecInfo visualizations and replace the unfiltered
+	bar charts on the table pages with them.
+
+	* CMakeLists.txt: Install new file.
+	
+	* src/html/classic/graphics.xsl (init-d3charts): Load new JavaScript
+	file gsa_donut_chart.js.
+	(js-severity-chart): Add option to show severity counts as donut chart.
+	(js-secinfo-top-visualization): Replace unfiltered bar chart with
+	donut chart.
+
+	* src/html/classic/js/gsa_graphics_base.js (name): Remove. Renamed to
+	display_name.
+	(display_name): New. Renamed function "name".
+	(Display [refresh]): New function.
+
+	* src/html/classic/js/gsa_donut_chart.js: New file.
+
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (data_severity_histogram): Count
 	empty values as "N/A", not as 0.
 

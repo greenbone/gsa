@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/d3.tip.min.js"></script>
   <script src="/js/gsa_graphics_base.js"></script>
   <script src="/js/gsa_bar_chart.js"></script>
+  <script src="/js/gsa_donut_chart.js"></script>
   <script type="text/javascript">
     var gsa_token = "<xsl:value-of select="/envelope/token"/>";
     var data_sources = {};
@@ -105,6 +106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="data_source_name" select="concat ($chart_name, '_src')"/>
   <xsl:param name="add_to_display" select="1"/>
   <xsl:param name="auto_load" select="0"/>
+  <xsl:param name="chart_type" select="'bar'"/>
 
   if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
     {
@@ -123,16 +125,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   if (generators ["<xsl:value-of select="$generator_name"/>"] == undefined)
     {
-      generators ["<xsl:value-of select="$generator_name"/>"]
-        = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
-            .bar_style (severity_bar_style ("value",
-                                            severity_levels.max_low,
-                                            severity_levels.max_medium))
-            .data_transform (data_severity_histogram)
-            .title (title_total ("<xsl:value-of select="$title_loading"/>",
-                                 "<xsl:value-of select="$title_prefix"/>",
-                                 "<xsl:value-of select="$title_suffix"/>",
-                                 "count"))
+      <xsl:choose>
+        <xsl:when test="$chart_type = 'bar'">
+          generators ["<xsl:value-of select="$generator_name"/>"]
+            = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+                .bar_style (severity_bar_style ("value",
+                                                severity_levels.max_low,
+                                                severity_levels.max_medium))
+                .data_transform (data_severity_histogram)
+                .title (title_total ("<xsl:value-of select="$title_loading"/>",
+                                    "<xsl:value-of select="$title_prefix"/>",
+                                    "<xsl:value-of select="$title_suffix"/>",
+                                    "count"))
+        </xsl:when>
+        <xsl:when test="$chart_type = 'donut'">
+          generators ["<xsl:value-of select="$generator_name"/>"]
+            = DonutChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+                .color_scale (severity_level_color_scale)
+                .data_transform (data_severity_level_counts)
+                .title (title_total ("<xsl:value-of select="$title_loading"/>",
+                                    "<xsl:value-of select="$title_prefix"/>",
+                                    "<xsl:value-of select="$title_suffix"/>",
+                                    "count"))
+        </xsl:when>
+      </xsl:choose>
     }
 
   charts ["<xsl:value-of select="$chart_name"/>"] =
@@ -257,19 +273,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:call-template name="js-severity-chart">
       <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_all_left'"/>
+      <xsl:with-param name="filter" select="filters/term"/>
+      <xsl:with-param name="chart_name" select="'severity_donut_left'"/>
       <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="generator_name" select="'severity_bar_chart_all'"/>
-      <xsl:with-param name="data_source_name" select="'severity_all'"/>
-      <xsl:with-param name="chart_label" select="'Severity bar chart (all)'"/>
+      <xsl:with-param name="generator_name" select="'severity_donut'"/>
+      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
+      <xsl:with-param name="chart_label" select="'Severity donut chart (all)'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
     </xsl:call-template>
     <xsl:call-template name="js-severity-chart">
       <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_all_right'"/>
+      <xsl:with-param name="filter" select="filters/term"/>
+      <xsl:with-param name="chart_name" select="'severity_donut_right'"/>
       <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-      <xsl:with-param name="generator_name" select="'severity_bar_chart_all'"/>
-      <xsl:with-param name="data_source_name" select="'severity_all'"/>
-      <xsl:with-param name="chart_label" select="'Severity bar chart (all)'"/>
+      <xsl:with-param name="generator_name" select="'severity_donut'"/>
+      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
+      <xsl:with-param name="chart_label" select="'Severity donut chart'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
     </xsl:call-template>
 
     <xsl:copy-of select="$extra_charts"/>

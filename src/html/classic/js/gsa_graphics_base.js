@@ -325,7 +325,7 @@ function Display (p_container)
   function my() {};
 
   /* Gets the Display name */
-  my.name = function ()
+  my.display_name = function ()
     {
       return name;
     }
@@ -427,6 +427,12 @@ function Display (p_container)
             .attr ("src", "img/next.png")
             .style ("vertical-align", "middle")
   }
+
+  /* refreshes the current chart */
+  my.refresh = function ()
+                {
+                  charts [chart_i].request_data ();
+                }
 
   /* Selects and shows a chart from the charts list by index */
   my.select_chart = function (index)
