@@ -2863,7 +2863,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:if test="/envelope/params/filterbox &gt; 0">
     <div style="background-color: #EEEEEE;">
       <form action="" method="get">
-        <input type="hidden" name="cmd" value="get_report"/>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/report_section != ''">
+            <input type="hidden" name="report_section" value="{/envelope/params/report_section}"/>
+            <input type="hidden" name="cmd" value="get_report_section"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="hidden" name="cmd" value="get_report"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <xsl:if test="@type='prognostic'">
           <input type="hidden" name="type" value="prognostic"/>
@@ -2938,12 +2946,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </xsl:if>
-        <div style="padding: 2px;">
-          <xsl:value-of select="gsa:i18n ('Results per page', 'Filter Box')"/>:
-          <input type="text" name="max_results" size="5"
-                 value="{report/results/@max}"
-                 maxlength="400"/>
-        </div>
+
+        <xsl:if test="/envelope/params/report_section = '' or /envelope/params/report_section = 'results'">
+          <div style="padding: 2px;">
+            <xsl:value-of select="gsa:i18n ('Results per page', 'Filter Box')"/>:
+            <input type="text" name="max_results" size="5"
+                  value="{report/results/@max}"
+                  maxlength="400"/>
+          </div>
+        </xsl:if>
 
         <xsl:choose>
           <xsl:when test="@type='prognostic'">
@@ -24490,9 +24501,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                   src="/img/help.png" border="0"/>
             </a>
-            <xsl:if test="$section != 'summary'">
-              <xsl:apply-templates select="." mode="fold-filter-icon"/>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="fold-filter-icon"/>
           </xsl:when>
           <xsl:otherwise>
             <select name="apply_filter" style="width:165px">
@@ -26310,6 +26319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'summary'"/>
       </xsl:apply-templates>
+      <xsl:apply-templates select="." mode="filterbox"/>
     </div>
     <div class="gb_window_part_content_no_pad">
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">

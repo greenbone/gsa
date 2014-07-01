@@ -1,3 +1,12 @@
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r19787.
+
+	* src/html/classic/omp.xsl (report [filterbox]): Allow filter box to be
+	shown on report_section pages.
+	(report [section-filter]): Show fold icon on summary page.
+	(report [summary]): Add filterbox.
+
 2014-06-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backport r19771.
