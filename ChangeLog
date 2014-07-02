@@ -1,3 +1,26 @@
+2014-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Fix various i18n mistakes and add comments about placeholders.
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Fix i18n contexts
+	and messages.
+	(report [results], list-window): Add i18n for "Applied filter:"
+	(group [details]): Add i18n for window title "Group Details".
+	(get_report_summary_response): Add i18n for user tags window.
+	(report [summary]): Fix i18n for "Slave" field.
+	(html-create-role-form): Add i18n.
+	(html-edit-role-form): Fix i18n for "New Permission" and
+	"Create Permission".
+	
+	* src/html/classic/po/de.xml: Add comments on messages with placeholder
+	ids. Add "None" for Severity and "Network Source Interface" for
+	Reports. Fix "Scan 2 started" and add missing "No Overrides". Add
+	"Create Role" and "Save Role".
+
+	* src/html/classic/po/zh.xml: Add comments on messages with placeholder
+	ids. Add "None" for Severity and "Network Source Interface" for
+	Reports. Add "Create Role" and "Save Role".
+
 2014-07-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Adding a feedback button option which is not active by default.
