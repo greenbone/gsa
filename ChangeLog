@@ -1,5 +1,16 @@
 2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-config): Do not handle
+	disabled case.
+	(html-edit-task-config-disabled, html-edit-task-scanner-disabled): New
+	templates.
+	(html-edit-task-slave, html-edit-task-openvas-options): Add new_task
+	parameter.
+	(html-edit-task-form): Adjust for better styling of non-alterable and
+	non-new tasks.
+
+2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (save_task_omp): Handle parameters depending on scanner
 	type.
 	(create_task_omp): Don't send slave id if no is specified.

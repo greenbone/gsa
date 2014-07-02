@@ -5296,57 +5296,89 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-config">
   <xsl:param name="type"/>
   <xsl:param name="param_name"/>
-  <xsl:choose>
-    <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
-      <tr>
-        <td></td>
-        <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
-        <td>
-          <input type="hidden" name="cmd" value="save_task"/>
-          <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
-          <select name="{$param_name}">
-            <xsl:choose>
-              <xsl:when test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
-                <xsl:for-each select="commands_response/get_configs_response/config[type = $type]">
-                  <xsl:choose>
-                    <xsl:when test="@id = $config_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">--</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
-        </td>
-      </tr>
-    </xsl:when>
-    <xsl:otherwise>
-      <tr>
-        <td></td>
-        <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
-        <td>
-          <input type="hidden" name="cmd" value="save_task"/>
-          <input type="hidden" name="{$param_name}" value="0"/>
-          <select name="dummy" disabled="0">
-            <xsl:choose>
-              <xsl:when test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
-                <xsl:apply-templates select="commands_response/get_tasks_response/task/config" mode="newtask"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">--</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
-        </td>
-      </tr>
-    </xsl:otherwise>
-  </xsl:choose>
+  <tr>
+    <td></td>
+    <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
+    <td>
+      <input type="hidden" name="cmd" value="save_task"/>
+      <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
+      <select name="{$param_name}">
+        <xsl:choose>
+          <xsl:when test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
+            <xsl:for-each select="commands_response/get_configs_response/config[type = $type]">
+              <xsl:choose>
+                <xsl:when test="@id = $config_id">
+                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="0">--</option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="html-edit-task-config-disabled">
+  <tr>
+    <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
+    <td>
+      <input type="hidden" name="cmd" value="save_task"/>
+      <input type="hidden" name="config_id" value="0"/>
+      <input type="hidden" name="osp_config_id" value="0"/>
+      <select name="dummy" disabled="0">
+        <xsl:choose>
+          <xsl:when test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
+            <xsl:apply-templates select="commands_response/get_tasks_response/task/config" mode="newtask"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="0">--</option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="html-edit-task-scanner-disabled">
+  <tr>
+    <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
+    <td>
+      <input type="hidden" name="cmd" value="save_task"/>
+      <input type="hidden" name="scanner_id" value="0"/>
+      <input type="hidden" name="osp_scanner_id" value="0"/>
+      <xsl:variable name="scanner_id">
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+            <xsl:value-of select="/envelope/params/scanner_id"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <select name="dummy" disabled="0">
+        <xsl:choose>
+          <xsl:when test="string-length (commands_response/get_tasks_response/task/scanner/name) &gt; 0">
+            <xsl:for-each select="commands_response/get_scanners_response/scanner">
+              <xsl:if test="@id = $scanner_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="0">--</option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+    </td>
+  </tr>
 </xsl:template>
 
 <xsl:template name="html-edit-task-target">
@@ -5541,9 +5573,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-slave">
+  <xsl:param name="new_task">1</xsl:param>
   <xsl:if test="gsa:may-op ('get_slaves')">
     <tr>
-      <td></td>
+      <xsl:if test="$new_task = 1">
+        <td></td>
+      </xsl:if>
       <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
       <td>
         <select name="slave_id">
@@ -5710,15 +5745,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-openvas-options">
+  <xsl:param name="new_task">1</xsl:param>
   <tr>
-    <td></td>
+    <xsl:if test="$new_task = 1">
+      <td></td>
+    </xsl:if>
     <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
     <td>
       <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
     </td>
   </tr>
   <tr>
-    <td></td>
+    <xsl:if test="$new_task = 1">
+      <td></td>
+    </xsl:if>
     <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
     <td>
       <xsl:variable name="hosts_ordering"
@@ -5748,7 +5788,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <tr>
-        <td></td>
+        <xsl:if test="$new_task = 1">
+          <td></td>
+        </xsl:if>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name, 'Task Window')"/>
         </td>
@@ -5759,7 +5801,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
       </tr>
       <tr>
-        <td></td>
+        <xsl:if test="$new_task = 1">
+          <td></td>
+        </xsl:if>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name, 'Task Window')"/>
         </td>
@@ -5835,6 +5879,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="groups" value="1"/>
           <input type="hidden" name="group_id_optional:1" value="--"/>
         </xsl:if>
+        <xsl:variable name="new_task">
+          <xsl:choose>
+            <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">1</xsl:when>
+            <xsl:otherwise>0</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <xsl:call-template name="html-edit-task-name"/>
           <xsl:call-template name="html-edit-task-comment"/>
@@ -5847,37 +5897,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="html-edit-task-target"/>
               <xsl:call-template name="html-edit-task-alert"/>
               <xsl:call-template name="html-edit-task-schedule"/>
+              <xsl:if test="$new_task = 0">
+                <input type="hidden" name="scanner_type" value="1"/>
+                <xsl:call-template name="html-edit-task-config-disabled"/>
+                <xsl:call-template name="html-edit-task-scanner-disabled"/>
+                <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
+                  <xsl:call-template name="html-edit-task-slave">
+                    <xsl:with-param name="new_task">0</xsl:with-param>
+                  </xsl:call-template>
+                  <xsl:call-template name="html-edit-task-openvas-options">
+                    <xsl:with-param name="new_task">0</xsl:with-param>
+                  </xsl:call-template>
+                </xsl:if>
+              </xsl:if>
               <xsl:call-template name="html-edit-task-scan-options"/>
             </xsl:otherwise>
           </xsl:choose>
         </table>
-        <table>
-          <tr>
-            <td>
-              <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
-            </td>
-          </tr>
-          <xsl:call-template name="html-edit-task-scanner">
-            <xsl:with-param name="title">OpenVAS Scanner</xsl:with-param>
-            <xsl:with-param name="type">2</xsl:with-param>
-            <xsl:with-param name="param_name">scanner_id</xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="html-edit-task-config">
-            <xsl:with-param name="param_name">config_id</xsl:with-param>
-            <xsl:with-param name="type">0</xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="html-edit-task-slave"/>
-          <xsl:call-template name="html-edit-task-openvas-options"/>
-          <xsl:call-template name="html-edit-task-scanner">
-            <xsl:with-param name="title">OSP Scanner</xsl:with-param>
-            <xsl:with-param name="type">1</xsl:with-param>
-            <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="html-edit-task-config">
-            <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
-            <xsl:with-param name="type">1</xsl:with-param>
-          </xsl:call-template>
-        </table>
+        <xsl:if test="$new_task != 0">
+          <table>
+            <tr>
+              <td>
+                <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
+              </td>
+            </tr>
+            <xsl:call-template name="html-edit-task-scanner">
+              <xsl:with-param name="title">OpenVAS Scanner</xsl:with-param>
+              <xsl:with-param name="type">2</xsl:with-param>
+              <xsl:with-param name="param_name">scanner_id</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="html-edit-task-config">
+              <xsl:with-param name="param_name">config_id</xsl:with-param>
+              <xsl:with-param name="type">0</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="html-edit-task-slave"/>
+            <xsl:call-template name="html-edit-task-openvas-options"/>
+            <xsl:call-template name="html-edit-task-scanner">
+              <xsl:with-param name="title">OSP Scanner</xsl:with-param>
+              <xsl:with-param name="type">1</xsl:with-param>
+              <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="html-edit-task-config">
+              <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
+              <xsl:with-param name="type">1</xsl:with-param>
+            </xsl:call-template>
+          </table>
+        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td colspan="2" style="text-align:right;">
