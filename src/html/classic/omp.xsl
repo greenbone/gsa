@@ -5300,6 +5300,108 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="html-edit-task-config">
+  <xsl:choose>
+    <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
+      <tr>
+        <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
+        <td>
+          <input type="hidden" name="cmd" value="save_task"/>
+          <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
+          <select name="config_id">
+            <xsl:choose>
+              <xsl:when test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
+                <xsl:for-each select="commands_response/get_configs_response/config">
+                  <xsl:choose>
+                    <xsl:when test="@id = $config_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">--</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+        </td>
+      </tr>
+    </xsl:when>
+    <xsl:otherwise>
+      <tr>
+        <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
+        <td>
+          <input type="hidden" name="cmd" value="save_task"/>
+          <input type="hidden" name="config_id" value="0"/>
+          <select name="dummy" disabled="0">
+            <xsl:choose>
+              <xsl:when test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
+                <xsl:apply-templates select="commands_response/get_tasks_response/task/config" mode="newtask"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">--</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+        </td>
+      </tr>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="html-edit-task-target">
+  <xsl:choose>
+    <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task Window')"/></td>
+        <td>
+          <xsl:variable name="target_id" select="gsa:param-or ('target_id', commands_response/get_tasks_response/task/target/@id)"/>
+          <select name="target_id">
+            <xsl:choose>
+              <xsl:when test="string-length (commands_response/get_targets_response/target/name) &gt; 0">
+                <xsl:for-each select="commands_response/get_targets_response/target">
+                  <xsl:choose>
+                    <xsl:when test="@id = $target_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">--</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+        </td>
+      </tr>
+    </xsl:when>
+    <xsl:otherwise>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
+        <td>
+          <input type="hidden" name="target_id" value="0"/>
+          <select name="dummy2" disabled="0">
+            <xsl:choose>
+              <xsl:when test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
+                <xsl:apply-templates select="commands_response/get_tasks_response/task/target" mode="newtask"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">--</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+        </td>
+      </tr>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="html-edit-task-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -5365,104 +5467,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="cmd" value="save_container_task"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
-                  <tr>
-                    <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
-                    <td>
-                      <input type="hidden" name="cmd" value="save_task"/>
-                      <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
-                      <select name="config_id">
-                        <xsl:choose>
-                          <xsl:when
-                            test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
-                            <xsl:for-each select="commands_response/get_configs_response/config">
-                              <xsl:choose>
-                                <xsl:when test="@id = $config_id">
-                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="0">--</option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task Window')"/></td>
-                    <td>
-                      <xsl:variable name="target_id" select="gsa:param-or ('target_id', commands_response/get_tasks_response/task/target/@id)"/>
-                      <select name="target_id">
-                        <xsl:choose>
-                          <xsl:when
-                            test="string-length (commands_response/get_targets_response/target/name) &gt; 0">
-                            <xsl:for-each select="commands_response/get_targets_response/target">
-                              <xsl:choose>
-                                <xsl:when test="@id = $target_id">
-                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="0">--</option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </select>
-                    </td>
-                  </tr>
-                </xsl:when>
-                <xsl:otherwise>
-                  <tr>
-                    <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
-                    <td>
-                      <input type="hidden" name="cmd" value="save_task"/>
-                      <input type="hidden" name="config_id" value="0"/>
-                      <select name="dummy" disabled="0">
-                        <xsl:choose>
-                          <xsl:when
-                            test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
-                            <xsl:apply-templates
-                              select="commands_response/get_tasks_response/task/config"
-                              mode="newtask"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="0">--</option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
-                    <td>
-                      <input type="hidden" name="target_id" value="0"/>
-                      <select name="dummy2" disabled="0">
-                        <xsl:choose>
-                          <xsl:when
-                            test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
-                            <xsl:apply-templates
-                              select="commands_response/get_tasks_response/task/target"
-                              mode="newtask"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="0">--</option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </select>
-                    </td>
-                  </tr>
-                </xsl:otherwise>
-              </xsl:choose>
+              <xsl:call-template name="html-edit-task-target"/>
+              <xsl:call-template name="html-edit-task-config"/>
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
                 <td>
