@@ -1297,8 +1297,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:variable name="inactive_text">
         <xsl:choose>
-          <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is still in use', 'Trashcan')"/></xsl:when>
-          <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Trashcan')"/></xsl:when>
+          <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is still in use', 'Table Row')"/></xsl:when>
+          <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Table Row')"/></xsl:when>
           <xsl:when test="not(gsa:may (concat ('delete_', $type)))"><xsl:value-of select="gsa:i18n ('Permission to move ', 'Trashcan')"/><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' to trashcan denied', 'Trashcan')"/></xsl:when>
           <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move to trashcan.', 'Trashcan')"/></xsl:otherwise>
         </xsl:choose>
@@ -1319,18 +1319,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
              style="margin-left:3px;">
-            <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
+            <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="inactive_text">
             <xsl:choose>
-              <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Window')"/></xsl:when>
-              <xsl:when test="not(gsa:may (concat ('delete_', $type)))"><xsl:value-of select="gsa:i18n ('Permission to edit ', 'Window')"/><xsl:value-of select="$cap-type"/><xsl:value-of select="gsa:i18n ('#edit denied#', 'Window', ' denied')"/></xsl:when>
-              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot modify ', 'Window')"/><xsl:value-of select="$cap-type"/><xsl:value-of select="gsa:i18n ('#cannot modify suffix#', 'Window', '')"/></xsl:otherwise>
+              <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n (' is not writable', 'Table Row')"/></xsl:when>
+              <xsl:when test="not(gsa:may (concat ('delete_', $type)))"><xsl:value-of select="gsa:i18n ('Permission to edit ', 'Table Row')"/><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n ('#edit denied#', 'Table Row', ' denied')"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot modify ', 'Table Row')"/><xsl:value-of select="gsa:i18n ($cap-type, $cap-type)"/><xsl:value-of select="gsa:i18n ('#cannot modify suffix#', 'Table Row', '')"/></xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"
+          <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"
                title="{$inactive_text}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
@@ -1342,9 +1342,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$grey-clone">
       <img src="/img/clone_inactive.png"
-           alt="{gsa:i18n ('Clone', 'Window')}"
+           alt="{gsa:i18n ('Clone', 'Table Row')}"
            value="Clone"
-           title="{$cap-type}{gsa:i18n (' must be owned or global', 'Window')}"
+           title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' must be owned or global', 'Table Row')}"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or (string-length (owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))">
@@ -1358,23 +1358,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="id" value="{@id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="image" src="/img/clone.png" alt="{gsa:i18n (concat ('Clone ', $cap-type))}"
-                 name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Window')}"/>
+          <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
+                 name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
         </form>
       </div>
     </xsl:when>
     <xsl:when test="owner/name = /envelope/login/text() or string-length (owner/name) = 0">
       <img src="/img/clone_inactive.png"
-           alt="{gsa:i18n ('Clone', 'Window')}"
+           alt="{gsa:i18n ('Clone', 'Table Row')}"
            value="Clone"
-           title="{$cap-type}{gsa:i18n (' must be owned or global', 'Window')}"
+           title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' must be owned or global', 'Table Row')}"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:otherwise>
       <img src="/img/clone_inactive.png"
-           alt="{gsa:i18n ('Clone', 'Window')}"
+           alt="{gsa:i18n ('Clone', 'Table Row')}"
            value="Clone"
-           title="{gsa:i18n ('Permission to clone denied', 'Window')}"
+           title="{gsa:i18n ('Permission to clone denied', 'Table Row')}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -1385,7 +1385,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row', '')}"
          style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Window')}"/>
+        <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Table Row')}"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -3279,7 +3279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <div class="float_right">
                     <xsl:apply-templates select="." mode="results-pager"/>
                   </div>
-                  (Applied filter:
+                  (<xsl:value-of select="gsa:i18n('Applied filter:', 'Filter Box')"/>
                   <a class="footnote"
                      href="/omp?cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;overrides={$apply-overrides}&amp;details={/envelope/params/details}&amp;filter={report/filters/term}{$prognostic}{$delta}&amp;token={/envelope/token}">
                     <xsl:value-of select="report/filters/term"/>
@@ -4227,7 +4227,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
                   </xsl:call-template>
                 </div>
-                (Applied filter:
+                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter Box')"/>:
                 <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
@@ -19513,7 +19513,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Group Details
+      <xsl:value-of select="gsa:i18n('Group Details', 'Group')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Group'"/>
         <xsl:with-param name="type" select="'group'"/>
@@ -26093,7 +26093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="next" select="'get_report_section'"/>
       <xsl:with-param name="report_section" select="'summary'"/>
       <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
-      <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
+      <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'), ' ', gsa:i18n ('Report', 'Report'), ' &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
     </xsl:call-template>
   </xsl:for-each>
 </xsl:template>
@@ -26294,7 +26294,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
             <xsl:if test="boolean (report/scan/task/slave)">
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('Slave', 'Report Window')"/>:</td>
+                <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
                 <td>
                   <xsl:if test="string-length (report/scan/task/slave/name) &gt; 0">
                     <xsl:value-of select="report/scan/task/slave/name"/>
@@ -26578,14 +26578,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Role
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('New Role', 'Role')"/>
       <a href="/help/new_role.html?token={/envelope/token}"
-         title="Help: New Role">
+         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Role', 'Role')}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_roles&amp;role={/envelope/params/role}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Roles" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Roles"/>
+         title="{gsa:i18n ('Roles', 'Role')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Roles', 'Role')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -26596,7 +26596,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_role"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="175">Name
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -26604,20 +26604,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Comment (optional)</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Users</td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n('Users', 'User')"/></td>
             <td>
               <input type="text" name="users" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Role"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Role', 'Role')}"/>
             </td>
           </tr>
         </table>
@@ -26701,7 +26701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </table>
         <br/>
       </form>
-      <h2><xsl:value-of select="gsa:i18n ('New Permission', 'Role Window')"/></h2>
+      <h2><xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/></h2>
 
       <xsl:variable name="in_use" select="commands_response/get_roles_response/role/in_use"/>
 
@@ -26746,10 +26746,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Window')}"/>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Window')}"
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"
                          disabled="1"/>
                 </xsl:otherwise>
               </xsl:choose>

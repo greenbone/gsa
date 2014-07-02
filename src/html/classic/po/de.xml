@@ -341,10 +341,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Details</str>
     </msg>
     <msg>
+      <!-- "View details of " -->
       <id>#DETAILS_OF_PREFIX#</id>
       <str>Details für </str>
     </msg>
     <msg>
+      <!-- Suffix appended to [X] in "View details of [X]"
+           (blank in English) -->
       <id>#DETAILS_OF_SUFFIX#</id>
       <str> ansehen</str>
     </msg>
@@ -355,10 +358,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Bearbeiten</str>
     </msg>
     <msg>
+      <!-- as in "Permission to edit [X] denied" -->
       <id>Permission to edit </id>
       <str>Keine Berechtigung, </str>
     </msg>
     <msg>
+      <!-- " denied" as in "Permission to edit [X] denied" -->
       <id>#edit denied#</id>
       <str> zu bearbeiten</str>
     </msg>
@@ -367,6 +372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Kann </str>
     </msg>
     <msg>
+      <!-- suffix after [X] in "Cannot modify [X]" (blank in English) -->
       <id>#cannot modify suffix#</id>
       <str> nicht ändern</str>
     </msg>
@@ -381,18 +387,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Exportieren</str>
     </msg>
     <msg>
+      <!-- as in "Export [X] filtered [Y] as XML" -->
       <id>Export </id>
       <str></str>
     </msg>
     <msg>
+      <!-- as in "Export [X] filtered [Y] as XML" -->
       <id> filtered </id>
       <str> gefilterte </str>
     </msg>
     <msg>
+      <!-- generic suffix inseted after [Y] in
+           "Export [X] filtered [Y]" (blank in English) -->
       <id>#EXPORT_SUFFIX#</id>
       <str> exportieren</str>
     </msg>
     <msg>
+      <!-- as in "Export [X] filtered [Y] as XML" -->
       <id> as XML</id>
       <str> als XML exportieren</str>
     </msg>
@@ -413,10 +424,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <!-- Observer icon (global or owned)-->
     <msg>
+      <!-- "Global " as in "Global [X]" -->
       <id>#global prefix#</id>
       <str></str>
     </msg>
     <msg>
+      <!-- Suffix inserted after [X] in "Global [X]" (blank in English) -->
       <id>#global suffix#</id>
       <str> ist global</str>
     </msg>
@@ -728,6 +741,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>High</id>
       <str>Hoch</str>
+    </msg>
+
+    <msg>
+      <id>None</id>
+      <str>Keiner</str>
     </msg>
   </grp>
 
@@ -1601,6 +1619,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Liste aller abschlossenen Berichte für Aufgabe </str>
     </msg>
     <msg>
+      <!-- Suffix inserted after [X] in
+           "View list of all finished reports for Task [X]"
+           (blank in English) -->
       <id>#TASK FINSISHED REPORTS SUFFIX#</id>
       <str> betrachten</str>
     </msg>
@@ -1614,6 +1635,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Letzten Bericht für Aufgabe </str>
     </msg>
     <msg>
+      <!-- Suffix after [X] in "View last report for Task [X]"
+           (blank in English) -->
       <id>#TASK LAST REPORT SUFFIX#</id>
       <str> betrachten</str>
     </msg>
@@ -1637,10 +1660,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- Slave -->
     <msg>
+      <!-- "Task is configured to run on slave " -->
       <id>#TASK RUN ON SLAVE PREFIX#</id>
       <str>Aufgabe ist konfiguriert, um auf Slave </str>
     </msg>
     <msg>
+      <!-- suffix after [X] in  "Task is configured to run on slave [X]"
+           (blank in English)-->
       <id>#TASK RUN ON SLAVE SUFFIX#</id>
       <str> ausgeführt zu werden</str>
     </msg>
@@ -1945,8 +1971,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Scan 1 gestartet</str>
     </msg>
     <msg>
-      <id>Scan 1 started</id>
-      <str>Scan 1 gestartet</str>
+      <id>Scan 2 started</id>
+      <str>Scan 2 gestartet</str>
     </msg>
 
     <msg>
@@ -2006,6 +2032,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Filtered report</id>
       <str>Gefilterter Bericht</str>
+    </msg>
+    <!-- Source Interface -->
+    <msg>
+      <id>Network Source Interface</id>
+      <str>Netzwerk-Quell-Interface</str>
     </msg>
     <!-- Task references -->
     <msg>
@@ -2742,6 +2773,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Keine Übersteuerung</str>
     </msg>
     <msg>
+      <id>No Overrides</id>
+      <str>Keine Übersteuerung</str>
+    </msg>
+    <msg>
       <id>Update</id>
       <str>Aktualisieren</str>
     </msg>
@@ -2844,10 +2879,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Ports</str>
     </msg>
     <msg>
+      <!-- "Apps" - short form -->
       <id>#Apps short#</id>
       <str>Anw.</str>
     </msg>
     <msg>
+      <!-- "Apps" - long form -->
       <id>Apps</id>
       <str>Anwendungen</str>
     </msg>
@@ -4429,6 +4466,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- - - References and reference actions - - -->
     <msg>
+      <!-- "None" when referring to filters -->
       <id>#Filter None#</id>
       <str>Keiner</str>
     </msg>
@@ -5219,6 +5257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>darf neue Objekte vom Typ </str>
     </msg>
     <msg>
+      <!-- Suffix after [X] in "may create a new [X]" -->
       <id>#may create suffix#</id>
       <str> erstellen</str>
     </msg>
@@ -5229,10 +5268,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
 
     <msg>
+      <!-- as in "may delete [X]" (permissions for single resource) -->
       <id>may delete </id>
       <str>darf </str>
     </msg>
     <msg>
+      <!-- suffix after [X] in "may delete [X]" 
+           (referring to single resource, blank in English) -->
       <id>#may delete resource suffix#</id>
       <str> löschen</str>
     </msg>
@@ -5242,6 +5284,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>darf Objekte vom Typ </str>
     </msg>
     <msg>
+      <!-- suffix after [X] in "may delete an existing new [X]"
+           (referring to whole resource type, blank in English) -->
       <id>#may delete type suffix#</id>
       <str> löschen</str>
     </msg>
@@ -5579,11 +5623,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>New Role</id>
       <str>Neue Rolle</str>
     </msg>
+    <msg>
+      <id>Create Role</id>
+      <str>Rolle erstellen</str>
+    </msg>
 
     <msg>
       <id>Edit Role</id>
       <str>Rolle bearbeiten</str>
     </msg>
+    <msg>
+      <id>Save Role</id>
+      <str>Rolle speichern</str>
+    </msg>
+
     <!-- - - Common references - - -->
     <msg>
       <id>Role Details</id>
