@@ -4951,7 +4951,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td>
             </td>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
+            <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
             </td>
             <td>
               <select name="config_id">
@@ -4959,24 +4959,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea' and type = 0]">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
-            <td>
-              <input type="text" name="source_iface" value="{/envelope/params/source_iface}"/>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
-            <td>
-              <select name="hosts_ordering">
-                <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task Window')"/></option>
-                <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task Window')"/></option>
-                <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task Window')"/></option>
               </select>
             </td>
           </tr>
@@ -5013,14 +4995,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <tr>
             <td></td>
+            <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
             <td>
-              <xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/>:
+              <input type="text" name="source_iface" value="{/envelope/params/source_iface}"/>
             </td>
-            <td></td>
           </tr>
           <tr>
             <td></td>
-            <td valign="top">
+            <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
+            <td>
+              <select name="hosts_ordering">
+                <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task Window')"/></option>
+                <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task Window')"/></option>
+                <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task Window')"/></option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
               <xsl:value-of select="gsa:i18n ('Maximum concurrently executed NVTs per host', 'Task Window')"/>
             </td>
             <td>
@@ -5301,17 +5294,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-config">
+  <xsl:param name="type"/>
+  <xsl:param name="param_name"/>
   <xsl:choose>
     <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">
       <tr>
-        <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
+        <td></td>
+        <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/></td>
         <td>
           <input type="hidden" name="cmd" value="save_task"/>
           <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
-          <select name="config_id">
+          <select name="{$param_name}">
             <xsl:choose>
               <xsl:when test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
-                <xsl:for-each select="commands_response/get_configs_response/config">
+                <xsl:for-each select="commands_response/get_configs_response/config[type = $type]">
                   <xsl:choose>
                     <xsl:when test="@id = $config_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -5332,10 +5328,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <tr>
+        <td></td>
         <td valign="top"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
         <td>
           <input type="hidden" name="cmd" value="save_task"/>
-          <input type="hidden" name="config_id" value="0"/>
+          <input type="hidden" name="{$param_name}" value="0"/>
           <select name="dummy" disabled="0">
             <xsl:choose>
               <xsl:when test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
@@ -5499,11 +5496,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-scanner">
-  <xsl:if test="gsa:may-op ('get_scanners')">
+  <xsl:param name="title"/>
+  <xsl:param name="param_name"/>
+  <xsl:param name="type"/>
+  <xsl:if test="count(get_scanners_response/scanner[type = 0]) &gt;= 0">
     <tr>
-      <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
       <td>
-        <select name="scanner_id">
+        <xsl:choose>
+          <xsl:when test="commands_response/get_tasks_response/task/scanner/type = $type">
+            <input type="radio" name="scanner_type" value="{$type}" checked="1"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="radio" name="scanner_type" value="{$type}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td><xsl:value-of select="gsa:i18n ($title, 'Scanner')"/></td>
+      <td>
+        <select name="{$param_name}">
           <xsl:variable name="scanner_id">
             <xsl:choose>
               <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
@@ -5514,7 +5524,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <xsl:for-each select="commands_response/get_scanners_response/scanner">
+          <xsl:for-each select="commands_response/get_scanners_response/scanner[type = $type]">
             <xsl:choose>
               <xsl:when test="@id = $scanner_id">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -5533,6 +5543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-slave">
   <xsl:if test="gsa:may-op ('get_slaves')">
     <tr>
+      <td></td>
       <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
       <td>
         <select name="slave_id">
@@ -5700,12 +5711,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-openvas-options">
   <tr>
+    <td></td>
     <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
     <td>
       <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
     </td>
   </tr>
   <tr>
+    <td></td>
     <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
     <td>
       <xsl:variable name="hosts_ordering"
@@ -5735,6 +5748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <tr>
+        <td></td>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name, 'Task Window')"/>
         </td>
@@ -5745,6 +5759,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
       </tr>
       <tr>
+        <td></td>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name, 'Task Window')"/>
         </td>
@@ -5833,12 +5848,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="html-edit-task-alert"/>
               <xsl:call-template name="html-edit-task-schedule"/>
               <xsl:call-template name="html-edit-task-scan-options"/>
-              <xsl:call-template name="html-edit-task-scanner"/>
-              <xsl:call-template name="html-edit-task-config"/>
-              <xsl:call-template name="html-edit-task-slave"/>
-              <xsl:call-template name="html-edit-task-openvas-options"/>
             </xsl:otherwise>
           </xsl:choose>
+        </table>
+        <table>
+          <tr>
+            <td>
+              <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
+            </td>
+          </tr>
+          <xsl:call-template name="html-edit-task-scanner">
+            <xsl:with-param name="title">OpenVAS Scanner</xsl:with-param>
+            <xsl:with-param name="type">2</xsl:with-param>
+            <xsl:with-param name="param_name">scanner_id</xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="html-edit-task-config">
+            <xsl:with-param name="param_name">config_id</xsl:with-param>
+            <xsl:with-param name="type">0</xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="html-edit-task-slave"/>
+          <xsl:call-template name="html-edit-task-openvas-options"/>
+          <xsl:call-template name="html-edit-task-scanner">
+            <xsl:with-param name="title">OSP Scanner</xsl:with-param>
+            <xsl:with-param name="type">1</xsl:with-param>
+            <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="html-edit-task-config">
+            <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
+            <xsl:with-param name="type">1</xsl:with-param>
+          </xsl:call-template>
         </table>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>

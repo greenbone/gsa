@@ -2359,6 +2359,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   hosts_ordering = params_value (params, "hosts_ordering");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
+  scanner_id = params_value (params, "scanner_id");
+  config_id = params_value (params, "config_id");
   in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
@@ -2374,11 +2376,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
       max_checks = "";
       source_iface = "";
       max_hosts = "";
-    }
-  else
-    {
-      scanner_id = params_value (params, "scanner_id");
-      config_id = params_value (params, "config_id");
     }
 
   submit = params_value (params, "submit_plus");
@@ -2446,7 +2443,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                                   param->value ? param->value : "");
     }
 
-  if (slave_id == NULL || strcmp (slave_id, "--") == 0)
+  if (slave_id == NULL || !strcmp (slave_id, "") || !strcmp (slave_id, "--"))
     slave_element = g_strdup ("");
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
@@ -2545,7 +2542,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
   return html;
 }
 
-#undef CHECK
 
 /**
  * @brief Delete a task, get all tasks, XSL transform the result.
@@ -2733,6 +2729,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
+  const char *scanner_type;
   int ret;
   params_t *alerts;
   GString *alert_element;
@@ -2744,6 +2741,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   next = params_value (params, "next");
   in_assets = params_value (params, "in_assets");
   target_id = params_value (params, "target_id");
+  scanner_type = params_value (params, "scanner_type");
   hosts_ordering = params_value (params, "hosts_ordering");
   config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
@@ -2753,6 +2751,17 @@ save_task_omp (credentials_t * credentials, params_t *params)
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
+  CHECK (scanner_type);
+  if (!strcmp (scanner_type, "1"))
+    {
+      scanner_id = params_value (params, "osp_scanner_id");
+      config_id = params_value (params, "osp_config_id");
+      slave_id = "0";
+      hosts_ordering = "";
+      max_checks = "";
+      source_iface = "";
+      max_hosts = "";
+    }
 
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
@@ -2914,6 +2923,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
   g_free (response);
   return html;
 }
+
+#undef CHECK
 
 /**
  * @brief Save container task, get next page, XSL transform the result.

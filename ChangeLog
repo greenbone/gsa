@@ -1,5 +1,20 @@
 2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (save_task_omp): Handle parameters depending on scanner
+	type.
+	(create_task_omp): Don't send slave id if no is specified.
+
+	* src/html/classic/omp.xsl (new_task): Reorder openvas scanner options.
+	Output style update.
+	(html-edit-task-config): Add type and param_name template parameters.
+	(html-edit-task-scanner): Add title, param_name and type template
+	parameters.
+	(html-edit-task-scan-options, html-edit-task-slave)
+	(html-edit-task-openvas-options, html-edit-task-from): Update style to
+	adjust for multi-scanner tasks.
+
+2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-alert)
 	(html-edit-task-scanner, html-edit-task-slave, html-edit-task-schedule)
 	(html-edit-task-scan-options, html-edit-task-openvas-options)
