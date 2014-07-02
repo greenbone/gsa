@@ -1,5 +1,13 @@
 2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-alert)
+	(html-edit-task-scanner, html-edit-task-slave, html-edit-task-schedule)
+	(html-edit-task-scan-options, html-edit-task-openvas-options)
+	(html-edit-task-name, html-edit-task-comments): New templates.
+	(html-edit-task-form): Call new templates.
+
+2014-07-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-config)
 	(html-edit-task-target): New templates.
 	(html-edit-task-form): Call new templates.

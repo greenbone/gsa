@@ -5402,6 +5402,383 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="html-edit-task-alert">
+  <xsl:if test="gsa:may-op ('get_alerts')">
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+      <td>
+        <xsl:variable name="alerts" select="commands_response/get_alerts_response/alert"/>
+        <xsl:choose>
+          <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']) &gt; 0">
+            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']/value">
+              <select name="alert_id_optional:{position ()}">
+                <xsl:variable name="alert_id" select="text ()"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($alert_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$alerts">
+                  <xsl:choose>
+                    <xsl:when test="@id = $alert_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="commands_response/get_tasks_response/task/alert">
+              <select name="alert_id_optional:{position ()}">
+                <xsl:variable name="alert_id" select="@id"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($alert_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$alerts">
+                  <xsl:choose>
+                    <xsl:when test="@id = $alert_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:variable name="count">
+          <xsl:variable name="params" select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
+          <xsl:choose>
+            <xsl:when test="$params &gt; 0">
+              <xsl:value-of select="$params"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="new-task-alert-select">
+          <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
+          <xsl:with-param name="count" select="alerts - $count"/>
+          <xsl:with-param name="position" select="$count + 1"/>
+        </xsl:call-template>
+
+        <!-- Force the Create Task button to be the default. -->
+        <input style="position: absolute; left: -100%"
+               type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
+        <input type="submit" name="submit_plus" value="+"/>
+
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/alerts)">
+            <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="hidden" name="alerts" value="{$count + 1}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="html-edit-task-scanner">
+  <xsl:if test="gsa:may-op ('get_scanners')">
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+      <td>
+        <select name="scanner_id">
+          <xsl:variable name="scanner_id">
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+                <xsl:value-of select="/envelope/params/scanner_id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:for-each select="commands_response/get_scanners_response/scanner">
+            <xsl:choose>
+              <xsl:when test="@id = $scanner_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="html-edit-task-slave">
+  <xsl:if test="gsa:may-op ('get_slaves')">
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+      <td>
+        <select name="slave_id">
+          <xsl:variable name="slave_id">
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
+                <xsl:value-of select="/envelope/params/slave_id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="string-length ($slave_id) &gt; 0">
+              <option value="0">--</option>
+            </xsl:when>
+            <xsl:otherwise>
+              <option value="0" selected="1">--</option>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:for-each select="commands_response/get_slaves_response/slave">
+            <xsl:choose>
+              <xsl:when test="@id = $slave_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="html-edit-task-schedule">
+  <xsl:if test="gsa:may-op ('get_schedules')">
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+      <td>
+        <select name="schedule_id">
+          <xsl:variable name="schedule_id">
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/schedule_id) &gt; 0">
+                <xsl:value-of select="/envelope/params/schedule_id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="string-length ($schedule_id) &gt; 0">
+              <option value="0">--</option>
+            </xsl:when>
+            <xsl:otherwise>
+              <option value="0" selected="1">--</option>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:for-each select="commands_response/get_schedules_response/schedule">
+            <xsl:choose>
+              <xsl:when test="@id = $schedule_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="html-edit-task-scan-options">
+  <tr>
+    <xsl:variable name="in_assets" select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
+    <td valign="top">
+      <xsl:value-of select="gsa:i18n ($in_assets/name, 'Task Window')"/>
+    </td>
+    <td>
+      <xsl:variable name="param_yes" select="/envelope/params/in_assets"/>
+      <xsl:choose>
+        <xsl:when test="string-length ($param_yes) &gt; 0">
+          <xsl:choose>
+            <xsl:when test="$param_yes = '1'">
+              <label>
+                <input type="radio" name="in_assets" value="1" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
+              </label>
+              <label>
+                <input type="radio" name="in_assets" value="0"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
+              </label>
+            </xsl:when>
+            <xsl:otherwise>
+              <label>
+                <input type="radio" name="in_assets" value="1"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
+              </label>
+              <label>
+                <input type="radio" name="in_assets" value="0" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
+              </label>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:when test="((string-length ($param_yes) &gt; 0) and ($param_yes = '1')) or $in_assets/value='yes'">
+          <label>
+            <input type="radio" name="in_assets" value="1" checked="1"/>
+            <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
+          </label>
+          <label>
+            <input type="radio" name="in_assets" value="0"/>
+            <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
+          </label>
+        </xsl:when>
+        <xsl:otherwise>
+          <label>
+            <input type="radio" name="in_assets" value="1"/>
+            <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
+          </label>
+          <label>
+            <input type="radio" name="in_assets" value="0" checked="1"/>
+            <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
+          </label>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+  <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task Window')"/></td>
+      <td>
+        <xsl:variable name="yes" select="commands_response/get_tasks_response/task/alterable"/>
+        <label>
+          <xsl:choose>
+            <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+              <input type="radio" name="alterable" value="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio" name="alterable" value="1" checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
+        </label>
+        <label>
+          <xsl:choose>
+            <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+              <input type="radio" name="alterable" value="0" checked="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio" name="alterable" value="0"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
+        </label>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="html-edit-task-openvas-options">
+  <tr>
+    <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
+    <td>
+      <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
+    </td>
+  </tr>
+  <tr>
+    <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
+    <td>
+      <xsl:variable name="hosts_ordering"
+                    select="commands_response/get_tasks_response/task/hosts_ordering"/>
+      <select name="hosts_ordering">
+        <xsl:call-template name="opt">
+          <xsl:with-param name="content" select="gsa:i18n ('Sequential', 'Task Window')"/>
+          <xsl:with-param name="value" select="'sequential'"/>
+          <xsl:with-param name="select-value" select="$hosts_ordering"/>
+        </xsl:call-template>
+        <xsl:call-template name="opt">
+          <xsl:with-param name="content" select="gsa:i18n ('Random', 'Task Window')"/>
+          <xsl:with-param name="value" select="'random'"/>
+          <xsl:with-param name="select-value" select="$hosts_ordering"/>
+        </xsl:call-template>
+        <xsl:call-template name="opt">
+          <xsl:with-param name="content" select="gsa:i18n ('Reverse', 'Task Window')"/>
+          <xsl:with-param name="value" select="'reverse'"/>
+          <xsl:with-param name="select-value" select="$hosts_ordering"/>
+        </xsl:call-template>
+      </select>
+    </td>
+  </tr>
+  <xsl:choose>
+    <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+      <input type="hidden" name="target_id" value="--"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <tr>
+        <td>
+          <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name, 'Task Window')"/>
+        </td>
+        <td>
+          <input type="text" name="max_checks"
+                 value="{gsa:param-or ('max_checks', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/value)}"
+                 size="10" maxlength="10"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name, 'Task Window')"/>
+        </td>
+        <td>
+          <input type="text" name="max_hosts"
+                 value="{gsa:param-or ('max_hosts', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/value)}"
+                 size="10" maxlength="10"/>
+        </td>
+      </tr>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="html-edit-task-name">
+  <tr>
+   <td valign="top" width="150"><xsl:value-of select="gsa:i18n ('Name', 'Task Window')"/></td>
+   <td width="280">
+     <input type="text" name="name"
+            value="{gsa:param-or ('name', commands_response/get_tasks_response/task/name)}"
+            size="30" maxlength="80"/>
+   </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="html-edit-task-comment">
+  <tr>
+    <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+    <td>
+      <input type="text" name="comment" size="30" maxlength="400"
+             value="{gsa:param-or ('comment', commands_response/get_tasks_response/task/comment)}"/>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template name="html-edit-task-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -5444,23 +5821,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="group_id_optional:1" value="--"/>
         </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-           <td valign="top" width="185"><xsl:value-of select="gsa:i18n ('Name', 'Task Window')"/></td>
-           <td>
-             <input type="text"
-                    name="name"
-                    value="{gsa:param-or ('name', commands_response/get_tasks_response/task/name)}"
-                    size="30"
-                    maxlength="80"/>
-           </td>
-          </tr>
-          <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Task Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{gsa:param-or ('comment', commands_response/get_tasks_response/task/comment)}"/>
-            </td>
-          </tr>
+          <xsl:call-template name="html-edit-task-name"/>
+          <xsl:call-template name="html-edit-task-comment"/>
           <xsl:choose>
             <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
               <input type="hidden" name="target_id" value="--"/>
@@ -5468,358 +5830,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="html-edit-task-target"/>
+              <xsl:call-template name="html-edit-task-alert"/>
+              <xsl:call-template name="html-edit-task-schedule"/>
+              <xsl:call-template name="html-edit-task-scan-options"/>
+              <xsl:call-template name="html-edit-task-scanner"/>
               <xsl:call-template name="html-edit-task-config"/>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
-                <td>
-                  <xsl:variable name="hosts_ordering"
-                                select="commands_response/get_tasks_response/task/hosts_ordering"/>
-                  <select name="hosts_ordering">
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="content" select="gsa:i18n ('Sequential', 'Task Window')"/>
-                      <xsl:with-param name="value" select="'sequential'"/>
-                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="content" select="gsa:i18n ('Random', 'Task Window')"/>
-                      <xsl:with-param name="value" select="'random'"/>
-                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="content" select="gsa:i18n ('Reverse', 'Task Window')"/>
-                      <xsl:with-param name="value" select="'reverse'"/>
-                      <xsl:with-param name="select-value" select="$hosts_ordering"/>
-                    </xsl:call-template>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
-                <td>
-                  <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
-                </td>
-              </tr>
-              <xsl:if test="gsa:may-op ('get_alerts')">
-                <tr>
-                  <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                  <td>
-                    <xsl:variable name="alerts"
-                                  select="commands_response/get_alerts_response/alert"/>
-                    <xsl:choose>
-                      <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']) &gt; 0">
-                        <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']/value">
-                          <select name="alert_id_optional:{position ()}">
-                            <xsl:variable name="alert_id" select="text ()"/>
-                            <xsl:choose>
-                              <xsl:when test="string-length ($alert_id) &gt; 0">
-                                <option value="0">--</option>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <option value="0" selected="1">--</option>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:for-each select="$alerts">
-                              <xsl:choose>
-                                <xsl:when test="@id = $alert_id">
-                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </select>
-                          <br/>
-                        </xsl:for-each>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:for-each select="commands_response/get_tasks_response/task/alert">
-                          <select name="alert_id_optional:{position ()}">
-                            <xsl:variable name="alert_id" select="@id"/>
-                            <xsl:choose>
-                              <xsl:when test="string-length ($alert_id) &gt; 0">
-                                <option value="0">--</option>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <option value="0" selected="1">--</option>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:for-each select="$alerts">
-                              <xsl:choose>
-                                <xsl:when test="@id = $alert_id">
-                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:for-each>
-                          </select>
-                          <br/>
-                        </xsl:for-each>
-                      </xsl:otherwise>
-                    </xsl:choose>
-
-                    <xsl:variable name="count">
-                      <xsl:variable name="params"
-                                    select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
-                      <xsl:choose>
-                        <xsl:when test="$params &gt; 0">
-                          <xsl:value-of select="$params"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:variable>
-                    <xsl:call-template name="new-task-alert-select">
-                      <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
-                      <xsl:with-param name="count" select="alerts - $count"/>
-                      <xsl:with-param name="position" select="$count + 1"/>
-                    </xsl:call-template>
-
-                    <!-- Force the Create Task button to be the default. -->
-                    <input style="position: absolute; left: -100%"
-                           type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
-                    <input type="submit" name="submit_plus" value="+"/>
-
-                    <xsl:choose>
-                      <xsl:when test="string-length (/envelope/params/alerts)">
-                        <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="hidden" name="alerts" value="{$count + 1}"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-              </xsl:if>
-              <xsl:if test="gsa:may-op ('get_schedules')">
-                <tr>
-                  <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                  <td>
-                    <select name="schedule_id">
-                      <xsl:variable name="schedule_id">
-                        <xsl:choose>
-                          <xsl:when test="string-length (/envelope/params/schedule_id) &gt; 0">
-                            <xsl:value-of select="/envelope/params/schedule_id"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:variable>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($schedule_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="commands_response/get_schedules_response/schedule">
-                        <xsl:choose>
-                          <xsl:when test="@id = $schedule_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                  </td>
-                </tr>
-              </xsl:if>
-              <xsl:if test="gsa:may-op ('get_slaves')">
-                <tr>
-                  <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                  <td>
-                    <select name="slave_id">
-                      <xsl:variable name="slave_id">
-                        <xsl:choose>
-                          <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
-                            <xsl:value-of select="/envelope/params/slave_id"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:variable>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($slave_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="commands_response/get_slaves_response/slave">
-                        <xsl:choose>
-                          <xsl:when test="@id = $slave_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                  </td>
-                </tr>
-              </xsl:if>
-              <xsl:if test="gsa:may-op ('get_scanners')">
-                <tr>
-                  <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-                  <td>
-                    <select name="scanner_id">
-                      <xsl:variable name="scanner_id">
-                        <xsl:choose>
-                          <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
-                            <xsl:value-of select="/envelope/params/scanner_id"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:variable>
-                      <xsl:for-each select="commands_response/get_scanners_response/scanner">
-                        <xsl:choose>
-                          <xsl:when test="@id = $scanner_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                  </td>
-                </tr>
-              </xsl:if>
+              <xsl:call-template name="html-edit-task-slave"/>
+              <xsl:call-template name="html-edit-task-openvas-options"/>
             </xsl:otherwise>
           </xsl:choose>
-          <tr>
-            <xsl:variable name="in_assets"
-                          select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
-            <td valign="top">
-              <xsl:value-of select="gsa:i18n ($in_assets/name, 'Task Window')"/>
-            </td>
-            <td>
-              <xsl:variable name="param_yes" select="/envelope/params/in_assets"/>
-              <xsl:choose>
-                <xsl:when test="string-length ($param_yes) &gt; 0">
-                  <xsl:choose>
-                    <xsl:when test="$param_yes = '1'">
-                      <label>
-                        <input type="radio" name="in_assets" value="1" checked="1"/>
-                        <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
-                      </label>
-                      <label>
-                        <input type="radio" name="in_assets" value="0"/>
-                        <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
-                      </label>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <label>
-                        <input type="radio" name="in_assets" value="1"/>
-                        <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
-                      </label>
-                      <label>
-                        <input type="radio" name="in_assets" value="0" checked="1"/>
-                        <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
-                      </label>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:when test="((string-length ($param_yes) &gt; 0) and ($param_yes = '1')) or $in_assets/value='yes'">
-                  <label>
-                    <input type="radio" name="in_assets" value="1" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="in_assets" value="0"/>
-                    <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="in_assets" value="1"/>
-                    <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="in_assets" value="0" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
-                  </label>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task Window')"/></td>
-              <td>
-                <xsl:variable name="yes"
-                              select="commands_response/get_tasks_response/task/alterable"/>
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="string-length ($yes) = 0 or $yes = 0">
-                      <input type="radio" name="alterable" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="alterable" value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('yes', 'Window')"/>
-                </label>
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="string-length ($yes) = 0 or $yes = 0">
-                      <input type="radio" name="alterable" value="0" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="alterable" value="0"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
-                </label>
-              </td>
-            </tr>
-          </xsl:if>
         </table>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <xsl:choose>
-            <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
-              <input type="hidden" name="target_id" value="--"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Scan Intensity', 'Task Window')"/></h2>
-              <tr>
-                <td valign="top" width="320">
-                  <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name, 'Task Window')"/>
-                </td>
-                <td>
-                  <input type="text"
-                         name="max_checks"
-                         value="{gsa:param-or ('max_checks', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/value)}"
-                         size="10"
-                         maxlength="10"/>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name, 'Task Window')"/>
-                </td>
-                <td>
-                  <input type="text"
-                         name="max_hosts"
-                         value="{gsa:param-or ('max_hosts', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/value)}"
-                         size="10"
-                         maxlength="10"/>
-                </td>
-              </tr>
-            </xsl:otherwise>
-          </xsl:choose>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save Task', 'Task')}"/>
