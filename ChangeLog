@@ -1,5 +1,10 @@
 2014-07-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-form): Move scan options
+	template call higher for consistency.
+
+2014-07-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (task [details]): Reposition the task's
 	propertities and show or hide different ones depending on the scanner
 	and scan config type. Update code style.

@@ -5883,6 +5883,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="html-edit-task-target"/>
               <xsl:call-template name="html-edit-task-alert"/>
               <xsl:call-template name="html-edit-task-schedule"/>
+              <xsl:call-template name="html-edit-task-scan-options"/>
               <xsl:if test="$new_task = 0">
                 <input type="hidden" name="scanner_type" value="1"/>
                 <xsl:call-template name="html-edit-task-config-disabled"/>
@@ -5896,7 +5897,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </xsl:if>
               </xsl:if>
-              <xsl:call-template name="html-edit-task-scan-options"/>
             </xsl:otherwise>
           </xsl:choose>
         </table>
