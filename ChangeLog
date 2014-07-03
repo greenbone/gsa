@@ -1,3 +1,9 @@
+2014-07-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-target-form, target,
+	html-edit-target-form): Form a slightly separated list for credentials
+	to prepare adding more of them. Move up Alive Test as apropriate.
+
 2014-07-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Label

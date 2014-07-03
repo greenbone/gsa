@@ -10149,31 +10149,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
           </xsl:if>
-          <xsl:if test="gsa:may-op ('get_lsc_credentials')">
-            <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-              <td>
-                <select name="lsc_credential_id">
-                  <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
-                </select>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="gsa:i18n ('on port', 'Target Window')"/>
-                <xsl:text> </xsl:text>
-                <input type="text" name="port" value="22" size="6"
-                       maxlength="400"/>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
-              <td>
-                <select name="lsc_smb_credential_id">
-                  <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
             <td>
@@ -10191,6 +10166,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
             </td>
           </tr>
+          <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+            <tr>
+              <td valign="top" width="175" colspan="2">
+                <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target Window')"/>
+                (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>):
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target Window')"/></td>
+              <td>
+                <select name="lsc_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                </select>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="gsa:i18n ('on port', 'Target Window')"/>
+                <xsl:text> </xsl:text>
+                <input type="text" name="port" value="22" size="6"
+                       maxlength="400"/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target Window')"/></td>
+              <td>
+                <select name="lsc_smb_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                </select>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create Target', 'Target')}"/>
@@ -10453,9 +10459,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                 </tr>
               </xsl:if>
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
+                <td>
+                  <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
+                  <select name="alive_tests">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'Scan Config Default'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Scan Config Default', 'Target Window')"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-ACK Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-SYN Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP &amp; TCP-ACK Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-ACK Service &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP, TCP-ACK Service &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'Consider Alive'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                  </select>
+                </td>
+              </tr>
               <xsl:if test="gsa:may-op ('get_lsc_credentials')">
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td valign="top" width="175" colspan="2">
+                    <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target Window')"/>
+                    (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>):
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target Window')"/></td>
                   <td>
                     <select name="lsc_credential_id">
                       <xsl:variable name="lsc_credential_id">
@@ -10500,7 +10561,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                 </tr>
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target Window')"/></td>
                   <td>
                     <select name="lsc_smb_credential_id">
                       <xsl:variable name="lsc_credential_id">
@@ -10739,10 +10800,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                 </tr>
               </xsl:if>
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
+                <td>
+                  <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
+                  <select name="alive_tests">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'Scan Config Default'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Scan Config Default', 'Target Window')"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-ACK Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-SYN Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP &amp; TCP-ACK Service Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'TCP-ACK Service &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'ICMP, TCP-ACK Service &amp; ARP Ping'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'Consider Alive'"/>
+                      <xsl:with-param name="select-value" select="$alive_tests"/>
+                    </xsl:call-template>
+                  </select>
+                </td>
+              </tr>
               <xsl:if test="gsa:may-op ('get_lsc_credentials')">
                 <tr>
+                  <td valign="top" width="175" colspan="2">
+                    <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target Window')"/>
+                    (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>):
+                  </td>
+                </tr>
+                <tr>
                   <td valign="top" width="{$width}">
-                    <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                    <xsl:value-of select="gsa:i18n ('SSH', 'Target Window')"/>
                   </td>
                   <td>
                     <select name="lsc_credential_id" disabled="1">
@@ -10790,7 +10906,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td valign="top" width="{$width}">
-                    <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
+                    <xsl:value-of select="gsa:i18n ('SMB', 'Target Window')"/>
                   </td>
                   <td>
                     <select name="lsc_smb_credential_id" disabled="1">
@@ -10821,55 +10937,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
-            <td>
-              <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
-              <select name="alive_tests">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'Scan Config Default'"/>
-                  <xsl:with-param name="content" select="gsa:i18n ('Scan Config Default', 'Target Window')"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'TCP-ACK Service Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'TCP-SYN Service Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ARP Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP &amp; TCP-ACK Service Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP &amp; ARP Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'TCP-ACK Service &amp; ARP Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'ICMP, TCP-ACK Service &amp; ARP Ping'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'Consider Alive'"/>
-                  <xsl:with-param name="select-value" select="$alive_tests"/>
-                </xsl:call-template>
-              </select>
-            </td>
-          </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save Target', 'Target')}"/>
@@ -11255,9 +11322,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/>:</td>
+          <td>
+            <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target Window')"/>
+          </td>
+        </tr>
         <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (ssh_lsc_credential/@id) &gt; 0">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/>:</td>
+            <td valign="top" width="175" colspan="2">
+              <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target Window')"/>:
+            </td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('SSH', 'Target Window')"/>:</td>
             <td>
               <xsl:if test="string-length (ssh_lsc_credential/@id) &gt; 0">
                 <xsl:choose>
@@ -11280,7 +11358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (smb_lsc_credential/@id) &gt; 0">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('SMB', 'Target Window')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="gsa:may-op ('get_lsc_credentials')">
@@ -11295,12 +11373,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/>:</td>
-          <td>
-            <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target Window')"/>
-          </td>
-        </tr>
       </table>
 
       <xsl:choose>
