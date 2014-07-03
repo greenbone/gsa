@@ -1,3 +1,27 @@
+2014-07-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Label
+	bar chart as "Severity by CVSS" and donut chart as "Severity by Class".
+
+	* src/html/classic/js/gsa_bar_chart.js (data_severity_histogram):
+	Include the values on the x label of each bin as the upper limit, e.g.
+	"1.0" will still go into the "1" bin, not the "2" one.
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator [generate]): Fix coloring of slices. Improve
+	compatibility of donuts that are not divided into slices. Show a
+	transparent grey donut if the data set is empty. Move labels apart if
+	they overlap.
+	(DonutChartGenerator [relax_labels]): New function to reduce label
+	overlap.
+	(DonutChartGenerator [donut_full_top_path_d]): New function to create
+	the top for a complete donut.
+
+	* src/html/classic/js/gsa_graphics_base.js (Display [prev_chart]): Go
+	to the last chart when currently at the first one.
+	(Display [next_chart]): Go to the first chart when currently at the
+	last one.
+
 2014-07-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-task-form): Move scan options

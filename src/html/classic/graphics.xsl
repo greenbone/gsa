@@ -259,7 +259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="display_name" select="'top-visualization-left'"/>
       <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
       <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity bar chart'"/>
+      <xsl:with-param name="chart_label" select="'Severity by CVSS'"/>
     </xsl:call-template>
     <xsl:call-template name="js-severity-chart">
       <xsl:with-param name="type" select="$type"/>
@@ -268,7 +268,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
       <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity bar chart'"/>
+      <xsl:with-param name="chart_label" select="'Severity by CVSS'"/>
     </xsl:call-template>
 
     <xsl:call-template name="js-severity-chart">
@@ -278,7 +278,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="display_name" select="'top-visualization-left'"/>
       <xsl:with-param name="generator_name" select="'severity_donut'"/>
       <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity donut chart (all)'"/>
+      <xsl:with-param name="chart_label" select="'Severity by Class'"/>
       <xsl:with-param name="chart_type" select="'donut'"/>
     </xsl:call-template>
     <xsl:call-template name="js-severity-chart">
@@ -288,7 +288,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="generator_name" select="'severity_donut'"/>
       <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity donut chart'"/>
+      <xsl:with-param name="chart_label" select="'Severity by Class'"/>
       <xsl:with-param name="chart_type" select="'donut'"/>
     </xsl:call-template>
 

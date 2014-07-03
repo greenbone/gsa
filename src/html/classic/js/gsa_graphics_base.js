@@ -450,7 +450,8 @@ function Display (p_container)
                     {
                       if (chart_i > 0)
                         my.select_chart (chart_i - 1);
-
+                      else
+                        my.select_chart (charts.length - 1);
                     }
 
   /* Selects and shows the next chart from the charts list if possible */
@@ -458,6 +459,8 @@ function Display (p_container)
                     {
                       if (chart_i < charts.length - 1)
                         my.select_chart (chart_i + 1);
+                      else
+                        my.select_chart (0);
                     }
 
   return my;

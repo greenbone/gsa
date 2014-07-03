@@ -93,7 +93,7 @@ function data_severity_histogram (raw_data, x_field, y_field)
                     else if (Number (val) >= 10.0)
                       return 11;
                     else if (Number (val) > 0.0)
-                      return Math.floor (Number (val)) + 2;
+                      return Math.ceil (Number (val)) + 1;
                     else
                       return 0;
                   };

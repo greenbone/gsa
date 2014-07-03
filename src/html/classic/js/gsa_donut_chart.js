@@ -34,6 +34,7 @@ function DonutChartGenerator ()
   var width;
   var margin = {top: 20, right: 20, bottom: 20, left: 20};
   var legend_width = 120;
+  var label_spacing = 10;
 
   var data_transform = data_raw;
   var color_scale = d3.scale.category20 ();
@@ -156,7 +157,7 @@ function DonutChartGenerator ()
                            .value (function(d) { return d[y_field]; })
                            .sort (null)
 
-      var slices = slice_f (data);
+      var slices = slice_f (data).filter (function (elem) { return !isNaN (elem.endAngle)} );
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -235,7 +236,7 @@ function DonutChartGenerator ()
                                       d.endAngle,
                                       rx, ry, ri, h)
                           })
-                  .attr ("fill", function (d, i) { return d3.lab (color_scale (d[x_field])).darker (); } )
+                  .attr ("fill", function (d, i) { return d3.lab (color_scale (d.data [x_field])).darker (); } )
 
       donut.selectAll(".slice_top")
             .data (slices)
@@ -247,12 +248,18 @@ function DonutChartGenerator ()
 //                  .attr ("stroke-width", "0.25")
                   .attr("d", function (d, i)
                           {
-                            return DonutChartGenerator.donut_top_path_d
-                                     (d.startAngle,
-                                      d.endAngle,
-                                      rx, ry, ri, h)
+                            if (d.value != 0 && d.startAngle == d.endAngle)
+                              return DonutChartGenerator.donut_full_top_path_d
+                                      (d.startAngle,
+                                       d.endAngle,
+                                       rx, ry, ri, h)
+                            else
+                              return DonutChartGenerator.donut_top_path_d
+                                      (d.startAngle,
+                                       d.endAngle,
+                                       rx, ry, ri, h)
                           })
-                  .attr ("fill", function (d, i) { return color_scale (d[x_field]); } )
+                  .attr ("fill", function (d, i) { return color_scale (d.data [x_field]); } )
                   .attr ("title", function (d, i) { return d.data [x_field] + ": " + (100 * (d.endAngle - d.startAngle) / (2 * Math.PI)).toFixed (1) + "% (" + d.data [y_field] + ")" })
 
       donut.selectAll(".slice_outer")
@@ -270,12 +277,13 @@ function DonutChartGenerator ()
                                       d.endAngle,
                                       rx, ry, ri, h)
                           })
-                  .attr ("fill", function (d, i) { return d3.lab (color_scale (d[x_field])).darker (); } )
+                  .attr ("fill", function (d, i) { return d3.lab (color_scale (d.data [x_field])).darker (); } )
 
       donut.selectAll(".slice_label")
             .data (slices)
               .enter()
                 .insert ("text")
+                  .attr ("class", "slice_label")
                   .text (function (d, i)
                           {
                             if (d.endAngle - d.startAngle >= 0.02)
@@ -289,9 +297,34 @@ function DonutChartGenerator ()
                   .style ("font-weight", "bold")
                   .style ("font-size", "7pt");
 
-      donut.attr("opacity", "0")
+      // In case of missing data, draw a transparent grey donut
+      if (slices.length == 0)
+        {
+          donut.insert("path")
+                  .attr ("class", "slice_inner")
+                  .attr ("title", "No data")
+                  .style ("shape-rendering", "geometricPrecision")
+                  .attr ("d", DonutChartGenerator.donut_inner_path_d (0, 2 * Math.PI, rx, ry, ri, h))
+                  .style ("fill", d3.lab("silver").darker ())
+          donut.insert("path")
+                  .attr ("class", "slice_top")
+                  .attr ("title", "No data")
+                  .style ("shape-rendering", "geometricPrecision")
+                  .attr ("d", DonutChartGenerator.donut_full_top_path_d (0, 2 * Math.PI, rx, ry, ri, h))
+                  .style ("fill", "silver");
+          donut.insert("path")
+                  .attr ("class", "slice_outer")
+                  .attr ("title", "No data")
+                  .style ("shape-rendering", "geometricPrecision")
+                  .attr ("d", DonutChartGenerator.donut_outer_path_d (0, 2 * Math.PI, rx, ry, ri, h))
+                  .style ("fill", d3.lab("silver").darker ());
+        }
+
+      donut.attr("opacity", 0)
             .transition (500)
-              .attr ("opacity", "1");
+              .attr ("opacity", (slices.length != 0) ? 1 : 0.25);
+
+      relax_labels ();
 
       // Generate CSV
       csv_data = csv_from_records (data,
@@ -325,6 +358,59 @@ function DonutChartGenerator ()
 
       display.update_gen_data (my, gen_params);
     };
+
+  relax_labels = function (labels)
+    {
+      again = false;
+      var labels = svg.selectAll (".slice_label")
+
+      labels.each (function (d, i)
+        {
+          elem_a = this;
+
+          width_a = elem_a.getComputedTextLength ()
+          if (width_a == 0)
+            return;
+
+          sel_a = d3.select (elem_a);
+          x_a = sel_a.attr ("x");
+          y_a = sel_a.attr ("y");
+
+
+          labels.each (function (d, j)
+            {
+              elem_b = this;
+              if (elem_a == elem_b)
+                return;
+
+              width_b = elem_b.getComputedTextLength ()
+              if (width_b == 0)
+                return;
+
+              sel_b = d3.select(elem_b);
+              x_b = sel_a.attr("x");
+              y_b = sel_b.attr("y");
+
+              if (Math.abs (x_a - x_b) * 2 > (width_a + width_b))
+                return;
+
+              delta_y = y_a - y_b;
+
+              if (Math.abs(delta_y) > label_spacing)
+                return;
+
+              again = true;
+              var adjust = (delta_y > 0 ? 1 : -1) * 1;
+              sel_a.attr ("y", +y_a + adjust);
+              sel_b.attr ("y", +y_b - adjust);
+            });
+        });
+
+      if (again)
+        {
+          setTimeout (relax_labels, 1)
+        }
+    }
 
   return my;
 
@@ -396,6 +482,26 @@ DonutChartGenerator.donut_top_path_d = function (sa, ea, rx, ry, ri, h)
                "L", ri * ex, ri * ey,
                "A", rx * ri, ry * ri, "0", (ea - sa > Math.PI ? 1 : 0), "0", (sx * ri), (sy * ri),
                "z");
+
+  return result.join(" ");
+}
+
+/*
+ * Gets the path data for the top of a whole donut.
+ *
+ * This is needed because start and end points being the same could be
+ *  interpreted as an empty / nonexistent slice by some renderers.
+ */
+DonutChartGenerator.donut_full_top_path_d = function (sa, ea, rx, ry, ri, h)
+{
+  var result = []
+
+  result.push ("M", 0, -ry,
+               "A", rx, ry, "0", "1", "1", 0, +ry,
+               "A", rx, ry, "0", "1", "1", 0, -ry,
+               "M", 0, -ry * ri,
+               "A", rx * ri, ry * ri, "0", "0", "0", 0, +ry * ri,
+               "A", rx * ri, ry * ri, "0", "0", "0", 0, -ry * ri);
 
   return result.join(" ");
 }
