@@ -5878,6 +5878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
               <input type="hidden" name="target_id" value="--"/>
               <input type="hidden" name="cmd" value="save_container_task"/>
+              <xsl:call-template name="html-edit-task-scan-options"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="html-edit-task-target"/>
@@ -14940,7 +14941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="scanner_type">
                 <xsl:call-template name="scanner-type-list">
-                  <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/host"/>
+                  <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
                 </xsl:call-template>
               </select>
             </td>

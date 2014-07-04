@@ -2751,7 +2751,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
-  CHECK (scanner_type);
+  CHECK_PARAM (scanner_type, "Save Task", edit_task);
   if (!strcmp (scanner_type, "1"))
     {
       scanner_id = params_value (params, "osp_scanner_id");
@@ -2947,18 +2947,10 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
-
-  if (comment == NULL || name == NULL)
-    return edit_task (credentials, params,
-                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
-
-  if (task_id == NULL || in_assets == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a task. "
-                         "The task remains the same. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+  CHECK_PARAM (name, "Save Task", edit_task)
+  CHECK_PARAM (comment, "Save Task", edit_task)
+  CHECK_PARAM (task_id, "Save Task", edit_task)
+  CHECK_PARAM (in_assets, "Save Task", edit_task)
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
@@ -2973,13 +2965,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
-              &response,
-              &entity,
-              format,
-              task_id,
-              name,
-              comment,
+  ret = ompf (credentials, &response, &entity, format, task_id, name, comment,
               strcmp (in_assets, "0") ? "yes" : "no");
   g_free (format);
   switch (ret)

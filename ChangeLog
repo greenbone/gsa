@@ -1,3 +1,13 @@
+2014-07-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_task_omp, save_container_task_omp): Use
+	CHECK_PARAM for better parameters checking and error reporting.
+
+	* src/html/classic/omp.xsl (html-edit-task-form): Call
+	html-edit-task-scan-options template when editing container tasks too.
+	(scanner [details]): Set default scanner_type parameter value to the
+	current scanner type.
+
 2014-07-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-target-form, target,
