@@ -4071,6 +4071,8 @@ gsad_cleanup ()
 
   if (log_config) free_log_configuration (log_config);
 
+  gsad_base_cleanup ();
+
   pidfile_remove ("gsad");
 }
 

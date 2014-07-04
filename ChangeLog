@@ -1,3 +1,15 @@
+2014-07-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Fix sporadic segfault when using libxslt in multiple threads.
+
+	* src/gsad_base.c (gsad_base_cleanup): New function.
+	(xsl_transform_with_stylesheet): Move calls of xsltCleanupGlobals and
+	xmlCleanupParser to new gsad_base_cleanup function.
+
+	* src/gsad_base.h (gsad_base_cleanup): New function prototype.
+
+	* src/gsad.c (gsad_cleanup): Call gsad_base_cleanup.
+
 2014-07-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Improve layout for scanner

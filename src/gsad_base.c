@@ -75,6 +75,21 @@ gsad_base_init ()
 }
 
 /**
+ * @brief Base init.
+ *
+ * @return 0 success, -1 error.
+ */
+int
+gsad_base_cleanup ()
+{
+#ifdef USE_LIBXSLT
+  xsltCleanupGlobals ();
+  xmlCleanupParser ();
+#endif
+  return 0;
+}
+
+/**
  * @brief Set language code of user.
  *
  * Caller must handle locking.
@@ -197,8 +212,6 @@ xsl_transform_with_stylesheet (const char *xml_text,
   xmlFreeDoc (res);
   xmlFreeDoc (doc);
 
-  xsltCleanupGlobals ();
-  xmlCleanupParser ();
   return (char *) doc_txt_ptr;
 #else
   int content_fd;

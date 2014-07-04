@@ -81,6 +81,7 @@ typedef struct
 } credentials_t;
 
 int gsad_base_init ();
+int gsad_base_cleanup ();
 void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);
 char * xsl_transform_with_stylesheet (const char *, const char *);
