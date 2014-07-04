@@ -3683,14 +3683,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:</td>
-          <td>
-            <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="config/name"/>
-            </a>
-          </td>
-        </tr>
-        <tr>
           <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
           <td>
             <xsl:choose>
@@ -3698,6 +3690,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <a href="/omp?cmd=get_scanner&amp;scanner_id={scanner/@id}&amp;token={/envelope/token}">
                   <xsl:value-of select="scanner/name"/>
                 </a>
+                (<xsl:value-of select="gsa:i18n ('Type', 'Scanner')"/>: 
+                <xsl:call-template name="scanner-type-name">
+                  <xsl:with-param name="type" select="scanner/type"/>
+                </xsl:call-template>)
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="scanner/name"/>
@@ -3705,9 +3701,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </td>
         </tr>
+        <tr>
+          <td align="right"><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:</td>
+          <td>
+            <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="config/name"/>
+            </a>
+          </td>
+        </tr>
         <xsl:if test="config/type = 0">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
+            <td align="right"><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="gsa:may-op ('get_slaves')">
@@ -3722,7 +3726,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/>:</td>
+            <td align="right"><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/>:</td>
             <td>
               <xsl:choose>
                 <xsl:when test="hosts_ordering = 'sequential'"><xsl:value-of select="gsa:i18n ('Sequential', 'Task Window')"/></xsl:when>
@@ -3733,19 +3737,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/>:</td>
+            <td align="right"><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/>:</td>
             <td>
               <xsl:value-of select="preferences/preference[scanner_name='source_iface']/value"/>
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_checks']/name), 'Task Window')"/>:</td>
+            <td align="right"><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_checks']/name), 'Task Window')"/>:</td>
             <td>
               <xsl:value-of select="preferences/preference[scanner_name='max_checks']/value"/>
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_hosts']/name), 'Task Window')"/>:</td>
+            <td align="right"><xsl:value-of select="gsa:i18n (normalize-space (preferences/preference[scanner_name='max_hosts']/name), 'Task Window')"/>:</td>
             <td>
               <xsl:value-of select="preferences/preference[scanner_name='max_hosts']/value"/>
             </td>

@@ -1,3 +1,10 @@
+2014-07-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (tasks): Add the Scanner type
+	and reflect structure (scanner-type related items) for
+	scanner similar to "New Scanner" dialog. Could look nicer,
+	but at least the structure is now visible.
+
 2014-07-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_task_omp, save_container_task_omp): Use
