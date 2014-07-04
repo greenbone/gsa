@@ -119,13 +119,13 @@ enum content_type
  */
 struct param
 {
-  int valid;             /* Validation flag. */
-  int valid_utf8;        /* UTF8 validation flag. */
   gchar *value;          /* Value. */
   gchar *original_value; /* Original value, before validation. */
   gchar *filename;       /* Filename. */
-  int value_size;        /* Size of value, excluding trailing NULL. */
   params_t *values;      /* Multiple binary values. */
+  int valid;             /* Validation flag. */
+  int valid_utf8;        /* UTF8 validation flag. */
+  int value_size;        /* Size of value, excluding trailing NULL. */
 };
 
 /**

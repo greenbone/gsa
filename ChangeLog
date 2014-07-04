@@ -1,3 +1,9 @@
+2014-07-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (struct user, struct gsad_connection_info),
+	src/gsad_base.h (struct param): Reorder structures elements to reduce
+	space loss due to struct memory alignment.
+
 2014-07-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Fix sporadic segfault when using libxslt in multiple threads.

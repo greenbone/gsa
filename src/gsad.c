@@ -227,8 +227,8 @@ struct user
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language, in short form like "en".
   gchar *pw_warning;   ///< Password policy warning.
-  int charts;          ///< Whether to show charts for this user.
   time_t time;         ///< Login time.
+  int charts;          ///< Whether to show charts for this user.
 };
 
 /**
@@ -1258,13 +1258,13 @@ content_type_from_format_string (enum content_type* content_type,
  */
 struct gsad_connection_info
 {
-  int connectiontype;                      ///< 1=POST, 2=GET.
   struct MHD_PostProcessor *postprocessor; ///< POST processor.
   char *response;                          ///< HTTP response text.
-  int answercode;                          ///< HTTP response code.
   params_t *params;                        ///< Request parameters.
   char *cookie;                            ///< Value of SID cookie param.
   char *language;                          ///< Value of Accept-Language header.
+  int connectiontype;                      ///< 1=POST, 2=GET.
+  int answercode;                          ///< HTTP response code.
 };
 
 /**
