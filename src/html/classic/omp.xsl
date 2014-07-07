@@ -5329,6 +5329,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-config-disabled">
   <tr>
+    <td></td>
     <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
     <td>
       <input type="hidden" name="cmd" value="save_task"/>
@@ -5350,7 +5351,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-scanner-disabled">
   <tr>
-    <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)</td>
+    <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>
+      (<xsl:call-template name="scanner-type-name">
+        <xsl:with-param name="type" select="commands_response/get_tasks_response/task/scanner/type"/>
+      </xsl:call-template>)
+    </td>
     <td>
       <input type="hidden" name="cmd" value="save_task"/>
       <input type="hidden" name="scanner_id" value="0"/>
@@ -5575,12 +5580,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-slave">
-  <xsl:param name="new_task">1</xsl:param>
   <xsl:if test="gsa:may-op ('get_slaves')">
     <tr>
-      <xsl:if test="$new_task = 1">
-        <td></td>
-      </xsl:if>
+      <td></td>
       <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
       <td>
         <select name="slave_id">
@@ -5745,20 +5747,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-openvas-options">
-  <xsl:param name="new_task">1</xsl:param>
   <tr>
-    <xsl:if test="$new_task = 1">
-      <td></td>
-    </xsl:if>
+    <td></td>
     <td><xsl:value-of select="gsa:i18n ('Network Source Interface', 'Task Window')"/></td>
     <td>
       <input type="text" name="source_iface" value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='source_iface']/value}"/>
     </td>
   </tr>
   <tr>
-    <xsl:if test="$new_task = 1">
-      <td></td>
-    </xsl:if>
+    <td></td>
     <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task Window')"/></td>
     <td>
       <xsl:variable name="hosts_ordering"
@@ -5788,9 +5785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <tr>
-        <xsl:if test="$new_task = 1">
-          <td></td>
-        </xsl:if>
+        <td></td>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name, 'Task Window')"/>
         </td>
@@ -5801,9 +5796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
       </tr>
       <tr>
-        <xsl:if test="$new_task = 1">
-          <td></td>
-        </xsl:if>
+        <td></td>
         <td>
           <xsl:value-of select="gsa:i18n (commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name, 'Task Window')"/>
         </td>
@@ -5901,15 +5894,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="html-edit-task-scan-options"/>
               <xsl:if test="$new_task = 0">
                 <input type="hidden" name="scanner_type" value="1"/>
-                <xsl:call-template name="html-edit-task-config-disabled"/>
                 <xsl:call-template name="html-edit-task-scanner-disabled"/>
+                <xsl:call-template name="html-edit-task-config-disabled"/>
                 <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
-                  <xsl:call-template name="html-edit-task-slave">
-                    <xsl:with-param name="new_task">0</xsl:with-param>
-                  </xsl:call-template>
-                  <xsl:call-template name="html-edit-task-openvas-options">
-                    <xsl:with-param name="new_task">0</xsl:with-param>
-                  </xsl:call-template>
+                  <xsl:call-template name="html-edit-task-slave"/>
+                  <xsl:call-template name="html-edit-task-openvas-options"/>
                 </xsl:if>
               </xsl:if>
             </xsl:otherwise>
@@ -5922,11 +5911,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <h3>
                   <xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/>
                 </h3>
-              </td>
-              <td>
-                (<xsl:call-template name="scanner-type-name">
-                  <xsl:with-param name="type" select="2"/>
-                 </xsl:call-template>)
               </td>
             </tr>
             <xsl:call-template name="html-edit-task-scanner">

@@ -1,5 +1,15 @@
 2014-07-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-config-disabled): Add extra
+	table column for alignment.
+	(html-edit-task-scanner-disabled): Also show the scanner's type name.
+	(html-edit-task-slave, html-edit-task-openvas-options): Remove
+	distinguishing depending on whether the task is new or alterable or not.
+	(html-edit-task-form): Adjust templates calls. Remove superfluous
+	scanner type name.
+
+2014-07-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic.omp.xsl (new_task, html-edit-task-form): Replace
 	hard-coded values with template calls. Add current scanner type name in
 	Edit Task page.
