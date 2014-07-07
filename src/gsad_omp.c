@@ -5264,7 +5264,56 @@ char *
 get_alert (credentials_t * credentials, params_t *params,
            const char *extra_xml)
 {
-  return get_one ("alert", credentials, params, extra_xml, "tasks=\"1\"");
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_report_formats/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Report "
+                                 "Formats for the alert. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_alerts");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Report "
+                                 "Formats for the alert. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_alerts");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Report "
+                                 "Formats for the alert. "
+                                 "It is unclear whether the task has been saved or not. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_alerts");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"");
+  g_string_free (extra, TRUE);
+  return html;
 }
 
 /**
@@ -5278,45 +5327,7 @@ get_alert (credentials_t * credentials, params_t *params,
 char *
 get_alert_omp (credentials_t * credentials, params_t *params)
 {
-  int ret;
-  entity_t entity;
-  gchar *response;
-
-  /* Get Report Formats. */
-  response = NULL;
-  entity = NULL;
-  ret = omp (credentials, &response, &entity, "<get_report_formats/>");
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts");
-      case 2:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts");
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
-                             "It is unclear whether the task has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts");
-    }
-  free_entity (entity);
-
-  return get_alert (credentials, params, response);
+  return get_alert (credentials, params, NULL);
 }
 
 /**
