@@ -4936,7 +4936,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="radio" name="scanner_type" value="0" checked="1"/>
             </td>
             <td>
-              <xsl:value-of select="gsa:i18n ('OpenVAS Scanner', 'Scanner')"/>
+              <xsl:call-template name="scanner-type-name">
+                <xsl:with-param name="type" select="2"/>
+              </xsl:call-template>
             </td>
             <td>
               <select name="scanner_id">
@@ -5036,7 +5038,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="radio" name="scanner_type" value="1"/>
             </td>
             <td>
-              <xsl:value-of select="gsa:i18n ('OSP Scanner', 'Scanner')"/>
+              <xsl:call-template name="scanner-type-name">
+                <xsl:with-param name="type" select="1"/>
+              </xsl:call-template>
             </td>
             <td>
               <select name="osp_scanner_id">
@@ -5915,11 +5919,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table>
             <tr>
               <td>
-                <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
+                <h3>
+                  <xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/>
+                </h3>
+              </td>
+              <td>
+                (<xsl:call-template name="scanner-type-name">
+                  <xsl:with-param name="type" select="2"/>
+                 </xsl:call-template>)
               </td>
             </tr>
             <xsl:call-template name="html-edit-task-scanner">
-              <xsl:with-param name="title">OpenVAS Scanner</xsl:with-param>
+              <xsl:with-param name="title">
+                <xsl:call-template name="scanner-type-name">
+                  <xsl:with-param name="type" select="2"/>
+                </xsl:call-template>
+              </xsl:with-param>
               <xsl:with-param name="type">2</xsl:with-param>
               <xsl:with-param name="param_name">scanner_id</xsl:with-param>
             </xsl:call-template>
@@ -5930,7 +5945,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="html-edit-task-slave"/>
             <xsl:call-template name="html-edit-task-openvas-options"/>
             <xsl:call-template name="html-edit-task-scanner">
-              <xsl:with-param name="title">OSP Scanner</xsl:with-param>
+              <xsl:with-param name="title">
+                <xsl:call-template name="scanner-type-name">
+                  <xsl:with-param name="type" select="1"/>
+                </xsl:call-template>
+              </xsl:with-param>
               <xsl:with-param name="type">1</xsl:with-param>
               <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
             </xsl:call-template>

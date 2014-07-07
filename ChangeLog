@@ -1,3 +1,9 @@
+2014-07-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic.omp.xsl (new_task, html-edit-task-form): Replace
+	hard-coded values with template calls. Add current scanner type name in
+	Edit Task page.
+
 2014-07-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (struct user, struct gsad_connection_info),
