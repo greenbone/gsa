@@ -5233,7 +5233,8 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                 || (strcmp (method, "verinice Connector") == 0
                     && (strcmp (name, "verinice_server_url") == 0
                         || strcmp (name, "verinice_server_username") == 0
-                        || strcmp (name, "verinice_server_password") == 0))
+                        || strcmp (name, "verinice_server_password") == 0
+                        || strcmp (name, "verinice_server_report_format") == 0))
                 || (strcmp (method, "Email") == 0
                     && (strcmp (name, "to_address") == 0
                         || strcmp (name, "from_address") == 0

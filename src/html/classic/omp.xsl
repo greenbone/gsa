@@ -7598,6 +7598,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert Window')"/></td>
+                  <td>
+                    <select name="method_data:verinice_server_report_format">
+                      <xsl:for-each select="$report-formats/report_format">
+                        <xsl:if test="extension = 'vna'">
+                          <xsl:choose>
+                            <xsl:when test="name='Verinice ISM'">
+                              <option value="{@id}" selected="1">
+                                <xsl:value-of select="name"/>
+                              </option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="{@id}">
+                                <xsl:value-of select="name"/>
+                              </option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </xsl:if>
+                      </xsl:for-each>
+                      <xsl:if test="count ($report-formats/report_format) = 0">
+                        <option value="''">--</option>
+                      </xsl:if>
+                    </select>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -8113,6 +8140,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert Window')"/></td>
+                  <td>
+                    <select name="method_data:verinice_server_report_format">
+                      <xsl:for-each select="$report-formats/report_format">
+                        <xsl:if test="extension = 'vna'">
+                          <xsl:choose>
+                            <xsl:when test="@id=$method/data[name='verinice_server_report_format']/text()">
+                              <option value="{@id}" selected="1">
+                                <xsl:value-of select="name"/>
+                              </option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="{@id}">
+                                <xsl:value-of select="name"/>
+                              </option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </xsl:if>
+                      </xsl:for-each>
+                      <xsl:if test="count ($report-formats/report_format) = 0">
+                        <option value="''">--</option>
+                      </xsl:if>
+                    </select>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -8576,6 +8630,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:choose>
                         <xsl:when test="string-length(method/data[name='verinice_server_username']/text()) &gt; 0">
                           <xsl:value-of select="method/data[name='verinice_server_username']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Report', 'Alert Window')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='verinice_server_report_format']/text()) &gt; 0">
+                          <xsl:variable name="id"
+                                        select="method/data[name='verinice_server_report_format']/text()"/>
+                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
                       </xsl:choose>
                     </td>

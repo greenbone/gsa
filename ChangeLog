@@ -1,3 +1,14 @@
+2014-07-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add report format option for Verinice alerts.
+
+	* src/gsad_omp.c (append_alert_method_data): Add
+	verinice_server_report_format.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add report format to Verinice options.
+	(alert [details]): Add Verinice report format.
+
 2014-07-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-task-config-disabled): Add extra
