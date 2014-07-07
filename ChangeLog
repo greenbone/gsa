@@ -1,5 +1,11 @@
 2014-07-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (alert [details]): Display default format
+	name when there is no 'verinice_server_report_format', which happens for
+	existing Verinice alerts.
+
+2014-07-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_alert): Get the report formats here so that they
 	are available for the method details when caller is next_page.
 	(get_alert_omp): Let get_alert get the report formats.

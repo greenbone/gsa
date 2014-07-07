@@ -8644,6 +8644,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                         select="method/data[name='verinice_server_report_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
+                        <xsl:otherwise>
+                          Verinice ISM
+                        </xsl:otherwise>
                       </xsl:choose>
                     </td>
                   </tr>
