@@ -1,5 +1,13 @@
 2014-07-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r19831.
+
+	* src/html/classic/omp.xsl (alert [details]): Display default format
+	name when there is no 'verinice_server_report_format', which happens for
+	existing Verinice alerts.
+
+2014-07-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r19827.
 
 	Add report format option for Verinice alerts.
