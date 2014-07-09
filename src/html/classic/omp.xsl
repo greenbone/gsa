@@ -2710,7 +2710,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <xsl:variable name="filter_term">
     <xsl:choose>
-      <xsl:when test="/envelope/params/cmd='get_report_section' and /envelope/params/report_section != 'results'">
+      <xsl:when test="/envelope/params/cmd='get_report_section' and /envelope/params/report_section != 'results' and /envelope/params/report_section != 'summary'">
         <xsl:value-of select="/envelope/params/filter"/>
       </xsl:when>
       <xsl:otherwise>
@@ -2743,7 +2743,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="title">
     <xsl:choose>
-      <xsl:when test="$filterbox=1">
+      <xsl:when test="$fold=1">
         <xsl:value-of select="gsa:i18n ('Fold filter', 'Filter Box')"/>
       </xsl:when>
       <xsl:otherwise>
