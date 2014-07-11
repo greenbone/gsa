@@ -1,5 +1,18 @@
 2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js
+	(BarChartGenerator [generate]): Add option for showing SVG in
+	new window.
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator [generate]): Add option for showing SVG in
+	new window and change save filename prefix to "gsa_donut_chart-".
+	
+	* src/html/classic/js/gsa_graphics_base.js (blob_img_window): New
+	function.
+
+2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Restructure charts to allow defining charts via URL and add option
 	to show a detached chart in a popup window.
 

@@ -687,3 +687,17 @@ svg_from_elem = function (svg_elem, title)
                   + "</svg>";
   return svg_data;
 }
+
+/*
+ * Shows a blob url inside an img element in a new window.
+ */
+function blob_img_window (blob_url)
+{
+  var new_window = window.open ("", "_blank");
+
+  d3.select (new_window.document)
+      .select ("body")
+        .insert ("img")
+          .attr ("src", blob_url)
+  return;
+}

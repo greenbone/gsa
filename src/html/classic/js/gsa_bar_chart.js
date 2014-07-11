@@ -365,6 +365,11 @@ function BarChartGenerator ()
                     svg_blob = new Blob([svg_data], { type: "image/svg+xml" });
                     svg_url = URL.createObjectURL(svg_blob);
 
+                    display.create_or_get_menu_item ("svg_window")
+                               .attr("href", "javascript:void(0)")
+                               .attr("onclick", "blob_img_window (\"" + svg_url + "\")")
+                               .text("Show copyable SVG");
+
                     display.create_or_get_menu_item ("svg_dl")
                                .attr("href", svg_url)
                                .attr("download", "gsa_bar_chart-" + new Date().getTime() + ".svg")
