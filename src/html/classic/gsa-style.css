@@ -1072,15 +1072,15 @@ text-align:right;
 }
 
 #chart_list ul li a#section_list_first {
- height: 16px;
- width: 16px;
- background: url('img/style/dropdown_arrow.png') no-repeat center center;
+ height: 18px;
+ width: 24px;
+ background: url('img/style/dropdown_arrow.png') no-repeat 3px center;
  margin-bottom: 0px;
  margin-top: 0px;
 }
 
 #chart_list:hover ul li a#section_list_first {
-  background: url('img/style/dropdown_arrow_green.png') no-repeat center center;
+  background: url('img/style/dropdown_arrow_green.png') no-repeat 3px center;
 }
 
 #chart_list ul li ul {
