@@ -1,5 +1,16 @@
 2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (svg_from_elem): Add title
+	parameter to add a title text element to the exported SVG.
+
+	* src/html/classic/js/gsa_bar_chart.js
+	(BarChartGenerator [generate]): Add title to SVG export.
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator [generate]): Add title to SVG export.
+
+2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator [relax_labels]): Add var keyword to declaration.
 	Fix horizontal distance calculation for collision detection.

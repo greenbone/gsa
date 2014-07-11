@@ -350,7 +350,8 @@ function BarChartGenerator ()
       // Generate SVG after transition
       setTimeout(function()
                   {
-                    svg_data = svg_from_elem (display.svg ());
+                    svg_data = svg_from_elem (display.svg (),
+                                              display.header ().text ());
                     if (svg_url != null)
                       URL.revokeObjectURL (svg_url);
                     svg_blob = new Blob([svg_data], { type: "image/svg+xml" });

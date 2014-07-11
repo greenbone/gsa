@@ -596,7 +596,7 @@ csv_from_records = function (records, columns, headers, title)
 /*
  * Convert SVG element to export format
  */
-svg_from_elem = function (svg_elem)
+svg_from_elem = function (svg_elem, title)
 {
   var css_text = "";
   // find stylesheet
@@ -607,6 +607,10 @@ svg_from_elem = function (svg_elem)
    *         elsewhere. Workaround: Save copy as "plain SVG" in Inkscape.
    */
   var stylesheet;
+
+  var width = Number (svg_elem.attr ("width"));
+  var height = Number (svg_elem.attr ("height"));
+
   for (var sheet_i = 0; stylesheet == undefined && sheet_i < document.styleSheets.length; sheet_i++)
     {
       if (document.styleSheets [sheet_i].href.indexOf("/gsa-style.css", document.styleSheets [sheet_i].href.length - "/gsa-style.css".length) !== -1 )
@@ -618,14 +622,26 @@ svg_from_elem = function (svg_elem)
     {
       css_text += stylesheet.cssRules[i].cssText;
     }
+
+  var title_xml;
+  if (title != null && title != "")
+    title_xml =   "<text x=\"" + (width/2) + "\" y=\"0\""
+                + " text-anchor=\"middle\""
+                + " style=\"font-weight: bold; font-size: 12px\">"
+                + title
+                + "</text>"
+  else
+    title_xml = ""
+
   // create SVG
   var svg_data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                   + "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/SVG/DTD/svg10.dtd\"> "
                   + "<svg xmlns=\"http://www.w3.org/2000/svg\""
-                  + " viewBox=\"0 0 " + svg_elem.attr ("width") + " " + svg_elem.attr ("height") + "\""
-                  + " width=\"" + svg_elem.attr ("width") + "\""
-                  + " height=\"" + svg_elem.attr ("height") + "\">"
+                  + " viewBox=\"0 " + (title != null ? "-14" : "0") + " " + width + " " + height + "\""
+                  + " width=\"" + width + "\""
+                  + " height=\"" + (height + (title != null ? 14 : 0)) + "\">"
                   + " <defs><style type=\"text/css\">" + css_text + "</style></defs>"
+                  + title_xml
                   + svg_elem.html ()
                   + "</svg>";
   return svg_data;
