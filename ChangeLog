@@ -1,5 +1,46 @@
 2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Restructure charts to allow defining charts via URL and add option
+	to show a detached chart in a popup window.
+
+	* src/gsad_omp.c (get_aggregate_omp): Skip get_aggregate OMP call if
+	xml parameter is missing or a zero value.
+
+	* src/gsad.c (init_validator): Add parameters chart_type and
+	chart_template.
+
+	* src/html/classic/graphics.xsl (js-create-chart-box): Add a default
+	container_id.
+	(js-severity-chart, js-counts-chart): Remove.
+	(js-aggregate-data-source, js-aggregate-chart): New functions.
+	(js-secinfo-top-visualization, dashboard [secinfo]): Replace
+	js-severity-chart and js-counts-chart with new js-aggregate-data-source
+	and js-aggregate-chart.
+
+	* src/html/classic/gsad.xsl (envelope): Hide logo, menu and footer for
+	get_aggregate command.
+
+	* src/html/classic/omp.xsl (get_aggregate): New template.
+	(html-ovaldef-table): Remove extra charts, which are now handled in
+	graphics.xsl to allow creating a detached view.
+
+	* src/html/classic/js/gsa_bar_chart.js (BarChartGenerator): Replace
+	display and data_src parameters with chart parameter. Add detach option
+	to menu.
+
+	* src/html/classic/js/gsa_donut_chart.js (DonutChartGenerator): Replace
+	display and data_src parameters with chart parameter. Add detach option
+	to menu.
+
+	* src/html/classic/js/gsa_graphics_base.js (Chart): Add new parameters
+	and properties chart_type and chart_template. Add new function
+	detached_url.
+	(DataSource): Add new params getter.
+	(create_uri): Add no_xml parameter.
+	(open_detached): New function.
+
+2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (svg_from_elem): Add title
 	parameter to add a title text element to the exported SVG.
 

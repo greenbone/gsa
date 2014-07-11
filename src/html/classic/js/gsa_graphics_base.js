@@ -73,11 +73,14 @@ function create_chart_box (parent_id, container_id, width, height)
  *  p_display:   The Display to use
  */
 function Chart (p_data_src, p_generator, p_display,
-                p_label, p_icon, add_to_display)
+                p_label, p_icon, add_to_display,
+                p_chart_type, p_chart_template)
 {
   var data_src = p_data_src;
   var generator = p_generator;
   var display = p_display;
+  var chart_type = p_chart_type;
+  var chart_template = p_chart_template;
   var label = p_label ? p_label : "Unnamed chart";
   var icon = p_icon ? p_icon : "/img/help.png";
   var current_request = null;
@@ -132,6 +135,18 @@ function Chart (p_data_src, p_generator, p_display,
       return my;
     }
 
+  /* Gets the chart type */
+  my.chart_type = function ()
+    {
+      return chart_type;
+    }
+
+  /* Gets the chart template */
+  my.chart_template = function ()
+    {
+      return chart_template;
+    }
+
   /* Gets or sets the current request */
   my.current_request = function (value)
     {
@@ -156,7 +171,18 @@ function Chart (p_data_src, p_generator, p_display,
   /* Callback for when data has been loaded */
   my.data_loaded = function (data, gen_params)
     {
-      generator.generate (data, display, data_src, gen_params);
+      generator.generate (data, this, gen_params);
+    }
+
+  /* Construct URL for detached chart */
+  my.detached_url = function ()
+    {
+      return create_uri (data_src.command (),
+                         data_src.params (),
+                         data_src.prefix (),
+                         true)
+             + "&chart_type=" + chart_type
+             + "&chart_template=" + chart_template
     }
 
   return my;
@@ -211,6 +237,12 @@ function DataSource (command, params, prefix)
       else
         params [param_name] = value;
       return my;
+    }
+
+  /* Gets the parameters array */
+  my.params = function ()
+    {
+      return params;
     }
 
   /* Removes a parameter */
@@ -474,13 +506,14 @@ function Display (p_container)
 /*
  * creates a GSA request URI from a command name, parameters array and prefix
  */
-function create_uri (command, params, prefix)
+function create_uri (command, params, prefix, no_xml)
 {
   var params_str = prefix + "cmd=" + command;
   for (prop_name in params)
     {
-      params_str = (params_str + "&" + prop_name
-                    + "=" + params[prop_name]);
+      if (!no_xml || prop_name != "xml")
+        params_str = (params_str + "&" + prop_name
+                      + "=" + params[prop_name]);
     }
   params_str = params_str + "&token=" + gsa_token;
   return encodeURI (params_str);
@@ -499,6 +532,14 @@ function output_error (chart, display_message, console_message, console_extra)
   chart.display ().show_error (display_message);
 }
 
+/*
+ * Opens a popup window for a detached chart
+ */
+function open_detached (url)
+{
+  window.open (url, "", "width=460, height=310")
+  return false;
+}
 
 /*
  * Data extraction helpers

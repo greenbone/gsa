@@ -62,9 +62,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </script>
 </xsl:template>
 
+<xsl:variable name="chart_filter_days" select="7"/>
+
 <xsl:template name="js-create-chart-box">
   <xsl:param name="parent_id" select="'top-visualization'"/>
-  <xsl:param name="container_id"/>
+  <xsl:param name="container_id" select="'chart-box'"/>
   <xsl:param name="width" select="435"/>
   <xsl:param name="height" select="250"/>
 
@@ -74,173 +76,190 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="$height"/>)
 </xsl:template>
 
-<xsl:template name="js-severity-chart">
-  <xsl:param name="type" />
-  <xsl:param name="id" select="'severity_chart'"/>
-  <xsl:param name="filter" />
-  <xsl:param name="title_prefix">
-    <xsl:choose>
-      <xsl:when test="$filter">
-        <xsl:value-of select="concat(gsa:type-name-plural ($type), ' by severity (Total: ')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('All ', gsa:type-name-plural ($type), ' by severity (Total: ')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
-  <xsl:param name="title_suffix" select="')'"/>
-  <xsl:param name="title_loading">
-    <xsl:choose>
-      <xsl:when test="$filter">
-        <xsl:value-of  select="concat(gsa:type-name-plural ($type), ' by severity (loading...)')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('All ', gsa:type-name-plural ($type),' by severity (loading...)')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
-  <xsl:param name="chart_name"/>
-  <xsl:param name="chart_label" select="'Severity bar chart'"/>
-  <xsl:param name="display_name" select="concat ($chart_name, '_display')"/>
-  <xsl:param name="generator_name" select="concat ($chart_name, '_gen')"/>
-  <xsl:param name="data_source_name" select="concat ($chart_name, '_src')"/>
-  <xsl:param name="add_to_display" select="1"/>
-  <xsl:param name="auto_load" select="0"/>
-  <xsl:param name="chart_type" select="'bar'"/>
+<xsl:template name="js-aggregate-data-source">
+  <xsl:param name="data_source_name" select="'aggregate-source'"/>
 
-  if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
-    {
-      console.error ("Display not found: <xsl:value-of select="$display_name"/>");
-    }
+  <xsl:param name="aggregate_type"/>
+  <xsl:param name="group_column"/>
+  <xsl:param name="data_column"/>
+  <xsl:param name="filter"/>
+
+  <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
 
   if (data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
     {
       data_sources ["<xsl:value-of select="$data_source_name"/>"]
-        = DataSource ("get_aggregate",
-                      {xml:1,
-                       aggregate_type:"<xsl:value-of select="$type"/>",
-                       group_column:"severity",
-                       filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
+        =
+        <xsl:choose>
+          <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'info_by_class'">
+            DataSource ("get_aggregate",
+                        {xml:1,
+                         aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
+                         group_column:"severity",
+                         filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
+          </xsl:when>
+          <xsl:when test="$chart_template = 'recent_info_by_cvss' or $chart_template = 'recent_info_by_class'">
+            DataSource ("get_aggregate",
+                        {xml:1,
+                         aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
+                         group_column:"severity",
+                         filter:"<xsl:value-of select="str:replace (concat ('modified&gt;-', $chart_filter_days, 'd sort-reverse=severity'), '&quot;', '\&quot;')"/>"});
+          </xsl:when>
+          <xsl:otherwise>
+            DataSource ("get_aggregate",
+                        {xml:1,
+                         aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
+                         group_column:"<xsl:value-of select="$group_column"/>",
+                         filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
+          </xsl:otherwise>
+        </xsl:choose>
     }
-
-  if (generators ["<xsl:value-of select="$generator_name"/>"] == undefined)
-    {
-      <xsl:choose>
-        <xsl:when test="$chart_type = 'bar'">
-          generators ["<xsl:value-of select="$generator_name"/>"]
-            = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
-                .bar_style (severity_bar_style ("value",
-                                                severity_levels.max_low,
-                                                severity_levels.max_medium))
-                .data_transform (data_severity_histogram)
-                .title (title_total ("<xsl:value-of select="$title_loading"/>",
-                                    "<xsl:value-of select="$title_prefix"/>",
-                                    "<xsl:value-of select="$title_suffix"/>",
-                                    "count"))
-        </xsl:when>
-        <xsl:when test="$chart_type = 'donut'">
-          generators ["<xsl:value-of select="$generator_name"/>"]
-            = DonutChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
-                .color_scale (severity_level_color_scale)
-                .data_transform (data_severity_level_counts)
-                .title (title_total ("<xsl:value-of select="$title_loading"/>",
-                                    "<xsl:value-of select="$title_prefix"/>",
-                                    "<xsl:value-of select="$title_suffix"/>",
-                                    "count"))
-        </xsl:when>
-      </xsl:choose>
-    }
-
-  charts ["<xsl:value-of select="$chart_name"/>"] =
-    Chart (data_sources ["<xsl:value-of select="$data_source_name"/>"],
-           generators ["<xsl:value-of select="$generator_name"/>"],
-           displays ["<xsl:value-of select="$display_name"/>"],
-           "<xsl:value-of select="$chart_label"/>",
-           "/img/charts/severity-bar-chart.png",
-           <xsl:value-of select="$add_to_display"/>);
-
-  <xsl:if test="$auto_load">
-    charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
-  </xsl:if>
 </xsl:template>
 
-<xsl:template name="js-counts-chart">
-  <xsl:param name="type" />
-  <xsl:param name="id" select="'counts_chart'"/>
-  <xsl:param name="filter" />
-  <xsl:param name="group_column" />
-  <xsl:param name="group_label" select="$group_column" />
-  <xsl:param name="title_prefix">
-    <xsl:choose>
-      <xsl:when test="$filter">
-        <xsl:value-of select="concat(gsa:type-name-plural ($type), ' by ', $group_label,' (Total: ')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('All ', gsa:type-name-plural ($type), ' by ', $group_label,' (Total: ')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
-  <xsl:param name="title_suffix" select="')'"/>
-  <xsl:param name="title_loading">
-    <xsl:choose>
-      <xsl:when test="$filter">
-        <xsl:value-of  select="concat(gsa:type-name-plural ($type), ' by ', $group_label,' (loading...)')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('All ', gsa:type-name-plural ($type),' by ', $group_label, ' (loading...)')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
+<xsl:template name="js-aggregate-chart">
+  <xsl:param name="chart_name" select="'aggregate-chart'"/>
+  <xsl:param name="data_source_name" select="concat($chart_name, '-source')"/>
+  <xsl:param name="generator_name" select="concat($chart_name, '-generator')"/>
+  <xsl:param name="display_name" select="'chart-box'"/>
 
-  <xsl:param name="chart_name"/>
-  <xsl:param name="chart_label" select="concat (gsa:type-name ($type),' counts by ', $group_label)"/>
-  <xsl:param name="display_name" select="concat ($chart_name, '_display')"/>
-  <xsl:param name="generator_name" select="concat ($chart_name, '_gen')"/>
-  <xsl:param name="data_source_name" select="concat ($chart_name, '_src')"/>
-  <xsl:param name="add_to_display" select="1"/>
+  <xsl:param name="aggregate_type"/>
+  <xsl:param name="group_column"/>
+  <xsl:param name="data_column"/>
+  <xsl:param name="filter"/>
+
+  <xsl:param name="chart_type"/>
+  <xsl:param name="chart_template"/>
   <xsl:param name="auto_load" select="0"/>
+  <xsl:param name="create_data_source" select="0"/>
 
   if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
     {
       console.error ("Display not found: <xsl:value-of select="$display_name"/>");
     }
 
-  if (data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
-    {
-      data_sources ["<xsl:value-of select="$data_source_name"/>"]
-        = DataSource ("get_aggregate",
-                      {xml:1,
-                       aggregate_type:"<xsl:value-of select="$type"/>",
-                       group_column:"<xsl:value-of select="$group_column"/>",
-                       filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
-    }
+  <!-- Optionally create data source -->
+  <xsl:choose>
+    <xsl:when test="$create_data_source">
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="$data_source_name"/>
+        <xsl:with-param name="aggregate_type" select="$aggregate_type"/>
+        <xsl:with-param name="group_column" select="$group_column"/>
+        <xsl:with-param name="data_column" select="$data_column"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="chart_template" select="$chart_template"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      if (data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+        {
+          console.error ("Data source not found: <xsl:value-of select="$data_source_name"/>");
+        }
+    </xsl:otherwise>
+  </xsl:choose>
 
-  if (generators ["<xsl:value-of select="$generator_name"/>"] == undefined)
-    {
+  <!-- Select selector label -->
+  <xsl:variable name="selector_label">
+    <xsl:choose>
+      <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
+        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by Severity Class')"/>
+      </xsl:when>
+      <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
+        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by CVSS')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by ', $group_column)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Select title generator -->
+  <xsl:variable name="title_generator">
+    <xsl:choose>
+      <xsl:when test="$chart_template = 'recent_info_by_class' or $chart_template = 'recent_info_by_cvss'">
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' of the last ', $chart_filter_days, ' days (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' of the last ', $chart_filter_days, ' days (Total: ')"/>",
+                     ")",
+                     "count")
+      </xsl:when>
+      <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'info_by_cvss'">
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity (Total: ')"/>",
+                     ")",
+                     "count")
+      </xsl:when>
+      <xsl:otherwise>
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Total: ')"/>",
+                     ")",
+                     "count")
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Create chart generator -->
+  <xsl:choose>
+    <xsl:when test="$chart_type = 'donut'">
+      generators ["<xsl:value-of select="$generator_name"/>"]
+        = DonutChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:when>
+    <xsl:otherwise>
       generators ["<xsl:value-of select="$generator_name"/>"]
         = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
-            .title (title_total ("<xsl:value-of select="$title_loading"/>",
-                                 "<xsl:value-of select="$title_prefix"/>",
-                                 "<xsl:value-of select="$title_suffix"/>",
-                                 "count"))
-    }
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:otherwise>
+  </xsl:choose>
 
+  <!-- Create basic chart -->
   charts ["<xsl:value-of select="$chart_name"/>"] =
     Chart (data_sources ["<xsl:value-of select="$data_source_name"/>"],
-           generators ["<xsl:value-of select="$generator_name"/>"],
-           displays ["<xsl:value-of select="$display_name"/>"],
-           "<xsl:value-of select="$chart_label"/>",
-           "/img/charts/severity-bar-chart.png",
-           <xsl:value-of select="$add_to_display"/>);
+            generators ["<xsl:value-of select="$generator_name"/>"],
+            displays ["<xsl:value-of select="$display_name"/>"],
+            "<xsl:value-of select="$selector_label"/>",
+            "/img/charts/severity-bar-chart.png",
+            1,
+            "<xsl:value-of select="$chart_type"/>",
+            "<xsl:value-of select="$chart_template"/>");
+
+  <!-- Data modifiers and stylers -->
+  <xsl:choose>
+    <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
+      generators ["<xsl:value-of select="$generator_name"/>"]
+        .data_transform (data_severity_level_counts)
+      <xsl:choose>
+        <xsl:when test="$chart_type = 'donut'">
+          .color_scale (severity_level_color_scale)
+        </xsl:when>
+        <xsl:otherwise>
+
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
+      generators ["<xsl:value-of select="$generator_name"/>"]
+        .data_transform (data_severity_histogram)
+      <xsl:choose>
+        <xsl:when test="$chart_type = 'donut'">
+
+        </xsl:when>
+        <xsl:otherwise>
+          .bar_style (severity_bar_style ("value",
+                                          severity_levels.max_low,
+                                          severity_levels.max_medium))
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise/>
+  </xsl:choose>
 
   <xsl:if test="$auto_load">
     charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
   </xsl:if>
+
 </xsl:template>
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
-  <xsl:param name="extra_charts" select="''"/>
   <xsl:param name="auto_load_left" select="0"/>
   <xsl:param name="auto_load_right" select="1"/>
 
@@ -252,47 +271,80 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-severity-chart">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="filter" select="filters/term"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_filtered_left'"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
-      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity by CVSS'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-severity-chart">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="filter" select="filters/term"/>
-      <xsl:with-param name="chart_name" select="'severity_bar_chart_filtered_right'"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-      <xsl:with-param name="generator_name" select="'severity_bar_chart_filtered'"/>
-      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity by CVSS'"/>
+    <xsl:call-template name="js-aggregate-data-source">
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="group_column" select="'severity'"/>
+      <xsl:with-param name="data_column" select="''"/>
+      <xsl:with-param name="filter" select="/envelope/params/filter"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-severity-chart">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="filter" select="filters/term"/>
-      <xsl:with-param name="chart_name" select="'severity_donut_left'"/>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'left-by-cvss'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
       <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="generator_name" select="'severity_donut'"/>
-      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity by Class'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_type" select="'bar'"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
-    <xsl:call-template name="js-severity-chart">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="filter" select="filters/term"/>
-      <xsl:with-param name="chart_name" select="'severity_donut_right'"/>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'right-by-cvss'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
       <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-      <xsl:with-param name="generator_name" select="'severity_donut'"/>
-      <xsl:with-param name="data_source_name" select="'severity_filtered'"/>
-      <xsl:with-param name="chart_label" select="'Severity by Class'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_type" select="'bar'"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
 
-    <xsl:copy-of select="$extra_charts"/>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'left-by-class'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_template" select="'info_by_class'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'right-by-cvss'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_template" select="'info_by_class'"/>
+    </xsl:call-template>
+
+    <xsl:if test="$type = 'ovaldef'">
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'class'"/>
+        <xsl:with-param name="data_column" select="''"/>
+        <xsl:with-param name="filter" select="/envelope/params/filter"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-by-class'"/>
+        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'class'"/>
+        <xsl:with-param name="data_column" select="''"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-by-class'"/>
+        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'class'"/>
+        <xsl:with-param name="data_column" select="''"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+    </xsl:if>
 
     displays ["top-visualization-left"].create_chart_selector ();
     displays ["top-visualization-right"].create_chart_selector ();
@@ -339,8 +391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
-  <xsl:variable name="filter_days" select="7"/>
-  <xsl:variable name="filter" select="concat ('modified&gt;-', $filter_days, 'd sort-reverse=severity')"/>
+  <xsl:variable name="filter" select="concat ('modified&gt;-', $chart_filter_days, 'd sort-reverse=severity')"/>
 
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -371,27 +422,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="container_id" select="'nvt_severity_chart_display'"/>
             <xsl:with-param name="parent_id" select="'nvt_severity_chart'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'nvt'"/>
-            <xsl:with-param name="id" select="'nvt_severity_chart'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'nvt_severity_chart'"/>
+            <xsl:with-param name="aggregate_type" select="'nvt'"/>
             <xsl:with-param name="display_name" select="'nvt_severity_chart_display'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
           <xsl:call-template name="js-create-chart-box">
-            <xsl:with-param name="container_id" select="'nvt_severity_chart_2_display'"/>
+            <xsl:with-param name="container_id" select="'nvt_severity_chart_display_2'"/>
             <xsl:with-param name="parent_id" select="'nvt_severity_chart_2'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'nvt'"/>
-            <xsl:with-param name="id" select="'nvt_severity_chart_2'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'nvt_severity_chart_2'"/>
-            <xsl:with-param name="display_name" select="'nvt_severity_chart_2_display'"/>
-            <xsl:with-param name="filter" select="$filter"/>
-            <xsl:with-param name="title_prefix" select="concat ('NVTs of the last ', $filter_days, ' days (Total: ')"/>
-            <xsl:with-param name="title_loading" select="concat ('NVTs of the last ', $filter_days, ' days (loading ...) ')"/>
+            <xsl:with-param name="aggregate_type" select="'nvt'"/>
+            <xsl:with-param name="display_name" select="'nvt_severity_chart_display_2'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'recent_info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
 
@@ -399,27 +451,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="container_id" select="'cve_severity_chart_display'"/>
             <xsl:with-param name="parent_id" select="'cve_severity_chart'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'cve'"/>
-            <xsl:with-param name="id" select="'cve_severity_chart'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'cve_severity_chart'"/>
+            <xsl:with-param name="aggregate_type" select="'cve'"/>
             <xsl:with-param name="display_name" select="'cve_severity_chart_display'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
           <xsl:call-template name="js-create-chart-box">
-            <xsl:with-param name="container_id" select="'cve_severity_chart_2_display'"/>
+            <xsl:with-param name="container_id" select="'cve_severity_chart_display_2'"/>
             <xsl:with-param name="parent_id" select="'cve_severity_chart_2'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'cve'"/>
-            <xsl:with-param name="id" select="'cve_severity_chart_2'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'cve_severity_chart_2'"/>
-            <xsl:with-param name="display_name" select="'cve_severity_chart_2_display'"/>
-            <xsl:with-param name="filter" select="$filter"/>
-            <xsl:with-param name="title_prefix" select="concat ('CVEs of the last ', $filter_days, ' days (Total: ')"/>
-            <xsl:with-param name="title_loading" select="concat ('CVEs of the last ', $filter_days, ' days (loading ...) ')"/>
+            <xsl:with-param name="aggregate_type" select="'cve'"/>
+            <xsl:with-param name="display_name" select="'cve_severity_chart_display_2'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'recent_info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
 
@@ -427,27 +480,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="container_id" select="'cpe_severity_chart_display'"/>
             <xsl:with-param name="parent_id" select="'cpe_severity_chart'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'cpe'"/>
-            <xsl:with-param name="id" select="'cpe_severity_chart'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'cpe_severity_chart'"/>
+            <xsl:with-param name="aggregate_type" select="'cpe'"/>
             <xsl:with-param name="display_name" select="'cpe_severity_chart_display'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
           <xsl:call-template name="js-create-chart-box">
-            <xsl:with-param name="container_id" select="'cpe_severity_chart_2_display'"/>
+            <xsl:with-param name="container_id" select="'cpe_severity_chart_display_2'"/>
             <xsl:with-param name="parent_id" select="'cpe_severity_chart_2'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'cpe'"/>
-            <xsl:with-param name="id" select="'cpe_severity_chart_2'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'cpe_severity_chart_2'"/>
-            <xsl:with-param name="display_name" select="'cpe_severity_chart_2_display'"/>
-            <xsl:with-param name="filter" select="$filter"/>
-            <xsl:with-param name="title_prefix" select="concat ('CPEs of the last ', $filter_days, ' days (Total: ')"/>
-            <xsl:with-param name="title_loading" select="concat ('CPEs of the last ', $filter_days, ' days (loading ...) ')"/>
+            <xsl:with-param name="aggregate_type" select="'cpe'"/>
+            <xsl:with-param name="display_name" select="'cpe_severity_chart_display_2'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'recent_info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
 
@@ -455,27 +509,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="container_id" select="'ovaldef_severity_chart_display'"/>
             <xsl:with-param name="parent_id" select="'ovaldef_severity_chart'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'ovaldef'"/>
-            <xsl:with-param name="id" select="'ovaldef_severity_chart'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'ovaldef_severity_chart'"/>
+            <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
             <xsl:with-param name="display_name" select="'ovaldef_severity_chart_display'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
           <xsl:call-template name="js-create-chart-box">
-            <xsl:with-param name="container_id" select="'ovaldef_severity_chart_2_display'"/>
+            <xsl:with-param name="container_id" select="'ovaldef_severity_chart_display_2'"/>
             <xsl:with-param name="parent_id" select="'ovaldef_severity_chart_2'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'ovaldef'"/>
-            <xsl:with-param name="id" select="'ovaldef_severity_chart_2'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'ovaldef_severity_chart_2'"/>
-            <xsl:with-param name="display_name" select="'ovaldef_severity_chart_2_display'"/>
-            <xsl:with-param name="filter" select="$filter"/>
-            <xsl:with-param name="title_prefix" select="concat ('OVAL definitions of the last ', $filter_days, ' days (Total: ')"/>
-            <xsl:with-param name="title_loading" select="concat ('OVAL definitions of the last ', $filter_days, ' days (loading ...) ')"/>
+            <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
+            <xsl:with-param name="display_name" select="'ovaldef_severity_chart_display_2'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'recent_info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
 
@@ -483,27 +538,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="container_id" select="'dfn_cert_adv_severity_chart_display'"/>
             <xsl:with-param name="parent_id" select="'dfn_cert_adv_severity_chart'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-            <xsl:with-param name="id" select="'dfn_cert_adv_severity_chart'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'dfn_cert_adv_severity_chart'"/>
+            <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
             <xsl:with-param name="display_name" select="'dfn_cert_adv_severity_chart_display'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
 
           <xsl:call-template name="js-create-chart-box">
-            <xsl:with-param name="container_id" select="'dfn_cert_adv_severity_chart_2_display'"/>
+            <xsl:with-param name="container_id" select="'dfn_cert_adv_severity_chart_display_2'"/>
             <xsl:with-param name="parent_id" select="'dfn_cert_adv_severity_chart_2'"/>
           </xsl:call-template>
-          <xsl:call-template name="js-severity-chart">
-            <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-            <xsl:with-param name="id" select="'dfn_cert_adv_severity_chart_2'"/>
+          <xsl:call-template name="js-aggregate-chart">
             <xsl:with-param name="chart_name" select="'dfn_cert_adv_severity_chart_2'"/>
-            <xsl:with-param name="display_name" select="'dfn_cert_adv_severity_chart_2_display'"/>
-            <xsl:with-param name="filter" select="$filter"/>
-            <xsl:with-param name="title_prefix" select="concat ('DFN-CERT advisories of the last ', $filter_days, ' days (Total: ')"/>
-            <xsl:with-param name="title_loading" select="concat ('DFN-CERT advisories of the last ', $filter_days, ' days (loading ...) ')"/>
+            <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
+            <xsl:with-param name="display_name" select="'dfn_cert_adv_severity_chart_display_2'"/>
+            <xsl:with-param name="chart_type" select="'bar'"/>
+            <xsl:with-param name="chart_template" select="'recent_info_by_cvss'"/>
             <xsl:with-param name="auto_load" select="1"/>
+            <xsl:with-param name="create_data_source" select="1"/>
           </xsl:call-template>
         </script>
       </center>

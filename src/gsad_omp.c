@@ -4961,7 +4961,7 @@ export_agents_omp (credentials_t * credentials, params_t *params,
 char *
 get_aggregate_omp (credentials_t * credentials, params_t *params)
 {
-  const char *data_column, *group_column, *type, *filter;
+  const char *data_column, *group_column, *type, *filter, *xml_param;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -4972,6 +4972,12 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
   filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
+  xml_param = params_value (params, "xml");
+
+  if (xml_param == NULL || atoi (xml_param) == 0)
+    {
+      return xsl_transform_omp (credentials, g_strdup ("<get_aggregate/>"));
+    }
   xml = g_string_new ("<get_aggregate>");
 
   command = g_string_new ("<get_aggregates");

@@ -2159,19 +2159,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="envelope">
-  <div class="envelope">
-    <xsl:call-template name="html-gsa-logo">
-      <xsl:with-param name="username">
-        <xsl:value-of select="login/text()"/>
-      </xsl:with-param>
-      <xsl:with-param name="time">
-        <xsl:value-of select="time"/>
-      </xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="html-gsa-navigation"/>
-    <xsl:apply-templates/>
-    <xsl:call-template name="html-footer"/>
-  </div>
+  <xsl:choose>
+    <xsl:when test="params/cmd = 'get_aggregate'">
+      <xsl:apply-templates/>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="envelope">
+        <xsl:call-template name="html-gsa-logo">
+          <xsl:with-param name="username">
+            <xsl:value-of select="login/text()"/>
+          </xsl:with-param>
+          <xsl:with-param name="time">
+            <xsl:value-of select="time"/>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="html-gsa-navigation"/>
+        <xsl:apply-templates/>
+        <xsl:call-template name="html-footer"/>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="password_warning">

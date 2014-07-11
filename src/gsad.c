@@ -1091,6 +1091,8 @@ init_validator ()
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
   openvas_validator_alias (validator, "charts", "boolean");
+  openvas_validator_alias (validator, "chart_type", "name");
+  openvas_validator_alias (validator, "chart_template", "name");
   openvas_validator_alias (validator, "custom_severity", "boolean");
   openvas_validator_alias (validator, "dashboard_name", "name");
   openvas_validator_alias (validator, "debug",           "boolean");

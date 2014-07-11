@@ -132,8 +132,10 @@ function DonutChartGenerator ()
       display.header ().text (title ());
     }
 
-  my.generate = function (xml_data, display, data_src, gen_params)
+  my.generate = function (xml_data, chart, gen_params)
     {
+      var display = chart.display ();
+      var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
       // Extract records
@@ -325,6 +327,12 @@ function DonutChartGenerator ()
               .attr ("opacity", (slices.length != 0) ? 1 : 0.25);
 
       relax_labels ();
+
+      // Create detach menu item
+      display.create_or_get_menu_item ("detach")
+               .attr("href", "javascript:void(0);")
+               .attr("onclick", "javascript:open_detached (\"" + chart.detached_url () + "\")")
+               .text("Show detached chart window");
 
       // Generate CSV
       csv_data = csv_from_records (data,

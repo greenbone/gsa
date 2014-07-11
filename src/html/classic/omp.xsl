@@ -7278,6 +7278,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="agent" mode="select"/>
 </xsl:template>
 
+<!-- BEGIN AGGREGATES MANAGEMENT -->
+
+<xsl:template match="get_aggregate">
+  <xsl:call-template name="init-d3charts"/>
+  <div id="aggregate-container"/>
+  <xsl:call-template name="html-footer"/>
+  <script>
+    <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'aggregate-container'"/>
+      <xsl:with-param name="container_id" select="'aggregate-display'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-data-source">
+      <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
+      <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
+      <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
+      <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
+      <xsl:with-param name="filter" select="/envelope/params/filter"/>
+      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'aggregate-chart'"/>
+      <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
+      <xsl:with-param name="generator_name" select="'aggregate-generator'"/>
+      <xsl:with-param name="display_name" select="'aggregate-display'"/>
+      <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
+      <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
+      <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
+      <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
+      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
+      <xsl:with-param name="auto_load" select="1"/>
+    </xsl:call-template>
+  </script>
+</xsl:template>
+
+
+<!-- END AGGREGATES MANAGEMENT -->
+
 
 <!-- BEGIN ALERTS MANAGEMENT -->
 
@@ -16626,28 +16663,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="init-d3charts"/>
       <xsl:call-template name="js-secinfo-top-visualization">
         <xsl:with-param name="type" select="'ovaldef'"/>
-        <xsl:with-param name="extra_charts">
-          <xsl:call-template name="js-counts-chart">
-            <xsl:with-param name="type" select="'ovaldef'"/>
-            <xsl:with-param name="filter" select="filters/term"/>
-            <xsl:with-param name="group_column" select="'class'"/>
-            <xsl:with-param name="id" select="'top-visualization-left'"/>
-            <xsl:with-param name="chart_name" select="'ovaldef-by-class-left'"/>
-            <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-            <xsl:with-param name="data_source_name" select="'ovaldef-by-class'"/>
-            <xsl:with-param name="generator_name" select="'ovaldef-by-class'"/>
-          </xsl:call-template>
-          <xsl:call-template name="js-counts-chart">
-            <xsl:with-param name="type" select="'ovaldef'"/>
-            <xsl:with-param name="filter" select="filters/term"/>
-            <xsl:with-param name="group_column" select="'class'"/>
-            <xsl:with-param name="id" select="'top-visualization-left'"/>
-            <xsl:with-param name="chart_name" select="'ovaldef-by-class-right'"/>
-            <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-            <xsl:with-param name="data_source_name" select="'ovaldef-by-class'"/>
-            <xsl:with-param name="generator_name" select="'ovaldef-by-class'"/>
-          </xsl:call-template>
-        </xsl:with-param>
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="columns">
