@@ -359,7 +359,7 @@ function DonutChartGenerator ()
       display.update_gen_data (my, gen_params);
     };
 
-  relax_labels = function (labels)
+  var relax_labels = function (labels)
     {
       again = false;
       var labels = svg.selectAll (".slice_label")
@@ -388,7 +388,7 @@ function DonutChartGenerator ()
                 return;
 
               sel_b = d3.select(elem_b);
-              x_b = sel_a.attr("x");
+              x_b = sel_b.attr("x");
               y_b = sel_b.attr("y");
 
               if (Math.abs (x_a - x_b) * 2 > (width_a + width_b))

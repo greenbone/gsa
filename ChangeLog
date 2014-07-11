@@ -1,5 +1,11 @@
 2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator [relax_labels]): Add var keyword to declaration.
+	Fix horizontal distance calculation for collision detection.
+
+2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsa-style.css: Enlarge area around dropdown arrow.
 
 2014-07-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
