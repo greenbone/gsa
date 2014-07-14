@@ -312,7 +312,8 @@ function BarChartGenerator ()
             .transition().delay (0).duration (250).ease("sin-in-out")
               .attr("x", function(d) { return x_scale(d [x_field]); })
               .attr("width", x_scale.rangeBand())
-      x_axis_elem.transition().delay (0).duration (250).ease("sin-in-out").call (x_axis);
+      x_axis_elem.transition().delay (0).duration (250).ease("sin-in-out").call (x_axis)
+                              .delay (250).duration (125).attr("transform", "translate(0," + height + ")");
 
       // Update heights and y axis
       svg.selectAll(".bar")

@@ -1,3 +1,16 @@
+2014-07-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make detached charts resizable.
+
+	* src/html/classic/omp.xsl (get_aggregate): Add window resize listener.
+
+	* src/html/classic/js/gsa_bar_chart.js (BarChartGenerator [generate]):
+	Move x axis to correct position on update.
+
+	* src/html/classic/js/gsa_graphics_base.js (Display [width])
+	(Display [height], detached_chart_resize_listener): New functions.
+	(open_detached): Increase height of new window.
+
 2014-07-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js

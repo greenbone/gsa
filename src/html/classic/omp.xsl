@@ -7309,6 +7309,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
       <xsl:with-param name="auto_load" select="1"/>
     </xsl:call-template>
+
+    window.onresize = detached_chart_resize_listener (displays ["aggregate-display"])
   </script>
 </xsl:template>
 

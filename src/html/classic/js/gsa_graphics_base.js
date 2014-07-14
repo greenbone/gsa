@@ -460,6 +460,26 @@ function Display (p_container)
             .style ("vertical-align", "middle")
   }
 
+  my.width = function (new_width)
+                {
+                  if (!arguments.length)
+                    return container.property ("clientWidth");
+
+                  svg.attr ("width",
+                            Math.max (new_width, 200));
+                  return my;
+                }
+
+  my.height = function (new_height)
+                {
+                  if (!arguments.length)
+                    return container.property ("clientHeight");
+
+                  svg.attr ("height",
+                            Math.max (new_height - (header.property ("clientHeight") + footer.property ("clientHeight")), 100));
+                  return my;
+                }
+
   /* refreshes the current chart */
   my.refresh = function ()
                 {
@@ -537,8 +557,24 @@ function output_error (chart, display_message, console_message, console_extra)
  */
 function open_detached (url)
 {
-  window.open (url, "", "width=460, height=310")
+  window.open (url, "", "width=460, height=315")
   return false;
+}
+
+/*
+ * Resizes a chart display to fill the whole window
+ */
+function detached_chart_resize_listener (display)
+{
+  return function ()
+    {
+      var window_width = window.innerWidth;
+      var window_height = window.innerHeight;
+
+      display.width (window_width - 20);
+      display.height (window_height - (20 + Number (d3.select (".gsa_footer").property ("clientHeight"))));
+      display.refresh ();
+    }
 }
 
 /*
