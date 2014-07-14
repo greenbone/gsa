@@ -764,6 +764,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="feedback-icon">
+<!-- You may fill in here to_name and to_adress and un-comment the block
+     to enable a feedback button for support or similar purposes. -->
+<!--
+  <xsl:param name="to_name" select="'FILL IN NAME'"/>
+  <xsl:param name="to_address" select="'FILL IN EMAIL ADDRESS'"/>
+  <xsl:param name="subject" select="'Feedback'"/>
+  <xsl:param name="body" select="'Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;'"/>
+  <a href="mailto:{str:encode-uri ($to_name, true ())}%20%3C{str:encode-uri ($to_address, true ())}%3E?subject={str:encode-uri ($subject, true ())}&amp;body=Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;{str:encode-uri ($body, true ())}">
+    <img src="img/feedback.png" title="{gsa:i18n ('Send feedback to', 'Window')} {$to_name}" alt="{gsa:i18n('Feedback', 'Window')}"/>
+  </a>
+-->
+</xsl:template>
+
 <xsl:template name="filter-window-pager">
   <xsl:param name="type"/>
   <xsl:param name="list"/>
@@ -22974,6 +22988,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:call-template name="feedback-icon">
+        <xsl:with-param name="subject" select="concat ('Feedback on NVT &quot;', nvt/name,'&quot; (', nvt/@oid, ')')"/>
+        <xsl:with-param name="body" select="concat ('PLEASE FILL IN YOUR QUESTION OR NOTE HERE.',
+                                                    '&#xA;',
+                                                    'PLEASE REMOVE FROM THE CITED RESULTS BELOW ANY CLASSIFIED DATA.&#xA;',
+                                                    '&#xA;',
+                                                    'NVT:&#xA;',
+                                                    '  OID: ', nvt/@oid, '&#xA;',
+                                                    '  Name: ', nvt/name, '&#xA;',
+                                                    '  Location: ', port, '&#xA;',
+                                                    '&#xA;',
+                                                    'Result:&#xA;',
+                                                    description)"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right" style="font-size: 10px;">
