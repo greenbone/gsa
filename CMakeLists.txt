@@ -427,6 +427,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/first_inactive.png
                src/html/classic/img/last.png
                src/html/classic/img/last_inactive.png
+               src/html/classic/img/feedback.png
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/logo_l.png
