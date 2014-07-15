@@ -342,6 +342,8 @@ char * get_users_omp (credentials_t *, params_t *);
 char * new_user_omp (credentials_t *, params_t *);
 char * save_user_omp (credentials_t *, params_t *, char **);
 char * save_auth_omp (credentials_t *, params_t *);
+char * save_chart_preference_omp (credentials_t *, params_t *, gchar **,
+                                  gchar **);
 
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);

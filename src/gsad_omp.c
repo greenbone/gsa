@@ -225,6 +225,28 @@ omp_init (const gchar *address_manager, int port_manager)
 }
 
 /**
+ * @brief Traverse a chart preference tree and output xml elements.
+ *
+ * @param name   Name of the preference.
+ * @param value  Preference value.
+ * @param buffer GString buffer to output elements to.
+ *
+ * @return always 0
+ */
+static gboolean
+print_chart_pref (gchar *name, gchar *value, GString* buffer)
+{
+  g_string_append_printf (buffer,
+                          "<chart_preference>"
+                          "<name>%s</name>"
+                          "<value>%s</value>"
+                          "</chart_preference>",
+                          name,
+                          value);
+  return 0;
+}
+
+/**
  * @brief Wrap some XML in an envelope and XSL transform the envelope.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -282,6 +304,15 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  / 1000000.0);
   g_string_append (string, res);
   g_free (res);
+
+  if (credentials->charts)
+    {
+      g_string_append (string, "<chart_preferences>");
+      g_tree_foreach (credentials->chart_prefs,
+                      (GTraverseFunc)print_chart_pref,
+                      string);
+      g_string_append (string, "</chart_preferences>");
+    }
 
   if (credentials->pw_warning)
     {
@@ -19758,6 +19789,35 @@ save_auth_omp (credentials_t* credentials, params_t *params)
   free_entity (entity);
   g_free (response);
   return html;
+}
+
+/**
+ * @brief Save chart preferences.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  params        Request parameters.
+ *
+ * @return .
+ */
+char*
+save_chart_preference_omp (credentials_t* credentials, params_t *params,
+                           gchar **pref_name, gchar **pref_value)
+{
+  *pref_name = g_strdup (params_value (params, "chart_preference_name"));
+  *pref_value = g_strdup (params_value (params, "chart_preference_value"));
+
+  g_warning ("!TEST! %s : %s", *pref_name, *pref_value);
+
+  if (*pref_name == NULL)
+    return ("<save_chart_preference_response"
+            " status=\"400\" status_text=\"Invalid or missing name\">");
+
+  if (*pref_value == NULL)
+    return ("<save_chart_preference_response"
+            " status=\"400\" status_text=\"Invalid or missing value\">");
+
+  return ("<save_chart_preference_response"
+          " status=\"200\" status_text=\"OK\">");
 }
 
 

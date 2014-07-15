@@ -27,7 +27,8 @@
 /*
  * Creates adds display elements to a selected part of the HTML page
  */
-function create_chart_box (parent_id, container_id, width, height)
+function create_chart_box (parent_id, container_id, width, height,
+                           select_pref_name)
 {
   var parent = d3.select ("#" + parent_id);
   var container = parent.append ("div")
@@ -61,6 +62,9 @@ function create_chart_box (parent_id, container_id, width, height)
       .attr ("id", container_id + "-foot")
 
   displays [container_id] = new Display (container);
+  if (select_pref_name != '')
+    displays [container_id].select_pref_name (select_pref_name);
+
 }
 
 /*
@@ -354,6 +358,9 @@ function Display (p_container)
   var last_generator = null;
   var last_gen_params = null;
 
+  var select_pref_name = "";
+  var chart_pref_request = null;
+
   function my() {};
 
   /* Gets the Display name */
@@ -442,7 +449,7 @@ function Display (p_container)
                           .style ("margin-left", "5px")
                           .style ("margin-right", "5px")
                           .style ("vertical-align", "middle")
-                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (parseInt (this.value))");
+                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (parseInt (this.value), true)");
 
     for (var i = 0; i < charts.length; i++)
       {
@@ -459,6 +466,16 @@ function Display (p_container)
             .attr ("src", "img/next.png")
             .style ("vertical-align", "middle")
   }
+
+  my.select_pref_name = function (value)
+                {
+                  if (!arguments.length)
+                    return select_pref_name;
+
+                  select_pref_name = value;
+
+                  return my;
+                }
 
   my.width = function (new_width)
                 {
@@ -487,12 +504,29 @@ function Display (p_container)
                 }
 
   /* Selects and shows a chart from the charts list by index */
-  my.select_chart = function (index)
+  my.select_chart = function (index, save_preference)
                       {
                         if (typeof (index) != "number" || index < 0 || index >= charts.length)
                           return console.error ("Invalid chart index: " + index);
                         charts [index].request_data ();
                         chart_i = index;
+
+                        if (save_preference && select_pref_name != "")
+                          {
+                            if (chart_pref_request != null)
+                              chart_pref_request.abort ();
+
+                            chart_pref_request = d3.xhr ("/omp")
+
+                            var form_data = new FormData ();
+                            form_data.append ("chart_preference_name", select_pref_name);
+                            form_data.append ("chart_preference_value", index);
+                            form_data.append ("token", gsa_token);
+                            form_data.append ("cmd", "save_chart_preference");
+
+                            chart_pref_request.post (form_data);
+                          }
+
                         select_elem.select ("option#" + name + "_chart_opt_" + (index))
                                     .property ("selected", "selected")
                       }
@@ -501,18 +535,18 @@ function Display (p_container)
   my.prev_chart = function ()
                     {
                       if (chart_i > 0)
-                        my.select_chart (chart_i - 1);
+                        my.select_chart (chart_i - 1, true);
                       else
-                        my.select_chart (charts.length - 1);
+                        my.select_chart (charts.length - 1, true);
                     }
 
   /* Selects and shows the next chart from the charts list if possible */
   my.next_chart = function ()
                     {
                       if (chart_i < charts.length - 1)
-                        my.select_chart (chart_i + 1);
+                        my.select_chart (chart_i + 1, true);
                       else
-                        my.select_chart (0);
+                        my.select_chart (0, true);
                     }
 
   return my;

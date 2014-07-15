@@ -229,6 +229,7 @@ struct user
   gchar *pw_warning;   ///< Password policy warning.
   time_t time;         ///< Login time.
   int charts;          ///< Whether to show charts for this user.
+  GTree *chart_prefs;  ///< Chart preferences.
 };
 
 /**
@@ -292,6 +293,9 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_free (user->language);
       g_free (user->pw_warning);
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
+      g_tree_destroy (user->chart_prefs);
+      user->chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                           NULL, g_free, g_free);
     }
   else
     {
@@ -306,6 +310,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->capabilities = g_strdup (capabilities);
       user->language = language ? g_strdup (language) : NULL;
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
+      user->chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                           NULL, g_free, g_free);
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -546,6 +552,37 @@ user_set_charts (const gchar *name, const int charts)
       if (strcmp (item->username, name) == 0)
         {
           item->charts = charts;
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Set a chart preference of a user.
+ *
+ * @param[in]   name        User name.
+ * @param[in]   pref_name   Name of the chart preference.
+ * @param[in]   pref_value  Preference value to set.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_chart_pref (const gchar *name, gchar* pref_name, gchar *pref_value)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_tree_replace (item->chart_prefs,
+                          pref_name, pref_value);
           ret = 0;
           break;
         }
@@ -871,6 +908,7 @@ init_validator ()
                          "|(save_agent)"
                          "|(save_alert)"
                          "|(save_auth)"
+                         "|(save_chart_preference)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -915,6 +953,8 @@ init_validator ()
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "caller",     "^.*$");
+  openvas_validator_add (validator, "chart_preference_name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
   openvas_validator_add (validator, "comment",    "^[-_;'()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
@@ -1863,6 +1903,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   credentials->charts = user->charts;
 
+  credentials->chart_prefs = user->chart_prefs;
+
   gettimeofday (&credentials->cmd_start, NULL);
 
   /* The caller of a POST is usually the caller of the page that the POST form
@@ -1975,6 +2017,16 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_agent)
   ELSE (save_alert)
   ELSE (save_auth)
+  else if (!strcmp (cmd, "save_chart_preference"))
+    {
+      gchar *pref_name, *pref_value;
+
+      con_info->response = save_chart_preference_omp (credentials,
+                                                      con_info->params,
+                                                      &pref_name, &pref_value);
+      if (pref_name && pref_value)
+        user_set_chart_pref (credentials->username, pref_name, pref_value);
+    }
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
@@ -3570,6 +3622,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
       credentials->charts = user->charts;
+      credentials->chart_prefs = user->chart_prefs;
       credentials->pw_warning = user->pw_warning ? strdup (user->pw_warning)
                                                  : NULL;
       if (user->language)

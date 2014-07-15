@@ -1,3 +1,35 @@
+2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Save the user's chart selection for the current session.
+
+	* src/gsad_base.h (credentials_t): Add chart_prefs field.
+
+	* src/gsad_omp.c (print_chart_pref): New function.
+	(xsl_transform_omp): Add chart preferences to XML.
+	(save_chart_preference_omp): New function.
+
+	* src/gsad_omp.h (save_chart_preference_omp): New function prototype.
+
+	* src/gsad.c (user, user_add): Add chart_prefs field.
+	(user_set_chart_pref): New function.
+	(init_validator): Add command save_chart_preference and parameters
+	chart_preference_name, chart_preference_value.
+	(exec_omp_post): Assign char_prefs of user to credentials.
+	Handle save_chart_preference command.
+	(request_handler): Assign char_prefs of user to credentials.
+
+	* src/html/classic/graphics.xsl (js-create-chart-box): Add parameter
+	select_pref_name.
+	(js-secinfo-top-visualization): Get chart indexes from chart
+	preferences if they are available.
+
+	* src/html/classic/gsad.xsl (chart_preferences): New template.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_box): Add
+	select_pref_name parameter.
+	(Display): Post requests to set chart id for current display when
+	selecting a different chart.
+
 2014-07-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Make detached charts resizable.

@@ -69,11 +69,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="container_id" select="'chart-box'"/>
   <xsl:param name="width" select="435"/>
   <xsl:param name="height" select="250"/>
-
+  <xsl:param name="select_pref_name"/>
   create_chart_box ("<xsl:value-of select="$parent_id"/>",
                     "<xsl:value-of select="$container_id"/>",
                     <xsl:value-of select="$width"/>,
-                    <xsl:value-of select="$height"/>)
+                    <xsl:value-of select="$height"/>,
+                    "<xsl:value-of select="$select_pref_name"/>")
 </xsl:template>
 
 <xsl:template name="js-aggregate-data-source">
@@ -260,15 +261,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
-  <xsl:param name="auto_load_left" select="0"/>
-  <xsl:param name="auto_load_right" select="1"/>
+  <xsl:param name="auto_load_left_pref_name" select="concat ($type, '-select-left')"/>
+  <xsl:param name="auto_load_right_pref_name" select="concat ($type, '-select-right')"/>
+  <xsl:param name="auto_load_left_default" select="0"/>
+  <xsl:param name="auto_load_right_default" select="1"/>
+
+  <xsl:variable name="auto_load_left">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[name = $auto_load_left_pref_name]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[name = $auto_load_left_pref_name]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$auto_load_left_default"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="auto_load_right">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[name = $auto_load_right_pref_name]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[name = $auto_load_right_pref_name]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$auto_load_right_default"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-left'"/>
+      <xsl:with-param name="select_pref_name" select="concat ($type, '-select-left')"/>
     </xsl:call-template>
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
+      <xsl:with-param name="select_pref_name" select="concat ($type, '-select-right')"/>
     </xsl:call-template>
 
     <xsl:call-template name="js-aggregate-data-source">
@@ -350,10 +376,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    displays ["top-visualization-left"].select_chart (<xsl:value-of select="$auto_load_left"/>);
+    displays ["top-visualization-left"].select_chart (<xsl:value-of select="$auto_load_left"/>, false);
     </xsl:if>
-    <xsl:if test="$auto_load_left != ''">
-    displays ["top-visualization-right"].select_chart (<xsl:value-of select="$auto_load_right"/>);
+    <xsl:if test="$auto_load_right != ''">
+    displays ["top-visualization-right"].select_chart (<xsl:value-of select="$auto_load_right"/>, false);
     </xsl:if>
   </script>
 </xsl:template>

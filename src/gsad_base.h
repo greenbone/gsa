@@ -77,6 +77,7 @@ typedef struct
   char *severity;     ///< Severity class.
   char *pw_warning;   ///< Password policy warning message
   int charts;         ///< Whether to show charts for this user.
+  GTree *chart_prefs; ///< Chart preferences.
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
