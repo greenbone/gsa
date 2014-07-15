@@ -1,3 +1,10 @@
+2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r19879.
+
+	* src/html/classic/omp.xsl (os-icon): Add CPE ID to tooltip and link
+	to CPE page.
+
 2014-07-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r19796. Patch by Jan-Oliver Wagner.

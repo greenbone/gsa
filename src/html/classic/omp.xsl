@@ -23925,10 +23925,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="best_os_txt" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
   <xsl:choose>
     <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-      <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host Table Row')}: {$best_os_txt}"/>
-      <xsl:if test="$os-name">
-        <xsl:value-of select="$best_os_txt"/>
-      </xsl:if>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+        <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host Table Row')}: {$best_os_txt} ({$best_os_cpe})"/>
+        <xsl:if test="$os-name">
+          <xsl:value-of select="$best_os_txt"/>
+        </xsl:if>
+      </a>
     </xsl:when>
     <xsl:when test="not($best_os_cpe)">
       <!-- nothing detected or matched by our CPE database -->
@@ -23952,21 +23954,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
       <xsl:variable name="img_desc">
         <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+        <xsl:if test="not ($os-name)">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="$best_os_cpe"/>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
       </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="$os_icon">
-          <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
-          <xsl:if test="$os-name">
-            <xsl:value-of select="$img_desc"/>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-          <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-          <xsl:if test="$os-name">
-            <xsl:value-of select="$img_desc"/>
-          </xsl:if>
-        </xsl:otherwise>
-      </xsl:choose>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+        <xsl:choose>
+          <xsl:when test="$os_icon">
+            <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+            <xsl:if test="$os-name">
+              <xsl:value-of select="$img_desc"/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+            <xsl:if test="$os-name">
+              <xsl:value-of select="$img_desc"/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
