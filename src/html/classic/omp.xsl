@@ -24229,8 +24229,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="ip" select="host"/>
       <xsl:variable name="hostname"
                     select="../../host[ip = $ip]/detail[name = 'hostname']/value"/>
-
-      <xsl:value-of select="$ip"/>
+      <a href="?cmd=get_report&amp;type=assets&amp;host={$ip}&amp;token={/envelope/token}">
+        <xsl:value-of select="$ip"/>
+      </a>
       <xsl:if test="$hostname != ''">
         (<xsl:value-of select="$hostname"/>)
       </xsl:if>
@@ -25708,7 +25709,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-              <xsl:value-of select="$current_host"/>
+              <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
+                <xsl:value-of select="$current_host"/>
+              </a>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
@@ -25894,7 +25897,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-              <xsl:value-of select="$current_host"/>
+              <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
+                <xsl:value-of select="$current_host"/>
+              </a>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
@@ -26702,7 +26707,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </td>
                 <td>
-                  <xsl:value-of select="$current_host"/>
+                  <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
+                    <xsl:value-of select="$current_host"/>
+                  </a>
                   <xsl:if test="$hostname">
                     <xsl:value-of select="concat(' (', $hostname, ')')"/>
                   </xsl:if>
@@ -26964,7 +26971,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:value-of select="$host/ip"/>
+              <a href="?cmd=get_report&amp;type=assets&amp;host={$host/ip}&amp;token={/envelope/token}">
+                <xsl:value-of select="$host/ip"/>
+              </a>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
@@ -27048,7 +27057,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </td>
             <td>
-              <xsl:value-of select="$host"/>
+              <a href="?cmd=get_report&amp;type=assets&amp;host={$host}&amp;token={/envelope/token}">
+                <xsl:value-of select="$host"/>
+              </a>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
