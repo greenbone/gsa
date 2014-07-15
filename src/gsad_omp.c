@@ -19806,8 +19806,6 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
   *pref_name = g_strdup (params_value (params, "chart_preference_name"));
   *pref_value = g_strdup (params_value (params, "chart_preference_value"));
 
-  g_warning ("!TEST! %s : %s", *pref_name, *pref_value);
-
   if (*pref_name == NULL)
     return ("<save_chart_preference_response"
             " status=\"400\" status_text=\"Invalid or missing name\">");

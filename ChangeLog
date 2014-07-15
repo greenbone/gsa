@@ -1,5 +1,10 @@
 2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (save_chart_preference_omp): Remove log message used
+	for testing.
+
+2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Save the user's chart selection for the current session.
 
 	* src/gsad_base.h (credentials_t): Add chart_prefs field.
