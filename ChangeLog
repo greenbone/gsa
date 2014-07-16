@@ -1,3 +1,10 @@
+2014-07-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (host): Show OS name and CPE as text after
+	the OS icon.
+	(os-icon): Add paramter os-cpe.
+	(report [os]): Add paramter os-cpe to OS icon to hide CPE.
+
 2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-headers], report [hosts])
