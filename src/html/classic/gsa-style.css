@@ -1055,6 +1055,10 @@ text-align:right;
  */
 
 /* Chart menu. */
+#chart_list {
+  position: absolute;
+}
+
 #chart_list ul {
  list-style: none;
  margin: 0px;
@@ -1073,7 +1077,7 @@ text-align:right;
 
 #chart_list ul li a#section_list_first {
  height: 18px;
- width: 24px;
+ width: 48px;
  background: url('img/style/dropdown_arrow.png') no-repeat 3px center;
  margin-bottom: 0px;
  margin-top: 0px;
@@ -1160,7 +1164,7 @@ text-align:right;
 .chart-head {
   background: #3A3A3A;
   color: #EEEEEE;
-  padding: 2px;
+  padding: 2px 2px 2px 20px;
 }
 
 .chart-foot {

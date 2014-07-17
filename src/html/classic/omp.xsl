@@ -7281,8 +7281,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN AGGREGATES MANAGEMENT -->
 
 <xsl:template match="get_aggregate">
+  <xsl:variable name="filter_term" select="/envelope/params/filter"/>
+
   <xsl:call-template name="init-d3charts"/>
   <div id="aggregate-container"/>
+  <xsl:choose>
+    <xsl:when test="$filter_term != ''">
+      <div id="applied_filter" class="footnote" style="padding: 5px 10px">
+        <b><xsl:value-of select="gsa:i18n('Applied filter:', 'Filter Box')"/></b>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$filter_term"/>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <div id="applied_filter"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:call-template name="html-footer"/>
   <script>
     <xsl:call-template name="js-create-chart-box">
@@ -7294,7 +7308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
       <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
-      <xsl:with-param name="filter" select="/envelope/params/filter"/>
+      <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
     </xsl:call-template>
     <xsl:call-template name="js-aggregate-chart">
@@ -7310,7 +7324,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="auto_load" select="1"/>
     </xsl:call-template>
 
+    if (this.fit_window)
+      fit_detached_window ()
+
     window.onresize = detached_chart_resize_listener (displays ["aggregate-display"])
+    window.onresize ();
   </script>
 </xsl:template>
 

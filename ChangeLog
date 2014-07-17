@@ -1,3 +1,18 @@
+2014-07-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsa-style.css: Make area around chart menu arrow
+	wider and change positioning of header text so it isn't narrowed by
+	the wider area around the arrow.
+
+	* src/html/classic/omp.xsl (get_aggregate): Add the filter term if
+	one was given. Fit window to the size of the chart when opened via
+	open_detached. Ensure chart is full size when reloading page.
+
+	* src/html/classic/js/gsa_graphics_base.js (open_detached): Set
+	variable to fit window to the size of the chart.
+	(fit_detached_window): New function.
+	(detached_chart_resize_listener): Add filter div to height calulation.
+
 2014-07-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (host): Show OS name and CPE as text after

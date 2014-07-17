@@ -591,8 +591,30 @@ function output_error (chart, display_message, console_message, console_extra)
  */
 function open_detached (url)
 {
-  window.open (url, "", "width=460, height=315")
+  var new_window = window.open (url, "", "width=460, height=340");
+  new_window.fit_window = true;
   return false;
+}
+
+/*
+ * Resize a detached chart window to fit the chart display, filter and footer
+ */
+function fit_detached_window ()
+{
+  var display = d3.select ("#aggregate-display");
+  var display_width = Number (display.property ("scrollWidth"));
+  var display_height = Number (display.property ("scrollHeight"));
+  var filter = d3.select ("#applied_filter");
+  var footer = d3.select (".gsa_footer")
+  var height_diff = this.outerHeight - this.innerHeight;
+  var width_diff = this.outerWidth - this.innerWidth;
+
+  this.resizeTo (display_width + width_diff + 24,
+                  this.innerHeight)
+  this.resizeTo (display_width + width_diff + 24,
+                  20 + height_diff + display_height
+                  + Number (filter.property ("scrollHeight"))
+                  + Number (footer.property ("scrollHeight")))
 }
 
 /*
@@ -606,7 +628,11 @@ function detached_chart_resize_listener (display)
       var window_height = window.innerHeight;
 
       display.width (window_width - 20);
-      display.height (window_height - (20 + Number (d3.select (".gsa_footer").property ("clientHeight"))));
+      display.height (window_height - (  Number (d3.select (".gsa_footer")
+                                                    .property ("clientHeight"))
+                                       + Number (d3.select ("#applied_filter")
+                                                    .property ("clientHeight"))
+                                       + 20));
       display.refresh ();
     }
 }
