@@ -287,6 +287,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="filter" select="/envelope/get_info/get_info_response/filters/term"/>
+
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-left'"/>
@@ -302,7 +304,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="aggregate_type" select="$type"/>
       <xsl:with-param name="group_column" select="'severity'"/>
       <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="filter" select="/envelope/params/filter"/>
+      <xsl:with-param name="filter" select="$filter"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
 
@@ -346,7 +348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'class'"/>
         <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="filter" select="/envelope/params/filter"/>
+        <xsl:with-param name="filter" select="$filter"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 

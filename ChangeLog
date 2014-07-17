@@ -1,5 +1,10 @@
 2014-07-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Get
+	filter term from get_info_response for consistency with filter box.
+
+2014-07-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsa-style.css: Make area around chart menu arrow
 	wider and change positioning of header text so it isn't narrowed by
 	the wider area around the arrow.
