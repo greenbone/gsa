@@ -1,3 +1,10 @@
+2014-07-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r19909.
+
+	* src/html/classic/omp.xsl (report [section-list]): Replace "Details"
+	in "Task: Details" with task name.
+
 2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r19879.

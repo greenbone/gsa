@@ -24461,7 +24461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:if test="$type != 'prognostic'">
                 <li class="last">
                   <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;token={/envelope/token}">
-                    <xsl:value-of select="gsa:i18n ('Task: Details', 'Report Section')"/>
+                    <xsl:value-of select="concat (gsa:i18n ('Task', 'Task'), ': ', task/name)"/>
                   </a>
                 </li>
               </xsl:if>
