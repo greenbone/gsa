@@ -1,3 +1,10 @@
+2014-07-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (auto-refresh): Remove "10 Sec." option.
+	Add options "2 Min." and "5 Min."
+
+	* src/html/classic/po/de.xml, src/html/classic/po/zh.xml: Add "Min.".
+
 2014-07-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [section-list]): Replace "Details"
