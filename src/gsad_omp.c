@@ -13293,7 +13293,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *response = NULL;
-  const char *name, *comment, *host, *port, *type;
+  const char *name, *comment, *host, *port, *type, *ca_pub, *key_pub, *key_priv;
   entity_t entity = NULL;
 
   name = params_value (params, "name");
@@ -13301,16 +13301,25 @@ create_scanner_omp (credentials_t * credentials, params_t *params)
   host = params_value (params, "host");
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
+  ca_pub = params_value (params, "ca_pub");
+  key_pub = params_value (params, "key_pub");
+  key_priv = params_value (params, "key_priv");
   CHECK_PARAM (name, "Create Scanner", new_scanner);
+  CHECK_PARAM (comment, "Create Scanner", new_scanner);
   CHECK_PARAM (host, "Create Scanner", new_scanner);
   CHECK_PARAM (port, "Create Scanner", new_scanner);
   CHECK_PARAM (type, "Create Scanner", new_scanner);
+  CHECK_PARAM (ca_pub, "Create Scanner", new_scanner);
+  CHECK_PARAM (key_pub, "Create Scanner", new_scanner);
+  CHECK_PARAM (key_priv, "Create Scanner", new_scanner);
 
   switch (ompf (credentials, &response, &entity,
                 "<create_scanner><name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
+                "<ca_pub>%s</ca_pub><key_pub>%s</key_pub>"
+                "<key_priv>%s</key_priv>"
                 "</create_scanner>",
-                name, comment ? comment : "", host, port, type))
+                name, comment, host, port, type, ca_pub, key_pub, key_priv))
     {
       case 0:
       case -1:

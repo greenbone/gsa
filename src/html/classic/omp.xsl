@@ -14941,7 +14941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Port', 'Scanner Window')"/></td>
-            <td><input type="text" name="port" value="1234" size="30"/></td>
+            <td><input type="text" name="port" value="9391" size="30"/></td>
           </tr>
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/></td>
@@ -14952,6 +14952,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
               </select>
             </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Public Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="ca_pub"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Public Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="key_pub"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="key_priv"/></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">

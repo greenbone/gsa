@@ -1,3 +1,15 @@
+2014-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate ca_pub, key_pub and key_priv
+	parameters.
+
+	* src/gsad_omp.c (create_scanner_omp): Handle new fields parameters and
+	send their values accordingly.
+
+	* src/html/classic/omp.xml (html-create-scanner-form): Change default
+	port value to 9391. Add fields for CA public key, public key and private
+	key.
+
 2014-07-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:escape-js): New function.
