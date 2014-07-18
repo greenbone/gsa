@@ -15112,6 +15112,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Public Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="ca_pub"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Public Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="key_pub"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Scanner Window')"/></td>
+            <td><input type="file" name="key_priv"/></td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save Scanner', 'Scanner')}"/>
             </td>

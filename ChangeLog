@@ -1,5 +1,12 @@
 2014-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (save_scanner_omp): Send scanner certs values.
+
+	* src/html/classic/omp.xsl (html-edit-scanner-form): Add fields to edit
+	CA public key, public key and private key.
+
+2014-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Validate ca_pub, key_pub and key_priv
 	parameters.
 
