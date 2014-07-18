@@ -141,6 +141,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="translate($string, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
 </func:function>
 
+<func:function name="gsa:escape-js">
+  <xsl:param name="string"/>
+  <func:result select="str:replace (str:replace ($string, '\', '\\'), '&quot;', '\&quot;')"/>
+</func:function>
+
 <func:function name="gsa:date-tz">
   <xsl:param name="time"></xsl:param>
   <func:result>
@@ -4201,7 +4206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
-      <xsl:variable name="caller_escaped" select="str:replace (str:replace (/envelope/caller, '&quot;', '\&quot;'), '\', '\\')"/>
+      <xsl:variable name="caller_escaped" select="gsa:escape-js (/envelope/caller)"/>
       <xsl:choose>
         <xsl:when test="$top-visualization = ''"/>
         <xsl:when test="/envelope/charts = '1'">

@@ -97,21 +97,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         {xml:1,
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"severity",
-                         filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
+                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>"});
           </xsl:when>
           <xsl:when test="$chart_template = 'recent_info_by_cvss' or $chart_template = 'recent_info_by_class'">
             DataSource ("get_aggregate",
                         {xml:1,
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"severity",
-                         filter:"<xsl:value-of select="str:replace (concat ('modified&gt;-', $chart_filter_days, 'd sort-reverse=severity'), '&quot;', '\&quot;')"/>"});
+                         filter:"<xsl:value-of select="gsa:escape-js (concat ('modified&gt;-', $chart_filter_days, 'd sort-reverse=severity'))"/>"});
           </xsl:when>
           <xsl:otherwise>
             DataSource ("get_aggregate",
                         {xml:1,
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"<xsl:value-of select="$group_column"/>",
-                         filter:"<xsl:value-of select="str:replace ($filter, '&quot;', '\&quot;')"/>"});
+                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>"});
           </xsl:otherwise>
         </xsl:choose>
     }

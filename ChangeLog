@@ -1,5 +1,13 @@
 2014-07-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (gsa:escape-js): New function.
+	(list-window): Use new function to escape caller.
+
+	* src/html/classic/graphics.xsl (js-aggregate-data-source): Use new
+	function to escape filter term.
+
+2014-07-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (auto-refresh): Remove "10 Sec." option.
 	Add options "2 Min." and "5 Min."
 
