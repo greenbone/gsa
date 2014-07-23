@@ -1,5 +1,19 @@
 2014-07-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/help.xsl (new_task.html, glossary.html): Update
+	documentation.
+	(details-window-line-actions, scanners.html, scanner_details.html): New
+	templates.
+	(slave_details.html, user_details.html, agent_details.html)
+	(alert_details.html, schedule_details.html, permission_details)
+	(role_details, filter_details.html, group_details.html)
+	(note_details.html, override_details, lsc_credential_details.html)
+	(port_list_details.html, report_format_details.html)
+	(config_details.html, tag_details.html, target_details.html): Call
+	details-window-line-actions template accordingly.
+
+2014-07-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (preference-details): Handle osp_file special
 	case too.
 

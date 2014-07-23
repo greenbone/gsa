@@ -66,6 +66,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="details-window-line-actions">
+  <xsl:param name="type"/>
+  <xsl:param name="name"/>
+  <xsl:param name="ultimate"/>
+
+  <h4>New <xsl:value-of select="$name"/></h4>
+  <p>
+    To create a new <xsl:value-of select="$name"/> click the new icon
+    <img src="/img/new.png" alt="New Scanner" title="New {$name}"/>
+    which goes to the <a href="new_{$type}.html?token={/envelope/token}">
+    New <xsl:value-of select="$name"/></a> page.
+  </p>
+
+  <h4><xsl:value-of select="$name"/>s</h4>
+  <p>
+    Pressing the list icon
+    <img src="/img/list.png" alt="{$name}s" title="{$name}s"/>
+    will switch to the
+    <a href="{$type}s.html?token={/envelope/token}">
+      <xsl:value-of select="$name"/>s
+    </a> page.
+  </p>
+
+  <h4>Delete <xsl:value-of select="$name"/></h4>
+  <p>
+    Pressing the "Delete <xsl:value-of select="$name"/>" icon
+    <xsl:choose>
+      <xsl:when test="$ultimate">
+        <img src="/img/delete.png" alt="Delete {$name}" title="Delete {$name}"/>
+        will delete the resource.
+      </xsl:when>
+      <xsl:otherwise>
+        <img src="/img/trashcan.png" alt="Delete {$name}" title="Delete {$name}"/>
+        will move the resource to the trashcan.
+      </xsl:otherwise>
+    </xsl:choose>
+  </p>
+  <h4>Edit <xsl:value-of select="$name"/></h4>
+  <p>
+    Pressing the "Edit <xsl:value-of select="$name"/>" icon
+    <img src="/img/edit.png" alt="Edit {$name}" title="Edit {$name}"/>
+    will switch to an overview of the configuration for this
+    <xsl:value-of select="$type"/> and allows editing the its properties.
+  </p>
+
+  <h4>Exporting</h4>
+  <p>
+    Export the <xsl:value-of select="$name"/> as XML by clicking on the
+    export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+  </p>
+</xsl:template>
+
 <xsl:template name="list-window-line-actions">
   <xsl:param name="type"/>
   <xsl:param name="used_by"/>
@@ -554,34 +606,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         comment and installer package trust state and time.
       </p>
 
-      <h4>New Agent </h4>
-      <p>
-        To create a new agent click the new icon
-        <img src="/img/new.png" alt="New Agent" title="New Agent"/>
-        which goes to the <a href="new_agent.html?token={/envelope/token}">
-        New Agent</a> page.
-      </p>
-
-      <h4>Agents</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Agents" title="Agents"/>
-        will switch to the agents page.
-      </p>
-
-      <h4>Edit Agent</h4>
-      <p>
-        Pressing the "Edit Agent" icon
-        <img src="/img/edit.png" alt="Edit Agent" title="Edit Agent"/>
-        will switch to an overview of the configuration for this agent and
-        allows editing the agent's properties.
-      </p>
-
-      <h4>Export Agent</h4>
-      <p>
-        Export the agent as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'agent'"/>
+        <xsl:with-param name="name" select="'Agent'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -1009,34 +1037,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         time.
       </p>
 
-      <h4>New Credential </h4>
-      <p>
-        To create a new lsc credential click the new icon
-        <img src="/img/new.png" alt="New Credential" title="New Credential"/>
-        which goes to the <a href="new_lsc_credential.html?token={/envelope/token}">
-        New Credential</a> page.
-      </p>
-
-      <h4>Credentials</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Credentials" title="Credentials"/>
-        will switch to the lsc credentials page.
-      </p>
-
-      <h4>Edit Credential</h4>
-      <p>
-        Pressing the "Edit Credential" icon
-        <img src="/img/edit.png" alt="Edit Credential" title="Edit Credential"/>
-        will switch to an overview of the configuration for this lsc_credential and
-        allows editing the Credential's properties.
-      </p>
-
-      <h4>Export Credential</h4>
-      <p>
-        Export the Credential as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'lsc_credential'"/>
+        <xsl:with-param name="name" select="'Credential'"/>
+      </xsl:call-template>
 
       <h3>Targets using this Credential</h3>
       <p>
@@ -1284,26 +1288,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         condition, event, method and filter.
       </p>
 
-      <h4>New Alert </h4>
-      <p>
-      To create a new alert click the new icon
-      <img src="/img/new.png" alt="New Alert" title="New Alert"/>
-      which goes to the <a href="new_alert.html?token={/envelope/token}">
-      New Alert</a> page.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'alert'"/>
+        <xsl:with-param name="name" select="'Alert'"/>
+      </xsl:call-template>
 
-      <h4>Alerts</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Alerts" title="Alerts"/>
-       will switch to the alerts page.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the alert as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
       <h3>Tasks using this Alert</h3>
       <p>
         This table provides an overview of the tasks that are associated to the
@@ -1616,26 +1605,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         this port list.
       </p>
 
-      <h4>New Port List </h4>
-      <p>
-        To create a new Port List click the new icon
-        <img src="/img/new.png" alt="New Port List" title="New Port List"/>
-        which goes to the <a href="new_port_list.html?token={/envelope/token}">
-        New Port List</a> page.
-      </p>
-
-      <h4>Port Lists</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Port Lists" title="Port Lists"/>
-        will switch to the Port Lists page.
-      </p>
-
-      <h4>Export Port List</h4>
-      <p>
-        Export the Port List as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'port_list'"/>
+        <xsl:with-param name="name" select="'Port List'"/>
+      </xsl:call-template>
 
       <h3>Port Ranges</h3>
       <p>
@@ -1899,34 +1872,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         content type, trust, activity, summary, description and parameters.
       </p>
 
-      <h4>New Report Format </h4>
-      <p>
-        To create a new Report Format click the new icon
-        <img src="/img/new.png" alt="New Report Format" title="New Report Format"/>
-        which goes to the <a href="new_report_format.html?token={/envelope/token}">
-        New Report Format</a> page.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'report_format'"/>
+        <xsl:with-param name="name" select="'Report Format'"/>
+      </xsl:call-template>
 
-      <h4>Report Formats</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Report Formats" title="Report Formats"/>
-        will switch to the Report Formats page.
-      </p>
-
-      <h4>Edit Report Format</h4>
-      <p>
-        Pressing the "Edit Report Format" icon
-        <img src="/img/edit.png" alt="Edit Report Format" title="Edit Report Format"/>
-        will switch to an overview of the configuration for this Report Formats and
-        allows editing the Report Format's properties.
-      </p>
-
-      <h4>Export Report Format</h4>
-      <p>
-        Export the Report Format as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
       <h3>Parameters</h3>
       <p>
         This table provides a list of the parameters that control the
@@ -2139,34 +2089,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and duration.
       </p>
 
-      <h4>New Schedule </h4>
-      <p>
-      To create a new schedule click the new icon
-      <img src="/img/new.png" alt="New Schedule" title="New Schedule"/>
-      which goes to the <a href="new_schedule.html?token={/envelope/token}">
-      New Schedule</a> page.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'schedule'"/>
+        <xsl:with-param name="name" select="'Schedule'"/>
+      </xsl:call-template>
 
-      <h4>Schedules</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Schedules" title="Schedules"/>
-       will switch to the schedules page.
-      </p>
-
-      <h4>Edit Schedule</h4>
-      <p>
-       Pressing the "Edit Schedule" icon
-       <img src="/img/edit.png" alt="Edit Schedule" title="Edit Schedule"/>
-       will switch to an overview of the configuration for this schedule and
-       allows editing the schedule's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the schedule as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
       <h3>Tasks using this Schedule</h3>
       <p>
         This table provides an overview of the tasks that are associated to the
@@ -2353,6 +2280,110 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="scanners.html">
+  <div class="gb_window_part_center">Help: Scanners
+    <a href="/omp?cmd=get_scanners&amp;token={/envelope/token}"
+       title="Scanners" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Scanners"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SCANNERS'"/>
+      </xsl:call-template>
+
+      <h1>Scanners</h1>
+      <p>
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#scanner">Scanners</a>.
+        (name, host, port and type).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the scanner and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Host</td>
+          <td>Host of the scanner.</td>
+        </tr>
+        <tr class="odd">
+          <td>Port</td>
+          <td>Network port of the scanner.</td>
+        </tr>
+        <tr class="even">
+          <td>Type</td>
+          <td>Type of the scanner</td>
+        </tr>
+      </table>
+
+      <h3>New Scanner</h3>
+      <p>
+        To create a new scanner click the
+        new icon <img src="/img/new.png" alt="New Scanner" title="New Scanner"/> which
+        goes to the <a href="new_scanner.html?token={/envelope/token}">New Scanner</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of scanners as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Scanner'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="scanner_details.html">
+  <div class="gb_window_part_center">Help: Scanner Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SCANNERS'"/>
+      </xsl:call-template>
+
+      <h1>Scanner Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a>.
+        This includes the Name, creation time, modification time,
+        comment, host, port and type of the scanner.
+      </p>
+
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'scanner'"/>
+        <xsl:with-param name="name" select="'Scanner'"/>
+      </xsl:call-template>
+
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="slave_details.html">
   <div class="gb_window_part_center">Help: Slave Details
   </div>
@@ -2375,34 +2406,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and duration.
       </p>
 
-      <h4>New Slave </h4>
-      <p>
-        To create a new slave click the new icon
-        <img src="/img/new.png" alt="New Slave" title="New Slave"/>
-        which goes to the <a href="new_slave.html?token={/envelope/token}">
-        New Slave</a> page.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'slave'"/>
+        <xsl:with-param name="name" select="'Slave'"/>
+      </xsl:call-template>
 
-      <h4>Slaves</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Slaves" title="Slaves"/>
-        will switch to the slaves page.
-      </p>
-
-      <h4>Edit Slave</h4>
-      <p>
-        Pressing the "Edit Slave" icon
-        <img src="/img/edit.png" alt="Edit Slave" title="Edit Slave"/>
-        will switch to an overview of the configuration for this slave and
-        allows editing the slave's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the slave as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
       <h3>Tasks using this Slave</h3>
       <p>
         This table provides an overview of the tasks that are associated to the
@@ -2892,35 +2900,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         This includes the name, role and groups.
       </p>
 
-      <h4>New User</h4>
-      <p>
-        To create a new user click the
-        new icon <img src="/img/new.png" alt="New User" title="New User"/> which
-        goes to the <a href="new_user.html?token={/envelope/token}">New User</a>
-        page.
-      </p>
-
-      <h4>Users</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Users" title="Users"/>
-       will switch to the <a href="users.html?token={/envelope/token}">Users</a>
-       page.
-      </p>
-
-      <h4>Edit User</h4>
-      <p>
-       Pressing the "Edit User" icon
-       <img src="/img/edit.png" alt="Edit User" title="Edit User"/>
-       will switch to an overview of the this user and
-       allows editing the user's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the user as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'user'"/>
+        <xsl:with-param name="name" select="'User'"/>
+        <xsl:with-param name="ultimate" select="'1'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -3100,35 +3084,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and resource name and type.
       </p>
 
-      <h4>New Permission</h4>
-      <p>
-        To create a new permission click the
-        new icon <img src="/img/new.png" alt="New Permission" title="New Permission"/> which
-        goes to the <a href="new_permission.html?token={/envelope/token}">New Permission</a>
-        page.
-      </p>
-
-      <h4>Permissions</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Permissions" title="Permissions"/>
-       will switch to the permissions page.
-      </p>
-
-      <h4>Edit Permission</h4>
-      <p>
-       Pressing the "Edit Permission" icon
-       <img src="/img/edit.png" alt="Edit Permission" title="Edit Permission"/>
-       will switch to an overview of the configuration for this permission and
-       allows editing the permission's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the permission as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
-
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'permission'"/>
+        <xsl:with-param name="name" select="'Permission'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -3207,18 +3166,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         comment and users.
       </p>
 
-      <h4>Roles</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Roles" title="Roles"/>
-        will switch to the roles page.
-      </p>
-
-      <h4>Export Roles</h4>
-      <p>
-        Export the role as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'role'"/>
+        <xsl:with-param name="name" select="'Role'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -3748,34 +3699,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         This includes the name, comment, term and type.
       </p>
 
-      <h4>New Filter</h4>
-      <p>
-        To create a new filter click the
-        new icon <img src="/img/new.png" alt="New Filter" title="New Filter"/> which
-        goes to the <a href="new_filter.html?token={/envelope/token}">New Filter</a>
-        page.
-      </p>
-
-      <h4>Filters</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Filters" title="Filters"/>
-       will switch to the filters page.
-      </p>
-
-      <h4>Edit Filter</h4>
-      <p>
-       Pressing the "Edit Filter" icon
-       <img src="/img/edit.png" alt="Edit Filter" title="Edit Filter"/>
-       will switch to an overview of the configuration for this filter and
-       allows editing the filter's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the filter as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'filter'"/>
+        <xsl:with-param name="name" select="'Filter'"/>
+      </xsl:call-template>
 
       <h3>Alerts using this Filter</h3>
       <p>
@@ -4105,7 +4032,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="slave"></a>
       <h2>Slave</h2>
       <p>
-        A slave is another OpenVAS server on which a <a href="#task">task</a>
+        A slave is another OpenVAS manager on which a <a href="#task">task</a>
         could be run.
       </p>
 
@@ -4117,7 +4044,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        The result of a scan is a <a href="#report">report</a>.
       </p>
       <p>
-       The status of all active scan can be seen
+       The status of all active scans can be seen
        in the <a href="/omp?cmd=get_tasks?token={/envelope/token}">task overview</a>.
        The progress is shown as a percentage of
        total number of tests to be executed. The
@@ -4129,6 +4056,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        The task overview offers an option to stop a scan.
        The resulting report will then be incomplete.
+      </p>
+
+      <a name="scanner"></a>
+      <h2>Scanner</h2>
+      <p>
+        A scanner is an OpenVAS Scanner daemon or compatible OSP daemon on
+        which the <a href="#scan">scan</a> will be run.
       </p>
 
       <a name="config"></a>
@@ -4569,35 +4503,10 @@ Public License instead of this License.
         This includes the name, comment and users.
       </p>
 
-      <h4>New Group</h4>
-      <p>
-        To create a new group click the
-        new icon <img src="/img/new.png" alt="New Group" title="New Group"/> which
-        goes to the <a href="new_group.html?token={/envelope/token}">New Group</a>
-        page.
-      </p>
-
-      <h4>Groups</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Groups" title="Groups"/>
-       will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
-       page.
-      </p>
-
-      <h4>Edit Group</h4>
-      <p>
-       Pressing the "Edit Group" icon
-       <img src="/img/edit.png" alt="Edit Group" title="Edit Group"/>
-       will switch to an overview of the this group and
-       allows editing the group's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the group as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'group'"/>
+        <xsl:with-param name="name" select="'Group'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -5611,13 +5520,6 @@ Public License instead of this License.
           <td>Alphanumeric</td>
           <td></td>
         </tr>
-        <tr class="odd">
-          <td>Scan Config</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>Choice</td>
-          <td>Full and fast</td>
-        </tr>
         <tr class="even">
           <td>Scan Targets</td>
           <td>yes</td>
@@ -5626,22 +5528,8 @@ Public License instead of this License.
           <td>Localhost</td>
         </tr>
         <tr class="odd">
-          <td>Order for target hosts</td>
-          <td>no</td>
-          <td>---</td>
-          <td>Choice</td>
-          <td>Sequential</td>
-        </tr>
-        <tr class="even">
-          <td>Network Source Interface</td>
-          <td>no</td>
-          <td>---</td>
-          <td>Alphanumeric</td>
-          <td>eth1</td>
-        </tr>
-        <tr class="odd">
           <td>
-            Alert
+            Alerts
             <xsl:if test="not (gsa:may-op ('get_alerts'))">*</xsl:if>
           </td>
           <td>no</td>
@@ -5659,6 +5547,34 @@ Public License instead of this License.
           <td>Choice</td>
           <td></td>
         </tr>
+        <tr class="even">
+          <td>Add results to Asset Management</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Alterable Task</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>OpenVAS Scanner</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Config</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Full and fast</td>
+        </tr>
         <tr class="odd">
           <td>
             Slave
@@ -5670,42 +5586,39 @@ Public License instead of this License.
           <td></td>
         </tr>
         <tr class="even">
-          <td>Observers</td>
+          <td>Network Source Interface</td>
           <td>no</td>
-          <td>400</td>
+          <td>---</td>
           <td>Alphanumeric</td>
-          <td>alice bob</td>
+          <td>eth1</td>
         </tr>
         <tr class="odd">
-          <td>
-            Observer Groups
-            <xsl:if test="not (gsa:may-op ('get_groups'))">*</xsl:if>
-          </td>
+          <td>Order for target hosts</td>
           <td>no</td>
           <td>---</td>
           <td>Choice</td>
-          <td></td>
-        </tr>
-        <tr class="even">
-          <td>Add results to Asset Management</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>Choice</td>
-          <td></td>
+          <td>Sequential</td>
         </tr>
         <tr class="odd">
-          <td>Scan Intensity: Maximum concurrently executed NVTs per host</td>
+          <td>Maximum concurrently executed NVTs per host</td>
           <td>no</td>
           <td>10</td>
           <td>Numeric</td>
           <td>2</td>
         </tr>
         <tr class="even">
-          <td>Scan Intensity: Maximum concurrently scanned hosts</td>
+          <td>Maximum concurrently scanned hosts</td>
           <td>no</td>
           <td>10</td>
           <td>Numeric</td>
           <td>10</td>
+        </tr>
+        <tr class="even">
+          <td>Scanner: OSP Ovaldi</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
         </tr>
       </table>
       <xsl:if test="not (gsa:may-op ('get_alerts')) or not (gsa:may-op ('get_schedules')) or not (gsa:may-op ('get_slaves')) or not (gsa:may-op ('get_groups'))">
@@ -5847,34 +5760,10 @@ Public License instead of this License.
        Clicking on the NVT name will go to the NVT Details page.
       </p>
 
-      <h4>New Note</h4>
-      <p>
-        To create a new note click the
-        new icon <img src="/img/new.png" alt="New Note" title="New Note"/> which
-        goes to the <a href="new_note.html?token={/envelope/token}">New Note</a>
-        page.
-      </p>
-
-      <h4>Notes</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Notes" title="Notes"/>
-       will switch to the notes page.
-      </p>
-
-      <h4>Edit Note</h4>
-      <p>
-       Pressing the "Edit Note" icon
-       <img src="/img/edit.png" alt="Edit Note" title="Edit Note"/>
-       will switch to an overview of the configuration for this note and
-       allows editing the note's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the note as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="name" select="'Note'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -6437,34 +6326,10 @@ Public License instead of this License.
        Clicking on the NVT name will go to the NVT Details page.
       </p>
 
-      <h4>New Override</h4>
-      <p>
-        To create a new override click the
-        new icon <img src="/img/new.png" alt="New Override" title="New Override"/> which
-        goes to the <a href="new_override.html?token={/envelope/token}">New Override</a>
-        page.
-      </p>
-
-      <h4>Overrides</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Overrides" title="Overrides"/>
-       will switch to the overrides page.
-      </p>
-
-      <h4>Edit Override</h4>
-      <p>
-       Pressing the "Edit Override" icon
-       <img src="/img/edit.png" alt="Edit Override" title="Edit Override"/>
-       will switch to an overview of the configuration for this override and
-       allows editing the override's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the override as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'override'"/>
+        <xsl:with-param name="name" select="'Override'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -7160,26 +7025,10 @@ Public License instead of this License.
         associated configuration parameters.
       </p>
 
-      <h4>New Scan Config </h4>
-      <p>
-        To create a new Scan Config click the new icon
-        <img src="/img/new.png" alt="New Scan Config" title="New Scan Config"/>
-        which goes to the <a href="new_config.html?token={/envelope/token}">
-        New Scan Config</a> page.
-      </p>
-
-      <h4>Scan Config</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Scan Configs" title="Scan Configs"/>
-        will switch to the Scan Configs page.
-      </p>
-
-      <h4>Export Scan Config</h4>
-      <p>
-        Export the Scan Config as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'config'"/>
+        <xsl:with-param name="name" select="'Scan Config'"/>
+      </xsl:call-template>
 
       <h2>Network Vulnerability Test Families</h2>
       <p>
@@ -7742,34 +7591,10 @@ Public License instead of this License.
         nonexistent resource).
       </p>
 
-      <h4>New Tag</h4>
-      <p>
-        To create a new tag click the
-        new icon <img src="/img/new.png" alt="New Tag" title="New Tag"/> which
-        goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
-        page.
-      </p>
-
-      <h4>Tags</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Tags" title="Tags"/>
-       will switch to the tags page.
-      </p>
-
-      <h4>Edit Tag</h4>
-      <p>
-       Pressing the "Edit Tag" icon
-       <img src="/img/edit.png" alt="Edit Tag" title="Edit Tag"/>
-       will switch to an overview of this tag and
-       allows editing the tag's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the tag as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'tag'"/>
+        <xsl:with-param name="name" select="'Tag'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -7801,34 +7626,10 @@ Public License instead of this License.
         associated credential.
       </p>
 
-      <h4>New Target</h4>
-      <p>
-        To create a new target click the
-        new icon <img src="/img/new.png" alt="New Target" title="New Target"/> which
-        goes to the <a href="new_target.html?token={/envelope/token}">New Target</a>
-        page.
-      </p>
-
-      <h4>Targets</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Targets" title="Targets"/>
-       will switch to the targets page.
-      </p>
-
-      <h4>Edit Target</h4>
-      <p>
-       Pressing the "Edit Target" icon
-       <img src="/img/edit.png" alt="Edit Target" title="Edit Target"/>
-       will switch to an overview of the configuration for this target and
-       allows editing the target's properties.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the target as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'target'"/>
+        <xsl:with-param name="name" select="'Target'"/>
+      </xsl:call-template>
 
       <h3>Tasks using this Target</h3>
       <p>
