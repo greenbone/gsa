@@ -1,3 +1,8 @@
+2014-07-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (preference-details): Handle osp_file special
+	case too.
+
 2014-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_scanner_omp): Send scanner certs values.

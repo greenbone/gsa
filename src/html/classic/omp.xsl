@@ -12006,7 +12006,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$config != ''">
       <td>
         <xsl:choose>
-          <xsl:when test="type='file' and string-length(value) &gt; 0">
+          <xsl:when test="(type='file' or type='osp_file') and string-length(value) &gt; 0">
             <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
           </xsl:when>
           <xsl:otherwise>
