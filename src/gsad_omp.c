@@ -305,14 +305,11 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   g_string_append (string, res);
   g_free (res);
 
-  if (credentials->charts)
-    {
-      g_string_append (string, "<chart_preferences>");
-      g_tree_foreach (credentials->chart_prefs,
-                      (GTraverseFunc)print_chart_pref,
-                      string);
-      g_string_append (string, "</chart_preferences>");
-    }
+  g_string_append (string, "<chart_preferences>");
+  g_tree_foreach (credentials->chart_prefs,
+                  (GTraverseFunc)print_chart_pref,
+                  string);
+  g_string_append (string, "</chart_preferences>");
 
   if (credentials->pw_warning)
     {
@@ -19703,11 +19700,64 @@ dashboard (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   const char *name;
+  gchar* response;
+  entity_t entity;
+  int ret;
 
   name = params_value (params, "dashboard_name");
 
   xml = g_string_new ("<dashboard>");
   g_string_append_printf (xml, "<name>%s</name>", name ? name : "");
+
+  response = NULL;
+  entity = NULL;
+  if (strcasecmp (name, "SecInfo") == 0)
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<get_filters filter=\"type=info first=1 rows=-1\"/>");
+  else
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                "<get_filters filter=\"first=1 rows=-1\"/>");
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "filters list. "
+                            "Diagnostics: Failure to send command to "
+                            "manager daemon.",
+                            "/omp?cmd=dashboard");
+      case 2:
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "filters list. "
+                            "Diagnostics: Failure to receive response from "
+                            "manager daemon.",
+                            "/omp?cmd=dashboard");
+      default:
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "filters list. "
+                            "Diagnostics: Internal Error.",
+                            "/omp?cmd=dashboard");
+    }
+
+  g_string_append (xml, response);
+  g_free (response);
+
   g_string_append (xml, "</dashboard>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }

@@ -1,3 +1,42 @@
+2014-07-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Replace predefined charts on SecInfo dashboard with four user defined
+	ones, allowing a selection of charts and SecInfo filters.
+
+	* src/gsad_omp.c (xsl_transform_omp): Always add chart preferences.
+	(dashboard): Get filters for the SecInfo dashboard.
+
+	* src/html/classic/graphics.xsl: Add EXSLT prefix. Remove XSLT variable
+	chart_filter_days.
+	(js-create-chart-box): Add parameter for filter preference.
+	(js-aggregate-data-source): Remove options recent_info_by_class and
+	recent_info_by_cvss for chart_template.
+	(js-aggregate-chart): Remove chart titles for chart_template options
+	recent_info_by_class and recent_info_by_cvss. Pass chart name to Chart
+	constructor.
+	(js-secinfo-top-visualization): Change automatic selection of charts to
+	use chart names. Fix name typo of chart right-by-class. Pass value for
+	request_data parameter of select_chart.
+	(dashboard [secinfo]): Replace predefined charts with four user defined
+	ones. Change automatic selection of charts to use chart names. Pass
+	value for request_data parameter of select_chart.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_box): Add
+	parameter filter_pref_name.
+	(Chart): Add p_chart_name parameter.
+	(Chart [chart_name]): New function.
+	(Display [create_chart_selector]): Select charts from list by name and
+	pass new request_data parameter of select_chart.
+	(Display [create_filter_selector], Display [add_filter])
+	(Display [select_filter], Display [filter_pref_name]): New functions.
+	(Display [select_chart]): Select charts by name instead of index and
+	add parameter request_data.
+	(Display [select_chart_index]): New function to select chart by index.
+	Functionality from original select_chart with new request_data
+	parameter.
+	(Display [prev_chart], Display [next_chart]): Use new function
+	select_chart_index.
+
 2014-07-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/help.xsl (new_task.html, glossary.html): Update

@@ -28,7 +28,7 @@
  * Creates adds display elements to a selected part of the HTML page
  */
 function create_chart_box (parent_id, container_id, width, height,
-                           select_pref_name)
+                           select_pref_name, filter_pref_name)
 {
   var parent = d3.select ("#" + parent_id);
   var container = parent.append ("div")
@@ -65,6 +65,9 @@ function create_chart_box (parent_id, container_id, width, height,
   if (select_pref_name != '')
     displays [container_id].select_pref_name (select_pref_name);
 
+  if (filter_pref_name != '')
+    displays [container_id].filter_pref_name (filter_pref_name);
+
 }
 
 /*
@@ -77,7 +80,7 @@ function create_chart_box (parent_id, container_id, width, height,
  *  p_display:   The Display to use
  */
 function Chart (p_data_src, p_generator, p_display,
-                p_label, p_icon, add_to_display,
+                p_chart_name, p_label, p_icon, add_to_display,
                 p_chart_type, p_chart_template)
 {
   var data_src = p_data_src;
@@ -85,6 +88,7 @@ function Chart (p_data_src, p_generator, p_display,
   var display = p_display;
   var chart_type = p_chart_type;
   var chart_template = p_chart_template;
+  var chart_name = p_chart_name;
   var label = p_label ? p_label : "Unnamed chart";
   var icon = p_icon ? p_icon : "/img/help.png";
   var current_request = null;
@@ -119,6 +123,12 @@ function Chart (p_data_src, p_generator, p_display,
         return display;
       display = value;
       return my;
+    }
+
+  /* Gets the chart name */
+  my.chart_name = function ()
+    {
+      return chart_name;
     }
 
   /* Gets or sets the label */
@@ -351,14 +361,19 @@ function Display (p_container)
   var svg = container.select ("#" + container.attr ("id") + "-svg");
   var footer = container.select ("#" + container.attr ("id") + "-foot");
   var select_elem = null;
+  var filter_elem = null;
 
   var charts = [];
   var chart_i = 0;
+  var chart_name_indexes = {};
+
+  var filters = {"": { name:"--", term:"" }};
 
   var last_generator = null;
   var last_gen_params = null;
 
   var select_pref_name = "";
+  var filter_pref_name = "";
   var chart_pref_request = null;
 
   function my() {};
@@ -449,12 +464,13 @@ function Display (p_container)
                           .style ("margin-left", "5px")
                           .style ("margin-right", "5px")
                           .style ("vertical-align", "middle")
-                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (parseInt (this.value), true)");
+                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (this.value, true, true)");
 
     for (var i = 0; i < charts.length; i++)
       {
+        chart_name_indexes [charts [i].chart_name ()] = i
         select_elem.append ("option")
-                      .attr ("value", i)
+                      .attr ("value", charts [i].chart_name ())
                       .attr ("id", name + "_chart_opt_" + i)
                       .text (charts [i].label ())
       }
@@ -467,12 +483,83 @@ function Display (p_container)
             .style ("vertical-align", "middle")
   }
 
+  /* Creates a filter selector */
+  my.create_filter_selector = function ()
+    {
+      filter_elem = footer.append ("div")
+                            .attr ("id", name + "_filter_selector")
+                            .text ("Filter: ")
+                              .append ("select")
+                              .attr ("onchange", "displays [\""+ name + "\"].select_filter (this.value, true, true)")
+      filter_elem.append ("option")
+                  .text ("--")
+                  .attr ("value", "")
+    }
+
+  /* Adds a filter to the selector */
+  my.add_filter = function (id, filter_name, term)
+    {
+      filters [id] = {name: filter_name, term: term}
+      d3.select ("#" + name + "_filter_selector select")
+          .append ("option")
+            .text (filter_name)
+            .attr ("value", id)
+            .attr ("id", name + "_filter_opt_" + id)
+    }
+
+  my.select_filter = function (filter_id, save_preference, request_data)
+    {
+      if (filters [filter_id] == undefined)
+        {
+          console.warn ("Filter not found: " + filter_id)
+          my.select_filter ("", save_preference, request_data);
+          return;
+        }
+
+      for (var chart in charts)
+        {
+          charts[chart].data_src ().param ("filter", filters [filter_id].term);
+        }
+
+      if (request_data)
+        charts [chart_i].request_data (my);
+
+      if (save_preference && select_pref_name != "")
+        {
+          if (chart_pref_request != null)
+            chart_pref_request.abort ();
+
+          chart_pref_request = d3.xhr ("/omp")
+
+          var form_data = new FormData ();
+          form_data.append ("chart_preference_name", filter_pref_name);
+          form_data.append ("chart_preference_value", filter_id);
+          form_data.append ("token", gsa_token);
+          form_data.append ("cmd", "save_chart_preference");
+
+          chart_pref_request.post (form_data);
+        }
+
+      filter_elem.select ("option#" + name + "_filter_opt_" + filter_id)
+                                    .property ("selected", "selected")
+    }
+
   my.select_pref_name = function (value)
                 {
                   if (!arguments.length)
                     return select_pref_name;
 
                   select_pref_name = value;
+
+                  return my;
+                }
+
+  my.filter_pref_name = function (value)
+                {
+                  if (!arguments.length)
+                    return filter_pref_name;
+
+                  filter_pref_name = value;
 
                   return my;
                 }
@@ -503,13 +590,28 @@ function Display (p_container)
                   charts [chart_i].request_data ();
                 }
 
+  /* Selects and shows a chart from the charts list by name */
+  my.select_chart = function (name, save_preference, request_data)
+    {
+      if (chart_name_indexes [name] == undefined)
+        {
+          console.warn ("Chart not found: " + name);
+          my.select_chart_index (0, save_preference, request_data)
+        }
+      else
+        my.select_chart_index (chart_name_indexes [name],
+                               save_preference, request_data)
+    }
+
   /* Selects and shows a chart from the charts list by index */
-  my.select_chart = function (index, save_preference)
+  my.select_chart_index = function (index, save_preference, request_data)
                       {
                         if (typeof (index) != "number" || index < 0 || index >= charts.length)
                           return console.error ("Invalid chart index: " + index);
-                        charts [index].request_data ();
                         chart_i = index;
+
+                        if (request_data)
+                          charts [index].request_data ();
 
                         if (save_preference && select_pref_name != "")
                           {
@@ -520,7 +622,7 @@ function Display (p_container)
 
                             var form_data = new FormData ();
                             form_data.append ("chart_preference_name", select_pref_name);
-                            form_data.append ("chart_preference_value", index);
+                            form_data.append ("chart_preference_value", charts [index].chart_name ());
                             form_data.append ("token", gsa_token);
                             form_data.append ("cmd", "save_chart_preference");
 
@@ -535,18 +637,18 @@ function Display (p_container)
   my.prev_chart = function ()
                     {
                       if (chart_i > 0)
-                        my.select_chart (chart_i - 1, true);
+                        my.select_chart_index (chart_i - 1, true, true);
                       else
-                        my.select_chart (charts.length - 1, true);
+                        my.select_chart_index (charts.length - 1, true, true);
                     }
 
   /* Selects and shows the next chart from the charts list if possible */
   my.next_chart = function ()
                     {
                       if (chart_i < charts.length - 1)
-                        my.select_chart (chart_i + 1, true);
+                        my.select_chart_index (chart_i + 1, true, true);
                       else
-                        my.select_chart (0, true);
+                        my.select_chart_index (0, true, true);
                     }
 
   return my;
