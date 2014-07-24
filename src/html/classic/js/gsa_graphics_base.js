@@ -545,50 +545,50 @@ function Display (p_container)
     }
 
   my.select_pref_name = function (value)
-                {
-                  if (!arguments.length)
-                    return select_pref_name;
+    {
+      if (!arguments.length)
+        return select_pref_name;
 
-                  select_pref_name = value;
+      select_pref_name = value;
 
-                  return my;
-                }
+      return my;
+    }
 
   my.filter_pref_name = function (value)
-                {
-                  if (!arguments.length)
-                    return filter_pref_name;
+    {
+      if (!arguments.length)
+        return filter_pref_name;
 
-                  filter_pref_name = value;
+      filter_pref_name = value;
 
-                  return my;
-                }
+      return my;
+    }
 
   my.width = function (new_width)
-                {
-                  if (!arguments.length)
-                    return container.property ("clientWidth");
+    {
+      if (!arguments.length)
+        return container.property ("clientWidth");
 
-                  svg.attr ("width",
-                            Math.max (new_width, 200));
-                  return my;
-                }
+      svg.attr ("width",
+                Math.max (new_width, 200));
+      return my;
+    }
 
   my.height = function (new_height)
-                {
-                  if (!arguments.length)
-                    return container.property ("clientHeight");
+    {
+      if (!arguments.length)
+        return container.property ("clientHeight");
 
-                  svg.attr ("height",
-                            Math.max (new_height - (header.property ("clientHeight") + footer.property ("clientHeight")), 100));
-                  return my;
-                }
+      svg.attr ("height",
+                Math.max (new_height - (header.property ("clientHeight") + footer.property ("clientHeight")), 100));
+      return my;
+    }
 
   /* refreshes the current chart */
   my.refresh = function ()
-                {
-                  charts [chart_i].request_data ();
-                }
+    {
+      charts [chart_i].request_data ();
+    }
 
   /* Selects and shows a chart from the charts list by name */
   my.select_chart = function (name, save_preference, request_data)
@@ -605,51 +605,51 @@ function Display (p_container)
 
   /* Selects and shows a chart from the charts list by index */
   my.select_chart_index = function (index, save_preference, request_data)
-                      {
-                        if (typeof (index) != "number" || index < 0 || index >= charts.length)
-                          return console.error ("Invalid chart index: " + index);
-                        chart_i = index;
+    {
+      if (typeof (index) != "number" || index < 0 || index >= charts.length)
+        return console.error ("Invalid chart index: " + index);
+      chart_i = index;
 
-                        if (request_data)
-                          charts [index].request_data ();
+      if (request_data)
+        charts [index].request_data ();
 
-                        if (save_preference && select_pref_name != "")
-                          {
-                            if (chart_pref_request != null)
-                              chart_pref_request.abort ();
+      if (save_preference && select_pref_name != "")
+        {
+          if (chart_pref_request != null)
+            chart_pref_request.abort ();
 
-                            chart_pref_request = d3.xhr ("/omp")
+          chart_pref_request = d3.xhr ("/omp")
 
-                            var form_data = new FormData ();
-                            form_data.append ("chart_preference_name", select_pref_name);
-                            form_data.append ("chart_preference_value", charts [index].chart_name ());
-                            form_data.append ("token", gsa_token);
-                            form_data.append ("cmd", "save_chart_preference");
+          var form_data = new FormData ();
+          form_data.append ("chart_preference_name", select_pref_name);
+          form_data.append ("chart_preference_value", charts [index].chart_name ());
+          form_data.append ("token", gsa_token);
+          form_data.append ("cmd", "save_chart_preference");
 
-                            chart_pref_request.post (form_data);
-                          }
+          chart_pref_request.post (form_data);
+        }
 
-                        select_elem.select ("option#" + name + "_chart_opt_" + (index))
-                                    .property ("selected", "selected")
-                      }
+      select_elem.select ("option#" + name + "_chart_opt_" + (index))
+                  .property ("selected", "selected")
+    }
 
   /* Selects and shows the previous chart from the charts list if possible */
   my.prev_chart = function ()
-                    {
-                      if (chart_i > 0)
-                        my.select_chart_index (chart_i - 1, true, true);
-                      else
-                        my.select_chart_index (charts.length - 1, true, true);
-                    }
+    {
+      if (chart_i > 0)
+        my.select_chart_index (chart_i - 1, true, true);
+      else
+        my.select_chart_index (charts.length - 1, true, true);
+    }
 
   /* Selects and shows the next chart from the charts list if possible */
   my.next_chart = function ()
-                    {
-                      if (chart_i < charts.length - 1)
-                        my.select_chart_index (chart_i + 1, true, true);
-                      else
-                        my.select_chart_index (0, true, true);
-                    }
+    {
+      if (chart_i < charts.length - 1)
+        my.select_chart_index (chart_i + 1, true, true);
+      else
+        my.select_chart_index (0, true, true);
+    }
 
   return my;
 }

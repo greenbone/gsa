@@ -32,16 +32,16 @@ function default_bar_style (d) {
 
 function severity_bar_style (field, max_low, max_medium) {
   var func = function (d)
-             {
-                if (Number(d[field]) > max_medium)
-                  return ("fill: #D80000");
-                else if (Number(d[field]) >= max_low)
-                  return ("fill: orange");
-                else if (Number(d[field]) > 0.0)
-                  return ("fill: skyblue");
-                else
-                  return ("fill: silver");
-             };
+    {
+      if (Number(d[field]) > max_medium)
+        return ("fill: #D80000");
+      else if (Number(d[field]) >= max_low)
+        return ("fill: orange");
+      else if (Number(d[field]) > 0.0)
+        return ("fill: skyblue");
+      else
+        return ("fill: silver");
+    };
   func.max_low = max_low;
   func.max_medium = max_medium;
   func.field = field;
@@ -87,16 +87,16 @@ function data_severity_histogram (raw_data, x_field, y_field)
   var bins = ["N/A", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   var bin_func = function (val)
-                  {
-                    if (val !== "" && Number (val) <= 0.0)
-                      return 1;
-                    else if (Number (val) >= 10.0)
-                      return 11;
-                    else if (Number (val) > 0.0)
-                      return Math.ceil (Number (val)) + 1;
-                    else
-                      return 0;
-                  };
+    {
+      if (val !== "" && Number (val) <= 0.0)
+        return 1;
+      else if (Number (val) >= 10.0)
+        return 11;
+      else if (Number (val) > 0.0)
+        return Math.ceil (Number (val)) + 1;
+      else
+        return 0;
+    };
 
   var data = bins.map (function (d)
                         {

@@ -1,5 +1,17 @@
 2014-07-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js (severity_bar_style)
+	(data_severity_histogram [bin_func]): Make indentation more consistent
+	with other JavaScript.
+
+	* src/html/classic/js/gsa_graphics_base.js (Display [select_pref_name])
+	(Display [filter_pref_name], Display [width], Display [height])
+	(Display [refresh], Display [select_chart_index], Display [prev_chart])
+	(Display [next_chart]): Make indentation more consistent with other
+	JavaScript.
+
+2014-07-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Replace predefined charts on SecInfo dashboard with four user defined
 	ones, allowing a selection of charts and SecInfo filters.
 
