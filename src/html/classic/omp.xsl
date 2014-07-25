@@ -15185,6 +15185,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Scanner', 'Scanner Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Scanner', 'Scanner Window')"/></h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+
+              <tr class="{gsa:table-row-class(position())}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                    <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Window')}" style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
   <xsl:call-template name="user-tags-window">

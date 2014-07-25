@@ -1,3 +1,16 @@
+2014-07-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner [details]): Add table for tasks
+	using this scanner object.
+
+	* src/html/classic/help.xsl (details-window-line-actions): Add used_by
+	parameter and documentation for objects table using the detailed object.
+	(lsc_credential_details.hml, alert_details.html, port_list_details.html)
+	(schedule_details.html, scanner_details.html, slave_details.html)
+	(filter_details.html, target_details.html): Adjust
+	details-window-line-actions template call and remove redundant code
+	accordingly.
+
 2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-aggregate-chart): Rename the chart
