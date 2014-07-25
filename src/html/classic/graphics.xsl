@@ -342,7 +342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-by-class'"/>
+        <xsl:with-param name="chart_name" select="'left-by-oval-class'"/>
         <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'class'"/>
@@ -352,7 +352,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
       <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-by-class'"/>
+        <xsl:with-param name="chart_name" select="'right-by-oval-class'"/>
         <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'class'"/>
