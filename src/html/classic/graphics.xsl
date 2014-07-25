@@ -572,6 +572,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="create_data_source" select="0"/>
             </xsl:call-template>
 
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
+              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'bar'"/>
+              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+              <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_donut_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
+              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'donut'"/>
+              <xsl:with-param name="chart_template" select="'info_by_class'"/>
+              <xsl:with-param name="create_data_source" select="0"/>
+            </xsl:call-template>
+
             displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
             <xsl:if test="$filters">
               displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();

@@ -446,6 +446,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = 'dfn_cert_adv'">
       <func:result select="'DFN-CERT Advisory'"/>
     </xsl:when>
+    <xsl:when test="$type = 'allinfo'">
+      <func:result select="'All SecInfo'"/>
+    </xsl:when>
     <xsl:when test="$type = 'lsc_credential'">
       <func:result select="'Credential'"/>
     </xsl:when>
@@ -460,6 +463,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$type = 'dfn_cert_adv'">
       <func:result select="'DFN-CERT Advisories'"/>
+    </xsl:when>
+    <xsl:when test="$type = 'allinfo'">
+      <func:result select="'All SecInfo'"/>
     </xsl:when>
     <xsl:otherwise>
       <func:result select="concat(gsa:type-name ($type), 's')"/>
@@ -16834,6 +16840,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (info/allinfo)"/>
     <xsl:with-param name="filtered-count" select="info_count/filtered"/>
     <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-secinfo-top-visualization">
+        <xsl:with-param name="type" select="'allinfo'"/>
+      </xsl:call-template>
+    </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
         <name>Name</name>

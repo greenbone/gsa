@@ -1,3 +1,17 @@
+2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add allinfo charts to SecInfo dashboard and the All SecInfo table page.
+
+	* src/gsad.c (init_validator): Make aggregate_type separate from
+	resource_type and allow "allinfo".
+
+	* src/html/classic/graphics.xsl (dashboard [secinfo]): Add chart
+	selections for allinfo.
+
+	* src/html/classic/omp.xsl (gsa:type-name, gsa:type-name-plural): Add
+	case for allinfo.
+	(html-allinfo-table): Add chart boxes.
+
 2014-07-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js (severity_bar_style)
