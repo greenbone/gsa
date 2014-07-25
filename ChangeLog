@@ -1,6 +1,15 @@
 2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
-	Backport 19921.
+	Backport r19883.
+
+	* src/html/classic/omp.xsl (host): Show OS name and CPE as text after
+	the OS icon.
+	(os-icon): Add paramter os-cpe.
+	(report [os]): Add paramter os-cpe to OS icon to hide CPE.
+
+2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r19921.
 
 	* src/html/classic/omp.xsl (auto-refresh): Remove "10 Sec." option.
 	Add options "2 Min." and "5 Min."

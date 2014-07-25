@@ -21935,6 +21935,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="os-icon">
               <xsl:with-param name="host" select="../host"/>
               <xsl:with-param name="current_host" select="ip"/>
+              <xsl:with-param name="os-name" select="1"/>
+              <xsl:with-param name="img-style" select="'padding-right: 3px'"/>
             </xsl:call-template>
           </td>
         </tr>
@@ -23929,13 +23931,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="current_host"/>
   <xsl:param name="img-style"/>
   <xsl:param name="os-name"/>
+  <xsl:param name="os-cpe" select="1"/>
   <!-- Check for detected operating system(s) -->
   <xsl:variable name="best_os_cpe" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
   <xsl:variable name="best_os_txt" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
   <xsl:choose>
     <xsl:when test="contains($best_os_txt, '[possible conflict]')">
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
-        <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host Table Row')}: {$best_os_txt} ({$best_os_cpe})"/>
+        <xsl:choose>
+          <xsl:when test="$os-cpe">
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host Table Row')}: {$best_os_txt} ({$best_os_cpe})"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host Table Row')}: {$best_os_txt}"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="$os-name">
           <xsl:value-of select="$best_os_txt"/>
         </xsl:if>
@@ -23963,7 +23973,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
       <xsl:variable name="img_desc">
         <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-        <xsl:if test="not ($os-name)">
+        <xsl:if test="$os-cpe">
           <xsl:text> (</xsl:text>
           <xsl:value-of select="$best_os_cpe"/>
           <xsl:text>)</xsl:text>
@@ -25310,6 +25320,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="current_host" select="$host/ip"/>
                 <xsl:with-param name="img-style" select="'margin-right:2px; vertical-align: text-top;'"/>
                 <xsl:with-param name="os-name" select="1"/>
+                <xsl:with-param name="os-cpe" select="0"/>
               </xsl:call-template>
             </td>
             <td>
