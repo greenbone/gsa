@@ -1,5 +1,11 @@
 2014-07-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (preference [details])
+	(preference [edit-details]): Adjust for handling
+	ovaldi_file preference type.
+
+2014-07-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (scanner [details]): Add table for tasks
 	using this scanner object.
 

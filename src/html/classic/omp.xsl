@@ -12012,7 +12012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$config != ''">
       <td>
         <xsl:choose>
-          <xsl:when test="(type='file' or type='osp_file') and string-length(value) &gt; 0">
+          <xsl:when test="type='file' and string-length(value) &gt; 0">
             <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
           </xsl:when>
           <xsl:otherwise>
@@ -12026,6 +12026,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type='file' and string-length(value) &gt; 0">
           <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
         </xsl:when>
+        <xsl:when test="type='ovaldi_file'">Files list.</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
         </xsl:otherwise>
@@ -12060,19 +12061,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- TODO: Is name enough to make the preference unique, or is
            type required too? -->
       <xsl:choose>
-        <xsl:when test="type='osp_file'">
-          <label>
-            <xsl:choose>
-              <xsl:when test="string-length(value) &gt; 0">
-                <xsl:value-of select="gsa:i18n ('Replace existing file with', 'Scan Config Table Row')"/>:
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="gsa:i18n ('Upload file', 'Scan Config Table Row')"/>:
-              </xsl:otherwise>
-            </xsl:choose>
-          </label>
-          <br/>
-          <input type="file" name="{name}" size="30"/>
+        <xsl:when test="type='ovaldi_file'">
+          <xsl:variable name="value">
+            <xsl:value-of select="value"/>
+          </xsl:variable>
+          <select name="{name}">
+            <xsl:for-each select="str:split (default, '|')">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="."/>
+                <xsl:with-param name="select-value" select="$value"/>
+              </xsl:call-template>
+            </xsl:for-each>
+          </select>
         </xsl:when>
         <xsl:when test="type='checkbox'">
           <xsl:choose>
@@ -12198,7 +12198,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="default"/>
+      <xsl:choose>
+        <xsl:when test="type='ovaldi_file'">
+          <xsl:value-of select="value"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="default"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:if test="$for_config_details">
