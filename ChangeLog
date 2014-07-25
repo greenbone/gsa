@@ -1,4 +1,13 @@
-2014-07-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport 19921.
+
+	* src/html/classic/omp.xsl (auto-refresh): Remove "10 Sec." option.
+	Add options "2 Min." and "5 Min."
+
+	* src/html/classic/po/de.xml, src/html/classic/po/zh.xml: Add "Min.".
+
+2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r19880.
 

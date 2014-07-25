@@ -1164,14 +1164,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='10'">
-        <option value="10" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 10 <xsl:value-of select="gsa:i18n ('Sec.', 'Window')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="10"><xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 10 <xsl:value-of select="gsa:i18n ('Sec.', 'Window')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
       <xsl:when test="/envelope/autorefresh/@interval='30'">
         <option value="30" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 30 <xsl:value-of select="gsa:i18n ('Sec.', 'Window')"/></option>
       </xsl:when>
@@ -1185,6 +1177,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <option value="60"><xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 60 <xsl:value-of select="gsa:i18n ('Sec.', 'Window')"/></option>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='120'">
+        <option value="120" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 2 <xsl:value-of select="gsa:i18n ('Min.', 'Window')"/></option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="120"><xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 2 <xsl:value-of select="gsa:i18n ('Min.', 'Window')"/></option>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='300'">
+        <option value="300" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 5 <xsl:value-of select="gsa:i18n ('Min.', 'Window')"/></option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="300"><xsl:value-of select="gsa:i18n ('Refresh every', 'Window')"/> 5 <xsl:value-of select="gsa:i18n ('Min.', 'Window')"/></option>
       </xsl:otherwise>
     </xsl:choose>
   </select>

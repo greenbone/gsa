@@ -455,6 +455,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>秒 </str>
     </msg>
     <msg>
+      <id>Min.</id>
+      <str>分</str>
+    </msg>
+    <msg>
       <id>Update</id>
       <str>更新</str>
     </msg>
