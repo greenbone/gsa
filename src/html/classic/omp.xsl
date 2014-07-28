@@ -29919,18 +29919,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:choose>
-        <xsl:when test="@name='method:ads'">
-          <xsl:value-of select="gsa:i18n ('ADS Authentication', 'Group Window')"/>
-          <a href="/help/users.html?token={/envelope/token}#adsauthentication"
-             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('', ''))}({gsa:i18n ('ADS Authentication', 'Group Window')})">
-          <img src="/img/help.png"/></a>
-        </xsl:when>
-        <xsl:when test="@name='method:ldap'">
-          <xsl:value-of select="gsa:i18n ('LDAP Authentication and Authorization', 'Group Window')"/>
-          <a href="/help/users.html?token={/envelope/token}#ldapauthentication"
-             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('', ''))}({gsa:i18n ('LDAP Authentication and Authorization', 'Group Window')})">
-          <img src="/img/help.png"/></a>
-        </xsl:when>
         <xsl:when test="@name='method:ldap_connect'">
           <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group Window')"/>
           <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
@@ -29971,12 +29959,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="even">
                 <td>
                 <xsl:choose>
-                  <xsl:when test="@name='method:ads'">
-                    ADS
-                  </xsl:when>
-                  <xsl:when test="@name='method:ldap'">
-                    LDAP
-                  </xsl:when>
                   <xsl:when test="@name='method:ldap_connect'">
                     LDAP
                   </xsl:when>
@@ -29986,18 +29968,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
               </tr>
               <tr class="odd">
-              <xsl:choose>
-                <xsl:when test="@name='method:ads'">
-                  <td><xsl:value-of select="gsa:i18n ('Domain', 'Group Window')"/></td>
-                  <td><input type="text" name="domain" size="30"
-                       value="{auth_conf_setting[@key='domain']/@value}"/></td>
-                </xsl:when>
-                <xsl:otherwise>
-                  <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group Window')"/></td>
-                  <td><input type="text" name="authdn" size="30"
-                       value="{auth_conf_setting[@key='authdn']/@value}"/></td>
-                </xsl:otherwise>
-              </xsl:choose>
+                <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group Window')"/></td>
+                <td><input type="text" name="authdn" size="30"
+                     value="{auth_conf_setting[@key='authdn']/@value}"/></td>
               </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
@@ -30027,8 +30000,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="describe_auth_response" mode="show">
-  <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap']" mode="auth"/>
-  <xsl:apply-templates select="describe_auth_response/group[@name='method:ads']" mode="auth"/>
   <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="auth"/>
 </xsl:template>
 

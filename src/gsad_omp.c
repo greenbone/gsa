@@ -19777,7 +19777,7 @@ save_auth_omp (credentials_t* credentials, params_t *params)
   entity_t entity;
   char *truefalse;
   gchar *html, *response;
-  const char *ldaphost, *method, *authdn, *domain;
+  const char *ldaphost, *method, *authdn;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -19788,11 +19788,8 @@ save_auth_omp (credentials_t* credentials, params_t *params)
   ldaphost = params_value (params, "ldaphost");
   method = params_value (params, "group");
   authdn = params_value (params, "authdn");
-  domain = params_value (params, "domain");
 
   if (ldaphost == NULL || method == NULL
-      || (strcmp (method, "method:ldap") == 0 && authdn == NULL)
-      || (strcmp (method, "method:ads")  == 0 && domain == NULL)
       || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
     return get_users (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM
@@ -19810,14 +19807,13 @@ save_auth_omp (credentials_t* credentials, params_t *params)
               "<group name=\"%s\">"
               "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
               "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-              "<auth_conf_setting key=\"%s\" value=\"%s\"/>"
+              "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
               "</group>"
               "</modify_auth>",
               method,
               truefalse,
               ldaphost,
-              (strcmp (method, "method:ads") == 0) ? "domain" : "authdn",
-              (strcmp (method, "method:ads") == 0) ? domain : authdn);
+              authdn);
   switch (ret)
     {
       case 0:
