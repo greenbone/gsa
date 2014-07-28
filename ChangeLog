@@ -1,3 +1,24 @@
+2014-07-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backporting r19966.
+
+	Dropping remains for no more supported ADS and LDAP
+	authorization. The only method supported is ldap_connect,
+	which is the per-user ldap authentication.
+
+	* src/html/classic/help.xsl, src/html/classic/help_zh.xsl (users.html):
+	Removed description for LDAP(Authorizationn) and ADS.
+ 
+	* src/gsad.c (init_validator): Removed ldap and ads from validator
+	"group".
+
+	* gsad_omp.c (save_auth_omp): Removed handlung for methods "ldap"
+	and "ads".
+	(save_auth_omp): Removed special handling for "ads" case.
+
+	* src/html/classic/omp.xsl (group mode auth, describe_auth_response
+	mode=show): Drop ads and ldap.
+
 2014-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r19883.

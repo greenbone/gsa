@@ -901,8 +901,8 @@ init_validator ()
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
-  /* Validator for  save_auth group, e.g. "method:ldap". */
-  openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
+  /* Validator for  save_auth group, e.g. "method:ldap_connect". */
+  openvas_validator_add (validator, "group",        "^method:(ldap_connect)$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
