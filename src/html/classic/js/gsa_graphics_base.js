@@ -776,8 +776,10 @@ function extract_simple_records (xml_data, selector)
 function capitalize (str)
 {
   switch (str.toLowerCase ())
-  {
-      case "nvt", "cve", "cpe":
+    {
+      case "nvt":
+      case "cve":
+      case "cpe":
         return str.toUpperCase ();
         break;
       default:
@@ -788,7 +790,75 @@ function capitalize (str)
                             + split_str [i].slice (1);
           }
         return split_str.join(" ");
-  }
+    }
+}
+
+function resource_type_name (type)
+{
+  switch (type.toLowerCase())
+    {
+      case "ovaldef":
+        return "OVAL definition"
+      case "dfn_cert_adv":
+        return "DFN-CERT Advisory"
+      default:
+        return capitalize (type);
+    }
+}
+
+function resource_type_name_plural (type)
+{
+  switch (type.toLowerCase())
+    {
+      case "dfn_cert_adv":
+        return "DFN-CERT Advisories"
+      default:
+        return resource_type_name (type) + "s"
+    }
+}
+
+/*
+ * Display helpers
+ */
+
+/*
+ * Wrap SVG text at a given width
+ */
+function wrap_text (text_selection, width)
+{
+  text_selection.each(function()
+    {
+      var text = d3.select(this);
+      var words = text.text()
+                        .match (/[^\s-]+[\s-]*/g)
+                          .reverse();
+      var current_word;
+      var line = [];
+      var line_number = 0;
+      var line_height = 1.2; //em
+      var x = text.attr ("x");
+      var y = text.attr ("y");
+      var dy = parseFloat (text.attr ("dy"));
+      var tspan = text.text (null)
+                      .append ("tspan")
+                        .attr ("x", x)
+                        .attr ("y", y)
+      while (word = words.pop ())
+        {
+          line.push (word);
+          tspan.text(line.join (""));
+          if (tspan.node ().getComputedTextLength () > width) {
+            line.pop ();
+            tspan.text (line.join (""));
+            line = [word];
+            tspan = text.append ("tspan")
+                          .attr("x", x)
+                          .attr("y", y)
+                          .attr("dy", ++line_number * line_height + "em")
+                          .text(word);
+          }
+        }
+    });
 }
 
 

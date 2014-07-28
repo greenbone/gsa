@@ -1,3 +1,24 @@
+2014-07-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add "All SecInfo by type" chart. Improve donut chart legends with
+	dynamic width, word wrap and more consistent font size in export
+	version.
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart): Add data
+	transform case for new chart template resource_type_counts.
+	(js-secinfo-top-visualization, dashboard [secinfo]): Add chart
+	"All SecInfo by type".
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator [generate]): Make legend width depend on chart
+	display size. Add word wrap to legend.
+	(resource_type_counts): New function.
+
+	* src/html/classic/js/gsa_graphics_base.js (capitalize): Fix NVT and
+	CVE cases.
+	(resource_type_name, resource_type_name_plural, wrap_text): New
+	functions.
+
 2014-07-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Dropping remains for no more supported ADS and LDAP

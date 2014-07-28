@@ -161,6 +161,8 @@ function DonutChartGenerator ()
 
       var slices = slice_f (data).filter (function (elem) { return !isNaN (elem.endAngle)} );
 
+      legend_width = Math.min (240, Math.max (120, display.svg ().attr ("width") / 5))
+
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
       width = display.svg ().attr ("width") - margin.left - margin.right - legend_width;
@@ -191,22 +193,28 @@ function DonutChartGenerator ()
                         .attr ("class", "legend")
                         .attr ("transform", "translate(" + (width + 10.5) + ", 0)")
 
+      var legend_y = 0;
       for (var i = 0; i < x_data.length; i++)
         {
           legend.insert ("rect")
               .attr ("height", "15")
               .attr ("width", "15")
               .attr ("x", 0.5)
-              .attr ("y", 20 * i + 0.5)
+              .attr ("y", legend_y + 0.5)
               .attr ("fill", color_scale (x_data[i]))
               .attr ("stroke", "black")
               .attr ("stroke-width", "0.25")
               .style ("shape-rendering", "geometricPrecision")
 
-          legend.insert ("text")
-              .attr ("x", 22)
-              .attr ("y", 20 * i + 12)
-              .text (x_data[i])
+          var new_text = legend.insert ("text")
+                                .attr ("x", 22)
+                                .attr ("y", legend_y + 12)
+                                .style ("font-size", "12px")
+                                .style ("font-weight", "bold")
+                                .text (x_data[i])
+          wrap_text (new_text, legend_width - 25);
+
+          legend_y += Math.max (20, new_text.node ().getBBox ().height + 5);
         }
 
       legend.attr ("opacity", 0)
@@ -581,6 +589,24 @@ function data_severity_level_counts (raw_data, x_field, y_field)
         data[0][y_field] += count;
     };
 
+  return data;
+}
+
+function resource_type_counts (raw_data, x_field, y_field)
+{
+  var data = [];
+  for (record in raw_data)
+    {
+      var new_record = {};
+      for (field in raw_data [record])
+        {
+          if (field == x_field)
+            new_record[field] = resource_type_name_plural (raw_data [record][field]);
+          else
+            new_record[field] = raw_data [record][field];
+        }
+      data.push (new_record);
+    }
   return data;
 }
 
