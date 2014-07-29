@@ -1,3 +1,10 @@
+2014-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r19972.
+
+	* src/html/classic/help.xsl (config_editor_nvt.html): Mention that files
+	must be UTF-8 encoded.
+
 2014-07-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backporting r19966.
@@ -8,7 +15,7 @@
 
 	* src/html/classic/help.xsl, src/html/classic/help_zh.xsl (users.html):
 	Removed description for LDAP(Authorizationn) and ADS.
- 
+
 	* src/gsad.c (init_validator): Removed ldap and ads from validator
 	"group".
 
