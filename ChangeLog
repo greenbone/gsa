@@ -1,3 +1,8 @@
+2014-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (config_editor_nvt.html): Mention that files
+	must be UTF-8 encoded.
+
 2014-07-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Dropping the "Pause" Feature from GUI.
@@ -66,7 +71,7 @@
 
 	* src/html/classic/help.xsl, src/html/classic/help_zh.xsl (users.html):
 	Removed description for LDAP(Authorizationn) and ADS.
- 
+
 	* src/gsad.c (init_validator): Removed ldap and ads from validator
 	"group".
 
@@ -322,7 +327,7 @@
 	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator [generate]): Add option for showing SVG in
 	new window and change save filename prefix to "gsa_donut_chart-".
-	
+
 	* src/html/classic/js/gsa_graphics_base.js (blob_img_window): New
 	function.
 

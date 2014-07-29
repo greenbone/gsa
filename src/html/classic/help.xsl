@@ -7332,8 +7332,12 @@ Public License instead of this License.
         </tr>
         <tr class="even">
           <td>Value</td>
-          <td>The value for the NVT Preference in the given Scan Configuration.
-              For different Preference Types, different input methods are shown.</td>
+          <td>
+            The value for the NVT Preference in the given Scan Configuration.
+            For different Preference Types, different input methods are shown.
+            <br/><br/>
+            Note that file preferences must be UTF-8 encoded.
+          </td>
         </tr>
       </table>
     </div>
