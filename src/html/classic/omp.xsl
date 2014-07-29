@@ -3432,7 +3432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </xsl:when>
     <xsl:when test="status='Running'">
-      <xsl:call-template name="pause-icon">
+      <xsl:call-template name="stop-icon">
         <xsl:with-param name="type">task</xsl:with-param>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
@@ -3513,50 +3513,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Task is not paused or stopped', 'Task Table Row')}"
            style="margin-left:3px;"/>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="gsa:may ('stop_task') = 0">
-      <img src="/img/stop_inactive.png" border="0" alt="{gsa:i18n ('Stop', 'Task Table Row')}" title="{gsa:i18n ('Permission to stop task denied', 'Task Table Row')}"
-         style="margin-left:3px;"/>
-    </xsl:when>
-    <xsl:when test="target/@id=''">
-      <img src="/img/stop_inactive.png" border="0" alt="{gsa:i18n ('Stop', 'Task Table Row')}" title="{gsa:i18n ('Task is a container', 'Task Table Row')}"
-         style="margin-left:3px;"/>
-    </xsl:when>
-    <xsl:when test="string-length(schedule/@id) &gt; 0">
-      <img src="/img/stop_inactive.png" border="0"
-           alt="{gsa:i18n ('Stop', 'Task Table Row')}" title="{gsa:i18n ('Task is scheduled', 'Task Table Row')}"
-           style="margin-left:3px;"/>
-    </xsl:when>
-    <xsl:when test="string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1">
-      <xsl:call-template name="stop-icon">
-        <xsl:with-param name="type">task</xsl:with-param>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-          <input type="hidden" name="next" value="{$next}"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested' or status='Delete Requested' or status='Ultimate Delete Requested'">
-      <img src="/img/stop_inactive.png" border="0"
-           alt="{gsa:i18n ('Stop', 'Task Table Row')}" title="{gsa:i18n ('Tasks can only be be stopped when running or paused', 'Task Table Row')}"
-           style="margin-left:3px;"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="stop-icon">
-        <xsl:with-param name="type">task</xsl:with-param>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-          <input type="hidden" name="next" value="{$next}"/>
-        </xsl:with-param>
-      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -6448,7 +6404,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Trend</name>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="7"/>
+    <xsl:with-param name="icon-count" select="6"/>
   </xsl:call-template>
 </xsl:template>
 
