@@ -848,14 +848,23 @@ function wrap_text (text_selection, width)
           line.push (word);
           tspan.text(line.join (""));
           if (tspan.node ().getComputedTextLength () > width) {
-            line.pop ();
-            tspan.text (line.join (""));
-            line = [word];
+            if (line.length > 1)
+              {
+                line.pop ();
+                tspan.text (line.join (""));
+                line = [word];
+              }
+            else
+              {
+                tspan.text (line.join (""));
+                line.pop ();
+              }
+
             tspan = text.append ("tspan")
                           .attr("x", x)
                           .attr("y", y)
                           .attr("dy", ++line_number * line_height + "em")
-                          .text(word);
+                          .text(line.join (""));
           }
         }
     });

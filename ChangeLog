@@ -1,3 +1,8 @@
+2014-07-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (wrap_text): Do not move
+	a too long word to the next line if it is the only one in the line.
+
 2014-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report, get_report_section): Get report formats
