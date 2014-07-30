@@ -28,7 +28,7 @@
  * Creates adds display elements to a selected part of the HTML page
  */
 function create_chart_box (parent_id, container_id, width, height,
-                           select_pref_name, filter_pref_name)
+                           select_pref_id, filter_pref_id)
 {
   var parent = d3.select ("#" + parent_id);
   var container = parent.append ("div")
@@ -62,11 +62,11 @@ function create_chart_box (parent_id, container_id, width, height,
       .attr ("id", container_id + "-foot")
 
   displays [container_id] = new Display (container);
-  if (select_pref_name != '')
-    displays [container_id].select_pref_name (select_pref_name);
+  if (select_pref_id != '')
+    displays [container_id].select_pref_id (select_pref_id);
 
-  if (filter_pref_name != '')
-    displays [container_id].filter_pref_name (filter_pref_name);
+  if (filter_pref_id != '')
+    displays [container_id].filter_pref_id (filter_pref_id);
 
 }
 
@@ -372,8 +372,8 @@ function Display (p_container)
   var last_generator = null;
   var last_gen_params = null;
 
-  var select_pref_name = "";
-  var filter_pref_name = "";
+  var select_pref_id = "";
+  var filter_pref_id = "";
   var chart_pref_request = null;
 
   function my() {};
@@ -524,7 +524,7 @@ function Display (p_container)
       if (request_data)
         charts [chart_i].request_data (my);
 
-      if (save_preference && select_pref_name != "")
+      if (save_preference && select_pref_id != "")
         {
           if (chart_pref_request != null)
             chart_pref_request.abort ();
@@ -532,7 +532,7 @@ function Display (p_container)
           chart_pref_request = d3.xhr ("/omp")
 
           var form_data = new FormData ();
-          form_data.append ("chart_preference_name", filter_pref_name);
+          form_data.append ("chart_preference_id", filter_pref_id);
           form_data.append ("chart_preference_value", filter_id);
           form_data.append ("token", gsa_token);
           form_data.append ("cmd", "save_chart_preference");
@@ -544,22 +544,22 @@ function Display (p_container)
                                     .property ("selected", "selected")
     }
 
-  my.select_pref_name = function (value)
+  my.select_pref_id = function (value)
     {
       if (!arguments.length)
-        return select_pref_name;
+        return select_pref_id;
 
-      select_pref_name = value;
+      select_pref_id = value;
 
       return my;
     }
 
-  my.filter_pref_name = function (value)
+  my.filter_pref_id = function (value)
     {
       if (!arguments.length)
-        return filter_pref_name;
+        return filter_pref_id;
 
-      filter_pref_name = value;
+      filter_pref_id = value;
 
       return my;
     }
@@ -613,7 +613,7 @@ function Display (p_container)
       if (request_data)
         charts [index].request_data ();
 
-      if (save_preference && select_pref_name != "")
+      if (save_preference && select_pref_id != "")
         {
           if (chart_pref_request != null)
             chart_pref_request.abort ();
@@ -621,7 +621,7 @@ function Display (p_container)
           chart_pref_request = d3.xhr ("/omp")
 
           var form_data = new FormData ();
-          form_data.append ("chart_preference_name", select_pref_name);
+          form_data.append ("chart_preference_id", select_pref_id);
           form_data.append ("chart_preference_value", charts [index].chart_name ());
           form_data.append ("token", gsa_token);
           form_data.append ("cmd", "save_chart_preference");

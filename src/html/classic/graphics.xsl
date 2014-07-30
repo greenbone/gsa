@@ -68,14 +68,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="container_id" select="'chart-box'"/>
   <xsl:param name="width" select="435"/>
   <xsl:param name="height" select="250"/>
-  <xsl:param name="select_pref_name"/>
-  <xsl:param name="filter_pref_name"/>
+  <xsl:param name="select_pref_id"/>
+  <xsl:param name="filter_pref_id"/>
   create_chart_box ("<xsl:value-of select="$parent_id"/>",
                     "<xsl:value-of select="$container_id"/>",
                     <xsl:value-of select="$width"/>,
                     <xsl:value-of select="$height"/>,
-                    "<xsl:value-of select="$select_pref_name"/>",
-                    "<xsl:value-of select="$filter_pref_name"/>")
+                    "<xsl:value-of select="$select_pref_id"/>",
+                    "<xsl:value-of select="$filter_pref_id"/>")
 </xsl:template>
 
 <xsl:template name="js-aggregate-data-source">
@@ -254,15 +254,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
-  <xsl:param name="auto_load_left_pref_name" select="concat ($type, '-select-left')"/>
-  <xsl:param name="auto_load_right_pref_name" select="concat ($type, '-select-right')"/>
+  <xsl:param name="auto_load_left_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='nvt'">f68d9369-1945-477b-968f-121c6029971b</xsl:when>
+      <xsl:when test="$type='cve'">815ddd2e-8654-46c7-a05b-d73224102240</xsl:when>
+      <xsl:when test="$type='cpe'">9cff9b4d-b164-43ce-8687-f2360afc7500</xsl:when>
+      <xsl:when test="$type='ovaldef'">9563efc0-9f4e-4d1f-8f8d-0205e32b90a4</xsl:when>
+      <xsl:when test="$type='dfn_cert_adv'">9812ea49-682d-4f99-b3cc-eca051d1ce59</xsl:when>
+      <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="auto_load_right_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='nvt'">af89a84a-d3ec-43a8-97a8-aa688bf093bc</xsl:when>
+      <xsl:when test="$type='cve'">418a5746-d68a-4a2d-864a-0da993b32220</xsl:when>
+      <xsl:when test="$type='cpe'">629fdb73-35fa-4247-9018-338c202f7c03</xsl:when>
+      <xsl:when test="$type='ovaldef'">fe1610a3-4e87-4b0d-9b7a-f0f66fef586b</xsl:when>
+      <xsl:when test="$type='dfn_cert_adv'">72014b52-4389-435d-9438-8c13601ecbd2</xsl:when>
+      <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
+    </xsl:choose>
+  </xsl:param>
   <xsl:param name="auto_load_left_default" select="'left-by-cvss'"/>
   <xsl:param name="auto_load_right_default" select="'right-by-class'"/>
 
   <xsl:variable name="auto_load_left">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[name = $auto_load_left_pref_name]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[name = $auto_load_left_pref_name]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$auto_load_left_default"/>
@@ -271,8 +289,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <xsl:variable name="auto_load_right">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[name = $auto_load_right_pref_name]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[name = $auto_load_right_pref_name]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$auto_load_right_default"/>
@@ -285,11 +303,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-left'"/>
-      <xsl:with-param name="select_pref_name" select="concat ($type, '-select-left')"/>
+      <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
     </xsl:call-template>
     <xsl:call-template name="js-create-chart-box">
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
-      <xsl:with-param name="select_pref_name" select="concat ($type, '-select-right')"/>
+      <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
     </xsl:call-template>
 
     <xsl:call-template name="js-aggregate-data-source">
@@ -468,22 +486,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <script>
           <xsl:for-each select="exslt:node-set ($chart_defaults)/chart">
             <xsl:variable name="display_name" select="concat (text(), '_display')"/>
-            <xsl:variable name="auto_load_pref_name" select="concat (text (), '-select')"/>
+            <xsl:variable name="auto_load_pref_id">
+              <xsl:choose>
+                <xsl:when test="text() = 'secinfo_1'">84ab32da-fe69-44d8-8a8f-70034cf28d4e</xsl:when>
+                <xsl:when test="text() = 'secinfo_2'">42d48049-3153-43bf-b30d-72ca5ab1eb49</xsl:when>
+                <xsl:when test="text() = 'secinfo_3'">76f34fe0-254a-4481-97aa-c6f1da2f842b</xsl:when>
+                <xsl:when test="text() = 'secinfo_4'">71106ed7-b677-414e-bf67-2e7716441db3</xsl:when>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:variable name="auto_load">
               <xsl:choose>
-                <xsl:when test="$envelope/chart_preferences/chart_preference[name = $auto_load_pref_name]">
-                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[name = $auto_load_pref_name]/value"/>
+                <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]">
+                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]/value"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="@auto_load"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="auto_filter_pref_name" select="concat (text (), '-filter')"/>
+            <xsl:variable name="auto_filter_pref_id">
+              <xsl:choose>
+                <xsl:when test="text() = 'secinfo_1'">517d0efe-426e-49a9-baa7-eda2832c93e8</xsl:when>
+                <xsl:when test="text() = 'secinfo_2'">3c693fb2-4f87-4b1f-a09e-cb9aa66440f4</xsl:when>
+                <xsl:when test="text() = 'secinfo_3'">bffa72a5-8110-49f9-aa5e-f431ce834826</xsl:when>
+                <xsl:when test="text() = 'secinfo_4'">268079c6-f353-414f-9b7c-43f5419edf2d</xsl:when>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:variable name="auto_filter">
               <xsl:choose>
-                <xsl:when test="$envelope/chart_preferences/chart_preference[name = $auto_filter_pref_name]">
-                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[name = $auto_filter_pref_name]/value"/>
+                <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]">
+                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]/value"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="''"/>
@@ -494,8 +526,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="js-create-chart-box">
               <xsl:with-param name="container_id" select="$display_name"/>
               <xsl:with-param name="parent_id" select="'dashboard'"/>
-              <xsl:with-param name="select_pref_name" select="$auto_load_pref_name"/>
-              <xsl:with-param name="filter_pref_name" select="$auto_filter_pref_name"/>
+              <xsl:with-param name="select_pref_id" select="$auto_load_pref_id"/>
+              <xsl:with-param name="filter_pref_id" select="$auto_filter_pref_id"/>
             </xsl:call-template>
 
             <xsl:call-template name="js-aggregate-chart">

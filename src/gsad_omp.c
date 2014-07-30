@@ -227,21 +227,20 @@ omp_init (const gchar *address_manager, int port_manager)
 /**
  * @brief Traverse a chart preference tree and output xml elements.
  *
- * @param name   Name of the preference.
+ * @param id     ID of the preference.
  * @param value  Preference value.
  * @param buffer GString buffer to output elements to.
  *
  * @return always 0
  */
 static gboolean
-print_chart_pref (gchar *name, gchar *value, GString* buffer)
+print_chart_pref (gchar *id, gchar *value, GString* buffer)
 {
   g_string_append_printf (buffer,
-                          "<chart_preference>"
-                          "<name>%s</name>"
+                          "<chart_preference id=\"%s\">"
                           "<value>%s</value>"
                           "</chart_preference>",
-                          name,
+                          id,
                           value);
   return 0;
 }
@@ -19865,21 +19864,79 @@ save_auth_omp (credentials_t* credentials, params_t *params)
  */
 char*
 save_chart_preference_omp (credentials_t* credentials, params_t *params,
-                           gchar **pref_name, gchar **pref_value)
+                           gchar **pref_id, gchar **pref_value)
 {
-  *pref_name = g_strdup (params_value (params, "chart_preference_name"));
+  *pref_id = g_strdup (params_value (params, "chart_preference_id"));
   *pref_value = g_strdup (params_value (params, "chart_preference_value"));
 
-  if (*pref_name == NULL)
+  gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
+                                     strlen (*pref_value));
+  gchar* response;
+  entity_t entity;
+  int ret;
+
+  if (*pref_id == NULL)
     return ("<save_chart_preference_response"
-            " status=\"400\" status_text=\"Invalid or missing name\">");
+            " status=\"400\" status_text=\"Invalid or missing name\"/>");
 
   if (*pref_value == NULL)
     return ("<save_chart_preference_response"
-            " status=\"400\" status_text=\"Invalid or missing value\">");
+            " status=\"400\" status_text=\"Invalid or missing value\"/>");
 
-  return ("<save_chart_preference_response"
-          " status=\"200\" status_text=\"OK\">");
+  response = NULL;
+  entity = NULL;
+  ret = ompf (credentials, &response, &entity,
+              "<modify_setting setting_id=\"%s\">"
+              "<value>%s</value>"
+              "</modify_setting>",
+              *pref_id, value_64);
+  g_free (value_64);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving settings. "
+                             "It is unclear whether all the settings were saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving settings. "
+                             "It is unclear whether all the settings were saved. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving settings. "
+                             "It is unclear whether all the settings were saved. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_my_settings");
+    }
+
+  if (omp_success (entity))
+    {
+      free_entity (entity);
+      g_free (response);
+      return ("<save_chart_preference_response"
+              " status=\"200\" status_text=\"OK\"/>");
+    }
+  else
+    {
+      gchar* ret_response
+        = g_strdup_printf("<save_chart_preference_response"
+                          " status=\"%s\" status_text=\"%s\"/>",
+                          entity_attribute (entity, "status"),
+                          entity_attribute (entity, "status_text"));
+      free_entity (entity);
+      g_free (response);
+      return ret_response;
+    }
 }
 
 
@@ -20128,13 +20185,15 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
+ * @param[out] chart_prefs   Chart preferences.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_omp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language, gchar **pw_warning)
+                  gchar **capabilities, gchar **language, gchar **pw_warning,
+                  GTree **chart_prefs)
 {
   gnutls_session_t session;
   int socket;
@@ -20257,7 +20316,6 @@ authenticate_omp (const gchar * username, const gchar * password,
           openvas_server_close (socket, session);
           return 2;
         }
-      openvas_server_close (socket, session);
 
       /* Check the response. */
 
@@ -20274,11 +20332,75 @@ authenticate_omp (const gchar * username, const gchar * password,
       if (first == '2')
         {
           *capabilities = response;
-          return 0;
+        }
+      else
+        {
+          openvas_server_close (socket, session);
+          g_free (response);
+          return -1;
         }
 
-      g_free (response);
-      return -1;
+      /* Get the chart preferences */
+
+      ret = openvas_server_send (&session,
+                                 "<get_settings filter='name~\"Chart\"'/>");
+      if (ret)
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Read the response */
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Check the response. */
+      status = entity_attribute (entity, "status");
+      if (status == NULL
+          || strlen (status) == 0)
+        {
+          g_free (response);
+          free_entity (entity);
+          return -1;
+        }
+      first = status[0];
+      if (first == '2')
+        {
+          entities_t entities = entity->entities;
+          entity_t child_entity;
+          *chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                          NULL, g_free, g_free);
+
+          while ((child_entity = first_entity (entities)))
+            {
+              if (strcmp (entity_name (child_entity), "setting") == 0)
+                {
+                  const char *setting_id
+                    = entity_attribute (child_entity, "id");
+                  const char *setting_value
+                    = entity_text (entity_child (child_entity, "value"));
+
+                  if (setting_id && setting_value)
+                    g_tree_insert (*chart_prefs,
+                                   g_strdup (setting_id),
+                                   g_strdup (setting_value));
+                }
+              entities = next_entities (entities);
+            }
+          free_entity (entity);
+          g_free (response);
+          return 0;
+        }
+      else
+        {
+          free_entity (entity);
+          g_free (response);
+          return -1;
+        }
     }
   else
     {

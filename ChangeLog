@@ -1,3 +1,37 @@
+2014-07-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use UUIDs to identify chart preferences and keep them between sessions
+	by sending them to manager on updates and retrieving them on login.
+
+	* src/gsad_omp.c (print_chart_pref): Replace name parameter with id.
+	(save_chart_preference_omp): Use id instead of name. Save preference
+	in Manager database. Close response tags.
+	(authenticate_omp): Add chart_prefs parameter and get the user's chart
+	preferences.
+
+	* src/gsad_omp.h (authenticate_omp): Add parameter for chart_prefs.
+
+	* src/gsad.c (user_add): Add chart_prefs parameter and use it instead
+	of creating the user's chart_prefs of here.
+	(user_set_chart_pref): Change pref_name to pref_id.
+	(init_validator): Change chart_preference_name to chart_preference_id.
+	(exec_omp_post): Add chart_prefs parameter for authenticate_omp.
+	Replace pref_name with pref_id.
+
+	* src/html/classic/graphics.xsl (js-create-chart-box)
+	(js-secinfo-top-visualization): Replace preference names with ids and
+	rename variables and parameters accordingly.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_box)
+	(Display, Display [select_filter]): Replace preference names with ids
+	and rename variables and parameters accordingly.
+	(Display [select_pref_name]): Remove. Renamed to select_pref_id.
+	(Display [filter_pref_name]): Remove. Renamed to filter_pref_id.
+	(Display [select_pref_id]): New. Renamed select_pref_name.
+	(Display [filter_pref_id]): New. Renamed filter_pref_name.
+	(Display [select_chart_index]): Replace preference name with id. Rename
+	variable accordingly and use new chart_preference_id GSA parameter.
+
 2014-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (config_editor_nvt.html): Mention that files

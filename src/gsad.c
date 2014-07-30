@@ -255,13 +255,14 @@ static GMutex *mutex = NULL;
  * @param[in]  capabilities  Capabilities of manager.
  * @param[in]  language      User Interface Language setting.
  * @param[in]  pw_warning    Password policy warning.
+ * @param[in]  chart_prefs   The chart preferences.
  *
  * @return Added user.
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning)
+          const gchar *language, const gchar *pw_warning, GTree *chart_prefs)
 {
   user_t *user = NULL;
   int index;
@@ -294,8 +295,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_free (user->pw_warning);
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
       g_tree_destroy (user->chart_prefs);
-      user->chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                           NULL, g_free, g_free);
+      user->chart_prefs = chart_prefs;
     }
   else
     {
@@ -310,8 +310,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->capabilities = g_strdup (capabilities);
       user->language = language ? g_strdup (language) : NULL;
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-      user->chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                           NULL, g_free, g_free);
+      user->chart_prefs = chart_prefs;
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -564,13 +563,13 @@ user_set_charts (const gchar *name, const int charts)
  * @brief Set a chart preference of a user.
  *
  * @param[in]   name        User name.
- * @param[in]   pref_name   Name of the chart preference.
+ * @param[in]   pref_id     ID of the chart preference.
  * @param[in]   pref_value  Preference value to set.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_chart_pref (const gchar *name, gchar* pref_name, gchar *pref_value)
+user_set_chart_pref (const gchar *name, gchar* pref_id, gchar *pref_value)
 {
   int index, ret;
   ret = 1;
@@ -582,7 +581,7 @@ user_set_chart_pref (const gchar *name, gchar* pref_name, gchar *pref_value)
       if (strcmp (item->username, name) == 0)
         {
           g_tree_replace (item->chart_prefs,
-                          pref_name, pref_value);
+                          pref_id, pref_value);
           ret = 0;
           break;
         }
@@ -954,7 +953,7 @@ init_validator ()
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "caller",     "^.*$");
-  openvas_validator_add (validator, "chart_preference_name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
   openvas_validator_add (validator, "comment",    "^[-_;'()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
@@ -1668,6 +1667,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           int ret;
           gchar *timezone, *role, *capabilities, *severity, *language;
           gchar *pw_warning;
+          GTree *chart_prefs;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
@@ -1675,7 +1675,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                   &severity,
                                   &capabilities,
                                   &language,
-                                  &pw_warning);
+                                  &pw_warning,
+                                  &chart_prefs);
           if (ret)
             {
               time_t now;
@@ -1717,7 +1718,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                role,
                                capabilities,
                                language,
-                               pw_warning);
+                               pw_warning,
+                               chart_prefs);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -2022,13 +2024,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_auth)
   else if (!strcmp (cmd, "save_chart_preference"))
     {
-      gchar *pref_name, *pref_value;
+      gchar *pref_id, *pref_value;
 
       con_info->response = save_chart_preference_omp (credentials,
                                                       con_info->params,
-                                                      &pref_name, &pref_value);
-      if (pref_name && pref_value)
-        user_set_chart_pref (credentials->username, pref_name, pref_value);
+                                                      &pref_id, &pref_value);
+      if (pref_id && pref_value)
+        user_set_chart_pref (credentials->username, pref_id, pref_value);
     }
   ELSE (save_config)
   ELSE (save_config_family)
