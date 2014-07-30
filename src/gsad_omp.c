@@ -10518,9 +10518,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if ((type && (strcmp (type, "prognostic") == 0))
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
-          if (openvas_server_send (&session, "<get_report_formats"
-                                             " sort_field=\"name\""
-                                             " sort_order=\"ascending\"/>")
+          if (openvas_server_send
+               (&session,
+                "<get_report_formats"
+                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -10676,9 +10677,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_REPORT_FORMATS"))
         {
-          if (openvas_server_send (&session, "<get_report_formats"
-                                             " sort_field=\"name\""
-                                             " sort_order=\"ascending\"/>")
+          if (openvas_server_send
+               (&session,
+                "<get_report_formats"
+                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -10981,7 +10983,8 @@ get_report_section (credentials_t * credentials, params_t *params,
       ret = omp (credentials,
                  &response,
                  NULL,
-                 "<get_report_formats/>");
+                 "<get_report_formats"
+                 " filter=\"owner=any permission=any rows=-1\"/>");
 
       switch (ret)
         {
