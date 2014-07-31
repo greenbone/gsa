@@ -1,3 +1,44 @@
+2014-07-31  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport of r19970, original commit by Jan-Oliver Wagner.
+
+	Dropping the "Pause" Feature from GUI.
+
+	Pausing a task is a feature that keeps the scanner running but asks it
+	to not launch any further tests. Thus memory is consumed while being
+	paused.
+
+	The pausing feature caused various sorts of problems while not adding
+	real benefit (the "Stop"/"Resume" Feature already serves the needs
+	well).
+
+	- Multiple paused tasks can eat all memory and make OOM killer act.
+	- Users seem to not understand the difference easily.
+	- Controlling paused tasks on Sensors turned out to be error-prone.
+
+	The only advantage of Pause vs. Stop is that Stop means to rescan
+	all non-completed hosts while Pause continues fine-grained at the
+	NVT level. For example, stopping a task with a single host means to
+	do a full rescan when doing a "Resume". Stopping a scan of 200 hosts
+	of which 100 are done and 20 in progress means to scan those 20 again
+	and then the remaining 80. In practice this gain turned out to be of
+	little use.
+
+	This patch just removes opportunity to do a "Pause" via the GUI,
+	while OMP still may allow it and this GUI still needs to handle "Pause"
+	and "Pause Requested" Status.
+
+	* src/html/classic/omp.xsl (task-icons): Remove the Stop icon as
+	an always displayed (possibly greyed out) icon.
+	In case of Status is "Running" now display the Stop icon instead
+	of the Pause icon.
+	(html-task-table): Reduce width of Actions column from 7 to 6 icons.
+
+	* src/html/classic/help.xsl, src/html/classic/help_de.xsl,
+	src/html/classic/help_zh.xsl (tasks.html):
+	Remove the description of the Pause icon, but leave in the other
+	Pause documentation because that is still possible to issue via OMP.
+
 2014-07-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r19972.

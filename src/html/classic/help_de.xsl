@@ -547,24 +547,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Container-Aufgabe ist.
       </p>
 
-      <h4>Aufgabe pausieren</h4>
-      <p>
-       Indem sie auf das Pause-Icon <img src="/img/pause.png" alt="Pausieren" title="Pausieren"/>
-       drücken, pausieren Sie eine laufende Aufgabe. Die Liste der Aufgaben wird
-       aktualisiert.
-      </p>
-      <p>
-       Diese Aktion ist nur verfügbar, wenn die Aufgabe den Status
-       "Läuft gerade" oder "Angefordert" hat und weder an einen Zeitplan
-       gebunden noch eine Container-Aufgabe ist.
-      </p>
-      <p>
-       Bitte beachten Sie, dass der Scan-Dienst im Stand-by aktiv bleibt.
-       Reservierter Speicher und Prozesse werden dabei nicht freigegeben.
-       Daher können pausierte Aufgaben erheblichen Einfluss auf die
-       Gesamtleistung haben.
-      </p>
-
       <h4>Zeitplan-Details</h4>
       <p>
         Wenn Sie auf das "Zeitplan-Details"-Icon <img src="/img/scheduled.png"

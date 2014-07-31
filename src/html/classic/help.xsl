@@ -8418,21 +8418,6 @@ Public License instead of this License.
        is not a scheduled task or a container task.
       </p>
 
-      <h4>Pause Task</h4>
-      <p>
-       Pressing the pause icon <img src="/img/pause.png" alt="Pause" title="Pause"/> will
-       pause a running task. The list of tasks will be updated.
-      </p>
-      <p>
-       This action is only available if the task has status "Running" or "Requested" and
-       is not a scheduled task or a container task.
-      </p>
-      <p>
-       Please note that the scan service remains stand-by active and will not release
-       allocated memory or processes. Therefore, paused tasks can have significant impact
-       on the overall performance.
-      </p>
-
       <h4>Schedule Details</h4>
       <p>
         Pressing the "Schedule Details" icon <img src="/img/scheduled.png"
