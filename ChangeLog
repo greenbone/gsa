@@ -1,3 +1,15 @@
+2014-06-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r19989.
+
+	Make logging in GSAD thread-safe to solve crashing issues when many
+	requests are received at the same time. A quick way to test for this is
+	to use: nmap localhost -p 443 --script ssl-enum-ciphers.
+
+	* src/gsad.c (logger_mutex): New variable.
+	(mhd_logger): Initialize mutex variable if not done. Protect logging
+	function call.
+
 2014-07-31  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport of r19970, original commit by Jan-Oliver Wagner.
