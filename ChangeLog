@@ -1,3 +1,13 @@
+2014-07-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Make logging in GSAD thread-safe to solve crashing issues when many
+	requests are received at the same time. A quick way to test for this is
+	to use: nmap localhost -p 443 --script ssl-enum-ciphers.
+
+	* src/gsad.c (logger_mutex): New variable.
+	(mhd_logger): Initialize mutex variable if not done. Protect logging
+	function call.
+
 2014-07-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (wrap_text): Do not move
