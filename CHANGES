@@ -1,3 +1,35 @@
+gsa 5.0.2 (2014-08-01)
+
+This is the second maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release removes support for pausing tasks from the GSA. The pausing
+feature caused various sorts of problems while not adding real benefit (the
+"Stop"/"Resume" Feature already serves the needs well). The release also fixes
+a number of other fixes and improvements. For details please refer to the list
+below.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner and Michael
+Wiegand.
+
+Main changes since 5.0.1:
+* Support for pausing tasks has been removed.
+* Support for the (since OpenVAS Manager 5.0.3) predefined report format plugin
+  "Verinice ISM" has been improved.
+* Fixed an issue with the value of the Content-Length header when redirecting.
+* The time zone format is now more consistent.
+* Allow "AU" (in place of "Au") in the CVSS base vector.
+* Internationalization support has been improved.
+* Add support for an optional feedback button which is disabled by default.
+* Improve OS display in host details.
+* Make host details more accessible from the results view.
+* Help texts have been updated.
+* Logging has been made thread-safe.
+
+
 gsa 5.0.1 (2014-06-16)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)

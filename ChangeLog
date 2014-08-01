@@ -1,3 +1,9 @@
+2014-08-01  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 5.0.2 release.
+
+	* CHANGES: Updated.
+
 2014-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r20008.
@@ -5,7 +11,7 @@
 	* src/html/classic/help.xsl: Add note about password field being
 	optional when LDAP box is checked.
 
-2014-06-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2014-07-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r19989.
 
