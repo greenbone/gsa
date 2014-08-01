@@ -2694,7 +2694,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="even">
           <td>Password</td>
-          <td>yes</td>
+          <td>yes *</td>
           <td>40</td>
           <td>Free form text</td>
           <td></td>
@@ -2725,6 +2725,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         If per-User-LDAP Authentication is configured, an additional checkbox
         ("Allow LDAP- Authentication only") is shown. When ticked, the user can only
         log in via the configured LDAP-Server.
+      </p>
+      <p>
+        * The password field is optional when this checkbox is ticked.
       </p>
 
       <a name="peruserldapauthentication"></a>
