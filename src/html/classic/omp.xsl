@@ -10035,13 +10035,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_tags_response"/>
 
 
-<!-- BEGIN TARGET LOCATORS MANAGEMENT -->
-
-<xsl:template match="target_locator" mode="select">
-  <option value="{name}"><xsl:value-of select="name"/></option>
-</xsl:template>
-
-
 <!-- BEGIN TARGETS MANAGEMENT -->
 
 <xsl:template match="modify_target_response">
@@ -10062,7 +10055,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-create-target-form">
   <xsl:param name="lsc-credentials"></xsl:param>
-  <xsl:param name="target-sources"></xsl:param>
   <xsl:param name="port-lists"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -10109,120 +10101,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-          <tr>
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
-          <xsl:choose>
-            <xsl:when test="not ($target-sources/target_locator)">
-              <!-- No target locator(s) given. -->
-              <td>
-                <xsl:value-of select="$target-sources"/>
-                <table>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="manual"
-                               checked="1"/>
-                        <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                      </label>
-                    </td>
-                    <td>
-                      <input type="text" name="hosts" value="localhost" size="30"
-                              maxlength="2000"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="file"/>
-                        <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
-                      </label>
-                    </td>
-                    <td>
-                      <input type="file" name="file" size="30"/>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- Target locator(s) given. -->
-              <td>
-                <xsl:value-of select="$target-sources"/>
-                <table>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="manual"
-                               checked="1"/>
-                        <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                      </label>
-                    </td>
-                    <td>
-                      <input type="text" name="hosts" value="localhost" size="30"
-                             maxlength="2000"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="file"/>
-                        <xsl:value-of select="gsa:i18n ('From File', 'Target Window')"/>
-                      </label>
-                    </td>
-                    <td>
-                      <input type="file" name="file" size="30"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>
-                        <input type="radio" name="target_source" value="import"/>
-                        <xsl:value-of select="gsa:i18n ('Import', 'Target Window')"/>
-                      </label>
-                    </td>
-                    <td>
-                      <select name="target_locator">
-                        <xsl:apply-templates select="$target-sources" mode="select"/>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>
-                      <xsl:value-of select="gsa:i18n ('Import Authentication', 'Target Window')"/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>
-                      <table>
-                      <tr>
-                        <td><xsl:value-of select="gsa:i18n ('Username', 'Target Window')"/></td>
-                        <td>
-                          <input type="text" name="login" value="" size="15"
-                                maxlength="80"/>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><xsl:value-of select="gsa:i18n ('Password', 'Target Window')"/></td>
-                        <td>
-                          <input type="password" autocomplete="off"
-                                 name="password" value="" size="15"
-                                 maxlength="80"/>
-                        </td>
-                      </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </xsl:otherwise>
-          </xsl:choose>
+          <tr>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
+            <td>
+              <table>
+                <tr>
+                  <td>
+                    <label>
+                      <input type="radio" name="target_source" value="manual"
+                             checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
+                    </label>
+                  </td>
+                  <td>
+                    <input type="text" name="hosts" value="localhost" size="30"
+                            maxlength="2000"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label>
+                      <input type="radio" name="target_source" value="file"/>
+                      <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
+                    </label>
+                  </td>
+                  <td>
+                    <input type="file" name="file" size="30"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
           </tr>
           <tr>
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target Window')"/></td>
@@ -10384,116 +10297,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="commands_response/get_targets_response/target/in_use = '0'">
               <tr>
                 <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
-                <xsl:choose>
-                  <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
-                    <!-- No target locator(s) given. -->
-                    <td>
-                      <table>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="manual"
-                                     checked="1"/>
-                              <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="text" name="hosts"
-                                   value="{commands_response/get_targets_response/target/hosts}"
-                                   size="30"
-                                   maxlength="2000"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="file"/>
-                              <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="file" name="file" size="30"/>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- Target locator(s) given. -->
-                    <td>
-                      <table>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="manual"
-                                     checked="1"/>
-                              <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="text" name="hosts"
-                                   value="{commands_response/get_targets_response/target/hosts}"
-                                   size="30"
-                                   maxlength="2000"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="file"/>
-                              <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="file" name="file" size="30"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="import"/>
-                              <xsl:value-of select="gsa:i18n ('Import', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <select name="target_locator">
-                              <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
-                                                   mode="select"/>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>
-                            <xsl:value-of select="gsa:i18n ('Import Authentication', 'Target Window')"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>
-                            <table>
-                            <tr>
-                              <td><xsl:value-of select="gsa:i18n ('Username', 'Target Window')"/></td>
-                              <td>
-                                <input type="text" name="login" value="" size="15"
-                                      maxlength="80"/>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td><xsl:value-of select="gsa:i18n ('Password', 'Target Window')"/></td>
-                              <td>
-                                <input type="password" autocomplete="off"
-                                       name="password" value="" size="15"
-                                       maxlength="80"/>
-                              </td>
-                            </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <td>
+                  <table>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_source" value="manual"
+                                 checked="1"/>
+                          <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" name="hosts"
+                               value="{commands_response/get_targets_response/target/hosts}"
+                               size="30"
+                               maxlength="2000"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_source" value="file"/>
+                          <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="file" name="file" size="30"/>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
               </tr>
               <tr>
                 <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target Window')"/></td>
@@ -10713,119 +10546,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td valign="top" width="{$width}">
                   <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Window')"/>)
                 </td>
-                <xsl:choose>
-                  <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
-                    <!-- No target locator(s) given. -->
-                    <td>
-                      <table>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="manual"
-                                     checked="1" disabled="1"/>
-                              <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="text" name="hosts"
-                                   value="{commands_response/get_targets_response/target/hosts}"
-                                   size="30"
-                                   maxlength="2000"
-                                   disabled="1"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="file" disabled="1"/>
-                              <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="file" name="file" size="30" disabled="1"/>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- Target locator(s) given. -->
-                    <td>
-                      <table>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="manual"
-                                     checked="1" disabled="1"/>
-                              <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="text" name="hosts"
-                                   value="{commands_response/get_targets_response/target/hosts}"
-                                   size="30"
-                                   maxlength="2000"
-                                   disabled="1"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="file" disabled="1"/>
-                              <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <input type="file" name="file" size="30" disabled="1"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="target_source" value="import"
-                                     disabled="1"/>
-                              <xsl:value-of select="gsa:i18n ('Import', 'Target Window')"/>
-                            </label>
-                          </td>
-                          <td>
-                            <select name="target_locator">
-                              <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
-                                                   mode="select"/>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>
-                            <xsl:value-of select="gsa:i18n ('Import Authentication', 'Target Window')"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>
-                            <table>
-                            <tr>
-                              <td><xsl:value-of select="gsa:i18n ('Username', 'Target Window')"/></td>
-                              <td>
-                                <input type="text" name="login" value="" size="15"
-                                      maxlength="80" disabled="1"/>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td><xsl:value-of select="gsa:i18n ('Password', 'Target Window')"/></td>
-                              <td>
-                                <input type="password" autocomplete="off"
-                                       name="password" value="" size="15"
-                                       maxlength="80" disabled="1"/>
-                              </td>
-                            </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <td>
+                  <table>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_source" value="manual"
+                                 checked="1" disabled="1"/>
+                          <xsl:value-of select="gsa:i18n ('Manual', 'Target Window')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" name="hosts"
+                               value="{commands_response/get_targets_response/target/hosts}"
+                               size="30"
+                               maxlength="2000"
+                               disabled="1"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_source" value="file" disabled="1"/>
+                          <xsl:value-of select="gsa:i18n ('From file', 'Target Window')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="file" name="file" size="30" disabled="1"/>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
               </tr>
               <tr>
                 <td valign="top" width="{$width}">
@@ -11161,9 +10912,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param
       name="lsc-credentials"
       select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
-    <xsl:with-param
-      name="target-sources"
-      select="get_target_locators_response | commands_response/get_target_locators_response"/>
     <xsl:with-param
       name="port-lists"
       select="get_port_lists_response | commands_response/get_port_lists_response"/>
