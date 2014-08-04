@@ -1,3 +1,10 @@
+2014-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_omp.c (omp, authenticate_omp, new_task, edit_alert,
+	new_target, save_config_omp, save_config_family_omp, get_report,
+	get_report, import_port_list_omp): Use openvas_server_sendf
+	instead of openvas_server_send, which is to be removed eventually.
+
 2014-08-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-body]): Handle special case

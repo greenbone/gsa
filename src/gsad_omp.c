@@ -8,7 +8,7 @@
  * Michael Wiegand <michael.wiegand@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * Copyright (C) 2009, 2014 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -583,7 +583,7 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
         return -1;
     }
 
-  ret = openvas_server_send (&session, command);
+  ret = openvas_server_sendf (&session, command);
   if (ret == -1)
     {
       openvas_server_close (socket, session);
@@ -2006,10 +2006,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   xml = g_string_new ("<new_task>");
 
   /* Get list of targets. */
-  if (openvas_server_send (&session,
-                           "<get_targets"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
+  if (openvas_server_sendf (&session,
+                            "<get_targets"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2035,10 +2035,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     }
 
   /* Get configs to select in new task UI. */
-  if (openvas_server_send (&session,
-                           "<get_configs"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
+  if (openvas_server_sendf (&session,
+                            "<get_configs"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2066,10 +2066,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_ALERTS"))
     {
       /* Get alerts to select in new task UI. */
-      if (openvas_server_send (&session,
-                               "<get_alerts"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>")
+      if (openvas_server_sendf (&session,
+                                "<get_alerts"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2098,10 +2098,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCHEDULES"))
     {
       /* Get schedules to select in new task UI. */
-      if (openvas_server_send (&session,
-                               "<get_schedules"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>")
+      if (openvas_server_sendf (&session,
+                                "<get_schedules"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2130,10 +2130,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SLAVES"))
     {
       /* Get slaves to select in new task UI. */
-      if (openvas_server_send (&session,
-                               "<get_slaves"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>")
+      if (openvas_server_sendf (&session,
+                                "<get_slaves"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2162,7 +2162,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
-      if (openvas_server_send (&session, "<get_scanners/>") == -1)
+      if (openvas_server_sendf (&session, "<get_scanners/>") == -1)
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -2193,8 +2193,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get groups for Observer Groups. */
 
-      if (openvas_server_send (&session,
-                               "<get_groups/>")
+      if (openvas_server_sendf (&session,
+                                "<get_groups/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -5680,9 +5680,9 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get target locators. */
 
-      if (openvas_server_send (&session,
-                              "<get_filters"
-                              " filter=\"type=result\"/>")
+      if (openvas_server_sendf (&session,
+                               "<get_filters"
+                               " filter=\"type=result\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -6060,8 +6060,8 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
     {
       /* Get target locators. */
 
-      if (openvas_server_send (&session,
-                               "<get_target_locators/>")
+      if (openvas_server_sendf (&session,
+                                "<get_target_locators/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8626,9 +8626,9 @@ save_config_omp (credentials_t * credentials, params_t *params)
         }
     }
 
-  if (openvas_server_send (&session,
-                           "</family_selection>"
-                           "</modify_config>")
+  if (openvas_server_sendf (&session,
+                            "</family_selection>"
+                            "</modify_config>")
       == -1)
     {
       openvas_server_close (socket, session);
@@ -8918,9 +8918,9 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
           }
     }
 
-  if (openvas_server_send (&session,
-                           "</nvt_selection>"
-                           "</modify_config>")
+  if (openvas_server_sendf (&session,
+                            "</nvt_selection>"
+                            "</modify_config>")
       == -1)
     {
       openvas_server_close (socket, session);
@@ -9804,7 +9804,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   commands_xml = g_string_new ("");
   if (commands)
     {
-      if (openvas_server_send (&session, commands)
+      if (openvas_server_sendf (&session, "%s", commands)
           == -1)
         {
           g_string_free (commands_xml, TRUE);
@@ -10711,9 +10711,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_ALERTS"))
         {
-          if (openvas_server_send (&session, "<get_alerts"
-                                             " sort_field=\"name\""
-                                             " sort_order=\"ascending\"/>")
+          if (openvas_server_sendf (&session, "<get_alerts"
+                                              " sort_field=\"name\""
+                                              " sort_order=\"ascending\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -17195,10 +17195,10 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
 
   /* Get all the port_lists. */
 
-  if (openvas_server_send (&session,
-                           "<get_port_lists"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
+  if (openvas_server_sendf (&session,
+                            "<get_port_lists"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -20304,8 +20304,8 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Request help. */
 
-      ret = openvas_server_send (&session,
-                                 "<help format=\"XML\" type=\"brief\"/>");
+      ret = openvas_server_sendf (&session,
+                                  "<help format=\"XML\" type=\"brief\"/>");
       if (ret)
         {
           openvas_server_close (socket, session);
@@ -20346,8 +20346,8 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Get the chart preferences */
 
-      ret = openvas_server_send (&session,
-                                 "<get_settings filter='name~\"Chart\"'/>");
+      ret = openvas_server_sendf (&session,
+                                  "<get_settings filter='name~\"Chart\"'/>");
       if (ret)
         {
           openvas_server_close (socket, session);
