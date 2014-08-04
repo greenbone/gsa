@@ -24490,6 +24490,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <p>
           <xsl:value-of select="gsa:i18n ('Details', 'Window')"/>:
           <xsl:choose>
+            <xsl:when test="substring(description, 1, 5) = 'oval:'">
+              <xsl:variable name="ovaldef_id">
+                <xsl:value-of select="substring-before(description, ' ')"/>
+              </xsl:variable>
+              <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_id={$ovaldef_id}&amp;details=1&amp;token={/envelope/token}"
+                 title="{gsa:view_details_title ('OVAL Definition', $ovaldef_id)}"><xsl:value-of select="$ovaldef_id"/></a>
+            </xsl:when>
             <xsl:when test="$prognostic=1">
               <xsl:call-template name="get_info_cve_lnk">
                 <xsl:with-param name="cve" select="cve/@id"/>

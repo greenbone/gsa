@@ -1,3 +1,8 @@
+2014-08-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-body]): Handle special case
+	of osp results with ovaldi definitions.
+
 2014-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl: Add note about password field being
