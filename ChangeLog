@@ -1,3 +1,9 @@
+2014-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r20021.
+
+	* src/gsad_omp.c (get_many): Get filters shared by other users too.
+
 2014-08-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
