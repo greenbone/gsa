@@ -4864,41 +4864,6 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
         <b>*</b> 对当前 OMP 服务器连接不可用。
       </xsl:if>
 
-      <p>
-        如果后台被配置成支持 LDAP，主机的附加域将会显示，以允许从管理系统导入目标系统：
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>必填</td>
-          <td>最大长度</td>
-          <td>语法</td>
-          <td>示例</td>
-        </tr>
-        <tr class="even">
-          <td>主机：导入</td>
-          <td>---</td>
-          <td>---</td>
-          <td>已配置的服务的选择</td>
-          <td>UCS 2.3</td>
-        </tr>
-        <tr class="odd">
-          <td>用户名</td>
-          <td>是</td>
-          <td>40</td>
-          <td>所选服务的账户名。</td>
-          <td>smith</td>
-        </tr>
-        <tr class="even">
-          <td>密码</td>
-          <td>是</td>
-          <td>40</td>
-          <td>上面用户名相应的密码。</td>
-          <td></td>
-        </tr>
-      </table>
-
       <h4>目标</h4>
       <p>
        点击列表图标

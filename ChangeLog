@@ -1,5 +1,10 @@
 2014-08-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/help.xsl, src/html/classic/help_zh.xsl
+	(new_target.html): Remove the description of target locators (LDAP).
+
+2014-08-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Removed target locator feature from daemon.
 
 	* src/gsad_omp.c (new_target): Removed retrieval of target locators.
