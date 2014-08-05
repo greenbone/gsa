@@ -1,5 +1,10 @@
 2014-08-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (result [result-headers]): Handle osp
+	result cases to output the vulnerability title correctly.
+
+2014-08-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_report, authenticate_omp): Call
 	openvas_server_sendf instead of openvas_server_send.
 

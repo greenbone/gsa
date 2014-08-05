@@ -23950,11 +23950,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:when test="string-length(nvt/name) &gt; 1">
                     <xsl:value-of select="nvt/name"/>
                   </xsl:when>
-                  <xsl:when test="string-length(description) &gt; 50">
-                    <xsl:value-of select="substring (description, 0, 50)"/>...
+                  <!-- OSP results cases -->
+                  <xsl:when test="substring(description, 1, 5) = 'oval:'">
+                    <xsl:value-of select="substring-before(description, ' ')"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="description"/>
+                    <xsl:value-of select="substring-before(description, '&#10;')"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
