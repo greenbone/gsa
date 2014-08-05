@@ -1,3 +1,15 @@
+2014-08-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Removed target locator feature from daemon.
+
+	* src/gsad_omp.c (new_target): Removed retrieval of target locators.
+	(create_target_omp): Removed handling of target locators.
+	(edit_target): Remove retrieval of target locators.
+	(save_target_omp):
+
+	* src/gsad.c (init_validator): Drop target locator from explations in comment
+	and dropped entry "target_locator".
+
 2014-08-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-headers]): Handle osp

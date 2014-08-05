@@ -5678,7 +5678,7 @@ edit_alert (credentials_t * credentials, params_t *params,
 
   if (command_enabled (credentials, "GET_FILTERS"))
     {
-      /* Get target locators. */
+      /* Get filters. */
 
       if (openvas_server_sendf (&session,
                                "<get_filters"
@@ -6056,39 +6056,6 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
         }
     }
 
-  if (command_enabled (credentials, "GET_TARGET_LOCATORS"))
-    {
-      /* Get target locators. */
-
-      if (openvas_server_sendf (&session,
-                                "<get_target_locators/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the list "
-                               "of target locators. "
-                               "The current list of schedules is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the list "
-                               "of target locators. "
-                               "The current list of schedules is not available. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-    }
-
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     {
       /* Get the port lists. */
@@ -6162,14 +6129,12 @@ create_target_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response, *command;
-  const char *name, *hosts, *exclude_hosts, *target_locator, *comment;
+  const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests;
   gchar *credentials_element, *smb_credentials_element;
-  gchar* source_element = NULL;
   gchar* comment_element = NULL;
-  const char *username, *password;
   entity_t entity;
   GString *xml;
 
@@ -6178,7 +6143,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
   exclude_hosts = params_value (params, "exclude_hosts");
   reverse_lookup_only = params_value (params, "reverse_lookup_only");
   reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
-  target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
   comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
@@ -6196,7 +6160,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
     {
       gchar *msg;
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given target_locator was invalid",
+                            "Given target_source was invalid",
                             "Create Target");
       html = new_target (credentials, params, msg);
       g_free (msg);
@@ -6210,25 +6174,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (target_smb_credential, "Create Target", new_target);
   CHECK_PARAM (alive_tests, "Create Target", new_target);
 
-  username = params_value (params, "login");
-  password = params_value (params, "password");
-
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
   else
     comment_element = g_strdup ("");
-
-  if (strcmp (target_source, "import") == 0)
-    source_element = g_markup_printf_escaped ("<target_locator>"
-                                              "%s"
-                                              "<username>%s</username>"
-                                              "<password>%s</password>"
-                                              "</target_locator>",
-                                              target_locator,
-                                              username ? username : "",
-                                              password ? password : "");
-  else
-    source_element = g_strdup ("");
 
   if (strcmp (target_credential, "--") == 0)
     credentials_element = g_strdup ("");
@@ -6260,11 +6209,9 @@ create_target_omp (credentials_t * credentials, params_t *params)
                      "<port_list id=\"%s\"/>"
                      "<alive_tests>%s</alive_tests>",
                      name,
-                     (strcmp (source_element, "") == 0)
-                       ? ((strcmp (target_source, "file") == 0)
+                     strcmp (target_source, "file") == 0
                             ? params_value (params, "file")
-                            : hosts)
-                       : "",
+                            : hosts,
                      exclude_hosts ? exclude_hosts : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",
@@ -6272,11 +6219,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
                      alive_tests);
 
   command = g_strdup_printf ("<create_target>"
-                             "%s%s%s%s%s"
+                             "%s%s%s%s"
                              "</create_target>",
                              xml->str,
                              comment_element,
-                             source_element,
                              credentials_element,
                              smb_credentials_element);
 
@@ -6284,7 +6230,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
   g_free (comment_element);
   g_free (credentials_element);
   g_free (smb_credentials_element);
-  g_free (source_element);
 
   ret = omp (credentials,
              &response,
@@ -7442,12 +7387,9 @@ edit_target (credentials_t * credentials, params_t *params,
     }
 
   if (openvas_server_sendf (&session,
-                            "<commands>"
                             "<get_targets"
                             " target_id=\"%s\""
-                            " details=\"1\"/>"
-                            "<get_target_locators/>"
-                            "</commands>",
+                            " details=\"1\"/>",
                             target_id)
       == -1)
     {
@@ -7652,7 +7594,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *hosts, *target_locator, *exclude_hosts, *comment;
+  const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
@@ -7734,7 +7676,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
   exclude_hosts = params_value (params, "exclude_hosts");
   reverse_lookup_only = params_value (params, "reverse_lookup_only");
   reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
-  target_locator = params_value (params, "target_locator");
   target_source = params_value (params, "target_source");
   port_list_id = params_value (params, "port_list_id");
   target_credential = params_value (params, "lsc_credential_id");
@@ -7781,7 +7722,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
       gchar *msg;
       openvas_server_close (socket, session);
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given target_locator was invalid",
+                            "Given target_source was invalid",
                             "Modify Target");
       html = new_target (credentials, params, msg);
       g_free (msg);
@@ -7791,30 +7732,14 @@ save_target_omp (credentials_t * credentials, params_t *params)
   {
     int ret;
     gchar *credentials_element, *smb_credentials_element;
-    gchar* source_element = NULL;
     gchar* comment_element;
-    const char *username, *password, *status;
+    const char *status;
     entity_t entity;
-
-    username = params_value (params, "login");
-    password = params_value (params, "password");
 
     if (comment)
       comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
     else
       comment_element = g_strdup ("");
-
-    if (strcmp (target_source, "import") == 0)
-      source_element = g_markup_printf_escaped ("<target_locator>"
-                                                "%s"
-                                                "<username>%s</username>"
-                                                "<password>%s</password>"
-                                                "</target_locator>",
-                                                target_locator,
-                                                username ? username : "",
-                                                password ? password : "");
-    else
-      source_element = g_strdup ("");
 
     if (strcmp (target_credential, "--") == 0)
       credentials_element = g_strdup ("");
@@ -7843,22 +7768,19 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                 "<reverse_lookup_only>%s</reverse_lookup_only>"
                                 "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                                 "<port_list id=\"%s\"/>"
-                                "%s%s%s%s"
+                                "%s%s%s"
                                 "<alive_tests>%s</alive_tests>"
                                 "</modify_target>",
                                 target_id,
                                 name,
-                                (strcmp (source_element, "") == 0)
-                                  ? ((strcmp (target_source, "file") == 0)
-                                       ? params_value (params, "file")
-                                       : hosts)
-                                  : "",
+                                strcmp (target_source, "file") == 0
+                                  ? params_value (params, "file")
+                                  : hosts,
                                 exclude_hosts ? exclude_hosts : "",
                                 reverse_lookup_only ? reverse_lookup_only : "0",
                                 reverse_lookup_unify ? reverse_lookup_unify : "0",
                                 port_list_id,
                                 comment_element,
-                                source_element,
                                 credentials_element,
                                 smb_credentials_element,
                                 alive_tests);
@@ -7866,7 +7788,6 @@ save_target_omp (credentials_t * credentials, params_t *params)
     g_free (comment_element);
     g_free (credentials_element);
     g_free (smb_credentials_element);
-    g_free (source_element);
 
     if (ret == -1)
       {

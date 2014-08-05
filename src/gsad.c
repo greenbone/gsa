@@ -1016,9 +1016,7 @@ init_validator ()
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "lang",         "^(Browser Language|Chinese|English|German)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
-  /* Used for Administrator users, LSC credentials, login for target
-   * locator and slave login name.  Needs to match validate_username in
-   * Administrator. */
+  /* Used for Administrator users, LSC credentials, and slave login name. */
   openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
@@ -1103,7 +1101,6 @@ init_validator ()
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "submit_plus",    "^\\+$");
-  openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
