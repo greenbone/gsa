@@ -10519,7 +10519,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if ((type && (strcmp (type, "prognostic") == 0))
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
-          if (openvas_server_send
+          if (openvas_server_sendf
                (&session,
                 "<get_report_formats"
                 " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
@@ -10678,7 +10678,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_REPORT_FORMATS"))
         {
-          if (openvas_server_send
+          if (openvas_server_sendf
                (&session,
                 "<get_report_formats"
                 " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
@@ -20245,7 +20245,7 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Get language setting. */
 
-      ret = openvas_server_send
+      ret = openvas_server_sendf
              (&session,
               "<get_settings"
               " setting_id=\"6765549a-934e-11e3-b358-406186ea4fc5\"/>");
