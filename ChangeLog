@@ -1,3 +1,38 @@
+2014-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add new SecInfo subtype CERT-Bund Advisory (CERT_BUND_ADV).
+
+	* src/gsad_omp.c (get_info): Add CERT_BUND_ADV case.
+
+	* src/gsad.c (init_validator): Add "cert_bund_adv" as accepted value to
+	aggregate_type. Add "cert_bund_adv" and "CERT-Bund Advisory" as values
+	to resource_type.
+
+	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Add
+	chart selections for cert_bund_adv.
+	(dashboard): Add CERT-Bund chart selection options.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add SecInfo menu
+	item "CERT-Bund Advisories".
+
+	* src/html/classic/omp.xsl (gsa:type-name, gsa:type-name-plural)
+	(tagged_resource_link, tag_resource_types): Add cases for cert_bund_adv.
+	(ref_cert_list): Add CERT-Bund as accepted CERT type.
+	(info/cert_bund_adv): New template.
+	(get_info_allinfo_lnk): Add case for cert_bund_adv.
+	(get_info_cert_bund_adv_lnk, html-cert_bund_adv-table): New templatey.
+	(get_info_response): Add case for cert_bund_adv.
+	(cve-details): Add CERT-Bund as accepted CERT type.
+	(cert_bund_adv-details): New template.
+	(get_my_settings, edit_my_settings): Add CERT-Bund Filter.
+
+	* src/html/classic/js/gsa_graphics_base.js (resource_type_name)
+	(resource_type_name_plural): Add cases for cert_bund_adv.
+
+	* src/html/classic/po/de.xml: Add translations for new resource type
+	"CERT-Bund Advisory" and make common strings available in new
+	CERT-Bund Advisory contexts.
+
 2014-08-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl, src/html/classic/help_zh.xsl

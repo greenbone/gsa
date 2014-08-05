@@ -799,6 +799,8 @@ function resource_type_name (type)
     {
       case "ovaldef":
         return "OVAL definition"
+      case "cert_bund_adv":
+        return "CERT-Bund Advisory"
       case "dfn_cert_adv":
         return "DFN-CERT Advisory"
       default:
@@ -812,6 +814,8 @@ function resource_type_name_plural (type)
     {
       case "dfn_cert_adv":
         return "DFN-CERT Advisories"
+      case "cert_bund_adv":
+        return "CERT-Bund Advisories"
       default:
         return resource_type_name (type) + "s"
     }

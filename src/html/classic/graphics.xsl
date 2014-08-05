@@ -260,6 +260,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='cve'">815ddd2e-8654-46c7-a05b-d73224102240</xsl:when>
       <xsl:when test="$type='cpe'">9cff9b4d-b164-43ce-8687-f2360afc7500</xsl:when>
       <xsl:when test="$type='ovaldef'">9563efc0-9f4e-4d1f-8f8d-0205e32b90a4</xsl:when>
+      <xsl:when test="$type='cert_bund_adv'">a6946f44-480f-4f37-8a73-28a4cd5310c4</xsl:when>
       <xsl:when test="$type='dfn_cert_adv'">9812ea49-682d-4f99-b3cc-eca051d1ce59</xsl:when>
       <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
     </xsl:choose>
@@ -270,6 +271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='cve'">418a5746-d68a-4a2d-864a-0da993b32220</xsl:when>
       <xsl:when test="$type='cpe'">629fdb73-35fa-4247-9018-338c202f7c03</xsl:when>
       <xsl:when test="$type='ovaldef'">fe1610a3-4e87-4b0d-9b7a-f0f66fef586b</xsl:when>
+      <xsl:when test="$type='cert_bund_adv'">469d50da-880a-4bfc-88ed-22e53764c683</xsl:when>
       <xsl:when test="$type='dfn_cert_adv'">72014b52-4389-435d-9438-8c13601ecbd2</xsl:when>
       <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
     </xsl:choose>
@@ -619,6 +621,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="display_name" select="$display_name"/>
               <xsl:with-param name="chart_type" select="'donut'"/>
               <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_bar_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
+              <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'bar'"/>
+              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+              <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_donut_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
+              <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'donut'"/>
+              <xsl:with-param name="chart_template" select="'info_by_class'"/>
+              <xsl:with-param name="create_data_source" select="0"/>
             </xsl:call-template>
 
             <xsl:call-template name="js-aggregate-chart">

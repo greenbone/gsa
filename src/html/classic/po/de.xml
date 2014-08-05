@@ -519,6 +519,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>CVE Window</ctxt>
     <ctxt>CPE Window</ctxt>
     <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
     <ctxt>DFN-CERT Advisory Window</ctxt>
     <ctxt>Target Window</ctxt>
     <ctxt>Port List Window</ctxt>
@@ -647,6 +648,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>CVE Window</ctxt>
     <ctxt>CPE Window</ctxt>
     <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
     <ctxt>DFN-CERT Advisory Window</ctxt>
     <ctxt>Target Window</ctxt>
     <ctxt>Port List Window</ctxt>
@@ -942,6 +944,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>OVAL-Definition</str>
     </msg>
     <msg>
+      <id>CERT-Bund Advisory</id>
+      <str>CERT-Bund-Advisory</str>
+    </msg>
+    <msg>
       <id>DFN-CERT Advisory</id>
       <str>DFN-CERT-Advisory</str>
     </msg>
@@ -1082,6 +1088,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>OVAL-Definitionen</str>
     </msg>
     <msg>
+      <id>CERT-Bund Advisories</id>
+      <str>CERT-Bund Advisories</str>
+    </msg>
+    <msg>
       <id>DFN-CERT Advisories</id>
       <str>DFN-CERT-Advisories</str>
     </msg>
@@ -1220,6 +1230,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>OVAL definition</id>
       <str>OVAL-Definition</str>
+    </msg>
+    <msg>
+      <id>CERT-Bund advisory</id>
+      <str>CERT-Bund-Advisory</str>
     </msg>
     <msg>
       <id>DFN-CERT advisory</id>
@@ -1364,6 +1378,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>DFN-CERT Advisories</id>
       <str>DFN-CERT-Advisories</str>
+    </msg>
+    <msg>
+      <id>CERT-Bund advisory</id>
+      <str>CERT-Bund-Advisory</str>
     </msg>
     <msg>
       <id>SecInfo</id>
@@ -3160,6 +3178,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>CVE Window</ctxt>
     <ctxt>CPE Window</ctxt>
     <ctxt>OVAL Definition Window</ctxt>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
     <ctxt>DFN-CERT Advisory Window</ctxt>
     <!-- - - Type name - - -->
     <msg>
@@ -3425,8 +3444,124 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </grp>
 
 
-  <!-- 3.11      DFN-CERT Advisories -->
-  <!-- 3.11.1    DFN-CERT Advisory type name and common strings -->
+  <!-- 3.11      CERT-Bund Advisories -->
+  <!-- 3.11.1    CERT-Bund Advisory type name and common strings -->
+  <grp>
+    <ctxt>CERT-Bund Advisory</ctxt>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
+    <ctxt>Info</ctxt>
+    <!-- - - Type name - - -->
+    <msg>
+      <id>CERT-Bund Advisory</id>
+      <str>CERT-Bund-Advisory</str>
+    </msg>
+    <msg>
+      <id>CERT-Bund Advisories</id>
+      <str>CERT-Bund-Advisories</str>
+    </msg>
+    <!-- - - Common actions - - -->
+    <!-- - - Common references - - -->
+    <msg>
+      <id>CERT-Bund Advisory Details</id>
+      <str>CERT-Bund-Advisory-Details</str>
+    </msg>
+
+    <msg>
+      <id>CERT-Bund Filter</id>
+      <str>CERT-Bund-Filter</str>
+    </msg>
+  </grp>
+  <!-- 3.11.2    CERT-Bund Advisory actions and properties - all views -->
+  <grp>
+    <ctxt>CERT-Bund Advisory Table Row</ctxt>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.3    CERT-Bund Advisory actions and properties - window / headers only -->
+  <grp>
+    <ctxt>CERT-Bund Advisory Window</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <msg>
+      <id>Software</id>
+      <str>Software</str>
+    </msg>
+    <msg>
+      <id>Platform</id>
+      <str>Plattform</str>
+    </msg>
+
+    <msg>
+      <id>Effect</id>
+      <str>Auswirkung</str>
+    </msg>
+
+    <msg>
+      <id>Remote Attack</id>
+      <str>Remoteangriff</str>
+    </msg>
+    <msg>
+      <id>yes</id>
+      <str>ja</str>
+    </msg>
+    <msg>
+      <id>no</id>
+      <str>nein</str>
+    </msg>
+
+    <msg>
+      <id>CERT-Bund risk rating</id>
+      <str>CERT-Bund Risikobewertung</str>
+    </msg>
+    <!-- risk ratings -->
+    <msg>
+      <id>very high</id>
+      <str>sehr hoch</str>
+    </msg>
+    <msg>
+      <id>high</id>
+      <str>hoch</str>
+    </msg>
+    <msg>
+      <id>medium</id>
+      <str>mittel</str>
+    </msg>
+    <msg>
+      <id>low</id>
+      <str>niedrig</str>
+    </msg>
+    <msg>
+      <id>very low</id>
+      <str>sehr niedrig</str>
+    </msg>
+
+    <msg>
+      <id>Reference</id>
+      <str>Bezug</str>
+    </msg>
+    <msg>
+      <id>Reference URL</id>
+      <str>Bezugs-URL</str>
+    </msg>
+
+    <msg>
+      <id>Referenced CVEs</id>
+      <str>CVE-Verweise</str>
+    </msg>
+    <!-- - - References and reference actions - - -->
+  </grp>
+  <!-- 3.11.4    CERT-Bund Advisory actions and properties - table rows only -->
+  <grp>
+    <ctxt>CERT-Bund Advisory Table Row</ctxt>
+    <!-- - - Actions - - -->
+    <!-- - - Properties - - -->
+    <!-- - - References and reference actions - - -->
+  </grp>
+
+  <!-- 3.12      DFN-CERT Advisories -->
+  <!-- 3.12.1    DFN-CERT Advisory type name and common strings -->
   <grp>
     <ctxt>DFN-CERT Advisory</ctxt>
     <ctxt>DFN-CERT Advisory Window</ctxt>
@@ -3452,7 +3587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>DFN-CERT-Filter</str>
     </msg>
   </grp>
-  <!-- 3.11.2    DFN-CERT Advisory actions and properties - all views -->
+  <!-- 3.12.2    DFN-CERT Advisory actions and properties - all views -->
   <grp>
     <ctxt>DFN-CERT Advisory Table Row</ctxt>
     <ctxt>DFN-CERT Advisory Window</ctxt>
@@ -3460,7 +3595,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
   </grp>
-  <!-- 3.11.3    DFN-CERT Advisory actions and properties - window / headers only -->
+  <!-- 3.12.3    DFN-CERT Advisory actions and properties - window / headers only -->
   <grp>
     <ctxt>DFN-CERT Advisory Window</ctxt>
     <!-- - - Actions - - -->
@@ -3480,7 +3615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- - - References and reference actions - - -->
   </grp>
-  <!-- 3.11.4    DFN-CERT Advisory actions and properties - table rows only -->
+  <!-- 3.12.4    DFN-CERT Advisory actions and properties - table rows only -->
   <grp>
     <ctxt>DFN-CERT Advisory Table Row</ctxt>
     <!-- - - Actions - - -->
@@ -3489,8 +3624,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </grp>
 
 
-  <!-- 3.12      Info (All Info)-->
-  <!-- 3.12.1    Info type name and common strings -->
+  <!-- 3.13      Info (All Info)-->
+  <!-- 3.13.1    Info type name and common strings -->
   <grp>
     <ctxt>All SecInfo Information</ctxt>
     <ctxt>All SecInfo Information Window</ctxt>
@@ -3516,7 +3651,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Alle-Sicherheitsinfos-Filter</str>
     </msg>
   </grp>
-  <!-- 3.12.2    Info actions and properties - all views -->
+  <!-- 3.13.2    Info actions and properties - all views -->
   <grp>
     <ctxt>All SecInfo Table Row</ctxt>
     <ctxt>All SecInfo Window</ctxt>
@@ -3526,7 +3661,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- - - Properties - - -->
     <!-- - - References and reference actions - - -->
   </grp>
-  <!-- 3.12.3    Info actions and properties - window / headers only -->
+  <!-- 3.13.3    Info actions and properties - window / headers only -->
   <grp>
     <ctxt>All SecInfo Window</ctxt>
     <ctxt>Info Window</ctxt>
@@ -3538,7 +3673,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <!-- - - References and reference actions - - -->
   </grp>
-  <!-- 3.12.4    Info actions and properties - table rows only -->
+  <!-- 3.13.4    Info actions and properties - table rows only -->
   <grp>
     <ctxt>All SecInfo Table Row</ctxt>
     <ctxt>Info Table Row</ctxt>

@@ -945,7 +945,7 @@ init_validator ()
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "aggregate_type", "agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|dfn_cert_adv");
+  openvas_validator_add (validator, "aggregate_type", "agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
@@ -1069,8 +1069,8 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|dfn_cert_adv|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|DFN-CERT Advisory)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "optional_resource_type",
                          "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"

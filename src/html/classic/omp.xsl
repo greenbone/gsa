@@ -443,6 +443,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = 'ovaldef'">
       <func:result select="'OVAL Definition'"/>
     </xsl:when>
+    <xsl:when test="$type = 'cert_bund_adv'">
+      <func:result select="'CERT-Bund Advisory'"/>
+    </xsl:when>
     <xsl:when test="$type = 'dfn_cert_adv'">
       <func:result select="'DFN-CERT Advisory'"/>
     </xsl:when>
@@ -461,6 +464,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:type-name-plural">
   <xsl:param name="type"/>
   <xsl:choose>
+    <xsl:when test="$type = 'cert_bund_adv'">
+      <func:result select="'CERT-Bund Advisories'"/>
+    </xsl:when>
     <xsl:when test="$type = 'dfn_cert_adv'">
       <func:result select="'DFN-CERT Advisories'"/>
     </xsl:when>
@@ -9208,7 +9214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_location" select="0"/>
   <xsl:param name="token"/>
   <xsl:choose>
-    <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='dfn_cert_adv'">
+    <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='cert_bund_adv' or $resource_type='dfn_cert_adv'">
       <xsl:choose>
         <xsl:when test="gsa:may-op ('get_info') and $resource_location = '0'">
           <a href="/omp?cmd=get_info&amp;info_type={$resource_type}&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
@@ -9572,6 +9578,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'cve'"/>
       <xsl:with-param name="content" select="gsa:i18n ('CVE', 'CVE')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'cert_bund_adv' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'cert_bund_adv'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('CERT-Bund Advisory', 'CERT-Bund Advisory')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -15566,6 +15579,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <xsl:for-each select="$certlist/cert_ref">
           <xsl:choose>
+            <xsl:when test="@type='CERT-Bund'">
+              <xsl:call-template name="get_info_cert_bund_adv_lnk">
+                <xsl:with-param name="cert_bund_adv" select="@id"/>
+                <xsl:with-param name="gsa_token" select="$token"/>
+              </xsl:call-template>
+            </xsl:when>
             <xsl:when test="@type='DFN-CERT'">
               <xsl:call-template name="get_info_dfn_cert_adv_lnk">
                 <xsl:with-param name="dfn_cert_adv" select="@id"/>
@@ -15972,6 +15991,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tbody>
 </xsl:template>
 
+<xsl:template match="info/cert_bund_adv">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_cert_bund_adv_lnk">
+          <xsl:with-param name="cert_bund_adv" select="../name"/>
+          <xsl:with-param name="cert_bund_adv_id" select="../@id"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="title"/>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:date (../creation_time)"/>
+    </td>
+    <td>
+      <xsl:value-of select="cve_refs"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="max_cvss &gt;= 0.0">
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="max_cvss"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Table Row')"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template match="info/dfn_cert_adv">
   <tr class="{gsa:table-row-class(position())}">
     <td>
@@ -16145,6 +16208,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="oid" select="$id"/>
       </xsl:call-template>
     </xsl:when>
+    <xsl:when test="$type = 'cert_bund_adv'">
+      <xsl:call-template name="get_info_cert_bund_adv_lnk">
+        <xsl:with-param name="cert_bund_adv" select="$name"/>
+        <xsl:with-param name="cert_bund_adv_id" select="$id"/>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="$type = 'dfn_cert_adv'">
       <xsl:call-template name="get_info_dfn_cert_adv_lnk">
         <xsl:with-param name="dfn_cert_adv" select="$name"/>
@@ -16234,6 +16303,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      title="{gsa:view_details_title ('OVAL Definition', $ovaldef)}">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$ovaldef"/>
+      <xsl:with-param name="width" select="'55'"/>
+      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
+    </xsl:call-template>
+  </a>
+</xsl:template>
+
+<xsl:template name="get_info_cert_bund_adv_lnk">
+  <xsl:param name="cert_bund_adv"/>
+  <xsl:param name="cert_bund_adv_id"/>
+  <xsl:variable name="cert_bund_adv_select">
+    <xsl:choose>
+      <xsl:when test="$cert_bund_adv_id">info_id=<xsl:value-of select="$cert_bund_adv_id"/></xsl:when>
+      <xsl:otherwise>info_name=<xsl:value-of select="$cert_bund_adv"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;{$cert_bund_adv_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
+     title="{gsa:view_details_title ('CERT-Bund Advisory', $cert_bund_adv)}">
+    <xsl:call-template name="wrap" disable-output-escaping="yes">
+      <xsl:with-param name="string" select="$cert_bund_adv"/>
       <xsl:with-param name="width" select="'55'"/>
       <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
     </xsl:call-template>
@@ -16497,6 +16585,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="html-cert_bund_adv-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/cert_bund_advs.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'info'"/>
+    <xsl:with-param name="subtype" select="'cert_bund_adv'"/>
+    <xsl:with-param name="cap-type" select="'CERT-Bund Advisory'"/>
+    <xsl:with-param name="cap-type-plural" select="'CERT-Bund Advisories'"/>
+    <xsl:with-param name="resources-summary" select="info"/>
+    <xsl:with-param name="resources" select="info/cert_bund_adv"/>
+    <xsl:with-param name="count" select="count (info/cert_bund_adv)"/>
+    <xsl:with-param name="filtered-count" select="info_count/filtered"/>
+    <xsl:with-param name="full-count" select="info_count/text ()"/>
+
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-secinfo-top-visualization">
+        <xsl:with-param name="type" select="'cert_bund_adv'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+
+    <xsl:with-param name="columns">
+      <column>
+        <name>Name</name>
+      </column>
+      <column>
+        <name>Title</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>CVEs</name>
+      </column>
+      <column>
+        <name>Severity</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-dfn_cert_adv-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
@@ -16662,6 +16805,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="html-ovaldef-table"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="/envelope/params/info_type = 'CERT_BUND_ADV' or /envelope/params/info_type = 'cert_bund_adv'">
+      <xsl:choose>
+        <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
+                        or /envelope/params/info_id">
+          <xsl:call-template name="cert_bund_adv-details"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="html-cert_bund_adv-table"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -16942,6 +17096,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <td><xsl:value-of select="title"/></td>
                     <td width="100">
                       <xsl:choose>
+                        <xsl:when test="@type='CERT-Bund'">
+                        <a href="?cmd=get_info&amp;info_type=cert_bund_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                          <img src="/img/details.png"
+                          border="0"
+                          alt="{gsa:i18n ('Details', 'Window')}"
+                          style="margin-left:3px;"/>
+                        </a>
+                        </xsl:when>
                         <xsl:when test="@type='DFN-CERT'">
                         <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                           <img src="/img/details.png"
@@ -17466,6 +17628,175 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <li>
     <xsl:if test="translate(./@negate,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b>NOT </b></xsl:if><xsl:value-of select="./@comment"/><i> (<a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={./@definition_ref}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@definition_ref"/></a>)</i><xsl:if test="translate(./@applicability_check,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b> [Applicability check]</b></xsl:if>
   </li>
+</xsl:template>
+
+
+<xsl:template name="cert_bund_adv-details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisory Details', 'CERT-Bund Advisory')"/>
+      <a href="/help/cert_bund_adv_details.html?token={/envelope/token}"
+        title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('CERT-Bund Details', 'CERT-Bund Advisory'),')')}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('ID', 'Window')"/>:</td>
+            <td>
+              <xsl:value-of select="info/name"/>
+            </td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Created', 'Window')"/>:</td>
+            <td><xsl:value-of select="info/creation_time"/></td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
+            <td><xsl:value-of select="info/modification_time"/></td>
+          </tr>
+        </table>
+      </div>
+
+      <xsl:choose>
+        <xsl:when test="info/cert_bund_adv">
+          <table>
+            <tr>
+              <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>:</b></td>
+              <td>
+                <b><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Ref_Num"/></b>
+              </td>
+            </tr>
+            <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
+              <tr>
+                <td valign="top"><xsl:value-of select="gsa:i18n ('Version', 'Window')"/>:</td>
+                <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Version"/></td>
+              </tr>
+            </xsl:if>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Window')"/>:</td>
+              <td>
+                <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Title"/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Software', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Software"/></td>
+            </tr>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Platform', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Platform"/></td>
+            </tr>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Effect', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Effect, 'CERT-Bund Advisory Window')"/></td>
+            </tr>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Remote Attack', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/RemoteAttack, 'CERT-Bund Advisory Window')"/></td>
+            </tr>
+
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Window')"/>:</td>
+              <td valign="top">
+                <xsl:choose>
+                  <xsl:when test="info/cert_bund_adv/max_cvss &gt;= 0.0">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="info/cert_bund_adv/max_cvss"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Window')"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('CERT-Bund risk rating', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign=""><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Risk, 'CERT-Bund Advisory Window')"/></td>
+            </tr>
+
+            <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Reference_Source">
+              <tr>
+                <td valign="top"><xsl:value-of select="gsa:i18n ('Reference', 'CERT-Bund Advisory Window')"/>:</td>
+                <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_Source"/></td>
+              </tr>
+            </xsl:if>
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Reference URL', 'CERT-Bund Advisory Window')"/>:</td>
+              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_URL"/></td>
+            </tr>
+          </table>
+
+          <xsl:choose>
+            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock) > 0">
+              <h2><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></h2>
+              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock">
+                <p><xsl:value-of select="text()"/></p>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <h2><xsl:value-of select="gsa:i18n ('Description', 'Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:choose>
+            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CVEList/CVE) > 0">
+              <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'CERT-Bund Advisory Window')"/></h2>
+              <ul>
+              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CVEList/CVE">
+                <li>
+                  <xsl:call-template name="get_info_cve_lnk">
+                    <xsl:with-param name="cve" select="."/>
+                    <xsl:with-param name="gsa_token" select="/envelope/token"/>
+                  </xsl:call-template>
+                </li>
+              </xsl:for-each>
+              </ul>
+            </xsl:when>
+            <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'CERT-Bund Advisory Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:choose>
+            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info) > 0">
+              <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory Window')"/></h2>
+              <ul>
+              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info">
+                <li><p><b><xsl:value-of select="@Info_Issuer"/>:</b><br/> <xsl:value-of select="@Info_URL"/></p></li>
+              </xsl:for-each>
+              </ul>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- hide because the feed is not expected to contain other links -->
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('CERT-Bund advisory not found', 'CERT-Bund Advisory Window')"/></h1>
+          <xsl:value-of select="gsa:i18n ('No CERT-Bund advisory with the requested ID could be found in the SCAP database.', 'CERT-Bund Advisory Window')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for','Tag Window'),' &quot;',info/name,'&quot;:')"/>
+    <xsl:with-param name="user_tags" select="info/user_tags"/>
+    <xsl:with-param name="tag_names" select="../get_tags_response"/>
+    <xsl:with-param name="resource_type" select="'info'"/>
+    <xsl:with-param name="resource_id"   select="info/@id"/>
+    <xsl:with-param name="resource_subtype" select="'cert_bund_adv'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="dfn_cert_adv-details">
@@ -30454,6 +30785,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
               </tr>
               <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-filter">
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='CERT-Bund Filter']/value"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -30462,7 +30802,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'Info')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -30856,6 +31196,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="gsa:param-or (concat ('settings_filter:', 'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'), get_settings_response/setting[name='OVAL Filter']/value)"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'e4cf514a-17e2-4ab9-9c90-336f15e24750'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="gsa:param-or (concat ('settings_filter:', 'e4cf514a-17e2-4ab9-9c90-336f15e24750'), get_settings_response/setting[name='CERT-Bund Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
