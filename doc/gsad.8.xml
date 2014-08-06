@@ -46,9 +46,8 @@
 
     <p>
       The Greenbone Security Assistant Daemon (gsad) is a web
-      application that connects to the OpenVAS Manager and OpenVAS
-      Administrator to provide for a full-featured user interface for
-      vulnerability management.
+      application that connects to the OpenVAS Manager to provide for a
+      full-featured user interface for vulnerability management.
     </p>
 
   </description>
@@ -70,11 +69,6 @@
     </option>
 
     <option>
-      <p><opt>--alisten=<arg>ADDRESS</arg></opt></p>
-      <optdesc><p>Administrator address.</p></optdesc>
-    </option>
-
-    <option>
       <p><opt>--mlisten=<arg>ADDRESS</arg></opt></p>
       <optdesc><p>Manager address.</p></optdesc>
     </option>
@@ -82,11 +76,6 @@
     <option>
       <p><opt>-p, --port=<arg>PORT</arg></opt></p>
       <optdesc><p>Listen on port number PORT.</p></optdesc>
-    </option>
-
-    <option>
-      <p><opt>-a, --aport=<arg>PORT</arg></opt></p>
-      <optdesc><p>Use administrator port number PORT.</p></optdesc>
     </option>
 
     <option>

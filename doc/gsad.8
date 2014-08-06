@@ -7,7 +7,7 @@ gsad \- Greenbone Security Assistant for the Open Vulnerability Assessment Syste
 .SH DESCRIPTION
 Together, OpenVAS Scanner (openvassd(8)) and OpenVAS Manager (openvasmd(8)) provide the core functionality of the Open Vulnerability Assessment System (OpenVAS), with OpenVAS Scanner handling the actual scan process and OpenVAS Manager adding various management functionalities to handle and organise scan results. 
 
-The Greenbone Security Assistant Daemon (gsad) is a web application that connects to the OpenVAS Manager and OpenVAS Administrator to provide for a full-featured user interface for vulnerability management. 
+The Greenbone Security Assistant Daemon (gsad) is a web application that connects to the OpenVAS Manager to provide for a full-featured user interface for vulnerability management. 
 .SH OPTIONS
 .TP
 .BR -f ", " --foreground
@@ -19,17 +19,11 @@ Serve HTTP only, without SSL.
 .BR --listen=\fIADDRESS\fR
 Listen on ADDRESS.
 .TP
-.BR --alisten=\fIADDRESS\fR
-Administrator address.
-.TP
 .BR --mlisten=\fIADDRESS\fR
 Manager address.
 .TP
 .BR -p ", " --port=\fIPORT\fR
 Listen on port number PORT.
-.TP
-.BR -a ", " --aport=\fIPORT\fR
-Use administrator port number PORT.
 .TP
 .BR -m ", " --mport=\fIPORT\fR
 Use manager port number PORT.
