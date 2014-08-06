@@ -2,9 +2,8 @@ About Greenbone Security Assistant
 ----------------------------------
 
 The Greenbone Security Assistant is a web application that
-connects to the OpenVAS Manager and OpenVAS Administrator
-to provide for a full-featured user interface for
-vulnerability management.
+connects to the OpenVAS Manager to provide for a full-featured user interface
+for vulnerability management.
 
 Greenbone Security Assistant is licensed under GNU General Public License
 Version 2 or any later version. Please see file COPYING for details.

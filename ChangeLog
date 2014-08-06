@@ -1,5 +1,10 @@
 2014-08-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* README, doc/gsad.8, doc/gsad.8.xml, doc/gsad.html: Documentation
+	update. OpenVAS Administrator is not used anymore.
+
+2014-08-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (main): Refactor listening address and port code. Use
 	values correctly in --redirect case.
 
