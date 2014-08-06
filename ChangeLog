@@ -1,3 +1,10 @@
+2014-08-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r20056.
+
+	* src/gsad.c (main): Refactor listening address and port code. Use
+	values correctly in --redirect case.
+
 2014-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r20021.
