@@ -4494,14 +4494,28 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
+  gsad_address.sin_family = AF_INET;
+  gsad_address.sin_port = htons (gsad_port);
+  if (gsad_address_string)
+    {
+      if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
+        {
+          g_warning ("Failed to create GSAD address %s", gsad_address_string);
+          return 1;
+        }
+    }
+  else
+    gsad_address.sin_addr.s_addr = INADDR_ANY;
   if (redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
 
+      gsad_address.sin_port = htons (gsad_redirect_port);
       gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
                                       gsad_redirect_port, NULL, NULL, &redirect_handler,
                                       NULL, MHD_OPTION_NOTIFY_COMPLETED,
                                       free_resources, NULL,
+                                      MHD_OPTION_SOCK_ADDR, &gsad_address,
                                       MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
                                       MHD_OPTION_END);
 
@@ -4520,20 +4534,6 @@ main (int argc, char **argv)
     {
       omp_init (gsad_manager_address_string, gsad_manager_port);
 
-      gsad_address.sin_family = AF_INET;
-      gsad_address.sin_port = htons (gsad_port);
-      if (gsad_address_string)
-        {
-          if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
-            {
-              g_critical ("%s: failed to create GSAD address %s\n",
-                          __FUNCTION__,
-                          gsad_address_string);
-              exit (EXIT_FAILURE);
-            }
-        }
-      else
-        gsad_address.sin_addr.s_addr = INADDR_ANY;
 
       tracef ("   GSAD will bind to address %s port %i\n",
               gsad_address_string ? gsad_address_string : "*",
@@ -4562,20 +4562,7 @@ main (int argc, char **argv)
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
-              gsad_address.sin_family = AF_INET;
               gsad_address.sin_port = htons (gsad_port);
-              if (gsad_address_string)
-                {
-                  if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
-                    {
-                      g_critical ("%s: failed to create GSAD address %s\n",
-                                  __FUNCTION__,
-                                  gsad_address_string);
-                      exit (EXIT_FAILURE);
-                    }
-                }
-              else
-                gsad_address.sin_addr.s_addr = INADDR_ANY;
 
               gsad_daemon =
                 MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
@@ -4663,21 +4650,7 @@ main (int argc, char **argv)
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
-              gsad_address.sin_family = AF_INET;
               gsad_address.sin_port = htons (gsad_port);
-              if (gsad_address_string)
-                {
-                  if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
-                    {
-                      g_critical ("%s: failed to create GSAD address %s\n",
-                                  __FUNCTION__,
-                                  gsad_address_string);
-                      exit (EXIT_FAILURE);
-                    }
-                }
-              else
-                gsad_address.sin_addr.s_addr = INADDR_ANY;
-
               gsad_daemon =
                 MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
                                   | MHD_USE_DEBUG

@@ -1,3 +1,8 @@
+2014-08-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (main): Refactor listening address and port code. Use
+	values correctly in --redirect case.
+
 2014-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add new SecInfo subtype CERT-Bund Advisory (CERT_BUND_ADV).
