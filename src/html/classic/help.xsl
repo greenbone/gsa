@@ -3136,6 +3136,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a></li>
               </ul>
+            <li> <a href="cert_bund_advs.html?token={/envelope/token}">CERT-Bund Advisories</a></li>
+              <ul>
+                <li> <a href="cert_bund_adv_details.html?token={/envelope/token}">CERT-Bund Advisory Details</a></li>
+              </ul>
             <li> <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a></li>
               <ul>
                 <li> <a href="dfn_cert_adv_details.html?token={/envelope/token}">DFN-CERT Advisory Details</a></li>
@@ -3351,6 +3355,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         showing the history of the definition. The first column describes the
         type of event (i.e. submission, change and status changes). The
         following columns are the date and the contributors, if applicable.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="cert_bund_adv_details.html">
+  <div class="gb_window_part_center">Help: CERT-Bund Advisory Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <h1>CERT-Bund Advisory Details</h1>
+      <p>
+        A page that provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#cert_bund_adv">CERT-Bund Advisory</a>.
+        This includes the creation time, modification time, title, affected software and platforms, effect of an attack, whether remote attacks are possible, CERT-Bund risk rating and main reference.
+      </p>
+      <h3>Categories</h3>
+      <p>
+        This list contains the categories the advisory belongs to.
+      </p>
+      <h3>Description</h3>
+      <p>
+        This section contains a description of the affected products and of the vulnerability.
+      </p>
+      <h3>Referenced CVEs</h3>
+      <p>
+        This list provides an overview of the
+        <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
+        that are referenced by the advisory.
+        Details of these CVEs can be by clicking on them.
+      </p>
+      <h3>Other links</h3>
+      <p>
+        This list contains links to sources of additional information on the vulnerability.
       </p>
     </div>
   </div>
@@ -3753,6 +3798,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         (Source: http://www.first.org/cvss/cvss-guide).
+      </p>
+
+      <a name="cert_bund_adv"></a>
+      <h2>CERT-Bund Advisory (CERT_BUND_ADV)</h2>
+      <p>
+        An advisory published by CERT-Bund. See the
+        <a href="/help/cert_bund_advs.html?token={/envelope/token}#about">
+        &quot;About CERT-Bund&quot; section of the CERT-Bund Advisories page</a>
+        for more information.
       </p>
 
       <a name="dfn_cert_adv"></a>
@@ -4704,6 +4758,10 @@ Public License instead of this License.
       <h4>OVAL filter</h4>
       <p>
         Default filter to use when getting the <a href="ovaldefs.html?token={/envelope/token}">OVAL Definitions</a> page.
+      </p>
+      <h4>CERT-Bund filter</h4>
+      <p>
+        Default filter to use when getting the <a href="cert_bund_advs.html?token={/envelope/token}">CERT-Bund Advisories</a> page.
       </p>
       <h4>DFN-CERT filter</h4>
       <p>
@@ -8854,6 +8912,120 @@ Public License instead of this License.
       </p>
       <p>
         The OVAL Definitions table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="cert_bund_advs.html">
+  <div class="gb_window_part_center">Help: CERT-Bund Advisories</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <h1>CERT-Bund Advisories</h1>
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html?token={/envelope/token}#cert_bund_adv">CERT-Bund Advisories</a>
+        and summarizes the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>The CERT-Bund IDs of the advisories.</td>
+        </tr>
+        <tr class="odd">
+          <td>Title</td>
+          <td>The titles of the advisories.</td>
+        </tr>
+        <tr>
+          <td>Created</td>
+          <td>The date the advisory was created.</td>
+        </tr>
+        <tr class="odd">
+          <td>Severity</td>
+          <td>The highest CVSS of any CVE that is referenced by the advisory.</td>
+        </tr>
+        <tr>
+          <td>CVEs</td>
+          <td>The number of CVEs referenced by the advisories</td>
+        </tr>
+      </table>
+
+      <a name="about"></a>
+      <h3>About CERT-Bund</h3>
+      <p>
+        CERT-Bund (Computer Emergency Response Team for federal agencies,
+        https://www.cert-bund.de/) is the central point of contact for preventive and
+        reactive measures regarding security-related computer incidents.
+      </p>
+
+      <p>
+        With the intention of avoiding harm and limiting potential damage, CERT-Bund
+      </p>
+      <ul>
+        <li>creates and publishes recommendations for preventive measures</li>
+        <li>points out vulnerabilities in hardware and software products</li>
+        <li>proposes measures to address known vulnerabilities</li>
+        <li>supports public agencies efforts to respond to IT security incidents</li>
+        <li>recommends various mitigation measures</li>
+      </ul>
+
+      <p>In addition, CERT-Bund operates Germany's national IT Situation Centre.</p>
+
+      <p>
+        CERT-Bund's services are primarily available to the federal authorities and include
+      </p>
+
+      <ul>
+        <li>24-hour on-call duty in cooperation with the IT Situation Centre</li>
+        <li>analysis of incoming incident reports</li>
+        <li>creation of recommendations derived from incidents</li>
+        <li>support during IT security incidents</li>
+        <li>operation of a warning and information service</li>
+        <li>active alerting of the Federal Administration in case of imminent danger.</li>
+      </ul>
+
+      <p>
+        In addition, CERT-Bund offers comprehensive information for interested
+        individuals by providing warning and information services for citizens
+        (http://www.buerger-cert.de/) which are available online
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
+      </p>
+      <p>
+        The CERT Advisory table is always empty when the database is missing.
       </p>
       <p>
         The SCAP data is updated during a SCAP data feed sync and the CERT data

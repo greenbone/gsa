@@ -1,5 +1,16 @@
 2014-08-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add help for CERT-Bund Advisories.
+
+	* src/html/classic/help.xsl (contents.html): Add links to pages
+	"CERT-Bund Advisories" and "CERT-Bund Advisory Details".
+	(cert_bund_adv_details.html): New template.
+	(glossary.html): Add section "CERT-Bund Advisory".
+	(my_settings.html): Add section for "CERT-Bund filter".
+	(cert_bund_advs.html): New template.
+
+2014-08-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (cert_bund_adv-details): Add "Categories"
 	section.
 
