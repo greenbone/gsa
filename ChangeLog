@@ -1,3 +1,11 @@
+2014-08-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (cert_bund_adv-details): Add "Categories"
+	section.
+
+	* src/html/classic/po/de.xml: Add "Categories" string for CERT-Bund
+	Advisories.
+
 2014-08-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* README, doc/gsad.8, doc/gsad.8.xml, doc/gsad.html: Documentation

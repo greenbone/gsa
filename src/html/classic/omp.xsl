@@ -17738,6 +17738,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
 
           <xsl:choose>
+            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CategoryTree) > 0">
+              <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory Window')"/></h2>
+              <ul>
+                <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CategoryTree">
+                  <li><xsl:value-of select="text()"/></li>
+                </xsl:for-each>
+              </ul>
+            </xsl:when>
+            <xsl:otherwise>
+              <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h2>
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:choose>
             <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock) > 0">
               <h2><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></h2>
               <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock">
