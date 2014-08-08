@@ -17814,6 +17814,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="dfn_cert_adv-details">
+  <xsl:variable name="token" select="/envelope/token"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -17914,12 +17915,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'DFN-CERT Advisory Window')"/></h2>
               <ul>
               <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
-                <li>
-                  <xsl:call-template name="get_info_cve_lnk">
-                    <xsl:with-param name="cve" select="."/>
-                    <xsl:with-param name="gsa_token" select="/envelope/token"/>
-                  </xsl:call-template>
-                </li>
+                <xsl:for-each select="str:tokenize (str:replace (text (), 'CVE ', 'CVE-'), ' ')">
+                  <xsl:if test="starts-with (text (), 'CVE-') and (string-length (text ()) &gt;= 13) and string (number(substring (text (), 4, 4))) != 'NaN'">
+                    <li>
+                      <xsl:call-template name="get_info_cve_lnk">
+                        <xsl:with-param name="cve" select="."/>
+                        <xsl:with-param name="gsa_token" select="$token"/>
+                      </xsl:call-template>
+                    </li>
+                  </xsl:if>
+                </xsl:for-each>
               </xsl:for-each>
               </ul>
             </xsl:when>
