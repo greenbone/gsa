@@ -1,3 +1,11 @@
+2014-08-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-headers]): Remove checking of
+	description value in oval definitions' case as nvt oid value is set
+	correctly now.
+	(result [result-body]): Use the NVT's oid to check for oval definitions
+	instead of the description's value.
+
 2014-08-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (dfn_cert_adv-details): Split CVE elements

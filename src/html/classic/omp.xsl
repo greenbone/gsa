@@ -24301,9 +24301,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="nvt/name"/>
                   </xsl:when>
                   <!-- OSP results cases -->
-                  <xsl:when test="substring(description, 1, 5) = 'oval:'">
-                    <xsl:value-of select="substring-before(description, ' ')"/>
-                  </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="substring-before(description, '&#10;')"/>
                   </xsl:otherwise>
@@ -24589,9 +24586,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <p>
           <xsl:value-of select="gsa:i18n ('Details', 'Window')"/>:
           <xsl:choose>
-            <xsl:when test="substring(description, 1, 5) = 'oval:'">
+            <xsl:when test="substring(nvt/@oid, 1, 5) = 'oval:'">
               <xsl:variable name="ovaldef_id">
-                <xsl:value-of select="substring-before(description, ' ')"/>
+                <xsl:value-of select="nvt/@oid"/>
               </xsl:variable>
               <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_id={$ovaldef_id}&amp;details=1&amp;token={/envelope/token}"
                  title="{gsa:view_details_title ('OVAL Definition', $ovaldef_id)}"><xsl:value-of select="$ovaldef_id"/></a>
