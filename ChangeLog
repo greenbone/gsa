@@ -1,3 +1,11 @@
+2014-08-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (new_tag, save_tag_omp): Remove manager_connect.
+	Session was not being used used, and was not being closed in
+	save_tag_omp.
+	(authenticate_omp): Close session, otherwise Manager process wait around
+	for more input.
+
 2014-08-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-headers]): Remove checking of
@@ -130,7 +138,7 @@
 
 2014-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/classic/help.xsl: Add note about password field being
+	* src/gsad_omp.c (get_many): Get filters shared by other users too.
 
 2014-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 

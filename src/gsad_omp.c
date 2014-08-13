@@ -6721,9 +6721,7 @@ static char *
 new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *end;
+  gchar *end;
   const char *resource_type, *resource_id, *tag_id, *tag_name;
 
   resource_type = params_value (params, "resource_type");
@@ -6731,23 +6729,6 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   tag_id = params_value (params, "tag_id");
   tag_name = params_value (params, "tag_name");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting targets list. "
-                             "The current list of targets is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
 
   xml = g_string_new ("<new_tag>");
 
@@ -6772,7 +6753,6 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   g_string_append (xml, end);
   g_free (end);
 
-  openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
@@ -7023,9 +7003,7 @@ edit_tag_omp (credentials_t * credentials, params_t *params)
 char *
 save_tag_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *response;
+  gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   const char *tag_id;
   entity_t entity;
@@ -7046,24 +7024,6 @@ save_tag_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (resource_type, "Save Tag", edit_tag)
   CHECK_PARAM (resource_id, "Save Tag", edit_tag)
   CHECK_PARAM (active, "Save Tag", edit_tag)
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while modifying a tag."
-                             " The tag was not modified. "
-                             "Diagnostics: Failure to connect to "
-                             "manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
 
   response = NULL;
   entity = NULL;
@@ -20320,12 +20280,14 @@ authenticate_omp (const gchar * username, const gchar * password,
             }
           free_entity (entity);
           g_free (response);
+          openvas_server_close (socket, session);
           return 0;
         }
       else
         {
           free_entity (entity);
           g_free (response);
+          openvas_server_close (socket, session);
           return -1;
         }
     }
