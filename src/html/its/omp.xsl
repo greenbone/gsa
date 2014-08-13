@@ -361,7 +361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:choose>
               <xsl:when test="not ($its_config)">Fehler: Die ITS-Scankonfiguration wurde nicht gefunden.</xsl:when>
               <xsl:when test="$task_target=''">Fehler: Ziel der Prüfung ist nicht definiert.</xsl:when>
-              <xsl:when test="$task_status='Stop Requested' or $task_status='Pause Requested' or $task_status='Stop Waiting' or $task_status='Pause Waiting'">Prüfung wird bereits angehalten.</xsl:when>
+              <xsl:when test="$task_status='Stop Requested' or $task_status='Stop Waiting'">Prüfung wird bereits angehalten.</xsl:when>
               <xsl:when test="$task_status='Requested' or $task_status='Resume Requested' or $task_status='Resume Waiting'">Prüfung wird gerade gestartet.</xsl:when>
               <xsl:when test="$task_status='Running'">Prüfung läuft bereits.</xsl:when>
               <xsl:when test="$task_status='Done'">Prüfung ist bereits abgeschlossen.<br/>Bitte setzen Sie die Ergebnisse zurück, bevor sie eine neue Prüfung starten.</xsl:when>
@@ -374,7 +374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <!-- Stop button -->
     <xsl:choose>
-      <xsl:when test="$task_status = 'Running' or $task_status='Paused'">
+      <xsl:when test="$task_status = 'Running'">
         <form name="stop_task_{translate($task_id, '-', '_')}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -402,7 +402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="$task='' or $task_status='New'">Prüfung wurde noch nicht gestartet.</xsl:when>
               <xsl:when test="$task_status='Done'">Prüfung ist bereits abgeschlossen.</xsl:when>
               <xsl:when test="$task_status='Stopped'">Prüfung wurde bereits angehalten.</xsl:when>
-              <xsl:when test="$task_status='Stop Requested' or $task_status='Pause Requested' or $task_status='Stop Waiting' or $task_status='Pause Waiting'">Prüfung wird bereits angehalten.</xsl:when>
+              <xsl:when test="$task_status='Stop Requested' or $task_status='Stop Waiting'">Prüfung wird bereits angehalten.</xsl:when>
               <xsl:when test="$task_status='Requested' or $task_status='Resume Requested' or $task_status='Resume Waiting'">Prüfung wird gerade gestartet.</xsl:when>
               <xsl:otherwise>Prüfung kann momentan nicht angehalten werden.</xsl:otherwise>
             </xsl:choose>
@@ -442,7 +442,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:choose>
               <xsl:when test="$task_status='Running'">Prüfung läuft gerade.</xsl:when>
               <xsl:when test="$task_status='Requested' or $task_status='Resume Requested' or $task_status='Resume Waiting'">Prüfung wird gerade gestartet.</xsl:when>
-              <xsl:when test="$task_status='Stop Requested' or $task_status='Pause Requested' or $task_status='Stop Waiting' or $task_status='Pause Waiting'">Prüfung wird bereits angehalten.</xsl:when>
+              <xsl:when test="$task_status='Stop Requested' or $task_status='Stop Waiting'">Prüfung wird bereits angehalten.</xsl:when>
               <xsl:otherwise>Ergebnis kann momentan nicht zurückgesetzt werden.</xsl:otherwise>
             </xsl:choose>
           </span>
@@ -638,9 +638,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$status = 'New'">Noch nicht gestartet</xsl:when>
       <xsl:when test="$status = 'Requested'">Wird gestartet</xsl:when>
       <xsl:when test="$status = 'Running'">Läuft gerade</xsl:when>
-      <xsl:when test="$status = 'Pause Requested'">Wird angehalten</xsl:when>
-      <xsl:when test="$status = 'Pause Waiting'">Wird angehalten</xsl:when>
-      <xsl:when test="$status = 'Paused'">Angehalten</xsl:when>
       <xsl:when test="$status = 'Resume Requested'">Wird fortgesetzt</xsl:when>
       <xsl:when test="$status = 'Resume Waiting'">Wird fortgesetzt</xsl:when>
       <xsl:when test="$status = 'Stop Requested'">Wird angehalten</xsl:when>

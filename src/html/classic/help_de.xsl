@@ -290,32 +290,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   Reboot, gestoppt.
               </td></tr>
               <tr><td valign="top">
-                  <div class="progressbar_box" title="Pause Angefordert">
-                    <div class="progressbar_bar_request" style="width:100px;"></div>
-                    <div class="progressbar_text">Pause Angefordert</div>
-                  </div>
-                </td><td>
-                  Der Benutzer hat kürzlich den Scan pausiert. Der Manager-Server
-                  hat dieses Kommando zum Scanner gesendet, aber der Scanner
-                  hat den Scan noch nicht sauber pausiert.
-              </td></tr>
-              <tr><td valign="top">
-                  <div class="progressbar_box" title="Pausiert">
-                    <div class="progressbar_bar_request" style="width:82px;"></div>
-                    <div class="progressbar_text">
-                      Pausiert bei <xsl:value-of select="82"/> %
-                    </div>
-                  </div>
-                </td><td>
-                  Der letzte Scan dieser Aufgabe wurde vom Benutzer pausiert.
-                  Der Scan war zu 15% abgeschlossen, als er pausiert wurde.
-                  Der neueste Bericht kann unvollständig sein.
-                  Die Aufgabe wird auf gestoppt gesetzt, wenn der Scanner- oder
-                  Manager-Server neu gestart wird, z.B. bei einem Reboot.
-                  Der Scan-Dienst bleibt im Stand-by aktiv und gibt keinen
-                  Speicher frei, so lange die Aufgabe pausiert ist.
-              </td></tr>
-              <tr><td valign="top">
                   <div class="progressbar_box" title="Interner Fehler">
                     <div class="progressbar_bar_error" style="width:100px;"></div>
                     <div class="progressbar_text">Interner Fehler</div>

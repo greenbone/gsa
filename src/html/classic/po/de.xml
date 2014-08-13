@@ -1544,10 +1544,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Stop</id>
       <str>Stoppen</str>
     </msg>
-    <msg>
-      <id>Pause</id>
-      <str>Pausieren</str>
-    </msg>
     <!-- Task status action tooltips -->
     <msg>
       <id>Task is a container</id>
@@ -1566,7 +1562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Keine Berechtigung, Aufgabe zu stoppen</str>
     </msg>
     <msg>
-      <id>Task is already active or paused</id>
+      <id>Task is already active</id>
       <str>Aufgabe ist bereits aktiv oder pausiert</str>
     </msg>
     <msg>
@@ -1574,12 +1570,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Aufgabe ist durch Zeitplan gesteuert</str>
     </msg>
     <msg>
-      <id>Task is not paused or stopped</id>
+      <id>Task is not stopped</id>
       <str>Aufgabe ist nicht pausiert oder gestoppt</str>
-    </msg>
-    <msg>
-      <id>Tasks can only be be stopped when running or paused</id>
-      <str>Nur laufende oder pausierte Aufgaben können gestoppt werden</str>
     </msg>
 
     <!-- - - Properties - - -->
@@ -1846,14 +1838,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>New</id>
       <str>Neu</str>
-    </msg>
-    <msg>
-      <id>Pause Requested</id>
-      <str>Pause Angefordert</str>
-    </msg>
-    <msg>
-      <id>Paused</id>
-      <str>Pausiert</str>
     </msg>
     <msg>
       <id>Requested</id>
@@ -5462,16 +5446,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
 
     <msg>
-      <id>may pause tasks</id>
-      <str>darf Aufgaben pausieren</str>
-    </msg>
-    <msg>
       <id>may resume or start tasks</id>
       <str>darf Aufgaben fortsetzen oder starten</str>
-    </msg>
-    <msg>
-      <id>may resume paused tasks</id>
-      <str>darf pausierte Aufgaben fortsetzen</str>
     </msg>
     <msg>
       <id>may resume stopped tasks</id>

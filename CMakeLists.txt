@@ -393,10 +393,8 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/descending_inactive.png
                src/html/classic/img/note.png
                src/html/classic/img/scheduled.png
-               src/html/classic/img/pause.png
                src/html/classic/img/override.png
                src/html/classic/img/new_override.png
-               src/html/classic/img/pause_inactive.png
                src/html/classic/img/trashcan.png
                src/html/classic/img/trashcan_inactive.png
                src/html/classic/img/indicator_js.png

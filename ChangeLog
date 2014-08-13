@@ -1,5 +1,13 @@
 2014-08-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* CMakeLists.txt: Remove reference to deleted files.
+
+	* src/html/classic/help_de.xsl, src/html/classic/po/de.xml,
+	src/html/classic/po/zh.xml, src/html/its/gsad.xsl, src/html/its/omp.xsl:
+	Update for pause feature removal.
+
+2014-08-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Finish removal of pause feature.
 
 	* src/gsad.c (init_validator): Don't validate pause_task and

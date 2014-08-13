@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="envelope/params/@refresh_interval != ''">
         <meta http-equiv="refresh" content="{envelope/autorefresh/@interval};{/envelope/caller}&amp;token={/envelope/token}" />
       </xsl:when>
-      <xsl:when test="not(envelope/params/@refresh_interval != '') and ($task_status != '') and ($task_status != 'Done') and ($task_status != 'Stopped') and ($task_status != 'Paused') and ($task_status != 'Internal Error') and ($task_status != 'New')">
+      <xsl:when test="not(envelope/params/@refresh_interval != '') and ($task_status != '') and ($task_status != 'Done') and ($task_status != 'Stopped') and ($task_status != 'Internal Error') and ($task_status != 'New')">
         <meta http-equiv="refresh" content="5;{/envelope/caller}&amp;token={/envelope/token}" />
       </xsl:when>
       <xsl:otherwise/>

@@ -1507,10 +1507,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Stop</id>
       <str>停止</str>
     </msg>
-    <msg>
-      <id>Pause</id>
-      <str>暂停</str>
-    </msg>
     <!-- Task status action tooltips -->
     <msg>
       <id>Task is a container</id>
@@ -1529,7 +1525,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>停止任务的权限被拒绝</str>
     </msg>
     <msg>
-      <id>Task is already active or paused</id>
+      <id>Task is already active</id>
       <str>任务已经活跃或暂停</str>
     </msg>
     <msg>
@@ -1537,12 +1533,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>任务已进行计划</str>
     </msg>
     <msg>
-      <id>Task is not paused or stopped</id>
+      <id>Task is not stopped</id>
       <str>任务没被暂停或停止</str>
-    </msg>
-    <msg>
-      <id>Tasks can only be be stopped when running or paused</id>
-      <str>任务只能在运行或暂停时被停止</str>
     </msg>
 
     <!-- - - Properties - - -->
@@ -1809,14 +1801,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>New</id>
       <str>新建</str>
-    </msg>
-    <msg>
-      <id>Pause Requested</id>
-      <str>已请求暂停</str>
-    </msg>
-    <msg>
-      <id>Paused</id>
-      <str>已暂停</str>
     </msg>
     <msg>
       <id>Requested</id>
@@ -5303,16 +5287,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
 
     <msg>
-      <id>may pause tasks</id>
-      <str>允许暂停任务</str>
-    </msg>
-    <msg>
       <id>may resume or start tasks</id>
       <str>允许继续或开始任务</str>
-    </msg>
-    <msg>
-      <id>may resume paused tasks</id>
-      <str>允许继续已暂停的任务</str>
     </msg>
     <msg>
       <id>may resume stopped tasks</id>
