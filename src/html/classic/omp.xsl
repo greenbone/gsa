@@ -1478,25 +1478,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="pause-icon">
-  <xsl:param name="type"></xsl:param>
-  <xsl:param name="id"></xsl:param>
-  <xsl:param name="params"></xsl:param>
-
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px"
-          action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="pause_{$type}"/>
-      <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/pause.png" alt="{gsa:i18n ('Pause', 'Task Table Row')}"
-             name="Pause" value="Pause" title="{gsa:i18n ('Pause', 'Task Table Row')}"/>
-      <xsl:copy-of select="$params"/>
-    </form>
-  </div>
-</xsl:template>
-
 <xsl:template name="restore-icon">
   <xsl:param name="id"></xsl:param>
 
@@ -3419,7 +3400,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:if test="boolean ($show-start-when-scheduled)">
         <xsl:choose>
-          <xsl:when test="status!='Running' and status!='Stop Requested' and status!='Delete Requested' and status!='Ultimate Delete Requested' and status!='Pause Requested' and status!='Paused' and status!='Resume Requested' and status!='Requested'">
+          <xsl:when test="status!='Running' and status!='Stop Requested' and status!='Delete Requested' and status!='Ultimate Delete Requested' and status!='Resume Requested' and status!='Requested'">
             <xsl:call-template name="start-icon">
               <xsl:with-param name="type">task</xsl:with-param>
               <xsl:with-param name="id" select="@id"/>
@@ -3432,7 +3413,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Task is already active or paused', 'Task Table Row')}"/>
+            <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Task is already active', 'Task Table Row')}"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
@@ -3449,8 +3430,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Task is already active or paused', 'Task Table Row')}"/>
+    <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Resume Requested' or status='Requested'">
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Task Table Row')}" title="{gsa:i18n ('Task is already active', 'Task Table Row')}"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="start-icon">
@@ -3495,29 +3476,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
-    <xsl:when test="status='Paused'">
-      <xsl:choose>
-        <xsl:when test="gsa:may ('resume_paused_task') = 0">
-          <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Permission to resume task denied', 'Task Table Row')}"
-             style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="resume-icon">
-            <xsl:with-param name="type">task</xsl:with-param>
-            <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
-            <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-              <input type="hidden" name="next" value="{$next}"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
     <xsl:otherwise>
-      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Task is not paused or stopped', 'Task Table Row')}"
+      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Task is not stopped', 'Task Table Row')}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -3970,23 +3930,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="progressbar_box" title="{gsa:i18n ('Delete Requested', 'Status')}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="gsa:i18n ('Delete Requested', 'Status')"/></div>
-      </div>
-    </xsl:when>
-    <xsl:when test="$status='Pause Requested'">
-      <div class="progressbar_box" title="{gsa:i18n ($status, 'Status')}{$title_suffix}">
-        <div class="progressbar_bar_request" style="width:100px;"></div>
-        <div class="progressbar_text"><xsl:value-of select="gsa:i18n ($status, 'Status')"/></div>
-      </div>
-    </xsl:when>
-    <xsl:when test="$status='Paused'">
-      <div class="progressbar_box" title="{gsa:i18n ($status, 'Status')}{$title_suffix}">
-        <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
-        <div class="progressbar_text">
-          <xsl:value-of select="gsa:i18n ($status, 'Status')"/>
-          <xsl:if test="$progress &gt;= 0">
-            <xsl:value-of select="gsa:i18n (' at ', 'Status')"/> <xsl:value-of select="$progress"/> %
-          </xsl:if>
-        </div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Resume Requested'">
@@ -4607,30 +4550,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="pause_task_response">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Pause Task</xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template match="resume_paused_task_response">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Resume Task</xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
 <xsl:template match="resume_stopped_task_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Resume Stopped Task</xsl:with-param>
@@ -5228,11 +5147,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                title="{gsa:i18n ('Report is observed', 'Report Table Row')}"
                style="margin-left:3px;"/>
         </xsl:when>
-        <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
+        <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested'">
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="{gsa:i18n ('Scan is active or paused', 'Report Table Row')}"
+               title="{gsa:i18n ('Scan is active', 'Report Table Row')}"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -6315,7 +6234,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="start_task_response"/>
   <xsl:apply-templates select="stop_task_response"/>
   <xsl:apply-templates select="modify_task_response"/>
-  <xsl:apply-templates select="pause_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="commands_response/get_tasks_response/task"
@@ -6333,7 +6251,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="start_task_response"/>
   <xsl:apply-templates select="stop_task_response"/>
   <xsl:apply-templates select="modify_task_response"/>
-  <xsl:apply-templates select="pause_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>

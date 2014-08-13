@@ -5910,36 +5910,6 @@ Public License instead of this License.
               </tr>
               <tr>
                 <td valign="top">
-                  <div class="progressbar_box" title="Pause Requested">
-                    <div class="progressbar_bar_request" style="width:100px;"></div>
-                    <div class="progressbar_text">Pause Requested</div>
-                  </div>
-                </td>
-                <td>
-                  The user has recently paused the scan. The manager
-                  server has submitted this command to the scanner, but the scanner
-                  has not yet cleanly paused the scan.
-                </td>
-              </tr>
-              <tr>
-                <td valign="top">
-                  <div class="progressbar_box" title="Paused">
-                    <div class="progressbar_bar_request" style="width:82px;"></div>
-                    <div class="progressbar_text">
-                      Paused at <xsl:value-of select="82"/> %
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  The scan was paused by the user.   The scan was
-                  82% complete when it was paused.
-                  The report will change to stopped if the scanner or manager
-                  server is restarted, for example on reboot.
-                  The scan service remains stand-by active and will not release any memory.
-                </td>
-              </tr>
-              <tr>
-                <td valign="top">
                   <div class="progressbar_box" title="Internal Error">
                     <div class="progressbar_bar_error" style="width:100px;"></div>
                     <div class="progressbar_text">Internal Error</div>
@@ -7963,31 +7933,6 @@ Public License instead of this License.
                   scanner or manager server is restarted, for example on reboot.
               </td></tr>
               <tr><td valign="top">
-                  <div class="progressbar_box" title="Pause Requested">
-                    <div class="progressbar_bar_request" style="width:100px;"></div>
-                    <div class="progressbar_text">Pause Requested</div>
-                  </div>
-                </td><td>
-                  The user has recently paused the scan. The manager
-                  server has submitted this command to the scanner, but the scanner
-                  has not yet cleanly paused the scan.
-              </td></tr>
-              <tr><td valign="top">
-                  <div class="progressbar_box" title="Paused">
-                    <div class="progressbar_bar_request" style="width:82px;"></div>
-                    <div class="progressbar_text">
-                      Paused at <xsl:value-of select="82"/> %
-                    </div>
-                  </div>
-                </td><td>
-                  The last scan for this task was paused by the user.   The scan was
-                  82% complete when it was paused.  The newest report might be incomplete.
-                  The task will change to stopped if the scanner or manager
-                  server is restarted, for example on reboot.
-                  The scan service remains stand-by active and will not release any memory
-                  as long as the the task is paused.
-              </td></tr>
-              <tr><td valign="top">
                   <div class="progressbar_box" title="Internal Error">
                     <div class="progressbar_bar_error" style="width:100px;"></div>
                     <div class="progressbar_text">Internal Error</div>
@@ -8222,7 +8167,7 @@ Public License instead of this License.
       <h4>Resume Task</h4>
       <p>
        Pressing the resume icon <img src="/img/resume.png" alt="Resume"
-         title="Resume"/> will resume a previously paused or stopped task. The list of
+         title="Resume"/> will resume a previously stopped task. The list of
        tasks will be updated.
       </p>
       <p>
@@ -8236,7 +8181,7 @@ Public License instead of this License.
        stop a running task. The list of tasks will be updated.
       </p>
       <p>
-       This action is only available if the task is either running or paused.
+       This action is only available if the task is running.
       </p>
 
       <h4>Move Task to Trashcan</h4>

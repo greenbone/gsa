@@ -3093,34 +3093,6 @@ stop_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Pause a task, get all tasks, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-pause_task_omp (credentials_t * credentials, params_t *params)
-{
-  return resource_action (credentials, params, "task", "pause");
-}
-
-/**
- * @brief Resume a paused task, get all tasks, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-resume_paused_task_omp (credentials_t * credentials, params_t *params)
-{
-  return resource_action (credentials, params, "task", "resume_paused");
-}
-
-/**
  * @brief Resume a stopped task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

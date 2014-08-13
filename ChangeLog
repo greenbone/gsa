@@ -1,3 +1,28 @@
+2014-08-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Finish removal of pause feature.
+
+	* src/gsad.c (init_validator): Don't validate pause_task and
+	resume_paused_task.
+	(exec_omp_post): Remove paused and resume paused tasks handling.
+
+	* src/gsad_omp.c (pause_task_omp, resume_paused_task_omp): Delete
+	functions.
+
+	* src/gsad_omp.h: Remove deleted functions prototypes.
+
+	* src/html/classic/gsad.xsl (pause_task_response)
+	(resume_paused_task_response): Remove templates.
+	(html-gsa-logo): Don't apply removed templates.
+
+	* src/html/classic/help.xsl (reports.html, tasks.html): Remove
+	references to pause feature.
+
+	* src/html/classic/omp.xsl (pause-icon): Remove template.
+	(task-icons, report [report], get_task): Remove references and handling
+	of pause feature.
+	(pause_task_response, resume_paused_task_response): Remove templates.
+
 2014-08-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (new_tag, save_tag_omp): Remove manager_connect.
