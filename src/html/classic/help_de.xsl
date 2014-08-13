@@ -537,8 +537,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Indem Sie auf das Fortsetzen-Icon <img src="/img/resume.png"
          alt="Fortsetzen" title="Fortsetzen"/> drücken, setzen Sie eine zuvor
-       pausierte oder gestoppte Aufgabe fort. Die Liste der Aufgaben wird
-       aktualisiert.
+       gestoppte Aufgabe fort. Die Liste der Aufgaben wird aktualisiert.
       </p>
       <p>
         Diese Aktion ist nur verfügbar, wenn die Aufgabe zuvor angehalten wurde,
@@ -552,8 +551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Die Liste der Aufgaben wird aktualisiert.
       </p>
       <p>
-       Diese Aktion ist nur verfügbar, wenn die Aufgabe entweder läuft oder
-       pausiert ist.
+       Diese Aktion ist nur verfügbar, wenn die Aufgabe gerade läuft.
       </p>
 
       <h4>Aufgabe in den Mülleimer verschieben</h4>

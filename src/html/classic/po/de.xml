@@ -1563,7 +1563,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Task is already active</id>
-      <str>Aufgabe ist bereits aktiv oder pausiert</str>
+      <str>Aufgabe ist bereits aktiv</str>
     </msg>
     <msg>
       <id>Task is scheduled</id>
@@ -1571,7 +1571,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Task is not stopped</id>
-      <str>Aufgabe ist nicht pausiert oder gestoppt</str>
+      <str>Aufgabe ist nicht gestoppt</str>
     </msg>
 
     <!-- - - Properties - - -->
