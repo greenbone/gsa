@@ -3612,7 +3612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Alterable Task', 'Task Window')"/>:
           </td>
           <td>
-            <xsl:variable name="yes" select="/envelope/params/alterable"/>
+            <xsl:variable name="yes" select="alterable"/>
             <xsl:choose>
               <xsl:when test="string-length ($yes) = 0 or $yes = 0">
                 <xsl:value-of select="gsa:i18n ('no', 'Window')"/>
