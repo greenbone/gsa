@@ -1,3 +1,10 @@
+2014-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r20131.
+
+	* src/html/classic/omp.xsl (task [details]): Use right element for
+	alterable field.
+
 2014-08-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r20108.
