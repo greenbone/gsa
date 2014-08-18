@@ -1,3 +1,8 @@
+2014-08-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-body]): Handle ospd-ovaldi
+	results with no attached oval definintions.
+
 2014-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Use right element for
