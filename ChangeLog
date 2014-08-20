@@ -1,3 +1,21 @@
+2014-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add overview table of all results to Scan Management.
+
+	* src/gsad_omp.c (next_page): Add case for get_results.
+	(get_results, get_results_omp): New functions.
+
+	* src/gsad_omp.h (get_results_omp): New function prototype.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add command get_results.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add "Results" item
+	to Scan Management menu.
+
+	* src/html/classic/omp.xsl (get_results_response): Add case for
+	table view of results.
+	(html-results-table, result): New templates.
+
 2014-08-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-body]): Handle ospd-ovaldi

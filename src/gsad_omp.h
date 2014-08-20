@@ -71,6 +71,7 @@ char * download_ssl_cert (credentials_t *, params_t *, gsize *);
 char * export_result_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *);
 char * get_result_omp (credentials_t *, params_t *);
+char * get_results_omp (credentials_t *, params_t *);
 
 char * new_alert_omp (credentials_t *, params_t *);
 char * create_alert_omp (credentials_t *, params_t *);

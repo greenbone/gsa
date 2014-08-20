@@ -24829,6 +24829,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
+    <xsl:when test="not (/envelope/params/result_id)">
+      <xsl:call-template name="html-results-table"/>
+    </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="results/result" mode="details"/>
     </xsl:otherwise>
@@ -24961,6 +24964,127 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!--     GET_RESULTS -->
+
+<xsl:template name="html-results-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'result'"/>
+    <xsl:with-param name="cap-type" select="'Result'"/>
+    <xsl:with-param name="resources-summary" select="results"/>
+    <xsl:with-param name="resources" select="results/result"/>
+    <xsl:with-param name="count" select="count (results/result)"/>
+    <xsl:with-param name="filtered-count" select="result_count/filtered"/>
+    <xsl:with-param name="full-count" select="result_count/text()"/>
+    <xsl:with-param name="top-visualization">
+    <!--
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-secinfo-top-visualization">
+        <xsl:with-param name="type" select="'result'"/>
+      </xsl:call-template>
+    -->
+    </xsl:with-param>
+    <xsl:with-param name="columns">
+      <column>
+        <name>Vulnerability</name>
+      </column>
+      <column>
+        <name>Severity</name>
+      </column>
+      <column>
+        <name>Host</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>Location</name>
+      </column>
+      <column>
+        <name>Created</name>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="result">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <a href="omp?cmd=get_result&amp;result_id={@id}&amp;token={/envelope/token}">
+        <xsl:choose>
+          <xsl:when test="nvt/@oid=0">
+            <i>Open port</i>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="nvt/name"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </td>
+    <td>
+      <xsl:variable name="severity_title">
+        <xsl:choose>
+          <xsl:when test="original_severity">
+            <xsl:choose>
+              <xsl:when test="severity = original_severity">
+                <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
+              </xsl:when>
+              <xsl:otherwise>(<xsl:value-of select="gsa:i18n ('Overridden from ', 'Result Window')"/> <b><xsl:value-of select="original_severity"/><xsl:if test="original_severity &gt; 0.0">: <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor (original_severity), 'Severity')"/></xsl:if></b>)</xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="severity != ''">
+          <xsl:variable name="extra_text">
+            <xsl:choose>
+              <xsl:when test="severity &gt;= 0.0">
+                <xsl:value-of select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity'), ')')"/>
+              </xsl:when>
+              <xsl:when test="severity != ''">
+                <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
+              </xsl:when>
+              <xsl:otherwise>N/A</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:variable name="severity">
+            <xsl:choose>
+              <xsl:when test="severity &gt;= 0.0">
+                <xsl:value-of select="severity"/>
+              </xsl:when>
+              <xsl:otherwise></xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="$severity"/>
+            <xsl:with-param name="extra_text" select="$extra_text"/>
+            <xsl:with-param name="title" select="$severity_title"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="'0.0'"/>
+            <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:cvss-risk-factor('0.0'), 'Severity'), ')')"/>
+            <xsl:with-param name="title" select="$severity_title"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="?cmd=get_report&amp;type=assets&amp;host={host}&amp;token={/envelope/token}">
+        <xsl:value-of select="host"/>
+      </a>
+    </td>
+    <td>
+      <xsl:value-of select="port"/>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:long-time (creation_time)"/>
+    </td>
+  </tr>
 </xsl:template>
 
 <!--     REPORT -->

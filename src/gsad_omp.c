@@ -170,6 +170,8 @@ static char *get_reports (credentials_t *, params_t *, const char *);
 
 static char *get_result_page (credentials_t *, params_t *, const char *);
 
+static char *get_results (credentials_t *, params_t *, const char *);
+
 static char *get_role (credentials_t *, params_t *, const char *);
 
 static char *get_roles (credentials_t *, params_t *, const char *);
@@ -781,6 +783,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_reports") == 0)
     return get_reports (credentials, params, response);
+
+  if (strcmp (next, "get_results") == 0)
+    return get_results (credentials, params, response);
 
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
@@ -10953,6 +10958,38 @@ export_result_omp (credentials_t * credentials, params_t *params,
 {
   return export_resource ("result", credentials, params, content_type,
                           content_disposition, content_length);
+}
+
+/**
+ * @brief Get all results, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_results (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return get_many ("result", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all results, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_results_omp (credentials_t *credentials, params_t *params)
+{
+  return get_results (credentials,
+                      params,
+                      NULL);
 }
 
 /**
