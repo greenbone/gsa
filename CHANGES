@@ -1,3 +1,44 @@
+gsa 6.0+beta1 (2014-08-23)
+
+This is the first beta version of the upcoming 6.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release -- in combination with the OpenVAS Manager 6.0+beta1 release --
+enables a number of new features like the multi-scanner support, the first
+charts in SecInfo, the new Cert-BUND in SecInfo and the new results section
+under Scan Management.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner.
+
+Main changes since 5.0 series:
+* New: Configure menu "Scanners" for OTP and OSP based scanners. The classic
+  OpenVAS Scanner is pre-configured.
+* New: For Task objects there is now a scanner selection. Scanner-specific
+  settings are grouped with the respective scanner type. Apart from the
+  classic OpenVAS Scanner now a OSP-based OVAL Scanner "ovaldi" is an optional
+  scanner type.  
+* New: Scan Configuration editor for OSP-based scanner type "ovaldi".
+* New: Chart types "bar-chart" and "donut", based on the d3 library, for
+  each of the SecInfo object types.  These are used for showing severity
+  and severity classes. 
+* New: SecInfo dashboard showing 4 charts that can be indivually be configured
+  regarding type, object type and filter.
+* New: SecInfo object type "CERT-Bund", a german CERT.
+* New: "Results" section in menu "Scan Management".
+* Added "Backend operation" in the page footer. This is the time taken to get
+  from the start of the page handler to the start of the XSL transform.
+* Added warning if login password does not comply with password policy.
+* Remove public key requirement from Credentials creation.
+* Removed target locator feature as this is not being fully
+  supported by the backend anyway.
+* Removed any remains of handling Pause status of tasks.
+* ITS (IT-Schwachstellenampel, now at 1.1):
+  * Added settings page and password warning.
+* Various small fixes and improvements.
+
+
 gsa 5.0.0 (2014-04-23)
 
 This is the first release of the Greenbone Security Assistant (GSA) 5.0 module

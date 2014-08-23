@@ -1,3 +1,9 @@
+2014-08-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 6.0+beta1 release.
+
+	* CHANGES: Updated.
+	
 2014-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add overview table of all results to Scan Management.
