@@ -12092,7 +12092,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </div>
   <div class="gb_window_part_content">
-    <xsl:apply-templates select="get_nvts_response/nvt">
+    <xsl:apply-templates select="get_nvts_response/nvt" mode="details">
       <xsl:with-param name="config" select="config/name"/>
     </xsl:apply-templates>
 
@@ -17276,7 +17276,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="nvt-details">
+<xsl:template name="nvt-details">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -17287,7 +17287,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <xsl:apply-templates select="info/nvt"/>
+      <xsl:apply-templates select="info/nvt" mode="details"/>
     </div>
   </div>
 </xsl:template>
@@ -17870,7 +17870,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN NVT DETAILS -->
 
-<xsl:template match="nvt">
+<xsl:template match="nvt" mode="details">
   <xsl:param name="config"/>
   <div class="float_right" style="font-size: 10px;">
     <table style="font-size: 10px;">

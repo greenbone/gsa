@@ -1,3 +1,10 @@
+2014-09-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (nvt): Add details mode to template, to
+	differentiate with info/nvt template.
+	(nvt-details): Fix template name. Correctly call nvt template.
+	(html-config-nvt-table): Correctly call nvt template.
+
 2014-09-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add "NVTs by family" bubble charts.
