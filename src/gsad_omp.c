@@ -5085,8 +5085,8 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
-                             "Formats for new alert. "
-                             "It is unclear whether the task has been saved or not. "
+                             "Formats for new alert. It is unclear whether"
+                             " the alert has been saved or not. "
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts");
     }
@@ -7842,9 +7842,48 @@ new_config (credentials_t *credentials, params_t *params,
               const char *extra_xml)
 {
   GString *xml;
+  int ret;
+  entity_t entity = NULL;
+  gchar *response = NULL;
+
   xml = g_string_new ("<new_config>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  /* Get Scanners. */
+  ret = omp (credentials, &response, &entity, "<get_scanners/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting scanners"
+                             " for new config. Diagnostics: Failure to send"
+                             " command to manager daemon.",
+                             "/omp?cmd=get_configs");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting scanners"
+                             " for new config. " "Diagnostics: Failure to"
+                             " receive response from manager daemon.",
+                             "/omp?cmd=get_configs");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting scanners"
+                             "for new config. It is unclear whether the config"
+                             " has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_configs");
+    }
+  g_string_append (xml, response);
+  g_free (response);
+  free_entity (entity);
+
   g_string_append (xml, "</new_config>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -7875,19 +7914,23 @@ char *
 create_config_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response;
-  const char *name, *comment, *base;
+  const char *name, *comment, *base, *scanner = NULL;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
 
-  if (name == NULL || comment == NULL || base == NULL)
-    return new_config (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Scan Config"));
+  CHECK_PARAM (name, "New Config", new_config);
+  CHECK_PARAM (comment, "New Config", new_config);
+  CHECK_PARAM (base, "New Config", new_config);
+  if (!strcmp (base, "0"))
+    {
+      scanner = params_value (params, "scanner_id");
+      CHECK_PARAM (scanner, "New Config", new_config);
+    }
 
   /* Create the config. */
-
   switch (ompf (credentials,
                 &response,
                 &entity,
@@ -7895,10 +7938,10 @@ create_config_omp (credentials_t * credentials, params_t *params)
                 "<name>%s</name>"
                 "<copy>%s</copy>"
                 "<comment>%s</comment>"
+                "<scanner>%s</scanner>"
                 "</create_config>",
-                name,
-                base ? base : "empty",
-                comment ? comment : ""))
+                name, base, comment,
+                scanner ?: ""))
     {
       case 0:
       case -1:

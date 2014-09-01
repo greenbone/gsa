@@ -11308,6 +11308,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </label>
                   </td>
                 </tr>
+                <tr>
+                  <td colspan="2">
+                    <label>
+                      <input type="radio" name="base" value="0"/>
+                      <select name="scanner_id">
+                        <xsl:for-each select="get_scanners_response/scanner[type != '2']">
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:for-each>
+                      </select>
+                    </label>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>

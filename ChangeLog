@@ -1,5 +1,15 @@
 2014-09-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (new_config): Query the list of scanners.
+	(create_config_omp): Send uuid of scanner to create config from, when
+	base config value is 0.
+	(new_alert): Fix error message.
+
+	* src/html/classic/omp.xsl (html-create-config-from): Add choice list of
+	OSP scanners to create config from.
+
+2014-09-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (nvt): Add details mode to template, to
 	differentiate with info/nvt template.
 	(nvt-details): Fix template name. Correctly call nvt template.
