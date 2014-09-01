@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/d3.tip.min.js"></script>
   <script src="/js/gsa_graphics_base.js"></script>
   <script src="/js/gsa_bar_chart.js"></script>
+  <script src="/js/gsa_bubble_chart.js"></script>
   <script src="/js/gsa_donut_chart.js"></script>
   <script type="text/javascript">
     var gsa_token = "<xsl:value-of select="/envelope/token"/>";
@@ -105,6 +106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         {xml:1,
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"<xsl:value-of select="$group_column"/>",
+                         data_column:"<xsl:value-of select="$data_column"/>",
                          filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>"});
           </xsl:otherwise>
         </xsl:choose>
@@ -176,6 +178,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      ")",
                      "count")
       </xsl:when>
+      <xsl:when test="$chart_type = 'bubbles'">
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Total: ')"/>",
+                     ")",
+                     "size_value")
+      </xsl:when>
       <xsl:otherwise>
         title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Loading...)')"/>",
                      "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Total: ')"/>",
@@ -190,6 +198,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$chart_type = 'donut'">
       generators ["<xsl:value-of select="$generator_name"/>"]
         = DonutChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:when>
+    <xsl:when test="$chart_type = 'bubbles'">
+      generators ["<xsl:value-of select="$generator_name"/>"]
+        = BubbleChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:otherwise>
@@ -354,6 +367,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="chart_type" select="'donut'"/>
       <xsl:with-param name="chart_template" select="'info_by_class'"/>
     </xsl:call-template>
+
+    <xsl:if test="$type = 'nvt'">
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'family'"/>
+        <xsl:with-param name="data_column" select="'severity'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-nvt-by-family'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'family'"/>
+        <xsl:with-param name="data_column" select="'severity'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-nvt-by-family'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'family'"/>
+        <xsl:with-param name="data_column" select="'severity'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+    </xsl:if>
 
     <xsl:if test="$type = 'ovaldef'">
       <xsl:call-template name="js-aggregate-data-source">
@@ -551,6 +596,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="chart_template" select="'info_by_class'"/>
               <xsl:with-param name="auto_load" select="0"/>
               <xsl:with-param name="create_data_source" select="0"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_bubble_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_families_src')"/>
+              <xsl:with-param name="aggregate_type" select="'nvt'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'bubbles'"/>
+              <xsl:with-param name="group_column" select="'family'"/>
+              <xsl:with-param name="data_column" select="'severity'"/>
+              <xsl:with-param name="chart_template" select="''"/>
+              <xsl:with-param name="auto_load" select="0"/>
+              <xsl:with-param name="create_data_source" select="1"/>
             </xsl:call-template>
 
             <xsl:call-template name="js-aggregate-chart">

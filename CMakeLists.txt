@@ -322,6 +322,7 @@ install (FILES src/html/classic/favicon.gif
 install (FILES src/html/classic/js/d3.tip.min.js
                src/html/classic/js/d3.v3.min.js
                src/html/classic/js/gsa_bar_chart.js
+               src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_donut_chart.js
                src/html/classic/js/gsa_graphics_base.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)

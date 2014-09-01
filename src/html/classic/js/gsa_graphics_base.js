@@ -874,6 +874,23 @@ function wrap_text (text_selection, width)
     });
 }
 
+/*
+ * Color scales
+ */
+severity_colors_gradient = function ()
+{
+  return d3.scale.linear()
+            .domain([-1.0,
+                      0.0,
+                      severity_levels.max_low,
+                      severity_levels.max_medium,
+                      10.0])
+            .range([d3.rgb ("grey"),
+                    d3.rgb ("silver"),
+                    d3.rgb ("skyblue"),
+                    d3.rgb ("orange"),
+                    d3.rgb ("red")]);
+}
 
 /*
  * Data export helpers

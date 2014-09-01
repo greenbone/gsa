@@ -1,3 +1,22 @@
+2014-09-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add "NVTs by family" bubble charts.
+
+	* CMakeLists.txt: Install src/html/classic/js/gsa_bubble_chart.js.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Add
+	gsa_bubble_chart.js.
+	(js-aggregate-data-source): Add data_column parameter for generic
+	DataSource.
+	(js-aggregate-chart): Add chart type option "bubbles".
+	(js-secinfo-top-visualization, dashboard [secinfo]): Add bubble charts
+	"NVTs by family".
+
+	* src/html/classic/js/gsa_bubble_chart.js: New JavaScript file.
+
+	* src/html/classic/js/gsa_graphics_base.js (severity_colors_gradient):
+	New function.
+
 2014-08-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post release version bump.
