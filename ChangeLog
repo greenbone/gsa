@@ -1,3 +1,23 @@
+2014-09-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt, doc/gsad.8.xml, src/CMakeLists.txt, src/gsad_base.c,
+	src/gsad_base.h, src/gsad.c, src/gsad_omp.c, src/gsad_omp.h,
+	src/tracef.h, src/validator.c, src/validator.h,
+	src/html/classic/graphics.xsl, src/html/classic/gsad.xsl,
+	src/html/classic/gsa-style.css, src/html/classic/help_de.xsl,
+	src/html/classic/help.xsl, src/html/classic/help_zh.xsl,
+	src/html/classic/omp-doc.xsl, src/html/classic/omp.xsl,
+	src/html/classic/os.xml, src/html/classic/po/de.xml,
+	src/html/classic/po/zh.xml, src/html/classic/rnc.xsl,
+	src/html/classic/wizard.xsl, src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_graphics_base.js, src/html/its/CMakeLists.txt,
+	src/html/its/gsad.xsl, src/html/its/gsa-style.css,
+	src/html/its/help.xsl, src/html/its/omp.xsl,
+	tools/generate-cpe-icon-dict.sh: Ensure the GPLv2+ license notice uses
+	the paragraph suggested by the Free Software Foundation.
+
 2014-09-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_config): Query the list of scanners.
