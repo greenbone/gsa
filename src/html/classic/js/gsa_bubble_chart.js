@@ -48,6 +48,7 @@ function BubbleChartGenerator ()
   var x_field = "value";
   var y_field = "count";
   var color_field = "mean";
+  var data_column = "severity";
 
   var csv_data;
   var csv_blob;
@@ -59,8 +60,15 @@ function BubbleChartGenerator ()
 
   var tooltip_func = function (d)
     {
+      var color_value;
+
+      if (data_column == "severity")
+        color_value = d.color_value.toFixed (1);
+      else
+        color_value = d.color_value;
+
       return d.label_value + ": " + d.size_value + " ("
-               + color_label + ": " + d.color_value + ")";
+               + color_label + ": " + color_value + ")";
     }
 
   my.height = function ()
@@ -152,8 +160,9 @@ function BubbleChartGenerator ()
       switch (data_src.command ())
         {
           case "get_aggregate":
+            data_column = data_src.param ("data_column")
             color_label = (color_field == "mean" ? "average" : color_field)
-                          + " " + data_src.param ("data_column")
+                          + " " + data_column;
             records = extract_simple_records (xml_data,
                                               "aggregate group");
             data = data_transform (records, x_field, y_field, color_field);
@@ -186,25 +195,31 @@ function BubbleChartGenerator ()
           .padding(1.5);
 
       var nodes = bubbles.nodes({children: data})
-                        .filter (function(d) { return !d.children; });
+                        .filter (function(d) { return d.depth != 0; });
 
       svg.selectAll(".node")
             .data(nodes)
               .enter()
                 .call (BubbleChartGenerator.create_bubble)
 
+      // Remove unused bubbles
+      svg.selectAll(".node")
+            .data (nodes)
+              .exit ()
+                .remove ()
+
       // Update bubbles
       svg.selectAll(".node")
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-          .select ("circle")
-            .attr ("r", function(d) { return d.r })
-            .attr ("title", tooltip_func)
-            .style ("fill", function(d) { return color_scale (d.color_value) })
+          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+            .select ("circle")
+              .attr ("r", function(d) { return d.r })
+              .attr ("title", tooltip_func)
+              .style ("fill", function(d) { return color_scale (d.color_value) })
 
-      svg.selectAll(".node")
-        .select ("text")
-          .attr ("title", tooltip_func)
-          .text(function(d) { return d.label_value.substring(0, d.r / 3); });
+        svg.selectAll(".node")
+          .select ("text")
+            .attr ("title", tooltip_func)
+            .text(function(d) { return d.label_value.substring(0, d.r / 3); });
 
       // Create detach menu item
       display.create_or_get_menu_item ("detach")
