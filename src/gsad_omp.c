@@ -1075,6 +1075,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gchar *html, *request, *built_filter;
   const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
   const char *replace_task_id, *charts;
+  const char *overrides, *autofp, *autofp_value;
 
   filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
@@ -1083,6 +1084,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   replace_task_id = params_value (params, "replace_task_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
+  overrides = params_value (params, "overrides");
+  autofp = params_value (params, "autofp");
+  autofp_value = params_value (params, "autofp_value");
 
   charts = params_value (params, "charts");
 
@@ -1135,16 +1139,22 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               gchar *task;
               const char *search_phrase, *task_id;
 
-              if (strcmp (type, "task"))
-                task = NULL;
-              else
+              if (strcmp (type, "task") == 0)
                 {
-                  const char *overrides;
-                  overrides = params_value (params, "overrides");
                   task = g_strdup_printf ("apply_overrides=%i ",
                                           overrides
                                           && strcmp (overrides, "0"));
                 }
+              else if (strcmp (type, "result") == 0)
+                {
+                  task = g_strdup_printf ("apply_overrides=%i autofp=%s ",
+                                          (overrides
+                                           && strcmp (overrides, "0")),
+                                          (autofp && autofp_value)
+                                            ? autofp_value : "0");
+                }
+              else
+                task = NULL;
 
               search_phrase = params_value (params, "search_phrase");
               task_id = params_value (params, "task_id");
@@ -1198,6 +1208,18 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               else
                 filter = "apply_overrides=1 rows=-2"
                          " permission=any owner=any sort-reverse=date";
+            }
+          else if (strcmp (type, "result") == 0)
+            {
+              built_filter
+                = g_strdup_printf("apply_overrides=%d autofp=%s rows=-2"
+                                  " permission=any owner=any"
+                                  " sort-reverse=created",
+                                  (overrides == NULL
+                                   || strcmp (overrides, "0")),
+                                  (autofp && strcmp (autofp, "0"))
+                                    ? autofp_value
+                                    : "0");
             }
           else if (strcmp (type, "task"))
             filter = "rows=-2 permission=any owner=any";
@@ -11016,6 +11038,13 @@ char *
 get_results (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
+  const char *overrides;
+  overrides = params_value (params, "overrides");
+
+  if (overrides)
+    /* User toggled overrides.  Set the overrides value in the filter. */
+    params_toggle_overrides (params, overrides);
+
   return get_many ("result", credentials, params, extra_xml, NULL);
 }
 

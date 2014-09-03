@@ -886,7 +886,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-rest">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id'][column != '']">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id'][column != '']">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -1065,6 +1065,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>
               </label>
+            </div>
+          </xsl:if>
+          <xsl:if test="filters/keywords/keyword[column='autofp_value']">
+            <div style="padding: 2px;">
+              <xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:
+              <div style="margin-left: 30px">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
+                      <input type="checkbox" name="autofp" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="autofp" value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
+                </label>
+                <div style="margin-left: 30px">
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                        <input type="radio" name="autofp_value" value="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="autofp_value" value="1" checked="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
+                  </label>
+                  <br/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                        <input type="radio" name="autofp_value" value="2" checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="autofp_value" value="2"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
+                  </label>
+                </div>
+              </div>
             </div>
           </xsl:if>
           <xsl:if test="filters/keywords/keyword[column='first']">
@@ -25003,6 +25046,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Severity</name>
+        <html>
+          <before>
+            <div style="float: right; display: inline">
+              <form method="get" action="">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_results"/>
+                <input type="hidden" name="filter" value="{filters/term}"/>
+                <input type="hidden"
+                       name="refresh_interval"
+                       value="{/envelope/autorefresh/@interval}"/>
+                <xsl:choose>
+                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="image"
+                           name="No Overrides"
+                           src="/img/overrides_disabled.png"
+                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                           value="No Overrides"
+                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="overrides" value="0"/>
+                    <input type="image"
+                           name="Overrides are Applied"
+                           src="/img/overrides_enabled.png"
+                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                           value="Overrides are Applied"
+                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                           style="margin-left:3px;margin-right:3px;"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </form>
+            </div>
+          </before>
+        </html>
       </column>
       <column>
         <name>Host</name>

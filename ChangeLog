@@ -1,3 +1,15 @@
+2014-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add autofp and override controls to results list page.
+
+	* src/gsad_omp.c (get_many): Add apply_overrides and autofp keywords
+	for results.
+	(get_results): Add function call for toggling overrides.
+
+	* src/html/classic/omp.xsl (filter-rest): Skip the keyword "autofp".
+	(filter-window-part): Add autofp selection.
+	(html-results-table): Add overrides toggle button to severity column.
+
 2014-09-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Make license of CMakeLists.txt files consistent.
