@@ -24534,6 +24534,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
 
+      <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'affected')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'affected') != 'N/A'">
+        <div class="result_section">
+          <b><xsl:value-of select="gsa:i18n ('Affected Software/OS', 'Result Window')"/></b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'affected')"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
+
       <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'insight')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
         <div class="result_section">
           <b><xsl:value-of select="gsa:i18n ('Vulnerability Insight', 'Result Window')"/></b>

@@ -2389,6 +2389,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Ergebnis zur Schwachstellenerkennung</str>
     </msg>
     <msg>
+      <id>Affected Software/OS</id>
+      <str>Betroffene Software/OS</str>
+    </msg>
+    <msg>
       <id>Vulnerability Insight</id>
       <str>Schwachstellen-Einblick</str>
     </msg>
