@@ -1,5 +1,10 @@
 2014-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_nvts): Use "details" mode when
+	applying templates to the NVT.
+
+2014-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add autofp and override controls to results list page.
 
 	* src/gsad_omp.c (get_many): Add apply_overrides and autofp keywords

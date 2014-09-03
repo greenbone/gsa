@@ -18228,7 +18228,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="gb_window_part_content">
           <xsl:apply-templates
-            select="commands_response/get_nvts_response/nvt"/>
+            select="commands_response/get_nvts_response/nvt" mode="details"/>
           <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
           <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
             <xsl:call-template name="preferences-details">
