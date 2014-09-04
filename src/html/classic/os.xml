@@ -396,11 +396,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:ibm:aix</pattern><title>IBM AIX</title><icon>os_aix.png</icon>
     </operating_system>
     <operating_system>
-        <pattern>cpe:/o:cisco:ios</pattern><title>Cisco IOS</title><icon>os_cisco.png</icon>
+        <pattern>cpe:/o:cisco:nx-os</pattern><title>Cisco NX-OS</title><icon>os_cisco.png</icon>
+    </operating_system> 
+    <operating_system>
+        <pattern>cpe:/o:cisco:ios_xr</pattern><title>Cisco IOS XR</title><icon>os_cisco.png</icon>
     </operating_system>
     <operating_system>
-        <pattern>cpe:/o:cisco:nx-os</pattern><title>Cisco NX-OS</title><icon>os_cisco.png</icon>
-    </operating_system>    
+        <pattern>cpe:/o:cisco:ios</pattern><title>Cisco IOS</title><icon>os_cisco.png</icon>
+    </operating_system>
     <operating_system>
         <pattern>cpe:/o:juniper</pattern><title>Juniper</title><icon>os_junos.png</icon>
     </operating_system>
