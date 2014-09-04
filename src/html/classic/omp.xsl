@@ -18307,7 +18307,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note Window')"/></b></td>
                 <td>
-                  <xsl:variable name="nvt" select="get_results_response/results/result/nvt"/>
+                  <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
                   <xsl:variable name="max" select="70"/>
                   <xsl:choose>
                     <xsl:when test="$nvt/@oid = 0">
@@ -18550,7 +18550,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Note Window')"/>
           </h3>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-            <xsl:for-each select="get_results_response/results/result">
+            <xsl:for-each select="get_results_response/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
@@ -19330,7 +19330,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Override Window')"/></b></td>
                 <td>
-                  <xsl:variable name="nvt" select="get_results_response/results/result/nvt"/>
+                  <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
                   <xsl:variable name="max" select="70"/>
                   <xsl:choose>
                     <xsl:when test="$nvt/@oid = 0">
@@ -19593,7 +19593,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Override Window')"/>
           </h3>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-            <xsl:for-each select="get_results_response/results/result">
+            <xsl:for-each select="get_results_response/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -24897,7 +24897,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="html-results-table"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="results/result" mode="details"/>
+      <xsl:apply-templates select="result" mode="details"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -25037,8 +25037,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="type" select="'result'"/>
     <xsl:with-param name="cap-type" select="'Result'"/>
     <xsl:with-param name="resources-summary" select="results"/>
-    <xsl:with-param name="resources" select="results/result"/>
-    <xsl:with-param name="count" select="count (results/result)"/>
+    <xsl:with-param name="resources" select="result"/>
+    <xsl:with-param name="count" select="count (result)"/>
     <xsl:with-param name="filtered-count" select="result_count/filtered"/>
     <xsl:with-param name="full-count" select="result_count/text()"/>
     <xsl:with-param name="top-visualization">

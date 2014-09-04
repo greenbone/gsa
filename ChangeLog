@@ -1,3 +1,10 @@
+2014-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-note-form)
+	(html-create-override-form, get_results_response, html-results-table):
+	Change location of result elements from a results element inside the
+	get_results_response element to directly inside get_results_response.
+
 2014-09-04 Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/classic/os.xml:
