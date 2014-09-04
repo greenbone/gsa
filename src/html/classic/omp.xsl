@@ -11715,7 +11715,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type='file' and string-length(value) &gt; 0">
           <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
         </xsl:when>
-        <xsl:when test="type='ovaldi_file'">Files list.</xsl:when>
+        <xsl:when test="type='osp_ovaldi_file'">Files list.</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
         </xsl:otherwise>
@@ -11747,10 +11747,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
     <td><xsl:value-of select="name"/></td>
     <td>
-      <!-- TODO: Is name enough to make the preference unique, or is
-           type required too? -->
       <xsl:choose>
-        <xsl:when test="type='ovaldi_file'">
+
+        <!-- OSP config types. -->
+        <xsl:when test="type='osp_ovaldi_file'">
           <xsl:variable name="value">
             <xsl:value-of select="value"/>
           </xsl:variable>
@@ -11763,6 +11763,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
           </select>
         </xsl:when>
+        <xsl:when test="type='osp_integer'">
+          <input type="text" name="{name}"
+                 value="{value}" size="30" maxlength="400"/>
+        </xsl:when>
+
+        <!-- Classic config types. -->
         <xsl:when test="type='checkbox'">
           <xsl:choose>
             <xsl:when test="value='yes'">
@@ -11888,7 +11894,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="type='ovaldi_file'">
+        <xsl:when test="type='osp_ovaldi_file'">
           <xsl:value-of select="value"/>
         </xsl:when>
         <xsl:otherwise>

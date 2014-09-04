@@ -1,3 +1,9 @@
+2014-09-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (preferences [details])
+	(preference [edit-details]): Rename ovaldi_file to osp_ovaldi_file.
+	Handle osp_integer preference type.
+
 2014-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-note-form)
