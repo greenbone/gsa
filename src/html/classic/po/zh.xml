@@ -2368,6 +2368,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>漏洞检测结果</str>
     </msg>
     <msg>
+      <id>Affected Software/OS</id>
+      <str>影响的软件/操作系统</str>
+    </msg>
+    <msg>
       <id>Vulnerability Insight</id>
       <str>漏洞察看</str>
     </msg>
