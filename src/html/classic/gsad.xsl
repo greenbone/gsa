@@ -1482,6 +1482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Results', 'Result')"/></name>
           </item>
         </xsl:if>
+        <divider/>
         <xsl:if test="gsa:may-op ('GET_NOTES')">
           <item>
             <page>get_notes</page>
@@ -1518,24 +1519,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li class="pointy"></li>
             <xsl:for-each select="exslt:node-set ($items)/*">
               <xsl:if test="name (.) = 'item'">
+                <xsl:variable name="divider">
+                  <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
+                    <xsl:text>section_start</xsl:text>
+                  </xsl:if>
+                </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="position() = last() and boolean (filter)">
-                    <li class="last {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="position() = last()">
-                    <li class="last {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="string-length (class) &gt; 0 and boolean (filter)">
-                    <li class="{class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="string-length (class) &gt; 0">
-                    <li class="{class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="boolean (filter)">
-                    <li><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="{$divider}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:otherwise>
-                    <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                    <li class="{$divider}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:if>
@@ -1593,7 +1599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'Info')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'Info')"/></a></li>
-            <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
+            <li class="section_start last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
           </ul>
         </xsl:when>
         <xsl:otherwise>
@@ -1797,6 +1803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></name>
           </item>
         </xsl:if>
+        <divider/>
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED')">
           <item>
             <page>get_feed</page>
@@ -1838,12 +1845,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li class="pointy"></li>
             <xsl:for-each select="exslt:node-set ($items)/item">
+              <xsl:variable name="divider">
+                <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
+                  <xsl:text>section_start</xsl:text>
+                </xsl:if>
+              </xsl:variable>
               <xsl:choose>
                 <xsl:when test="position() = last()">
-                  <li class="last"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                  <li class="{$divider} last"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                 </xsl:when>
                 <xsl:otherwise>
-                  <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
+                  <li class="{$divider}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
