@@ -24388,13 +24388,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
@@ -24420,13 +24420,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
