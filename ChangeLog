@@ -1,5 +1,11 @@
 2014-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (contents.html): Add link to Results page.
+	(glossary.html): Add section "Result".
+	(results.html): New template.
+
+2014-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (result [result-headers]): Fix report and
 	task related parameters and add missing ones for "Add Note" and
 	"Add Override" buttons.
