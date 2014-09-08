@@ -81,6 +81,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="boolean ($capabilities/command[gsa:lower-case (name) = gsa:lower-case ($name)])"/>
 </func:function>
 
+<func:function name="gsa:may-clone">
+  <xsl:param name="type"/>
+  <xsl:param name="owner" select="owner"/>
+  <func:result select="gsa:may-op (concat ('create_', $type)) and ($owner/name = /envelope/login/text() or (string-length ($owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))"/>
+</func:function>
+
 <func:function name="gsa:may-get-trash">
   <func:result select="boolean ($capabilities/command[substring (gsa:lower-case (name), 1, 4) = 'get_' and gsa:lower-case (name) != 'get_version' and gsa:lower-case (name) != 'get_info' and gsa:lower-case (name) != 'get_nvts' and gsa:lower-case (name) != 'get_system_reports'  and gsa:lower-case (name) != 'get_settings'])"/>
 </func:function>
@@ -1369,7 +1375,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' must be owned or global', 'Table Row')}"
            style="margin-left:3px;"/>
     </xsl:when>
-    <xsl:when test="gsa:may-op (concat ('create_', $type)) and (owner/name = /envelope/login/text() or (string-length (owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))">
+    <xsl:when test="gsa:may-clone ($type)">
       <div style="display: inline">
         <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -4244,6 +4250,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
   <xsl:param name="nonew"/>
+  <xsl:param name="noclone" select="$nonew"/>
   <xsl:param name="noexport"/>
   <xsl:param name="filter" select="/envelope/params/filter"/>
   <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
@@ -4259,6 +4266,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
+    </xsl:when>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noclone"/>
+    <xsl:when test="gsa:may-clone ($type, owner)">
+      <xsl:choose>
+        <xsl:when test="writable='0' and $type='permission'">
+          <img src="/img/clone_inactive.png"
+               alt="{gsa:i18n ('Clone', 'Table Row')}"
+               value="Clone"
+               title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' must be owned or global', 'Table Row')}"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="cmd" value="clone"/>
+            <input type="hidden" name="resource_type" value="{$type}"/>
+            <input type="hidden" name="next" value="get_{$type}"/>
+            <input type="hidden" name="id" value="{@id}"/>
+            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
+                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
+          </form>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
   </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
