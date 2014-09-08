@@ -1,5 +1,13 @@
 2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [section-list]): Add new item
+	"Results view" linking to the get_results table.
+
+	* src/html/classic/po/de.xml: Add new message "Results view" to
+	context "Report Section".
+
+2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (assets): Automatically submit overrides
 	dropdown selection.
 	(section-filter): Auto-submit filter dropdown selection.

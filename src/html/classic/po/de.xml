@@ -2153,6 +2153,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Bericht: Fehlermeldungen</str>
     </msg>
     <msg>
+      <id>Results view</id>
+      <str>Ergebnisansicht</str>
+    </msg>
+    <msg>
       <id>Task: Details</id>
       <str>Aufgabe: Details</str>
     </msg>
