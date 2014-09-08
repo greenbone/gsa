@@ -356,7 +356,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
             }
 
           if (param->value && param->valid && param->valid_utf8
-              && strcmp (name, "xml_file"))
+              && strcmp (name, "xml_file") && strcmp (name, "installer"))
             xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
         }
     }
