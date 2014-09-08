@@ -80,6 +80,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     New <xsl:value-of select="$name"/></a> page.
   </p>
 
+  <h4>Clone</h4>
+  <p>
+    To clone a <xsl:value-of select="$name"/> click the clone icon
+    <img src="/img/clone.png" alt="Clone" title="Clone"/>
+    which goes to the details page of the clone.
+  </p>
+
   <h4><xsl:value-of select="$name"/>s</h4>
   <p>
     Pressing the list icon

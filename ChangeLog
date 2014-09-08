@@ -1,3 +1,15 @@
+2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add clone icon to details pages.
+
+	* src/html/classic/help.xsl (details-window-line-actions): Add section
+	on clone icon.
+
+	* src/html/classic/omp.xsl (gsa:may-clone): New function.
+	(list-window-line-icons): Use new gsa:may-clone function to check if
+	current user may clone the resource.
+	(details-header-icons): Add clone icon.
+
 2014-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (details-header-icons): Use gsa:may for New
