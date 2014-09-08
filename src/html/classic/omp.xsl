@@ -4254,7 +4254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
   <xsl:choose>
     <xsl:when test="$nonew"/>
-    <xsl:when test="gsa:may (concat ('create_', $type))">
+    <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>

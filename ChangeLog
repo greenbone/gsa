@@ -1,3 +1,10 @@
+2014-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r20296.
+
+	* src/html/classic/omp.xsl (details-header-icons): Use gsa:may for New
+	icon because gsa:may-op checks resource permissions.
+
 2014-09-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backport r20257 by Michael Meyer.
