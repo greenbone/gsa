@@ -1,5 +1,10 @@
 2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-pager): Only activate the
+	previous page button if the max rows parameter is > 0.
+
+2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [section-list]): Add new item
 	"Results view" linking to the get_results table.
 
