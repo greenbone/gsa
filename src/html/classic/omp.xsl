@@ -2462,7 +2462,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png" border="0"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get">
+        <form action="" method="get" name="switch_overrides">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
@@ -2472,7 +2472,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                this could lead to changes in the number of hosts in the table. -->
           <input type="hidden" name="first_result" value="1"/>
           <input type="hidden" name="max_results" value="{report/hosts/@max}"/>
-          <select style="margin-bottom: 0px;" name="overrides" size="1">
+          <select style="margin-bottom: 0px;" name="overrides" size="1" onchange="switch_overrides.submit ()">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
                 <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No overrides', 'Override Controls')"/></option>
@@ -25756,7 +25756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
           </div>
         </form>
-        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter">
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="cmd" value="get_report_section"/>
             <input type="hidden" name="report_id" value="{@id}"/>
@@ -25776,7 +25776,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:if test="@type='delta'">
               <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
             </xsl:if>
-            <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
+            <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
               <option value="">--</option>
               <xsl:variable name="id" select="filters/@id"/>
               <xsl:for-each select="../../../filters/get_filters_response/filter">
@@ -28541,11 +28541,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <div id="small_form" style="float:left;">
-                <form action="" method="get">
+                <form action="" method="get" name="switch_slave">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="get_system_reports"/>
                   <input type="hidden" name="duration" value="{$duration}"/>
-                  <select name="slave_id">
+                  <select name="slave_id" onchange="switch_slave.submit ()">
                     <xsl:variable name="slave_id">
                       <xsl:value-of select="../slave/@id"/>
                     </xsl:variable>

@@ -1,5 +1,12 @@
 2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (assets): Automatically submit overrides
+	dropdown selection.
+	(section-filter): Auto-submit filter dropdown selection.
+	(get_system_reports_response): Auto-submit slave dropdown selection.
+
+2014-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add clone icon to details pages.
 
 	* src/html/classic/help.xsl (details-window-line-actions): Add section
