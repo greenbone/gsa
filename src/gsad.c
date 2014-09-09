@@ -230,6 +230,7 @@ struct user
   time_t time;         ///< Login time.
   int charts;          ///< Whether to show charts for this user.
   GTree *chart_prefs;  ///< Chart preferences.
+  gchar *autorefresh; ///< Auto-Refresh interval
 };
 
 /**
@@ -262,7 +263,8 @@ static GMutex *mutex = NULL;
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning, GTree *chart_prefs)
+          const gchar *language, const gchar *pw_warning, GTree *chart_prefs,
+          const gchar *autorefresh)
 {
   user_t *user = NULL;
   int index;
@@ -296,6 +298,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
       g_tree_destroy (user->chart_prefs);
       user->chart_prefs = chart_prefs;
+      g_free (user->autorefresh);
+      user->autorefresh = g_strdup (autorefresh);
     }
   else
     {
@@ -311,6 +315,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->language = language ? g_strdup (language) : NULL;
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
       user->chart_prefs = chart_prefs;
+      user->autorefresh = g_strdup (autorefresh);
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -582,6 +587,36 @@ user_set_chart_pref (const gchar *name, gchar* pref_id, gchar *pref_value)
         {
           g_tree_replace (item->chart_prefs,
                           pref_id, pref_value);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Set default autorefresh interval of user.
+ *
+ * @param[in]   name         User name.
+ * @param[in]   autorefresh  Autorefresh interval.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_autorefresh (const gchar *name, const gchar *autorefresh)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->autorefresh);
+          item->autorefresh = g_strdup (autorefresh);
           ret = 0;
           break;
         }
@@ -1662,7 +1697,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         {
           int ret;
           gchar *timezone, *role, *capabilities, *severity, *language;
-          gchar *pw_warning;
+          gchar *pw_warning, *autorefresh;
           GTree *chart_prefs;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
@@ -1672,7 +1707,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                   &capabilities,
                                   &language,
                                   &pw_warning,
-                                  &chart_prefs);
+                                  &chart_prefs,
+                                  &autorefresh);
           if (ret)
             {
               time_t now;
@@ -1715,7 +1751,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                capabilities,
                                language,
                                pw_warning,
-                               chart_prefs);
+                               chart_prefs,
+                               autorefresh);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -1724,6 +1761,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (language);
               g_free (role);
               g_free (pw_warning);
+              g_free (autorefresh);
               return 1;
             }
         }
@@ -1905,6 +1943,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->charts = user->charts;
 
   credentials->chart_prefs = user->chart_prefs;
+
+  credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
+                                               : NULL;
 
   gettimeofday (&credentials->cmd_start, NULL);
 
@@ -3636,7 +3677,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           credentials->language = g_strdup (language ? language
                                                      : DEFAULT_GSAD_LANGUAGE);
         }
-
+      credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
+                                                   : NULL;
       sid = g_strdup (user->cookie);
 
       user_release (user);

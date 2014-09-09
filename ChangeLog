@@ -1,3 +1,28 @@
+2014-09-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make autorefresh interval a user setting that's automatically set
+	by the refresh_interval parameter (e.g. from dropdown selections).
+
+	* src/gsad_base.h (credentials_t): Add "autorefresh" field.
+	(user_set_autorefresh): New function prototype.
+
+	* src/gsad_omp.c (omp, ompf): New static function prototypes.
+	(xsl_transform_omp): Save refresh_interval parameter in user settings.
+	(authenticate_omp): Add autorefresh parameter and get "Auto-Refresh"
+	setting.
+
+	* src/gsad_omp.h (authenticate_omp): Add autorefresh parameter.
+	
+	* src/gsad.c (user): Add "autorefresh" field.
+	(user_add): Add autorefresh parameter and set the autorefresh field
+	of the user.
+	(user_set_autorefresh): New function.
+	(exec_omp_post, request_handler): Handle new autorefresh field of user
+	and set autorefresh interval attribute in response to user setting.
+
+	* src/html/classic/gsad.xsl (autorefresh): Add conditions for adding
+	the refresh metadata.
+
 2014-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp): Exclude installer from PARAMS, as

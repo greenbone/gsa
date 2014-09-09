@@ -78,6 +78,7 @@ typedef struct
   char *pw_warning;   ///< Password policy warning message
   int charts;         ///< Whether to show charts for this user.
   GTree *chart_prefs; ///< Chart preferences.
+  char *autorefresh;  ///< Auto-refresh interval.
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
@@ -166,5 +167,8 @@ gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
 
 /* temporary setting to show charts - defined in gsad.c */
 int user_set_charts (const gchar*, const int);
+
+/* default refresh interval setting */
+int user_set_autorefresh (const gchar*, const gchar*);
 
 #endif /* not _GSAD_BASE_H */
