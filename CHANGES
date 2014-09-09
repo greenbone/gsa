@@ -1,3 +1,33 @@
+gsa 5.0.3 (2014-09-09)
+
+This is the third maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes an issue which caused excessive OpenVAS Managers to be
+spawned when editing tags due to OMP miscommunication. It also makes the 'clone'
+action more easily available and adds the 'affected' tag to the NVT results, as
+well as addressing a number of smaller issues.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell and Timo Pollmeier.
+
+Main changes since 5.0.2:
+* An issue which caused stray openvasmd processes to be spawned when editing
+  tags has been fixed.
+* The 'clone' action is now available directly from the details pages.
+* The 'affected' NVT tag is now included in the results.
+* An issue which cause shared filters to be missing from some menus has been
+  fixed.
+* The "--listen" parameter is now applied to the redirect port as well.
+* An issue which cause the 'Alterable' state of tasks to be displayed
+  incorrectly has been fixed.
+* Selections in drop-down menus are now automatically submitted if JavaScript is
+  available.
+* Documentation has been updated.
+
+
 gsa 5.0.2 (2014-08-01)
 
 This is the second maintenance release of the Greenbone Security Assistant (GSA)
