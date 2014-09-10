@@ -1,5 +1,22 @@
 2014-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r20350.
+
+	Remember last filt_id on each list page for the current session.
+
+	* src/gsad_base.h (credentials_t): Add field last_filt_ids.
+
+	* src/gsad_omp.c (get_many, get_report): Save type specific filt_id in
+	current session data if it is given and retrieve it if neither filt_id
+	nor filter is given.
+
+	* src/gsad.c (user): Add field last_filt_ids.
+	(user_add): Create last_filt_ids.
+	(exec_omp_post, request_handler): Copy last_filt_id from user to
+	credentials.
+
+2014-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r20334.
 
 	Make autorefresh interval a user setting that's automatically set

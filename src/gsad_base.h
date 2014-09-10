@@ -75,6 +75,7 @@ typedef struct
   char *severity;     ///< Severity class.
   params_t *params;   ///< Request parameters.
   char *autorefresh;  ///< Auto-refresh interval.
+  GTree *last_filt_ids; ///< Last filter ids.
 } credentials_t;
 
 int gsad_base_init ();

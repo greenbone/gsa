@@ -1068,17 +1068,34 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   GString *type_many; /* The plural form of type */
   gnutls_session_t session;
   int socket;
-  gchar *html, *request, *built_filter;
-  const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
+  gchar *filter_type, *html, *request, *built_filter;
+  const char *given_filt_id, *filt_id, *filter;
+  const char *first, *max, *sort_field, *sort_order;
   const char *replace_task_id;
 
-  filt_id = params_value (params, "filt_id");
+  given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
   replace_task_id = params_value (params, "replace_task_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
+
+  if (strcasecmp (type, "info") == 0)
+    filter_type = g_strdup (params_value (params, "info_type"));
+  else
+    filter_type = g_strdup (type);
+
+  if (given_filt_id)
+    {
+      g_tree_replace (credentials->last_filt_ids, filter_type,
+                      g_strdup (given_filt_id));
+      filt_id = given_filt_id;
+    }
+  else if (filter == NULL || strcmp (filter, "") == 0)
+    filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
+  else
+    filt_id = NULL;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -9449,7 +9466,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
-  const char *filt_id, *filter, *apply_filter, *report_section;
+  const char *given_filt_id, *filt_id, *filter, *apply_filter, *report_section;
   const char *host_search_phrase, *host_levels;
   const char *host_first_result, *host_max_results;
   int ret;
@@ -9896,8 +9913,19 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                            "/omp?cmd=get_tasks");
     }
 
-  filt_id = params_value (params, "filt_id");
+  given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
+
+  if (params_given (params, "filt_id"))
+    {
+      g_tree_replace (credentials->last_filt_ids, g_strdup ("report_result"),
+                      g_strdup (given_filt_id));
+      filt_id = given_filt_id;
+    }
+  else if (filter == NULL || strcmp (filter, "") == 0)
+    filt_id = g_tree_lookup (credentials->last_filt_ids, "report_result");
+  else
+    filt_id = NULL;
 
   if (filter == NULL)
     filter = "";

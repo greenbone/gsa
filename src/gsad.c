@@ -228,6 +228,7 @@ struct user
   gchar *language;     ///< User Interface Language, in short form like "en".
   time_t time;         ///< Login time.
   gchar *autorefresh; ///< Auto-Refresh interval
+  GTree *last_filt_ids;///< Last used filter ids.
 };
 
 /**
@@ -290,6 +291,9 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_free (user->language);
       g_free (user->autorefresh);
       user->autorefresh = g_strdup (autorefresh);
+      g_tree_destroy (user->last_filt_ids);
+      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                             NULL, g_free, g_free);
     }
   else
     {
@@ -304,6 +308,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->capabilities = g_strdup (capabilities);
       user->language = language ? g_strdup (language) : NULL;
       user->autorefresh = g_strdup (autorefresh);
+      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                             NULL, g_free, g_free);
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -1834,6 +1840,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
                                                : NULL;
+
+  credentials->last_filt_ids = user->last_filt_ids;
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
@@ -3522,6 +3530,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
       credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
                                                    : NULL;
+
+      credentials->last_filt_ids = user->last_filt_ids;
+
       sid = g_strdup (user->cookie);
 
       user_release (user);
