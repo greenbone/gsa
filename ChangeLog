@@ -1,3 +1,19 @@
+2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add automatic login of a specified user via a special token, and a
+	"Login as a guest" link on the Login page.
+
+	* src/gsad.c (guest_username, guest_password): New variables.
+	(user_find): If the token is "guest" and --guest-username was given,
+	then login as the guest user.
+	(exec_omp_post, request_handler): Send guest username to XSL.  Handle
+	new user_find return.
+	(file_content_response): Send guest to XSL.
+	(main): Add --guest-username and --guest-password.
+
+	* src/html/classic/gsad.xsl (login_page): Display guest login link if
+	configured.
+
 2014-09-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (mhd_logger): Remove logger mutex locking as it is done in

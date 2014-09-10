@@ -208,6 +208,16 @@ int use_secure_cookie = 1;
 int session_timeout;
 
 /**
+ * @brief Guest username.
+ */
+gchar *guest_username = NULL;
+
+/**
+ * @brief Guest password.
+ */
+gchar *guest_password = NULL;
+
+/**
  * @brief User session data.
  */
 GPtrArray *users = NULL;
@@ -334,7 +344,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  * @param[out]  user_return  User.
  *
  * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
- *         3 bad/missing cookie, 4 bad/missing token.
+ *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed.
  */
 int
 user_find (const gchar *cookie, const gchar *token, user_t **user_return)
@@ -344,6 +354,50 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
   int index;
   if (token == NULL)
     return 4;
+
+  if (guest_username && token && (strcmp (token, "guest") == 0))
+    {
+      int ret;
+      gchar *timezone, *role, *capabilities, *severity, *language;
+      gchar *pw_warning, *autorefresh;
+      GTree *chart_prefs;
+      ret = authenticate_omp (guest_username,
+                              guest_password,
+                              &role,
+                              &timezone,
+                              &severity,
+                              &capabilities,
+                              &language,
+                              &pw_warning,
+                              &chart_prefs,
+                              &autorefresh);
+      if (ret)
+        return 5;
+      else
+        {
+          user_t *user;
+          user = user_add (guest_username,
+                           guest_password,
+                           timezone,
+                           severity,
+                           role,
+                           capabilities,
+                           language,
+                           pw_warning,
+                           chart_prefs,
+                           autorefresh);
+          *user_return = user;
+          g_free (timezone);
+          g_free (severity);
+          g_free (capabilities);
+          g_free (language);
+          g_free (role);
+          g_free (pw_warning);
+          g_free (autorefresh);
+          return 0;
+        }
+    }
+
   g_mutex_lock (mutex);
   for (index = 0; index < users->len; index++)
     {
@@ -1719,6 +1773,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
+              // FIX do via function
               xml = g_strdup_printf ("<login_page>"
                                      "<message>"
                                      "Login failed.%s"
@@ -1726,6 +1781,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "<i18n>%s</i18n>"
+                                     "<guest><username>%s</username></guest>"
                                      "</login_page>",
                                      ret == 2
                                       ? "  OMP service is down."
@@ -1735,7 +1791,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      ctime_now,
                                      con_info->language
                                       ? con_info->language
-                                      : DEFAULT_GSAD_LANGUAGE);
+                                      : DEFAULT_GSAD_LANGUAGE,
+                                     guest_username);
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
@@ -1786,10 +1843,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                  "<token></token>"
                                  "<time>%s</time>"
                                  "<i18n>%s</i18n>"
+                                 "<guest><username>%s</username></guest>"
                                  "</login_page>",
                                  ctime_now,
                                  con_info->language ? con_info->language
-                                                    : DEFAULT_GSAD_LANGUAGE);
+                                                    : DEFAULT_GSAD_LANGUAGE,
+                                 guest_username);
           res = xsl_transform (xml);
           g_free (xml);
           con_info->response = res;
@@ -1844,6 +1903,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->answercode = MHD_HTTP_OK;
       return 3;
     }
+  if (ret == 5)
+    {
+      con_info->response
+       = gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred inside GSA daemon. "
+                       "Diagnostics: Guest login failed.",
+                       "/omp?cmd=get_tasks");
+      con_info->answercode = MHD_HTTP_OK;
+      return 3;
+    }
 
   if (ret == 2)
     {
@@ -1866,6 +1936,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<time>%s</time>"
                                      "<url>%s</url>"
                                      "<i18n>%s</i18n>"
+                                     "<guest><username>%s</username></guest>"
                                      "</login_page>",
                                      ctime_now,
                                      caller
@@ -1873,7 +1944,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                       : "",
                                      con_info->language
                                       ? con_info->language
-                                      : DEFAULT_GSAD_LANGUAGE);
+                                      : DEFAULT_GSAD_LANGUAGE,
+                                     guest_username);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -1896,11 +1968,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "<token></token>"
                              "<time>%s</time>"
                              "<i18n>%s</i18n>"
+                             "<guest><username>%s</username></guest>"
                              "</login_page>",
                              ctime_now,
                              con_info->language
                               ? con_info->language
-                              : DEFAULT_GSAD_LANGUAGE);
+                              : DEFAULT_GSAD_LANGUAGE,
+                             guest_username);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -3159,11 +3233,13 @@ file_content_response (credentials_t *credentials,
                              "<token></token>"
                              "<time>%s</time>"
                              "<i18n>%s</i18n>"
+                             "<guest><username>%s</username></guest>"
                              "</login_page>",
                              ctime_now,
                              language
                               ? language
-                              : DEFAULT_GSAD_LANGUAGE);
+                              : DEFAULT_GSAD_LANGUAGE,
+                             guest_username);
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -3518,13 +3594,20 @@ request_handler (void *cls, struct MHD_Connection *connection,
         cookie = NULL;
 
       ret = user_find (cookie, token, &user);
-      if (ret == 1)
+      if (ret == 1 || ret == 5)
         {
-          res =  gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred inside GSA daemon. "
-                               "Diagnostics: Bad token.",
-                               "/omp?cmd=get_tasks");
+          if (ret == 1)
+            res =  gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred inside GSA daemon. "
+                                 "Diagnostics: Bad token.",
+                                 "/omp?cmd=get_tasks");
+          else
+            res =  gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred inside GSA daemon. "
+                                 "Diagnostics: Guest login failed.",
+                                 "/omp?cmd=get_tasks");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           free (res);
@@ -3574,6 +3657,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                   "<time>%s</time>"
                   "<url>%s</url>"
                   "<i18n>%s</i18n>"
+                  "<guest><username>%s</username></guest>"
                   "</login_page>",
                   ((ret == 2)
                     ? (strncmp (url, "/logout", strlen ("/logout"))
@@ -3587,7 +3671,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     && strncmp (url, "/logout", strlen ("/logout")))
                     ? full_url
                     : ""),
-                  language ? language : DEFAULT_GSAD_LANGUAGE);
+                  language ? language : DEFAULT_GSAD_LANGUAGE,
+                  guest_username);
           g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
@@ -3630,9 +3715,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  "<token></token>"
                                  "<time>%s</time>"
                                  "<i18n>%s</i18n>"
+                                 "<guest><username>%s</username></guest>"
                                  "</login_page>",
                                  ctime_now,
-                                 language ? language : DEFAULT_GSAD_LANGUAGE);
+                                 language ? language : DEFAULT_GSAD_LANGUAGE,
+                                 guest_username);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -4261,6 +4348,8 @@ main (int argc, char **argv)
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
   static gchar *face_name = NULL;
+  static gchar *guest_user = NULL;
+  static gchar *guest_pass = NULL;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -4325,6 +4414,12 @@ main (int argc, char **argv)
     {"face", 0,
      0, G_OPTION_ARG_STRING, &face_name,
      "Use interface files from subdirectory <dir>", "<dir>"},
+    {"guest-username", 0,
+     0, G_OPTION_ARG_STRING, &guest_user,
+     "Username for guest user.  Enables guest logins.", "<name>"},
+    {"guest-password", 0,
+     0, G_OPTION_ARG_STRING, &guest_pass,
+     "Password for guest user.  Defaults to guest username.", "<password>"},
     {NULL}
   };
 
@@ -4413,6 +4508,12 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
   session_timeout = timeout;
+
+  if (guest_user)
+    {
+      guest_username = guest_user;
+      guest_password = guest_pass ? guest_pass : guest_user;
+    }
 
   gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;
 

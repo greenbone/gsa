@@ -2111,6 +2111,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <br clear="all" />
           </form>
         </center>
+        <xsl:if test="string-length (guest/username) &gt; 0">
+          <div style="text-align: right">
+            <a href="/omp?token=guest">Login as a guest</a>
+          </div>
+        </xsl:if>
       </div>
     </div>
   </div>
