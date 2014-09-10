@@ -1,3 +1,11 @@
+014-09-10 Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/html/classic/img/os_cyclades.png:
+	New icon for cyclades.
+
+	* src/html/classic/os.xml:
+	Added cyclades.
+
 2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add automatic login of a specified user via a special token, and a
