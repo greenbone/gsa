@@ -1,5 +1,12 @@
 2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Default to dashboard in get_info case, to
+	match the first item in the SecInfo menu.
+
+	* src/gsad_omp.c (dashboard): Default dashboard name to SecInfo.
+
+2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Allow users to have multiple simultaneous sessions, as long as the
 	sessions are on different browsers.
 

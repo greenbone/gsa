@@ -2320,7 +2320,7 @@ exec_omp_get (struct MHD_Connection *connection,
         cmd = "get_reports";
       else if (credentials->capabilities
                && strcasestr (credentials->capabilities, "get_info"))
-        cmd = "get_info";
+        cmd = "dashboard";
       else if (credentials->capabilities
                && strcasestr (credentials->capabilities, "get_targets"))
         cmd = "get_targets";
