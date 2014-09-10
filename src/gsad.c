@@ -286,54 +286,26 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       item = (user_t*) g_ptr_array_index (users, index);
       if (strcmp (item->username, username) == 0)
         {
-          user = item;
-          break;
+          if (time (NULL) - item->time > (session_timeout * 60))
+            g_ptr_array_remove (users, (gpointer) item);
         }
     }
-  if (user)
-    {
-      free (user->token);
-      user->token = openvas_uuid_make ();
-      free (user->cookie);
-      user->cookie = openvas_uuid_make ();
-      g_free (user->password);
-      user->password = g_strdup (password);
-      g_free (user->role);
-      user->role = g_strdup (role);
-      g_free (user->timezone);
-      user->timezone = g_strdup (timezone);
-      g_free (user->capabilities);
-      user->capabilities = g_strdup (capabilities);
-      g_free (user->language);
-      g_free (user->pw_warning);
-      user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-      g_tree_destroy (user->chart_prefs);
-      user->chart_prefs = chart_prefs;
-      g_free (user->autorefresh);
-      user->autorefresh = g_strdup (autorefresh);
-      g_tree_destroy (user->last_filt_ids);
-      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                             NULL, g_free, g_free);
-    }
-  else
-    {
-      user = g_malloc (sizeof (user_t));
-      user->cookie = openvas_uuid_make ();
-      user->token = openvas_uuid_make ();
-      user->username = g_strdup (username);
-      user->password = g_strdup (password);
-      user->role = g_strdup (role);
-      user->timezone = g_strdup (timezone);
-      user->severity = g_strdup (severity);
-      user->capabilities = g_strdup (capabilities);
-      user->language = language ? g_strdup (language) : NULL;
-      user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-      user->chart_prefs = chart_prefs;
-      user->autorefresh = g_strdup (autorefresh);
-      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                             NULL, g_free, g_free);
-      g_ptr_array_add (users, (gpointer) user);
-    }
+  user = g_malloc (sizeof (user_t));
+  user->cookie = openvas_uuid_make ();
+  user->token = openvas_uuid_make ();
+  user->username = g_strdup (username);
+  user->password = g_strdup (password);
+  user->role = g_strdup (role);
+  user->timezone = g_strdup (timezone);
+  user->severity = g_strdup (severity);
+  user->capabilities = g_strdup (capabilities);
+  user->language = language ? g_strdup (language) : NULL;
+  user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
+  user->chart_prefs = chart_prefs;
+  user->autorefresh = g_strdup (autorefresh);
+  user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                         NULL, g_free, g_free);
+  g_ptr_array_add (users, (gpointer) user);
   set_language_code (&user->language, language);
   user->time = time (NULL);
   user->charts = 0;
@@ -341,7 +313,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
 }
 
 /**
- * @brief Add a user.
+ * @brief Find a user, given a token and cookie.
  *
  * If a user is returned, it's up to the caller to release the user.
  *
@@ -446,13 +418,13 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
 /**
  * @brief Set timezone of user.
  *
- * @param[in]   name      User name.
+ * @param[in]   token     User token.
  * @param[in]   timezone  Timezone.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_timezone (const gchar *name, const gchar *timezone)
+user_set_timezone (const gchar *token, const gchar *timezone)
 {
   int index, ret;
   ret = 1;
@@ -461,7 +433,7 @@ user_set_timezone (const gchar *name, const gchar *timezone)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->timezone);
           item->timezone = g_strdup (timezone);
@@ -476,13 +448,13 @@ user_set_timezone (const gchar *name, const gchar *timezone)
 /**
  * @brief Set password of user.
  *
- * @param[in]   name      User name.
+ * @param[in]   token     User token.
  * @param[in]   password  Password.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_password (const gchar *name, const gchar *password)
+user_set_password (const gchar *token, const gchar *password)
 {
   int index, ret;
   ret = 1;
@@ -491,7 +463,7 @@ user_set_password (const gchar *name, const gchar *password)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->password);
           g_free (item->pw_warning);
@@ -514,7 +486,7 @@ user_set_password (const gchar *name, const gchar *password)
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_severity (const gchar *name, const gchar *severity)
+user_set_severity (const gchar *token, const gchar *severity)
 {
   int index, ret;
   ret = 1;
@@ -523,7 +495,7 @@ user_set_severity (const gchar *name, const gchar *severity)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->severity);
           item->severity = g_strdup (severity);
@@ -538,13 +510,13 @@ user_set_severity (const gchar *name, const gchar *severity)
 /**
  * @brief Set language of user.
  *
- * @param[in]   name      User name.
+ * @param[in]   token     User token.
  * @param[in]   language  Language.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_language (const gchar *name, const gchar *language)
+user_set_language (const gchar *token, const gchar *language)
 {
   int index, ret;
   ret = 1;
@@ -553,7 +525,7 @@ user_set_language (const gchar *name, const gchar *language)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->language);
           set_language_code (&item->language, language);
@@ -568,13 +540,13 @@ user_set_language (const gchar *name, const gchar *language)
 /**
  * @brief Set language of user, given a code.
  *
- * @param[in]   name      User name.
+ * @param[in]   token     User token.
  * @param[in]   language  Language code.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_language_code (const gchar *name, const gchar *language)
+user_set_language_code (const gchar *token, const gchar *language)
 {
   int index, ret;
   ret = 1;
@@ -583,7 +555,7 @@ user_set_language_code (const gchar *name, const gchar *language)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->language);
           item->language = g_strdup (language);
@@ -598,13 +570,13 @@ user_set_language_code (const gchar *name, const gchar *language)
 /**
  * @brief Set charts setting of user.
  *
- * @param[in]   name      User name.
+ * @param[in]   token      User token.
  * @param[in]   charts    Whether to show charts.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_charts (const gchar *name, const int charts)
+user_set_charts (const gchar *token, const int charts)
 {
   int index, ret;
   ret = 1;
@@ -613,7 +585,7 @@ user_set_charts (const gchar *name, const int charts)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           item->charts = charts;
           ret = 0;
@@ -627,14 +599,14 @@ user_set_charts (const gchar *name, const int charts)
 /**
  * @brief Set a chart preference of a user.
  *
- * @param[in]   name        User name.
+ * @param[in]   token       User token.
  * @param[in]   pref_id     ID of the chart preference.
  * @param[in]   pref_value  Preference value to set.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_chart_pref (const gchar *name, gchar* pref_id, gchar *pref_value)
+user_set_chart_pref (const gchar *token, gchar* pref_id, gchar *pref_value)
 {
   int index, ret;
   ret = 1;
@@ -643,7 +615,7 @@ user_set_chart_pref (const gchar *name, gchar* pref_id, gchar *pref_value)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_tree_replace (item->chart_prefs,
                           pref_id, pref_value);
@@ -658,13 +630,13 @@ user_set_chart_pref (const gchar *name, gchar* pref_id, gchar *pref_value)
 /**
  * @brief Set default autorefresh interval of user.
  *
- * @param[in]   name         User name.
+ * @param[in]   token        User token.
  * @param[in]   autorefresh  Autorefresh interval.
  *
  * @return 0 ok, 1 failed to find user.
  */
 int
-user_set_autorefresh (const gchar *name, const gchar *autorefresh)
+user_set_autorefresh (const gchar *token, const gchar *autorefresh)
 {
   int index, ret;
   ret = 1;
@@ -673,7 +645,7 @@ user_set_autorefresh (const gchar *name, const gchar *autorefresh)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, name) == 0)
+      if (strcmp (item->token, token) == 0)
         {
           g_free (item->autorefresh);
           item->autorefresh = g_strdup (autorefresh);
@@ -709,7 +681,7 @@ user_remove (user_t *user)
 }
 
 /**
- * @brief Add a user.
+ * @brief Find a user, given a token.
  *
  * If a user is returned, it's up to the caller to release the user.
  *
@@ -2147,7 +2119,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                                       con_info->params,
                                                       &pref_id, &pref_value);
       if (pref_id && pref_value)
-        user_set_chart_pref (credentials->username, pref_id, pref_value);
+        user_set_chart_pref (credentials->token, pref_id, pref_value);
     }
   ELSE (save_config)
   ELSE (save_config_family)
@@ -2164,18 +2136,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                                  &severity, &language);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
-        user_set_timezone (credentials->username, timezone);
+        user_set_timezone (credentials->token, timezone);
       if (password)
         /* credentials->password set in save_my_settings_omp before XSLT. */
-        user_set_password (credentials->username, password);
+        user_set_password (credentials->token, password);
       if (severity)
         /* credentials->severity set in save_my_settings_omp before XSLT. */
-        user_set_severity (credentials->username, severity);
+        user_set_severity (credentials->token, severity);
       /* credentials->language is set in save_my_settings_omp before XSLT. */
       if (language)
-        user_set_language (credentials->username, language);
+        user_set_language (credentials->token, language);
       else
-        user_set_language_code (credentials->username, credentials->language);
+        user_set_language_code (credentials->token, credentials->language);
 
       g_free (timezone);
       g_free (password);
@@ -2202,7 +2174,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                           &password);
       if (password)
         /* credentials->password set in save_user_omp before XSLT. */
-        user_set_password (credentials->username, password);
+        user_set_password (credentials->token, password);
 
       g_free (password);
     }

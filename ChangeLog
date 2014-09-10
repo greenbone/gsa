@@ -1,3 +1,15 @@
+2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Allow users to have multiple simultaneous sessions, as long as the
+	sessions are on different browsers.
+
+	* src/gsad.c (user_add): Remove all previous users that have timed out.
+	Always add a new user.
+	(user_set_timezone, user_set_password, user_set_severity)
+	(user_set_language, user_set_language_code, user_set_charts)
+	(user_set_chart_pref, user_set_autorefresh): Change name arg to token.
+	(exec_omp_post): Set user prefs in session by token instead of by name.
+
 2014-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Remember last filt_id on each list page for the current session.
