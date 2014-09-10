@@ -241,6 +241,7 @@ struct user
   int charts;          ///< Whether to show charts for this user.
   GTree *chart_prefs;  ///< Chart preferences.
   gchar *autorefresh; ///< Auto-Refresh interval
+  GTree *last_filt_ids;///< Last used filter ids.
 };
 
 /**
@@ -310,6 +311,9 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->chart_prefs = chart_prefs;
       g_free (user->autorefresh);
       user->autorefresh = g_strdup (autorefresh);
+      g_tree_destroy (user->last_filt_ids);
+      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                             NULL, g_free, g_free);
     }
   else
     {
@@ -326,6 +330,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
       user->chart_prefs = chart_prefs;
       user->autorefresh = g_strdup (autorefresh);
+      user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
+                                             NULL, g_free, g_free);
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -2020,6 +2026,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
                                                : NULL;
+
+  credentials->last_filt_ids = user->last_filt_ids;
 
   gettimeofday (&credentials->cmd_start, NULL);
 
@@ -3766,6 +3774,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
       credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
                                                    : NULL;
+
+      credentials->last_filt_ids = user->last_filt_ids;
+
       sid = g_strdup (user->cookie);
 
       user_release (user);

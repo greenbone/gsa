@@ -79,6 +79,7 @@ typedef struct
   int charts;         ///< Whether to show charts for this user.
   GTree *chart_prefs; ///< Chart preferences.
   char *autorefresh;  ///< Auto-refresh interval.
+  GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
 } credentials_t;
 
