@@ -4206,32 +4206,14 @@ register_signal_handlers ()
   return 0;
 }
 
-/**
- * @brief Mutex for logging routine.
- */
-static GMutex *logger_mutex = NULL;
-
 static void
 mhd_logger (void *arg, const char *fmt, va_list ap)
 {
   char buf[1024];
 
-#if GLIB_CHECK_VERSION (2, 31, 0)
-  if (logger_mutex == NULL)
-    {
-      logger_mutex = g_malloc (sizeof (*logger_mutex));
-      g_mutex_init (logger_mutex);
-    }
-#else
-  if (logger_mutex == NULL)
-    logger_mutex = g_mutex_new ();
-#endif
-
   vsnprintf (buf, sizeof (buf), fmt, ap);
   va_end (ap);
-  g_mutex_lock(logger_mutex);
   g_warning ("MHD: %s", buf);
-  g_mutex_unlock(logger_mutex);
 }
 
 /**

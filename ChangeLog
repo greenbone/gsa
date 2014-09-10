@@ -1,3 +1,8 @@
+2014-09-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (mhd_logger): Remove logger mutex locking as it is done in
+	openvas_logging module now.
+
 2014-09-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Make autorefresh interval a user setting that's automatically set
@@ -12,7 +17,7 @@
 	setting.
 
 	* src/gsad_omp.h (authenticate_omp): Add autorefresh parameter.
-	
+
 	* src/gsad.c (user): Add "autorefresh" field.
 	(user_add): Add autorefresh parameter and set the autorefresh field
 	of the user.
