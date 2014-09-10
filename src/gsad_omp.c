@@ -91,6 +91,12 @@ int manager_port = 9390;
 
 /* Headers. */
 
+static int
+omp (credentials_t *, gchar **, entity_t *, const char *);
+
+static int
+ompf (credentials_t *, gchar **, entity_t *, const char *, ...);
+
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
 static char *edit_role (credentials_t *, params_t *, const char *);
@@ -269,10 +275,65 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
 
   refresh_interval = params_value (credentials->params, "refresh_interval");
   if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
-    g_string_append_printf (string, "<autorefresh interval=\"0\" />");
+    g_string_append_printf (string,
+                            "<autorefresh interval=\"%s\"/>",
+                            credentials->autorefresh);
   else
-    g_string_append_printf (string, "<autorefresh interval=\"%s\" />",
-                            refresh_interval);
+    {
+      int ret;
+      gchar *interval_64, *response;
+      entity_t entity;
+
+      interval_64 = (refresh_interval
+                     ? g_base64_encode ((guchar*) refresh_interval,
+                                        strlen (refresh_interval))
+                     : g_strdup (""));
+      ret = ompf (credentials, &response, &entity,
+                  "<modify_setting"
+                  " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
+                  "<value>%s</value>"
+                  "</modify_setting>",
+                  interval_64);
+      g_free (interval_64);
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while modifying the"
+                                " autorefresh setting for the settings. "
+                                "Diagnostics: Failure to send command to"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while modifying the"
+                                " autorefresh setting for the settings. "
+                                "Diagnostics: Failure to receive response from"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while modifying the"
+                                " autorefresh setting for the settings. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_my_settings");
+        }
+
+      free_entity (entity);
+      g_free (credentials->autorefresh);
+      credentials->autorefresh = g_strdup (refresh_interval);
+      user_set_autorefresh (credentials->username, refresh_interval);
+
+      g_string_append_printf (string,
+                              "<autorefresh interval=\"%s\"/>",
+                              credentials->autorefresh);
+    }
 
   g_string_append (string, "<params>");
   params_iterator_init (&iter, credentials->params);
@@ -19319,7 +19380,8 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
 int
 authenticate_omp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language)
+                  gchar **capabilities, gchar **language,
+                  gchar **autorefresh)
 {
   gnutls_session_t session;
   int socket;
@@ -19435,7 +19497,6 @@ authenticate_omp (const gchar * username, const gchar * password,
           openvas_server_close (socket, session);
           return 2;
         }
-      openvas_server_close (socket, session);
 
       /* Check the response. */
 
@@ -19452,11 +19513,76 @@ authenticate_omp (const gchar * username, const gchar * password,
       if (first == '2')
         {
           *capabilities = response;
-          return 0;
+        }
+      else
+        {
+          openvas_server_close (socket, session);
+          g_free (response);
+          return -1;
         }
 
-      g_free (response);
-      return -1;
+      /* Get autorefresh setting. */
+
+      ret = openvas_server_sendf
+             (&session,
+              "<get_settings"
+              " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\"/>");
+      if (ret)
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Read the response. */
+
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Check the response. */
+
+      status = entity_attribute (entity, "status");
+      if (status == NULL
+          || strlen (status) == 0)
+        {
+          g_free (response);
+          free_entity (entity);
+          return -1;
+        }
+      first = status[0];
+      if (first == '2')
+        {
+          entity_t setting;
+          setting = entity_child (entity, "setting");
+          if (setting == NULL)
+            {
+              free_entity (entity);
+              g_free (response);
+              return -1;
+            }
+          setting = entity_child (setting, "value");
+          if (setting == NULL)
+            {
+              free_entity (entity);
+              g_free (response);
+              return -1;
+            }
+          *autorefresh = g_strdup (entity_text (setting));
+          g_free (response);
+          free_entity (entity);
+        }
+      else
+        {
+          free_entity (entity);
+          g_free (response);
+          return -1;
+        }
+
+      openvas_server_close (socket, session);
+      return 0;
     }
   else
     {

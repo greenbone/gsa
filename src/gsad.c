@@ -227,6 +227,7 @@ struct user
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language, in short form like "en".
   time_t time;         ///< Login time.
+  gchar *autorefresh; ///< Auto-Refresh interval
 };
 
 /**
@@ -257,7 +258,7 @@ static GMutex *mutex = NULL;
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language)
+          const gchar *language, const gchar *autorefresh)
 {
   user_t *user = NULL;
   int index;
@@ -287,6 +288,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_free (user->capabilities);
       user->capabilities = g_strdup (capabilities);
       g_free (user->language);
+      g_free (user->autorefresh);
+      user->autorefresh = g_strdup (autorefresh);
     }
   else
     {
@@ -300,6 +303,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->severity = g_strdup (severity);
       user->capabilities = g_strdup (capabilities);
       user->language = language ? g_strdup (language) : NULL;
+      user->autorefresh = g_strdup (autorefresh);
       g_ptr_array_add (users, (gpointer) user);
     }
   set_language_code (&user->language, language);
@@ -508,6 +512,36 @@ user_set_language_code (const gchar *name, const gchar *language)
         {
           g_free (item->language);
           item->language = g_strdup (language);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Set default autorefresh interval of user.
+ *
+ * @param[in]   name         User name.
+ * @param[in]   autorefresh  Autorefresh interval.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_autorefresh (const gchar *name, const gchar *autorefresh)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->autorefresh);
+          item->autorefresh = g_strdup (autorefresh);
           ret = 0;
           break;
         }
@@ -1563,13 +1597,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         {
           int ret;
           gchar *timezone, *role, *capabilities, *severity, *language;
+          gchar *autorefresh;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
                                   &timezone,
                                   &severity,
                                   &capabilities,
-                                  &language);
+                                  &language,
+                                  &autorefresh);
           if (ret)
             {
               time_t now;
@@ -1610,7 +1646,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                severity,
                                role,
                                capabilities,
-                               language);
+                               language,
+                               autorefresh);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -1618,6 +1655,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (capabilities);
               g_free (language);
               g_free (role);
+              g_free (autorefresh);
               return 1;
             }
         }
@@ -1793,6 +1831,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            : g_strdup (con_info->language
                                         ? con_info->language
                                         : DEFAULT_GSAD_LANGUAGE);
+
+  credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
+                                               : NULL;
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
@@ -3479,7 +3520,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           credentials->language = g_strdup (language ? language
                                                      : DEFAULT_GSAD_LANGUAGE);
         }
-
+      credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
+                                                   : NULL;
       sid = g_strdup (user->cookie);
 
       user_release (user);

@@ -74,6 +74,7 @@ typedef struct
   char *language;     ///< Accept-Language browser header.
   char *severity;     ///< Severity class.
   params_t *params;   ///< Request parameters.
+  char *autorefresh;  ///< Auto-refresh interval.
 } credentials_t;
 
 int gsad_base_init ();
@@ -156,5 +157,8 @@ param_t *params_append_bin (params_t *, const char *, const char *, int, int);
 #define params_iterator_init g_hash_table_iter_init
 
 gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
+
+/* default refresh interval setting */
+int user_set_autorefresh (const gchar*, const gchar*);
 
 #endif /* not _GSAD_BASE_H */
