@@ -242,6 +242,7 @@ struct user
   GTree *chart_prefs;  ///< Chart preferences.
   gchar *autorefresh; ///< Auto-Refresh interval
   GTree *last_filt_ids;///< Last used filter ids.
+  int guest;           ///< Whether the user is a guest.
 };
 
 /**
@@ -309,6 +310,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   set_language_code (&user->language, language);
   user->time = time (NULL);
   user->charts = 0;
+  user->guest = 0;
   return user;
 }
 
@@ -339,6 +341,35 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
       gchar *timezone, *role, *capabilities, *severity, *language;
       gchar *pw_warning, *autorefresh;
       GTree *chart_prefs;
+
+      if (cookie)
+        {
+          /* Look for an existing guest user from the same browser (that is,
+           * with the same cookie). */
+
+          g_mutex_lock (mutex);
+          for (index = 0; index < users->len; index++)
+            {
+              user_t *item;
+              item = (user_t*) g_ptr_array_index (users, index);
+              if (item->guest && (strcmp (item->cookie, cookie) == 0))
+                {
+                  user = item;
+                  break;
+                }
+            }
+          if (user)
+            {
+              *user_return = user;
+              ret = 0;
+              user->time = time (NULL);
+              return ret;
+            }
+          g_mutex_unlock (mutex);
+        }
+
+      /* Log in as guest. */
+
       ret = authenticate_omp (guest_username,
                               guest_password,
                               &role,
@@ -364,6 +395,7 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
                            pw_warning,
                            chart_prefs,
                            autorefresh);
+          user->guest = 1;
           *user_return = user;
           g_free (timezone);
           g_free (severity);

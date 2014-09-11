@@ -1,3 +1,12 @@
+2014-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (struct user): Add guest flag.
+	(user_add): Init guest flag.
+	(user_find): When the special token is given and the guest user has an
+	existing session in the browser, then use the existing session.  This
+	prevents the generic guest links from logging the guest out on another
+	tab, for example.
+
 2014-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Default to dashboard in get_info case, to
