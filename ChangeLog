@@ -1,5 +1,13 @@
 2014-09-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (user_add): Check guest_username value before usage to
+	avoid segfault.
+
+	* src/html/classic/omp.xsl (result [result-headers]): Don't leave
+	result title empty in case no possible value is present.
+
+2014-09-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (params_mhd_validate): Adjust to handle params with
 	osp_pref_ prefix.
 

@@ -310,7 +310,10 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   set_language_code (&user->language, language);
   user->time = time (NULL);
   user->charts = 0;
-  user->guest = strcmp (username, guest_username) ? 0 : 1;
+  if (guest_username)
+    user->guest = strcmp (username, guest_username) ? 0 : 1;
+  else
+    user->guest = 0;
   return user;
 }
 

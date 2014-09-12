@@ -24318,8 +24318,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="nvt/name"/>
                   </xsl:when>
                   <!-- OSP results cases -->
-                  <xsl:otherwise>
+                  <xsl:when test="substring-before(description, '&#10;') &gt; 1">
                     <xsl:value-of select="substring-before(description, '&#10;')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="substring(description, 0, 30)"/>...
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
