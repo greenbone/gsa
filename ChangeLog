@@ -1,5 +1,12 @@
 2014-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (user_add): Set guest according to username.  This ensures
+	that the user is marked as guest even when logged in with a password,
+	which results in the session being used for generic guest links too.
+	(user_find): Remove user->guest init.  Now done in user_add.
+
+2014-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (struct user): Add guest flag.
 	(user_add): Init guest flag.
 	(user_find): When the special token is given and the guest user has an

@@ -310,7 +310,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   set_language_code (&user->language, language);
   user->time = time (NULL);
   user->charts = 0;
-  user->guest = 0;
+  user->guest = strcmp (username, guest_username) ? 0 : 1;
   return user;
 }
 
@@ -395,7 +395,6 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
                            pw_warning,
                            chart_prefs,
                            autorefresh);
-          user->guest = 1;
           *user_return = user;
           g_free (timezone);
           g_free (severity);
