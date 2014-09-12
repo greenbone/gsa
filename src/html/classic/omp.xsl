@@ -11789,7 +11789,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="value">
             <xsl:value-of select="value"/>
           </xsl:variable>
-          <select name="{name}">
+          <select name="osp_pref_{name}">
             <xsl:for-each select="str:split (default, '|')">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="."/>
@@ -11799,7 +11799,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </select>
         </xsl:when>
         <xsl:when test="type='osp_integer'">
-          <input type="text" name="{name}"
+          <input type="text" name="osp_pref_{name}"
+                 value="{value}" size="30" maxlength="400"/>
+        </xsl:when>
+        <xsl:when test="type='osp_string'">
+          <input type="text" name="osp_pref_{name}"
                  value="{value}" size="30" maxlength="400"/>
         </xsl:when>
 
@@ -11929,7 +11933,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="type='osp_ovaldi_file'">
+        <xsl:when test="substring (type, 1, 4) ='osp_'">
           <xsl:value-of select="value"/>
         </xsl:when>
         <xsl:otherwise>

@@ -1,3 +1,14 @@
+2014-09-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (params_mhd_validate): Adjust to handle params with
+	osp_pref_ prefix.
+
+	* src/gsad_omp.c (save_osp_prefs): Correctly send all osp preferences.
+
+	* src/html/classic/omp.xsl (edit-config-preferences [edit-details]):
+	Handle preferences of osp_string type. Distinguish osp parameters with
+	osp_pref_ prefix. Handle outputting of osp preferences values.
+
 2014-09-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (user_find): Add more returns from authenticate_omp.

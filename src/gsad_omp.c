@@ -8378,38 +8378,48 @@ static char *
 save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
                 params_t *params)
 {
-  gchar *value;
-  size_t psize;
+  GHashTableIter iter;
+  gpointer param_name, val;
   char *ret;
-  const char *pvalue, *pname = "definitions_file";
+  const char *config_id;
 
-  pvalue = params_value (params, pname);
-  if (pvalue == NULL || *pvalue == '\0')
-    return NULL;
+  config_id = params_value (params, "config_id");
+  g_hash_table_iter_init (&iter, params);
+  while (g_hash_table_iter_next (&iter, &param_name, &val))
+    {
+      gchar *value;
+      param_t *param = val;
 
-  psize = params_value_size (params, pname);
-  if (psize == 0)
-    return NULL;
-  value = psize ? g_base64_encode ((guchar *) pvalue, psize) : g_strdup ("");
+      if (!g_str_has_prefix (param_name, "osp_pref_"))
+        continue;
+      value = param->value_size ? g_base64_encode ((guchar *) param->value,
+                                                   param->value_size)
+                                : g_strdup ("");
 
-  if (openvas_server_sendf (&session,
-                            "<modify_config config_id=\"%s\">"
-                            "<preference>"
-                            "<name>%s</name>"
-                            "<value>%s</value>"
-                            "</preference>"
-                            "</modify_config>",
-                            params_value (params, "config_id"), pname, value)
-      == -1)
-    return gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a config. "
-                         "It is unclear whether the entire config has been saved. "
-                         "Diagnostics: Failure to send command to manager daemon.",
-                         "/omp?cmd=get_configs");
+      /* Send the name without the osp_pref_ prefix. */
+      param_name = ((char *) param_name) + 9;
+      if (openvas_server_sendf (&session,
+                                "<modify_config config_id=\"%s\">"
+                                "<preference><name>%s</name>"
+                                "<value>%s</value></preference>"
+                                "</modify_config>",
+                                config_id, param_name, value)
+          == -1)
+        {
+          g_free (value);
+          return gsad_message
+                  (credentials, "Internal error", __FUNCTION__, __LINE__,
+                   "An internal error occurred while saving a config. It is"
+                   " unclear whether the entire config has been saved. "
+                   "Diagnostics: Failure to send command to manager daemon.",
+                   "/omp?cmd=get_configs");
+        }
+      g_free (value);
 
-  ret = check_modify_config (credentials, &session);
-  if (ret)
-    return ret;
+      ret = check_modify_config (credentials, &session);
+      if (ret)
+        return ret;
+    }
   return NULL;
 }
 

@@ -1689,7 +1689,8 @@ params_mhd_validate (void *params)
       param_t *param;
       param = (param_t*) value;
 
-      if (openvas_validate (validator, name, param->value))
+      if (!g_str_has_prefix (name, "osp_pref_")
+          && openvas_validate (validator, name, param->value))
         {
           param->original_value = param->value;
           param->value = NULL;
