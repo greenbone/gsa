@@ -1,3 +1,9 @@
+2014-09-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (user_find): Add more returns from authenticate_omp.
+	(exec_omp_post, request_handler): Show login screen when automatic guest
+	login fails.
+
 2014-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (user_add): Set guest according to username.  This ensures

@@ -324,7 +324,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  * @param[out]  user_return  User.
  *
  * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
- *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed.
+ *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed,
+ *         6 OMP down for guest login, -1 error during guest login.
  */
 int
 user_find (const gchar *cookie, const gchar *token, user_t **user_return)
@@ -380,8 +381,12 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
                               &pw_warning,
                               &chart_prefs,
                               &autorefresh);
-      if (ret)
+      if (ret == 1)
         return 5;
+      else if (ret == 2)
+        return 6;
+      else if (ret == -1)
+        return -1;
       else
         {
           user_t *user;
@@ -1912,17 +1917,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->answercode = MHD_HTTP_OK;
       return 3;
     }
-  if (ret == 5)
-    {
-      con_info->response
-       = gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred inside GSA daemon. "
-                       "Diagnostics: Guest login failed.",
-                       "/omp?cmd=get_tasks");
-      con_info->answercode = MHD_HTTP_OK;
-      return 3;
-    }
 
   if (ret == 2)
     {
@@ -1984,6 +1978,40 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                               ? con_info->language
                               : DEFAULT_GSAD_LANGUAGE,
                              guest_username);
+      con_info->response = xsl_transform (xml);
+      g_free (xml);
+      con_info->answercode = MHD_HTTP_OK;
+      return 2;
+    }
+
+  if (ret >= 5 || ret == -1)
+    {
+      time_t now;
+      gchar *xml;
+      char ctime_now[200];
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
+
+      xml = g_markup_printf_escaped ("<login_page>"
+                                     "<message>"
+                                     "Login failed.%s"
+                                     "</message>"
+                                     "<token></token>"
+                                     "<time>%s</time>"
+                                     "<i18n>%s</i18n>"
+                                     "<guest><username>%s</username></guest>"
+                                     "</login_page>",
+                                     ret == 6
+                                      ? "  OMP service is down."
+                                      : (ret == -1
+                                          ? "  Error during authentication."
+                                          : ""),
+                                     ctime_now,
+                                     con_info->language
+                                      ? con_info->language
+                                      : DEFAULT_GSAD_LANGUAGE,
+                                     guest_username);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -3605,20 +3633,50 @@ request_handler (void *cls, struct MHD_Connection *connection,
         cookie = NULL;
 
       ret = user_find (cookie, token, &user);
-      if (ret == 1 || ret == 5)
+      if (ret == 1 || ret >= 5 || ret == -1)
         {
           if (ret == 1)
-            res =  gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred inside GSA daemon. "
-                                 "Diagnostics: Bad token.",
-                                 "/omp?cmd=get_tasks");
+            res = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred inside GSA daemon. "
+                                "Diagnostics: Bad token.",
+                                "/omp?cmd=get_tasks");
           else
-            res =  gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred inside GSA daemon. "
-                                 "Diagnostics: Guest login failed.",
-                                 "/omp?cmd=get_tasks");
+            {
+              time_t now;
+              gchar *xml;
+              char ctime_now[200];
+              const char* language;
+
+              now = time (NULL);
+              ctime_r_strip_newline (&now, ctime_now);
+
+              language = MHD_lookup_connection_value (connection,
+                                                      MHD_HEADER_KIND,
+                                                      "Accept-Language");
+
+              xml = g_strdup_printf ("<login_page>"
+                                     "<message>"
+                                     "Login failed.%s"
+                                     "</message>"
+                                     "<token></token>"
+                                     "<time>%s</time>"
+                                     "<i18n>%s</i18n>"
+                                     "<guest><username>%s</username></guest>"
+                                     "</login_page>",
+                                     ret == 6
+                                      ? "  OMP service is down."
+                                      : (ret == -1
+                                          ? "  Error during authentication."
+                                          : ""),
+                                     ctime_now,
+                                     language
+                                      ? language
+                                      : DEFAULT_GSAD_LANGUAGE,
+                                     guest_username);
+              res = xsl_transform (xml);
+              g_free (xml);
+            }
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           free (res);
