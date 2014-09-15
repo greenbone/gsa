@@ -1810,7 +1810,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      con_info->language
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username);
+                                     guest_username ? guest_username : "");
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
@@ -1866,7 +1866,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                  ctime_now,
                                  con_info->language ? con_info->language
                                                     : DEFAULT_GSAD_LANGUAGE,
-                                 guest_username);
+                                 guest_username ? guest_username : "");
           res = xsl_transform (xml);
           g_free (xml);
           con_info->response = res;
@@ -1952,7 +1952,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      con_info->language
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username);
+                                     guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -1981,7 +1981,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->language
                               ? con_info->language
                               : DEFAULT_GSAD_LANGUAGE,
-                             guest_username);
+                             guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -2015,7 +2015,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      con_info->language
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username);
+                                     guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -3282,7 +3282,7 @@ file_content_response (credentials_t *credentials,
                              language
                               ? language
                               : DEFAULT_GSAD_LANGUAGE,
-                             guest_username);
+                             guest_username ? guest_username : "");
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -3677,7 +3677,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                      language
                                       ? language
                                       : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username);
+                                     guest_username ? guest_username : "");
               res = xsl_transform (xml);
               g_free (xml);
             }
@@ -3745,7 +3745,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     ? full_url
                     : ""),
                   language ? language : DEFAULT_GSAD_LANGUAGE,
-                  guest_username);
+                  guest_username ? guest_username : "");
           g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
@@ -3792,7 +3792,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  "</login_page>",
                                  ctime_now,
                                  language ? language : DEFAULT_GSAD_LANGUAGE,
-                                 guest_username);
+                                 guest_username ? guest_username : "");
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,

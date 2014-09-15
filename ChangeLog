@@ -1,3 +1,8 @@
+2014-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post, file_content_response)
+	(request_handler): Check if guest_username is NULL before printing it.
+
 2014-09-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/classic/po/de.xml: Fix spelling in German translation.
