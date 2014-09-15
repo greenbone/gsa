@@ -1,3 +1,7 @@
+2014-09-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/po/de.xml: Fix spelling in German translation.
+
 2014-09-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (user_add): Check guest_username value before usage to

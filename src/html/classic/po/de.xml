@@ -317,7 +317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- Clone -->
     <msg>
       <id>Clone</id>
-      <str>Clonen</str>
+      <str>Klonen</str>
     </msg>
     <msg>
       <id> must be owned or global</id>
@@ -325,7 +325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
     <msg>
       <id>Permission to clone denied</id>
-      <str>Keine Berechtigung zum Clonen</str>
+      <str>Keine Berechtigung zum Klonen</str>
     </msg>
 
     <!-- Conjunctions -->
