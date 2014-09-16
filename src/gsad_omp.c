@@ -384,7 +384,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
       free_entity (entity);
       g_free (credentials->autorefresh);
       credentials->autorefresh = g_strdup (refresh_interval);
-      user_set_autorefresh (credentials->username, refresh_interval);
+      user_set_autorefresh (credentials->token, refresh_interval);
 
       g_string_append_printf (string,
                               "<autorefresh interval=\"%s\"/>",
@@ -1171,7 +1171,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (params_given (params, "charts"))
     {
       credentials->charts = atoi (charts);
-      user_set_charts (credentials->username, credentials->charts);
+      user_set_charts (credentials->token, credentials->charts);
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
