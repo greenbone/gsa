@@ -1705,14 +1705,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <a class="top_button"
-             href="/omp?cmd=get_targets&amp;token={/envelope/token}">
+             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Configuration', 'MM')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
-                <li class="first_button_overlay">
-                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                </li>
+                <xsl:choose>
+                  <xsl:when test="count (exslt:node-set ($items)/item) = 1">
+                    <li class="first_button_overlay overlay_last">
+                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                    </li>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <li class="first_button_overlay">
+                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                    </li>
+                  </xsl:otherwise>
+                </xsl:choose>
               </ul>
             </div>
           </a>

@@ -1,6 +1,10 @@
 2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp, get_many): Pass token instead of
+
+2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (xsl_transform_omp, get_many): Pass token instead of
 	username to set functions.
 
 2014-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
