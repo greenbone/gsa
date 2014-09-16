@@ -1,6 +1,11 @@
 2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad_omp.c (xsl_transform_omp, get_many): Pass token instead of
+	* ChangeLog: Add ChangeLog for last commit.
+
+2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): In the Configuration
+	menu round the bottom of the menu highlight when there is only one item.
 
 2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
