@@ -10254,7 +10254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Target'"/>
         <xsl:with-param name="type" select="'target'"/>
         <xsl:with-param name="id"
-                        select="commands_response/get_targets_response/target/@id"/>
+                        select="get_targets_response/target/@id"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -10264,7 +10264,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="target_id"
-               value="{commands_response/get_targets_response/target/@id}"/>
+               value="{get_targets_response/target/@id}"/>
         <input type="hidden" name="next" value="{next}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
@@ -10272,7 +10272,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
-        <input type="hidden" name="in_use" value="{commands_response/get_targets_response/target/in_use}"/>
+        <input type="hidden" name="in_use" value="{get_targets_response/target/in_use}"/>
         <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
@@ -10289,7 +10289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <input type="text"
                      name="name"
-                     value="{commands_response/get_targets_response/target/name}"
+                     value="{get_targets_response/target/name}"
                      size="30"
                      maxlength="80"/>
             </td>
@@ -10298,11 +10298,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_targets_response/target/comment}"/>
+                     value="{get_targets_response/target/comment}"/>
             </td>
           </tr>
           <xsl:choose>
-            <xsl:when test="commands_response/get_targets_response/target/in_use = '0'">
+            <xsl:when test="get_targets_response/target/in_use = '0'">
               <tr>
                 <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
                 <td>
@@ -10317,7 +10317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </td>
                       <td>
                         <input type="text" name="hosts"
-                               value="{commands_response/get_targets_response/target/hosts}"
+                               value="{get_targets_response/target/hosts}"
                                size="30"
                                maxlength="2000"/>
                       </td>
@@ -10340,7 +10340,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target Window')"/></td>
                 <td>
                   <input type="text" name="exclude_hosts"
-                         value="{commands_response/get_targets_response/target/exclude_hosts}"
+                         value="{get_targets_response/target/exclude_hosts}"
                          size="30" maxlength="2000"/>
                 </td>
               </tr>
@@ -10349,7 +10349,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_only = '1'">
                         <input type="radio" name="reverse_lookup_only" value="1" checked="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10359,7 +10359,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_only = '0'">
                         <input type="radio" name="reverse_lookup_only" value="0" checked="1"/><xsl:value-of select="gsa:i18n ('No', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10374,7 +10374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_unify = '1'">
                         <input type="radio" name="reverse_lookup_unify" value="1" checked="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10384,7 +10384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_unify = '0'">
                         <input type="radio" name="reverse_lookup_unify" value="0" checked="1"/><xsl:value-of select="gsa:i18n ('No', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10400,7 +10400,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="port_list_id">
                       <xsl:variable name="port_list_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                        <xsl:value-of select="get_targets_response/target/port_list/@id"/>
                       </xsl:variable>
                       <xsl:for-each select="get_port_lists_response/port_list">
                         <xsl:choose>
@@ -10419,7 +10419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
                 <td>
-                  <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
+                  <xsl:variable name="alive_tests" select="get_targets_response/target/alive_tests/text()"/>
                   <select name="alive_tests">
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'Scan Config Default'"/>
@@ -10477,7 +10477,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="lsc_credential_id">
                       <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                        <xsl:value-of select="get_targets_response/target/ssh_lsc_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
                         <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
@@ -10502,12 +10502,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="gsa:i18n ('on port', 'Target Window')"/>
                     <xsl:text> </xsl:text>
                     <xsl:variable name="credential"
-                                  select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
+                                  select="get_targets_response/target/ssh_lsc_credential"/>
                     <xsl:choose>
                       <xsl:when test="$credential and string-length ($credential/port)">
                         <input type="text"
                                name="port"
-                               value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                               value="{get_targets_response/target/ssh_lsc_credential/port}"
                                size="6"
                                maxlength="400"/>
                       </xsl:when>
@@ -10522,7 +10522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="lsc_smb_credential_id">
                       <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                        <xsl:value-of select="get_targets_response/target/smb_lsc_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
                         <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
@@ -10566,7 +10566,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </td>
                       <td>
                         <input type="text" name="hosts"
-                               value="{commands_response/get_targets_response/target/hosts}"
+                               value="{get_targets_response/target/hosts}"
                                size="30"
                                maxlength="2000"
                                disabled="1"/>
@@ -10592,7 +10592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
                 <td>
                   <input type="text" name="exclude_hosts"
-                         value="{commands_response/get_targets_response/target/exclude_hosts}"
+                         value="{get_targets_response/target/exclude_hosts}"
                          size="30" maxlength="2000"
                          disabled="1"/>
                 </td>
@@ -10604,7 +10604,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '1'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_only = '1'">
                         <input type="radio" name="reverse_lookup_only" value="1" checked="1" disabled="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10614,7 +10614,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_only = '0'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_only = '0'">
                         <input type="radio" name="reverse_lookup_only" value="0" checked="1" disabled="1"/><xsl:value-of select="gsa:i18n ('No', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10631,7 +10631,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '1'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_unify = '1'">
                         <input type="radio" name="reverse_lookup_unify" value="1" checked="1" disabled="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10641,7 +10641,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <label>
                     <xsl:choose>
-                      <xsl:when test="commands_response/get_targets_response/target/reverse_lookup_unify = '0'">
+                      <xsl:when test="get_targets_response/target/reverse_lookup_unify = '0'">
                         <input type="radio" name="reverse_lookup_unify" value="0" checked="1" disabled="1"/><xsl:value-of select="gsa:i18n ('No', 'Window')"/>
                       </xsl:when>
                       <xsl:otherwise>
@@ -10659,7 +10659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="port_list_id" disabled="1">
                       <xsl:variable name="port_list_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                        <xsl:value-of select="get_targets_response/target/port_list/@id"/>
                       </xsl:variable>
                       <xsl:for-each select="commands_response/get_port_lists_response/port_list">
                         <xsl:choose>
@@ -10678,7 +10678,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target Window')"/></td>
                 <td>
-                  <xsl:variable name="alive_tests" select="commands_response/get_targets_response/target/alive_tests/text()"/>
+                  <xsl:variable name="alive_tests" select="get_targets_response/target/alive_tests/text()"/>
                   <select name="alive_tests">
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'Scan Config Default'"/>
@@ -10738,7 +10738,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="lsc_credential_id" disabled="1">
                       <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                        <xsl:value-of select="get_targets_response/target/ssh_lsc_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
                         <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
@@ -10763,12 +10763,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="gsa:i18n ('on port', 'Target Window')"/>
                     <xsl:text> </xsl:text>
                     <xsl:variable name="credential"
-                                  select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
+                                  select="get_targets_response/target/ssh_lsc_credential"/>
                     <xsl:choose>
                       <xsl:when test="$credential and string-length ($credential/port)">
                         <input type="text"
                                name="port"
-                               value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                               value="{get_targets_response/target/ssh_lsc_credential/port}"
                                size="6"
                                maxlength="400"
                                disabled="1"/>
@@ -10786,7 +10786,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>
                     <select name="lsc_smb_credential_id" disabled="1">
                       <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                        <xsl:value-of select="get_targets_response/target/smb_lsc_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
                         <xsl:when test="string-length ($lsc_credential_id) &gt; 0">

@@ -1,3 +1,9 @@
+2014-09-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-target-form): Fix XPath
+	expressions for get_target_response, which is no longer nested inside a
+	commands_response element since the target_locator removal.
+
 2014-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Add ChangeLog for last commit.
