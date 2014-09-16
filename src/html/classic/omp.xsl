@@ -1922,7 +1922,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="scanner-type-name">
   <xsl:param name="type"/>
   <xsl:choose>
-    <xsl:when test="$type = '1'">OSP Ovaldi</xsl:when>
+    <xsl:when test="$type = '1'">OSP Scanner</xsl:when>
     <xsl:when test="$type = '2'">OpenVAS Scanner</xsl:when>
     <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
   </xsl:choose>
@@ -1932,7 +1932,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default"/>
   <xsl:call-template name="opt">
     <xsl:with-param name="value" select="1"/>
-    <xsl:with-param name="content" select="'OSP Ovaldi'"/>
+    <xsl:with-param name="content" select="'OSP Scanner'"/>
     <xsl:with-param name="select-value" select="$default"/>
   </xsl:call-template>
   <xsl:call-template name="opt">

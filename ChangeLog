@@ -1,3 +1,8 @@
+2014-09-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/help.xsl, src/html/classic/omp.xsl: Use OSP Scanner
+	name instead of OSP Ovaldi.
+
 2014-09-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-target-form): Fix XPath

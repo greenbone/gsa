@@ -5548,7 +5548,7 @@ Public License instead of this License.
           <td>10</td>
         </tr>
         <tr class="even">
-          <td>Scanner: OSP Ovaldi</td>
+          <td>Scanner: OSP Scanner</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
