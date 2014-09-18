@@ -1273,6 +1273,8 @@ init_validator ()
   openvas_validator_alias (validator, "host_max_results",   "max_results");
   openvas_validator_alias (validator, "host_levels",        "levels");
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
+  openvas_validator_alias (validator, "lsc_esxi_credential_id",
+                           "lsc_credential_id");
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");

@@ -3581,16 +3581,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>IPs</str>
     </msg>
     <msg>
-      <id>SSH Credential</id>
-      <str>SSH 证书</str>
+      <id>Credentials</id>
+      <str>证书</str>
     </msg>
     <msg>
       <id>on port</id>
       <str>端口</str>
     </msg>
     <msg>
-      <id>SMB Credential</id>
-      <str>SMB 证书</str>
+      <id>SSH</id>
+      <str>SSH</str>
+    </msg>
+    <msg>
+      <id>SMB</id>
+      <str>SMB</str>
+    </msg>
+    <msg>
+      <id>ESXi</id>
+      <str>ESXi</str>
     </msg>
 
     <!-- Hosts -->

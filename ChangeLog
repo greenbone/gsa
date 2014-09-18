@@ -1,3 +1,23 @@
+2014-09-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add ESXi credentials to targets.
+
+	* src/gsad_omp.c (create_target_omp, save_target_omp): Add ESXi
+	credentials.
+
+	* src/gsad.c (init_validator): Add lsc_esxi_credential_id as
+	as alias for lsc_credential_id.
+
+	* src/html/classic/help.xsl (new_target, targets.html): Add ESXi
+	credentials.
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form, html-targets-table, target, target [trash])
+	(target [details], html-targets-trash-table): Add ESXi credentials.
+
+	* src/html/classic/po/de.xml, src/html/classic/po/zh.xml: Change target
+	column names.
+
 2014-09-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/help.xsl, src/html/classic/omp.xsl: Use OSP Scanner

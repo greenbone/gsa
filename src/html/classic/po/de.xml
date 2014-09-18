@@ -3744,16 +3744,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>IPs</str>
     </msg>
     <msg>
-      <id>SSH Credential</id>
-      <str>SSH-Anmeldedaten</str>
+      <id>Credentials</id>
+      <str>Anmeldedaten</str>
     </msg>
     <msg>
       <id>on port</id>
       <str>auf Port</str>
     </msg>
     <msg>
-      <id>SMB Credential</id>
-      <str>SMB-Anmeldedaten</str>
+      <id>SSH</id>
+      <str>SSH</str>
+    </msg>
+    <msg>
+      <id>SMB</id>
+      <str>SMB</str>
+    </msg>
+    <msg>
+      <id>ESXi</id>
+      <str>ESXi</str>
     </msg>
 
     <!-- Hosts -->

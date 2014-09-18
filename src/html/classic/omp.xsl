@@ -10233,6 +10233,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
               </td>
             </tr>
+            <tr>
+              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target Window')"/></td>
+              <td>
+                <select name="lsc_esxi_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                </select>
+              </td>
+            </tr>
           </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
@@ -10276,6 +10285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
+          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -10523,6 +10533,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <select name="lsc_smb_credential_id">
                       <xsl:variable name="lsc_credential_id">
                         <xsl:value-of select="get_targets_response/target/smb_lsc_credential/@id"/>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target Window')"/></td>
+                  <td>
+                    <select name="lsc_esxi_credential_id">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="get_targets_response/target/esxi_lsc_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
                         <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
@@ -10809,6 +10847,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </select>
                   </td>
                 </tr>
+                <tr>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target Window')"/></td>
+                  <td>
+                    <select name="lsc_esxi_credential_id" disabled="1">
+                      <xsl:variable name="lsc_credential_id">
+                        <xsl:value-of select="get_targets_response/target/esxi_lsc_credential/@id"/>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $lsc_credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
@@ -10900,10 +10966,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Port List</name>
       </column>
       <column>
-        <name>SSH Credential</name>
-      </column>
-      <column>
-        <name>SMB Credential</name>
+        <name>Credentials</name>
+        <column>
+          <name>SSH</name>
+          <field>ssh_credential</field>
+        </column>
+        <column>
+          <name>SMB</name>
+          <field>smb_credential</field>
+        </column>
+        <column>
+          <name>ESXi</name>
+          <field>esxi_credential</field>
+        </column>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -11026,6 +11101,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="esxi_lsc_credential/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="esxi_lsc_credential/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:call-template name="list-window-line-icons">
         <xsl:with-param name="cap-type" select="'Target'"/>
         <xsl:with-param name="type" select="'target'"/>
@@ -11083,6 +11170,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="smb_lsc_credential/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="esxi_lsc_credential/trash = '1'">
+          <xsl:value-of select="esxi_lsc_credential/name"/>
+          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="esxi_lsc_credential/name"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -11240,6 +11340,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="smb_lsc_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (esxi_lsc_credential/@id) &gt; 0">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target Window')"/>:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="gsa:may-op ('get_lsc_credentials')">
+                  <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="esxi_lsc_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="esxi_lsc_credential/name"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -28828,13 +28945,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td><xsl:value-of select="gsa:i18n ('Name', 'Target Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Hosts', 'Target Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('IPs', 'Target Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Port List', 'Target Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Target Window')"/></td>
+        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Name', 'Target Window')"/></td>
+        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Hosts', 'Target Window')"/></td>
+        <td rowspan="2"><xsl:value-of select="gsa:i18n ('IPs', 'Target Window')"/></td>
+        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Port List', 'Target Window')"/></td>
+        <td colspan="3"><xsl:value-of select="gsa:i18n ('Credentials', 'Target Window')"/></td>
+        <td rowspan="2" width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Target Window')"/></td>
+      </tr>
+      <tr class="gbntablehead2">
+        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('SSH', 'Target Window')"/></td>
+        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('SMB', 'Target Window')"/></td>
+        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('ESXi', 'Target Window')"/></td>
       </tr>
       <xsl:apply-templates select="target" mode="trash"/>
     </table>

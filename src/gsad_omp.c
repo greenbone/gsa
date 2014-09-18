@@ -6210,9 +6210,11 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *command;
   const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
+  const char *target_esxi_credential;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests;
   gchar *credentials_element, *smb_credentials_element;
+  gchar *esxi_credentials_element;
   gchar* comment_element = NULL;
   entity_t entity;
   GString *xml;
@@ -6228,6 +6230,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  target_esxi_credential = params_value (params, "lsc_esxi_credential_id");
   alive_tests = params_value (params, "alive_tests");
 
   CHECK_PARAM (name, "Create Target", new_target);
@@ -6251,6 +6254,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   if (strcmp (target_credential, "--"))
     CHECK_PARAM (port, "Create Target", new_target);
   CHECK_PARAM (target_smb_credential, "Create Target", new_target);
+  CHECK_PARAM (target_esxi_credential, "Create Target", new_target);
   CHECK_PARAM (alive_tests, "Create Target", new_target);
 
   if (comment != NULL)
@@ -6275,6 +6279,13 @@ create_target_omp (credentials_t * credentials, params_t *params)
       g_strdup_printf ("<smb_lsc_credential id=\"%s\"/>",
                        target_smb_credential);
 
+  if (strcmp (target_esxi_credential, "--") == 0)
+    esxi_credentials_element = g_strdup ("");
+  else
+    esxi_credentials_element =
+      g_strdup_printf ("<esxi_lsc_credential id=\"%s\"/>",
+                       target_esxi_credential);
+
   /* Create the target. */
 
   xml = g_string_new ("");
@@ -6298,12 +6309,13 @@ create_target_omp (credentials_t * credentials, params_t *params)
                      alive_tests);
 
   command = g_strdup_printf ("<create_target>"
-                             "%s%s%s%s"
+                             "%s%s%s%s%s"
                              "</create_target>",
                              xml->str,
                              comment_element,
                              credentials_element,
-                             smb_credentials_element);
+                             smb_credentials_element,
+                             esxi_credentials_element);
 
   g_string_free (xml, TRUE);
   g_free (comment_element);
@@ -7635,6 +7647,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response;
   const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_credential, *port, *target_smb_credential, *target_source;
+  const char *target_esxi_credential;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
 
@@ -7720,11 +7733,13 @@ save_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  target_esxi_credential = params_value (params, "lsc_esxi_credential_id");
 
   CHECK_PARAM (target_source, "Save Target", edit_target);
   CHECK_PARAM (port_list_id, "Save Target", edit_target);
   CHECK_PARAM (target_credential, "Save Target", edit_target);
   CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
+  CHECK_PARAM (target_esxi_credential, "Save Target", edit_target);
 
   if (target_credential
       && strcmp (target_credential, "--")
@@ -7771,6 +7786,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
   {
     int ret;
     gchar *credentials_element, *smb_credentials_element;
+    gchar *esxi_credentials_element;
     gchar* comment_element;
     const char *status;
     entity_t entity;
@@ -7797,6 +7813,13 @@ save_target_omp (credentials_t * credentials, params_t *params)
         g_strdup_printf ("<smb_lsc_credential id=\"%s\"/>",
                          target_smb_credential);
 
+    if (strcmp (target_esxi_credential, "--") == 0)
+      esxi_credentials_element = g_strdup ("");
+    else
+      esxi_credentials_element =
+        g_strdup_printf ("<esxi_lsc_credential id=\"%s\"/>",
+                         target_esxi_credential);
+
     /* Modify the target. */
 
     ret = openvas_server_sendf (&session,
@@ -7807,7 +7830,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                 "<reverse_lookup_only>%s</reverse_lookup_only>"
                                 "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                                 "<port_list id=\"%s\"/>"
-                                "%s%s%s"
+                                "%s%s%s%s"
                                 "<alive_tests>%s</alive_tests>"
                                 "</modify_target>",
                                 target_id,
@@ -7822,11 +7845,13 @@ save_target_omp (credentials_t * credentials, params_t *params)
                                 comment_element,
                                 credentials_element,
                                 smb_credentials_element,
+                                esxi_credentials_element,
                                 alive_tests);
 
     g_free (comment_element);
     g_free (credentials_element);
     g_free (smb_credentials_element);
+    g_free (esxi_credentials_element);
 
     if (ret == -1)
       {

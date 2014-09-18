@@ -5394,6 +5394,16 @@ Public License instead of this License.
           <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
+        <tr class="even">
+          <td>
+            ESXi Credential
+            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+          </td>
+          <td>no</td>
+          <td>--</td>
+          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Security Scan Account for ESXi</td>
+        </tr>
       </table>
       <xsl:if test="not (gsa:may-op ('get_port_lists')) or not (gsa:may-op ('get_lsc_credentials'))">
         <b>*</b> not available with the current OMP Server connection.
@@ -7838,12 +7848,16 @@ Public License instead of this License.
           <td>Associated port list, that can be clicked on to view details.</td>
         </tr>
         <tr class="odd">
-          <td>SSH Credential</td>
+          <td>Credentials: SSH</td>
           <td>Associated SSH credential, that can be clicked on to view details.</td>
         </tr>
         <tr class="even">
-          <td>SMB Credential</td>
+          <td>Credentials: SMB</td>
           <td>Associated SMB credential, that can be clicked on to view details.</td>
+        </tr>
+        <tr class="odd">
+          <td>Credentials: ESXi</td>
+          <td>Associated ESXi credential, that can be clicked on to view details.</td>
         </tr>
       </table>
 
