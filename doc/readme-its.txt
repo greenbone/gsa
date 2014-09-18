@@ -30,3 +30,12 @@ Now you can login with your user account and have
 a entirely new user interface.
 You can switch back to classic by stopping gsad again
 and start without the --face setting.
+
+
+ITS Scan Config and Report Format Plugin:
+
+ITS expects a special Scan Config installed for the
+user and a special Report Format Plugin.
+ITS will take the Scan Config named "ITS-Scankonfiguration"
+and the Report Format Plugin named "ITS PDF".
+

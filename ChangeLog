@@ -1,3 +1,8 @@
+2014-09-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* doc/readme-its.txt: Added not on special Scan Config
+	and Report Format Plugin.
+
 2014-09-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Change possible values for apply_filter,
