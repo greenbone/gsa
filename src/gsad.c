@@ -1052,6 +1052,7 @@ init_validator ()
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "aggregate_type", "agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
+  openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
@@ -1229,7 +1230,6 @@ init_validator ()
   openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
   openvas_validator_alias (validator, "alerts",     "optional_number");
   openvas_validator_alias (validator, "alterable", "boolean");
-  openvas_validator_alias (validator, "apply_filter", "boolean");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",            "name");

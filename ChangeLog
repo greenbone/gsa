@@ -1,5 +1,21 @@
 2014-09-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Change possible values for apply_filter,
+	allowing to only ignore the pagination info like the "first" and "rows"
+	filter keywords.
+
+	* src/gsad.c (init_validator): Make apply_filter a separate parameter
+	name allowing the values "no", "no_pagination" and "full".
+
+	* src/html/classic/omp.xsl (report [section-filter]): Add new default
+	option to only ignore the pagination info and adjust existing selection
+	items.
+
+	* src/html/classic/po/de.xml: Update selection for apply_filter on
+	report section pages.
+
+2014-09-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add ESXi credentials to targets.
 
 	* src/gsad_omp.c (create_target_omp, save_target_omp): Add ESXi

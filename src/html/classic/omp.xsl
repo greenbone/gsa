@@ -25975,25 +25975,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <select name="apply_filter" style="width:165px">
               <xsl:choose>
-                <xsl:when test="/envelope/params/apply_filter = '1'">
-                  <option value="0" selected="1"><xsl:value-of select="gsa:i18n ('All results', 'Filter Box')"/></option>
+                <xsl:when test="/envelope/params/apply_filter = 'no_pagination' or not(/envelope/params/apply_filter != '')">
+                  <option value="no_pagination" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('All filtered results:', 'Filter Box')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="0">&#8730;<xsl:value-of select="gsa:i18n ('All results', 'Filter Box')"/></option>
+                  <option value="no_pagination"><xsl:value-of select="gsa:i18n ('All filtered results:', 'Filter Box')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:choose>
-                <xsl:when test="/envelope/params/apply_filter = '1'">
-                  <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Results filtered with:', 'Filter Box')"/></option>
+                <xsl:when test="/envelope/params/apply_filter = 'no'">
+                  <option value="no" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('All results', 'Filter Box')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="1"><xsl:value-of select="gsa:i18n ('Results filtered with:', 'Filter Box')"/></option>
+                  <option value="no"><xsl:value-of select="gsa:i18n ('All results', 'Filter Box')"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="/envelope/params/apply_filter = 'full' or /envelope/params/apply_filter = ''">
+                  <option value="full" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply full filter:', 'Filter Box')"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="full"><xsl:value-of select="gsa:i18n ('Apply full filter:', 'Filter Box')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </select>
             <xsl:text> </xsl:text>
             <xsl:choose>
-              <xsl:when test="/envelope/params/apply_filter = '1'">
+              <xsl:when test="/envelope/params/apply_filter != 'no'">
                 <input type="text" name="filter" size="53"
                         value="{$filter_term}"
                         maxlength="1000"/>

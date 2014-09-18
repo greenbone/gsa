@@ -9717,7 +9717,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *host_search_phrase, *host_levels;
   const char *host_first_result, *host_max_results;
   int ret;
-  int ignore_filter;
+  int ignore_filter, ignore_pagination;
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -9731,10 +9731,16 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   else
     report_section = "";
 
-  ignore_filter = (strcmp (apply_filter, "1")
+  ignore_filter = (strcmp (apply_filter, "full")
+                   && strcmp (apply_filter, "no_pagination")
                    && strcmp (report_section, "")
                    && strcmp (report_section, "results")
                    && strcmp (report_section, "summary"));
+
+  ignore_pagination = (strcmp (apply_filter, "full")
+                       && strcmp (report_section, "")
+                       && strcmp (report_section, "results")
+                       && strcmp (report_section, "summary"));
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -10002,6 +10008,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
+                                        " ignore_pagination=\"%d\""
                                         " autofp=\"%s\""
                                         " notes=\"%i\""
                                         " notes_details=\"1\""
@@ -10019,6 +10026,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         " search_phrase=\"%s\""
                                         " min_cvss_base=\"%s\""
                                         " alert_id=\"%s\"/>",
+                                        ignore_pagination,
                                         strcmp (autofp, "0") ? autofp_value
                                                              : "0",
                                         strcmp (esc_notes, "0") ? 1 : 0,
@@ -10270,6 +10278,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                      : "a994b278-1f62-11e1-96ac-406186ea4fc5");
   else
     ret = openvas_server_sendf_xml (&session,
+                                    " ignore_pagination=\"%d\""
                                     " filt_id=\"%s\""
                                     " filter=\"%s\""
                                     " pos=\"%s\""
@@ -10291,6 +10300,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " delta_states=\"%s\""
                                     " search_phrase=\"%s\""
                                     " min_cvss_base=\"%s\"/>",
+                                    ignore_pagination,
                                     filt_id ? filt_id : "0",
                                     filter ? filter : "",
                                     pos ? pos : "1",
