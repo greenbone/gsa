@@ -1,3 +1,10 @@
+2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (glossary.html): Mention task alterable
+	flag.
+	(tasks.html): Add note about when Alterable Task field is present, for
+	Edit Task help.
+
 2014-09-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Use "no_pagination" as value for

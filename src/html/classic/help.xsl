@@ -4075,14 +4075,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        A task is initially formed by a <a href="#target">target</a>
        and a <a href="#config">scan configuration</a>.
-       Executing a task means to create a <a href="#scan">scan</a>.
-       As a result, a task collects a series
-       of <a href="#report">reports</a>.
+       Executing a task initiates a <a href="#scan">scan</a>.  Each scan
+       produces a <a href="#report">report</a>.
+       As a result, a task collects a series of reports.
       </p>
       <p>
-       The target and scan configuration is static.
-       Thus, the resulting sequence of reports describe the
+       A task's target and scan configuration are static.
+       Thus, the resulting sequence of reports describes the
        change of security status over time.
+       However, a task may be marked as <b>alterable</b> when there are
+       no reports present.  For such a task the target and scan configuration
+       may be changed at any time, which may be convenient in certain
+       situations.
       </p>
       <p>
        A <b>container task</b> is a task whose sole function is to hold
@@ -8142,6 +8146,13 @@ Public License instead of this License.
          title="Edit Task"/> will
        switch to an overview of the configuration for this task and allows
        editing of some of the task's properties.
+      </p>
+      <p>
+        Note that the Alterable Task field is only available for editing if
+        the task has no reports.  This ensures that a sequence of reports on
+        a non-alterable task can always be trusted to show the change in
+        security status, because all scans have used the same target and
+        scan configuration.
       </p>
     </div>
   </div>
