@@ -35,7 +35,8 @@ and start without the --face setting.
 ITS Scan Config and Report Format Plugin:
 
 ITS expects a special Scan Config installed for the
-user and a special Report Format Plugin.
-ITS will take the Scan Config named "ITS-Scankonfiguration"
-and the Report Format Plugin named "ITS PDF".
-
+user, a special Report Format Plugin and a special Scanner.
+ITS will take the Scan Config named "ITS-Scankonfiguration",
+the Report Format Plugin named "ITS PDF" and the Scanner
+named "ITS-Scanner".
+Currently the ITS-Scanner is just a normal OpenVAS Scanner.

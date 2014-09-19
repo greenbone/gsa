@@ -1,3 +1,21 @@
+2014-09-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow configuring a scanner for IT-Schwachstellenampel. Make config
+	and scanner available after submitting forms.
+
+	* doc/readme-its.txt: Extend note to also include the Scanner.
+
+	* src/html/its/gsad.xsl (main_page_link): Add new parameter
+	event_data:include_scanners.
+	(charts, chart_preferences): New dummy templates.
+	(html-footer): Increase version number to 1.2.
+
+	* src/html/its/omp.xsl (task_controls): Try to get Config from
+	event_data:config_id parameter if get_configs is not not available.
+	Get scanner "ITS-Scanner" from get_scanners response or last
+	event_data:scanner_id. Add warning if Scanner is not found.
+	Pass event_data:config_id and event_data:scanner_id in every form.
+
 2014-09-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* doc/readme-its.txt: Added not on special Scan Config

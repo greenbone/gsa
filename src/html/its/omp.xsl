@@ -186,7 +186,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="smb_credential"/>
 
   <xsl:variable name="configs" select="/envelope/wizard/run_wizard_response/response/commands_response/get_configs_response"/>
-  <xsl:variable name="its_config" select="$configs/config[name='ITS-Scankonfiguration']/@id"/>
+  <xsl:variable name="scanners" select="/envelope/wizard/run_wizard_response/response/commands_response/get_scanners_response"/>
+  <xsl:variable name="its_config" select="$configs/config[name='ITS-Scankonfiguration']/@id |/envelope/params/_param[name='event_data:config_id' and value!='' and value!='daba56c8-73ec-11df-a475-002264764cea' and not($configs)]/value"/>
+  <xsl:variable name="its_scanner" select="$scanners/scanner[name='ITS-Scanner']/@id |/envelope/params/_param[name='event_data:scanner_id' and value!='' and value!='08b69003-5fc2-4037-a479-93b440211c73' and not ($scanners)]/value"/>
 
   <xsl:variable name="task_id">
     <xsl:choose>
@@ -263,7 +265,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       Laufzeiten verwendet.
     </div>
   </xsl:if>
-  
+
+  <xsl:if test="not ($its_scanner)">
+    <div class="errorbox">
+      <h4>Warnung: Der ITS-Scanner wurde nicht gefunden.</h4>
+      Ersatzweise wird der voreingestellte OpenVAS-Scanner verwendet.
+    </div>
+  </xsl:if>
+
   <div id="controls">
     <span class="debug">
       task id: <xsl:value-of select="$task_id"/> <br/>
@@ -302,6 +311,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="event_data:config_id" value="daba56c8-73ec-11df-a475-002264764cea"/>
             </xsl:otherwise>
           </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="$its_scanner">
+              <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="hidden" name="event_data:scanner_id" value="08b69003-5fc2-4037-a479-93b440211c73"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="cmd" value="run_wizard"/>
@@ -338,6 +355,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:name" value="Schwachstellenampel"/>
           <input type="hidden" name="event_data:include_configs" value="1"/>
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
+          <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
+          <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
           <a href="#" onclick="document.start_task_{translate($task_id, '-', '_')}.submit();" class="button play tooltip">&#9658;
             <span style="width: 120px; margin-top: 18px; margin-left: -17px">
               <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
@@ -385,6 +404,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:name" value="Schwachstellenampel"/>
           <input type="hidden" name="event_data:include_configs" value="1"/>
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
+          <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
+          <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
           <!-- TODO replace submit with script-free version -->
           <a href="#" onclick="document.stop_task_{translate($task_id, '-', '_')}.submit();" class="button stop tooltip">&#9632;
             <span style="width: 100px; margin-top: 18px; margin-left: -17px">
@@ -426,6 +447,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:include_configs" value="1"/>
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
           <input type="hidden" name="event_data:ultimate" value="1"/>
+          <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
+          <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
           <!-- TODO replace submit with script-free version -->
           <a href="#" onclick="document.clear_reports_{translate($task_id, '-', '_')}.submit();" class="button clear tooltip">X
             <span style="width: 100px; margin-top: 18px; margin-left: -17px">

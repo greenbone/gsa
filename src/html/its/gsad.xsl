@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- Main page link -->
 
-<xsl:variable name="main_page_link" select="'/omp?cmd=wizard_get&amp;get_name=get_tasks_deep&amp;event_data:name=Schwachstellenampel&amp;event_data:include_report_formats=1&amp;event_data:include_configs=1'"/>
+<xsl:variable name="main_page_link" select="'/omp?cmd=wizard_get&amp;get_name=get_tasks_deep&amp;event_data:name=Schwachstellenampel&amp;event_data:include_report_formats=1&amp;event_data:include_configs=1&amp;event_data:include_scanners=1'"/>
 
 <!-- HEADERS, FOOTER, SIDEBARS -->
 
@@ -165,6 +165,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="help_response" mode="content">
 </xsl:template>
 
+<xsl:template match="charts">
+</xsl:template>
+
+<xsl:template match="chart_preferences">
+</xsl:template>
+
 <xsl:template match="envelope">
   <div id="header_back">
     <xsl:call-template name="html-its-header"/>
@@ -280,7 +286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-footer">
   <div id="footer_logos">
     <hr/>
-    <p align="right">IT Schwachstellenampel Version 1.1</p>
+    <p align="right">IT Schwachstellenampel Version 1.2</p>
   </div>
 </xsl:template>
 
