@@ -1,3 +1,10 @@
+2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport parts of r20419 and r19946.
+
+	* src/html/classic/help.xsl (details-window-line-actions): New template.
+	(task_details.html): Bring Task Details up to date.
+
 2014-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r20350.
