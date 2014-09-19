@@ -1,3 +1,11 @@
+2014-09-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Use "no_pagination" as value for
+	apply_filter if it is not given.
+
+	* src/html/classic/omp.xsl (report [section-filter]): Color text grey
+	only if the filter is not applied at all.
+
 2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (new_task.html): Get row backgrounds right.

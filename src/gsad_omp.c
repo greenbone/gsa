@@ -9723,7 +9723,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       && params_valid (params, "apply_filter"))
     apply_filter = params_value (params, "apply_filter");
   else
-    apply_filter = "0";
+    apply_filter = "no_pagination";
 
   if (params_given (params, "report_section")
       && params_valid (params, "report_section"))

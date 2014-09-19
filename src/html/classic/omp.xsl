@@ -26001,14 +26001,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </select>
             <xsl:text> </xsl:text>
             <xsl:choose>
-              <xsl:when test="/envelope/params/apply_filter != 'no'">
+              <xsl:when test="/envelope/params/apply_filter = 'no'">
                 <input type="text" name="filter" size="53"
-                        value="{$filter_term}"
+                        value="{$filter_term}" style="color:silver"
                         maxlength="1000"/>
               </xsl:when>
               <xsl:otherwise>
                 <input type="text" name="filter" size="53"
-                        value="{$filter_term}" style="color:silver"
+                        value="{$filter_term}"
                         maxlength="1000"/>
               </xsl:otherwise>
             </xsl:choose>
