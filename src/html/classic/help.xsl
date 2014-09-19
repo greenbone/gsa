@@ -75,7 +75,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <h4>New <xsl:value-of select="$name"/></h4>
   <p>
     To create a new <xsl:value-of select="$name"/> click the new icon
-    <img src="/img/new.png" alt="New Scanner" title="New {$name}"/>
+    <img src="/img/new.png" alt="New {$name}" title="New {$name}"/>
     which goes to the <a href="new_{$type}.html?token={/envelope/token}">
     New <xsl:value-of select="$name"/></a> page.
   </p>
@@ -6788,223 +6788,42 @@ Public License instead of this License.
 
       <h1>Task Details</h1>
       <p>
-       This information dialog lists name, status and number of reports for
-       the task for which the report list is shown below.
-       It also lists the scanning order for target hosts, network source
+       This information dialog lists the details of a task.
+      </p>
+      <p>
+       The details include name,
+       status, number of reports, number of notes and number of overrides.
+       It also lists the current settings for target host scanning order, network source
        interface, <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>,
+       <a href="glossary.html?token={/envelope/token}#target">Target</a>,
        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>,
        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
-       <a href="glossary.html?token={/envelope/token}#target">Target</a> for the shown report, if
-       any were chosen. Information about the chosen Scan Config, Alert,
-       Schedule or Target is accessible by clicking on the respective items
-       name.
-      </p>
-
-      <a name="reports"></a>
-      <h1>Reports</h1>
-      <p>
-       This table provides an overview of all
-       <a href="glossary.html?token={/envelope/token}#report">reports</a>
-       for the selected task (see Task Summary box).
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Report</td>
-          <td>Shows the time stamp for the report. This indicates
-              when the scan finished and the final report
-              was created.</td>
-        </tr>
-        <tr>
-          <td>Severity</td>
-          <td>Highest severity of the report. The bar will be colored
-              according to the severity level defined by the current <a href="/help/my_settings.html?token={/envelope/token}#severity_class">Severity Class</a>:
-            <br/>
-            <table>
-              <tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="'8.0'"/>
-                    <xsl:with-param name="extra_text" select="' (High)'"/>
-                    <xsl:with-param name="title" select="'High'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  A red bar is shown if the maximum severity is in the
-                  'High' range.
-                </td>
-              </tr><tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="'5.0'"/>
-                    <xsl:with-param name="extra_text" select="' (Medium)'"/>
-                    <xsl:with-param name="title" select="'Medium'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  A yellow bar is shown if the maximum severity is in the
-                  'Medium' range.
-                </td>
-              </tr><tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="'2.0'"/>
-                    <xsl:with-param name="extra_text" select="' (Low)'"/>
-                    <xsl:with-param name="title" select="'Low'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  A blue bar is shown if the maximum severity is in the
-                  'Low' range.
-                </td>
-              </tr><tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="'0.0'"/>
-                    <xsl:with-param name="extra_text" select="' (None)'"/>
-                    <xsl:with-param name="title" select="'None'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  An empty bar is shown if no vulnerabilities were detected.
-                  Perhaps some NVT created a log information, so the report
-                  is not necessarily empty.
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Scan Results</td>
-          <td>This column lists the number
-            of occurrences for each severity level.
-            <br/>
-            <table>
-              <tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-label">
-                    <xsl:with-param name="level" select="'High'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  The number of issues of severity "High" found during the scan.
-                </td>
-              </tr>
-              <tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-label">
-                    <xsl:with-param name="level" select="'Medium'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  The number of issues of severity "Medium" found during the scan.
-                </td>
-              </tr>
-              <tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-label">
-                    <xsl:with-param name="level" select="'Low'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  The number of issues of severity "Low" found during the scan.
-                </td>
-              </tr>
-              <tr>
-                <td valign="top">
-                  <xsl:call-template name="severity-label">
-                    <xsl:with-param name="level" select="'Log'"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  The number of log-entries that occurred during the scan.
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-
-      <a name="overrides"></a>
-      <h3>Overrides</h3>
-      <p>
-       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
-       The selection allows to switch to a view without applying overrides.
-       In the table view, severity and scan results numbers might change
-       when switching this selection.
-       By pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon a change is confirmed.
+       <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
       </p>
       <p>
-       The selection that is active for the present page is marked with a hook (&#8730;).
+        Further information about certain details is available by clicking on
+        the respective item.  For example, clicking on the number of notes
+        goes to a listing of these notes.
       </p>
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'task'"/>
+        <xsl:with-param name="name" select="'Task'"/>
+      </xsl:call-template>
+      <h4>Start Task</h4>
       <p>
-       Note that leaving this page will reset the overrides selection to apply overrides.
+        To start the task click the start icon
+        <img src="/img/start.png" alt="Start Task" title="Start Task"/>.
       </p>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Delta</h4>
+      <h4>Stop Task</h4>
       <p>
-       Pressing the delta icon
-       <img src="/img/delta.png" alt="Compare" title="Compare"/> will
-       select the report for comparison.
+        To stop the task click the stop icon
+        <img src="/img/stop.png" alt="Stop Task" title="Stop Task"/>.  This icon
+        is only available when the task is running.
       </p>
-
+      <h4>Resume Task</h4>
       <p>
-       Once a report is selected for comparison, the greyed out delta icon
-       <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
-       indicates that the report has been selected.
-      </p>
-
-      <p>
-       Pressing the second delta icon
-       <img src="/img/delta_second.png" alt="Compare" title="Compare"/> will
-       produce a comparison between the report and the previously selected one.
-      </p>
-
-      <h4>Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details"/> will
-       display all report details on a new page
-       <a href="/help/view_report.html?token={/envelope/token}">View Report</a>.
-      </p>
-
-      <h4>Delete Report</h4>
-      <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
-       remove the report immediately. The list of reports will be updated.
-      </p>
-
-      <a name="notes"></a>
-      <h1>Notes</h1>
-      <p>
-       This table provides an overview of all
-       <a href="glossary.html?token={/envelope/token}#note">notes</a>
-       that apply to any result generated by the task.
-       It is formatted much like the <a href="notes.html?token={/envelope/token}">Notes</a> page.
-      </p>
-
-      <a name="overrides"></a>
-      <h1>Overrides</h1>
-      <p>
-       This table provides an overview of all
-       <a href="glossary.html?token={/envelope/token}#override">overrides</a>
-       that apply to any result generated by the task.
-       It is formatted much like the <a href="overrides.html?token={/envelope/token}">Overrides</a> page.
-      </p>
-
-      <a name="import_report"></a>
-      <h1>Import Report</h1>
-      <p>
-        To import a report into the container, select the report file and hit the
-        "Add Report" button.
+        To resume the task after it has stopped, click the resume icon
+        <img src="/img/resume.png" alt="Resume Task" title="Resume Task"/>.
       </p>
     </div>
   </div>
