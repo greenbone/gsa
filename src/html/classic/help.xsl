@@ -5464,14 +5464,14 @@ Public License instead of this License.
           <td>Alphanumeric</td>
           <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Scan Targets</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
           <td>Localhost</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>
             Alerts
             <xsl:if test="not (gsa:may-op ('get_alerts'))">*</xsl:if>
@@ -5481,7 +5481,7 @@ Public License instead of this License.
           <td>Choice</td>
           <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>
             Schedule
             <xsl:if test="not (gsa:may-op ('get_schedules'))">*</xsl:if>
@@ -5498,7 +5498,7 @@ Public License instead of this License.
           <td>Choice</td>
           <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Alterable Task</td>
           <td>yes</td>
           <td>---</td>
@@ -5519,7 +5519,7 @@ Public License instead of this License.
           <td>Choice</td>
           <td>Full and fast</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>
             Slave
             <xsl:if test="not (gsa:may-op ('get_slaves'))">*</xsl:if>
@@ -5529,14 +5529,14 @@ Public License instead of this License.
           <td>Choice</td>
           <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Network Source Interface</td>
           <td>no</td>
           <td>---</td>
           <td>Alphanumeric</td>
           <td>eth1</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Order for target hosts</td>
           <td>no</td>
           <td>---</td>
@@ -5557,7 +5557,7 @@ Public License instead of this License.
           <td>Numeric</td>
           <td>10</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Scanner: OSP Scanner</td>
           <td>yes</td>
           <td>---</td>

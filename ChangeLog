@@ -1,5 +1,9 @@
 2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (new_task.html): Get row backgrounds right.
+
+2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/help.xsl (details-window-line-actions): Use type in
 	alt instead of "Scanner".
 	(task_details.html): Bring Task Details up to date.
