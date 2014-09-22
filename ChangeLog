@@ -1,3 +1,13 @@
+2014-09-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/os_netgear.png: New.
+
+	* src/html/classic/img/os_cyclades.png: Updated.
+
+	* CMakeLists.txt: Install the two icons.
+
+	* src/html/classic/os.xml: Added netgear.
+
 2014-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (glossary.html): Mention task alterable

@@ -9,7 +9,7 @@ Authors:
 Henri Doreau <henri.doreau@greenbone.net>
 
 Copyright:
-Copyright (C) 2011 Greenbone Networks GmbH
+Copyright (C) 2011, 2014 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -421,6 +421,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:netbsd:netbsd</pattern><title>NetBSD</title><icon>os_netbsd.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:netgear</pattern><title>Netgear</title><icon>os_netgear.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:openbsd:openbsd</pattern><title>OpenBSD</title><icon>os_openbsd.png</icon>

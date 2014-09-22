@@ -458,6 +458,7 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_centos.png
                 src/html/classic/img/os_cisco.png
                 src/html/classic/img/os_conflict.png
+                src/html/classic/img/os_cyclades.png
                 src/html/classic/img/os_debian.png
                 src/html/classic/img/os_fedora.png
                 src/html/classic/img/os_freebsd.png
@@ -468,6 +469,7 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_linux.png
                 src/html/classic/img/os_mandriva.png
                 src/html/classic/img/os_netbsd.png
+                src/html/classic/img/os_netgear.png
                 src/html/classic/img/os_novell.png
                 src/html/classic/img/os_openbsd.png
                 src/html/classic/img/os_redhat.png
