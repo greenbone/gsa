@@ -1,3 +1,7 @@
+2014-09-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_my_settings): Correct row backgrounds.
+
 2014-09-23  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
