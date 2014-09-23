@@ -11853,6 +11853,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$config != ''">
       <td>
         <xsl:choose>
+          <xsl:when test="type='osp_boolean' and value = '0'">False</xsl:when>
+          <xsl:when test="type='osp_boolean'">True</xsl:when>
           <xsl:when test="type='file' and string-length(value) &gt; 0">
             <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
           </xsl:when>
@@ -11922,6 +11924,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type='osp_string'">
           <input type="text" name="osp_pref_{name}"
                  value="{value}" size="30" maxlength="400"/>
+        </xsl:when>
+        <xsl:when test="type='osp_boolean'">
+          <select name="osp_pref_{name}">
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'1'"/>
+              <xsl:with-param name="content" select="'True'"/>
+              <xsl:with-param name="select-value" select="value"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'0'"/>
+              <xsl:with-param name="content" select="'False'"/>
+              <xsl:with-param name="select-value" select="value"/>
+            </xsl:call-template>
+          </select>
         </xsl:when>
 
         <!-- Classic config types. -->
@@ -12050,6 +12066,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="type = 'osp_boolean' and value = '0'">False</xsl:when>
+        <xsl:when test="type = 'osp_boolean'">True</xsl:when>
         <xsl:when test="substring (type, 1, 4) ='osp_'">
           <xsl:value-of select="value"/>
         </xsl:when>

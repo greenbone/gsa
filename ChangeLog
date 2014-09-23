@@ -1,3 +1,8 @@
+2014-09-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (preference [details, edit-details]): Handle
+	osp_boolean preference type adequately.
+
 2014-09-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_my_settings): Correct row backgrounds.
