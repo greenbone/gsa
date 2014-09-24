@@ -25,7 +25,11 @@
  */
 
 /*
- * Creates adds display elements to a selected part of the HTML page
+ * Basic chart components
+ */
+
+/*
+ * Creates and adds display elements to a selected part of the HTML page
  */
 function create_chart_box (parent_id, container_id, width, height,
                            select_pref_id, filter_pref_id)
@@ -656,7 +660,7 @@ function Display (p_container)
 
 
 /*
- * Helper functions
+ * Data Source Helper functions
  */
 
 /*
@@ -674,6 +678,207 @@ function create_uri (command, params, prefix, no_xml)
   params_str = params_str + "&token=" + gsa_token;
   return encodeURI (params_str);
 }
+
+/*
+ * Extracts records from XML
+ */
+function extract_simple_records (xml_data, selector)
+{
+  var records = [];
+  xml_data.selectAll (selector)
+            .each (function (d, i)
+                    {
+                      var record = {};
+                      d3.select(this)
+                          .selectAll ("*")
+                            .each (function (d, i)
+                                    {
+                                      if (!isNaN (parseFloat (d3.select (this).text ()))
+                                          && isFinite (d3.select (this).text ()))
+                                        record [this.localName]
+                                          = parseFloat (d3.select (this).text ())
+                                      else
+                                        record [this.localName]
+                                          = d3.select (this).text ()
+                                    });
+                      records.push (record);
+                     });
+  return records;
+}
+
+
+/*
+ * Helpers for processing extracted data
+ */
+
+/*
+ * Gets capitalized resource and attribute names
+ */
+function capitalize (str)
+{
+  switch (str.toLowerCase ())
+    {
+      case "nvt":
+      case "cve":
+      case "cpe":
+        return str.toUpperCase ();
+        break;
+      default:
+        var split_str = str.split ("_");
+        for (i in split_str)
+          {
+            split_str [i] = split_str [i].charAt (0).toUpperCase ()
+                            + split_str [i].slice (1);
+          }
+        return split_str.join(" ");
+    }
+}
+
+/*
+ * Gets the full name of a resource type.
+ */
+function resource_type_name (type)
+{
+  switch (type.toLowerCase())
+    {
+      case "ovaldef":
+        return "OVAL definition"
+      case "cert_bund_adv":
+        return "CERT-Bund Advisory"
+      case "dfn_cert_adv":
+        return "DFN-CERT Advisory"
+      default:
+        return capitalize (type);
+    }
+}
+
+/*
+ * Gets the plural form of the full name of a resource type.
+ */
+function resource_type_name_plural (type)
+{
+  switch (type.toLowerCase())
+    {
+      case "dfn_cert_adv":
+        return "DFN-CERT Advisories"
+      case "cert_bund_adv":
+        return "CERT-Bund Advisories"
+      default:
+        return resource_type_name (type) + "s"
+    }
+}
+
+
+/*
+ * Record set transformation functions
+ */
+
+/*
+ * Dummy function returning the raw data
+ */
+function data_raw (data)
+{
+  return data;
+}
+
+/*
+ * Transform data into a severity histogram
+ */
+function data_severity_histogram (raw_data, x_field, y_field)
+{
+  var bins = ["N/A", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+  var bin_func = function (val)
+    {
+      if (val !== "" && Number (val) <= 0.0)
+        return 1;
+      else if (Number (val) >= 10.0)
+        return 11;
+      else if (Number (val) > 0.0)
+        return Math.ceil (Number (val)) + 1;
+      else
+        return 0;
+    };
+
+  var data = bins.map (function (d)
+                        {
+                          record = {};
+                          record [x_field] = d;
+                          record [y_field] = 0;
+                          return record;
+                        });
+
+  for (var i in raw_data)
+    {
+      data[bin_func (raw_data [i][x_field])][y_field]
+                     = Number(data[bin_func (raw_data [i][x_field])][y_field])
+                       + Number(raw_data[i][y_field]);
+    };
+
+  return data;
+}
+
+/*
+ * Gets the counts of severity levels from records containing the counts
+ * the counts for each numeric CVSS score.
+ */
+function data_severity_level_counts (raw_data, x_field, y_field)
+{
+  var bins = ["N/A", "None", "Low", "Medium", "High"]
+
+  var data = bins.map (function (d)
+                        {
+                          record = {};
+                          record [x_field] = d;
+                          record [y_field] = 0;
+                          return record;
+                        });
+
+  for (var i in raw_data)
+    {
+      var val = raw_data [i][x_field];
+      var count = raw_data [i][y_field];
+
+      if (val !== "" && Number (val) <= 0.0)
+        data[1][y_field] += count;
+      else if (Number (val) >= severity_levels.min_high)
+        data[4][y_field] += count;
+      else if (Number (val) >= severity_levels.min_medium)
+        data[3][y_field] += count;
+      else if (Number (val) >= severity_levels.min_low)
+        data[2][y_field] += count;
+      else
+        data[0][y_field] += count;
+    };
+
+  return data;
+}
+
+/**
+ * Get counts by resource type, using the full type name for the x field.
+ */
+function resource_type_counts (raw_data, x_field, y_field)
+{
+  var data = [];
+  for (record in raw_data)
+    {
+      var new_record = {};
+      for (field in raw_data [record])
+        {
+          if (field == x_field)
+            new_record[field] = resource_type_name_plural (raw_data [record][field]);
+          else
+            new_record[field] = raw_data [record][field];
+        }
+      data.push (new_record);
+    }
+  return data;
+}
+
+
+/*
+ * Generic display helper functions
+ */
 
 /*
  * Prints an error to the console and shows it on the display of a chart.
@@ -740,92 +945,6 @@ function detached_chart_resize_listener (display)
 }
 
 /*
- * Data extraction helpers
- */
-
-/*
- * Extracts records from XML
- */
-function extract_simple_records (xml_data, selector)
-{
-  var records = [];
-  xml_data.selectAll (selector)
-            .each (function (d, i)
-                    {
-                      var record = {};
-                      d3.select(this)
-                          .selectAll ("*")
-                            .each (function (d, i)
-                                    {
-                                      if (!isNaN (parseFloat (d3.select (this).text ()))
-                                          && isFinite (d3.select (this).text ()))
-                                        record [this.localName]
-                                          = parseFloat (d3.select (this).text ())
-                                      else
-                                        record [this.localName]
-                                          = d3.select (this).text ()
-                                    });
-                      records.push (record);
-                     });
-  return records;
-}
-
-/*
- * Gets capitalized resource and attribute names
- */
-function capitalize (str)
-{
-  switch (str.toLowerCase ())
-    {
-      case "nvt":
-      case "cve":
-      case "cpe":
-        return str.toUpperCase ();
-        break;
-      default:
-        var split_str = str.split ("_");
-        for (i in split_str)
-          {
-            split_str [i] = split_str [i].charAt (0).toUpperCase ()
-                            + split_str [i].slice (1);
-          }
-        return split_str.join(" ");
-    }
-}
-
-function resource_type_name (type)
-{
-  switch (type.toLowerCase())
-    {
-      case "ovaldef":
-        return "OVAL definition"
-      case "cert_bund_adv":
-        return "CERT-Bund Advisory"
-      case "dfn_cert_adv":
-        return "DFN-CERT Advisory"
-      default:
-        return capitalize (type);
-    }
-}
-
-function resource_type_name_plural (type)
-{
-  switch (type.toLowerCase())
-    {
-      case "dfn_cert_adv":
-        return "DFN-CERT Advisories"
-      case "cert_bund_adv":
-        return "CERT-Bund Advisories"
-      default:
-        return resource_type_name (type) + "s"
-    }
-}
-
-/*
- * Display helpers
- */
-
-/*
  * Wrap SVG text at a given width
  */
 function wrap_text (text_selection, width)
@@ -874,8 +993,58 @@ function wrap_text (text_selection, width)
     });
 }
 
+
 /*
- * Color scales
+ * Generic chart title generators
+ */
+
+/*
+ * Returns a static title
+ */
+function title_static (loading_text, loaded_text)
+{
+  return function (data)
+    {
+      if (typeof data === 'undefined')
+        return loading_text;
+      else
+        return loaded_text;
+    }
+}
+
+/*
+ * Returns a title containing the total count of the resources.
+ */
+function title_total (loading_text, prefix, suffix, count_field)
+{
+  return function (data)
+    {
+      if (typeof data === 'undefined')
+        return loading_text;
+
+      var total = 0;
+      for (i = 0; i < data.length; i++)
+        total = Number(total) + Number(data[i][count_field]);
+      return (prefix + String(total) + suffix);
+    }
+}
+
+/*
+ * Generic chart styling helpers
+ */
+
+/* Color scales */
+
+/*
+ * Color scale for SecInfo severity levels
+ */
+severity_level_color_scale
+  = d3.scale.ordinal ()
+              .range (["silver", "#DDDDDD", "skyblue", "orange", "#D80000"])
+              .domain (["N/A", "None", "Low", "Medium", "High"]);
+
+/*
+ * Severity gradient
  */
 severity_colors_gradient = function ()
 {
@@ -891,6 +1060,7 @@ severity_colors_gradient = function ()
                     d3.rgb ("orange"),
                     d3.rgb ("red")]);
 }
+
 
 /*
  * Data export helpers

@@ -1,5 +1,30 @@
 2014-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Reorganize generic chart functions, including moving them from chart
+	type specific files to the more general gsa_graphics_base.js.
+
+	* src/html/classic/js/gsa_bar_chart.js (title_static, title_total)
+	(data_raw, data_severity_histogram): Remove. Moved to
+	gsa_graphics_base.js.
+
+	* src/html/classic/js/gsa_donut_chart.js (data_severity_level_counts):
+	(resource_type_counts, severity_level_color_scale): Remove. Moved to
+	gsa_graphics_base.js.
+
+	* src/html/classic/js/gsa_graphics_base.js: Reorganize functions into
+	different sections.
+	(create_chart_box): Add 'and' in comment.
+	(output_error, open_detached, fit_detached_window)
+	(detached_chart_resize_listener): Relocate to section "Generic display
+	helper functions".
+	(data_raw, data_severity_histogram): Add. Moved from gsa_bar_chart.js.
+	Add comments.
+	(data_severity_level_counts, resource_type_counts)
+	(severity_level_color_scale): Add. Moved from gsa_donut_chart.js.
+	Add comments.
+
+2014-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add basic line chart.
 
 	* CMakeLists.txt: Install file src/html/classic/js/gsa_line_chart.js.
