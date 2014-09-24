@@ -86,7 +86,7 @@ pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.16)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
-pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=7.0.0)
+pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=8.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=2.8)
 
