@@ -1,3 +1,17 @@
+2014-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add basic line chart.
+
+	* CMakeLists.txt: Install file src/html/classic/js/gsa_line_chart.js.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Load new file
+	js/gsa_line_chart.js.
+	(js-aggregate-chart): Add new case for line chart.
+	(js-secinfo-top-visualization, dashboard [secinfo]): Add line chart for
+	NVTs by creation time.
+
+	* src/html/classic/js/gsa_line_chart.js: New JavaScript file.
+
 2014-09-24  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Bump required minimum version of openvas-libraries.

@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_bar_chart.js"></script>
   <script src="/js/gsa_bubble_chart.js"></script>
   <script src="/js/gsa_donut_chart.js"></script>
+  <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
     var gsa_token = "<xsl:value-of select="/envelope/token"/>";
     var data_sources = {};
@@ -205,6 +206,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         = BubbleChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
+    <xsl:when test="$chart_type = 'line'">
+      generators ["<xsl:value-of select="$generator_name"/>"]
+        = LineChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:when>
     <xsl:otherwise>
       generators ["<xsl:value-of select="$generator_name"/>"]
         = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
@@ -333,6 +339,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="filter" select="$filter"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
+    <xsl:call-template name="js-aggregate-data-source">
+      <xsl:with-param name="data_source_name" select="'created-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="group_column" select="'created'"/>
+      <xsl:with-param name="data_column" select="''"/>
+      <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="chart_template" select="''"/>
+    </xsl:call-template>
 
     <xsl:call-template name="js-aggregate-chart">
       <xsl:with-param name="chart_name" select="'left-by-cvss'"/>
@@ -396,6 +410,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_column" select="'severity'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-by-created'"/>
+        <xsl:with-param name="data_source_name" select="'created-count-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'created'"/>
+        <xsl:with-param name="data_column" select="''"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'line'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-by-created'"/>
+        <xsl:with-param name="data_source_name" select="'created-count-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'created'"/>
+        <xsl:with-param name="data_column" select="''"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'line'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>
@@ -596,6 +631,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="chart_template" select="'info_by_class'"/>
               <xsl:with-param name="auto_load" select="0"/>
               <xsl:with-param name="create_data_source" select="0"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_timeline_chart')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_timeline_src')"/>
+              <xsl:with-param name="aggregate_type" select="'nvt'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'line'"/>
+              <xsl:with-param name="group_column" select="'created'"/>
+              <xsl:with-param name="data_column" select="''"/>
+              <xsl:with-param name="chart_template" select="''"/>
+              <xsl:with-param name="auto_load" select="0"/>
+              <xsl:with-param name="create_data_source" select="1"/>
             </xsl:call-template>
 
             <xsl:call-template name="js-aggregate-chart">
