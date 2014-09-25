@@ -7303,7 +7303,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     if (this.fit_window)
       fit_detached_window ()
 
-    window.onresize = detached_chart_resize_listener (displays ["aggregate-display"])
+    window.onresize = detached_chart_resize_listener (gsa.displays ["aggregate-display"])
     window.onresize ();
   </script>
 </xsl:template>

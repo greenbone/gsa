@@ -1,5 +1,10 @@
 2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_aggregate): Get displays array from
+	gsa object.
+
+2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Clean up various variables of chart JavaScript that are global, but
 	should be local.
 
