@@ -1,5 +1,15 @@
 2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Process charts request parameter for all http get requests, not just
+	OMP get commands.
+
+	* src/gsad_omp.c (get_many): Do not set the charts setting here.
+
+	* src/gsad.c (exec_omp_get): Try to get charts parameter and update
+	setting accordingly.
+
+2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_aggregate): Get displays array from
 	gsa object.
 

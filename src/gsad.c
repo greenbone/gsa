@@ -2428,6 +2428,17 @@ exec_omp_get (struct MHD_Connection *connection,
       tzset ();
     }
 
+  /* Set page display settings */
+
+  /* Show / hide charts */
+  if (params_given (params, "charts"))
+    {
+      const char* charts;
+      charts = params_value (params, "charts");
+      credentials->charts = atoi (charts);
+      user_set_charts (credentials->token, credentials->charts);
+    }
+
   gettimeofday (&credentials->cmd_start, NULL);
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */

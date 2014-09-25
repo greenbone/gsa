@@ -1136,7 +1136,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gchar *filter_type, *html, *request, *built_filter;
   const char *given_filt_id, *filt_id, *filter;
   const char *first, *max, *sort_field, *sort_order;
-  const char *replace_task_id, *charts;
+  const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value;
 
   given_filt_id = params_value (params, "filt_id");
@@ -1149,8 +1149,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   overrides = params_value (params, "overrides");
   autofp = params_value (params, "autofp");
   autofp_value = params_value (params, "autofp_value");
-
-  charts = params_value (params, "charts");
 
   if (strcasecmp (type, "info") == 0)
     filter_type = g_strdup (params_value (params, "info_type"));
@@ -1167,12 +1165,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
   else
     filt_id = NULL;
-
-  if (params_given (params, "charts"))
-    {
-      credentials->charts = atoi (charts);
-      user_set_charts (credentials->token, credentials->charts);
-    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
