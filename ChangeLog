@@ -1,3 +1,8 @@
+2014-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (tasks.html): Note the extra filtering terms
+	"schedule" and "next_due".
+
 2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add second line to line charts so the NVTs chart shows both the new

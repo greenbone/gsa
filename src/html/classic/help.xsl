@@ -8031,6 +8031,19 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
+      <h3>Extra filtering and sorting terms</h3>
+      <p>
+        Tasks include the extra filter terms "schedule" and "next_due".
+      </p>
+      <p>
+        "schedule" allows filtering and sorting by the name of the task's
+        schedule.  To include only scheduled tasks, simply use "schedule=".
+      </p>
+      <p>
+        "next_due" allows filtering and sorting by the next time the task
+        is due to run.  For example, "next_due>2d" will list all scheduled
+        tasks that are due to start more than two days from now.
+      </p>
 
       <a name="autorefresh"></a>
       <h3>Auto-refresh</h3>
