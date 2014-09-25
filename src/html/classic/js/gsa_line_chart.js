@@ -32,16 +32,19 @@ function LineChartGenerator ()
   var svg;
   var height;
   var width;
-  var margin = {top: 15, right: 25, bottom: 25, left: 55};
+  var margin = {top: 15, right: 55, bottom: 25, left: 55};
 
   var x_scale = d3.time.scale.utc ();
   var y_scale = d3.scale.linear ();
+  var y2_scale = d3.scale.linear ();
 
   var x_axis;
   var y_axis;
+  var y2_axis;
 
   var x_axis_elem;
   var y_axis_elem;
+  var y2_axis_elem;
 
   var data_transform = data_raw;
   var color_scale = d3.scale.category20 ();
@@ -52,16 +55,25 @@ function LineChartGenerator ()
 
   var x_data;
   var y_data;
+  var y2_data;
 
   var x_label = "";
   var y_label = "";
+  var y2_label = "";
 
   var x_field = "value";
-  var y_field = "count";
+  var y_field = "c_count";
+  var y2_field = "count";
 
-  var line = d3.svg.line()
+  var line_1 = d3.svg.line()
     .x(function(d) { return x_scale (d [x_field]); })
-    .y(function(d) { return y_scale (d [y_field]); });
+    .y(function(d) { return y_scale (d [y_field]); })
+    .defined (function (d) { return d [y_field] != undefined; })
+
+  var line_2 = d3.svg.line()
+    .x(function(d) { return x_scale (d [x_field]); })
+    .y(function(d) { return y2_scale (d [y2_field]); })
+    .defined (function (d) { return d [y2_field] != undefined; })
 
   var csv_data;
   var csv_blob;
@@ -74,8 +86,11 @@ function LineChartGenerator ()
   var x_min, x_max;
   var y_min, y_max;
 
-  function time_line (data, aggregate)
+  function time_line (data, aggregate, aggregate2, fill, fill2)
   {
+    if (data.length == 0)
+      return [];
+
     var t_min = new Date (data[0][x_field] * 1000)
     var t_max = new Date (data[data.length-1][x_field] * 1000)
     var interval_days = (t_max.getTime() - t_min.getTime()) / 86400000
@@ -83,8 +98,11 @@ function LineChartGenerator ()
     var t_index = 0;
     var data_index = 0;
     var new_data = [];
+    var prev_y, prev_y2;
     if (aggregate == null)
-      aggregate = "sum"
+      aggregate = "max"
+    if (aggregate2 == null)
+      aggregate2 = "sum"
 
     if (interval_days <= 100)
       {
@@ -107,26 +125,23 @@ function LineChartGenerator ()
                                          t_max, 3)
       }
 
-    var y_value;
-    if (aggregate == "min")
-      y_value = Infinity;
-    else if (aggregate == "max")
-      y_value = -Infinity;
-    else
-      y_value = 0;
-
     for (t_index in times)
       {
         var new_record = {};
         var t = times[t_index];
         new_record[x_field] = t;
 
-        new_record[y_field] = 0;
+        var y_value = undefined, y2_value = undefined;
+
         while (data_index < data.length
                && (t_index >= times.length - 1
                    || data [data_index][x_field] * 1000 < times[Number(t_index)+1].getTime()))
           {
-            if (aggregate == "sum" || aggregate == "cumulative_sum")
+            if (y_value == undefined)
+              {
+                y_value = data [data_index][y_field]
+              }
+            else if (aggregate == "sum")
               {
                 y_value += Number(data [data_index][y_field])
               }
@@ -138,15 +153,47 @@ function LineChartGenerator ()
               {
                 y_value = Math.max (y_value, Number(data [data_index][y_field]))
               }
+
+            if (y2_value == undefined)
+              {
+                y2_value = data [data_index][y2_field]
+              }
+            else if (aggregate2 == "sum")
+              {
+                y2_value += Number(data [data_index][y2_field])
+              }
+            else if (aggregate2 == "min")
+              {
+                y2_value = Math.min (y2_value, Number(data [data_index][y2_field]))
+              }
+            else if (aggregate2 == "max")
+              {
+                y2_value = Math.max (y2_value, Number(data [data_index][y2_field]))
+              }
+
             data_index ++;
           }
-        new_record[y_field] = y_value;
-        if (aggregate == "min")
-          y_value = Infinity;
-        else if (aggregate == "max")
-          y_value = -Infinity;
-        else if (aggregate != "cumulative_sum")
-          y_value = 0;
+
+        if (y_value != undefined)
+          {
+            new_record[y_field] = y_value;
+            prev_y = y_value;
+          }
+        else if (fill == "previous")
+          new_record[y_field] = prev_y;
+        else
+          new_record[y_field] = fill;
+
+        if (y2_value != undefined)
+          {
+            new_record[y2_field] = y2_value;
+            prev_y2 = y2_value;
+          }
+        else if (fill2 == "previous")
+          new_record[y2_field] = prev_y2;
+        else
+          new_record[y2_field] = fill2;
+
         new_data.push (new_record);
       }
     return (new_data);
@@ -236,7 +283,7 @@ function LineChartGenerator ()
             records = extract_simple_records (xml_data,
                                               "aggregate group");
             data = data_transform (records, x_field, y_field);
-            data = time_line (data, "sum");
+            data = time_line (data, "max", "sum", "previous", 0);
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -244,12 +291,19 @@ function LineChartGenerator ()
         }
       display.header ().text (title (data));
 
+      var defined = function (d) { return d != undefined; }
       x_data = data.map (function (d) { return d [x_field]; });
       y_data = data.map (function (d) { return d [y_field]; });
-      x_min = Math.min.apply (null, x_data)
-      x_max = Math.max.apply (null, x_data)
-      y_min = Math.min.apply (null, y_data)
-      y_max = Math.max.apply (null, y_data)
+      y2_data = data.map (function (d) { return d [y2_field]; });
+      x_min = Math.min.apply (null, x_data.filter (defined) )
+      x_max = Math.max.apply (null, x_data.filter (defined))
+      y_min = Math.min.apply (null, y_data.filter (defined))
+      y_max = Math.max.apply (null, y_data.filter (defined))
+      y2_min = Math.min.apply (null, y2_data.filter (defined))
+      y2_max = Math.max.apply (null, y2_data.filter (defined))
+
+      if (data.length == 1)
+        console.debug ("data.length == 1");
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -268,17 +322,26 @@ function LineChartGenerator ()
                           .orient("bottom")
                           .ticks (6);
 
-
           y_axis = d3.svg.axis ()
                     .scale (y_scale)
                     .orient ("left");
+
+          y2_axis = d3.svg.axis ()
+                      .scale (y2_scale)
+                      .orient ("right");
         }
 
       x_scale.range ([0, width]);
       y_scale.range ([height, 0]);
+      y2_scale.range ([height, 0]);
 
-      x_scale.domain ([x_min, x_max]).nice(12);
+      if (data.length > 1)
+        x_scale.domain ([x_min, x_max]).nice(3);
+      else
+        x_scale.domain ([x_min-1, x_min+1]);
+
       y_scale.domain ([0, y_max]).nice(10);
+      y2_scale.domain ([0, y2_max]).nice(10);
 
       if (!update)
         {
@@ -297,24 +360,86 @@ function LineChartGenerator ()
                             .attr("class", "y axis")
                             .call(y_axis);
 
+          y2_axis_elem = svg.append("g")
+                            .attr("class", "y axis")
+                            .attr("transform", "translate(" + width + ", 0)")
+                            .call(y2_axis);
+
           svg.append("path")
               .attr ("id", "line_y")
               .datum(data)
               .style("fill", "transparent")
               .style("stroke", "1px")
               .style("stroke", "green")
-              .attr("d", line);
+              .attr("d", line_1);
 
+          svg.append("path")
+              .attr ("id", "line_y2")
+              .datum(data)
+              .style("fill", "transparent")
+              .style("stroke", "1px")
+              .style("stroke-dasharray", "3,2")
+              .style("stroke", d3.rgb("green").brighter())
+              .attr("d", line_2);
+
+          if (data.length == 1)
+            {
+              svg.append ("circle")
+                  .attr ("id", "circle_y")
+                  .style("fill", "transparent")
+                  .style("stroke", "1px")
+                  .style("stroke", "green")
+                  .attr ("r", "4px")
+                  .attr ("cx", x_scale (data [0][x_field]))
+                  .attr ("cy", y_scale (data [0][y_field]));
+
+              svg.append ("circle")
+                  .attr ("id", "circle_y2")
+                  .style("fill", "transparent")
+                  .style("stroke", "1px")
+                  .style("stroke-dasharray", "3,2")
+                  .style("stroke", d3.rgb("green").brighter())
+                  .attr ("r", "4px")
+                  .attr ("cx", x_scale (data [0][x_field]))
+                  .attr ("cy", y2_scale (data [0][y2_field]));
+            }
         }
 
       x_axis_elem
         .call (x_axis)
         .attr("transform", "translate(0," + height + ")")
-      y_axis_elem.call (y_axis);
+      y_axis_elem
+        .call (y_axis)
+      y2_axis_elem
+        .call (y2_axis)
+        .attr("transform", "translate(" + width + ", 0)")
 
       svg.select ("#line_y")
         .datum(data)
-        .attr ("d", line);
+        .attr ("d", line_1);
+
+      svg.select ("#line_y2")
+        .datum(data)
+        .attr ("d", line_2);
+
+      if (data.length == 1)
+        {
+          svg.select ("#circle_y")
+              .attr ("cx", x_scale (data [0][x_field]))
+              .attr ("cy", y_scale (data [0][y_field]));
+
+          svg.select ("#circle_y2")
+              .attr ("cx", x_scale (data [0][x_field]))
+              .attr ("cy", y2_scale (data [0][y2_field]));
+        }
+      else
+        {
+          svg.select ("#circle_y")
+              .remove ();
+
+          svg.select ("#circle_y2")
+              .remove ();
+        }
 
       // Create detach menu item
       display.create_or_get_menu_item ("detach")

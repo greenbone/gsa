@@ -1,5 +1,19 @@
 2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add second line to line charts so the NVTs chart shows both the new
+	NVTs per time step and the cumulative amount.
+
+	* src/html/classic/js/gsa_line_chart.js (LineChartGenerator): Increase
+	right margin size. Add variables for second y axis. Make line generator
+	test if y fields are defined.
+	(time_line): Add parameters aggregate2, fill, fill2. Return empty data
+	array if original was empty. Get data for second y axis and fill in
+	missing values according to fill and fill2.
+	(generate): Add second line and y axis. Handle missing values and data
+	arrays containing only one point.
+
+2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Process charts request parameter for all http get requests, not just
 	OMP get commands.
 
