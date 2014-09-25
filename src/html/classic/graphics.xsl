@@ -48,14 +48,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_donut_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
-    var gsa_token = "<xsl:value-of select="/envelope/token"/>";
-    var data_sources = {};
-    var generators = {};
-    var displays = {};
-    var charts = {};
-    var chart_selections = [];
+    gsa.gsa_token = "<xsl:value-of select="/envelope/token"/>";
+    gsa.data_sources = {};
+    gsa.generators = {};
+    gsa.displays = {};
+    gsa.charts = {};
 
-    var severity_levels =
+    gsa.severity_levels =
       {max_high : 10.0,
        min_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium') + 0.1"/>,
        max_medium : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium')"/>,
@@ -90,9 +89,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
 
-  if (data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+  if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
     {
-      data_sources ["<xsl:value-of select="$data_source_name"/>"]
+      gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"]
         =
         <xsl:choose>
           <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'info_by_class'">
@@ -130,7 +129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="auto_load" select="0"/>
   <xsl:param name="create_data_source" select="0"/>
 
-  if (displays ["<xsl:value-of select="$display_name"/>"] == undefined)
+  if (gsa.displays ["<xsl:value-of select="$display_name"/>"] == undefined)
     {
       console.error ("Display not found: <xsl:value-of select="$display_name"/>");
     }
@@ -148,7 +147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      if (data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+      if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
         {
           console.error ("Data source not found: <xsl:value-of select="$data_source_name"/>");
         }
@@ -197,32 +196,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Create chart generator -->
   <xsl:choose>
     <xsl:when test="$chart_type = 'donut'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
-        = DonutChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = DonutChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'bubbles'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
-        = BubbleChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'line'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
-        = LineChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = LineChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:otherwise>
-      generators ["<xsl:value-of select="$generator_name"/>"]
-        = BarChartGenerator (data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = BarChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:otherwise>
   </xsl:choose>
 
   <!-- Create basic chart -->
-  charts ["<xsl:value-of select="$chart_name"/>"] =
-    Chart (data_sources ["<xsl:value-of select="$data_source_name"/>"],
-            generators ["<xsl:value-of select="$generator_name"/>"],
-            displays ["<xsl:value-of select="$display_name"/>"],
+  gsa.charts ["<xsl:value-of select="$chart_name"/>"] =
+    Chart (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"],
+            gsa.generators ["<xsl:value-of select="$generator_name"/>"],
+            gsa.displays ["<xsl:value-of select="$display_name"/>"],
             "<xsl:value-of select="$chart_name"/>",
             "<xsl:value-of select="$selector_label"/>",
             "/img/charts/severity-bar-chart.png",
@@ -233,11 +232,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Data modifiers and stylers -->
   <xsl:choose>
     <xsl:when test="$chart_template = 'resource_type_counts'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         .data_transform (resource_type_counts)
     </xsl:when>
     <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         .data_transform (data_severity_level_counts)
       <xsl:choose>
         <xsl:when test="$chart_type = 'donut'">
@@ -249,7 +248,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
-      generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         .data_transform (data_severity_histogram)
       <xsl:choose>
         <xsl:when test="$chart_type = 'donut'">
@@ -257,8 +256,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           .bar_style (severity_bar_style ("value",
-                                          severity_levels.max_low,
-                                          severity_levels.max_medium))
+                                          gsa.severity_levels.max_low,
+                                          gsa.severity_levels.max_medium))
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -266,7 +265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:if test="$auto_load">
-    charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
+    gsa.charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
   </xsl:if>
 
 </xsl:template>
@@ -499,14 +498,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:if>
 
-    displays ["top-visualization-left"].create_chart_selector ();
-    displays ["top-visualization-right"].create_chart_selector ();
+    gsa.displays ["top-visualization-left"].create_chart_selector ();
+    gsa.displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
     </xsl:if>
     <xsl:if test="$auto_load_right != ''">
-    displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
     </xsl:if>
   </script>
 </xsl:template>
@@ -798,17 +797,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="create_data_source" select="1"/>
             </xsl:call-template>
 
-            displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
+            gsa.displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
             <xsl:if test="$filters">
-              displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();
+              gsa.displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();
 
               <xsl:for-each select="$filters">
-                displays ["<xsl:value-of select="$display_name"/>"].add_filter ("<xsl:value-of select="@id"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
+                gsa.displays ["<xsl:value-of select="$display_name"/>"].add_filter ("<xsl:value-of select="@id"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
               </xsl:for-each>
-              displays ["<xsl:value-of select="$display_name"/>"].select_filter ("<xsl:value-of select="$auto_filter"/>", false);
+              gsa.displays ["<xsl:value-of select="$display_name"/>"].select_filter ("<xsl:value-of select="$auto_filter"/>", false);
             </xsl:if>
 
-            displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
+            gsa.displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
           </xsl:for-each>
         </script>
       </center>

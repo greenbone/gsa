@@ -25,6 +25,11 @@
  */
 
 /*
+ * GSA base object
+ */
+if (typeof gsa === 'undefined') gsa = {};
+
+/*
  * Basic chart components
  */
 
@@ -65,12 +70,12 @@ function create_chart_box (parent_id, container_id, width, height,
       .attr ("class", "chart-foot")
       .attr ("id", container_id + "-foot")
 
-  displays [container_id] = new Display (container);
+  gsa.displays [container_id] = new Display (container);
   if (select_pref_id != '')
-    displays [container_id].select_pref_id (select_pref_id);
+    gsa.displays [container_id].select_pref_id (select_pref_id);
 
   if (filter_pref_id != '')
-    displays [container_id].filter_pref_id (filter_pref_id);
+    gsa.displays [container_id].filter_pref_id (filter_pref_id);
 
 }
 
@@ -459,7 +464,7 @@ function Display (p_container)
   {
     footer.append ("a")
           .attr ("href", "javascript: void (0);")
-          .attr ("onclick", "displays [\"" + name + "\"].prev_chart ()")
+          .attr ("onclick", "gsa.displays [\"" + name + "\"].prev_chart ()")
           .append ("img")
             .attr ("src", "img/previous.png")
             .style ("vertical-align", "middle")
@@ -468,7 +473,7 @@ function Display (p_container)
                           .style ("margin-left", "5px")
                           .style ("margin-right", "5px")
                           .style ("vertical-align", "middle")
-                          .attr ("onchange", "displays [\""+ name + "\"].select_chart (this.value, true, true)");
+                          .attr ("onchange", "gsa.displays [\""+ name + "\"].select_chart (this.value, true, true)");
 
     for (var i = 0; i < charts.length; i++)
       {
@@ -481,7 +486,7 @@ function Display (p_container)
 
     footer.append ("a")
           .attr ("href", "javascript: void (0);")
-          .attr ("onclick", "displays [\"" + name + "\"].next_chart ()")
+          .attr ("onclick", "gsa.displays [\"" + name + "\"].next_chart ()")
           .append ("img")
             .attr ("src", "img/next.png")
             .style ("vertical-align", "middle")
@@ -494,7 +499,7 @@ function Display (p_container)
                             .attr ("id", name + "_filter_selector")
                             .text ("Filter: ")
                               .append ("select")
-                              .attr ("onchange", "displays [\""+ name + "\"].select_filter (this.value, true, true)")
+                              .attr ("onchange", "gsa.displays [\""+ name + "\"].select_filter (this.value, true, true)")
       filter_elem.append ("option")
                   .text ("--")
                   .attr ("value", "")
@@ -538,7 +543,7 @@ function Display (p_container)
           var form_data = new FormData ();
           form_data.append ("chart_preference_id", filter_pref_id);
           form_data.append ("chart_preference_value", filter_id);
-          form_data.append ("token", gsa_token);
+          form_data.append ("token", gsa.gsa_token);
           form_data.append ("cmd", "save_chart_preference");
 
           chart_pref_request.post (form_data);
@@ -627,7 +632,7 @@ function Display (p_container)
           var form_data = new FormData ();
           form_data.append ("chart_preference_id", select_pref_id);
           form_data.append ("chart_preference_value", charts [index].chart_name ());
-          form_data.append ("token", gsa_token);
+          form_data.append ("token", gsa.gsa_token);
           form_data.append ("cmd", "save_chart_preference");
 
           chart_pref_request.post (form_data);
@@ -669,13 +674,13 @@ function Display (p_container)
 function create_uri (command, params, prefix, no_xml)
 {
   var params_str = prefix + "cmd=" + command;
-  for (prop_name in params)
+  for (var prop_name in params)
     {
       if (!no_xml || prop_name != "xml")
         params_str = (params_str + "&" + prop_name
                       + "=" + params[prop_name]);
     }
-  params_str = params_str + "&token=" + gsa_token;
+  params_str = params_str + "&token=" + gsa.gsa_token;
   return encodeURI (params_str);
 }
 
@@ -725,7 +730,7 @@ function capitalize (str)
         break;
       default:
         var split_str = str.split ("_");
-        for (i in split_str)
+        for (var i in split_str)
           {
             split_str [i] = split_str [i].charAt (0).toUpperCase ()
                             + split_str [i].slice (1);
@@ -802,7 +807,7 @@ function data_severity_histogram (raw_data, x_field, y_field)
 
   var data = bins.map (function (d)
                         {
-                          record = {};
+                          var record = {};
                           record [x_field] = d;
                           record [y_field] = 0;
                           return record;
@@ -828,7 +833,7 @@ function data_severity_level_counts (raw_data, x_field, y_field)
 
   var data = bins.map (function (d)
                         {
-                          record = {};
+                          var record = {};
                           record [x_field] = d;
                           record [y_field] = 0;
                           return record;
@@ -841,11 +846,11 @@ function data_severity_level_counts (raw_data, x_field, y_field)
 
       if (val !== "" && Number (val) <= 0.0)
         data[1][y_field] += count;
-      else if (Number (val) >= severity_levels.min_high)
+      else if (Number (val) >= gsa.severity_levels.min_high)
         data[4][y_field] += count;
-      else if (Number (val) >= severity_levels.min_medium)
+      else if (Number (val) >= gsa.severity_levels.min_medium)
         data[3][y_field] += count;
-      else if (Number (val) >= severity_levels.min_low)
+      else if (Number (val) >= gsa.severity_levels.min_low)
         data[2][y_field] += count;
       else
         data[0][y_field] += count;
@@ -860,7 +865,7 @@ function data_severity_level_counts (raw_data, x_field, y_field)
 function resource_type_counts (raw_data, x_field, y_field)
 {
   var data = [];
-  for (record in raw_data)
+  for (var record in raw_data)
     {
       var new_record = {};
       for (field in raw_data [record])
@@ -966,6 +971,7 @@ function wrap_text (text_selection, width)
                       .append ("tspan")
                         .attr ("x", x)
                         .attr ("y", y)
+      var word;
       while (word = words.pop ())
         {
           line.push (word);
@@ -1023,7 +1029,7 @@ function title_total (loading_text, prefix, suffix, count_field)
         return loading_text;
 
       var total = 0;
-      for (i = 0; i < data.length; i++)
+      for (var i = 0; i < data.length; i++)
         total = Number(total) + Number(data[i][count_field]);
       return (prefix + String(total) + suffix);
     }
@@ -1051,8 +1057,8 @@ severity_colors_gradient = function ()
   return d3.scale.linear()
             .domain([-1.0,
                       0.0,
-                      severity_levels.max_low,
-                      severity_levels.max_medium,
+                      gsa.severity_levels.max_low,
+                      gsa.severity_levels.max_medium,
                       10.0])
             .range([d3.rgb ("grey"),
                     d3.rgb ("silver"),

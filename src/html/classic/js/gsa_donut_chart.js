@@ -383,7 +383,13 @@ function DonutChartGenerator ()
 
   var relax_labels = function (labels)
     {
-      again = false;
+      var elem_a, elem_b;
+      var sel_a, sel_b;
+      var x_a, x_b;
+      var y_a, y_b;
+      var width_a, width_b;
+      var word;
+      var again = false;
       var labels = svg.selectAll (".slice_label")
 
       labels.each (function (d, i)

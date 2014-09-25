@@ -40,6 +40,9 @@ function LineChartGenerator ()
   var x_axis;
   var y_axis;
 
+  var x_axis_elem;
+  var y_axis_elem;
+
   var data_transform = data_raw;
   var color_scale = d3.scale.category20 ();
   var title = title_static ("Loading line chart ...", "Bubble Chart");

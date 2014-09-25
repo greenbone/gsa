@@ -1,3 +1,27 @@
+2014-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Clean up various variables of chart JavaScript that are global, but
+	should be local.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Put chart objects,
+	gsa_token and severity_levels into a gsa base object.
+	(js-aggregate-data-source, js-aggregate-chart)
+	(js-secinfo-top-visualization, dashboard [secinfo]): Update references
+	to objects now in the gsa object.
+
+	* src/html/classic/js/gsa_bubble_chart.js (simple_bubble_data): Make
+	the variable d local.
+
+	* src/html/classic/js/gsa_donut_chart.js (relax_labels): Make variables
+	local.
+
+	* src/html/classic/js/gsa_graphics_base.js (): Create gsa object.
+	(create_chart_box, Display, create_uri, capitalize)
+	(data_severity_histogram, data_severity_level_counts)
+	(resource_type_counts, wrap_text, title_total)
+	(severity_colors_gradient): Update references to objects now in the gsa
+	object and make various temporary variables local.
+
 2014-09-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Reorganize generic chart functions, including moving them from chart

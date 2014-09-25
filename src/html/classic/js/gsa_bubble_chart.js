@@ -349,7 +349,7 @@ function simple_bubble_data (raw_data, label_field, size_field, color_field)
 {
   var bubble_data = [];
 
-  for (d in raw_data)
+  for (var d in raw_data)
     {
       var new_record = {};
 
