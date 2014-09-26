@@ -1,3 +1,7 @@
+2014-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (tasks.html): Correct schedule example.
+
 2014-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (tasks.html): Note the extra filtering terms

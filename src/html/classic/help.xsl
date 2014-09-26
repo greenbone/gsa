@@ -8037,7 +8037,7 @@ Public License instead of this License.
       </p>
       <p>
         "schedule" allows filtering and sorting by the name of the task's
-        schedule.  To include only scheduled tasks, simply use "schedule=".
+        schedule.  To include only scheduled tasks, use "not schedule=".
       </p>
       <p>
         "next_due" allows filtering and sorting by the next time the task
