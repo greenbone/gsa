@@ -1,6 +1,12 @@
 2014-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Backport r20485.
+	Backport r20488.
+
+	* src/html/classic/help.xsl (tasks.html): Correct schedule example.
+
+2014-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r20486.
 
 	* src/html/classic/help.xsl (tasks.html): Note the extra filtering terms
 	"schedule" and "next_due".
