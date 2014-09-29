@@ -1,3 +1,12 @@
+2014-09-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add charts to the Tasks page.
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	New template.
+
+	* src/html/classic/omp.xsl (html-tasks-table): Add visualization.
+
 2014-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (tasks.html): Correct schedule example.

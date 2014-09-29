@@ -6406,6 +6406,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="6"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-scan-management-top-visualization">
+        <xsl:with-param name="type" select="'task'"/>
+        <xsl:with-param name="auto_load_left_default" select="'left-by-class'"/>
+        <xsl:with-param name="auto_load_right_default" select="'right-by-task-status'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

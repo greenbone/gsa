@@ -270,6 +270,138 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </xsl:template>
 
+<xsl:template name="js-scan-management-top-visualization">
+  <xsl:param name="type" select="'task'"/>
+  <xsl:param name="auto_load_left_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="auto_load_right_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='task'">ce8608af-7e66-45a8-aa8a-76def4f9f838</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="auto_load_left_default" select="'left-by-cvss'"/>
+  <xsl:param name="auto_load_right_default" select="'right-by-class'"/>
+
+  <xsl:variable name="auto_load_left">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$auto_load_left_default"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="auto_load_right">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$auto_load_right_default"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term"/>
+
+  <script type="text/javascript">
+    <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="container_id" select="'top-visualization-left'"/>
+      <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="container_id" select="'top-visualization-right'"/>
+      <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="js-aggregate-data-source">
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="group_column" select="'severity'"/>
+      <xsl:with-param name="data_column" select="''"/>
+      <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-data-source">
+      <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="group_column" select="'status'"/>
+      <xsl:with-param name="data_column" select="''"/>
+      <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="chart_template" select="''"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'left-by-cvss'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+      <xsl:with-param name="chart_type" select="'bar'"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'right-by-cvss'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:with-param name="chart_type" select="'bar'"/>
+      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'left-by-class'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_template" select="'info_by_class'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-aggregate-chart">
+      <xsl:with-param name="chart_name" select="'right-by-class'"/>
+      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
+      <xsl:with-param name="aggregate_type" select="$type"/>
+      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:with-param name="chart_type" select="'donut'"/>
+      <xsl:with-param name="chart_template" select="'info_by_class'"/>
+    </xsl:call-template>
+
+    <xsl:if test="$type='task'">
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-by-task-status'"/>
+        <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'status'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-by-task-status'"/>
+        <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'status'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    gsa.displays ["top-visualization-left"].create_chart_selector ();
+    gsa.displays ["top-visualization-right"].create_chart_selector ();
+
+    <xsl:if test="$auto_load_left != ''">
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
+    </xsl:if>
+    <xsl:if test="$auto_load_right != ''">
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
+    </xsl:if>
+  </script>
+</xsl:template>
+
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
   <xsl:param name="auto_load_left_pref_id">
