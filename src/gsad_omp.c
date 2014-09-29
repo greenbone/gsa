@@ -9701,7 +9701,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *alert_id, *search_phrase, *min_cvss_base, *type;
+  const char *alert_id, *search_phrase, *min_cvss_base, *type, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
@@ -9741,6 +9741,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   search_phrase = params_value (params, "search_phrase");
   if (search_phrase == NULL)
     params_given (params, "search_phrase") || (search_phrase = "");
+
+  zone = params_value (params, "timezone");
+  if (zone == NULL)
+    params_given (params, "zone") || (zone = "");
 
   if (params_given (params, "min_cvss_base"))
     {
@@ -9929,7 +9933,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     {
       const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
       const char *esc_first_result, *esc_max_results;
-      const char *esc_search_phrase, *esc_min_cvss_base;
+      const char *esc_search_phrase, *esc_min_cvss_base, *esc_zone;
 
       esc_notes = params_value (params, "esc_notes");
       if (esc_notes == NULL)
@@ -9957,6 +9961,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       esc_search_phrase = params_value (params, "esc_search_phrase");
       if (esc_search_phrase == NULL)
         params_given (params, "esc_search_phrase") || (esc_search_phrase = "");
+
+      esc_zone = params_value (params, "esc_zone");
+      if (esc_zone == NULL)
+        params_given (params, "esc_zone") || (esc_zone = "");
 
       if (params_given (params, "esc_min_cvss_base"))
         {
@@ -10018,6 +10026,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         " search_phrase=\"%s\""
                                         " min_cvss_base=\"%s\""
                                         " alert_id=\"%s\"/>",
+                                        " timezone=\"%s\"/>",
                                         ignore_pagination,
                                         strcmp (autofp, "0") ? autofp_value
                                                              : "0",
@@ -10043,7 +10052,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         delta_states->str,
                                         esc_search_phrase,
                                         esc_min_cvss_base,
-                                        alert_id);
+                                        alert_id,
+                                        esc_zone);
       if (ret == -1)
         {
           openvas_server_close (socket, session);
@@ -10291,7 +10301,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " levels=\"%s\""
                                     " delta_states=\"%s\""
                                     " search_phrase=\"%s\""
-                                    " min_cvss_base=\"%s\"/>",
+                                    " min_cvss_base=\"%s\""
+                                    " timezone=\"%s\"/>",
                                     ignore_pagination,
                                     filt_id ? filt_id : "0",
                                     filter ? filter : "",
@@ -10323,7 +10334,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     levels->str,
                                     delta_states->str,
                                     search_phrase,
-                                    min_cvss_base);
+                                    min_cvss_base,
+                                    zone);
   if (ret == -1)
     {
       openvas_server_close (socket, session);

@@ -1,3 +1,10 @@
+2014-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (full-report-export-form)
+	(filtered-report-export-form): Add timezone to download form.
+
+	* src/gsad_omp.c (get_report): Add timezone to GET_REPORTS request.
+
 2014-09-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add charts to the Tasks page.

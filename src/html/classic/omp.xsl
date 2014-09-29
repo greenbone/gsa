@@ -27019,6 +27019,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:for-each>
     </select>
+    <xsl:if test="string-length (report/filters/timezone) &gt; 0">
+      <input type="hidden" name="timezone" value="{report/filters/timezone}"/>
+    </xsl:if>
     <input type="image"
             name="submit"
             value="Download"
@@ -27100,6 +27103,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:for-each>
     </select>
+    <xsl:if test="string-length (report/filters/timezone) &gt; 0">
+      <input type="hidden" name="timezone" value="{report/filters/timezone}"/>
+    </xsl:if>
     <input type="image"
             name="submit"
             value="Download"
