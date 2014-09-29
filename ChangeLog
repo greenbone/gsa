@@ -1,5 +1,10 @@
 2014-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Default to GET_SYSTEM_REPORTS before
+	GET_MY_SETTINGS, because this is convenient for the Monitor role.
+
+2014-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (full-report-export-form)
 	(filtered-report-export-form): Add timezone to download form.
 

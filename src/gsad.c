@@ -2389,6 +2389,9 @@ exec_omp_get (struct MHD_Connection *connection,
       else if (credentials->capabilities
                && strcasestr (credentials->capabilities, "get_targets"))
         cmd = "get_targets";
+      else if (credentials->capabilities
+               && strcasestr (credentials->capabilities, "get_system_reports"))
+        cmd = "get_system_reports";
       else
         cmd = "get_my_settings";
     }
