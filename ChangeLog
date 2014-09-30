@@ -1,3 +1,15 @@
+2014-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsa-style.css (.axis text): Split font styling so it
+	does not override "font-style".
+
+	* src/html/classic/js/gsa_graphics_base.js (field_name): New function.
+	
+	* src/html/classic/js/gsa_line_chart.js (LineChartGenerator): Enlarge
+	top margin, add legend_elem variable.
+	(generate): Add legend on top of chart. Make font of right y axis
+	oblique.
+
 2014-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Default to GET_SYSTEM_REPORTS before

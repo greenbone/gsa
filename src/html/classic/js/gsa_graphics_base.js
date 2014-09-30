@@ -773,6 +773,26 @@ function resource_type_name_plural (type)
     }
 }
 
+/*
+ * Gets the full form of an aggregate field.
+ */
+function field_name (field, type)
+{
+  switch (field.toLowerCase())
+    {
+      case "c_count":
+        return "total " + resource_type_name_plural (type)
+      case "count":
+        return resource_type_name_plural (type)
+      case "created":
+        return "creation time"
+      case "modified":
+        return "modification time"
+      default:
+        return field;
+    }
+}
+
 
 /*
  * Record set transformation functions

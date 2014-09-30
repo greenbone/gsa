@@ -1178,7 +1178,9 @@ text-align:right;
 }
 
 .axis text {
-  font: 8pt sans-serif;
+  font-family: sans-serif;
+  font-size: 8pt;
+  font-weight: normal;
 }
 
 .axis path,

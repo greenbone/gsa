@@ -32,7 +32,9 @@ function LineChartGenerator ()
   var svg;
   var height;
   var width;
-  var margin = {top: 15, right: 55, bottom: 25, left: 55};
+  var margin = {top: 55, right: 55, bottom: 25, left: 55};
+
+  var legend_elem;
 
   var x_scale = d3.time.scale.utc ();
   var y_scale = d3.scale.linear ();
@@ -351,6 +353,10 @@ function LineChartGenerator ()
           svg.attr ("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
+          legend_elem = svg.append ("g")
+                            .attr ("id", "legend")
+                            .attr("transform", "translate(0, -50)")
+
           x_axis_elem = svg.append("g")
                             .attr("class", "x axis")
                             .attr("transform", "translate(0," + height + ")")
@@ -362,6 +368,7 @@ function LineChartGenerator ()
 
           y2_axis_elem = svg.append("g")
                             .attr("class", "y axis")
+                            .style("font-style", "oblique")
                             .attr("transform", "translate(" + width + ", 0)")
                             .call(y2_axis);
 
@@ -404,6 +411,42 @@ function LineChartGenerator ()
                   .attr ("cy", y2_scale (data [0][y2_field]));
             }
         }
+
+      /* Create legend items */
+      /* TODO: automatic layout of legend elements*/
+      legend_elem.text ("");
+
+      legend_elem.append ("path")
+                  .attr ("d", "M 0 10 L 20 10")
+                  .style("fill", "transparent")
+                  .style("stroke", "1px")
+                  .style("stroke", "green")
+
+      legend_elem.append ("text")
+                  .style ("font-size", "8pt")
+                  .style ("font-weight", "bold")
+                  .attr ("x", 25)
+                  .attr ("y", 15)
+                  .text (field_name (y_field,
+                                     chart.data_src ()
+                                            .param ("aggregate_type")))
+
+      legend_elem.append ("path")
+                  .attr ("d", "M 100 10 L 120 10")
+                  .style("fill", "transparent")
+                  .style("stroke", "1px")
+                  .style("stroke-dasharray", "3,2")
+                  .style("stroke", d3.rgb("green").brighter())
+
+      legend_elem.append ("text")
+                  .style ("font-size", "8pt")
+                  .style ("font-weight", "bold")
+                  .style ("font-style", "oblique")
+                  .attr ("x", 125)
+                  .attr ("y", 15)
+                  .text (field_name (y2_field,
+                                     chart.data_src ()
+                                            .param ("aggregate_type")))
 
       x_axis_elem
         .call (x_axis)
