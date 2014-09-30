@@ -149,7 +149,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:escape-js">
   <xsl:param name="string"/>
-  <func:result select="str:replace (str:replace ($string, '\', '\\'), '&quot;', '\&quot;')"/>
+  <xsl:variable name='apos'>'</xsl:variable>
+  <func:result select="str:replace (str:replace (str:replace (str:replace (str:replace (
+                        $string, '\', '\x2F'), '&quot;', '\x22'), $apos, '\x27'), '&lt;', '\x3C'), '&lt;', '\x3E')"/>
 </func:function>
 
 <func:function name="gsa:date-tz">

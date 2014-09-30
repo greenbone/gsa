@@ -1,5 +1,10 @@
 2014-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (gsa:escape-js): Add escaping for "<", ">"
+	and "'". Use character code form for all escaped characters.
+
+2014-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsa-style.css (.axis text): Split font styling so it
 	does not override "font-style".
 
