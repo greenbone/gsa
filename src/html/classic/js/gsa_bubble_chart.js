@@ -239,7 +239,7 @@ function BubbleChartGenerator ()
 
       display.create_or_get_menu_item ("csv_dl")
                .attr("href", csv_url)
-               .attr("download", "gsa_bar_chart-" + new Date().getTime() + ".csv")
+               .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".csv")
                .text("Download CSV");
 
       // Generate SVG after transition
@@ -259,7 +259,7 @@ function BubbleChartGenerator ()
 
                     display.create_or_get_menu_item ("svg_dl")
                                .attr("href", svg_url)
-                               .attr("download", "gsa_donut_chart-" + new Date().getTime() + ".svg")
+                               .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".svg")
                                .text("Download SVG");
                   }, 600);
 

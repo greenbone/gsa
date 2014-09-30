@@ -502,7 +502,7 @@ function LineChartGenerator ()
 
       display.create_or_get_menu_item ("csv_dl")
                .attr("href", csv_url)
-               .attr("download", "gsa_bar_chart-" + new Date().getTime() + ".csv")
+               .attr("download", "gsa_line_chart-" + new Date().getTime() + ".csv")
                .text("Download CSV");
 
       // Generate SVG after transition

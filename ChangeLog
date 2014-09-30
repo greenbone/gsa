@@ -1,5 +1,16 @@
 2014-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Change file names
+	of exported CSV and SVG to "gsa_bubble_chart-[...]".
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Change file name
+	of exported CSV to "gsa_donut_chart-[...]".
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Change file name
+	of exported CSV to "gsa_line_chart-[...]".
+
+2014-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:escape-js): Add escaping for "<", ">"
 	and "'". Use character code form for all escaped characters.
 
