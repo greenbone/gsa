@@ -752,6 +752,8 @@ function resource_type_name (type)
         return "CERT-Bund Advisory"
       case "dfn_cert_adv":
         return "DFN-CERT Advisory"
+      case "allinfo":
+        return "SecInfo Item"
       default:
         return capitalize (type);
     }
@@ -1126,6 +1128,78 @@ csv_from_records = function (records, columns, headers, title)
     }
 
   return csv_data;
+}
+
+/*
+ * Generate HTML table from simple records
+ */
+html_table_from_records = function (records, columns, headers, title, filter)
+{
+  var csv_data = "";
+
+  var doc = document.implementation.createDocument ("http://www.w3.org/1999/xhtml", "html", null);
+  var head_s = d3.select (doc.documentElement).append ("head");
+  var body_s = d3.select (doc.documentElement).append ("body");
+  var table_s;
+  var row_class = "odd";
+
+  var stylesheet;
+  for (var sheet_i = 0; stylesheet == undefined && sheet_i < document.styleSheets.length; sheet_i++)
+    {
+      if (document.styleSheets [sheet_i].href.indexOf("/gsa-style.css", document.styleSheets [sheet_i].href.length - "/gsa-style.css".length) !== -1 )
+        stylesheet = document.styleSheets [sheet_i];
+    }
+
+  head_s.append ("title")
+          .text ("Greenbone Security Assistant - Chart data table")
+
+  head_s.append ("link")
+          .attr ("href", stylesheet.href)
+          .attr ("type", "text/css")
+          .attr ("rel", "stylesheet")
+
+  body_s.style ("padding", "10px")
+
+  body_s.append ("h1")
+          .text (title)
+
+  table_s = body_s.append ("table")
+                    .attr ("cellspacing", "2")
+                    .attr ("cellpadding", "4")
+                    .attr ("border", "0")
+                    .style ("border", "1px solid grey")
+
+
+  if (headers != undefined)
+    {
+      var tr_s = table_s.append ("tr")
+                          .attr ("class", "gbntablehead2");
+      for (var col_i in headers)
+        {
+          tr_s.append ("td")
+                .text (headers[col_i])
+        }
+    }
+
+  for (var row in records)
+    {
+      var tr_s = table_s.append ("tr")
+                          .attr ("class", row_class);
+      for (var col_i in columns)
+        {
+          var col = columns [col_i];
+          tr_s.append ("td")
+                .text (records [row][col])
+        }
+      row_class = (row_class == "odd") ? "even" : "odd";
+    }
+
+  if (filter != null)
+    body_s.append ("p")
+            .attr ("class", "footnote")
+            .text ("Applied filter: " + filter);
+
+  return doc.documentElement.outerHTML;
 }
 
 /*

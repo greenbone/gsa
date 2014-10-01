@@ -1,5 +1,16 @@
 2014-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js
+	src/html/classic/js/gsa_bubble_chart.js
+	src/html/classic/js/gsa_donut_chart.js
+	src/html/classic/js/gsa_line_chart.js: Add HTML table export menu item.
+
+	* src/html/classic/js/gsa_graphics_base.js (resource_type_name): Add
+	allinfo case.
+	(html_table_from_records): New function.
+
+2014-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (generate)
 	src/html/classic/js/gsa_bubble_chart.js (generate)
 	src/html/classic/js/gsa_donut_chart.js (generate)

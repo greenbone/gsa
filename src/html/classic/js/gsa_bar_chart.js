@@ -92,6 +92,10 @@ function BarChartGenerator ()
   var csv_blob;
   var csv_url;
 
+  var html_table_data;
+  var html_table_blob;
+  var html_table_url;
+
   var svg_data;
   var svg_blob;
   var svg_url;
@@ -288,6 +292,24 @@ function BarChartGenerator ()
                .attr("href", csv_url)
                .attr("download", "gsa_bar_chart-" + new Date().getTime() + ".csv")
                .text("Download CSV");
+
+      // Generate HTML table
+      html_table_data
+        = html_table_from_records (data,
+                                   [x_field, y_field],
+                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
+                                    capitalize (field_name ("count", data_src.param ("aggregate_type")))],
+                                   display.header(). text (),
+                                   data_src.param ("filter"));
+      if (html_table_url != null)
+        URL.revokeObjectURL (html_table_url);
+      html_table_blob = new Blob([html_table_data], { type: "text/html" });
+      html_table_url = URL.createObjectURL(html_table_blob);
+
+      display.create_or_get_menu_item ("html_table")
+                  .attr("href", html_table_url)
+                  .attr("target", "_blank")
+                  .text("Show HTML table");
 
       // Generate SVG after transition
       setTimeout(function()
