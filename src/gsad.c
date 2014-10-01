@@ -1728,6 +1728,58 @@ params_mhd_validate (void *params)
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
     con_info->response = name ## _omp (credentials, con_info->params);
 
+static credentials_t *
+credentials_new (user_t *user, const char *language)
+{
+  credentials_t *credentials;
+
+  assert (user->username);
+  assert (user->password);
+  assert (user->role);
+  assert (user->timezone);
+  assert (user->capabilities);
+  assert (user->token);
+  credentials = g_malloc0 (sizeof (credentials_t));
+  credentials->username = g_strdup (user->username);
+  credentials->password = g_strdup (user->password);
+  credentials->role = g_strdup (user->role);
+  credentials->timezone = g_strdup (user->timezone);
+  credentials->severity = g_strdup (user->severity);
+  credentials->capabilities = g_strdup (user->capabilities);
+  credentials->token = g_strdup (user->token);
+  credentials->charts = user->charts;
+  credentials->chart_prefs = user->chart_prefs;
+  credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
+                                             : NULL;
+  credentials->language = g_strdup (language);
+  credentials->autorefresh = user->autorefresh
+                              ? g_strdup (user->autorefresh) : NULL;
+  credentials->last_filt_ids = user->last_filt_ids;
+
+  return credentials;
+}
+
+static void
+credentials_free (credentials_t *creds)
+{
+  if (!creds)
+    return;
+
+  g_free (creds->username);
+  g_free (creds->password);
+  g_free (creds->role);
+  g_free (creds->timezone);
+  g_free (creds->token);
+  g_free (creds->caller);
+  g_free (creds->capabilities);
+  g_free (creds->language);
+  g_free (creds->severity);
+  g_free (creds->pw_warning);
+  g_free (creds->autorefresh);
+  /* params, chart_prefs and last_filt_ids are not duplicated. */
+  g_free (creds);
+}
+
 /**
  * @brief Handle a complete POST request.
  *
@@ -1748,8 +1800,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 {
   int ret;
   user_t *user;
-  credentials_t *credentials = NULL;
-  const char *cmd, *caller;
+  credentials_t *credentials;
+  const char *cmd, *caller, *language;
 
   /* Handle the login command specially. */
 
@@ -1875,7 +1927,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         }
       else
         {
-          con_info->response = gsad_message (credentials,
+          con_info->response = gsad_message (NULL,
                                              "Internal error",
                                              __FUNCTION__,
                                              __LINE__,
@@ -1893,14 +1945,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (params_given (con_info->params, "token") == 0)
         con_info->response
-         = gsad_message (credentials,
+         = gsad_message (NULL,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token missing.",
                          "/omp?cmd=get_tasks");
       else
         con_info->response
-         = gsad_message (credentials,
+         = gsad_message (NULL,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token bad.",
@@ -1915,7 +1967,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   if (ret == 1)
     {
       con_info->response
-       = gsad_message (credentials,
+       = gsad_message (NULL,
                        "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred inside GSA daemon. "
                        "Diagnostics: Bad token.",
@@ -2029,49 +2081,16 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* From here, the user is authenticated. */
 
-  credentials = calloc (1, sizeof (credentials_t));
-  if (credentials == NULL)
-    {
-      user_release (user);
-      abort ();
-    }
-  assert (user->username);
-  assert (user->password);
-  assert (user->token);
-  credentials->username = strdup (user->username);
-  credentials->password = strdup (user->password);
-  credentials->role = user->role ? strdup (user->role) : NULL;
-  credentials->timezone = user->timezone ? strdup (user->timezone) : NULL;
-  credentials->severity = user->severity ? strdup (user->severity) : NULL;
-  credentials->capabilities = user->capabilities
-                               ? strdup (user->capabilities)
-                               : NULL;
-  credentials->token = strdup (user->token);
-  credentials->pw_warning = credentials->pw_warning ? strdup (user->pw_warning)
-                                                    : NULL;
+
+  language = user->language ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
+  credentials = credentials_new (user, language);
   credentials->params = con_info->params;
-
-  credentials->language = user->language
-                           ? g_strdup (user->language)
-                           : g_strdup (con_info->language
-                                        ? con_info->language
-                                        : DEFAULT_GSAD_LANGUAGE);
-
-  credentials->charts = user->charts;
-
-  credentials->chart_prefs = user->chart_prefs;
-
-  credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
-                                               : NULL;
-
-  credentials->last_filt_ids = user->last_filt_ids;
-
   gettimeofday (&credentials->cmd_start, NULL);
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
-  credentials->caller = strdup (caller ? caller : "");
+  credentials->caller = g_strdup (caller ?: "");
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
 
@@ -2262,6 +2281,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
 
   con_info->answercode = MHD_HTTP_OK;
+  credentials_free (credentials);
   return 0;
 }
 
@@ -3508,9 +3528,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
   gsize response_size = 0;
   int http_response_code = MHD_HTTP_OK;
 
-  credentials_t *credentials = NULL;
-
-
   /* Never respond on first call of a GET. */
   if ((!strcmp (method, "GET")) && *con_cls == NULL)
     {
@@ -3574,6 +3591,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       const char *token, *cookie, *language;
       const char *omp_cgi_base = "/omp";
       struct MHD_Response *response;
+      credentials_t *credentials;
       user_t *user;
       gchar *sid;
       int ret;
@@ -3590,7 +3608,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       if (!strcmp (url, default_file))
         {
-          response = file_content_response (credentials,
+          response = file_content_response (NULL,
                                             connection, url,
                                             &http_response_code,
                                             &content_type,
@@ -3607,7 +3625,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           || !strcmp (url, "/favicon.ico")
           || !strcmp (url, "/favicon.gif"))
         {
-          response = file_content_response (credentials,
+          response = file_content_response (NULL,
                                             connection, url,
                                             &http_response_code,
                                             &content_type,
@@ -3625,7 +3643,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (strncmp (url, "/img/", strlen ("/img/")) == 0
           || strncmp (url, "/js/", strlen ("/js/")) == 0)
         {
-          response = file_content_response (credentials,
+          response = file_content_response (NULL,
                                             connection, url,
                                             &http_response_code,
                                             &content_type,
@@ -3656,7 +3674,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (ret == 1 || ret >= 5 || ret == -1)
         {
           if (ret == 1)
-            res = gsad_message (credentials,
+            res = gsad_message (NULL,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred inside GSA daemon. "
                                 "Diagnostics: Bad token.",
@@ -3822,41 +3840,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      credentials = calloc (1, sizeof (credentials_t));
-      if (credentials == NULL) abort ();
-      assert (user->username);
-      assert (user->password);
-      assert (user->role);
-      assert (user->timezone);
-      assert (user->capabilities);
-      assert (user->token);
-      credentials->username = strdup (user->username);
-      credentials->password = strdup (user->password);
-      credentials->role = strdup (user->role);
-      credentials->timezone = strdup (user->timezone);
-      credentials->severity = strdup (user->severity);
-      credentials->capabilities = strdup (user->capabilities);
-      credentials->token = strdup (user->token);
+      language = user->language;
+      if (!language)
+        /* Accept-Language: de; q=1.0, en; q=0.5 */
+        language = MHD_lookup_connection_value
+                    (connection, MHD_HEADER_KIND, "Accept-Language");
+      if (!language)
+        language = DEFAULT_GSAD_LANGUAGE;
+      credentials = credentials_new (user, language);
       credentials->caller = reconstruct_url (connection, url);
-      credentials->charts = user->charts;
-      credentials->chart_prefs = user->chart_prefs;
-      credentials->pw_warning = user->pw_warning ? strdup (user->pw_warning)
-                                                 : NULL;
-      if (user->language)
-        credentials->language = g_strdup (user->language);
-      else
-        {
-          /* Accept-Language: de; q=1.0, en; q=0.5 */
-          language = MHD_lookup_connection_value (connection,
-                                                  MHD_HEADER_KIND,
-                                                  "Accept-Language");
-          credentials->language = g_strdup (language ? language
-                                                     : DEFAULT_GSAD_LANGUAGE);
-        }
-      credentials->autorefresh = user->autorefresh ? strdup (user->autorefresh)
-                                                   : NULL;
-
-      credentials->last_filt_ids = user->last_filt_ids;
 
       sid = g_strdup (user->cookie);
 
@@ -3924,6 +3916,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (slave_id && openvas_validate (validator, "slave_id", slave_id))
             {
               g_free (sid);
+              credentials_free (credentials);
               return MHD_NO;
             }
 
@@ -3936,6 +3929,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (res == NULL)
             {
               g_free (sid);
+              credentials_free (credentials);
               return MHD_NO;
             }
           response = MHD_create_response_from_data ((unsigned int) res_len,
@@ -4022,6 +4016,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                             &content_type,
                                             &content_disposition);
         }
+      credentials_free (credentials);
 
       if (response)
         {

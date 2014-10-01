@@ -1,3 +1,9 @@
+2014-10-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (credentials_new, credentials_free): New functions.
+	(exec_omp_post, request_handler): Refactor code to use
+	credentials_new(), fix credentials memory leaks.
+
 2014-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js
