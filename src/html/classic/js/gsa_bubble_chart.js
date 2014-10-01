@@ -229,8 +229,10 @@ function BubbleChartGenerator ()
 
       // Generate CSV
       csv_data = csv_from_records (data,
-                                   [x_field, y_field],
-                                   ["Severity", "Count"],
+                                   ["label_value", "size_value", "color_value"],
+                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
+                                    capitalize (field_name ("count", data_src.param ("aggregate_type"))),
+                                    capitalize (field_name (data_src.param ("data_column"), data_src.param ("aggregate_type")))],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);

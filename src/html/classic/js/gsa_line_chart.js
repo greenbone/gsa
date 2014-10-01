@@ -492,8 +492,10 @@ function LineChartGenerator ()
 
       // Generate CSV
       csv_data = csv_from_records (data,
-                                   [x_field, y_field],
-                                   ["Severity", "Count"],
+                                   [x_field, y_field, y2_field],
+                                   [capitalize (field_name (x_field, data_src.param ("aggregate_type"))),
+                                    capitalize (field_name (y_field, data_src.param ("aggregate_type"))),
+                                    capitalize (field_name (y2_field, data_src.param ("aggregate_type")))],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
