@@ -1160,15 +1160,17 @@ html_table_from_records = function (records, columns, headers, title, filter)
 
   body_s.style ("padding", "10px")
 
-  body_s.append ("h1")
-          .text (title)
-
   table_s = body_s.append ("table")
                     .attr ("cellspacing", "2")
                     .attr ("cellpadding", "4")
                     .attr ("border", "0")
-                    .style ("border", "1px solid grey")
+                    .attr ("class", "gbntable")
 
+  table_s.append ("tr")
+          .attr ("class", "gbntablehead1")
+          .append ("td")
+            .attr ("colspan", headers.length)
+            .text (title)
 
   if (headers != undefined)
     {
