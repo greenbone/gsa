@@ -51,9 +51,9 @@ find_program (PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config 
                         " to retrieve information about installed"
                         " openvas-libraries in the system.")
 
-if (NOT USE_LIBXSLT)
-  set (USE_LIBXSLT 0)
-endif (NOT USE_LIBXSLT)
+if (NOT USE_LIBXSLT EQUAL 0)
+  set (USE_LIBXSLT 1)
+endif (NOT USE_LIBXSLT EQUAL 0)
 
 find_program (PATH_TO_XSLTPROC xsltproc DOC "xsltproc command line "
               "xslt processor.")
