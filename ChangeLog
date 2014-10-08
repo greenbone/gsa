@@ -1,3 +1,9 @@
+2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/help.xsl (users.html): Add info for the roles
+	"Info", "Guest" and "Monitor". Note that multiple and user-defined
+	roles can be chosen. Change "Role" field to an optional "Roles" one.
+
 2014-10-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* CMakeLists.txt: Set USE_LIBXSLT by default.
