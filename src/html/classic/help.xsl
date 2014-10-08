@@ -2741,7 +2741,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        contain a list of comma-separated interface names.
       </p>
       <p>
-       Note on <b>Roles</b>:
+       Note on <b>Roles</b>:<br/>
+       You can choose from all the Roles available on the
+       <a href="roles.html?token={/envelope/token}">Roles</a> page, including
+       the following predefined Roles:
        <ul>
          <li>
            A "User" has enough privileges for everyday use.
@@ -2757,7 +2760,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            observer may only view these resources when the owner of the
            task adds the observer to the task's observer list.
          </li>
+         <li>
+           "Info" users only have privileges to view SecInfo resources and
+           modify their own settings.  They do not have permissions to view,
+           create, modify or delete any other resources.
+         </li>
        </ul>
+       It is possible to assign multiple roles to a User which will grant the
+       permissions of each role. For example a User with the role "Info" and
+       another one that grants the get_system_reports permission will be able
+       to view both SecInfo and system reports.
       </p>
 
       <table class="gbntable">
@@ -2783,10 +2795,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td></td>
         </tr>
         <tr class="odd">
-          <td>Role</td>
-          <td>yes</td>
+          <td>Roles</td>
+          <td>no</td>
           <td>---</td>
-          <td>"User", "Administrator" or "Observer"</td>
+          <td>Choice</td>
           <td>User</td>
         </tr>
         <tr class="even">

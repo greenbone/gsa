@@ -1,3 +1,12 @@
+2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r20547, not including the Roles "Guest" and "Monitor" which
+	do not exist in this version.
+
+	* src/html/classic/help.xsl (users.html): Add info for the role "Info".
+	Note that multiple and user-defined roles can be chosen. Change "Role"
+	field to an optional "Roles" one.
+
 2014-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r20488.
