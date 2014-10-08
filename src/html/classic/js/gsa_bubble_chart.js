@@ -39,6 +39,7 @@ function BubbleChartGenerator ()
   var title = title_static ("Loading bubble chart ...", "Bubble Chart");
 
   var records;
+  var column_info;
   var data;
 
   var x_label = "";
@@ -48,7 +49,6 @@ function BubbleChartGenerator ()
   var x_field = "value";
   var y_field = "count";
   var color_field = "mean";
-  var data_column = "severity";
 
   var csv_data;
   var csv_blob;
@@ -66,7 +66,7 @@ function BubbleChartGenerator ()
     {
       var color_value;
 
-      if (data_column == "severity")
+      if (column_info.columns [color_field].data_type == "severity")
         color_value = d.color_value.toFixed (1);
       else
         color_value = d.color_value;
@@ -160,16 +160,15 @@ function BubbleChartGenerator ()
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
-      // Extract records
+      // Extract records and column info
       switch (data_src.command ())
         {
           case "get_aggregate":
-            data_column = data_src.param ("data_column")
-            color_label = (color_field == "mean" ? "average" : color_field)
-                          + " " + data_column;
             records = extract_simple_records (xml_data,
                                               "aggregate group");
+            column_info = data_src.column_info ();
             data = data_transform (records, x_field, y_field, color_field);
+            color_label = column_label (column_info.columns [color_field], false, false, true);
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -234,9 +233,9 @@ function BubbleChartGenerator ()
       // Generate CSV
       csv_data = csv_from_records (data,
                                    ["label_value", "size_value", "color_value"],
-                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
-                                    capitalize (field_name ("count", data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (data_src.param ("data_column"), data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true),
+                                    column_label (column_info.columns [color_field], true, false, true)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -252,9 +251,9 @@ function BubbleChartGenerator ()
       html_table_data
         = html_table_from_records (data,
                                    ["label_value", "size_value", "color_value"],
-                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
-                                    capitalize (field_name ("count", data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (data_src.param ("data_column"), data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true),
+                                    column_label (column_info.columns [color_field], true, false, true)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)

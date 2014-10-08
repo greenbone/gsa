@@ -1,5 +1,24 @@
 2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):
+	Gather column information when request finishes.
+	(DataSource [column_info], gather_column_info, column_label): New
+	functions.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Get column info and
+	use it to generate table column headers.
+
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Get column info
+	and use it to generate table column headers and bubble tooltips.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Get column info
+	and use it to generate table column headers.
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Get column info
+	and use it to generate table column headers.
+
+2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/help.xsl (users.html): Add info for the roles
 	"Info", "Guest" and "Monitor". Note that multiple and user-defined
 	roles can be chosen. Change "Role" field to an optional "Roles" one.

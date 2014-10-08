@@ -53,6 +53,7 @@ function LineChartGenerator ()
   var title = title_static ("Loading line chart ...", "Bubble Chart");
 
   var records;
+  var column_info;
   var data;
 
   var x_data;
@@ -290,6 +291,7 @@ function LineChartGenerator ()
                                               "aggregate group");
             data = data_transform (records, x_field, y_field);
             data = time_line (data, "max", "sum", "previous", 0);
+            column_info = data_src.column_info ();
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -431,9 +433,7 @@ function LineChartGenerator ()
                   .style ("font-weight", "bold")
                   .attr ("x", 25)
                   .attr ("y", 15)
-                  .text (field_name (y_field,
-                                     chart.data_src ()
-                                            .param ("aggregate_type")))
+                  .text (column_label (column_info.columns [y_field], true, false, true))
 
       legend_elem.append ("path")
                   .attr ("d", "M 100 10 L 120 10")
@@ -448,9 +448,7 @@ function LineChartGenerator ()
                   .style ("font-style", "oblique")
                   .attr ("x", 125)
                   .attr ("y", 15)
-                  .text (field_name (y2_field,
-                                     chart.data_src ()
-                                            .param ("aggregate_type")))
+                  .text (column_label (column_info.columns [y2_field], true, false, true))
 
       x_axis_elem
         .call (x_axis)
@@ -497,9 +495,9 @@ function LineChartGenerator ()
       // Generate CSV
       csv_data = csv_from_records (data,
                                    [x_field, y_field, y2_field],
-                                   [capitalize (field_name (x_field, data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (y_field, data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (y2_field, data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true),
+                                    column_label (column_info.columns [y2_field], true, false, true)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -515,9 +513,9 @@ function LineChartGenerator ()
       html_table_data
         = html_table_from_records (data,
                                    [x_field, y_field, y2_field],
-                                   [capitalize (field_name (x_field, data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (y_field, data_src.param ("aggregate_type"))),
-                                    capitalize (field_name (y2_field, data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true),
+                                    column_label (column_info.columns [y2_field], true, false, true)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)

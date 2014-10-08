@@ -78,6 +78,7 @@ function BarChartGenerator ()
   var title = title_static ("Loading bar chart ...", "Bar Chart");
 
   var records;
+  var column_info;
   var data;
   var x_data;
   var y_data;
@@ -177,12 +178,13 @@ function BarChartGenerator ()
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
-      // Extract records
+      // Extract records and column info
       switch (data_src.command ())
         {
           case "get_aggregate":
             records = extract_simple_records (xml_data,
                                               "aggregate group");
+            column_info = data_src.column_info ();
             data = data_transform (records, x_field, y_field);
             break;
           default:
@@ -280,8 +282,8 @@ function BarChartGenerator ()
       // Generate CSV
       csv_data = csv_from_records (data,
                                    [x_field, y_field],
-                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
-                                    capitalize (field_name ("count", data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -297,8 +299,8 @@ function BarChartGenerator ()
       html_table_data
         = html_table_from_records (data,
                                    [x_field, y_field],
-                                   [capitalize (field_name (data_src.param ("group_column"), data_src.param ("aggregate_type"))),
-                                    capitalize (field_name ("count", data_src.param ("aggregate_type")))],
+                                   [column_label (column_info.columns [x_field], true, false, true),
+                                    column_label (column_info.columns [y_field], true, false, true)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)

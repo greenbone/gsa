@@ -227,6 +227,7 @@ function DataSource (command, params, prefix)
   var params = (params == undefined) ? {} : params;
   var data_uri = null;
   var last_uri = null;
+  var column_info = {};
   var data = null;
 
   function my () {};
@@ -287,6 +288,12 @@ function DataSource (command, params, prefix)
       return last_uri;
     }
 
+  /* Gets the Column data of the last successful request */
+  my.column_info = function ()
+    {
+      return column_info;
+    }
+
   /* Sends an HTTP request to get XML data.
    * Once the data is loaded, the chart will be notified via the
    * data_loaded callback */
@@ -336,6 +343,7 @@ function DataSource (command, params, prefix)
                                 }
                               data = xml_select;
                               last_uri = data_uri;
+                              column_info = gather_column_info (params, gen_params, data);
 
                               chart.data_loaded (data, gen_params);
                               chart.current_request (null);
@@ -711,6 +719,90 @@ function extract_simple_records (xml_data, selector)
   return records;
 }
 
+/*
+ * Extracts records from XML
+ */
+function gather_column_info (params, gen_params, data)
+{
+  var column_info = { columns : {} };
+  var type = params ["aggregate_type"];
+  var group_columns = [];
+  var data_columns = [];
+
+  if (params ["group_column"])
+    group_columns.push (params ["group_column"]);
+
+  if (params ["data_column"])
+    data_columns.push (params ["data_column"]);
+
+  column_info.columns ["count"]
+    = { id : "count",
+        type : type,
+        field : null,
+        stat : "count",
+        data_type : "integer" }
+
+  column_info.columns ["c_count"]
+    = { id : "c_count",
+        type : type,
+        field : null,
+        stat : "c_count",
+        data_type : "integer" }
+
+  for (var i in group_columns)
+    {
+      column_info.columns ["value"]
+        = { id : "value",
+            type : type,
+            field : group_columns [i],
+            stat : "value",
+            data_type : null }
+    }
+
+  for (var i in data_columns)
+    {
+      var data_type;
+
+      if (data_columns [i] == "severity")
+        data_type = "severity";
+      else
+        data_type = null;
+
+      column_info.columns ["mean"]
+        = { id : "mean",
+            type : type,
+            field : data_columns [i],
+            stat : "mean",
+            data_type : data_type }
+
+      column_info.columns ["min"]
+        = { id : "min",
+            type : type,
+            field : data_columns [i],
+            stat : "minimum",
+            data_type : data_type }
+
+      column_info.columns ["max"]
+        = { id : "max",
+            type : type,
+            field : data_columns [i],
+            stat : "maximum",
+            data_type : data_type }
+
+      column_info.columns ["sum"]
+        = { id : "sum",
+            type : type,
+            field : data_columns [i],
+            stat : "sum",
+            data_type : data_type }
+    }
+
+  column_info ["group_columns"] = group_columns;
+  column_info ["data_columns"] = data_columns;
+
+  return column_info;
+}
+
 
 /*
  * Helpers for processing extracted data
@@ -793,6 +885,40 @@ function field_name (field, type)
       default:
         return field;
     }
+}
+
+/*
+ * Generates a label from a column info object.
+ */
+function column_label (info, capitalize_label, include_type, include_stat)
+{
+  var label = "";
+  if (include_stat)
+    switch (info.stat)
+      {
+        case "min":
+          label = label + "min. ";
+          break;
+        case "max":
+          label = label + "max. ";
+          break;
+        case "mean":
+          label = label + "average ";
+          break;
+        case "sum":
+          label = label + "summed ";
+          break;
+      }
+
+  label = label + field_name (info.field != null ? info.field : info.stat,
+                              info.type);
+
+  if (include_type && info.stat != "count" && info.stat != "c_count")
+    label = label + " (" + resource_type_name (info.type) + ")";
+  if (capitalize_label)
+    return capitalize (label)
+  else
+    return label;
 }
 
 
