@@ -128,8 +128,8 @@ function LineChartGenerator ()
       }
     else
       {
-        times = d3.time.month.range.utc (d3.time.year.utc.floor (t_min),
-                                         t_max, 3)
+        times = d3.time.month.range.utc (d3.time.month.utc.floor (t_min),
+                                         t_max)
       }
 
     for (t_index in times)
@@ -340,7 +340,7 @@ function LineChartGenerator ()
       y2_scale.range ([height, 0]);
 
       if (records.length > 1)
-        x_scale.domain ([x_min, x_max]).nice(3);
+        x_scale.domain ([x_min, x_max]);
       else
         x_scale.domain ([x_min-1, x_min+1]);
 
