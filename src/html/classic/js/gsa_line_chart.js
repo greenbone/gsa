@@ -48,7 +48,7 @@ function LineChartGenerator ()
   var y_axis_elem;
   var y2_axis_elem;
 
-  var data_transform = data_raw;
+  var data_transform = time_line;
   var color_scale = d3.scale.category20 ();
   var title = title_static ("Loading line chart ...", "Bubble Chart");
 
@@ -93,23 +93,33 @@ function LineChartGenerator ()
   var x_min, x_max;
   var y_min, y_max;
 
-  function time_line (data, aggregate, aggregate2, fill, fill2)
+  function time_line (old_data, params)
   {
-    if (data.length == 0)
-      return [];
+    var t_field = "value"
+    var fillers = { }
 
-    var t_min = new Date (data[0][x_field] * 1000)
-    var t_max = new Date (data[data.length-1][x_field] * 1000)
+    if (params)
+      {
+        if (params.t_field != null)
+          t_field = params.t_field;
+        if (params.fillers != null)
+          fillers = parms.fillers;
+      }
+
+    var new_data = { original_xml : old_data.original_xml,
+                     records : [],
+                     column_info : old_data.column_info };
+
+    if (old_data.records.length == 0)
+      return new_data;
+
+    var t_min = new Date (old_data.records[0][t_field] * 1000)
+    var t_max = new Date (old_data.records[old_data.records.length-1][t_field] * 1000)
     var interval_days = (t_max.getTime() - t_min.getTime()) / 86400000
     var times;
     var t_index = 0;
     var data_index = 0;
-    var new_data = [];
-    var prev_y, prev_y2;
-    if (aggregate == null)
-      aggregate = "max"
-    if (aggregate2 == null)
-      aggregate2 = "sum"
+    var prev_values = {};
 
     if (interval_days <= 100)
       {
@@ -136,73 +146,74 @@ function LineChartGenerator ()
       {
         var new_record = {};
         var t = times[t_index];
-        new_record[x_field] = t;
+        var values = {};
+        new_record[t_field] = t;
 
-        var y_value = undefined, y2_value = undefined;
-
-        while (data_index < data.length
+        while (data_index < old_data.records.length
                && (t_index >= times.length - 1
-                   || data [data_index][x_field] * 1000 < times[Number(t_index)+1].getTime()))
+                   || old_data.records [data_index][t_field] * 1000 < times[Number(t_index)+1].getTime()))
           {
-            if (y_value == undefined)
+            for (var field in old_data.records [data_index])
               {
-                y_value = data [data_index][y_field]
-              }
-            else if (aggregate == "sum")
-              {
-                y_value += Number(data [data_index][y_field])
-              }
-            else if (aggregate == "min")
-              {
-                y_value = Math.min (y_value, Number(data [data_index][y_field]))
-              }
-            else if (aggregate == "max")
-              {
-                y_value = Math.max (y_value, Number(data [data_index][y_field]))
-              }
-
-            if (y2_value == undefined)
-              {
-                y2_value = data [data_index][y2_field]
-              }
-            else if (aggregate2 == "sum")
-              {
-                y2_value += Number(data [data_index][y2_field])
-              }
-            else if (aggregate2 == "min")
-              {
-                y2_value = Math.min (y2_value, Number(data [data_index][y2_field]))
-              }
-            else if (aggregate2 == "max")
-              {
-                y2_value = Math.max (y2_value, Number(data [data_index][y2_field]))
+                if (field != t_field)
+                  {
+                    if (values [field] == undefined)
+                      {
+                        values [field] = old_data.records [data_index][field]
+                      }
+                    else if (old_data.column_info.columns[field].stat == "sum"
+                             || old_data.column_info.columns[field].stat == "count")
+                      {
+                        values [field] += Number(old_data.records [data_index][field])
+                      }
+                    else if (old_data.column_info.columns[field].stat == "min")
+                      {
+                        values [field] = Math.min (values [field], Number(old_data.records [data_index][field]))
+                      }
+                    else if (old_data.column_info.columns[field].stat == "max"
+                             || old_data.column_info.columns[field].stat == "c_count")
+                      {
+                        values [field] = Math.max (values [field], Number(old_data.records [data_index][field]))
+                      }
+                  }
               }
 
             data_index ++;
           }
 
-        if (y_value != undefined)
+        for (var field in old_data.column_info.columns)
           {
-            new_record[y_field] = y_value;
-            prev_y = y_value;
-          }
-        else if (fill == "previous")
-          new_record[y_field] = prev_y;
-        else
-          new_record[y_field] = fill;
+            if (field != t_field)
+              {
+                if (values [field] != null)
+                  {
+                    prev_values [field] = values [field];
+                    new_record [field] = values [field];
+                  }
+                else if (fillers [field] == "!previous")
+                  {
+                    new_record [field] = prev_values [field] ? prev_values [field] : 0;
+                  }
+                else if (fillers [field] != null)
+                  {
+                    new_record [field] = fillers [field]
+                  }
+                else if (old_data.column_info.columns[field].stat == "c_count")
+                  {
+                    new_record [field] = prev_values [field] ? prev_values [field] : 0;
+                  }
+                else if (old_data.column_info.columns[field].stat == "count")
+                  {
+                    new_record [field] = 0;
+                  }
+                else
+                  console.debug ("!" + field);
 
-        if (y2_value != undefined)
-          {
-            new_record[y2_field] = y2_value;
-            prev_y2 = y2_value;
+              }
           }
-        else if (fill2 == "previous")
-          new_record[y2_field] = prev_y2;
-        else
-          new_record[y2_field] = fill2;
-
-        new_data.push (new_record);
+        new_data.records.push (new_record);
       }
+
     return (new_data);
   }
 
@@ -289,7 +300,6 @@ function LineChartGenerator ()
           case "get_aggregate":
             data = data_transform (original_data, gen_params);
             records = data.records;
-            records = time_line (records, "max", "sum", "previous", 0);
             column_info = data.column_info;
             break;
           default:

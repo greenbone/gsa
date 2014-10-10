@@ -1,5 +1,15 @@
 2014-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js (data_transform): Set to
+	time_line by default.
+	(time_line): Use same interface as other data transformation functions.
+	Re-aggregate all columns and try to determine appropriate method
+	automatically. Choose filler for count and c_count automatically if
+	none is set in the params.
+	(generate): Remove extra call to time_line.
+
+2014-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js (time_line): Make 1 month
 	the largest time step.
 	(generate): Do not call the "nice" function for the x axis.
