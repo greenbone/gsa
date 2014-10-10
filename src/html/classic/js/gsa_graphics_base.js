@@ -228,7 +228,7 @@ function DataSource (command, params, prefix)
   var data_uri = null;
   var last_uri = null;
   var column_info = {};
-  var data = null;
+  var data = {};
 
   function my () {};
 
@@ -341,10 +341,19 @@ function DataSource (command, params, prefix)
                                   output_error (chart, "Error parsing XML data", "Error parsing XML data, details follow in a debug message", xml.documentElement.textContent);
                                   return;
                                 }
-                              data = xml_select;
                               last_uri = data_uri;
-                              column_info = gather_column_info (params, gen_params, data);
 
+                              if (command == "get_aggregate")
+                                {
+                                  data = { original_xml : xml_select,
+                                           records : extract_simple_records (xml_select, "aggregate group"),
+                                           column_info : extract_column_info (xml_select, gen_params) };
+                                }
+                              else
+                                {
+                                  output_error (chart, "Internal error: Invalid request", "Invalid request command: \"" + command + "\"")
+                                  return my;
+                                }
                               chart.data_loaded (data, gen_params);
                               chart.current_request (null);
                             }
@@ -354,7 +363,6 @@ function DataSource (command, params, prefix)
         {
           chart.data_loaded (data, gen_params);
         }
-
       return my;
     }
 
@@ -720,85 +728,44 @@ function extract_simple_records (xml_data, selector)
 }
 
 /*
- * Extracts records from XML
+ * Extracts column info from XML
  */
-function gather_column_info (params, gen_params, data)
+function extract_column_info (xml_data, gen_params)
 {
-  var column_info = { columns : {} };
-  var type = params ["aggregate_type"];
-  var group_columns = [];
-  var data_columns = [];
+  var column_info = { group_columns : [],
+                      data_columns : [],
+                      columns : {} };
 
-  if (params ["group_column"])
-    group_columns.push (params ["group_column"]);
+  xml_data.selectAll ("aggregate column_info aggregate_column")
+            .each (function (d, i)
+                    {
+                      var column = {};
+                      d3.select(this)
+                          .selectAll ("*")
+                            .each (function (d, i)
+                                    {
+                                      if (!isNaN (parseFloat (d3.select (this).text ()))
+                                          && isFinite (d3.select (this).text ()))
+                                        column [this.localName]
+                                          = parseFloat (d3.select (this).text ())
+                                      else
+                                        column [this.localName]
+                                          = d3.select (this).text ()
+                                    });
+                      column_info.columns [column.name] = column;
+                     });
 
-  if (params ["data_column"])
-    data_columns.push (params ["data_column"]);
+  xml_data.selectAll ("aggregate group_column")
+            .each (function (d, i)
+                    {
+                      column_info.group_columns.push (d3.select (this).text ())
+                    })
 
-  column_info.columns ["count"]
-    = { id : "count",
-        type : type,
-        field : null,
-        stat : "count",
-        data_type : "integer" }
-
-  column_info.columns ["c_count"]
-    = { id : "c_count",
-        type : type,
-        field : null,
-        stat : "c_count",
-        data_type : "integer" }
-
-  for (var i in group_columns)
-    {
-      column_info.columns ["value"]
-        = { id : "value",
-            type : type,
-            field : group_columns [i],
-            stat : "value",
-            data_type : null }
-    }
-
-  for (var i in data_columns)
-    {
-      var data_type;
-
-      if (data_columns [i] == "severity")
-        data_type = "severity";
-      else
-        data_type = null;
-
-      column_info.columns ["mean"]
-        = { id : "mean",
-            type : type,
-            field : data_columns [i],
-            stat : "mean",
-            data_type : data_type }
-
-      column_info.columns ["min"]
-        = { id : "min",
-            type : type,
-            field : data_columns [i],
-            stat : "minimum",
-            data_type : data_type }
-
-      column_info.columns ["max"]
-        = { id : "max",
-            type : type,
-            field : data_columns [i],
-            stat : "maximum",
-            data_type : data_type }
-
-      column_info.columns ["sum"]
-        = { id : "sum",
-            type : type,
-            field : data_columns [i],
-            stat : "sum",
-            data_type : data_type }
-    }
-
-  column_info ["group_columns"] = group_columns;
-  column_info ["data_columns"] = data_columns;
+  xml_data.selectAll ("aggregate data_column")
+            .each (function (d, i)
+                    {
+                      column_info.data_columns.push (d3.select (this).text ())
+                    })
 
   return column_info;
 }
@@ -910,7 +877,7 @@ function column_label (info, capitalize_label, include_type, include_stat)
           break;
       }
 
-  label = label + field_name (info.field != null ? info.field : info.stat,
+  label = label + field_name (info.column ? info.column : info.stat,
                               info.type);
 
   if (include_type && info.stat != "count" && info.stat != "c_count")
@@ -937,9 +904,23 @@ function data_raw (data)
 /*
  * Transform data into a severity histogram
  */
-function data_severity_histogram (raw_data, x_field, y_field)
+function data_severity_histogram (old_data, params)
 {
   var bins = ["N/A", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  var severity_field = "value";
+  var count_field = "count";
+
+  if (params)
+    {
+      if (params.severity_field)
+        severity_field = params.severity_field;
+      if (params.count_field)
+        count_field = params.count_field;
+    }
+
+  var column_info = { group_columns : [severity_field],
+                      data_columns : [count_field],
+                      columns : {} }
 
   var bin_func = function (val)
     {
@@ -953,20 +934,44 @@ function data_severity_histogram (raw_data, x_field, y_field)
         return 0;
     };
 
-  var data = bins.map (function (d)
-                        {
-                          var record = {};
-                          record [x_field] = d;
-                          record [y_field] = 0;
-                          return record;
-                        });
+  var records = bins.map (function (d)
+                            {
+                              var record = {};
+                              record [severity_field] = d;
+                              record [count_field] = 0;
+                              return record;
+                            });
 
-  for (var i in raw_data)
+  column_info.columns [severity_field]
+    = {
+        name : severity_field,
+        type : old_data.column_info.columns [severity_field].type,
+        column : old_data.column_info.columns [severity_field].column,
+        stat : old_data.column_info.columns [severity_field].stat,
+        data_type : "text"
+      }
+
+  column_info.columns [count_field]
+    = {
+        name : count_field,
+        type : old_data.column_info.columns [count_field].type,
+        column : "",
+        stat : "count",
+        data_type : "integer"
+      }
+
+  for (var i in old_data.records)
     {
-      data[bin_func (raw_data [i][x_field])][y_field]
-                     = Number(data[bin_func (raw_data [i][x_field])][y_field])
-                       + Number(raw_data[i][y_field]);
+      records[bin_func (old_data.records [i][severity_field])][count_field]
+                     = Number(records[bin_func (old_data.records [i][severity_field])][count_field])
+                       + Number(old_data.records[i][count_field]);
     };
+
+  var data = {
+              original_xml : old_data.original_xml,
+              records : records,
+              column_info : column_info
+             };
 
   return data;
 }
@@ -975,34 +980,72 @@ function data_severity_histogram (raw_data, x_field, y_field)
  * Gets the counts of severity levels from records containing the counts
  * the counts for each numeric CVSS score.
  */
-function data_severity_level_counts (raw_data, x_field, y_field)
+function data_severity_level_counts (old_data, params)
 {
   var bins = ["N/A", "None", "Low", "Medium", "High"]
+  var severity_field = "value";
+  var count_field = "count";
 
-  var data = bins.map (function (d)
-                        {
-                          var record = {};
-                          record [x_field] = d;
-                          record [y_field] = 0;
-                          return record;
-                        });
-
-  for (var i in raw_data)
+  if (params)
     {
-      var val = raw_data [i][x_field];
-      var count = raw_data [i][y_field];
+      if (params.severity_field)
+        severity_field = params.severity_field;
+      if (params.count_field)
+        count_field = params.count_field;
+    }
+
+  var records = bins.map (function (d)
+                            {
+                              var record = {};
+                              record [severity_field] = d;
+                              record [count_field] = 0;
+                              return record;
+                            });
+
+  var column_info = { group_columns : [severity_field],
+                      data_columns : [count_field],
+                      columns : {} }
+
+  column_info.columns [severity_field]
+    = {
+        name : severity_field,
+        type : old_data.column_info.columns [severity_field].type,
+        column : old_data.column_info.columns [severity_field].column,
+        stat : old_data.column_info.columns [severity_field].stat,
+        data_type : "text"
+      }
+
+  column_info.columns [count_field]
+    = {
+        name : count_field,
+        type : old_data.column_info.columns [count_field].type,
+        column : "",
+        stat : "count",
+        data_type : "integer"
+      }
+
+  for (var i in old_data.records)
+    {
+      var val = old_data.records [i][severity_field];
+      var count = old_data.records [i][count_field];
 
       if (val !== "" && Number (val) <= 0.0)
-        data[1][y_field] += count;
+        records[1][count_field] += count;
       else if (Number (val) >= gsa.severity_levels.min_high)
-        data[4][y_field] += count;
+        records[4][count_field] += count;
       else if (Number (val) >= gsa.severity_levels.min_medium)
-        data[3][y_field] += count;
+        records[3][count_field] += count;
       else if (Number (val) >= gsa.severity_levels.min_low)
-        data[2][y_field] += count;
+        records[2][count_field] += count;
       else
-        data[0][y_field] += count;
+        records[0][count_field] += count;
     };
+
+  var data = {
+              original_xml : old_data.original_xml,
+              records : records,
+              column_info : column_info
+             };
 
   return data;
 }
@@ -1010,22 +1053,32 @@ function data_severity_level_counts (raw_data, x_field, y_field)
 /**
  * Get counts by resource type, using the full type name for the x field.
  */
-function resource_type_counts (raw_data, x_field, y_field)
+function resource_type_counts (old_data, params)
 {
-  var data = [];
-  for (var record in raw_data)
+  var new_data = { original_xml : old_data.original_xml,
+                   records : [],
+                   column_info : old_data.column_info };
+
+  var type_field = "value";
+  if (params)
+    {
+      if (params.type_field != null)
+        type_field = params.type_field;
+    }
+
+  for (var record in old_data.records)
     {
       var new_record = {};
-      for (field in raw_data [record])
+      for (field in old_data.records [record])
         {
-          if (field == x_field)
-            new_record[field] = resource_type_name_plural (raw_data [record][field]);
+          if (field == type_field)
+            new_record[field] = resource_type_name_plural (old_data.records [record][field]);
           else
-            new_record[field] = raw_data [record][field];
+            new_record[field] = old_data.records [record][field];
         }
-      data.push (new_record);
+      new_data.records.push (new_record);
     }
-  return data;
+  return new_data;
 }
 
 
@@ -1177,8 +1230,8 @@ function title_total (loading_text, prefix, suffix, count_field)
         return loading_text;
 
       var total = 0;
-      for (var i = 0; i < data.length; i++)
-        total = Number(total) + Number(data[i][count_field]);
+      for (var i = 0; i < data.records.length; i++)
+        total = Number(total) + Number(data.records[i][count_field]);
       return (prefix + String(total) + suffix);
     }
 }

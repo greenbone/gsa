@@ -137,7 +137,7 @@ function DonutChartGenerator ()
       display.header ().text (title ());
     }
 
-  my.generate = function (xml_data, chart, gen_params)
+  my.generate = function (original_data, chart, gen_params)
     {
       var display = chart.display ();
       var data_src = chart.data_src ();
@@ -147,10 +147,9 @@ function DonutChartGenerator ()
       switch (data_src.command ())
         {
           case "get_aggregate":
-            records = extract_simple_records (xml_data,
-                                              "aggregate group");
-            column_info = data_src.column_info ();
-            data = data_transform (records, x_field, y_field);
+            data = data_transform (original_data, gen_params);
+            records = data.records;
+            column_info = data.column_info;
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -158,14 +157,14 @@ function DonutChartGenerator ()
         }
       display.header ().text (title (data));
 
-      x_data = data.map (function (d) { return d [x_field]; });
-      y_data = data.map (function (d) { return d [y_field]; });
+      x_data = records.map (function (d) { return d [x_field]; });
+      y_data = records.map (function (d) { return d [y_field]; });
 
       slice_f = d3.layout.pie()
                            .value (function(d) { return d[y_field]; })
                            .sort (null)
 
-      var slices = slice_f (data).filter (function (elem) { return !isNaN (elem.endAngle)} );
+      var slices = slice_f (records).filter (function (elem) { return !isNaN (elem.endAngle)} );
 
       legend_width = Math.min (240, Math.max (120, display.svg ().attr ("width") / 5))
 
@@ -349,7 +348,7 @@ function DonutChartGenerator ()
                .text("Show detached chart window");
 
       // Generate CSV
-      csv_data = csv_from_records (data,
+      csv_data = csv_from_records (records,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],
@@ -366,7 +365,7 @@ function DonutChartGenerator ()
 
       // Generate HTML table
       html_table_data
-        = html_table_from_records (data,
+        = html_table_from_records (records,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],

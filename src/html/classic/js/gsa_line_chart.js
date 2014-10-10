@@ -277,7 +277,7 @@ function LineChartGenerator ()
       display.header ().text (title ());
     }
 
-  my.generate = function (xml_data, chart, gen_params)
+  my.generate = function (original_data, chart, gen_params)
     {
       var display = chart.display ();
       var data_src = chart.data_src ();
@@ -287,11 +287,10 @@ function LineChartGenerator ()
       switch (data_src.command ())
         {
           case "get_aggregate":
-            records = extract_simple_records (xml_data,
-                                              "aggregate group");
-            data = data_transform (records, x_field, y_field);
-            data = time_line (data, "max", "sum", "previous", 0);
-            column_info = data_src.column_info ();
+            data = data_transform (original_data, gen_params);
+            records = data.records;
+            records = time_line (records, "max", "sum", "previous", 0);
+            column_info = data.column_info;
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -300,18 +299,15 @@ function LineChartGenerator ()
       display.header ().text (title (data));
 
       var defined = function (d) { return d != undefined; }
-      x_data = data.map (function (d) { return d [x_field]; });
-      y_data = data.map (function (d) { return d [y_field]; });
-      y2_data = data.map (function (d) { return d [y2_field]; });
+      x_data = records.map (function (d) { return d [x_field]; });
+      y_data = records.map (function (d) { return d [y_field]; });
+      y2_data = records.map (function (d) { return d [y2_field]; });
       x_min = Math.min.apply (null, x_data.filter (defined) )
       x_max = Math.max.apply (null, x_data.filter (defined))
       y_min = Math.min.apply (null, y_data.filter (defined))
       y_max = Math.max.apply (null, y_data.filter (defined))
       y2_min = Math.min.apply (null, y2_data.filter (defined))
       y2_max = Math.max.apply (null, y2_data.filter (defined))
-
-      if (data.length == 1)
-        console.debug ("data.length == 1");
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -343,7 +339,7 @@ function LineChartGenerator ()
       y_scale.range ([height, 0]);
       y2_scale.range ([height, 0]);
 
-      if (data.length > 1)
+      if (records.length > 1)
         x_scale.domain ([x_min, x_max]).nice(3);
       else
         x_scale.domain ([x_min-1, x_min+1]);
@@ -380,7 +376,7 @@ function LineChartGenerator ()
 
           svg.append("path")
               .attr ("id", "line_y")
-              .datum(data)
+              .datum(records)
               .style("fill", "transparent")
               .style("stroke", "1px")
               .style("stroke", "green")
@@ -388,14 +384,14 @@ function LineChartGenerator ()
 
           svg.append("path")
               .attr ("id", "line_y2")
-              .datum(data)
+              .datum(records)
               .style("fill", "transparent")
               .style("stroke", "1px")
               .style("stroke-dasharray", "3,2")
               .style("stroke", d3.rgb("green").brighter())
               .attr("d", line_2);
 
-          if (data.length == 1)
+          if (records.length == 1)
             {
               svg.append ("circle")
                   .attr ("id", "circle_y")
@@ -403,8 +399,8 @@ function LineChartGenerator ()
                   .style("stroke", "1px")
                   .style("stroke", "green")
                   .attr ("r", "4px")
-                  .attr ("cx", x_scale (data [0][x_field]))
-                  .attr ("cy", y_scale (data [0][y_field]));
+                  .attr ("cx", x_scale (records [0][x_field]))
+                  .attr ("cy", y_scale (records [0][y_field]));
 
               svg.append ("circle")
                   .attr ("id", "circle_y2")
@@ -413,8 +409,8 @@ function LineChartGenerator ()
                   .style("stroke-dasharray", "3,2")
                   .style("stroke", d3.rgb("green").brighter())
                   .attr ("r", "4px")
-                  .attr ("cx", x_scale (data [0][x_field]))
-                  .attr ("cy", y2_scale (data [0][y2_field]));
+                  .attr ("cx", x_scale (records [0][x_field]))
+                  .attr ("cy", y2_scale (records [0][y2_field]));
             }
         }
 
@@ -460,22 +456,22 @@ function LineChartGenerator ()
         .attr("transform", "translate(" + width + ", 0)")
 
       svg.select ("#line_y")
-        .datum(data)
+        .datum(records)
         .attr ("d", line_1);
 
       svg.select ("#line_y2")
-        .datum(data)
+        .datum(records)
         .attr ("d", line_2);
 
-      if (data.length == 1)
+      if (records.length == 1)
         {
           svg.select ("#circle_y")
-              .attr ("cx", x_scale (data [0][x_field]))
-              .attr ("cy", y_scale (data [0][y_field]));
+              .attr ("cx", x_scale (records [0][x_field]))
+              .attr ("cy", y_scale (records [0][y_field]));
 
           svg.select ("#circle_y2")
-              .attr ("cx", x_scale (data [0][x_field]))
-              .attr ("cy", y2_scale (data [0][y2_field]));
+              .attr ("cx", x_scale (records [0][x_field]))
+              .attr ("cy", y2_scale (records [0][y2_field]));
         }
       else
         {
@@ -493,7 +489,7 @@ function LineChartGenerator ()
                .text("Show detached chart window");
 
       // Generate CSV
-      csv_data = csv_from_records (data,
+      csv_data = csv_from_records (records,
                                    [x_field, y_field, y2_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true),
@@ -511,7 +507,7 @@ function LineChartGenerator ()
 
       // Generate HTML table
       html_table_data
-        = html_table_from_records (data,
+        = html_table_from_records (records,
                                    [x_field, y_field, y2_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true),

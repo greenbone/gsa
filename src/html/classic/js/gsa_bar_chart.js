@@ -172,7 +172,7 @@ function BarChartGenerator ()
       display.header ().text (title ());
     }
 
-  my.generate = function (xml_data, chart, gen_params)
+  my.generate = function (original_data, chart, gen_params)
     {
       var display = chart.display ();
       var data_src = chart.data_src ();
@@ -182,18 +182,17 @@ function BarChartGenerator ()
       switch (data_src.command ())
         {
           case "get_aggregate":
-            records = extract_simple_records (xml_data,
-                                              "aggregate group");
-            column_info = data_src.column_info ();
-            data = data_transform (records, x_field, y_field);
+            data = data_transform (original_data, gen_params);
+            records = data.records;
+            column_info = data.column_info;
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
             return;
         }
       display.header ().text (title (data));
-      x_data = data.map (function (d) { return d [x_field]; });
-      y_data = data.map (function (d) { return d [y_field]; });
+      x_data = records.map (function (d) { return d [x_field]; });
+      y_data = records.map (function (d) { return d [y_field]; });
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -236,7 +235,7 @@ function BarChartGenerator ()
 
       // Add new bars
       svg.selectAll(".bar")
-          .data(data)
+          .data(records)
             .enter().insert("rect", ".x.axis")
               .attr("class", "bar")
               .attr("y", function(d) { return y_scale(0); })
@@ -246,7 +245,7 @@ function BarChartGenerator ()
 
       // Update bar widths and x axis
       svg.selectAll(".bar")
-          .data(data)
+          .data(records)
             .transition().delay (0).duration (250).ease("sin-in-out")
               .attr("x", function(d) { return x_scale(d [x_field]); })
               .attr("width", x_scale.rangeBand())
@@ -255,7 +254,7 @@ function BarChartGenerator ()
 
       // Update heights and y axis
       svg.selectAll(".bar")
-          .data(data)
+          .data(records)
             .transition().delay (250).duration (250).ease("sin-in-out")
               .attr("y", function(d) { return y_scale(d [y_field]); })
               .attr("height", function(d) { return my.height() - y_scale(d [y_field]); })
@@ -265,7 +264,7 @@ function BarChartGenerator ()
 
       // Fade out and remove unused bars
       svg.selectAll(".bar")
-          .data(data)
+          .data(records)
             .exit ()
               .transition().delay(0).duration(250).ease("sin-in-out")
                 .style("opacity", 0)
@@ -280,7 +279,7 @@ function BarChartGenerator ()
                .text("Show detached chart window");
 
       // Generate CSV
-      csv_data = csv_from_records (data,
+      csv_data = csv_from_records (records,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],
@@ -297,7 +296,7 @@ function BarChartGenerator ()
 
       // Generate HTML table
       html_table_data
-        = html_table_from_records (data,
+        = html_table_from_records (records,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],

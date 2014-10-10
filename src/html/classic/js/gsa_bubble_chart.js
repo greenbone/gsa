@@ -66,7 +66,7 @@ function BubbleChartGenerator ()
     {
       var color_value;
 
-      if (column_info.columns [color_field].data_type == "severity")
+      if (column_info.columns ["color_value"].data_type == "severity")
         color_value = d.color_value.toFixed (1);
       else
         color_value = d.color_value;
@@ -154,7 +154,7 @@ function BubbleChartGenerator ()
       display.header ().text (title ());
     }
 
-  my.generate = function (xml_data, chart, gen_params)
+  my.generate = function (original_data, chart, gen_params)
     {
       var display = chart.display ();
       var data_src = chart.data_src ();
@@ -164,11 +164,10 @@ function BubbleChartGenerator ()
       switch (data_src.command ())
         {
           case "get_aggregate":
-            records = extract_simple_records (xml_data,
-                                              "aggregate group");
-            column_info = data_src.column_info ();
-            data = data_transform (records, x_field, y_field, color_field);
-            color_label = column_label (column_info.columns [color_field], false, false, true);
+            data = data_transform (original_data, gen_params);
+            records = data.records;
+            column_info = data.column_info;
+            color_label = column_label (column_info.columns ["color_value"], false, false, true);
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -197,7 +196,7 @@ function BubbleChartGenerator ()
           .value (function(d) { return d.size_value; })
           .padding(1.5);
 
-      var nodes = bubbles.nodes({children: data})
+      var nodes = bubbles.nodes({children: records})
                         .filter (function(d) { return d.depth != 0; });
 
       svg.selectAll(".node")
@@ -231,11 +230,11 @@ function BubbleChartGenerator ()
                .text("Show detached chart window");
 
       // Generate CSV
-      csv_data = csv_from_records (data,
+      csv_data = csv_from_records (records,
                                    ["label_value", "size_value", "color_value"],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true),
-                                    column_label (column_info.columns [color_field], true, false, true)],
+                                   [column_label (column_info.columns ["label_value"], true, false, true),
+                                    column_label (column_info.columns ["size_value"], true, false, true),
+                                    column_label (column_info.columns ["color_value"], true, false, true)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -249,11 +248,11 @@ function BubbleChartGenerator ()
 
       // Generate HTML table
       html_table_data
-        = html_table_from_records (data,
+        = html_table_from_records (records,
                                    ["label_value", "size_value", "color_value"],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true),
-                                    column_label (column_info.columns [color_field], true, false, true)],
+                                   [column_label (column_info.columns ["label_value"], true, false, true),
+                                    column_label (column_info.columns ["size_value"], true, false, true),
+                                    column_label (column_info.columns ["color_value"], true, false, true)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)
@@ -369,23 +368,63 @@ BubbleChartGenerator.create_bubble = function ()
     .text ("X")
 }
 
-function simple_bubble_data (raw_data, label_field, size_field, color_field)
+function simple_bubble_data (old_data, params)
 {
+  var label_field = (params && params.label_field) ? params.label_field : "value"
+  var size_field = (params && params.size_field) ? params.size_field : "count"
+  var color_field = (params && params.color_field) ? params.color_field : "mean"
+
+  var column_info = { group_columns: old_data.column_info.group_columns,
+                      data_columns: old_data.column_info.data_columns,
+                      columns : {} }
+
+  column_info.columns ["label_value"]
+    = {
+        name : "label_value",
+        type : old_data.column_info.columns [label_field].type,
+        column : old_data.column_info.columns [label_field].column,
+        stat : old_data.column_info.columns [label_field].stat,
+        data_type : old_data.column_info.columns [label_field].data_type,
+      }
+
+  column_info.columns ["size_value"]
+    = {
+        name : "size_value",
+        type : old_data.column_info.columns [size_field].type,
+        column : old_data.column_info.columns [size_field].column,
+        stat : old_data.column_info.columns [size_field].stat,
+        data_type : old_data.column_info.columns [size_field].data_type,
+      }
+
+  column_info.columns ["color_value"]
+    = {
+        name : "color_value",
+        type : old_data.column_info.columns [color_field].type,
+        column : old_data.column_info.columns [color_field].column,
+        stat : old_data.column_info.columns [color_field].stat,
+        data_type : old_data.column_info.columns [color_field].data_type,
+      }
+
   var bubble_data = [];
 
-  for (var d in raw_data)
+  for (var d in old_data.records)
     {
       var new_record = {};
 
-      new_record ["label_value"] = raw_data [d][label_field];
-      new_record ["size_value"] = raw_data [d][size_field];
+      new_record ["label_value"] = old_data.records [d][label_field];
+      new_record ["size_value"] = old_data.records [d][size_field];
       if (color_field)
-        new_record ["color_value"] = raw_data [d][color_field];
+        new_record ["color_value"] = old_data.records [d][color_field];
       else
         new_record ["color_value"] = null;
 
       bubble_data.push (new_record);
     }
-  return bubble_data;
+
+  var new_data = { original_xml : old_data.original_xml,
+                   column_info : column_info,
+                   records : bubble_data }
+
+  return new_data;
 }
 

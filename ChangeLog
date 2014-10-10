@@ -1,3 +1,38 @@
+2014-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make charts DataSource extract data records and column info. Pass
+	them bundled in a single object together with the XML. Adjust data
+	transformation functions accordingly.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Use data bundle
+	object instead of extracting records from XML and getting column_info
+	directly from data_source.
+
+	* src/html/classic/js/gsa_bubble_chart.js (tooltip_func): Use static
+	"color_value" as column_info is transformed together with records.
+	(generate): Use data bundle object instead of extracting records from
+	XML and getting column_info directly from data_source.
+	(simple_bubble_data): Adjust to transform whole data bundle, not only
+	records.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Use data bundle
+	object instead of extracting records from XML and getting column_info
+	directly from data_source.
+
+	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):
+	Extract data records and column info here and bundle it in an object
+	which is passed to generators instead of the XML.
+	(gather_column_info): Remove. Replaced by extract_column_info.
+	(extract_column_info): New function. Extracts the column info from
+	the XML response instead of reconstructing it from parameters.
+	(column_label, data_severity_histogram, data_severity_level_counts)
+	(resource_type_counts, title_total): Adjust to new data object and
+	column info syntax.
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Use data bundle
+	object instead of extracting records from XML and getting column_info
+	directly from data_source. Remove debug output for single record case.
+
 2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):
