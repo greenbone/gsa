@@ -1,3 +1,9 @@
+2014-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
+	revert r19245 (Older glib still need that call to g_thread_init)
+
+	* src/CMakeLists.txt, src/gsad.c, CMakeLists.txt: Updated
+
 2014-10-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (data_transform): Set to
