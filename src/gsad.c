@@ -67,6 +67,7 @@
 #include <openvas/base/openvas_file.h>
 #include <openvas/base/pidfile.h>
 #include <openvas/misc/openvas_uuid.h>
+#include <pthread.h>
 #include <pwd.h> /* for getpwnam */
 #include <signal.h>
 #include <stdint.h>
@@ -3944,6 +3945,7 @@ gsad_init ()
   mutex = g_malloc (sizeof (GMutex));
   g_mutex_init (mutex);
 #else
+  if (!g_thread_supported ()) g_thread_init (NULL);
   if (mutex == NULL)
     mutex = g_mutex_new ();
 #endif

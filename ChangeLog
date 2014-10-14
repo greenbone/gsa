@@ -1,3 +1,9 @@
+2014-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
+	revert r19245 (Older glib still need that call to g_thread_init)
+
+	* CMakeLists.txt, src/CMakeLists.txt, src/gsad.c: Updated
+
 2014-10-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r20547, not including the Roles "Guest" and "Monitor" which
