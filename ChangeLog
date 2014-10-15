@@ -1,3 +1,13 @@
+2014-10-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (user_find): In simple cases return 0 directly instead of
+	via ret.  In final "if" check if ret has already been set, otherwise the
+	return of 3 is overwritten.
+
+	* src/gsad_omp.c (get_report): In prognostic case free delta_states and
+	set error, and add missing openvas_server_sendf_xml check.
+	(save_user_omp): Remove duplicate assignment.
+
 2014-10-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Linking against libgthread is required only when
@@ -155,7 +165,7 @@
 	does not override "font-style".
 
 	* src/html/classic/js/gsa_graphics_base.js (field_name): New function.
-	
+
 	* src/html/classic/js/gsa_line_chart.js (LineChartGenerator): Enlarge
 	top margin, add legend_elem variable.
 	(generate): Add legend on top of chart. Make font of right y axis

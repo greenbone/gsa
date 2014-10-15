@@ -10212,24 +10212,39 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (host_search_phrase == NULL)
         {
           openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
           xml = g_string_new ("");
           g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
                                   "Given host search_phrase was invalid",
                                   "Get Report");
+          if (error) *error = 1;
           return g_string_free (xml, FALSE);
         }
 
-      ret = openvas_server_sendf_xml (&session,
-                                      " host_search_phrase=\"%s\""
-                                      " host_levels=\"%s\""
-                                      " host_first_result=\"%s\""
-                                      " host_max_results=\"%s\"",
-                                      host_search_phrase,
-                                      host_levels,
-                                      host_first_result,
-                                      host_max_results);
+      if (openvas_server_sendf_xml (&session,
+                                    " host_search_phrase=\"%s\""
+                                    " host_levels=\"%s\""
+                                    " host_first_result=\"%s\""
+                                    " host_max_results=\"%s\"",
+                                    host_search_phrase,
+                                    host_levels,
+                                    host_first_result,
+                                    host_max_results))
+        {
+          openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
+          g_string_free (commands_xml, TRUE);
+          g_string_free (levels, TRUE);
+          if (error) *error = 1;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
   else
     {
@@ -19466,7 +19481,6 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   *password_return = NULL;
 
-  enable_ldap_connect = params_value (params, "enable_ldap_connect");
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all

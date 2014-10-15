@@ -366,9 +366,8 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
           if (user)
             {
               *user_return = user;
-              ret = 0;
               user->time = time (NULL);
-              return ret;
+              return 0;
             }
           g_mutex_unlock (mutex);
         }
@@ -417,6 +416,7 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
     }
 
   g_mutex_lock (mutex);
+  ret = 0;
   for (index = 0; index < users->len; index++)
     {
       user_t *item;
@@ -444,12 +444,11 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
       else
         {
           *user_return = user;
-          ret = 0;
           user->time = time (NULL);
-          return ret;
+          return 0;
         }
     }
-  else
+  else if (ret == 0)
     ret = 2;
   g_mutex_unlock (mutex);
   return ret;
