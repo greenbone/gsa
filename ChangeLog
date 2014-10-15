@@ -1,3 +1,9 @@
+2014-10-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Linking against libgthread is required only when
+	using GLib =< 2.30. Adjust checks and assignments in CMakeLists
+	accordingly.
+
 2014-10-14  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
