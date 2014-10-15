@@ -1,3 +1,11 @@
+2014-10-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r20611.
+
+	* CMakeLists.txt: Linking against libgthread is required only when
+	using GLib =< 2.30. Adjust checks and assignments in CMakeLists
+	accordingly.
+
 2014-10-14  Benoît Allard  <benoit.allard@greenbone.net>
 
 	revert r19245 (Older glib still need that call to g_thread_init)

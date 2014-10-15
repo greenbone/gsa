@@ -85,11 +85,20 @@ endif (MANDATORY_TOOL_MISSING)
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.16)
-pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
 pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=7.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=2.8)
+
+# Linking against libgthread is only required for GLib versions using the old,
+# deprecated thread API, i.e. version 2.30 and earlier.
+if (${GLIB_VERSION} VERSION_LESS "2.31.0")
+  set (GTHREAD_REQUIRED TRUE)
+endif (${GLIB_VERSION} VERSION_LESS "2.31.0")
+
+if (GTHREAD_REQUIRED)
+  pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
+endif (GTHREAD_REQUIRED)
 
 execute_process (COMMAND pkg-config --cflags libmicrohttpd
   OUTPUT_VARIABLE LIBMICROHTTPD_CFLAGS
@@ -112,12 +121,14 @@ execute_process (COMMAND pkg-config --libs glib-2.0
   OUTPUT_VARIABLE GLIB_LDFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process (COMMAND pkg-config --cflags gthread-2.0
-  OUTPUT_VARIABLE GTHREAD_CFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process (COMMAND pkg-config --libs gthread-2.0
-  OUTPUT_VARIABLE GTHREAD_LDFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
+if (GTHREAD_REQUIRED)
+  execute_process (COMMAND pkg-config --cflags gthread-2.0
+    OUTPUT_VARIABLE GTHREAD_CFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process (COMMAND pkg-config --libs gthread-2.0
+    OUTPUT_VARIABLE GTHREAD_LDFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif (GTHREAD_REQUIRED)
 
 execute_process (COMMAND pkg-config --cflags libexslt
   OUTPUT_VARIABLE LIBEXSLT_CFLAGS
@@ -161,15 +172,15 @@ execute_process (COMMAND libgcrypt-config --cflags
   OUTPUT_VARIABLE LIBGCRYPT_CFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR NOT GTHREAD_FOUND OR
-    NOT LIBEXSLT_FOUND OR NOT LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR
-    NOT LIBGCRYPT)
+if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
+    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
+    LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
   message (FATAL_ERROR "One or more required libraries was not found "
     "(see message above), please install the missing "
     "libraries and run cmake again.")
-endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR NOT GTHREAD_FOUND OR
-  NOT LIBEXSLT_FOUND OR NOT LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
-  LIBGCRYPT)
+endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
+  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
+  LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
