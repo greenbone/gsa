@@ -10706,19 +10706,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                   <td>
                     <select name="port_list_id" disabled="1">
-                      <xsl:variable name="port_list_id">
-                        <xsl:value-of select="get_targets_response/target/port_list/@id"/>
-                      </xsl:variable>
-                      <xsl:for-each select="commands_response/get_port_lists_response/port_list">
-                        <xsl:choose>
-                          <xsl:when test="@id = $port_list_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
+                      <option>
+                        <xsl:value-of select="get_targets_response/target/port_list/name"/>
+                      </option>
                     </select>
                   </td>
                 </tr>
