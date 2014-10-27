@@ -1,3 +1,7 @@
+2014-10-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Remove stray colon.
+
 2014-10-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-target-form): Use the port list's

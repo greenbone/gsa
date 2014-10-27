@@ -10025,7 +10025,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         " delta_states=\"%s\""
                                         " search_phrase=\"%s\""
                                         " min_cvss_base=\"%s\""
-                                        " alert_id=\"%s\"/>",
+                                        " alert_id=\"%s\""
                                         " timezone=\"%s\"/>",
                                         ignore_pagination,
                                         strcmp (autofp, "0") ? autofp_value
