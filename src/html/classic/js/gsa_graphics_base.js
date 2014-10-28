@@ -985,6 +985,7 @@ function data_severity_level_counts (old_data, params)
   var bins = ["N/A", "None", "Low", "Medium", "High"]
   var severity_field = "value";
   var count_field = "count";
+  var ascending = false;
 
   if (params)
     {
@@ -992,6 +993,8 @@ function data_severity_level_counts (old_data, params)
         severity_field = params.severity_field;
       if (params.count_field)
         count_field = params.count_field;
+      if (params.ascending != undefined)
+        ascending = params.ascending;
     }
 
   var records = bins.map (function (d)
@@ -1043,7 +1046,7 @@ function data_severity_level_counts (old_data, params)
 
   var data = {
               original_xml : old_data.original_xml,
-              records : records,
+              records : ascending ? records : records.reverse (),
               column_info : column_info
              };
 
