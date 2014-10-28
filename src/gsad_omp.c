@@ -7733,12 +7733,9 @@ save_target_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
   CHECK_PARAM (target_esxi_credential, "Save Target", edit_target);
 
-  if (target_credential
-      && strcmp (target_credential, "--")
+  if (strcmp (target_credential, "--")
       && strcmp (target_credential, "0"))
-    {
-      CHECK_PARAM (port, "Save Target", edit_target);
-    }
+    CHECK_PARAM (port, "Save Target", edit_target);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {

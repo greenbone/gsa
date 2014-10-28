@@ -1,3 +1,7 @@
+2014-10-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_target_omp): Remove redundant null check.
+
 2014-10-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Remove stray colon.
