@@ -7307,7 +7307,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
       <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
-      <xsl:with-param name="auto_load" select="1"/>
+      <xsl:with-param name="auto_load" select="0"/>
     </xsl:call-template>
 
     if (this.fit_window)
