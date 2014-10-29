@@ -113,11 +113,21 @@ function LineChartGenerator ()
     if (old_data.records.length == 0)
       return new_data;
 
-    var t_min = new Date (old_data.records[0][t_field] * 1000)
-    var t_max = new Date (old_data.records[old_data.records.length-1][t_field] * 1000)
+    var t_index;
+
+    t_index = 0;
+    while (isNaN (old_data.records[t_index][t_field]))
+      t_index++;
+    var t_min = new Date (old_data.records[t_index][t_field] * 1000)
+
+    t_index = old_data.records.length-1;
+    while (isNaN (old_data.records[t_index][t_field]))
+      t_index--;
+    var t_max = new Date (old_data.records[t_index][t_field] * 1000)
+
     var interval_days = (t_max.getTime() - t_min.getTime()) / 86400000
     var times;
-    var t_index = 0;
+    t_index = 0;
     var data_index = 0;
     var prev_values = {};
 
@@ -148,11 +158,16 @@ function LineChartGenerator ()
         var t = times[t_index];
         var values = {};
         new_record[t_field] = t;
-
         while (data_index < old_data.records.length
                && (t_index >= times.length - 1
+                   || isNaN (old_data.records [data_index][t_field])
                    || old_data.records [data_index][t_field] * 1000 < times[Number(t_index)+1].getTime()))
           {
+            if (isNaN (old_data.records [data_index][t_field]))
+              {
+                data_index++;
+                continue;
+              }
             for (var field in old_data.records [data_index])
               {
                 if (field != t_field)
@@ -213,7 +228,6 @@ function LineChartGenerator ()
           }
         new_data.records.push (new_record);
       }
-
     return (new_data);
   }
 

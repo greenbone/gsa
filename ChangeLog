@@ -1,5 +1,10 @@
 2014-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js (time_line): Skip records with
+	non-numeric time values.
+
+2014-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:field-name): New function. Replaces
 	"created" with "creation time", "modified" with "modification time"
 	and replaces underscores with spaces for other field names.
