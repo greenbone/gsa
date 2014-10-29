@@ -1,3 +1,13 @@
+2014-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (gsa:field-name): New function. Replaces
+	"created" with "creation time", "modified" with "modification time"
+	and replaces underscores with spaces for other field names.
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart): Apply new
+	gsa:field-name function to column names in selector_label and
+	title_generator.
+
 2014-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (init-d3charts): Get token from params

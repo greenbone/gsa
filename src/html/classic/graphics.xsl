@@ -164,7 +164,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by CVSS')"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by ', $group_column)"/>
+        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -179,14 +179,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      "count")
       </xsl:when>
       <xsl:when test="$chart_type = 'bubbles'">
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Loading...)')"/>",
-                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Total: ')"/>",
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Total: ')"/>",
                      ")",
                      "size_value")
       </xsl:when>
       <xsl:otherwise>
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Loading...)')"/>",
-                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', $group_column, ' (Total: ')"/>",
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Loading...)')"/>",
+                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Total: ')"/>",
                      ")",
                      "count")
       </xsl:otherwise>

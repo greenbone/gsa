@@ -487,6 +487,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </func:function>
 
+<func:function name="gsa:field-name">
+  <xsl:param name="field"/>
+  <xsl:choose>
+    <xsl:when test="$field = 'created'">
+      <func:result select="'creation time'"/>
+    </xsl:when>
+    <xsl:when test="$field = 'modified'">
+      <func:result select="'modification time'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="translate ($field, '_', ' ')"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <func:function name="gsa:alert-in-trash">
   <xsl:for-each select="alert">
     <xsl:if test="trash/text() != '0'">
