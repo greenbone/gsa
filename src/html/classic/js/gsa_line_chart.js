@@ -381,7 +381,7 @@ function LineChartGenerator ()
 
           legend_elem = svg.append ("g")
                             .attr ("id", "legend")
-                            .attr("transform", "translate(0, -50)")
+                            .attr("transform", "translate(" + (20 - margin.left) + ", -50)")
 
           x_axis_elem = svg.append("g")
                             .attr("class", "x axis")
@@ -441,34 +441,55 @@ function LineChartGenerator ()
       /* Create legend items */
       /* TODO: automatic layout of legend elements*/
       legend_elem.text ("");
+      var legend_part = legend_elem.append ("g");
+      var legend_part_x = 0;
+      var legend_part_y = 0;
+      var last_part_rect = null;
+      var current_part_rect = null;
 
-      legend_elem.append ("path")
+      legend_part.append ("path")
                   .attr ("d", "M 0 10 L 20 10")
                   .style("fill", "transparent")
                   .style("stroke", "1px")
                   .style("stroke", "green")
 
-      legend_elem.append ("text")
+      legend_part.append ("text")
                   .style ("font-size", "8pt")
                   .style ("font-weight", "bold")
                   .attr ("x", 25)
                   .attr ("y", 15)
                   .text (column_label (column_info.columns [y_field], true, false, true))
 
-      legend_elem.append ("path")
-                  .attr ("d", "M 100 10 L 120 10")
+      last_part_rect = legend_part.node ().getBoundingClientRect ()
+      legend_part = legend_elem.append ("g");
+
+      legend_part.append ("path")
+                  .attr ("d", "M 0 10 L 20 10")
                   .style("fill", "transparent")
                   .style("stroke", "1px")
                   .style("stroke-dasharray", "3,2")
                   .style("stroke", d3.rgb("green").brighter())
 
-      legend_elem.append ("text")
+      legend_part.append ("text")
                   .style ("font-size", "8pt")
                   .style ("font-weight", "bold")
                   .style ("font-style", "oblique")
-                  .attr ("x", 125)
+                  .attr ("x", 25)
                   .attr ("y", 15)
                   .text (column_label (column_info.columns [y2_field], true, false, true))
+
+      current_part_rect = legend_part.node ().getBoundingClientRect ()
+
+      if (legend_part_x + 10 + current_part_rect.width <= width + 40)
+        {
+          legend_part_x = legend_part_x + last_part_rect.width + 10
+        }
+      else
+        {
+          legend_part_x = 0;
+          legend_part_y = legend_part_y + last_part_rect.height + 2;
+        }
+      legend_part.attr ("transform", "translate(" + legend_part_x + ", " + legend_part_y + ")")
 
       x_axis_elem
         .call (x_axis)

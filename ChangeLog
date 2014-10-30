@@ -1,3 +1,8 @@
+2014-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Position second
+	legend element dynamically to ensure it does not overlap the first.
+
 2014-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (time_line): Skip records with
