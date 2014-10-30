@@ -1,5 +1,10 @@
 2014-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js (time_line): Set time step to
+	1 year if data set covers a period of more than 3650 days.
+
+2014-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Show
 	time line chart on all SecInfo list pages.
 	(dashboard [secinfo]): Add time line charts for other SecInfo types.

@@ -141,15 +141,15 @@ function LineChartGenerator ()
         times = d3.time.week.range.utc (d3.time.week.utc.floor (t_min),
                                         t_max)
       }
-    else if (interval_days <= 1500)
+    else if (interval_days <= 3650)
       {
         times = d3.time.month.range.utc (d3.time.month.utc.floor (t_min),
                                          t_max)
       }
     else
       {
-        times = d3.time.month.range.utc (d3.time.month.utc.floor (t_min),
-                                         t_max)
+        times = d3.time.year.range.utc (d3.time.year.utc.floor (t_min),
+                                        t_max)
       }
 
     for (t_index in times)
