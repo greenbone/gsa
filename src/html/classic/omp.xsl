@@ -17103,9 +17103,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="contains(tags, 'solution=')">
-      <xsl:if test="not (contains(tags, 'solution=N/A'))">
+    <xsl:when test="contains(tags, 'solution=') or contains(tags, 'solution_type=')">
+      <xsl:if test="not (contains(tags, 'solution=N/A')) or contains(tags, 'solution_type=')">
         <h2><xsl:value-of select="gsa:i18n ('Solution', 'NVT Window')"/></h2>
+        <xsl:for-each select="str:split (tags, '|')">
+          <xsl:if test="'solution_type' = substring-before (., '=')">
+            <p>
+              <b><xsl:value-of select="gsa:i18n ('Solution type', 'NVT Window')"/>: </b>
+              <xsl:value-of select="substring-after (., '=')"/>
+            </p>
+          </xsl:if>
+        </xsl:for-each>
         <xsl:for-each select="str:split (tags, '|')">
           <xsl:if test="'solution' = substring-before (., '=')">
             <xsl:call-template name="structured-text">
@@ -17121,13 +17129,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- "NOTAG" means no tags, skip. -->
   <xsl:choose>
-    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
+    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') + contains(tags,'solution_type=') = count(str:split (tags, '|')))">
     </xsl:when>
     <xsl:otherwise>
       <h2><xsl:value-of select="gsa:i18n ('Other tags', 'NVT Window')"/></h2>
       <table>
       <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution',substring-before (., '=')))">
+        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution|solution_type',substring-before (., '=')))">
           <tr>
             <td valign="top"><xsl:value-of select="substring-before (., '=')"/>:</td>
             <td>

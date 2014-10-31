@@ -1,3 +1,12 @@
+2014-10-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r20745.
+
+	* src/html/classic/omp.xsl (nvt [details]): Add subsection for the
+	"solution_type" tag.
+
+	* src/html/classic/po/de.xml: Add "Solution type" message.
+
 2014-10-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport r20611.
