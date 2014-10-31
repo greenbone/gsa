@@ -1,3 +1,10 @@
+2014-10-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (nvt [details]): Add subsection for the
+	"solution_type" tag.
+
+	* src/html/classic/po/de.xml: Add "Solution type" message.
+
 2014-10-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (time_line): Set time step to

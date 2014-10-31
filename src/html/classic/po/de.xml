@@ -3122,6 +3122,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Lösung</str>
     </msg>
     <msg>
+      <id>Solution type</id>
+      <str>Art der Lösung</str>
+    </msg>
+    <msg>
       <id>Other tags</id>
       <str>Weitere Tags</str>
     </msg>
