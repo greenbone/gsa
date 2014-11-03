@@ -1,5 +1,10 @@
 2014-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (result [result-body]): Check the result's
+	severity for the cases when the nvt's cvss is not available.
+
+2014-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (result [result-body]): Improve check for
 	nvt's oid value when adding details link.
 

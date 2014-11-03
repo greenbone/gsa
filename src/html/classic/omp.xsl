@@ -24760,7 +24760,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <div class="result_section">
         <xsl:choose>
-          <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0)">
+          <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0) or (severity &gt; 0)">
             <b><xsl:value-of select="gsa:i18n ('Vulnerability Detection Method', 'Result Window')"/></b>
           </xsl:when>
           <xsl:otherwise>
