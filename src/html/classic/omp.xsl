@@ -24785,7 +24785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cve" select="cve/@id"/>
               </xsl:call-template>
             </xsl:when>
-            <xsl:when test="string-length(nvt/@oid) &gt; 1 and not(contains(nvt/@oid, ':'))">
+            <xsl:when test="string-length(nvt/@oid) &gt; 1 and starts-with(nvt/@oid, '1.3.6.1.4.1.25623.1.0.')">
               <xsl:variable name="max" select="80"/>
               <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:choose>
