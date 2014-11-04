@@ -1,3 +1,27 @@
+gsa 5.0.4 (2014-11-04)
+
+This is the fourth maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release adds support for the autorefresh interval as a user setting and for
+keeping filter selections persistent across a session. It also avoids
+unnecessary linking against libgthread and improves the documentation.
+
+Many thanks to everyone who contributed to this release:
+Benoît Allard, Matthew Mundell, Timo Pollmeier and Michael Wiegand.
+
+Main changes since 5.0.3:
+* The autorefresh interval is now a user setting, making it persistent in and
+  across sessions.
+* Support for keeping the filter selection consistent across a session has been
+  added.
+* GSA is now only linked against libgthread in environments where this is
+  required, i.e. when building with GLib =< 2.30.
+* Documentation has been updated.
+
+
 gsa 5.0.3 (2014-09-09)
 
 This is the third maintenance release of the Greenbone Security Assistant (GSA)
