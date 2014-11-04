@@ -423,7 +423,8 @@ function simple_bubble_data (old_data, params)
 
   var new_data = { original_xml : old_data.original_xml,
                    column_info : column_info,
-                   records : bubble_data }
+                   records : bubble_data,
+                   filter_info : old_data.filter_info }
 
   return new_data;
 }

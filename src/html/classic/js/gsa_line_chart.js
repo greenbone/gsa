@@ -108,7 +108,8 @@ function LineChartGenerator ()
 
     var new_data = { original_xml : old_data.original_xml,
                      records : [],
-                     column_info : old_data.column_info };
+                     column_info : old_data.column_info,
+                     filter_info : old_data.filter_info };
 
     if (old_data.records.length == 0)
       return new_data;

@@ -1,3 +1,42 @@
+2014-11-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make charts use filter ids instead of copying filter terms. Add filter
+	name to chart header. Limit width of chart box and cut off too long
+	title text.
+
+	* src/gsad_omp.c (get_aggregate_omp): Handle filt_id param.
+
+	* src/html/classic/graphics.xsl (js-create-chart-box): Reduce default
+	width by 2 px and add container_width.
+	(js-aggregate-data-source): Add filt_id parameter.
+	(js-aggregate-chart): Add filt_id parameter. Adjust title_total params.
+	(js-scan-management-top-visualization, js-secinfo-top-visualization):
+	Pass filter id to new charts.
+
+	* src/html/classic/gsa-style.css (.chart-head): Add attributes to cut
+	off overlong header text and show ellipsis if necessary.
+
+	* src/html/classic/omp.xsl (get_aggregate): Set container_width of
+	chart box to 98% and pass filter id to chart.
+
+	* src/html/classic/js/gsa_bubble_chart.js (simple_bubble_data): Copy
+	filter_info from original data object.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_box): Add new
+	container_width parameter.
+	(DataSource [request_data]): Get filter info.
+	(Display [select_filter]): Clear filter term parameter and set filt_id
+	instead.
+	(extract_filter_info): New function.
+	(data_severity_histogram, data_severity_level_counts)
+	(resource_type_counts): Copy filter_info from original data object.
+	(title_total): Reduce parameters to title and count_field. Make the
+	"(Loading...)" and "(Total: [...])" text static. Add filter name to
+	title if one is available.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Copy filter_info
+	from original data object.
+
 2014-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-body]): Check the result's

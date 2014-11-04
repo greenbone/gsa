@@ -1165,6 +1165,9 @@ text-align:right;
   background: #3A3A3A;
   color: #EEEEEE;
   padding: 2px 2px 2px 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .chart-foot {

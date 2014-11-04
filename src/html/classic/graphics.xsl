@@ -67,14 +67,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="js-create-chart-box">
   <xsl:param name="parent_id" select="'top-visualization'"/>
   <xsl:param name="container_id" select="'chart-box'"/>
-  <xsl:param name="width" select="435"/>
+  <xsl:param name="width" select="433"/>
   <xsl:param name="height" select="250"/>
+  <xsl:param name="container_width" select="concat ($width + 2, 'px')"/>
   <xsl:param name="select_pref_id"/>
   <xsl:param name="filter_pref_id"/>
   create_chart_box ("<xsl:value-of select="$parent_id"/>",
                     "<xsl:value-of select="$container_id"/>",
                     <xsl:value-of select="$width"/>,
                     <xsl:value-of select="$height"/>,
+                    "<xsl:value-of select="$container_width"/>",
                     "<xsl:value-of select="$select_pref_id"/>",
                     "<xsl:value-of select="$filter_pref_id"/>")
 </xsl:template>
@@ -86,6 +88,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="group_column"/>
   <xsl:param name="data_column"/>
   <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
 
   <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
 
@@ -99,7 +102,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         {xml:1,
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"severity",
-                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>"});
+                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                         filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:when>
           <xsl:otherwise>
             DataSource ("get_aggregate",
@@ -107,7 +111,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
                          group_column:"<xsl:value-of select="$group_column"/>",
                          data_column:"<xsl:value-of select="$data_column"/>",
-                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>"});
+                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                         filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:otherwise>
         </xsl:choose>
     }
@@ -123,6 +128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="group_column"/>
   <xsl:param name="data_column"/>
   <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
 
   <xsl:param name="chart_type"/>
   <xsl:param name="chart_template"/>
@@ -143,6 +149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="group_column" select="$group_column"/>
         <xsl:with-param name="data_column" select="$data_column"/>
         <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="$chart_template"/>
       </xsl:call-template>
     </xsl:when>
@@ -173,21 +180,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="title_generator">
     <xsl:choose>
       <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'info_by_cvss'">
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity (Loading...)')"/>",
-                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity (Total: ')"/>",
-                     ")",
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity')"/>",
                      "count")
       </xsl:when>
       <xsl:when test="$chart_type = 'bubbles'">
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Loading...)')"/>",
-                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Total: ')"/>",
-                     ")",
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
                      "size_value")
       </xsl:when>
       <xsl:otherwise>
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Loading...)')"/>",
-                     "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column), ' (Total: ')"/>",
-                     ")",
+        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
                      "count")
       </xsl:otherwise>
     </xsl:choose>
@@ -307,6 +308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id"/>
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
@@ -324,6 +326,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="'severity'"/>
       <xsl:with-param name="data_column" select="''"/>
       <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
     <xsl:call-template name="js-aggregate-data-source">
@@ -332,6 +335,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="'status'"/>
       <xsl:with-param name="data_column" select="''"/>
       <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="''"/>
     </xsl:call-template>
 
@@ -451,6 +455,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <xsl:variable name="filter" select="/envelope/get_info/get_info_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_info/get_info_response/filters/@id"/>
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
@@ -468,6 +473,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="'severity'"/>
       <xsl:with-param name="data_column" select="''"/>
       <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
     <xsl:call-template name="js-aggregate-data-source">
@@ -476,6 +482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="'created'"/>
       <xsl:with-param name="data_column" select="''"/>
       <xsl:with-param name="filter" select="$filter"/>
+      <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="''"/>
     </xsl:call-template>
 
@@ -541,6 +548,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="group_column" select="'family'"/>
         <xsl:with-param name="data_column" select="'severity'"/>
         <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
@@ -573,6 +581,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="group_column" select="'class'"/>
         <xsl:with-param name="data_column" select="''"/>
         <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 

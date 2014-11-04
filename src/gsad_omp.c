@@ -5060,7 +5060,7 @@ export_agents_omp (credentials_t * credentials, params_t *params,
 char *
 get_aggregate_omp (credentials_t * credentials, params_t *params)
 {
-  const char *data_column, *group_column, *type, *filter, *xml_param;
+  const char *data_column, *group_column, *type, *filter, *filt_id, *xml_param;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -5070,6 +5070,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   group_column = params_value (params, "group_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
+  filt_id = params_value (params, "filt_id");
   filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
   xml_param = params_value (params, "xml");
 
@@ -5087,6 +5088,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
   if (filter_escaped && strcmp (filter_escaped, ""))
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
+  if (filt_id && strcmp (filt_id, ""))
+    g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
   g_string_append (command, "/>");
 
   g_free (filter_escaped);

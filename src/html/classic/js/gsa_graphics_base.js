@@ -37,12 +37,13 @@ if (typeof gsa === 'undefined') gsa = {};
  * Creates and adds display elements to a selected part of the HTML page
  */
 function create_chart_box (parent_id, container_id, width, height,
-                           select_pref_id, filter_pref_id)
+                           container_width, select_pref_id, filter_pref_id)
 {
   var parent = d3.select ("#" + parent_id);
   var container = parent.append ("div")
                         .attr ("class", "dashboard_box")
-                        .attr ("id", container_id);
+                        .attr ("id", container_id)
+                        .style ("width", container_width);
 
   var menu = container.append ("div")
                .attr ("id", "chart_list")
@@ -347,7 +348,8 @@ function DataSource (command, params, prefix)
                                 {
                                   data = { original_xml : xml_select,
                                            records : extract_simple_records (xml_select, "aggregate group"),
-                                           column_info : extract_column_info (xml_select, gen_params) };
+                                           column_info : extract_column_info (xml_select, gen_params),
+                                           filter_info : extract_filter_info (xml_select, gen_params) };
                                 }
                               else
                                 {
@@ -543,7 +545,8 @@ function Display (p_container)
 
       for (var chart in charts)
         {
-          charts[chart].data_src ().param ("filter", filters [filter_id].term);
+          charts[chart].data_src ().delete_param ("filter");
+          charts[chart].data_src ().param ("filt_id", filter_id);
         }
 
       if (request_data)
@@ -770,6 +773,24 @@ function extract_column_info (xml_data, gen_params)
   return column_info;
 }
 
+/*
+ * Extracts filter info from XML
+ */
+function extract_filter_info (xml_data, gen_params)
+{
+  var filter_info = { };
+
+  filter_info.id =  xml_data.selectAll ("filters").attr ("id");
+  filter_info.term =  xml_data.selectAll ("filters term").text ()
+
+  if (! xml_data.selectAll ("filters name").empty ())
+    filter_info.name = xml_data.selectAll ("filters name").text ()
+  else
+    filter_info.name = "";
+
+  return filter_info;
+}
+
 
 /*
  * Helpers for processing extracted data
@@ -970,7 +991,8 @@ function data_severity_histogram (old_data, params)
   var data = {
               original_xml : old_data.original_xml,
               records : records,
-              column_info : column_info
+              column_info : column_info,
+              filter_info : old_data.filter_info
              };
 
   return data;
@@ -1047,7 +1069,8 @@ function data_severity_level_counts (old_data, params)
   var data = {
               original_xml : old_data.original_xml,
               records : ascending ? records : records.reverse (),
-              column_info : column_info
+              column_info : column_info,
+              filter_info : old_data.filter_info
              };
 
   return data;
@@ -1060,7 +1083,8 @@ function resource_type_counts (old_data, params)
 {
   var new_data = { original_xml : old_data.original_xml,
                    records : [],
-                   column_info : old_data.column_info };
+                   column_info : old_data.column_info,
+                   filter_info : old_data.filter_info };
 
   var type_field = "value";
   if (params)
@@ -1225,17 +1249,24 @@ function title_static (loading_text, loaded_text)
 /*
  * Returns a title containing the total count of the resources.
  */
-function title_total (loading_text, prefix, suffix, count_field)
+function title_total (title, count_field)
 {
   return function (data)
     {
+      var filter_text = "";
+
+      if (data != null
+          && data.filter_info != null
+          && data.filter_info.name != "")
+        filter_text = ": " + data.filter_info.name;
+
       if (typeof data === 'undefined')
-        return loading_text;
+        return title + " (Loading...)";
 
       var total = 0;
       for (var i = 0; i < data.records.length; i++)
         total = Number(total) + Number(data.records[i][count_field]);
-      return (prefix + String(total) + suffix);
+      return (title + filter_text + " (Total: " + String(total) + ")");
     }
 }
 
