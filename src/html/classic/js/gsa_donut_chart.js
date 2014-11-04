@@ -263,7 +263,8 @@ function DonutChartGenerator ()
 //                  .attr ("stroke-width", "0.25")
                   .attr("d", function (d, i)
                           {
-                            if (d.value != 0 && d.startAngle == d.endAngle)
+                            if (d.value != 0
+                                && (slices.length <= 1 || d.startAngle == d.endAngle))
                               return DonutChartGenerator.donut_full_top_path_d
                                       (d.startAngle,
                                        d.endAngle,
