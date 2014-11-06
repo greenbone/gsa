@@ -346,6 +346,23 @@ function DataSource (command, params, prefix)
 
                               if (command == "get_aggregate")
                                 {
+                                  var omp_status
+                                        = xml_select.select ("get_aggregate get_aggregates_response")
+                                                      .attr ("status");
+                                  var omp_status_text
+                                        = xml_select.select ("get_aggregate get_aggregates_response")
+                                                      .attr ("status_text");
+
+                                  if (omp_status != "200")
+                                    {
+                                      output_error (chart,
+                                                    "Error " + omp_status
+                                                    + ": " + omp_status_text,
+                                                    "OMP Error " + omp_status
+                                                    + ": " + omp_status_text)
+                                      return my;
+                                    }
+
                                   data = { original_xml : xml_select,
                                            records : extract_simple_records (xml_select, "aggregate group"),
                                            column_info : extract_column_info (xml_select, gen_params),

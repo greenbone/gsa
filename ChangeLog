@@ -1,5 +1,10 @@
 2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):
+	Check OMP response code before trying to extract data.
+
+2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (export_results_omp): New function.
 
 	* src/gsad_omp.h (export_results_omp): New function prototype.
