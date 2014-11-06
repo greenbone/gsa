@@ -1763,14 +1763,8 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks");
     }
 
-  if (strcmp (type, "result"))
-    resource_entity = entity_child (entity, type);
-  else
-    {
-      resource_entity = entity_child (entity, "results");
-      if (resource_entity)
-        resource_entity = entity_child (resource_entity, "result");
-    }
+  resource_entity = entity_child (entity, type);
+
   if (resource_entity == NULL)
     {
       free (content);

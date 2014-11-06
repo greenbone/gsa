@@ -1,5 +1,11 @@
 2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (export_resource): Remove special handling for the
+	type "result" as results retrieved with the get_results OMP command
+	are no longer nested inside a "results" element since trunk r20260.
+
+2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add settings to modify the file name format of exported resource lists,
 	resource details and reports.
 
