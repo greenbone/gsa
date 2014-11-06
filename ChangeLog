@@ -1,5 +1,14 @@
 2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (export_results_omp): New function.
+
+	* src/gsad_omp.h (export_results_omp): New function prototype.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add case for
+	export_results command.
+
+2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (export_resource): Remove special handling for the
 	type "result" as results retrieved with the get_results OMP command
 	are no longer nested inside a "results" element since trunk r20260.
