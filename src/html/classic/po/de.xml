@@ -5966,6 +5966,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Wizard-Zeilen</str>
     </msg>
     <msg>
+      <id>Details Export File Name</id>
+      <str>Details-Export-Dateiname</str>
+    </msg>
+    <msg>
+      <id>List Export File Name</id>
+      <str>Listen-Export-Dateiname</str>
+    </msg>
+    <msg>
+      <id>Report Export File Name</id>
+      <str>Bericht-Export-Dateiname</str>
+    </msg>
+    <msg>
       <id>Severity Class</id>
       <str>Schweregrad-Klasse</str>
     </msg>

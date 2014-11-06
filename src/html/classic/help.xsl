@@ -4665,6 +4665,20 @@ Public License instead of this License.
         a wizard associated with the listing, then the wizard be hidden.
       </p>
 
+      <h3>Details/List/Report Export File Name</h3>
+      <p>
+        The format used for the default file name for exported resource lists,
+        resource details and reports respectively. The format string can
+        contain alphanumeric characters, hyphens, underscores and placeholders
+        that will be replaced as follows:
+      </p>
+      <ul>
+        <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
+        <li><b>%T</b> - The resource type, e.g. "task", "port_list".
+        Pluralized for list pages.</li>
+        <li><b>%U</b> - The unique ID of the resource or "list" for lists of multiple resources.</li>
+        <li><b>%%</b> - The percent sign (%)</li>
+      </ul>
       <a name="severity_class"/>
       <h3>Severity Class</h3>
       <p>

@@ -1,3 +1,27 @@
+2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add settings to modify the file name format of exported resource lists,
+	resource details and reports.
+
+	* src/gsad_omp.c (format_file_name): New function.
+	(export_resource, export_many, get_report): Generate export file names
+	based on format defined in a setting.
+	(save_my_settings_omp): Add params for new settings
+	"Details Export File Name", "List Export File Name" and
+	"Report Export File Name".
+
+	* src/gsad.c (init_validator): Add details_fname, list_fname and
+	report_fname.
+
+	* src/html/classic/help.xsl (my_settings.html): Add help for newly
+	added settings.
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Add
+	new settings new settings "Details Export File Name",
+	"List Export File Name" and "Report Export File Name".
+
+	* src/html/classic/po/de.xml: Add new setting names.
+
 2014-11-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js (generate): Always use

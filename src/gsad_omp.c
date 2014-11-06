@@ -1592,6 +1592,83 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
 }
 
 /**
+ * @brief Generates a file name for exporting.
+ *
+ * @param[in]   fname_format  Format string.
+ * @param[in]   type          Type of resource.
+ * @param[in]   uuid          UUID of resource.
+ *
+ * @return The file name.
+ */
+gchar *
+format_file_name (gchar* fname_format, const char* type, const char* uuid)
+{
+  time_t now;
+  struct tm *now_broken;
+  gchar *file_date;
+  gchar *fname_point;
+  GString *file_name_buf;
+  int format_state = 0;
+
+  now = time (NULL);
+  now_broken = localtime (&now);
+  file_date = g_strdup_printf ("%04d%02d%02d",
+                               (now_broken->tm_year + 1900),
+                               (now_broken->tm_mon + 1),
+                               now_broken->tm_mday);
+
+  file_name_buf = g_string_new ("");
+
+  fname_point = fname_format;
+
+  while (format_state >= 0 && *fname_point != '\0')
+    {
+      assert (format_state >= 0 && format_state <= 1);
+      if (format_state == 0)
+        {
+          if (*fname_point == '%')
+            format_state = 1;
+          else
+            g_string_append_c (file_name_buf, *fname_point);
+        }
+      else if (format_state == 1)
+        {
+          switch (*fname_point)
+            {
+              case 'T':
+                g_string_append (file_name_buf, type ? type : "resource");
+                break;
+              case 'D':
+                g_string_append (file_name_buf, file_date);
+                break;
+              case 'U':
+                g_string_append (file_name_buf, uuid ? uuid : "list");
+                break;
+              case '%':
+                g_string_append_c (file_name_buf, '%');
+                break;
+              default:
+                g_warning ("%s : Unknown file name format placeholder: %%%c.",
+                           __FUNCTION__, *fname_point);
+                format_state = -1;
+            }
+          format_state = 0;
+        }
+      fname_point += sizeof (char);
+    }
+
+  if (format_state || strcmp (file_name_buf->str, "") == 0)
+    {
+      g_warning ("%s : Invalid file name format", __FUNCTION__);
+      g_string_free (file_name_buf, TRUE);
+      return NULL;
+    }
+
+  return g_string_free (file_name_buf, FALSE);
+}
+
+
+/**
  * @brief Export a resource.
  *
  * @param[in]   type                 Type of resource.
@@ -1615,6 +1692,10 @@ export_resource (const char *type, credentials_t * credentials,
   int socket;
   char *content = NULL;
   gchar *html, *id_name;
+  entity_t get_settings_entity, fname_entity, setting_entity;
+  char *setting_response;
+  gchar *fname_format, *file_name;
+
   const char *resource_id;
 
   *content_length = 0;
@@ -1704,12 +1785,66 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks");
     }
 
+  if (openvas_server_sendf (&session,
+                            "<get_settings setting_id=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\"/>")
+      == -1)
+    {
+      free (content);
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a setting. "
+                           "The setting could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
+    {
+      free (content);
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a setting. "
+                           "The setting could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  fname_format = NULL;
+  if (get_settings_entity && omp_success (get_settings_entity) == 1)
+    {
+      setting_entity = entity_child (get_settings_entity, "setting");
+      if (setting_entity)
+        {
+          fname_entity = entity_child (setting_entity, "value");
+          if (fname_entity)
+            fname_format = entity_text (fname_entity);
+        }
+    }
+
+  if (fname_format == NULL)
+    {
+      g_warning ("%s : File name format setting not found.", __FUNCTION__);
+      fname_format = "%T-%U";
+    }
+
+  file_name = format_file_name (fname_format, type, resource_id);
+  if (file_name == NULL)
+    file_name = g_strdup_printf ("%s-%s", type, resource_id);
+
   *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment; filename=\"%s-%s.xml\"",
-                                          type,
-                                          resource_id);
+  *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
+                                          file_name);
   *content_length = strlen (content);
   free_entity (entity);
+  free_entity (get_settings_entity);
+  g_free (setting_response);
+  g_free (file_name);
   g_string_free (xml, TRUE);
   openvas_server_close (socket, session);
   return content;
@@ -1737,8 +1872,10 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   char *content = NULL;
   gchar *html;
   const char *filter;
-  time_t now;
-  struct tm *tm;
+  gchar *type_many;
+  entity_t get_settings_entity, fname_entity, setting_entity;
+  char *setting_response;
+  gchar *fname_format, *file_name;
 
   *content_length = 0;
 
@@ -1791,17 +1928,71 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
-  now = time (NULL);
-  tm = localtime (&now);
+  if (openvas_server_sendf (&session,
+                            "<get_settings setting_id=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\"/>")
+      == -1)
+    {
+      free (content);
+      free_entity (entity);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a setting. "
+                           "The setting could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
+    {
+      free (content);
+      free_entity (entity);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a setting. "
+                           "The setting could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  fname_format = NULL;
+  if (get_settings_entity && omp_success (get_settings_entity) == 1)
+    {
+      setting_entity = entity_child (get_settings_entity, "setting");
+      if (setting_entity)
+        {
+          fname_entity = entity_child (setting_entity, "value");
+          if (fname_entity)
+            fname_format = entity_text (fname_entity);
+        }
+    }
+
+  if (fname_format == NULL)
+    {
+      g_warning ("%s : File name format setting not found.", __FUNCTION__);
+      fname_format = "%T-%D";
+    }
+
+  if (strcmp (type, "info") == 0)
+    type_many = g_strdup (type);
+  else
+    type_many = g_strdup_printf ("%ss", type);
+
+  file_name = format_file_name (fname_format, type_many, "list");
+  if (file_name == NULL)
+    file_name = g_strdup_printf ("%s-%s", type_many, "list");
+
+  g_free (type_many);
+
   *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment;"
-                                          " filename=\"%ss-%d-%d-%d.xml\"",
-                                          type,
-                                          tm->tm_mday,
-                                          tm->tm_mon + 1,
-                                          tm->tm_year +1900);
+  *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
+                                          file_name);
   *content_length = strlen (content);
   free_entity (entity);
+  free_entity (get_settings_entity);
+  g_free (setting_response);
+  g_free (file_name);
   openvas_server_close (socket, session);
   return content;
 }
@@ -9710,6 +9901,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
+  entity_t get_settings_entity, fname_entity, setting_entity;
+  char *setting_response;
+  gchar *fname_format, *file_name;
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -10406,14 +10600,77 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (extension && requested_content_type && content_type
               && content_disposition)
             {
+              if (openvas_server_sendf (&session,
+                                        "<get_settings setting_id="
+                                        "\"e1a2ae0b-736e-4484-b029-330c9e15b900\"/>")
+                  == -1)
+                {
+                  openvas_server_close (socket, session);
+                  return gsad_message (credentials,
+                                      "Internal error", __FUNCTION__, __LINE__,
+                                      "An internal error occurred while getting a setting. "
+                                      "The setting could not be delivered. "
+                                      "Diagnostics: Failure to send command to manager daemon.",
+                                      "/omp?cmd=get_tasks");
+                }
+
+              if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
+                {
+                  openvas_server_close (socket, session);
+                  return gsad_message (credentials,
+                                      "Internal error", __FUNCTION__, __LINE__,
+                                      "An internal error occurred while getting a setting. "
+                                      "The setting could not be delivered. "
+                                      "Diagnostics: Failure to receive response from manager daemon.",
+                                      "/omp?cmd=get_tasks");
+                }
+
+              fname_format = NULL;
+              if (get_settings_entity && omp_success (get_settings_entity) == 1)
+                {
+                  setting_entity = entity_child (get_settings_entity, "setting");
+                  if (setting_entity)
+                    {
+                      fname_entity = entity_child (setting_entity, "value");
+                      if (fname_entity)
+                        fname_format = entity_text (fname_entity);
+                    }
+                }
+
+              if (fname_format == NULL)
+                {
+                  g_warning ("%s : File name format setting not found.",
+                              __FUNCTION__);
+                  fname_format = "%T-%U";
+                }
+
+              file_name = format_file_name (fname_format,
+                                            "report",
+                                            (type
+                                             && ((strcmp (type, "assets") == 0)
+                                                 || (strcmp (type, "prognostic")
+                                                     == 0)))
+                                            ? type
+                                            : report_id);
+              if (file_name == NULL)
+                file_name = g_strdup_printf ("%s-%s",
+                                            "report",
+                                            (type
+                                             && ((strcmp (type, "assets") == 0)
+                                                 || (strcmp (type, "prognostic")
+                                                     == 0)))
+                                              ? type
+                                              : report_id);
+
               *content_type = g_strdup (requested_content_type);
               *content_disposition
-                = g_strdup_printf ("attachment; filename=report-%s.%s",
-                                   (type && ((strcmp (type, "assets") == 0)
-                                             || (strcmp (type, "prognostic") == 0)))
-                                    ? type
-                                    : report_id,
+                = g_strdup_printf ("attachment; filename=%s.%s",
+                                   file_name,
                                    extension);
+
+              free_entity (get_settings_entity);
+              g_free (setting_response);
+              g_free (file_name);
             }
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
@@ -10478,11 +10735,66 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                     id = "prognostic";
                   else
                     id = "ERROR";
+
+                  if (openvas_server_sendf (&session,
+                                            "<get_settings setting_id="
+                                            "\"e1a2ae0b-736e-4484-b029-330c9e15b900\"/>")
+                      == -1)
+                    {
+                      openvas_server_close (socket, session);
+                      return gsad_message (credentials,
+                                          "Internal error", __FUNCTION__, __LINE__,
+                                          "An internal error occurred while getting a setting. "
+                                          "The setting could not be delivered. "
+                                          "Diagnostics: Failure to send command to manager daemon.",
+                                          "/omp?cmd=get_tasks");
+                    }
+
+                  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
+                    {
+                      openvas_server_close (socket, session);
+                      return gsad_message (credentials,
+                                          "Internal error", __FUNCTION__, __LINE__,
+                                          "An internal error occurred while getting a setting. "
+                                          "The setting could not be delivered. "
+                                          "Diagnostics: Failure to receive response from manager daemon.",
+                                          "/omp?cmd=get_tasks");
+                    }
+
+                  fname_format = NULL;
+                  if (get_settings_entity && omp_success (get_settings_entity) == 1)
+                    {
+                      setting_entity = entity_child (get_settings_entity, "setting");
+                      if (setting_entity)
+                        {
+                          fname_entity = entity_child (setting_entity, "value");
+                          if (fname_entity)
+                            fname_format = entity_text (fname_entity);
+                        }
+                    }
+
+                  if (fname_format == NULL)
+                    {
+                      g_warning ("%s : File name format setting not found.",
+                                  __FUNCTION__);
+                      fname_format = "%T-%U";
+                    }
+
+                  file_name = format_file_name (fname_format,
+                                                "report", id);
+                  if (file_name == NULL)
+                    file_name = g_strdup_printf ("%s-%s",
+                                                "report", id);
+
                   *content_type = g_strdup (requested_content_type);
                   *content_disposition
-                    = g_strdup_printf ("attachment; filename=report-%s.%s",
-                                       id,
-                                       extension);
+                    = g_strdup_printf ("attachment; filename=%s.%s",
+                                      file_name,
+                                      extension);
+
+                  free_entity (get_settings_entity);
+                  g_free (setting_response);
+                  g_free (file_name);
                 }
               free_entity (entity);
               openvas_server_close (socket, session);
@@ -15105,7 +15417,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   gchar *html;
   const char *lang, *text, *old_passwd, *passwd, *status, *max;
-  gchar *lang_64, *text_64, *max_64;
+  const char *details_fname, *list_fname, *report_fname;
+  gchar *lang_64, *text_64, *max_64, *fname_64;
   GString *xml;
   entity_t entity;
   params_t *filters;
@@ -15121,11 +15434,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   passwd = params_value (params, "password");
   max = params_value (params, "max");
   lang = params_value (params, "lang");
+  details_fname = params_value (params, "details_fname");
+  list_fname = params_value (params, "list_fname");
+  report_fname = params_value (params, "report_fname");
   if ((text == NULL)
       || (passwd == NULL)
       || (old_passwd == NULL)
       || (max == NULL)
-      || (lang == NULL))
+      || (lang == NULL)
+      || (details_fname == NULL)
+      || (list_fname == NULL)
+      || (report_fname == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"));
@@ -15322,6 +15641,120 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
+    modify_failed = 1;
+
+  /* Send resource details export file name format. */
+  fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            fname_64 ? fname_64 : "")
+      == -1)
+    {
+      g_free (fname_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (fname_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (omp_success (entity) != 1)
+    modify_failed = 1;
+
+  /* Send resource list export file name format. */
+  fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            fname_64 ? fname_64 : "")
+      == -1)
+    {
+      g_free (fname_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (fname_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (omp_success (entity) != 1)
+    modify_failed = 1;
+
+  /* Send report export file name format. */
+  fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            fname_64 ? fname_64 : "")
+      == -1)
+    {
+      g_free (fname_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (fname_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (omp_success (entity) != 1)
     modify_failed = 1;
 
   /* Send User Interface Language. */
