@@ -1,3 +1,9 @@
+2014-11-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(detached_chart_resize_listener): Adjust to chart box width being 98%
+	of window width.
+
 2014-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):

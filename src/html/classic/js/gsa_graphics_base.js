@@ -1184,7 +1184,7 @@ function detached_chart_resize_listener (display)
       var window_width = window.innerWidth;
       var window_height = window.innerHeight;
 
-      display.width (window_width - 20);
+      display.width (window_width * 0.98 - 2);
       display.height (window_height - (  Number (d3.select (".gsa_footer")
                                                     .property ("clientHeight"))
                                        + Number (d3.select ("#applied_filter")
