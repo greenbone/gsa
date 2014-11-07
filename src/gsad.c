@@ -69,6 +69,7 @@
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
+#include <grp.h> /* for setgroups */
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -4142,6 +4143,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
 static gboolean
 drop_privileges (struct passwd * nobody_pw)
 {
+
+  if (setgroups (0,NULL) != 0)
+    {
+      g_critical ("%s: Failed to drop groups privileges!\n", __FUNCTION__);
+      return FALSE;
+    }
   if (setgid (nobody_pw->pw_gid) != 0)
     {
       g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
