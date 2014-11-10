@@ -78,6 +78,11 @@ function LineChartGenerator ()
     .y(function(d) { return y2_scale (d [y2_field]); })
     .defined (function (d) { return d [y2_field] != undefined; })
 
+  var info_line;
+  var info_box;
+  var info_text_g;
+  var info_text_lines;
+
   var csv_data;
   var csv_blob;
   var csv_url;
@@ -92,6 +97,9 @@ function LineChartGenerator ()
 
   var x_min, x_max;
   var y_min, y_max;
+
+  var x_step;
+  var info_last_x;
 
   function time_line (old_data, params)
   {
@@ -134,21 +142,25 @@ function LineChartGenerator ()
 
     if (interval_days <= 100)
       {
+        x_step = d3.time.day.utc
         times = d3.time.day.range.utc (d3.time.day.utc.floor (t_min),
                                        t_max)
       }
     else if (interval_days <= 750)
       {
+        x_step = d3.time.week.utc
         times = d3.time.week.range.utc (d3.time.week.utc.floor (t_min),
                                         t_max)
       }
     else if (interval_days <= 3650)
       {
+        x_step = d3.time.month.utc
         times = d3.time.month.range.utc (d3.time.month.utc.floor (t_min),
                                          t_max)
       }
     else
       {
+        x_step = d3.time.year.utc
         times = d3.time.year.range.utc (d3.time.year.utc.floor (t_min),
                                         t_max)
       }
@@ -231,6 +243,103 @@ function LineChartGenerator ()
       }
     return (new_data);
   }
+
+  function mouse_exited ()
+    {
+      info_box.style ("display", "none");
+      info_line.style ("display", "none");
+      info_text_g.style ("display", "none");
+    }
+
+  function mouse_moved ()
+    {
+      info_box.style ("display", "block");
+      info_line.style ("display", "block");
+      info_text_g.style ("display", "block");
+
+      var parent_rect = svg.node ()
+                            .parentNode
+                              .parentNode
+                                .getBoundingClientRect ()
+
+      var mouse_x = d3.event.clientX - parent_rect.left - margin.left - 1;
+      var mouse_y = d3.event.clientY - parent_rect.top - margin.top - 21;
+
+
+      var rounded_x = x_step.round (x_scale.invert (mouse_x));
+      if (rounded_x.getTime () > x_max.getTime ())
+        rounded_x = x_max;
+      else if (rounded_x.getTime () < x_min.getTime ())
+        rounded_x = x_min;
+
+      var line_index = find_record_index (data.records,
+                                          rounded_x,
+                                          x_field,
+                                          false);
+      var line_x = x_scale (rounded_x);
+      var box_x;
+
+      if (info_last_x == undefined
+          || info_last_x.getTime() != rounded_x.getTime())
+        {
+          var max_line_width = 0;
+
+          info_last_x = rounded_x;
+
+          for (var line in info_text_lines)
+            {
+              var d = data.records [line_index][info_text_lines [line].field];
+              var bbox;
+              var line_width;
+
+              if (info_text_lines [line].field == x_field)
+                {
+                  d = d3.time.format ("%Y-%m-%d")(d)
+                }
+
+              info_text_lines [line]
+                .elem
+                  .text (d)
+
+              bbox = info_text_lines [line].elem.node ()
+                                                  .getBoundingClientRect ();
+              line_width = bbox.width;
+              if (info_text_lines [line].field != x_field)
+                line_width += 25;
+              max_line_width = Math.max (max_line_width, line_width)
+            }
+
+          for (var line in info_text_lines)
+            {
+              info_text_lines [line].elem.attr ("x", max_line_width);
+            }
+
+          info_box
+            .attr ("width", max_line_width + 10)
+            .attr ("height", 53);
+        }
+
+      box_x = Math.min (width - info_box.attr ("width") + margin.right,
+                        Math.max (-margin.left,
+                                  mouse_x - info_box.attr ("width") / 2))
+
+      info_box
+        .text ("")
+        .attr ("x", box_x)
+        .attr ("y", mouse_y - 50)
+
+
+      info_text_g
+        .attr ("text-anchor", "end")
+        .attr ("transform",
+               "translate (" + (box_x + 5) + "," + (mouse_y - 35) + ")")
+
+      info_line
+        .attr ("x1", line_x)
+        .attr ("x2", line_x)
+        .attr ("y1", 0)
+        .attr ("y2", height)
+    }
 
   my.height = function ()
     {
@@ -327,12 +436,12 @@ function LineChartGenerator ()
       x_data = records.map (function (d) { return d [x_field]; });
       y_data = records.map (function (d) { return d [y_field]; });
       y2_data = records.map (function (d) { return d [y2_field]; });
-      x_min = Math.min.apply (null, x_data.filter (defined) )
-      x_max = Math.max.apply (null, x_data.filter (defined))
-      y_min = Math.min.apply (null, y_data.filter (defined))
-      y_max = Math.max.apply (null, y_data.filter (defined))
-      y2_min = Math.min.apply (null, y2_data.filter (defined))
-      y2_max = Math.max.apply (null, y2_data.filter (defined))
+      x_min = d3.min (x_data.filter (defined))
+      x_max = d3.max (x_data.filter (defined))
+      y_min = d3.min ( y_data.filter (defined))
+      y_max = d3.max (y_data.filter (defined))
+      y2_min = d3.min (y2_data.filter (defined))
+      y2_max = d3.max (y2_data.filter (defined))
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -377,6 +486,11 @@ function LineChartGenerator ()
           display.svg ().text ("");
           svg = display.svg ().append ("g");
 
+          // Setup mouse event listeners
+          display.svg ().on ("mousemove", mouse_moved)
+          display.svg ().on ("mouseleave", mouse_exited)
+
+          // Setup chart
           svg.attr ("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
@@ -437,6 +551,55 @@ function LineChartGenerator ()
                   .attr ("cx", x_scale (records [0][x_field]))
                   .attr ("cy", y2_scale (records [0][y2_field]));
             }
+
+          // Create tooltip elements
+          info_line = svg.append ("line")
+                          .style ("stroke", "grey")
+                          .style ("display", "none")
+          info_box = svg.append ("rect")
+                          .style ("fill", "white")
+                          .style ("opacity", "0.75")
+                          .style ("display", "none")
+          info_text_g = svg.append ("g")
+                            .style ("display", "none")
+
+          info_text_lines = [];
+          info_text_lines
+            .push ({ elem : info_text_g.append ("text")
+                                          .attr ("transform", "translate(0,0)")
+                                          .style ("font-weight", "bold")
+                                          .text ("X"),
+                     field : x_field
+                   })
+          info_text_lines
+            .push ({ elem : info_text_g.append ("text")
+                                          .attr ("transform", "translate(0,15)")
+                                          .style ("font-weight", "normal")
+                                          .text ("Y1"),
+                     field : y_field
+                   })
+          info_text_lines
+            .push ({ elem : info_text_g.append ("text")
+                                          .attr ("transform", "translate(0,30)")
+                                          .style ("font-weight", "normal")
+                                          .text ("Y2"),
+                     field : y2_field
+                   })
+
+          info_text_g.append ("line")
+                        .attr ("x1", "0")
+                        .attr ("x2", "15")
+                        .attr ("y1", "10")
+                        .attr ("y2", "10")
+                        .style ("stroke", "green")
+
+          info_text_g.append ("line")
+                        .attr ("x1", "0")
+                        .attr ("x2", "15")
+                        .attr ("y1", "25")
+                        .attr ("y2", "25")
+                        .style("stroke-dasharray", "3,2")
+                        .style("stroke", d3.rgb("green").brighter())
         }
 
       /* Create legend items */

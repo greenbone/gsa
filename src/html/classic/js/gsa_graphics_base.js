@@ -814,6 +814,19 @@ function extract_filter_info (xml_data, gen_params)
  */
 
 /*
+ * Finds the index of a record by the value of a given field
+ */
+function find_record_index (records, value, field)
+{
+  for (index in records)
+    {
+      if (records [index][field].getTime() == value.getTime())
+        return index;
+    }
+  return -1;
+}
+
+/*
  * Gets capitalized resource and attribute names
  */
 function capitalize (str)

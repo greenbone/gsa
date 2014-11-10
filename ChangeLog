@@ -1,3 +1,17 @@
+2014-11-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add tooltip box and sliding vertical bar to line charts.
+
+	* src/html/classic/js/gsa_graphics_base.js (find_record_index): New
+	function.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Remember the
+	object used to round the time values.
+	(mouse_exited, mouse_moved): New functions.
+	(generate): Use d3 min and max functions to get the bounds of x, y and
+	y2 values. Attach mouse listeners to the display's SVG element and add
+	tooltip elements.
+
 2014-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Apply patch provided by Michal Ambroz.
