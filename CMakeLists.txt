@@ -455,6 +455,12 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/last.png
                src/html/classic/img/last_inactive.png
                src/html/classic/img/feedback.png
+               src/html/classic/img/st_workaround.png
+               src/html/classic/img/solution_type.png
+               src/html/classic/img/st_vendorfix.png
+               src/html/classic/img/st_willnotfix.png
+               src/html/classic/img/st_nonavailable.png
+               src/html/classic/img/st_mitigate.png
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/logo_l.png
