@@ -253,6 +253,9 @@ function LineChartGenerator ()
 
   function mouse_moved ()
     {
+      if (data.records.length == 0)
+        return;
+
       info_box.style ("display", "block");
       info_line.style ("display", "block");
       info_text_g.style ("display", "block");
@@ -266,18 +269,32 @@ function LineChartGenerator ()
       var mouse_y = d3.event.clientY - parent_rect.top - margin.top - 21;
 
 
-      var rounded_x = x_step.round (x_scale.invert (mouse_x));
-      if (rounded_x.getTime () > x_max.getTime ())
-        rounded_x = x_max;
-      else if (rounded_x.getTime () < x_min.getTime ())
-        rounded_x = x_min;
+      var rounded_x;
+      var line_index;
+      var line_x;
+      var box_x;
 
-      var line_index = find_record_index (data.records,
+      if (data.records.length > 1)
+        {
+          rounded_x = x_step.round (x_scale.invert (mouse_x));
+          if (rounded_x.getTime () > x_max.getTime ())
+            rounded_x = x_max;
+          else if (rounded_x.getTime () < x_min.getTime ())
+            rounded_x = x_min;
+
+          line_index = find_record_index (data.records,
                                           rounded_x,
                                           x_field,
                                           false);
-      var line_x = x_scale (rounded_x);
-      var box_x;
+
+          line_x = x_scale (rounded_x);
+        }
+      else
+        {
+          rounded_x = x_min;
+          line_index = 0;
+          line_x = width / 2;
+        }
 
       if (info_last_x == undefined
           || info_last_x.getTime() != rounded_x.getTime())
@@ -538,7 +555,7 @@ function LineChartGenerator ()
                   .style("stroke", "1px")
                   .style("stroke", "green")
                   .attr ("r", "4px")
-                  .attr ("cx", x_scale (records [0][x_field]))
+                  .attr ("cx", width / 2)
                   .attr ("cy", y_scale (records [0][y_field]));
 
               svg.append ("circle")
@@ -548,7 +565,7 @@ function LineChartGenerator ()
                   .style("stroke-dasharray", "3,2")
                   .style("stroke", d3.rgb("green").brighter())
                   .attr ("r", "4px")
-                  .attr ("cx", x_scale (records [0][x_field]))
+                  .attr ("cx", width / 2)
                   .attr ("cy", y2_scale (records [0][y2_field]));
             }
 
@@ -675,11 +692,11 @@ function LineChartGenerator ()
       if (records.length == 1)
         {
           svg.select ("#circle_y")
-              .attr ("cx", x_scale (records [0][x_field]))
+              .attr ("cx", width / 2)
               .attr ("cy", y_scale (records [0][y_field]));
 
           svg.select ("#circle_y2")
-              .attr ("cx", x_scale (records [0][x_field]))
+              .attr ("cx", width / 2)
               .attr ("cy", y2_scale (records [0][y2_field]));
         }
       else
