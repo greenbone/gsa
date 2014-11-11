@@ -1,5 +1,20 @@
 2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add the time step to count fields (e.g. "NVTs / day") and correct
+	legend placement.
+
+	* src/html/classic/js/gsa_graphics_base.js (column_label): Delegate to
+	label_generator function in column info or default_column_label.
+	(default_column_label): New function with functionality from original
+	column_label function.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Add custom column
+	labeling function that adds the time step to count fields. Use updated
+	column info when processing records.
+	(generate): Correct width calculations for legend element placement.
+
+2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js (mouse_moved, generate): Fix
 	handling of cases with no records or a single one.
 

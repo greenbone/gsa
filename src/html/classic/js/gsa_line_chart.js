@@ -116,8 +116,48 @@ function LineChartGenerator ()
 
     var new_data = { original_xml : old_data.original_xml,
                      records : [],
-                     column_info : old_data.column_info,
+                     column_info : {},
                      filter_info : old_data.filter_info };
+
+    var column_info = new_data.column_info;
+    column_info.group_columns = old_data.column_info.group_columns
+    column_info.data_columns = old_data.column_info.data_columns
+    column_info.columns = {}
+    for (var column_name in old_data.column_info.columns)
+      {
+        var column = old_data.column_info.columns [column_name]
+        if (column.stat == "count")
+          {
+            var column = old_data.column_info.columns [column_name]
+            column_info.columns [column_name] = {}
+            for (var info in column)
+              {
+                column_info.columns [column_name][info] = column[info];
+              }
+
+            column_info.columns [column_name].label_generator
+              = function (column, capitalize_label, include_type, include_stat)
+                  {
+                    var suffix = "";
+
+                    if (x_step == d3.time.day.utc)
+                      suffix = " / day"
+                    else if (x_step == d3.time.week.utc)
+                      suffix = " / week"
+                    else if (x_step == d3.time.month.utc)
+                      suffix = " / month"
+                    else if (x_step == d3.time.year.utc)
+                      suffix = " / year"
+
+                    return (default_column_label (column, capitalize_label,
+                                                  include_type, include_stat)
+                            + suffix)
+                  }
+          }
+        else
+          column_info.columns [column_name]
+            = old_data.column_info.columns [column_name]
+      }
 
     if (old_data.records.length == 0)
       return new_data;
@@ -189,17 +229,17 @@ function LineChartGenerator ()
                       {
                         values [field] = old_data.records [data_index][field]
                       }
-                    else if (old_data.column_info.columns[field].stat == "sum"
-                             || old_data.column_info.columns[field].stat == "count")
+                    else if (column_info.columns[field].stat == "sum"
+                             || column_info.columns[field].stat == "count")
                       {
                         values [field] += Number(old_data.records [data_index][field])
                       }
-                    else if (old_data.column_info.columns[field].stat == "min")
+                    else if (column_info.columns[field].stat == "min")
                       {
                         values [field] = Math.min (values [field], Number(old_data.records [data_index][field]))
                       }
-                    else if (old_data.column_info.columns[field].stat == "max"
-                             || old_data.column_info.columns[field].stat == "c_count")
+                    else if (column_info.columns[field].stat == "max"
+                             || column_info.columns[field].stat == "c_count")
                       {
                         values [field] = Math.max (values [field], Number(old_data.records [data_index][field]))
                       }
@@ -660,8 +700,8 @@ function LineChartGenerator ()
                   .text (column_label (column_info.columns [y2_field], true, false, true))
 
       current_part_rect = legend_part.node ().getBoundingClientRect ()
-
-      if (legend_part_x + 10 + current_part_rect.width <= width + 40)
+      if (legend_part_x + last_part_rect.width + current_part_rect.width + 10
+          <= width - 40 + margin.left + margin.right)
         {
           legend_part_x = legend_part_x + last_part_rect.width + 10
         }

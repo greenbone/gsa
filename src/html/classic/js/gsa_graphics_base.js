@@ -910,6 +910,20 @@ function field_name (field, type)
  */
 function column_label (info, capitalize_label, include_type, include_stat)
 {
+  if (info.label_generator)
+    return info.label_generator (info, capitalize_label,
+                                 include_type, include_stat)
+  else
+    return default_column_label (info, capitalize_label,
+                                 include_type, include_stat)
+}
+
+/*
+ * Generates a label in the default format from a column info object.
+ */
+function default_column_label (info, capitalize_label,
+                               include_type, include_stat)
+{
   var label = "";
   if (include_stat)
     switch (info.stat)
