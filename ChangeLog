@@ -1,3 +1,31 @@
+2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make formatting in tables and some chart tooltips data type specific.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Pass column info to
+	csv_from_records and html_table_from_records.
+
+	* src/html/classic/js/gsa_bubble_chart.js (tooltip_func): Replace
+	hardcoded formatting of color values with format_data calls for all
+	fields.
+	(generate): Pass column info to csv_from_records and
+	html_table_from_records.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Pass column info
+	to csv_from_records and html_table_from_records.
+
+	* src/html/classic/js/gsa_graphics_base.js (gsa.date_format)
+	(gsa.datetime_format): New date format functions.
+	(format_data, format_data_default): New functions.
+	(csv_from_records, html_table_from_records): Apply format_data to
+	the data values.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Change data type
+	of t_field to "js_date" in column info.
+	(mouse_moved): Replace hardcoded date formatting with format_data call.
+	(generate): Pass column info to csv_from_records and
+	html_table_from_records.
+
 2014-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/st_workaround.png,

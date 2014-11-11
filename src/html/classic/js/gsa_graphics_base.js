@@ -29,6 +29,10 @@
  */
 if (typeof gsa === 'undefined') gsa = {};
 
+// Default date and time formats
+gsa.date_format = d3.time.format.utc ("%Y-%m-%d")
+gsa.datetime_format = d3.time.format.utc ("%Y-%m-%d %H:%M")
+
 /*
  * Basic chart components
  */
@@ -953,6 +957,44 @@ function default_column_label (info, capitalize_label,
     return label;
 }
 
+/**
+ * Generates a string representation of a data value using the column info.
+ */
+function format_data (value, col_info_item)
+{
+  if (col_info_item && col_info_item.data_formatter)
+    col_info_item.data_formatter (value, col_info_item)
+  else
+    return format_data_default (value, col_info_item);
+}
+
+/**
+ * Generates a default string representation of a data value using column info.
+ */
+function format_data_default (value, col_info_item)
+{
+  if (col_info_item)
+    {
+      switch (col_info_item.data_type)
+      {
+        case "js_date":
+          return gsa.date_format (value)
+        case "js_datetime":
+          return gsa.datetime_format (value)
+        case "unix_time":
+          return gsa.datetime_format (new Date (value * 1000));
+        case "cvss":
+          return value.toFixed (1);
+        default:
+          return String (value);
+      }
+    }
+  else
+    {
+      return String (value);
+    }
+}
+
 
 /*
  * Record set transformation functions
@@ -1354,7 +1396,7 @@ severity_colors_gradient = function ()
 /*
  * Generate CSV data from simple records
  */
-csv_from_records = function (records, columns, headers, title)
+csv_from_records = function (records, column_info, columns, headers, title)
 {
   var csv_data = "";
 
@@ -1377,7 +1419,11 @@ csv_from_records = function (records, columns, headers, title)
       for (var col_i in columns)
         {
           var col = columns [col_i];
-          csv_data += "\"" + String (records [row][col]).replace ("\"", "\"\"") + "\"";
+          csv_data += "\""
+                      + format_data (records [row][col],
+                                      column_info.columns [col])
+                            .replace ("\"", "\"\"")
+                      + "\"";
           if (col_i < columns.length - 1)
             csv_data += ",";
         }
@@ -1390,7 +1436,8 @@ csv_from_records = function (records, columns, headers, title)
 /*
  * Generate HTML table from simple records
  */
-html_table_from_records = function (records, columns, headers, title, filter)
+html_table_from_records = function (records, column_info, columns,
+                                    headers, title, filter)
 {
   var csv_data = "";
 
@@ -1448,7 +1495,8 @@ html_table_from_records = function (records, columns, headers, title, filter)
         {
           var col = columns [col_i];
           tr_s.append ("td")
-                .text (records [row][col])
+                .text (format_data (records [row][col],
+                                    column_info.columns [col]))
         }
       row_class = (row_class == "odd") ? "even" : "odd";
     }

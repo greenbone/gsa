@@ -126,7 +126,18 @@ function LineChartGenerator ()
     for (var column_name in old_data.column_info.columns)
       {
         var column = old_data.column_info.columns [column_name]
-        if (column.stat == "count")
+        if (column_name == t_field)
+          {
+            column_info.columns [column_name] = {}
+            for (var info in column)
+              {
+                if (info == "data_type")
+                  column_info.columns [column_name][info] = "js_date";
+                else
+                  column_info.columns [column_name][info] = column[info];
+              }
+          }
+        else if (column.stat == "count")
           {
             var column = old_data.column_info.columns [column_name]
             column_info.columns [column_name] = {}
@@ -349,10 +360,7 @@ function LineChartGenerator ()
               var bbox;
               var line_width;
 
-              if (info_text_lines [line].field == x_field)
-                {
-                  d = d3.time.format ("%Y-%m-%d")(d)
-                }
+              d = format_data (d, data.column_info.columns [info_text_lines [line].field])
 
               info_text_lines [line]
                 .elem
@@ -756,6 +764,7 @@ function LineChartGenerator ()
 
       // Generate CSV
       csv_data = csv_from_records (records,
+                                   column_info,
                                    [x_field, y_field, y2_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true),
@@ -774,6 +783,7 @@ function LineChartGenerator ()
       // Generate HTML table
       html_table_data
         = html_table_from_records (records,
+                                   column_info,
                                    [x_field, y_field, y2_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true),

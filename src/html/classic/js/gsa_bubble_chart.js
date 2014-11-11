@@ -64,15 +64,15 @@ function BubbleChartGenerator ()
 
   var tooltip_func = function (d)
     {
-      var color_value;
+      var label_value = format_data (d ["label_value"],
+                                     data.column_info.columns ["label_value"]);
+      var size_value  = format_data (d ["size_value"],
+                                     data.column_info.columns ["size_value"]);
+      var color_value = format_data (d ["color_value"],
+                                     data.column_info.columns ["color_value"]);
 
-      if (column_info.columns ["color_value"].data_type == "severity")
-        color_value = d.color_value.toFixed (1);
-      else
-        color_value = d.color_value;
-
-      return d.label_value + ": " + d.size_value + " ("
-               + color_label + ": " + color_value + ")";
+      return label_value + ": " + size_value
+              + " (" + color_label + ": " + color_value + ")";
     }
 
   my.height = function ()
@@ -231,6 +231,7 @@ function BubbleChartGenerator ()
 
       // Generate CSV
       csv_data = csv_from_records (records,
+                                   column_info,
                                    ["label_value", "size_value", "color_value"],
                                    [column_label (column_info.columns ["label_value"], true, false, true),
                                     column_label (column_info.columns ["size_value"], true, false, true),
@@ -249,6 +250,7 @@ function BubbleChartGenerator ()
       // Generate HTML table
       html_table_data
         = html_table_from_records (records,
+                                   column_info,
                                    ["label_value", "size_value", "color_value"],
                                    [column_label (column_info.columns ["label_value"], true, false, true),
                                     column_label (column_info.columns ["size_value"], true, false, true),

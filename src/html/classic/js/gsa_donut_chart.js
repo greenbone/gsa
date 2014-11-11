@@ -350,6 +350,7 @@ function DonutChartGenerator ()
 
       // Generate CSV
       csv_data = csv_from_records (records,
+                                   column_info,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],
@@ -367,6 +368,7 @@ function DonutChartGenerator ()
       // Generate HTML table
       html_table_data
         = html_table_from_records (records,
+                                   column_info,
                                    [x_field, y_field],
                                    [column_label (column_info.columns [x_field], true, false, true),
                                     column_label (column_info.columns [y_field], true, false, true)],
