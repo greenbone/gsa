@@ -551,6 +551,9 @@ function LineChartGenerator ()
           display.svg ().text ("");
           svg = display.svg ().append ("g");
 
+          display.svg ().on ("mousemove", null)
+          display.svg ().on ("mouseleave", null)
+
           // Setup mouse event listeners
           display.svg ().on ("mousemove", mouse_moved)
           display.svg ().on ("mouseleave", mouse_exited)

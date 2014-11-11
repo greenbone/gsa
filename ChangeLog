@@ -1,5 +1,13 @@
 2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js (generate)
+	src/html/classic/js/gsa_bubble_chart.js (generate)
+	src/html/classic/js/gsa_donut_chart.js (generate)
+	src/html/classic/js/gsa_line_chart.js (generate): Clear mouse event
+	listeners when chart is loaded.
+
+2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Make formatting in tables and some chart tooltips data type specific.
 
 	* src/html/classic/js/gsa_bar_chart.js (generate): Pass column info to

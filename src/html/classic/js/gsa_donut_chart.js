@@ -177,6 +177,9 @@ function DonutChartGenerator ()
           display.svg ().text ("");
           svg = display.svg ().append ("g");
 
+          display.svg ().on ("mousemove", null)
+          display.svg ().on ("mouseleave", null)
+
           svg.attr ("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
