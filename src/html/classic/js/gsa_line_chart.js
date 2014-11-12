@@ -624,12 +624,15 @@ function LineChartGenerator ()
           info_line = svg.append ("line")
                           .style ("stroke", "grey")
                           .style ("display", "none")
+                          .classed ("remove_on_static", true);
           info_box = svg.append ("rect")
                           .style ("fill", "white")
                           .style ("opacity", "0.75")
                           .style ("display", "none")
+                          .classed ("remove_on_static", true);
           info_text_g = svg.append ("g")
                             .style ("display", "none")
+                            .classed ("remove_on_static", true);
 
           info_text_lines = [];
           info_text_lines

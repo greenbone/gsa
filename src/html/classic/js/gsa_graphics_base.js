@@ -1549,6 +1549,9 @@ svg_from_elem = function (svg_elem, title)
   else
     title_xml = ""
 
+  var svg_clone = d3.select (svg_elem.node().cloneNode(true));
+  svg_clone.selectAll (".remove_on_static").remove ();
+
   // create SVG
   var svg_data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                   + "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/SVG/DTD/svg10.dtd\"> "
@@ -1558,7 +1561,7 @@ svg_from_elem = function (svg_elem, title)
                   + " height=\"" + (height + (title != null ? 14 : 0)) + "\">"
                   + " <defs><style type=\"text/css\">" + css_text + "</style></defs>"
                   + title_xml
-                  + svg_elem.html ()
+                  + svg_clone.html ()
                   + "</svg>";
   return svg_data;
 }

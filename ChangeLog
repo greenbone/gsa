@@ -1,3 +1,12 @@
+2014-11-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (svg_from_elem): Clone
+	the SVG element and remove elements marked with the CSS class
+	"remove_on_static".
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Add CSS class
+	"remove_on_static" to tooltip elements.
+
 2014-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js (generate)
