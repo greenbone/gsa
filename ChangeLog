@@ -1,5 +1,10 @@
 2014-11-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Free esxi_credentials_element
+	after command has been generated.
+
+2014-11-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-logo): Set height and width of
 	logo img as some versions of Firefox do not always adjust the size
 	correctly.

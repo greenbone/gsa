@@ -6501,6 +6501,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   g_free (comment_element);
   g_free (credentials_element);
   g_free (smb_credentials_element);
+  g_free (esxi_credentials_element);
 
   ret = omp (credentials,
              &response,
