@@ -1,5 +1,11 @@
 2014-11-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsad.xsl (html-gsa-logo): Set height and width of
+	logo img as some versions of Firefox do not always adjust the size
+	correctly.
+
+2014-11-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (svg_from_elem): Clone
 	the SVG element and remove elements marked with the CSS class
 	"remove_on_static".
