@@ -4673,10 +4673,18 @@ Public License instead of this License.
         that will be replaced as follows:
       </p>
       <ul>
+        <li><b>%C</b> - The creation date in the format YYYYMMDD.<br/>
+        This gives the current date if a creation is not available, e.g.
+        when exporting lists of resources.</li>
         <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
+        <li><b>%M</b> - The modification date in the format YYYYMMDD.<br/>
+        If the modification date is not available this gives either creation
+        date or the current date if a creation date is not available as well,
+        e.g. when exporting lists of resources.</li>
         <li><b>%T</b> - The resource type, e.g. "task", "port_list".
         Pluralized for list pages.</li>
         <li><b>%U</b> - The unique ID of the resource or "list" for lists of multiple resources.</li>
+        <li><b>%u</b> - The name of the currently logged in user.</li>
         <li><b>%%</b> - The percent sign (%)</li>
       </ul>
       <a name="severity_class"/>

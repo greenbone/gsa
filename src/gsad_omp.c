@@ -33,9 +33,13 @@
  * via OMP properly, and apply XSL-Transforms to deliver HTML results.
  */
 
+/* time.h in glibc2 needs this for strptime. */
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
 #include <netinet/in.h>
@@ -1594,28 +1598,94 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
 /**
  * @brief Generates a file name for exporting.
  *
- * @param[in]   fname_format  Format string.
- * @param[in]   type          Type of resource.
- * @param[in]   uuid          UUID of resource.
+ * @param[in]   fname_format      Format string.
+ * @param[in]   credentials       Current credentials.
+ * @param[in]   type              Type of resource.
+ * @param[in]   uuid              UUID of resource.
+ * @param[in]   resource_entity   Resource entity to extract extra data from.
  *
  * @return The file name.
  */
 gchar *
-format_file_name (gchar* fname_format, const char* type, const char* uuid)
+format_file_name (gchar* fname_format, credentials_t* credentials,
+                  const char* type, const char* uuid,
+                  entity_t resource_entity)
 {
   time_t now;
   struct tm *now_broken;
-  gchar *file_date;
+  gchar *now_date_str, *creation_date_str, *modification_date_str;
   gchar *fname_point;
   GString *file_name_buf;
   int format_state = 0;
+  entity_t creation_time_entity, modification_time_entity;
+
+  now_date_str = NULL;
+  creation_date_str = NULL;
+  modification_date_str = NULL;
 
   now = time (NULL);
   now_broken = localtime (&now);
-  file_date = g_strdup_printf ("%04d%02d%02d",
-                               (now_broken->tm_year + 1900),
-                               (now_broken->tm_mon + 1),
-                               now_broken->tm_mday);
+  now_date_str = g_strdup_printf ("%04d%02d%02d",
+                                  (now_broken->tm_year + 1900),
+                                  (now_broken->tm_mon + 1),
+                                  now_broken->tm_mday);
+
+  if (resource_entity)
+    {
+      struct tm creation_time, modification_time;
+      gchar *creation_date_short, *modification_date_short;
+
+      memset (&creation_time, 0, sizeof (struct tm));
+      memset (&modification_time, 0, sizeof (struct tm));
+      creation_date_short = NULL;
+      modification_date_short = NULL;
+
+      creation_time_entity = entity_child (resource_entity,
+                                           "creation_time");
+      if (creation_time_entity)
+        creation_date_short
+          = g_strndup (entity_text (creation_time_entity), 10);
+
+      if (creation_date_short
+          && (strlen (strptime (creation_date_short,
+                                "%Y-%m-%d", &creation_time))
+              == 0))
+        {
+          creation_date_str
+            = g_strdup_printf ("%04d%02d%02d",
+                               (creation_time.tm_year + 1900),
+                               (creation_time.tm_mon + 1),
+                               creation_time.tm_mday);
+        }
+
+      modification_time_entity = entity_child (resource_entity,
+                                              "modification_time");
+      if (modification_time_entity)
+        modification_date_short
+          = g_strndup (entity_text (modification_time_entity), 10);
+
+      if (modification_date_short
+          && (strlen (strptime (modification_date_short,
+                                "%Y-%m-%d", &modification_time))
+              == 0))
+        {
+          modification_date_str
+            = g_strdup_printf ("%04d%02d%02d",
+                               (modification_time.tm_year + 1900),
+                               (modification_time.tm_mon + 1),
+                               modification_time.tm_mday);
+        }
+    }
+  else
+    {
+      creation_time_entity = NULL;
+      modification_time_entity = NULL;
+    }
+
+  if (creation_date_str == NULL)
+    creation_date_str = g_strdup (now_date_str);
+  if (modification_date_str == NULL)
+    modification_date_str = g_strdup (now_date_str);
 
   file_name_buf = g_string_new ("");
 
@@ -1635,14 +1705,23 @@ format_file_name (gchar* fname_format, const char* type, const char* uuid)
         {
           switch (*fname_point)
             {
+              case 'C':
+                g_string_append (file_name_buf, creation_date_str);
+                break;
+              case 'D':
+                g_string_append (file_name_buf, now_date_str);
+                break;
+              case 'M':
+                g_string_append (file_name_buf, modification_date_str);
+                break;
               case 'T':
                 g_string_append (file_name_buf, type ? type : "resource");
                 break;
-              case 'D':
-                g_string_append (file_name_buf, file_date);
-                break;
               case 'U':
                 g_string_append (file_name_buf, uuid ? uuid : "list");
+                break;
+              case 'u':
+                g_string_append (file_name_buf, credentials->username);
                 break;
               case '%':
                 g_string_append_c (file_name_buf, '%');
@@ -1664,6 +1743,9 @@ format_file_name (gchar* fname_format, const char* type, const char* uuid)
       return NULL;
     }
 
+  g_free (now_date_str);
+  g_free (creation_date_str);
+  g_free (modification_date_str);
   return g_string_free (file_name_buf, FALSE);
 }
 
@@ -1827,7 +1909,8 @@ export_resource (const char *type, credentials_t * credentials,
       fname_format = "%T-%U";
     }
 
-  file_name = format_file_name (fname_format, type, resource_id);
+  file_name = format_file_name (fname_format, credentials, type, resource_id,
+                                resource_entity);
   if (file_name == NULL)
     file_name = g_strdup_printf ("%s-%s", type, resource_id);
 
@@ -1973,7 +2056,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   else
     type_many = g_strdup_printf ("%ss", type);
 
-  file_name = format_file_name (fname_format, type_many, "list");
+  file_name = format_file_name (fname_format, credentials, type_many, "list",
+                                NULL);
   if (file_name == NULL)
     file_name = g_strdup_printf ("%s-%s", type_many, "list");
 
@@ -10577,11 +10661,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "Diagnostics: Failure to receive response from manager daemon.",
                                    "/omp?cmd=get_tasks");
             }
-          openvas_server_close (socket, session);
           entity_t report = entity_child (entity, "report");
           if (report == NULL)
             {
               free_entity (entity);
+              openvas_server_close (socket, session);
               if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -10640,13 +10724,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                 }
 
               file_name = format_file_name (fname_format,
+                                            credentials,
                                             "report",
                                             (type
                                              && ((strcmp (type, "assets") == 0)
                                                  || (strcmp (type, "prognostic")
                                                      == 0)))
                                             ? type
-                                            : report_id);
+                                            : report_id,
+                                            report);
               if (file_name == NULL)
                 file_name = g_strdup_printf ("%s-%s",
                                             "report",
@@ -10667,6 +10753,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_free (setting_response);
               g_free (file_name);
             }
+          openvas_server_close (socket, session);
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
@@ -10775,8 +10862,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                       fname_format = "%T-%U";
                     }
 
-                  file_name = format_file_name (fname_format,
-                                                "report", id);
+                  file_name = format_file_name (fname_format, credentials,
+                                                "report", id, report_entity);
                   if (file_name == NULL)
                     file_name = g_strdup_printf ("%s-%s",
                                                 "report", id);
