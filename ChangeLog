@@ -1,5 +1,12 @@
 2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsa-style.css: Add styles for icon menus.
+
+	* src/html/classic/wizard.xsl (wizard-icon): Open a drop-down menu
+	to select the wizard when hovering over the icon.
+
+2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/graphics.xsl (init-d3charts): Correct max_low
 	assignment.
 

@@ -1049,6 +1049,63 @@ text-align:right;
  display: block;
 }
 
+/* Styles for icon menus */
+
+.menu_icon {
+  display: inline;
+}
+
+.menu_icon img {
+  padding: 2px;
+  margin: -2px;
+}
+
+.menu_icon:hover img {
+  background: #99CE48;
+}
+
+.menu_icon ul {
+  position:absolute;
+  display: none;
+  padding: 0;
+  margin-left: -18px;
+  margin-top: 18px;
+  z-index: 5;
+  list-style: none;
+  font-size: 10px;
+
+  border: 1px solid #3A3A3A;
+  border-radius: 0px 8px 8px 8px;
+}
+
+.menu_icon:hover ul {
+  display: inline;
+}
+
+.menu_icon ul li a {
+  display: block;
+  padding-top: 4px;
+  padding-bottom: 6px;
+  padding-right: 12px;
+  background: #FAFAFA;
+
+  text-decoration: none;
+  text-indent: 12px;
+  color: #3A3A3A;
+}
+
+.menu_icon ul li a:hover {
+  background: #99CE48;
+}
+
+.menu_icon ul li a.first {
+  border-radius: 0px 8px 0px 0px;
+}
+
+.menu_icon ul li a.last {
+  border-radius: 0px 0px 8px 8px;
+}
+
 
 /*
  * Dashboard / charts styles
