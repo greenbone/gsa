@@ -1614,6 +1614,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
   time_t now;
   struct tm *now_broken;
   gchar *now_date_str, *creation_date_str, *modification_date_str;
+  gchar *now_time_str, *creation_time_str, *modification_time_str;
   gchar *fname_point;
   GString *file_name_buf;
   int format_state = 0;
@@ -1622,6 +1623,9 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
   now_date_str = NULL;
   creation_date_str = NULL;
   modification_date_str = NULL;
+  now_time_str = NULL;
+  creation_time_str = NULL;
+  modification_time_str = NULL;
 
   now = time (NULL);
   now_broken = localtime (&now);
@@ -1629,6 +1633,10 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                                   (now_broken->tm_year + 1900),
                                   (now_broken->tm_mon + 1),
                                   now_broken->tm_mday);
+  now_time_str = g_strdup_printf ("%02d%02d%02d",
+                                  now_broken->tm_hour,
+                                  now_broken->tm_min,
+                                  now_broken->tm_sec);
 
   if (resource_entity)
     {
@@ -1644,11 +1652,11 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                                            "creation_time");
       if (creation_time_entity)
         creation_date_short
-          = g_strndup (entity_text (creation_time_entity), 10);
+          = g_strndup (entity_text (creation_time_entity), 19);
 
       if (creation_date_short
           && (strlen (strptime (creation_date_short,
-                                "%Y-%m-%d", &creation_time))
+                                "%Y-%m-%dT%H:%M:%S", &creation_time))
               == 0))
         {
           creation_date_str
@@ -1656,17 +1664,22 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                                (creation_time.tm_year + 1900),
                                (creation_time.tm_mon + 1),
                                creation_time.tm_mday);
+          creation_time_str
+            = g_strdup_printf ("%02d%02d%02d",
+                               creation_time.tm_hour,
+                               creation_time.tm_min,
+                               creation_time.tm_sec);
         }
 
       modification_time_entity = entity_child (resource_entity,
                                               "modification_time");
       if (modification_time_entity)
         modification_date_short
-          = g_strndup (entity_text (modification_time_entity), 10);
+          = g_strndup (entity_text (modification_time_entity), 19);
 
       if (modification_date_short
           && (strlen (strptime (modification_date_short,
-                                "%Y-%m-%d", &modification_time))
+                                "%Y-%m-%dT%H:%M:%S", &modification_time))
               == 0))
         {
           modification_date_str
@@ -1674,6 +1687,12 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                                (modification_time.tm_year + 1900),
                                (modification_time.tm_mon + 1),
                                modification_time.tm_mday);
+
+          modification_time_str
+            = g_strdup_printf ("%02d%02d%02d",
+                               modification_time.tm_hour,
+                               modification_time.tm_min,
+                               modification_time.tm_sec);
         }
     }
   else
@@ -1685,7 +1704,11 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
   if (creation_date_str == NULL)
     creation_date_str = g_strdup (now_date_str);
   if (modification_date_str == NULL)
-    modification_date_str = g_strdup (now_date_str);
+    modification_date_str = g_strdup (creation_date_str);
+  if (creation_time_str == NULL)
+    creation_time_str = g_strdup (now_time_str);
+  if (modification_time_str == NULL)
+    modification_time_str = g_strdup (creation_time_str);
 
   file_name_buf = g_string_new ("");
 
@@ -1708,14 +1731,23 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
               case 'C':
                 g_string_append (file_name_buf, creation_date_str);
                 break;
+              case 'c':
+                g_string_append (file_name_buf, creation_time_str);
+                break;
               case 'D':
                 g_string_append (file_name_buf, now_date_str);
                 break;
               case 'M':
                 g_string_append (file_name_buf, modification_date_str);
                 break;
+              case 'm':
+                g_string_append (file_name_buf, modification_time_str);
+                break;
               case 'T':
                 g_string_append (file_name_buf, type ? type : "resource");
+                break;
+              case 't':
+                g_string_append (file_name_buf, now_time_str);
                 break;
               case 'U':
                 g_string_append (file_name_buf, uuid ? uuid : "list");

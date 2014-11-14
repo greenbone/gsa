@@ -1,3 +1,15 @@
+2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (format_file_name): Add string placeholder support for
+	current, creation and modification time. Make modification date
+	fallback work as described on the help page.
+
+	* src/gsad.c (init_validator): Add %c, %m and %t as valid placeholders
+	in details_fname, list_fname and report_fname.
+
+	* src/html/classic/help.xsl (my_settings.html): Add descriptions of
+	new placeholders.
+
 2014-11-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (): Add #define _GNU_SOURCE and #include <time.h>.

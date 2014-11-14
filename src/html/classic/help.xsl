@@ -4676,13 +4676,19 @@ Public License instead of this License.
         <li><b>%C</b> - The creation date in the format YYYYMMDD.<br/>
         This gives the current date if a creation is not available, e.g.
         when exporting lists of resources.</li>
+        <li><b>%c</b> - The creation time in the format HHMMSS.<br/>
+        Falls back to the current time similar to %C.
+        </li>
         <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
         <li><b>%M</b> - The modification date in the format YYYYMMDD.<br/>
         If the modification date is not available this gives either creation
         date or the current date if a creation date is not available as well,
         e.g. when exporting lists of resources.</li>
+        <li><b>%m</b> - The modification time in the format HHMMSS.<br/>
+        Falls back to the creation time or current time similar to %M.</li>
         <li><b>%T</b> - The resource type, e.g. "task", "port_list".
         Pluralized for list pages.</li>
+        <li><b>%t</b> - The current time in the format HHMMSS.</li>
         <li><b>%U</b> - The unique ID of the resource or "list" for lists of multiple resources.</li>
         <li><b>%u</b> - The name of the currently logged in user.</li>
         <li><b>%%</b> - The percent sign (%)</li>
