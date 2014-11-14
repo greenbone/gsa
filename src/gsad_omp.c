@@ -1716,7 +1716,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
 
   while (format_state >= 0 && *fname_point != '\0')
     {
-      assert (format_state >= 0 && format_state <= 1);
+      assert (format_state >= -1 && format_state <= 1);
       if (format_state == 0)
         {
           if (*fname_point == '%')
