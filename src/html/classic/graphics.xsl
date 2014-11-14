@@ -59,7 +59,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        min_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium') + 0.1"/>,
        max_medium : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium')"/>,
        min_medium : <xsl:value-of select="gsa:risk-factor-max-cvss ('low') + 0.1"/>,
-       max_low : <xsl:value-of select="gsa:risk-factor-max-cvss ('low') + 0.1"/>,
+       max_low : <xsl:value-of select="gsa:risk-factor-max-cvss ('low')"/>,
        min_low : 0.1};
   </script>
 </xsl:template>

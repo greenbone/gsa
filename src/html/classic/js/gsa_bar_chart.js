@@ -33,15 +33,24 @@ function default_bar_style (d) {
 function severity_bar_style (field, max_low, max_medium) {
   var func = function (d)
     {
-      if (Number(d[field]) > max_medium)
+      console.debug ()
+      if (Number(d[field]) > Math.ceil (max_medium))
         return ("fill: #D80000");
-      else if (Number(d[field]) >= max_low)
+      if (Number(d[field]) > max_medium)
+        return ("fill: " + medium_high_color);
+      else if (Number(d[field]) > Math.ceil (max_low))
         return ("fill: orange");
+      else if (Number(d[field]) > max_low)
+        return ("fill: " + low_medium_color);
       else if (Number(d[field]) > 0.0)
         return ("fill: skyblue");
       else
         return ("fill: silver");
     };
+  var medium_high_color
+        = d3.interpolateHcl("#D80000", "orange")((max_medium % 1.0) / 2 + 0.25)
+  var low_medium_color
+        = d3.interpolateHcl("orange", "skyblue")((max_low % 1.0) / 2 + 0.25)
   func.max_low = max_low;
   func.max_medium = max_medium;
   func.field = field;

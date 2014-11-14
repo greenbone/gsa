@@ -1,5 +1,14 @@
 2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/graphics.xsl (init-d3charts): Correct max_low
+	assignment.
+
+	* src/html/classic/js/gsa_bar_chart.js (severity_bar_style): Adjust
+	to corrected max_low and blend colors for bars that represent more
+	than one severity level.
+
+2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (format_file_name): Add string placeholder support for
 	current, creation and modification time. Make modification date
 	fallback work as described on the help page.
