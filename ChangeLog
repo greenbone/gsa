@@ -1,5 +1,13 @@
 2014-11-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js (generate): Show long form
+	of x value in tooltip if available.
+
+	* src/html/classic/js/gsa_graphics_base.js (data_severity_level_counts):
+	Add long form of severity classes.
+
+2014-11-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_task): Use regex for name to select permissions.
 	(create_permission_omp): Create get_tasks, modify_task, start_task,
 	stop_task, resume_or_start_task and resume_stopped_task permissions

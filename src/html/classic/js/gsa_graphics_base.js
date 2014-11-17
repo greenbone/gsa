@@ -1099,6 +1099,16 @@ function data_severity_histogram (old_data, params)
 function data_severity_level_counts (old_data, params)
 {
   var bins = ["N/A", "None", "Low", "Medium", "High"]
+  var bins_long = ["N/A", "None (0.0)",
+                   "Low ("
+                   + gsa.severity_levels.min_low.toFixed (1)
+                   + " - " + gsa.severity_levels.max_low.toFixed (1) + ")",
+                   "Medium ("
+                   + gsa.severity_levels.min_medium.toFixed (1)
+                   + " - " + gsa.severity_levels.max_medium.toFixed (1) + ")",
+                   "High ("
+                   + gsa.severity_levels.min_high.toFixed (1)
+                   + " - " + gsa.severity_levels.max_high.toFixed (1) + ")"];
   var severity_field = "value";
   var count_field = "count";
   var ascending = false;
@@ -1159,6 +1169,11 @@ function data_severity_level_counts (old_data, params)
       else
         records[0][count_field] += count;
     };
+
+  for (var i in records)
+    {
+      records [i][severity_field + "~long"] = bins_long [i]
+    }
 
   var data = {
               original_xml : old_data.original_xml,

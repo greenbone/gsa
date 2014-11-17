@@ -279,7 +279,16 @@ function DonutChartGenerator ()
                                        rx, ry, ri, h)
                           })
                   .attr ("fill", function (d, i) { return color_scale (d.data [x_field]); } )
-                  .attr ("title", function (d, i) { return d.data [x_field] + ": " + (100 * (d.endAngle - d.startAngle) / (2 * Math.PI)).toFixed (1) + "% (" + d.data [y_field] + ")" })
+                  .attr ("title",
+                         function (d, i)
+                            {
+                              var x;
+                              if (d.data [x_field + "~long"])
+                                x = d.data [x_field + "~long"];
+                              else
+                                x = d.data [x_field];
+                              return x + ": " + (100 * (d.endAngle - d.startAngle) / (2 * Math.PI)).toFixed (1) + "% (" + d.data [y_field] + ")"
+                            })
 
       donut.selectAll(".slice_outer")
             .data (slices)
