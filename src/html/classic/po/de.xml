@@ -5339,8 +5339,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Permission Window</ctxt>
     <!-- - - Actions - - -->
     <msg>
-      <id>Grant read permissions to </id>
-      <str>Leserechte vergeben an </str>
+      <id>Grant </id>
+      <str></str>
+    </msg>
+    <msg>
+      <id> permissions to </id>
+      <str>-Rechte vergeben an </str>
+    </msg>
+
+    <msg>
+      <id>read</id>
+      <str>Lese</str>
+    </msg>
+    <msg>
+      <id>write</id>
+      <str>Schreib</str>
+    </msg>
+    <msg>
+      <id>start</id>
+      <str>Start</str>
+    </msg>
+    <msg>
+      <id>stop</id>
+      <str>Stopp</str>
+    </msg>
+    <msg>
+      <id>resume or start</id>
+      <str>Fortsetzen- oder Start</str>
+    </msg>
+    <msg>
+      <id>resume stopped</id>
+      <str>Fortsetzen</str>
+    </msg>
+    <msg>
+      <id>proxy</id>
+      <str>Stellvertreter</str>
     </msg>
     <!-- - - Properties - - -->
     <msg>

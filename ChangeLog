@@ -1,3 +1,17 @@
+2014-11-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Use regex for name to select permissions.
+	(create_permission_omp): Create get_tasks, modify_task, start_task,
+	stop_task, resume_or_start_task and resume_stopped_task permissions
+	if the permission name is "task_proxy".
+
+	* src/html/classic/omp.xsl (resource-permissions-window): Add dropdown
+	to select the type of permission, including a special "proxy" case
+	for tasks that adds all permissions except delete.
+
+	* src/html/classic/po/de.xml: Add / modify strings for new permission
+	selection in Permission Window.
+
 2014-11-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Use a dropdown for the timezone on the Edit User page.

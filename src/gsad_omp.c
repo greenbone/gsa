@@ -4007,7 +4007,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   if (openvas_server_sendf (&session,
                             "<get_permissions"
-                            " filter=\"name=get_tasks and resource_uuid=%s"
+                            " filter=\"name:^.*(task)s?$"
+                            "          and resource_uuid=%s"
                             "          first=1 rows=-1\"/>",
                             task_id)
       == -1)
@@ -17029,64 +17030,177 @@ create_permission_omp (credentials_t *credentials, params_t *params)
     subject_id = NULL;
   CHECK_PARAM (subject_id, "Create Permission", new_permission);
 
-  /* Create the permission. */
+  /* Create the permission(s). */
 
-  response = NULL;
-  entity = NULL;
-  ret = ompf (credentials,
-              &response,
-              &entity,
-              "<create_permission>"
-              "<name>%s</name>"
-              "<comment>%s</comment>"
-              "<resource id=\"%s\"/>"
-              "<subject id=\"%s\"><type>%s</type></subject>"
-              "</create_permission>",
-              name,
-              comment ? comment : "",
-              resource_id,
-              subject_id,
-              subject_type);
-
-  if (get_subject_entity)
-    free_entity (get_subject_entity);
-
-  switch (ret)
+  if (strcmp (name, "task_proxy") == 0)
     {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a permission. "
-                             "The permission was not created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_permissions");
-      case 2:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a permission. "
-                             "It is unclear whether the permission has been created or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_permissions");
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a permission. "
-                             "It is unclear whether the permission has been created or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_permissions");
-    }
+      response = NULL;
+      entity = NULL;
+      ret = ompf (credentials,
+                  &response,
+                  &entity,
+                  "<commands>"
+                  "<create_permission>"
+                  "<name>get_tasks</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "<create_permission>"
+                  "<name>modify_task</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "<create_permission>"
+                  "<name>start_task</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "<create_permission>"
+                  "<name>stop_task</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "<create_permission>"
+                  "<name>resume_or_start_task</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "<create_permission>"
+                  "<name>resume_stopped_task</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>"
+                  "</commands>",
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type);
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response);
-      if (html == NULL)
-        html = get_permissions (credentials, params, response);
+      if (get_subject_entity)
+        free_entity (get_subject_entity);
+
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_permissions");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "It is unclear whether the permission has been created or not. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_permissions");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "It is unclear whether the permission has been created or not. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_permissions");
+        }
+
+      if (omp_success (entity))
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = get_permissions (credentials, params, response);
+        }
+      else
+        html = new_permission (credentials, params, response);
     }
   else
-    html = new_permission (credentials, params, response);
+    {
+      response = NULL;
+      entity = NULL;
+      ret = ompf (credentials,
+                  &response,
+                  &entity,
+                  "<create_permission>"
+                  "<name>%s</name>"
+                  "<comment>%s</comment>"
+                  "<resource id=\"%s\"/>"
+                  "<subject id=\"%s\"><type>%s</type></subject>"
+                  "</create_permission>",
+                  name,
+                  comment ? comment : "",
+                  resource_id,
+                  subject_id,
+                  subject_type);
+
+      if (get_subject_entity)
+        free_entity (get_subject_entity);
+
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_permissions");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "It is unclear whether the permission has been created or not. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_permissions");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while creating a permission. "
+                                "It is unclear whether the permission has been created or not. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_permissions");
+        }
+
+      if (omp_success (entity))
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = get_permissions (credentials, params, response);
+        }
+      else
+        html = new_permission (credentials, params, response);
+    }
   free_entity (entity);
   g_free (response);
   return html;

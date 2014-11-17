@@ -2340,7 +2340,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('create_permission') and (gsa:may-op ('get_users') or gsa:may-op ('get_groups') or gsa:may-op ('get_roles'))">
           <form method="post">
             <input type="hidden" name="cmd" value="create_permission"/>
-            <input type="hidden" name="permission" value="{$next}s"/>
             <input type="hidden" name="comment" value=""/>
             <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -2349,7 +2348,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="{$resource_type}_id" value="{$resource_id}"/>
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <p style="">
-              <b><xsl:value-of select="gsa:i18n ('Grant read permissions to ', 'Permission Window')"/></b>
+              <b><xsl:value-of select="gsa:i18n ('Grant ', 'Permission Window')"/></b>
+              <select name="permission">
+                <option value="{concat('get_',$resource_type)}s"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
+                <option value="{concat('modify_',$resource_type)}"><xsl:value-of select="gsa:i18n ('write', 'Permission Window')"/></option>
+                <xsl:if test="$resource_type = 'task'">
+                  <option value="task_proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
+                  <option value="start_task"><xsl:value-of select="gsa:i18n ('start', 'Permission Window')"/></option>
+                  <option value="stop_task"><xsl:value-of select="gsa:i18n ('stop', 'Permission Window')"/></option>
+                  <option value="resume_or_start_task"><xsl:value-of select="gsa:i18n ('resume or start', 'Permission Window')"/></option>
+                  <option value="resume_stopped_task"><xsl:value-of select="gsa:i18n ('resume stopped', 'Permission Window')"/></option>
+                </xsl:if>
+              </select>
+              <b><xsl:value-of select="gsa:i18n (' permissions to ', 'Permission Window')"/></b>
               <select name="subject_type">
                 <xsl:if test="gsa:may-op ('get_users')">
                   <option value="user"><xsl:value-of select="gsa:i18n ('User', 'User')"/></option>
