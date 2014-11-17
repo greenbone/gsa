@@ -86,7 +86,9 @@ pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.16)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
-pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=8.0.0)
+pkg_check_modules (LIBOPENVAS_OMP REQUIRED libopenvas_omp>=8.0.0)
+pkg_check_modules (LIBOPENVAS_BASE REQUIRED libopenvas_base>=8.0.0)
+pkg_check_modules (LIBOPENVAS_MISC REQUIRED libopenvas_misc>=8.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=2.8)
 
@@ -137,11 +139,25 @@ execute_process (COMMAND pkg-config --libs libexslt
   OUTPUT_VARIABLE LIBEXSLT_LDFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process (COMMAND pkg-config --cflags libopenvas
-  OUTPUT_VARIABLE OPENVAS_CFLAGS
+execute_process (COMMAND pkg-config --cflags libopenvas_omp
+  OUTPUT_VARIABLE OPENVAS_OMP_CFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process (COMMAND pkg-config --libs libopenvas
-  OUTPUT_VARIABLE OPENVAS_LDFLAGS
+execute_process (COMMAND pkg-config --libs libopenvas_omp
+  OUTPUT_VARIABLE OPENVAS_OMP_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags libopenvas_misc
+  OUTPUT_VARIABLE OPENVAS_MISC_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libopenvas_misc
+  OUTPUT_VARIABLE OPENVAS_MISC_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags libopenvas_base
+  OUTPUT_VARIABLE OPENVAS_BASE_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libopenvas_base
+  OUTPUT_VARIABLE OPENVAS_BASE_LDFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 execute_process (COMMAND pkg-config --cflags libxslt
@@ -157,6 +173,9 @@ execute_process (COMMAND pkg-config --cflags gnutls
 execute_process (COMMAND pkg-config --libs gnutls
   OUTPUT_VARIABLE GNUTLS_LDFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+set (OPENVAS_CFLAGS "${OPENVAS_OMP_CFLAGS} ${OPENVAS_BASE_CFLAGS} ${OPENVAS_MISC_CFLAGS}")
+set (OPENVAS_LDFLAGS "${OPENVAS_OMP_LDFLAGS} ${OPENVAS_BASE_LDFLAGS} ${OPENVAS_MISC_LDFLAGS}")
 
 message (STATUS "Looking for libgcrypt...")
 find_library (LIBGCRYPT gcrypt)
@@ -174,13 +193,16 @@ execute_process (COMMAND libgcrypt-config --cflags
 
 if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
     (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-    LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+    LIBOPENVAS_OMP_FOUND OR NOT LIBOPENVAS_BASE_FOUND OR NOT
+    LIBOPENVAS_MISC_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
+    LIBGCRYPT)
   message (FATAL_ERROR "One or more required libraries was not found "
     "(see message above), please install the missing "
     "libraries and run cmake again.")
 endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
   (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-  LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+  LIBOPENVAS_OMP_FOUND OR NOT LIBOPENVAS_BASE_FOUND OR NOT LIBOPENVAS_MISC_FOUND
+  OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
