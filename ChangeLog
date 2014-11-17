@@ -1,3 +1,15 @@
+2014-11-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use a dropdown for the timezone on the Edit User page.
+
+	* CMakeLists.txt: Create and install timezone dictionary.
+
+	* src/html/classic/omp.xsl (edit_my_settings): Use dropdown for
+	timezone.
+
+	* tools/generate-zone-dict.sh, tools/zone-append.in,
+	tools/zone-prepend.in: New files.
+
 2014-11-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* CMakeLists.txt: Check for and link against libopenvas_omp,

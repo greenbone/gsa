@@ -31256,8 +31256,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Timezone', 'My Settings')"/></td>
               <td>
-                <input type="text" name="text" size="40" maxlength="800"
-                       value="{gsa:param-or ('text', /envelope/timezone)}"/>
+                <xsl:variable name="timezone">
+                  <xsl:value-of select="gsa:param-or ('text', /envelope/timezone)"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="$timezone = 'UTC' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
+                    <select name="text">
+                      <xsl:choose>
+                        <xsl:when test="$timezone = 'UTC'">
+                          <option value="UTC" selected="1">Coordinated Universal Time</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="UTC">Coordinated Universal Time</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="document ('zones.xml')/zones/zone/name">
+                        <xsl:choose>
+                          <xsl:when test=". = $timezone">
+                            <option value="{.}" selected="1"><xsl:value-of select="translate (., '_',' ')"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{.}"><xsl:value-of select="translate (., '_',' ')"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="text" size="40" maxlength="800"
+                           value="{gsa:param-or ('text', /envelope/timezone)}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
             </tr>
             <tr>

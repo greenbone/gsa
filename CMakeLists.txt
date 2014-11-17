@@ -335,6 +335,12 @@ add_custom_target (cpe-icon-dict
                    COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-cpe-icon-dict.sh" --src_path "${CMAKE_SOURCE_DIR}/src/html/classic/img/cpe" > ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
 
+add_custom_target (zone-dict
+                   ALL
+                   COMMENT "Generating timezone dictionary"
+                   COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-zone-dict.sh" > ${CMAKE_CURRENT_BINARY_DIR}/zones.xml
+                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
+
 ## Version
 
 string (REPLACE "
@@ -555,6 +561,9 @@ install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
+         DESTINATION ${GSA_DATA_DIR}/classic)
+
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/zones.xml
          DESTINATION ${GSA_DATA_DIR}/classic)
 
 ## Program
