@@ -33,10 +33,9 @@ function default_bar_style (d) {
 function severity_bar_style (field, max_low, max_medium) {
   var func = function (d)
     {
-      console.debug ()
       if (Number(d[field]) > Math.ceil (max_medium))
         return ("fill: #D80000");
-      if (Number(d[field]) > max_medium)
+      else if (Number(d[field]) > max_medium)
         return ("fill: " + medium_high_color);
       else if (Number(d[field]) > Math.ceil (max_low))
         return ("fill: orange");
@@ -48,9 +47,9 @@ function severity_bar_style (field, max_low, max_medium) {
         return ("fill: silver");
     };
   var medium_high_color
-        = d3.interpolateHcl("#D80000", "orange")((max_medium % 1.0) / 2 + 0.25)
+        = d3.interpolateHcl("#D80000", "orange")(0.5)
   var low_medium_color
-        = d3.interpolateHcl("orange", "skyblue")((max_low % 1.0) / 2 + 0.25)
+        = d3.interpolateHcl("orange", "skyblue")(0.5)
   func.max_low = max_low;
   func.max_medium = max_medium;
   func.field = field;
@@ -235,12 +234,20 @@ function BarChartGenerator ()
 
           my.tip = d3.tip()
             .attr('class', 'd3-tip')
+            .style ("font-weight", "normal")
             .offset([-10, 0])
             .html(function(d) {
-              if (y_label != "")
-                return "<strong>" + y_label + ":</strong> " + d [y_field] + "";
+              var x;
+              if (d [x_field + "~long"])
+                x = d [x_field + "~long"];
               else
-                return d [y_field];
+                x = d [x_field]
+
+              if (y_label != "")
+                return "<strong>" + y_label + " (" + x + "):</strong><br/> "
+                        + d [y_field] + "";
+              else
+                return "<strong>" + x + ":</strong><br/> " + d [y_field];
             });
 
         }

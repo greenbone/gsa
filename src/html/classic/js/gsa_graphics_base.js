@@ -1014,6 +1014,9 @@ function data_raw (data)
 function data_severity_histogram (old_data, params)
 {
   var bins = ["N/A", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  var bins_long = ["N/A", "0.0", "0.1 - 1.0", "1.1 - 2.0", "2.1 - 3.0",
+                   "3.1 - 4.0", "4.1 - 5.0", "5.1 - 6.0", "6.1 - 7.0",
+                   "7.1 - 8.0", "8.1 - 9.0", "9.1 - 10.0"];
   var severity_field = "value";
   var count_field = "count";
 
@@ -1073,6 +1076,11 @@ function data_severity_histogram (old_data, params)
                      = Number(records[bin_func (old_data.records [i][severity_field])][count_field])
                        + Number(old_data.records[i][count_field]);
     };
+
+  for (var i in records)
+    {
+      records[i][severity_field + "~long"] = bins_long [i]
+    }
 
   var data = {
               original_xml : old_data.original_xml,

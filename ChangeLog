@@ -1,3 +1,18 @@
+2014-11-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsa-style.css (.d3-tip): Reduce padding and center
+	text.
+
+	* src/html/classic/js/gsa_bar_chart.js (severity_bar_style): Remove
+	console output. Change second "if" to "else if". Use the color halfway
+	between class colors for mixed bars to improve contrast.
+	(generate): Show x value (or its "~long" version if available) in the
+	tooltip.
+
+	* src/html/classic/js/gsa_graphics_base.js (data_severity_histogram):
+	Add a special "~long" version of the bin column to the records that
+	specifies the whole severity range of a row (e.g. "1.1 - 2.0").
+
 2014-11-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (format_file_name): Consider format_state being -1
