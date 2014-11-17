@@ -27790,7 +27790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><b><xsl:value-of select="gsa:i18n ('Scan initiated', 'Report Window')"/>:</b></td>
               <td>
                 <xsl:if test="string-length (report/timestamp)">
-                  <b><xsl:value-of select="concat (date:day-abbreviation (report/timestamp), ' ', date:month-abbreviation (report/timestamp), ' ', date:day-in-month (report/timestamp), ' ', format-number(date:hour-in-day(report/timestamp), '00'), ':', format-number(date:minute-in-hour(report/timestamp), '00'), ':', format-number(date:second-in-minute(report/timestamp), '00'), ' ', date:year(report/timestamp))"/></b>
+                  <b><xsl:value-of select="concat (date:day-abbreviation (report/timestamp), ' ', date:month-abbreviation (report/timestamp), ' ', date:day-in-month (report/timestamp), ' ', format-number(date:hour-in-day(report/timestamp), '00'), ':', format-number(date:minute-in-hour(report/timestamp), '00'), ':', format-number(date:second-in-minute(report/timestamp), '00'), ' ', date:year(report/timestamp), ' ', report/timezone_abbrev)"/></b>
                 </xsl:if>
               </td>
             </tr>
@@ -27798,7 +27798,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:i18n ('Scan started', 'Report Window')"/>:</td>
               <td>
                 <xsl:if test="string-length (report/scan_start)">
-                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/>
+                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start), ' ', report/timezone_abbrev)"/>
                 </xsl:if>
               </td>
             </tr>
@@ -27806,7 +27806,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:i18n ('Scan ended', 'Report Window')"/>:</td>
               <td>
                 <xsl:if test="string-length (report/scan_end)">
-                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end))"/>
+                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end), ' ', report/timezone_abbrev)"/>
                 </xsl:if>
               </td>
             </tr>
