@@ -2351,13 +2351,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <b><xsl:value-of select="gsa:i18n ('Grant ', 'Permission Window')"/></b>
               <select name="permission">
                 <option value="{concat('get_',$resource_type)}s"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
-                <option value="{concat('modify_',$resource_type)}"><xsl:value-of select="gsa:i18n ('write', 'Permission Window')"/></option>
                 <xsl:if test="$resource_type = 'task'">
                   <option value="task_proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
-                  <option value="start_task"><xsl:value-of select="gsa:i18n ('start', 'Permission Window')"/></option>
-                  <option value="stop_task"><xsl:value-of select="gsa:i18n ('stop', 'Permission Window')"/></option>
-                  <option value="resume_or_start_task"><xsl:value-of select="gsa:i18n ('resume or start', 'Permission Window')"/></option>
-                  <option value="resume_stopped_task"><xsl:value-of select="gsa:i18n ('resume stopped', 'Permission Window')"/></option>
                 </xsl:if>
               </select>
               <b><xsl:value-of select="gsa:i18n (' permissions to ', 'Permission Window')"/></b>

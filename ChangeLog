@@ -1,5 +1,10 @@
 2014-11-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (resource-permissions-window): Change the
+	permission selection to "read" and "proxy" only.
+
+2014-11-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_trash): Fix typo in GET_LSC_CREDENTIALS messages.
 
 2014-11-17  Matthew Mundell <matthew.mundell@greenbone.net>
