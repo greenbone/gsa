@@ -15167,7 +15167,7 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
   GET_TRASH_RESOURCE ("GET_CONFIGS", "get_configs", "configs");
 
   GET_TRASH_RESOURCE ("GET_LSC_CREDENTIALS", "get_lsc_credentials",
-                      "credentails");
+                      "credentials");
 
   GET_TRASH_RESOURCE ("GET_ALERTS", "get_alerts", "alerts");
 
