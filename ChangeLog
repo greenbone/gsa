@@ -1,3 +1,8 @@
+2014-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (task [details]): Add filter keywords
+	"permission=any owner=any" to report list links.
+
 2014-11-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (resource-permissions-window): Change the
