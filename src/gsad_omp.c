@@ -700,6 +700,77 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
 }
 
 /**
+ * @brief Get a setting by UUID for the current user of an OMP server session.
+ *
+ * @param[in]  session     Username and password for authentication.
+ * @param[in]  setting_id  UUID of the setting to get.
+ * @param[out] value       Value of the setting.
+ *
+ * @return     -1 internal error, 0 success, 1 send error, 2 read error.
+ */
+static int
+setting_get_value (gnutls_session_t *session, const char *setting_id,
+                   gchar **value)
+{
+  int ret;
+  entity_t entity;
+  const char *status;
+  gchar *response;
+
+  *value = NULL;
+
+  ret = openvas_server_sendf
+          (session,
+           "<get_settings setting_id=\"%s\"/>",
+           setting_id);
+  if (ret)
+    return 1;
+
+  entity = NULL;
+  if (read_entity_and_text (session, &entity, &response))
+    return 2;
+
+  status = entity_attribute (entity, "status");
+  if (status == NULL
+      || strlen (status) == 0)
+    {
+      g_free (response);
+      free_entity (entity);
+      return -1;
+    }
+
+  if (status[0] == '2')
+    {
+      entity_t setting;
+      setting = entity_child (entity, "setting");
+      if (setting == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return -1;
+        }
+      setting = entity_child (setting, "value");
+      if (setting == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return -1;
+        }
+      *value = g_strdup (entity_text (setting));
+      g_free (response);
+      free_entity (entity);
+    }
+  else
+    {
+      free_entity (entity);
+      g_free (response);
+      return -1;
+    }
+
+  return 0;
+}
+
+/**
  * @brief Check a param.
  *
  * @param[in]  name     Param name.
@@ -1806,9 +1877,8 @@ export_resource (const char *type, credentials_t * credentials,
   int socket;
   char *content = NULL;
   gchar *html, *id_name;
-  entity_t get_settings_entity, fname_entity, setting_entity;
-  char *setting_response;
   gchar *fname_format, *file_name;
+  int ret;
 
   const char *resource_id;
 
@@ -1893,45 +1963,38 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks");
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_settings setting_id=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\"/>")
-      == -1)
+  ret = setting_get_value (&session,
+                           "a6ac88c5-729c-41ba-ac0a-deea4a3441f2",
+                           &fname_format);
+  if (ret)
     {
       free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a setting. "
-                           "The setting could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
-    {
-      free (content);
-      free_entity (entity);
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a setting. "
-                           "The setting could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  fname_format = NULL;
-  if (get_settings_entity && omp_success (get_settings_entity) == 1)
-    {
-      setting_entity = entity_child (get_settings_entity, "setting");
-      if (setting_entity)
+      switch (ret)
         {
-          fname_entity = entity_child (setting_entity, "value");
-          if (fname_entity)
-            fname_format = entity_text (fname_entity);
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_tasks");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Internal error.",
+                                "/omp?cmd=get_tasks");
         }
     }
 
@@ -1951,8 +2014,6 @@ export_resource (const char *type, credentials_t * credentials,
                                           file_name);
   *content_length = strlen (content);
   free_entity (entity);
-  free_entity (get_settings_entity);
-  g_free (setting_response);
   g_free (file_name);
   g_string_free (xml, TRUE);
   openvas_server_close (socket, session);
@@ -1982,9 +2043,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   gchar *html;
   const char *filter;
   gchar *type_many;
-  entity_t get_settings_entity, fname_entity, setting_entity;
-  char *setting_response;
   gchar *fname_format, *file_name;
+  int ret;
 
   *content_length = 0;
 
@@ -2037,43 +2097,37 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_settings setting_id=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\"/>")
-      == -1)
+  ret = setting_get_value (&session,
+                           "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
+                           &fname_format);
+  if (ret)
     {
       free (content);
       free_entity (entity);
       openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a setting. "
-                           "The setting could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
-    {
-      free (content);
-      free_entity (entity);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a setting. "
-                           "The setting could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  fname_format = NULL;
-  if (get_settings_entity && omp_success (get_settings_entity) == 1)
-    {
-      setting_entity = entity_child (get_settings_entity, "setting");
-      if (setting_entity)
+      switch (ret)
         {
-          fname_entity = entity_child (setting_entity, "value");
-          if (fname_entity)
-            fname_format = entity_text (fname_entity);
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_tasks");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Internal error.",
+                                "/omp?cmd=get_tasks");
         }
     }
 
@@ -2100,8 +2154,6 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                           file_name);
   *content_length = strlen (content);
   free_entity (entity);
-  free_entity (get_settings_entity);
-  g_free (setting_response);
   g_free (file_name);
   openvas_server_close (socket, session);
   return content;
@@ -10013,8 +10065,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
-  entity_t get_settings_entity, fname_entity, setting_entity;
-  char *setting_response;
   gchar *fname_format, *file_name;
 
   if (params_given (params, "apply_filter")
@@ -10712,40 +10762,35 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (extension && requested_content_type && content_type
               && content_disposition)
             {
-              if (openvas_server_sendf (&session,
-                                        "<get_settings setting_id="
-                                        "\"e1a2ae0b-736e-4484-b029-330c9e15b900\"/>")
-                  == -1)
+              ret = setting_get_value (&session,
+                                       "e1a2ae0b-736e-4484-b029-330c9e15b900",
+                                       &fname_format);
+              if (ret)
                 {
                   openvas_server_close (socket, session);
-                  return gsad_message (credentials,
-                                      "Internal error", __FUNCTION__, __LINE__,
-                                      "An internal error occurred while getting a setting. "
-                                      "The setting could not be delivered. "
-                                      "Diagnostics: Failure to send command to manager daemon.",
-                                      "/omp?cmd=get_tasks");
-                }
-
-              if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
-                {
-                  openvas_server_close (socket, session);
-                  return gsad_message (credentials,
-                                      "Internal error", __FUNCTION__, __LINE__,
-                                      "An internal error occurred while getting a setting. "
-                                      "The setting could not be delivered. "
-                                      "Diagnostics: Failure to receive response from manager daemon.",
-                                      "/omp?cmd=get_tasks");
-                }
-
-              fname_format = NULL;
-              if (get_settings_entity && omp_success (get_settings_entity) == 1)
-                {
-                  setting_entity = entity_child (get_settings_entity, "setting");
-                  if (setting_entity)
+                  switch (ret)
                     {
-                      fname_entity = entity_child (setting_entity, "value");
-                      if (fname_entity)
-                        fname_format = entity_text (fname_entity);
+                      case 1:
+                        return gsad_message (credentials,
+                                            "Internal error", __FUNCTION__, __LINE__,
+                                            "An internal error occurred while getting a setting. "
+                                            "The setting could not be delivered. "
+                                            "Diagnostics: Failure to send command to manager daemon.",
+                                            "/omp?cmd=get_tasks");
+                      case 2:
+                        return gsad_message (credentials,
+                                            "Internal error", __FUNCTION__, __LINE__,
+                                            "An internal error occurred while getting a setting. "
+                                            "The setting could not be delivered. "
+                                            "Diagnostics: Failure to receive response from manager daemon.",
+                                            "/omp?cmd=get_tasks");
+                      default:
+                        return gsad_message (credentials,
+                                            "Internal error", __FUNCTION__, __LINE__,
+                                            "An internal error occurred while getting a setting. "
+                                            "The setting could not be delivered. "
+                                            "Diagnostics: Internal error.",
+                                            "/omp?cmd=get_tasks");
                     }
                 }
 
@@ -10782,8 +10827,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    file_name,
                                    extension);
 
-              free_entity (get_settings_entity);
-              g_free (setting_response);
               g_free (file_name);
             }
           openvas_server_close (socket, session);
@@ -10851,40 +10894,36 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   else
                     id = "ERROR";
 
-                  if (openvas_server_sendf (&session,
-                                            "<get_settings setting_id="
-                                            "\"e1a2ae0b-736e-4484-b029-330c9e15b900\"/>")
-                      == -1)
+                  ret = setting_get_value
+                          (&session,
+                           "e1a2ae0b-736e-4484-b029-330c9e15b900",
+                           &fname_format);
+                  if (ret)
                     {
                       openvas_server_close (socket, session);
-                      return gsad_message (credentials,
-                                          "Internal error", __FUNCTION__, __LINE__,
-                                          "An internal error occurred while getting a setting. "
-                                          "The setting could not be delivered. "
-                                          "Diagnostics: Failure to send command to manager daemon.",
-                                          "/omp?cmd=get_tasks");
-                    }
-
-                  if (read_entity_and_text (&session, &get_settings_entity, &setting_response))
-                    {
-                      openvas_server_close (socket, session);
-                      return gsad_message (credentials,
-                                          "Internal error", __FUNCTION__, __LINE__,
-                                          "An internal error occurred while getting a setting. "
-                                          "The setting could not be delivered. "
-                                          "Diagnostics: Failure to receive response from manager daemon.",
-                                          "/omp?cmd=get_tasks");
-                    }
-
-                  fname_format = NULL;
-                  if (get_settings_entity && omp_success (get_settings_entity) == 1)
-                    {
-                      setting_entity = entity_child (get_settings_entity, "setting");
-                      if (setting_entity)
+                      switch (ret)
                         {
-                          fname_entity = entity_child (setting_entity, "value");
-                          if (fname_entity)
-                            fname_format = entity_text (fname_entity);
+                          case 1:
+                            return gsad_message (credentials,
+                                                "Internal error", __FUNCTION__, __LINE__,
+                                                "An internal error occurred while getting a setting. "
+                                                "The setting could not be delivered. "
+                                                "Diagnostics: Failure to send command to manager daemon.",
+                                                "/omp?cmd=get_tasks");
+                          case 2:
+                            return gsad_message (credentials,
+                                                "Internal error", __FUNCTION__, __LINE__,
+                                                "An internal error occurred while getting a setting. "
+                                                "The setting could not be delivered. "
+                                                "Diagnostics: Failure to receive response from manager daemon.",
+                                                "/omp?cmd=get_tasks");
+                          default:
+                            return gsad_message (credentials,
+                                                "Internal error", __FUNCTION__, __LINE__,
+                                                "An internal error occurred while getting a setting. "
+                                                "The setting could not be delivered. "
+                                                "Diagnostics: Internal error.",
+                                                "/omp?cmd=get_tasks");
                         }
                     }
 
@@ -10907,8 +10946,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                       file_name,
                                       extension);
 
-                  free_entity (get_settings_entity);
-                  g_free (setting_response);
                   g_free (file_name);
                 }
               free_entity (entity);
@@ -21045,61 +21082,21 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Get language setting. */
 
-      ret = openvas_server_sendf
-             (&session,
-              "<get_settings"
-              " setting_id=\"6765549a-934e-11e3-b358-406186ea4fc5\"/>");
-      if (ret)
-        {
-          openvas_server_close (socket, session);
-          return 2;
-        }
+      ret = setting_get_value (&session,
+                               "6765549a-934e-11e3-b358-406186ea4fc5",
+                               language);
 
-      /* Read the response. */
-
-      entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
+      switch (ret)
         {
-          openvas_server_close (socket, session);
-          return 2;
-        }
-
-      /* Check the response. */
-
-      status = entity_attribute (entity, "status");
-      if (status == NULL
-          || strlen (status) == 0)
-        {
-          g_free (response);
-          free_entity (entity);
-          return -1;
-        }
-      first = status[0];
-      if (first == '2')
-        {
-          entity_t setting;
-          setting = entity_child (entity, "setting");
-          if (setting == NULL)
-            {
-              free_entity (entity);
-              g_free (response);
-              return -1;
-            }
-          setting = entity_child (setting, "value");
-          if (setting == NULL)
-            {
-              free_entity (entity);
-              g_free (response);
-              return -1;
-            }
-          *language = g_strdup (entity_text (setting));
-          free_entity (entity);
-        }
-      else
-        {
-          free_entity (entity);
-          g_free (response);
-          return -1;
+          case 0:
+            break;
+          case 1:
+          case 2:
+            openvas_server_close (socket, session);
+            return 2;
+          default:
+            openvas_server_close (socket, session);
+            return -1;
         }
 
       /* Request help. */
@@ -21208,62 +21205,21 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Get autorefresh setting. */
 
-      ret = openvas_server_sendf
-             (&session,
-              "<get_settings"
-              " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\"/>");
-      if (ret)
-        {
-          openvas_server_close (socket, session);
-          return 2;
-        }
+      ret = setting_get_value (&session,
+                           "578a1c14-e2dc-45ef-a591-89d31391d007",
+                           autorefresh);
 
-      /* Read the response. */
-
-      entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
+      switch (ret)
         {
-          openvas_server_close (socket, session);
-          return 2;
-        }
-
-      /* Check the response. */
-
-      status = entity_attribute (entity, "status");
-      if (status == NULL
-          || strlen (status) == 0)
-        {
-          g_free (response);
-          free_entity (entity);
-          return -1;
-        }
-      first = status[0];
-      if (first == '2')
-        {
-          entity_t setting;
-          setting = entity_child (entity, "setting");
-          if (setting == NULL)
-            {
-              free_entity (entity);
-              g_free (response);
-              return -1;
-            }
-          setting = entity_child (setting, "value");
-          if (setting == NULL)
-            {
-              free_entity (entity);
-              g_free (response);
-              return -1;
-            }
-          *autorefresh = g_strdup (entity_text (setting));
-          g_free (response);
-          free_entity (entity);
-        }
-      else
-        {
-          free_entity (entity);
-          g_free (response);
-          return -1;
+          case 0:
+            break;
+          case 1:
+          case 2:
+            openvas_server_close (socket, session);
+            return 2;
+          default:
+            openvas_server_close (socket, session);
+            return -1;
         }
 
       openvas_server_close (socket, session);

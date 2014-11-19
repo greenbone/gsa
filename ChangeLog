@@ -1,5 +1,13 @@
 2014-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (setting_get_value): New function.
+	(export_resource, export_many, get_report): Get file name setting
+	using setting_get_value.
+	(authenticate_omp): Get language and autorefresh setting using
+	setting_get_value.
+
+2014-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (task [details]): Add filter keywords
 	"permission=any owner=any" to report list links.
 
