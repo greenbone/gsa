@@ -6094,6 +6094,14 @@ Public License instead of this License.
       </table>
 
       <xsl:call-template name="filtering"/>
+
+      <p>
+      A special filter command for results is the modifier 'timezone=' which
+      will convert any timestamps in the report to the given timezone.
+      Examples for the timezone modifiers are: 'timezone="Europe/Berlin"' or
+      'timezone="Asia/Shanghai"'.
+      </p>
+
       <xsl:call-template name="sorting"/>
 
       <a name="overrides"></a>
