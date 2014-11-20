@@ -1,3 +1,10 @@
+2014-11-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r20898 by Timo Pollmeier.
+
+	* src/html/classic/omp.xsl (task [details]): Add filter keywords
+	"permission=any owner=any" to report list links.
+
 2014-11-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
