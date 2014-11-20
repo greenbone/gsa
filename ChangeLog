@@ -1,3 +1,11 @@
+2014-11-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* tools/zone-append.in, tools/zone-prepend.in: Remove. Renamed to
+	tools/zone-dict-append.in, tools/zone-dict-prepend.in.
+
+	* tools/zone-dict-append.in, tools/zone-dict-prepend.in: New. Renamed
+	files tools/zone-append.in, tools/zone-prepend.in.
+
 2014-11-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl (reports.html): Added note about "timezone"
