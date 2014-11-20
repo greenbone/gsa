@@ -1,5 +1,10 @@
 2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-schedule-form)
+	(html-edit-schedule-form): Use dropdown for timezone.
+
+2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [filterbox]): Add timezone field in
 	expanded filtering.
 	(timezone-select): New template.

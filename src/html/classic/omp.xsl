@@ -13686,13 +13686,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/></td>
             <td>
-              <input type="text"
-                     name="timezone"
-                     value="{commands_response/get_schedules_response/schedule/timezone}"
-                     size="30"
-                     maxlength="80"/>
+              <xsl:call-template name="timezone-select">
+                <xsl:with-param name="timezone" select="/envelope/timezone"/>
+                <xsl:with-param name="select-name" select="'timezone'"/>
+              </xsl:call-template>
             </td>
           </tr>
           <tr class="even">
@@ -14273,11 +14272,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="odd">
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Schedule Window')"/></td>
             <td>
-              <input type="text"
-                     name="timezone"
-                     value="{commands_response/get_schedules_response/schedule/timezone}"
-                     size="30"
-                     maxlength="80"/>
+              <xsl:call-template name="timezone-select">
+                <xsl:with-param name="timezone" select="commands_response/get_schedules_response/schedule/timezone"/>
+                <xsl:with-param name="select-name" select="'timezone'"/>
+              </xsl:call-template>
             </td>
           </tr>
           <tr class="even">
