@@ -1,5 +1,10 @@
 2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (help [new_schedule.html])
+	(help [my_settings.html]): Update Timezone for new dropdown selection.
+
+2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (timezone-select): Use the given timezone for
 	the fallback text box instead of the current timezone.  Use the name arg
 	for the text box, instead of always 'text'.  Update the arg name to

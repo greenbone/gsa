@@ -2242,7 +2242,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Timezone</td>
           <td>no</td>
           <td>80</td>
-          <td>Timezone (<a href="my_settings.html?token={/envelope/token}#timezone">details</a>)</td>
+          <td>Choice</td>
           <td>Europe/Berlin</td>
         </tr>
         <tr class="odd">
@@ -4610,32 +4610,12 @@ Public License instead of this License.
       <a name="timezone"></a>
       <h3>Timezone</h3>
       <p>
-        The format of the timezone is the same as that of the TZ environment
-        variable on GNU/Linux systems.  That is, the same value accepted by the
-        tzset C function.  There are three versions of the format.  Note the lack
-        of spaces in the examples.
+        The timezone used for the current user.  This is used across the
+        entire user interface, and is the default timezone for reports.
       </p>
-
-      <ul>
-        <li>
-          <b>std offset</b> defines a simple timezone.  For example,
-          "FOO+2" defines a timezone FOO which is 2 hours behind UTC.
-        </li>
-        <li>
-          <b>std offset dst [offset],start[/time],end[/time]</b> defines a timezone,
-          including daylight savings time.  For example,
-          "NZST-12.00:00NZDT-13:00:00,M10.1.0,M3.3.0".
-        </li>
-        <li>
-          <b>:[filespec]</b> refers to a predefined timezone.  For example,
-          ":Africa/Johannesburg".  Note that the colon is optional.  Certain
-          acronyms are predefined, such as GB, NZ and CET.
-        </li>
-      </ul>
-
       <p>
         After setting the timezone, it is a good idea to check the time in the GSA
-        header bar.  If the timezone was correctly specified this should show the
+        header bar.  If the timezone was correctly selected this should show the
         current time.
       </p>
 
