@@ -616,6 +616,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="has-resource" select="boolean ($resource) and string-length ($resource/type) &gt; 0"/>
   <func:result>
     <xsl:choose>
+      <xsl:when test="$has-resource and $lower = 'super'">
+        <xsl:value-of select="gsa:i18n ('has super access to ', 'Permission Description')"/>
+        <xsl:value-of select="gsa:i18n (gsa:command-type ($lower), 'Type Lower')"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$resource/name"/>
+      </xsl:when>
+      <xsl:when test="$lower = 'super'">
+        <xsl:value-of select="gsa:i18n ('has super access to all users', 'Permission Description')"/>
+      </xsl:when>
       <xsl:when test="$lower = 'authenticate'">
         <xsl:value-of select="gsa:i18n ('may login', 'Permission Description')"/>
       </xsl:when>
@@ -28509,8 +28518,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
+            <xsl:if test="boolean (../../get_permissions_response/permission[name = 'Super' and resource = 0])">
+              <tr class="{gsa:table-row-class (1)}">
+                <td>Super</td>
+                <td>
+                  <xsl:value-of select="gsa:capitalise (gsa:permission-description ('Super', false ()))"/>
+                </td>
+                <td width="100">
+                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="{gsa:i18n ('Details', 'Window')}"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:if>
+            <xsl:variable name="offset"
+                          select="count (../../get_permissions_response/permission[name = 'Super' and resource = 0])"/>
             <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
-              <tr class="{gsa:table-row-class(position())}">
+              <tr class="{gsa:table-row-class (position () + $offset)}">
                 <td>
                   <xsl:value-of select="gsa:lower-case (name)"/>
                 </td>

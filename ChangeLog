@@ -1,3 +1,9 @@
+2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Add Super.
+	(role [details]): Prepend Super row in Permissions window if user has
+	Super permission.
+
 2014-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (setting_get_value): New function.
@@ -23,7 +29,7 @@
 2014-11-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [summary]): Add timezone to dates,
-	now that the the timezone can be changed in the filter.
+	now that the timezone can be changed in the filter.
 
 2014-11-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
