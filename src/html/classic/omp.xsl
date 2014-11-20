@@ -3269,7 +3269,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Timezone', 'Report Filter')"/>:
           <xsl:call-template name="timezone-select">
             <xsl:with-param name="timezone" select="report/timezone"/>
-            <xsl:with-param name="select-name" select="'timezone'"/>
+            <xsl:with-param name="input-name" select="'timezone'"/>
           </xsl:call-template>
         </div>
         <div style="float: right">
@@ -13690,7 +13690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:call-template name="timezone-select">
                 <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                <xsl:with-param name="select-name" select="'timezone'"/>
+                <xsl:with-param name="input-name" select="'timezone'"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -14274,7 +14274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:call-template name="timezone-select">
                 <xsl:with-param name="timezone" select="commands_response/get_schedules_response/schedule/timezone"/>
-                <xsl:with-param name="select-name" select="'timezone'"/>
+                <xsl:with-param name="input-name" select="'timezone'"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -31265,10 +31265,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="timezone-select">
   <xsl:param name="timezone" select="'utc'"/>
-  <xsl:param name="select-name" select="'text'"/>
+  <xsl:param name="input-name" select="'text'"/>
   <xsl:choose>
     <xsl:when test="$timezone = 'UTC' or $timezone = 'utc' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
-      <select name="{$select-name}">
+      <select name="{$input-name}">
         <xsl:choose>
           <xsl:when test="$timezone = 'UTC'">
             <option value="UTC" selected="1">Coordinated Universal Time</option>
@@ -31290,8 +31290,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </select>
     </xsl:when>
     <xsl:otherwise>
-      <input type="text" name="text" size="40" maxlength="800"
-             value="{gsa:param-or ('text', /envelope/timezone)}"/>
+      <input type="text" name="{$input-name}" size="40" maxlength="800"
+             value="{gsa:param-or ('text', $timezone)}"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

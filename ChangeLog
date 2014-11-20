@@ -1,5 +1,12 @@
 2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (timezone-select): Use the given timezone for
+	the fallback text box instead of the current timezone.  Use the name arg
+	for the text box, instead of always 'text'.  Update the arg name to
+	reflect this, and update all callers accordingly.
+
+2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-schedule-form)
 	(html-edit-schedule-form): Use dropdown for timezone.
 
