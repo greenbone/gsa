@@ -3265,6 +3265,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  value="{report/filters/phrase}"
                  maxlength="400"/>
         </div>
+        <div style="padding: 2px;">
+          <xsl:value-of select="gsa:i18n ('Timezone', 'Report Filter')"/>:
+          <xsl:call-template name="timezone-select">
+            <xsl:with-param name="timezone" select="report/timezone"/>
+            <xsl:with-param name="select-name" select="'timezone'"/>
+          </xsl:call-template>
+        </div>
         <div style="float: right">
           <input type="submit" value="{gsa:i18n ('Apply', 'Window')}" title="{gsa:i18n ('Apply', 'Window')}"/>
         </div>
@@ -31258,6 +31265,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="timezone-select">
+  <xsl:param name="timezone" select="'utc'"/>
+  <xsl:param name="select-name" select="'text'"/>
+  <xsl:choose>
+    <xsl:when test="$timezone = 'UTC' or $timezone = 'utc' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
+      <select name="{$select-name}">
+        <xsl:choose>
+          <xsl:when test="$timezone = 'UTC'">
+            <option value="UTC" selected="1">Coordinated Universal Time</option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="UTC">Coordinated Universal Time</option>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:for-each select="document ('zones.xml')/zones/zone/name">
+          <xsl:choose>
+            <xsl:when test=". = $timezone">
+              <option value="{.}" selected="1"><xsl:value-of select="translate (., '_',' ')"/></option>
+            </xsl:when>
+            <xsl:otherwise>
+              <option value="{.}"><xsl:value-of select="translate (., '_',' ')"/></option>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </select>
+    </xsl:when>
+    <xsl:otherwise>
+      <input type="text" name="text" size="40" maxlength="800"
+             value="{gsa:param-or ('text', /envelope/timezone)}"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="edit_my_settings">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="modify_setting_response"/>
@@ -31289,37 +31329,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Timezone', 'My Settings')"/></td>
               <td>
-                <xsl:variable name="timezone">
-                  <xsl:value-of select="gsa:param-or ('text', /envelope/timezone)"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="$timezone = 'UTC' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
-                    <select name="text">
-                      <xsl:choose>
-                        <xsl:when test="$timezone = 'UTC'">
-                          <option value="UTC" selected="1">Coordinated Universal Time</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="UTC">Coordinated Universal Time</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="document ('zones.xml')/zones/zone/name">
-                        <xsl:choose>
-                          <xsl:when test=". = $timezone">
-                            <option value="{.}" selected="1"><xsl:value-of select="translate (., '_',' ')"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{.}"><xsl:value-of select="translate (., '_',' ')"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="text" name="text" size="40" maxlength="800"
-                           value="{gsa:param-or ('text', /envelope/timezone)}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:call-template name="timezone-select">
+                  <xsl:with-param name="timezone"
+                                  select="gsa:param-or ('text', /envelope/timezone)"/>
+                </xsl:call-template>
               </td>
             </tr>
             <tr>

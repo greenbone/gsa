@@ -1,5 +1,12 @@
 2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [filterbox]): Add timezone field in
+	expanded filtering.
+	(timezone-select): New template.
+	(edit_my_settings): Call timezone-select to do timezone dropdown.
+
+2014-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:permission-description): Add Super.
 	(role [details]): Prepend Super row in Permissions window if user has
 	Super permission.
