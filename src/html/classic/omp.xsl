@@ -1470,7 +1470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img src="/img/clone_inactive.png"
            alt="{gsa:i18n ('Clone', 'Table Row')}"
            value="Clone"
-           title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' must be owned or global', 'Table Row')}"
+           title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' may not be cloned', 'Table Row')}"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="gsa:may-clone ($type)">
@@ -4372,6 +4372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="noedit"/>
   <xsl:param name="nonew"/>
   <xsl:param name="noclone" select="$nonew"/>
+  <xsl:param name="grey-clone" select="0"/>
   <xsl:param name="noexport"/>
   <xsl:param name="filter" select="/envelope/params/filter"/>
   <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
@@ -4391,6 +4392,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <xsl:choose>
     <xsl:when test="$noclone"/>
+    <xsl:when test="$grey-clone">
+      <img src="/img/clone_inactive.png"
+           alt="{gsa:i18n ('Clone', 'Table Row')}"
+           value="Clone"
+           title="{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n (' may not be cloned', 'Table Row')}"
+           style="margin-left:3px;"/>
+    </xsl:when>
     <xsl:when test="gsa:may-clone ($type, owner)">
       <xsl:choose>
         <xsl:when test="writable='0' and $type='permission'">
@@ -29861,6 +29869,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                title="{gsa:i18n ('Currently logged in as this user', 'User Table Row')}"
                style="margin-left:3px;"/>
         </xsl:when>
+        <xsl:when test="writable!='0' and in_use='0'">
+          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
+               title="{gsa:i18n ('User')}{gsa:i18n (' cannot be deleted', 'Table Row')}"
+               style="margin-left:3px;"/>
+        </xsl:when>
         <xsl:otherwise>
           <div style="display: inline">
             <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
@@ -29881,6 +29894,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'user'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="notrash" select="1"/>
+        <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
       </xsl:call-template>
     </td>
   </tr>
@@ -29895,6 +29909,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <xsl:call-template name="details-header-icons">
          <xsl:with-param name="cap-type" select="'User'"/>
          <xsl:with-param name="type" select="'user'"/>
+         <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
        </xsl:call-template>
     </div>
     <div class="gb_window_part_content">

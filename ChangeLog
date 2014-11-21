@@ -1,5 +1,16 @@
 2014-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make delete and clone icons fit special restrictions on Super Admin.
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Make clone tooltip
+	more generic.
+	(details-header-icons): Add grey-clone flag.
+	(user): Grey delete icon according to writable and in_use.  Grey clone
+	icon if the user has the Super Admin role.
+	(user [details]): Grey clone if Super Admin.
+
+2014-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (new-user-role-select, html-create-user-form)
 	(user [edit]): Remove Super Admin from role lists.
 
