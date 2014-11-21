@@ -1,3 +1,9 @@
+2014-11-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0+beta4 release.
+
+	* CHANGES: Updated.
+
 2014-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make delete and clone icons fit special restrictions on Super Admin.

@@ -1,3 +1,32 @@
+gsa 6.0+beta4 (2014-11-21)
+
+This is the fourth beta version of the upcoming 6.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for the new "Super Admin" role and for displaying NVT
+solution types and contains a number of smaller improvements.
+
+Many thanks to everyone who has contributed to this release:
+Michael Ambroz, Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver
+Wagner and Michael Wiegand.
+
+Main changes since 6.0+beta3:
+* Support for new "Super Admin" role in Manager has been added.
+* Support for displaying the "Solution Type" of an NVT has been added.
+* Setting the user timezone is now easier.
+* Permission handling has been improved.
+* Handling of the guest token when requesting charts has been improved.
+* Support for modifying the file name format of exported resource lists,
+  resource details and reports has been added.
+* The handling of user groups when dropping privileges has been improved.
+* The build process has been adjusted for changes in OpenVAS Libraries.
+* GSA is now only linked against libgthread in environments where this is
+  required, i.e. when building with GLib =< 2.30.
+* Documentation has been updated.
+* Numerous small improvements and bugfixes.
+
+
 gsa 6.0+beta3 (2014-10-14)
 
 This is the third beta version of the upcoming 6.0 release of the Greenbone
