@@ -1,3 +1,11 @@
+2014-11-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r20845.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Set height and width of
+	logo img as some versions of Firefox do not always adjust the size
+	correctly.
+
 2014-11-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport r20898 by Timo Pollmeier.
