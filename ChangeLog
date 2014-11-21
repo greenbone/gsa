@@ -1,3 +1,8 @@
+2014-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (new-user-role-select, html-create-user-form)
+	(user [edit]): Remove Super Admin from role lists.
+
 2014-11-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl (reports.html): Removed note about "timezone"
