@@ -6095,13 +6095,6 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
 
-      <p>
-      A special filter command for results is the modifier 'timezone=' which
-      will convert any timestamps in the report to the given timezone.
-      Examples for the timezone modifiers are: 'timezone="Europe/Berlin"' or
-      'timezone="Asia/Shanghai"'.
-      </p>
-
       <xsl:call-template name="sorting"/>
 
       <a name="overrides"></a>
@@ -8360,14 +8353,6 @@ Public License instead of this License.
        Note that leaving this page will reset the overrides selection to apply overrides.
       </p>
 
-      <a name="result_filtering"></a>
-      <h2>Result Filtering</h2>
-      <p>
-        The Result Filtering window shows how the results of the scan have been
-        filtered to produce the report.  Modifying any of the values and clicking
-        the "Apply" button will update the report.
-      </p>
-
       <h3>Download the filtered report</h3>
       <p>
        To download the currently shown report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
@@ -8377,13 +8362,6 @@ Public License instead of this License.
        icon.  Report formats can be configured on the
        <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
        page.
-      </p>
-
-      <a name="result_filtered"></a>
-      <h2>Filtered Results</h2>
-      <p>
-        The Filtered Results window shows the results of the report, filtered
-        according to the Result Filtering window.
       </p>
 
       <h3>Notes</h3>
@@ -8436,30 +8414,17 @@ Public License instead of this License.
        which is helpful if the result has a very long description.
       </p>
 
-      <h3>Result Sorting</h3>
+      <xsl:call-template name="filtering"/>
+
       <p>
-       Results shown on the page can be sorted either by the port number or by severity
-       class, and ascending or descending.
-       The sort order is changed by clicking on the respective text (e.g.
-       "severity ascending").
+      A special filter command for results is the modifier 'timezone=' which
+      will convert any timestamps in the report to the given timezone.
+      Examples for the timezone modifiers are: 'timezone="Europe/Berlin"' or
+      'timezone="Asia/Shanghai"'.
       </p>
 
-      <h3>Result Filtering</h3>
-      <p>
-       A checkbox for each severity class (High, Medium, Low and Log) can be ticked
-       or unticked to
-       include or exclude results of the respective severity class in the shown report.
-       This can be combined with a text phrase, which limits the report to all the
-       results that include the entered phrase.
-       The "Show notes" checkbox toggles the display of notes.
-      </p>
-      <p>
-       For delta reports, the checkboxes under the "Show delta results" heading
-       control which delta results are shown.
-      </p>
-      <p>
-       The list of results is updated after a click on the "Apply" button.
-      </p>
+      <xsl:call-template name="sorting"/>
+
     </div>
   </div>
 </xsl:template>
