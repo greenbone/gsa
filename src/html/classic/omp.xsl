@@ -4004,7 +4004,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="alert" mode="newtask">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
+  <xsl:param name="select_id" select="''"/>
+  <xsl:choose>
+    <xsl:when test="@id = $select_id">
+      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+    </xsl:when>
+    <xsl:otherwise>
+      <option value="{@id}"><xsl:value-of select="name"/></option>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="group" mode="newtask">
@@ -4731,10 +4739,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="position" select="1"/>
   <xsl:param name="count" select="0"/>
   <xsl:param name="alerts" select="get_alerts_response"/>
+  <xsl:param name="select_id" select="alert_id"/>
   <select name="alert_id_optional:{$position}">
     <option value="--">--</option>
     <xsl:apply-templates select="$alerts/alert"
-                         mode="newtask"/>
+                         mode="newtask">
+      <xsl:with-param name="select_id" select="$select_id"/>
+    </xsl:apply-templates>
   </select>
   <xsl:if test="$count &gt; 1">
     <br/>
@@ -4742,6 +4753,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="alerts" select="$alerts"/>
       <xsl:with-param name="count" select="$count - 1"/>
       <xsl:with-param name="position" select="$position + 1"/>
+      <xsl:with-param name="select_id" select="$select_id"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -4853,7 +4865,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:variable name="alerts"
                             select="get_alerts_response/alert"/>
-              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']">
+              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional']">
+                <xsl:sort select="substring-after (name, ':')" data-type="number"/>
                 <select name="{name}">
                   <xsl:variable name="alert_id" select="value"/>
                   <xsl:choose>
@@ -4878,11 +4891,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <br/>
               </xsl:for-each>
               <xsl:variable name="count"
-                            select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
+                            select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'])"/>
               <xsl:call-template name="new-task-alert-select">
                 <xsl:with-param name="alerts" select="get_alerts_response"/>
                 <xsl:with-param name="count" select="/envelope/params/alerts - $count"/>
                 <xsl:with-param name="position" select="$count + 1"/>
+                <xsl:with-param name="select_id" select="alert_id"/>
               </xsl:call-template>
 
               <xsl:choose>

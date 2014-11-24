@@ -1,5 +1,13 @@
 2014-11-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (alert [newtask], new-task-alert-select):
+	New parameter select_id to pre-select an alert by id.
+	(new_task): Select all alert_id_optional parameters and sort drop-downs
+	using index of alert_id_optional. Use alert_id element in new_task
+	to select the default Alert in the last drop-down.
+
+2014-11-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add settings for default resource selections on the "New Task" and
 	"New Target" pages.
 
