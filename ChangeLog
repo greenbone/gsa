@@ -1,3 +1,40 @@
+2014-11-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add settings for default resource selections on the "New Task" and
+	"New Target" pages.
+
+	* src/gsad_omp.c (setting_get_value): Allow missing settings.
+	(PARAM_OR_SETTING): New macro.
+	(new_task, new_target): Get resource params or fall back to default
+	resource settings and add them to the new_task / new_target element.
+	(get_my_settings_omp, edit_my_settings): Get Alerts, Configs,
+	Credentials, Filters, Port Lists, Scanners, Schedules, Slaves and
+	Targets in one "commands" command. Adjust Error messages.
+	(save_my_settings_omp): Save new default resources settings. Get
+	Alerts, Configs, Credentials, Filters, Port Lists, Scanners, Schedules,
+	Slaves and Targets in one "commands" command.
+
+	* src/gsad.c (init_validator): Add settings_default:name and
+	settings_default:value.
+	(params_append_mhd, params_mhd_add): Add settings_default:.
+
+	* src/html/classic/help.xsl (my_settings.html): Add new section about
+	default resource settings.
+
+	* src/html/classic/omp.xsl (get-settings-resource): New template.
+	(get-settings-filter): Use get_filter_response in commands_response.
+	(edit-settings-resource): New template.
+	(edit-settings-filters): Use get_filter_response in commands_response.
+	(new_task): Pre-select resources from new_task element in drop-downs.
+	(lsc_credential [select], port_list [select]): Add select_id param to
+	select an entry by id.
+	(html-create-target-form): Pre-select resources from new_task element
+	in drop-downs.
+	(get_my_settings, edit_my_settings): Add default resource settings.
+
+	* src/html/classic/wizard.xsl (quick-task-wizard): Pre-select resources
+	based on settings.
+
 2014-11-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.

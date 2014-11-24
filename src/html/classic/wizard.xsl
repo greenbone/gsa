@@ -229,10 +229,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
         </td>
         <td>
+          <xsl:variable name="config_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value"/>
           <select name="event_data:config_id">
             <xsl:for-each select="../run_wizard_response/response/commands_response/get_configs_response/config">
               <xsl:choose>
-                <xsl:when test="@id = 'daba56c8-73ec-11df-a475-002264764cea'">
+                <xsl:when test="@id = $config_id or (not($config_id) and @id = 'daba56c8-73ec-11df-a475-002264764cea')">
                   <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                 </xsl:when>
                 <xsl:otherwise>
@@ -635,10 +636,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:text>):</xsl:text>
           </td>
           <td>
+            <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
             <select name="event_data:ssh_credential">
               <option value="" selected="1">--</option>
               <xsl:for-each select="../run_wizard_response/response/commands_response/get_lsc_credentials_response/lsc_credential">
-                <option value="{@id}"><xsl:value-of select="name"/></option>
+                <xsl:choose>
+                  <xsl:when test="@id = $ssh_credential_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:for-each>
             </select>
             <xsl:value-of select="' on port '"/>
@@ -653,10 +662,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:text>)</xsl:text>
           </td>
           <td>
+            <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
             <select name="event_data:smb_credential">
               <option value="" selected="1">--</option>
               <xsl:for-each select="../run_wizard_response/response/commands_response/get_lsc_credentials_response/lsc_credential">
-                <option value="{@id}"><xsl:value-of select="name"/></option>
+                <xsl:choose>
+                  <xsl:when test="@id = $smb_credential_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:for-each>
             </select>
           </td>
@@ -684,10 +701,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:text>):</xsl:text>
           </td>
           <td>
+            <xsl:variable name="slave_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Slave']/value"/>
             <select name="event_data:slave_id">
               <option value="" selected="1">--</option>
               <xsl:for-each select="../run_wizard_response/response/commands_response/get_slaves_response/slave">
-                <option value="{@id}"><xsl:value-of select="name"/></option>
+                <xsl:choose>
+                  <xsl:when test="@id = $slave_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:for-each>
             </select>
           </td>

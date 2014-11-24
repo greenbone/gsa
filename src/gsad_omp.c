@@ -747,7 +747,7 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
         {
           free_entity (entity);
           g_free (response);
-          return -1;
+          return 0;
         }
       setting = entity_child (setting, "value");
       if (setting == NULL)
@@ -2411,6 +2411,50 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  */
 
 /**
+ * @brief Get a value from a param or fall back to a setting
+ *
+ * @param[out]  value       Variable to assign the value to.
+ * @param[in]   param       The param to try get the value from first.
+ * @param[in]   setting_id  The UUID of the setting to try next.
+ */
+#define PARAM_OR_SETTING(value, param, setting_id, cleanup)                   \
+  if (params_valid (params, param))                                           \
+    value = g_strdup (params_value (params, param));                          \
+  else                                                                        \
+    {                                                                         \
+      int ret;                                                                \
+      ret = setting_get_value (&session, setting_id, &value);                 \
+      if (ret)                                                                \
+        {                                                                     \
+          cleanup                                                             \
+          switch (ret)                                                        \
+            {                                                                 \
+              case 1:                                                         \
+                return gsad_message (credentials,                             \
+                                    "Internal error", __FUNCTION__, __LINE__, \
+                                    "An internal error occurred while getting a setting. " \
+                                    "The setting could not be delivered. " \
+                                    "Diagnostics: Failure to send command to manager daemon.", \
+                                    "/omp?cmd=get_tasks");                    \
+              case 2:                                                         \
+                return gsad_message (credentials,                             \
+                                    "Internal error", __FUNCTION__, __LINE__, \
+                                    "An internal error occurred while getting a setting. " \
+                                    "The setting could not be delivered. " \
+                                    "Diagnostics: Failure to receive response from manager daemon.", \
+                                    "/omp?cmd=get_tasks"); \
+              default:                                                        \
+                return gsad_message (credentials,                             \
+                                    "Internal error", __FUNCTION__, __LINE__, \
+                                    "An internal error occurred while getting a setting. " \
+                                    "The setting could not be delivered. "    \
+                                    "Diagnostics: Internal error.",           \
+                                    "/omp?cmd=get_tasks");                    \
+            }                                                                 \
+        }                                                                     \
+    }
+
+/**
  * @brief Returns page to create a new task.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
@@ -2430,6 +2474,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   gchar *html;
   int apply_overrides;
   const char *alerts, *overrides;
+  int ret;
+  gchar *alert, *schedule, *slave, *target;
+  gchar *openvas_config, *osp_config, *openvas_scanner, *osp_scanner;
 
   alerts = params_value (params, "alerts");
   overrides = params_value (params, "overrides");
@@ -2453,7 +2500,121 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                              "/omp?cmd=get_tasks");
     }
 
+  ret = setting_get_value (&session,
+                           "f9f5a546-8018-48d0-bef5-5ad4926ea899",
+                           &alert);
+  if (ret)
+    {
+      openvas_server_close (socket, session);
+      switch (ret)
+        {
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_tasks");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a setting. "
+                                "The setting could not be delivered. "
+                                "Diagnostics: Internal error.",
+                                "/omp?cmd=get_tasks");
+        }
+    }
+
+  PARAM_OR_SETTING (schedule, "schedule_id_optional",
+                    "778eedad-5550-4de0-abb6-1320d13b5e18",
+                    openvas_server_close (socket, session);
+                    g_free (alert);)
+
+  PARAM_OR_SETTING (slave, "slave_id_optional",
+                    "aec201fa-8a82-4b61-bebe-a44ea93b2909",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);)
+
+  PARAM_OR_SETTING (target, "target_id",
+                    "23409203-940a-4b4a-b70c-447475f18323",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);
+                    g_free (slave);)
+
+  PARAM_OR_SETTING (openvas_config, "config_id",
+                    "fe7ea321-e3e3-4cc6-9952-da836aae83ce",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);
+                    g_free (slave);
+                    g_free (target);)
+
+  PARAM_OR_SETTING (osp_config, "osp_config_id",
+                    "fb19ac4b-614c-424c-b046-0bc32bf1be73",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);
+                    g_free (slave);
+                    g_free (target);
+                    g_free (openvas_config);)
+
+  PARAM_OR_SETTING (openvas_scanner, "scanner_id",
+                    "f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);
+                    g_free (slave);
+                    g_free (target);
+                    g_free (openvas_config);
+                    g_free (osp_config);)
+
+  PARAM_OR_SETTING (osp_scanner, "osp_scanner_id",
+                    "b20697c9-be0a-4cd4-8b4d-5fe7841ebb03",
+                    openvas_server_close (socket, session);
+                    g_free (alert);
+                    g_free (schedule);
+                    g_free (slave);
+                    g_free (target);
+                    g_free (openvas_config);
+                    g_free (osp_config);
+                    g_free (openvas_scanner);)
+
   xml = g_string_new ("<new_task>");
+
+  g_string_append_printf (xml,
+                          "<alert_id>%s</alert_id>"
+                          "<config_id>%s</config_id>"
+                          "<osp_config_id>%s</osp_config_id>"
+                          "<scanner_id>%s</scanner_id>"
+                          "<osp_scanner_id>%s</osp_scanner_id>"
+                          "<schedule_id>%s</schedule_id>"
+                          "<slave_id>%s</slave_id>"
+                          "<target_id>%s</target_id>",
+                          alert ? alert : "",
+                          openvas_config ? openvas_config : "",
+                          osp_config ? osp_config : "",
+                          openvas_scanner ? openvas_scanner : "",
+                          osp_scanner ? osp_scanner : "",
+                          schedule ? schedule : "",
+                          slave ? slave : "",
+                          target ? target : "");
+
+  g_free (schedule);
+  g_free (slave);
+  g_free (target);
+  g_free (openvas_config);
+  g_free (osp_config);
+  g_free (openvas_scanner);
+  g_free (osp_scanner);
 
   /* Get list of targets. */
   if (openvas_server_sendf (&session,
@@ -6414,6 +6575,8 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *port_list;
+  gchar *ssh_credential, *smb_credential, *esxi_credential;
   gchar *html, *end;
   const char *filter, *first, *max;
 
@@ -6446,7 +6609,44 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
                              "/omp?cmd=get_targets");
     }
 
+  PARAM_OR_SETTING (port_list, "port_list_id",
+                    "d74a9ee8-7d35-4879-9485-ab23f1bd45bc",
+                    openvas_server_close (socket, session);)
+
+  PARAM_OR_SETTING (ssh_credential, "lsc_credential_id",
+                    "6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd",
+                    openvas_server_close (socket, session);
+                    g_free (port_list);)
+
+  PARAM_OR_SETTING (smb_credential, "lsc_smb_credential_id",
+                    "a25c0cfe-f977-417b-b1da-47da370c03e8",
+                    openvas_server_close (socket, session);
+                    g_free (port_list);
+                    g_free (ssh_credential);)
+
+  PARAM_OR_SETTING (esxi_credential, "lsc_esxi_credential_id",
+                    "83545bcf-0c49-4b4c-abbf-63baf82cc2a7",
+                    openvas_server_close (socket, session);
+                    g_free (port_list);
+                    g_free (ssh_credential);
+                    g_free (smb_credential);)
+
   xml = g_string_new ("<new_target>");
+
+  g_string_append_printf (xml,
+                          "<port_list_id>%s</port_list_id>"
+                          "<lsc_credential_id>%s</lsc_credential_id>"
+                          "<lsc_smb_credential_id>%s</lsc_smb_credential_id>"
+                          "<lsc_esxi_credential_id>%s</lsc_esxi_credential_id>",
+                          port_list ? port_list : "",
+                          ssh_credential ? ssh_credential : "",
+                          smb_credential ? smb_credential : "",
+                          esxi_credential ? esxi_credential : "");
+
+  g_free (port_list);
+  g_free (ssh_credential);
+  g_free (smb_credential);
+  g_free (esxi_credential);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
@@ -15344,14 +15544,37 @@ get_my_settings (credentials_t * credentials, params_t *params,
 char *
 get_my_settings_omp (credentials_t * credentials, params_t *params)
 {
+  GString *commands;
   int ret;
   entity_t entity;
   gchar *response;
 
-  /* Get Filters. */
+  commands = g_string_new ("<commands>");
+  if (command_enabled (credentials, "GET_ALERTS"))
+    g_string_append (commands, "<get_alerts/>");
+  if (command_enabled (credentials, "GET_CONFIGS"))
+    g_string_append (commands, "<get_configs/>");
+  if (command_enabled (credentials, "GET_FILTERS"))
+    g_string_append (commands, "<get_filters/>");
+  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+    g_string_append (commands, "<get_lsc_credentials/>");
+  if (command_enabled (credentials, "GET_PORT_LISTS"))
+    g_string_append (commands, "<get_port_lists/>");
+  if (command_enabled (credentials, "GET_SCANNERS"))
+    g_string_append (commands, "<get_scanners/>");
+  if (command_enabled (credentials, "GET_SCHEDULES"))
+    g_string_append (commands, "<get_schedules/>");
+  if (command_enabled (credentials, "GET_SLAVES"))
+    g_string_append (commands, "<get_slaves/>");
+  if (command_enabled (credentials, "GET_TARGETS"))
+    g_string_append (commands, "<get_targets/>");
+  g_string_append (commands, "</commands>");
+
+  /* Get Filters and other resource lists. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, "<get_filters/>");
+  ret = omp (credentials, &response, &entity, commands->str);
+  g_string_free (commands, TRUE);
   switch (ret)
     {
       case 0:
@@ -15360,22 +15583,22 @@ get_my_settings_omp (credentials_t * credentials, params_t *params)
       case 1:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Filters "
+                             "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_my_settings");
       case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
+                             "An internal error occurred while getting resources "
+                             "for the settings. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_alerts");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting Report "
-                             "Formats for the alert. "
+                             "An internal error occurred while getting resources "
+                             "for the settings. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts");
@@ -15398,17 +15621,38 @@ static char *
 edit_my_settings (credentials_t * credentials, params_t *params,
                   const char *extra_xml)
 {
-  GString *xml;
+  GString *commands, *xml;
   gnutls_session_t session;
   int socket, ret;
   gchar *html, *filters_xml;
   entity_t entity;
 
-  /* Get the Filters. */
+  /* Get the Filters and other resources. */
+  commands = g_string_new ("<commands>");
+  if (command_enabled (credentials, "GET_ALERTS"))
+    g_string_append (commands, "<get_alerts/>");
+  if (command_enabled (credentials, "GET_CONFIGS"))
+    g_string_append (commands, "<get_configs/>");
+  if (command_enabled (credentials, "GET_FILTERS"))
+    g_string_append (commands, "<get_filters/>");
+  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+    g_string_append (commands, "<get_lsc_credentials/>");
+  if (command_enabled (credentials, "GET_PORT_LISTS"))
+    g_string_append (commands, "<get_port_lists/>");
+  if (command_enabled (credentials, "GET_SCANNERS"))
+    g_string_append (commands, "<get_scanners/>");
+  if (command_enabled (credentials, "GET_SCHEDULES"))
+    g_string_append (commands, "<get_schedules/>");
+  if (command_enabled (credentials, "GET_SLAVES"))
+    g_string_append (commands, "<get_slaves/>");
+  if (command_enabled (credentials, "GET_TARGETS"))
+    g_string_append (commands, "<get_targets/>");
+  g_string_append (commands, "</commands>");
 
   filters_xml = NULL;
   entity = NULL;
-  ret = omp (credentials, &filters_xml, &entity, "<get_filters/>");
+  ret = omp (credentials, &filters_xml, &entity, commands->str);
+  g_string_free (commands, TRUE);
   switch (ret)
     {
       case 0:
@@ -15417,21 +15661,21 @@ edit_my_settings (credentials_t * credentials, params_t *params,
       case 1:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the Filters "
+                             "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_my_settings");
       case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the Filters "
+                             "An internal error occurred while getting resources "
                              "for the alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_my_settings");
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the Filters "
+                             "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_my_settings");
@@ -15592,9 +15836,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   const char *lang, *text, *old_passwd, *passwd, *status, *max;
   const char *details_fname, *list_fname, *report_fname;
   gchar *lang_64, *text_64, *max_64, *fname_64;
-  GString *xml;
+  GString *xml, *commands;
   entity_t entity;
-  params_t *filters;
+  params_t *defaults, *filters;
   int modify_failed = 0;
 
   *timezone = NULL;
@@ -15981,6 +16225,19 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   else
     modify_failed = 1;
 
+  /* Send default resources */
+  defaults = params_values (params, "settings_default:");
+  if (send_settings_filters (&session, defaults, xml, &modify_failed))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
   /* Send resources filters */
   filters = params_values (params, "settings_filter:");
   if (send_settings_filters (&session, filters, xml, &modify_failed))
@@ -16128,11 +16385,33 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (! omp_success (entity))
     modify_failed = 1;
 
-  /* Get filters */
+  /* Get the Filters and other resources. */
+  commands = g_string_new ("<commands>");
+  if (command_enabled (credentials, "GET_ALERTS"))
+    g_string_append (commands, "<get_alerts/>");
+  if (command_enabled (credentials, "GET_CONFIGS"))
+    g_string_append (commands, "<get_configs/>");
+  if (command_enabled (credentials, "GET_FILTERS"))
+    g_string_append (commands, "<get_filters/>");
+  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+    g_string_append (commands, "<get_lsc_credentials/>");
+  if (command_enabled (credentials, "GET_PORT_LISTS"))
+    g_string_append (commands, "<get_port_lists/>");
+  if (command_enabled (credentials, "GET_SCANNERS"))
+    g_string_append (commands, "<get_scanners/>");
+  if (command_enabled (credentials, "GET_SCHEDULES"))
+    g_string_append (commands, "<get_schedules/>");
+  if (command_enabled (credentials, "GET_SLAVES"))
+    g_string_append (commands, "<get_slaves/>");
+  if (command_enabled (credentials, "GET_TARGETS"))
+    g_string_append (commands, "<get_targets/>");
+  g_string_append (commands, "</commands>");
+
   if (openvas_server_sendf (&session,
-                            "<get_filters/>")
+                            commands->str)
       == -1)
     {
+      g_string_free (commands, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16142,6 +16421,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
 
+  g_string_free (commands, TRUE);
   entity = NULL;
   if (read_entity_and_string (&session, &entity, &xml))
     {

@@ -4724,6 +4724,71 @@ Public License instead of this License.
         </ul>
       </p>
 
+      <h3>Default Resources</h3>
+      <p>
+        Default selections for various resource creation pages like
+        <a href="new_task.html?token={/envelope/token}">New Task</a> or
+        <a href="new_target.html?token={/envelope/token}">New Target</a>
+        and wizards.
+      </p>
+      <p>
+        <b>Important Note:</b> These settings will only affect the initial selections
+        inside Greenbone Security Assistant. Commands sent directly via
+        <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP</a>
+        will still use the built-in defaults.
+        For example, creating a new Target using OMP without giving a Port List
+        will always use the "OpenVAS Default" Port List, regardless of the
+        default defined here.
+      </p>
+      <h4>Default Alert</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#alert">Alert</a>.
+      </p>
+      <h4>Default OpenVAS Scan Config</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> for new Tasks using OpenVAS scanners.
+      </p>
+      <h4>Default OSP Scan Config</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> for new Tasks using OSP scanners.
+      </p>
+      <h4>Default SSH Credential</h4>
+      <p>
+        Default Credential for logging in via SSH.
+      </p>
+      <h4>Default SSH Credential</h4>
+      <p>
+        Default Credential for logging in via SMB.
+      </p>
+      <h4>Default ESXi Credential</h4>
+      <p>
+        Default Credential for logging in to ESXi.
+      </p>
+      <h4>Default Port List</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#port_list">Port List</a> for new Targets.
+      </p>
+      <h4>Default OpenVAS Scan Config</h4>
+      <p>
+        Default OpenVAS <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a> for new Tasks.
+      </p>
+      <h4>Default OSP Scan Config</h4>
+      <p>
+        Default OSP <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a> for new Tasks.
+      </p>
+      <h4>Default Schedule</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> for new Tasks.
+      </p>
+      <h4>Default Slave</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#slave">Slave</a> for new Tasks.
+      </p>
+      <h4>Default Target</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#target">Target</a> for new Tasks.
+      </p>
+
       <h3>Resource Filters</h3>
       <p>
         Default filter applied for a particular resource. The dropdown menu will list

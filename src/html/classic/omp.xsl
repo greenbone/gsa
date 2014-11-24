@@ -1323,6 +1323,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="get-settings-resource">
+  <xsl:param name="id"/>
+  <xsl:param name="type"/>
+  <xsl:param name="cap_type" select="gsa:capitalise ($type)"/>
+  <xsl:param name="resources"/>
+
+  <xsl:choose>
+    <xsl:when test="$id">
+      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;token={/envelope/token}"
+         title="{gsa:i18n (concat ($cap_type, ' Details'), $type)}">
+        <xsl:value-of select="$resources[@id=$id]/name"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="get-settings-filter">
   <xsl:param name="filter"/>
 
@@ -1330,12 +1348,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$filter">
       <a href="/omp?cmd=get_filter&amp;filter_id={$filter}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Filter Details', 'Filter')}">
-        <xsl:value-of select="get_filters_response/filter[@id=$filter]/name"/>
+        <xsl:value-of select="commands_response/get_filters_response/filter[@id=$filter]/name"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="edit-settings-resource">
+  <xsl:param name="setting"/>
+  <xsl:param name="resources"/>
+  <xsl:param name="selected_id" select="@id"/>
+
+  <select style="margin-bottom: 0px;" name="{$setting}">
+    <option value="">--</option>
+    <xsl:for-each select="$resources">
+      <xsl:choose>
+        <xsl:when test="@id = $selected_id">
+          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+        </xsl:when>
+        <xsl:otherwise>
+          <option value="{@id}"><xsl:value-of select="name"/></option>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </select>
 </xsl:template>
 
 <xsl:template name="edit-settings-filters">
@@ -1345,7 +1383,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <select style="margin-bottom: 0px;" name="settings_filter:{$uuid}">
     <option value="">--</option>
     <xsl:variable name="id" select="filters/@id"/>
-    <xsl:for-each select="get_filters_response/filter[type=$filter-type]">
+    <xsl:for-each select="commands_response/get_filters_response/filter[type=$filter-type]">
       <xsl:choose>
         <xsl:when test="@id = $filter">
           <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -4794,7 +4832,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <select name="target_id">
               <xsl:variable name="target_id">
-                <xsl:value-of select="/envelope/params/target_id"/>
+                <xsl:value-of select="target_id"/>
               </xsl:variable>
               <xsl:for-each select="get_targets_response/target">
                 <xsl:choose>
@@ -4868,7 +4906,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="schedule_id_optional">
                 <xsl:variable name="schedule_id"
-                              select="/envelope/params/schedule_id_optional"/>
+                              select="schedule_id"/>
                 <xsl:choose>
                   <xsl:when test="string-length ($schedule_id) &gt; 0">
                     <option value="--">--</option>
@@ -4966,9 +5004,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
+              <xsl:variable name="scanner_id" select="scanner_id"/>
               <select name="scanner_id">
                 <xsl:for-each select="get_scanners_response/scanner[type = 2]">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                  <xsl:choose>
+                    <xsl:when test="@id = $scanner_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -4979,10 +5025,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
             </td>
             <td>
+              <xsl:variable name="config_id" select="config_id"/>
               <select name="config_id">
                 <!-- Skip the "empty" config. -->
                 <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea' and type = 0]">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                  <xsl:choose>
+                    <xsl:when test="@id = $config_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -4994,7 +5048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <select name="slave_id_optional">
                   <xsl:variable name="slave_id">
-                    <xsl:value-of select="/envelope/params/slave_id_optional"/>
+                    <xsl:value-of select="slave_id"/>
                   </xsl:variable>
                   <xsl:choose>
                     <xsl:when test="string-length ($slave_id) &gt; 0">
@@ -5068,9 +5122,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
+              <xsl:variable name="osp_scanner_id" select="osp_scanner_id"/>
               <select name="osp_scanner_id">
                 <xsl:for-each select="get_scanners_response/scanner[type = 1]">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  <xsl:choose>
+                    <xsl:when test="@id = $osp_scanner_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -5081,10 +5143,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
             </td>
             <td>
+              <xsl:variable name="osp_config_id" select="osp_config_id"/>
               <select name="osp_config_id">
                 <!-- Skip the "empty" config. -->
                 <xsl:for-each select="get_configs_response/config[type = 1]">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                  <xsl:choose>
+                    <xsl:when test="@id = $osp_config_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -6927,7 +6997,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential" mode="select">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
+  <xsl:param name="select_id" select="''"/>
+  <xsl:choose>
+    <xsl:when test="@id = $select_id">
+      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+    </xsl:when>
+    <xsl:otherwise>
+      <option value="{@id}"><xsl:value-of select="name"/></option>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="lsc_credentials_response" mode="select">
@@ -10116,7 +10194,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="port_list" mode="select">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
+  <xsl:param name="select_id" select="''"/>
+  <xsl:choose>
+    <xsl:when test="@id = $select_id">
+      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+    </xsl:when>
+    <xsl:otherwise>
+      <option value="{@id}"><xsl:value-of select="name"/></option>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="html-create-target-form">
@@ -10239,7 +10325,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
               <td>
                 <select name="port_list_id">
-                  <xsl:apply-templates select="$port-lists" mode="select"/>
+                  <xsl:apply-templates select="$port-lists" mode="select">
+                    <xsl:with-param name="select_id" select="port_list_id"/>
+                  </xsl:apply-templates>
                 </select>
               </td>
             </tr>
@@ -10273,7 +10361,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <select name="lsc_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select">
+                    <xsl:with-param name="select_id" select="lsc_credential_id"/>
+                  </xsl:apply-templates>
                 </select>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="gsa:i18n ('on port', 'Target Window')"/>
@@ -10287,7 +10377,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <select name="lsc_smb_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select">
+                    <xsl:with-param name="select_id" select="lsc_smb_credential_id"/>
+                  </xsl:apply-templates>
                 </select>
               </td>
             </tr>
@@ -10296,7 +10388,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <select name="lsc_esxi_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+                  <xsl:apply-templates select="$lsc-credentials" mode="select">
+                    <xsl:with-param name="select_id" select="lsc_esxi_credential_id"/>
+                  </xsl:apply-templates>
                 </select>
               </td>
             </tr>
@@ -31044,6 +31138,167 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </td>
             </tr>
+
+            <xsl:if test="gsa:may-op ('get_alerts')">
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default Alert']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_alerts_response/alert"/>
+                    <xsl:with-param name="type" select="'alert'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_configs')">
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Config')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                    <xsl:with-param name="type" select="'config'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Config')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                    <xsl:with-param name="type" select="'config'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default SSH Credential']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default SMB Credential']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_port_lists')">
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default Port List']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_port_lists_response/port_list"/>
+                    <xsl:with-param name="type" select="'port_list'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_scanners')">
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default OpenVAS Scanner']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
+                    <xsl:with-param name="type" select="'scanner'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default OSP Scanner']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
+                    <xsl:with-param name="type" select="'scanner'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_schedules')">
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default Schedule']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_schedules_response/schedule"/>
+                    <xsl:with-param name="type" select="'schedule'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_slaves')">
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default Slave']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
+                    <xsl:with-param name="type" select="'slave'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_targets')">
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default Target']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_targets_response/target"/>
+                    <xsl:with-param name="type" select="'target'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
             <xsl:if test="gsa:may-op ('get_filters')">
               <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
@@ -31471,6 +31726,179 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select>
               </td>
             </tr>
+
+            <xsl:if test="gsa:may-op ('get_alerts')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Alert']/value"/>
+                    <xsl:with-param name="type" select="'alert'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_alerts_response/alert"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_configs')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Config')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:fe7ea321-e3e3-4cc6-9952-da836aae83ce'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
+                    <xsl:with-param name="type" select="'config'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config[type = 0]"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Config')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:fb19ac4b-614c-424c-b046-0bc32bf1be73'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
+                    <xsl:with-param name="type" select="'config'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config[type = 1]"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credentials')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default SSH Credential']/value"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credentials')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:a25c0cfe-f977-417b-b1da-47da370c03e8'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default SMB Credential']/value"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credentials')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
+                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_port_lists')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:d74a9ee8-7d35-4879-9485-ab23f1bd45bc'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Port List']/value"/>
+                    <xsl:with-param name="type" select="'port_list'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_port_lists_response/port_list"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_scanners')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default OpenVAS Scanner']/value"/>
+                    <xsl:with-param name="type" select="'scanner'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner[type=2]"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:b20697c9-be0a-4cd4-8b4d-5fe7841ebb03'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default OSP Scanner']/value"/>
+                    <xsl:with-param name="type" select="'scanner'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner[type=1]"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_schedules')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:778eedad-5550-4de0-abb6-1320d13b5e18'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Schedule']/value"/>
+                    <xsl:with-param name="type" select="'schedule'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_schedules_response/schedule"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_slaves')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:aec201fa-8a82-4b61-bebe-a44ea93b2909'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Slave']/value"/>
+                    <xsl:with-param name="type" select="'slave'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_targets')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:23409203-940a-4b4a-b70c-447475f18323'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Target']/value"/>
+                    <xsl:with-param name="type" select="'target'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_targets_response/target"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
             <xsl:if test="gsa:may-op ('get_filters')">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
