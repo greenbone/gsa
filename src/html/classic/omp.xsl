@@ -3572,6 +3572,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
+  <xsl:if test="string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1">
+    <xsl:call-template name="stop-icon">
+      <xsl:with-param name="type">task</xsl:with-param>
+      <xsl:with-param name="id" select="@id"/>
+      <xsl:with-param name="params">
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+        <input type="hidden" name="next" value="{$next}"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:if>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Task is a container', 'Task Table Row')}"

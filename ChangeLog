@@ -1,3 +1,9 @@
+2014-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (task-icons): Put back the special
+	enable_stop case that Jan removed with the Pause feature.  This is handy
+	when the task gets stuck on Stop Requested after an error.
+
 2014-11-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-config-form): Don't show OSP
