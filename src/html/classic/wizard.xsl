@@ -1193,7 +1193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <br/>
               <xsl:call-template name="timezone-select">
                 <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                <xsl:with-param name="input-name" select="'event_data:timezone'"/>
+                <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
               </xsl:call-template>
             </div>
           </label>

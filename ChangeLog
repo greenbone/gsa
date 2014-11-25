@@ -1,3 +1,8 @@
+2014-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/wizard.xsl (modify-task-wizard): Use parameter
+	"start_timezone" instead of "timezone" to set timezone of schedule.
+
 2014-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task-icons): Put back the special
