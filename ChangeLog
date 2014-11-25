@@ -1,3 +1,12 @@
+2014-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/wizard.xsl (wizard-icon): Add "Modify Task Wizard"
+	to menu.
+	(modify-task-wizard, wizard/modify_task): New templates.
+	(wizard_list): Add "Modify Task Wizard" to menu.
+
+	* src/html/classic/po/de.xml: Add text of new Modify Task Wizard.
+
 2014-11-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (alert [newtask], new-task-alert-select):

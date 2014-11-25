@@ -6358,4 +6358,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Email-Bericht an</str>
     </msg>
   </grp>
+
+  <!-- Modify Task Wizard -->
+  <grp>
+    <ctxt>Modify Task Wizard</ctxt>
+    <msg>
+      <id>Modify Task Wizard</id>
+      <str>Aufgabe-Bearbeiten-Wizard</str>
+    </msg>
+    <msg>
+      <id>Quick edit: Modify a task</id>
+      <str>Schnell-Bearbeiten: Aufgabe ändern</str>
+    </msg>
+
+    <msg>
+      <id>I will modify an existing task for you. The difference to the Edit Task dialog is that here you can enter values for associated objects directly. I will then create them for you automatically and assign them to the selected task.</id>
+      <str>Ich werde für Sie eine vorhandene Aufgabe bearbeiten. Im Gegensatz zum "Aufgabe Bearbeiten"-Dialog können Sie hier direkt Werte für verknüpfte Objekte angeben. Diese werde ich automatisch für Sie erstellen und der ausgewählten Aufgabe zuweisen.</str>
+    </msg>
+    <msg>
+      <id>Please be aware that</id>
+      <str>Bitte beachten Sie, dass</str>
+    </msg>
+    <msg>
+      <id>setting a start time overwrites a possibly already existing one,</id>
+      <str>das Setzen einer Startzeit eine möglicherweise vorhandene überschreibt,</str>
+    </msg>
+    <msg>
+      <id>setting an Email Address means adding an additional Alert, not replacing an existing one.</id>
+      <str>bei Angabe einer Email-Adresse eine neue Benachrichtigung hinzugefügt und nicht eine vorhandene ersetzt wird.</str>
+    </msg>
+
+    <msg>
+      <id>Start time</id>
+      <str>Startzeit</str>
+    </msg>
+    <msg>
+      <id>Do not change</id>
+      <str>Nicht ändern</str>
+    </msg>
+
+    <msg>
+      <id>Email report to</id>
+      <str>Email-Bericht an</str>
+    </msg>
+
+    <msg>
+      <id>Modify Task</id>
+      <str>Aufgabe ändern</str>
+    </msg>
+  </grp>
 </i18n>
