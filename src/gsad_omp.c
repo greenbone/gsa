@@ -33,13 +33,9 @@
  * via OMP properly, and apply XSL-Transforms to deliver HTML results.
  */
 
-/* time.h in glibc2 needs this for strptime. */
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
 #include <netinet/in.h>
@@ -56,6 +52,7 @@
 #include "tracef.h"
 
 #include <openvas/misc/openvas_server.h>
+#include <openvas/base/openvas_file.h>
 #include <openvas/base/cvss.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
@@ -1682,174 +1679,39 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                   const char* type, const char* uuid,
                   entity_t resource_entity)
 {
-  time_t now;
-  struct tm *now_broken;
-  gchar *now_date_str, *creation_date_str, *modification_date_str;
-  gchar *now_time_str, *creation_time_str, *modification_time_str;
-  gchar *fname_point;
-  GString *file_name_buf;
-  int format_state = 0;
-  entity_t creation_time_entity, modification_time_entity;
-
-  now_date_str = NULL;
-  creation_date_str = NULL;
-  modification_date_str = NULL;
-  now_time_str = NULL;
-  creation_time_str = NULL;
-  modification_time_str = NULL;
-
-  now = time (NULL);
-  now_broken = localtime (&now);
-  now_date_str = g_strdup_printf ("%04d%02d%02d",
-                                  (now_broken->tm_year + 1900),
-                                  (now_broken->tm_mon + 1),
-                                  now_broken->tm_mday);
-  now_time_str = g_strdup_printf ("%02d%02d%02d",
-                                  now_broken->tm_hour,
-                                  now_broken->tm_min,
-                                  now_broken->tm_sec);
+  gchar *creation_time, *modification_time;
+  gchar *ret;
 
   if (resource_entity)
     {
-      struct tm creation_time, modification_time;
-      gchar *creation_date_short, *modification_date_short;
-
-      memset (&creation_time, 0, sizeof (struct tm));
-      memset (&modification_time, 0, sizeof (struct tm));
-      creation_date_short = NULL;
-      modification_date_short = NULL;
+      entity_t creation_time_entity, modification_time_entity;
 
       creation_time_entity = entity_child (resource_entity,
                                            "creation_time");
-      if (creation_time_entity)
-        creation_date_short
-          = g_strndup (entity_text (creation_time_entity), 19);
 
-      if (creation_date_short
-          && (strlen (strptime (creation_date_short,
-                                "%Y-%m-%dT%H:%M:%S", &creation_time))
-              == 0))
-        {
-          creation_date_str
-            = g_strdup_printf ("%04d%02d%02d",
-                               (creation_time.tm_year + 1900),
-                               (creation_time.tm_mon + 1),
-                               creation_time.tm_mday);
-          creation_time_str
-            = g_strdup_printf ("%02d%02d%02d",
-                               creation_time.tm_hour,
-                               creation_time.tm_min,
-                               creation_time.tm_sec);
-        }
+      if (creation_time_entity)
+        creation_time = entity_text (creation_time_entity);
+      else
+        creation_time = NULL;
 
       modification_time_entity = entity_child (resource_entity,
-                                              "modification_time");
+                                               "modification_time");
+
       if (modification_time_entity)
-        modification_date_short
-          = g_strndup (entity_text (modification_time_entity), 19);
-
-      if (modification_date_short
-          && (strlen (strptime (modification_date_short,
-                                "%Y-%m-%dT%H:%M:%S", &modification_time))
-              == 0))
-        {
-          modification_date_str
-            = g_strdup_printf ("%04d%02d%02d",
-                               (modification_time.tm_year + 1900),
-                               (modification_time.tm_mon + 1),
-                               modification_time.tm_mday);
-
-          modification_time_str
-            = g_strdup_printf ("%02d%02d%02d",
-                               modification_time.tm_hour,
-                               modification_time.tm_min,
-                               modification_time.tm_sec);
-        }
+        modification_time = entity_text (modification_time_entity);
+      else
+        modification_time = NULL;
     }
   else
     {
-      creation_time_entity = NULL;
-      modification_time_entity = NULL;
+      creation_time = NULL;
+      modification_time = NULL;
     }
 
-  if (creation_date_str == NULL)
-    creation_date_str = g_strdup (now_date_str);
-  if (modification_date_str == NULL)
-    modification_date_str = g_strdup (creation_date_str);
-  if (creation_time_str == NULL)
-    creation_time_str = g_strdup (now_time_str);
-  if (modification_time_str == NULL)
-    modification_time_str = g_strdup (creation_time_str);
+  ret = openvas_export_file_name (fname_format, credentials->username,
+                                  type, uuid, creation_time, modification_time);
 
-  file_name_buf = g_string_new ("");
-
-  fname_point = fname_format;
-
-  while (format_state >= 0 && *fname_point != '\0')
-    {
-      assert (format_state >= -1 && format_state <= 1);
-      if (format_state == 0)
-        {
-          if (*fname_point == '%')
-            format_state = 1;
-          else
-            g_string_append_c (file_name_buf, *fname_point);
-        }
-      else if (format_state == 1)
-        {
-          switch (*fname_point)
-            {
-              case 'C':
-                g_string_append (file_name_buf, creation_date_str);
-                break;
-              case 'c':
-                g_string_append (file_name_buf, creation_time_str);
-                break;
-              case 'D':
-                g_string_append (file_name_buf, now_date_str);
-                break;
-              case 'M':
-                g_string_append (file_name_buf, modification_date_str);
-                break;
-              case 'm':
-                g_string_append (file_name_buf, modification_time_str);
-                break;
-              case 'T':
-                g_string_append (file_name_buf, type ? type : "resource");
-                break;
-              case 't':
-                g_string_append (file_name_buf, now_time_str);
-                break;
-              case 'U':
-                g_string_append (file_name_buf, uuid ? uuid : "list");
-                break;
-              case 'u':
-                g_string_append (file_name_buf, credentials->username);
-                break;
-              case '%':
-                g_string_append_c (file_name_buf, '%');
-                break;
-              default:
-                g_warning ("%s : Unknown file name format placeholder: %%%c.",
-                           __FUNCTION__, *fname_point);
-                format_state = -1;
-            }
-          format_state = 0;
-        }
-      fname_point += sizeof (char);
-    }
-
-  if (format_state || strcmp (file_name_buf->str, "") == 0)
-    {
-      g_warning ("%s : Invalid file name format", __FUNCTION__);
-      g_string_free (file_name_buf, TRUE);
-      return NULL;
-    }
-
-  g_free (now_date_str);
-  g_free (creation_date_str);
-  g_free (modification_date_str);
-  return g_string_free (file_name_buf, FALSE);
+  return ret;
 }
 
 

@@ -1,3 +1,10 @@
+2014-11-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c: Remove #define _GNU_SOURCE and <time.h> include.
+	Include <openvas/base/openvas_file.h> instead.
+	(format_file_name): Use openvas_export_file_name from libraries to
+	format the file name.
+
 2014-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add creating of role/group/user Super permissions to New Permissions
