@@ -17266,7 +17266,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
-  resource_type = params_value (params, "resource_type");
+  resource_type = params_value (params, "optional_resource_type");
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
@@ -17274,7 +17274,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   CHECK_PARAM (comment, "Create Permission", new_permission);
   CHECK_PARAM (resource_id, "Create Permission", new_permission);
   CHECK_PARAM (subject_type, "Create Permission", new_permission);
-  if (params_given (params, "resource_type"))
+  if (params_given (params, "optional_resource_type"))
     CHECK_PARAM (resource_type, "Create Permission", new_permission);
 
   if (params_given (params, "subject_name"))

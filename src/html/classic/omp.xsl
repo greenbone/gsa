@@ -620,6 +620,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="gsa:i18n ('has super access to ', 'Permission Description')"/>
         <xsl:value-of select="gsa:i18n (gsa:command-type ($lower), 'Type Lower')"/>
         <xsl:text> </xsl:text>
+        <xsl:value-of select="$resource/type"/>
+        <xsl:text> </xsl:text>
         <xsl:value-of select="$resource/name"/>
       </xsl:when>
       <xsl:when test="$lower = 'super'">
@@ -21222,6 +21224,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <select name="permission">
+                <option value="Super">
+                  <xsl:text>Super (Has super access)</xsl:text>
+                </option>
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:if test="gsa:may-op (name)">
                     <option value="{gsa:lower-case (name)}">
@@ -21286,6 +21291,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value=""
                      size="50"
                      maxlength="100"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Permission Window')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Window')"/>)</td>
+            <td>
+              <select name="optional_resource_type">
+                <option value="">--</option>
+                <option value="user">User</option>
+                <option value="role">Role</option>
+                <option value="group">Group</option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -28462,7 +28478,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Group', 'Window')"/></td>
             <td>
-              <input type="hidden" name="resource_type" value="group"/>
+              <input type="hidden" name="optional_resource_type" value="group"/>
               <select name="id_or_empty">
                 <xsl:for-each select="get_groups_response/group">
                   <option value="{@id}"><xsl:value-of select="name"/></option>

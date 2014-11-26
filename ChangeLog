@@ -1,3 +1,16 @@
+2014-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add creating of role/group/user Super permissions to New Permissions
+	page.
+
+	* src/gsad_omp.c (create_permission_omp): Allow "" as resource type.
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Add type name
+	to Super description.
+	(html-create-permission-form): Add Super, including optional resource
+	type field.
+	(html-edit-role-form): Switch to optional_resource_type.
+
 2014-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a New Super Permission section on the Edit Role page.
