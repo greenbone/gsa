@@ -21674,6 +21674,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="name">
                   <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
                 </xsl:variable>
+                <option value="Super">
+                  <xsl:text>Super (Has super access)</xsl:text>
+                </option>
                 <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                   <xsl:choose>
                     <xsl:when test="gsa:lower-case (name) = $name">
@@ -21806,6 +21809,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          maxlength="100"/>
                 </xsl:otherwise>
               </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Permission Window')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Window')"/>)</td>
+            <td>
+              <select name="optional_resource_type">
+                <option value="">--</option>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
+                    <option value="user" selected="1">User</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="user">User</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'role'">
+                    <option value="role" selected="1">Role</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="role">Role</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'group'">
+                    <option value="group" selected="1">Group</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="group">Group</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
             </td>
           </tr>
           <tr>

@@ -1,3 +1,12 @@
+2014-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Super permissions support to Edit Permissions page.
+
+	* src/gsad_omp.c (save_permission_omp): Add resource type to OMP.
+
+	* src/html/classic/omp.xsl (html-edit-permission-form): Add Super,
+	including optional resource type field.
+
 2014-11-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Don't show OSP task submenu if no

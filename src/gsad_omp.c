@@ -17606,7 +17606,7 @@ char *
 save_permission_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response;
-  const char *permission_id, *name, *comment, *resource_id;
+  const char *permission_id, *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type;
   entity_t entity;
   int ret;
@@ -17616,12 +17616,15 @@ save_permission_omp (credentials_t * credentials, params_t *params)
   comment = params_value (params, "comment");
   subject_type = params_value (params, "subject_type");
   resource_id = params_value (params, "id_or_empty");
+  resource_type = params_value (params, "optional_resource_type");
 
   CHECK_PARAM (permission_id, "Save Permission", edit_permission);
   CHECK_PARAM (name, "Save Permission", edit_permission);
   CHECK_PARAM (comment, "Save Permission", edit_permission);
   CHECK_PARAM (resource_id, "Save Permission", edit_permission);
   CHECK_PARAM (subject_type, "Save Permission", edit_permission);
+  if (params_given (params, "optional_resource_type"))
+    CHECK_PARAM (resource_type, "Save Permission", edit_permission);
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -17646,14 +17649,17 @@ save_permission_omp (credentials_t * credentials, params_t *params)
               "<subject id=\"%s\">"
               "<type>%s</type>"
               "</subject>"
-              "<resource id=\"%s\"/>"
+              "<resource id=\"%s\">"
+              "<type>%s</type>"
+              "</resource>"
               "</modify_permission>",
               permission_id,
               name,
               comment,
               subject_id,
               subject_type,
-              (resource_id && strlen (resource_id)) ? resource_id : "0");
+              (resource_id && strlen (resource_id)) ? resource_id : "0",
+              resource_type ? resource_type : "");
   switch (ret)
     {
       case 0:
