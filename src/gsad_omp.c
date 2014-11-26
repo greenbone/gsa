@@ -17255,7 +17255,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
 {
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *resource_id;
+  const char *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   entity_t entity;
 
@@ -17266,6 +17266,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
+  resource_type = params_value (params, "resource_type");
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
@@ -17273,6 +17274,8 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   CHECK_PARAM (comment, "Create Permission", new_permission);
   CHECK_PARAM (resource_id, "Create Permission", new_permission);
   CHECK_PARAM (subject_type, "Create Permission", new_permission);
+  if (params_given (params, "resource_type"))
+    CHECK_PARAM (resource_type, "Create Permission", new_permission);
 
   if (params_given (params, "subject_name"))
     {
@@ -17469,12 +17472,15 @@ create_permission_omp (credentials_t *credentials, params_t *params)
                   "<create_permission>"
                   "<name>%s</name>"
                   "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
+                  "<resource id=\"%s\">"
+                  "<type>%s</type>"
+                  "</resource>"
                   "<subject id=\"%s\"><type>%s</type></subject>"
                   "</create_permission>",
                   name,
                   comment ? comment : "",
                   resource_id,
+                  resource_type ? resource_type : "",
                   subject_id,
                   subject_type);
 
@@ -18537,6 +18543,46 @@ edit_role (credentials_t * credentials, params_t *params,
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_roles");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity,
+                   "<get_groups"
+                   " filter=\"rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_roles");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_roles");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
                                  "Diagnostics: Internal Error.",
                                  "/omp?cmd=get_roles");
         }

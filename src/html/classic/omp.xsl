@@ -28445,6 +28445,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </form>
+
+      <h2><xsl:value-of select="gsa:i18n ('New Super Permission', 'Permission')"/></h2>
+
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_permission"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="role_id" value="{$role_id}"/>
+        <input type="hidden" name="next" value="edit_role"/>
+        <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="comment" value=""/>
+        <input type="hidden" name="subject_type" value="role"/>
+        <input type="hidden" name="permission" value="Super"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Group', 'Window')"/></td>
+            <td>
+              <input type="hidden" name="resource_type" value="group"/>
+              <select name="id_or_empty">
+                <xsl:for-each select="get_groups_response/group">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="count (get_groups_response/group) &gt; 0">
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"
+                         disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </table>
+      </form>
+
       <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">

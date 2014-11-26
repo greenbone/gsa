@@ -1178,7 +1178,7 @@ init_validator ()
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
-  openvas_validator_add (validator, "permission",       "^[_a-z]{1,1000}$");
+  openvas_validator_add (validator, "permission",       "^([_a-z]{1,1000}|Super)$");
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",

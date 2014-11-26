@@ -1,3 +1,14 @@
+2014-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a New Super Permission section on the Edit Role page.
+
+	* src/gsad.c (init_validator): Add Super to permission.
+
+	* src/gsad_omp.c (create_permission_omp): Handle resource_type.
+	(edit_role): Get groups for dropdown.
+
+	* src/html/classic/omp.xsl (html-edit-role-form): Add Super section.
+
 2014-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/wizard.xsl (quick-task-wizard): Add timezone
