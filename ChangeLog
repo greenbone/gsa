@@ -1,3 +1,14 @@
+2014-11-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/wizard.xsl (quick-first-scan-wizard): Pass default
+	Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and
+	Slave from My Settings to wizard. Add a note about the use of these
+	defaults.
+	(quick-task-wizard): Pass default Port List and OpenVAS Scanner from
+	My Settings. Add a note about the use of these defaults.
+	
+	* src/html/classic/po/de.xml: Add the notes about using the defaults.
+
 2014-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Super permissions support to Edit Permissions page.

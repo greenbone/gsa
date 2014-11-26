@@ -6288,6 +6288,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt über 1% liegt kann man bereits über den Link in der Spalte "Berichte Gesamt" in die Details des Scan-Berichts springen und die bisher gesammelten Ergebisse einsehen.</str>
     </msg>
     <msg>
+      <id>When creating the Target and Task I will use the default Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and Slave configured in &quot;My Settings&quot;.</id>
+      <str>Beim Erstellen des Ziels und der Aufgabe werde ich die Voreinstellungen für die Portliste, Benachrichtigung, OpenVAS-Scankonfiguration, Anmeldedaten, OpenVAS-Scanner und Slave verwenden, die in &quot;Eigene Einstellungen&quot; konfiguriert wurden.</str>
+    </msg>
+    <msg>
       <id>By clicking the New Task icon</id>
       <str>Durch Anklicken des &quot;Neue Aufgabe&quot;-Icons</str>
     </msg>
@@ -6327,6 +6331,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Finally, you can select a slave which will run the scan.</id>
       <str>Schließlich können sie auch einen Slave wählen, auf dem der Scan laufen soll.</str>
+    </msg>
+    <msg>
+      <id>When creating the Target and Task I will use the default Port List and OpenVAS Scanner configured in &quot;My Settings&quot;.</id>
+      <str>Beim Erstellen des Ziels und der Aufgabe werde ich die Voreinstellungen für die Portliste und den OpenVAS-Scanner verwenden, die in &quot;Eigene Einstellungen&quot; konfiguriert wurden.</str>
     </msg>
 
     <msg>

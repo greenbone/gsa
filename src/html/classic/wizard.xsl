@@ -128,6 +128,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="next" value="get_tasks"/>
             <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
+            <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Port List']/value}"/>
+            <input type="hidden" name="event_data:alert_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Alert']/value}"/>
+            <input type="hidden" name="event_data:config_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value}"/>
+            <input type="hidden" name="event_data:ssh_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SSH Credential']/value}"/>
+            <input type="hidden" name="event_data:smb_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SMB Credential']/value}"/>
+            <input type="hidden" name="event_data:esxi_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default ESXi Credential']/value}"/>
+            <input type="hidden" name="event_data:scanner_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scanner']/value}"/>
+            <input type="hidden" name="event_data:slave_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Slave']/value}"/>
             <input type="submit" name="submit" value="{gsa:i18n ('Start Scan', 'Task Wizard')}"/>
           </form>
         </p>
@@ -142,6 +150,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </p>
         <p>
           <xsl:value-of select="gsa:i18n('In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.', 'Task Wizard')"/>
+        </p>
+        <p>
+          <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and Slave configured in &quot;My Settings&quot;.', 'Task Wizard')"/>
         </p>
         <p>
           <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
@@ -198,6 +209,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
     <input type="hidden" name="next" value="get_tasks"/>
 
+    <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Port List']/value}"/>
+    <input type="hidden" name="event_data:scanner_id" value="{../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scanner']/value}"/>
     <table>
       <tr>
         <td valign="top" rowspan="15" width="250px">
@@ -213,6 +226,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <br/>
             <xsl:value-of select="gsa:i18n ('Finally, you can select a slave which will run the scan.', 'Advanced Task Wizard')"/>
           </xsl:if></p>
+          <p>
+            <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List and OpenVAS Scanner configured in &quot;My Settings&quot;.', 'Advanced Task Wizard')"/>
+          </p>
         </td>
         <td valign="center" rowspan="15">
           <img src="img/enchantress.png"/>
@@ -681,6 +697,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:for-each select="../run_wizard_response/response/commands_response/get_lsc_credentials_response/lsc_credential">
                 <xsl:choose>
                   <xsl:when test="@id = $smb_credential_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target Window')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:text>)</xsl:text>
+          </td>
+          <td>
+            <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
+            <select name="event_data:esxi_credential">
+              <option value="" selected="1">--</option>
+              <xsl:for-each select="../run_wizard_response/response/commands_response/get_lsc_credentials_response/lsc_credential">
+                <xsl:choose>
+                  <xsl:when test="@id = $esxi_credential_id">
                     <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                   </xsl:when>
                   <xsl:otherwise>
