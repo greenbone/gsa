@@ -5139,7 +5139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="count(get_scanners_response/scanner[type = 1]) &gt; 0">
+        <xsl:if test="count(get_scanners_response/scanner[type = 1]) and count(get_configs_response/config[type = 1])">
           <tr>
             <td>
               <input type="radio" name="scanner_type" value="1"/>
