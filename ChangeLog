@@ -1,3 +1,8 @@
+2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/wizard.xsl (modify-task-wizard): Change "next" param
+	to "get_tasks".
+
 2014-11-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/wizard.xsl (quick-first-scan-wizard): Pass default
