@@ -1,6 +1,6 @@
 2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad_omp.c (get_one):
+	* src/gsad_omp.c (edit_role): Correct filter field name.
 
 2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 

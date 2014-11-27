@@ -18405,7 +18405,7 @@ edit_role (credentials_t * credentials, params_t *params,
       entity = NULL;
       switch (ompf (credentials, &response, &entity,
                     "<get_permissions"
-                    " filter=\"rows=-1 ubject_type=role and subject_uuid=%s\"/>",
+                    " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
         {
           case 0:
