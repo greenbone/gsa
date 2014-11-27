@@ -1,3 +1,7 @@
+2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one):
+
 2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (user): Correct condition for greying the
@@ -16,7 +20,7 @@
 	defaults.
 	(quick-task-wizard): Pass default Port List and OpenVAS Scanner from
 	My Settings. Add a note about the use of these defaults.
-	
+
 	* src/html/classic/po/de.xml: Add the notes about using the defaults.
 
 2014-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
