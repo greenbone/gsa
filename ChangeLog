@@ -1,6 +1,15 @@
 2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* ChangeLog: Add missing entry.
+
+2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (edit_role): Correct filter field name.
+
+2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one): Check if extra_xml was given, to prevent
+	segfaults when the database contains errors.
 
 2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
