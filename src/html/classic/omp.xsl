@@ -30083,7 +30083,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                title="{gsa:i18n ('Currently logged in as this user', 'User Table Row')}"
                style="margin-left:3px;"/>
         </xsl:when>
-        <xsl:when test="writable!='0' and in_use='0'">
+        <xsl:when test="writable='0' or in_use != '0'">
           <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Table Row')}"
                title="{gsa:i18n ('User')}{gsa:i18n (' cannot be deleted', 'Table Row')}"
                style="margin-left:3px;"/>

@@ -1,5 +1,10 @@
 2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (user): Correct condition for greying the
+	delete icon.
+
+2014-11-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/wizard.xsl (modify-task-wizard): Change "next" param
 	to "get_tasks".
 
