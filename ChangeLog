@@ -1,3 +1,8 @@
+2014-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (user): Add permissions test to delete icon,
+	to match Details page.
+
 2014-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Add missing entry.
