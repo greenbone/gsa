@@ -70,6 +70,7 @@ typedef struct
   char *timezone;     ///< User's timezone.
   char *token;        ///< Session token.
   char *caller;       ///< Caller URL, for POST relogin.
+  char *current_page; ///< Current page URL, for refresh.
   char *capabilities; ///< Capabilites of manager.
   char *language;     ///< Accept-Language browser header.
   char *severity;     ///< Severity class.

@@ -91,7 +91,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="autorefresh" mode="html-header-meta">
   <xsl:variable name="cmd" select="name(/envelope/*[starts-with (name(), 'get_')])"/>
   <xsl:if test="(@interval &gt; 0) and starts-with ($cmd, 'get_') and substring ($cmd, 1) and ($cmd = 'get_task' or substring ($cmd, string-length ($cmd), 1) = 's') and ($cmd != 'get_my_settings') and ($cmd != 'get_system_reports') and (count (//gsad_msg) = 0) and (count (//gsad_response) = 0)">
-    <meta http-equiv="refresh" content="{@interval};{/envelope/caller}&amp;token={/envelope/token}" />
+    <meta http-equiv="refresh" content="{@interval};{/envelope/current_page}&amp;token={/envelope/token}" />
   </xsl:if>
 </xsl:template>
 
@@ -2083,6 +2083,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="caller">
+</xsl:template>
+
+<xsl:template match="current_page">
 </xsl:template>
 
 <xsl:template match="token">
