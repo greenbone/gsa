@@ -23719,7 +23719,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </column>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
+    <xsl:with-param name="default-filter" select="'apply_overrides=1 permission=any owner=any sort-reverse=date'"/>
     <xsl:with-param name="extra_params">
       <param>
         <name>task_filter</name>

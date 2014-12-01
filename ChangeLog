@@ -1,3 +1,9 @@
+2014-12-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-reports-table): Add "permission=any"
+	and "owner=any" keywords to filter used by "Return to default filter
+	view" icon.
+
 2014-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (user): Add permissions test to delete icon,
