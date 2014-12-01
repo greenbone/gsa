@@ -1,3 +1,23 @@
+2014-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Ensure that auto refresh goes to the current page when the previous page
+	submitted a form.
+
+	* src/gsad_base.h (credentials_t): Add current_page.
+
+	* src/gsad.c (credentials_free): Free current_page.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add CURRENT_PAGE to ENVELOPE.
+	(page_url, page_url_append_param): New functions.
+	(next_page): Setup current_page in credentials according to "next"
+	param.  This overrides the default, which is to use the caller URL.
+	(get_one, get_task, get_config): Append ID to page_url when extracting
+	ID from OMP CREATE response.
+
+	* src/html/classic/gsad.xsl (autorefresh [html-header-meta]): Use
+	CURRENT_PAGE instead of CALLER for the refresh URL.
+	(current_page): New template.
+
 2014-12-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-reports-table): Add "permission=any"

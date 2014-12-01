@@ -286,6 +286,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   res = g_markup_printf_escaped ("<envelope>"
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
+                                 "<current_page>%s</current_page>"
                                  "<time>%s</time>"
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
@@ -296,6 +297,11 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<backend_operation>%.2f</backend_operation>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
+                                 credentials->current_page
+                                   ? credentials->current_page
+                                   : (credentials->caller
+                                       ? credentials->caller
+                                       : ""),
                                  ctime_now,
                                  credentials->timezone
                                    ? credentials->timezone : "",
@@ -786,6 +792,50 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
       return ret_html;                                                         \
     }
 
+/**
+ * @brief Get an URL for the current page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  cmd          Command for URL.
+ *
+ * @return URL.
+ */
+static char *
+page_url (credentials_t *credentials, const gchar *cmd)
+{
+  GString *url;
+
+  url = g_string_new ("");
+
+  g_string_append_printf (url, "?cmd=%s", cmd);
+
+  if (credentials->caller && strlen (credentials->caller))
+    g_string_append_printf (url, "&%s", credentials->caller + 1);
+
+  return g_string_free (url, FALSE);
+}
+
+/**
+ * @brief Append a param to the URL for the current page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  name         Param name.
+ * @param[in]  value        Param value.
+ */
+static void
+page_url_append_param (credentials_t *credentials, const gchar *name,
+                       const gchar *value)
+{
+  if (credentials->current_page)
+    {
+      gchar *new;
+      new = g_strdup_printf ("%s&%s=%s", credentials->current_page, name,
+                             value);
+      g_free (credentials->current_page);
+      credentials->current_page = new;
+    }
+}
+
 
 /* Generic page handlers. */
 
@@ -806,6 +856,8 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   next = params_value (params, "next");
   if (next == NULL)
     return NULL;
+
+  credentials->current_page = page_url (credentials, next);
 
   if (strcmp (next, "edit_role") == 0)
     return edit_role (credentials, params, response);
@@ -1021,6 +1073,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
               param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
               id = params_value (params, name);
               assert (id);
+              page_url_append_param (credentials, name, id);
               g_free (name);
               free_entity (entity);
             }
@@ -3963,6 +4016,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
           param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
           task_id = params_value (params, "task_id");
           assert (task_id);
+          page_url_append_param (credentials, "task_id", task_id);
           free_entity (entity);
         }
       else
@@ -8669,6 +8723,7 @@ get_config (credentials_t * credentials, params_t *params,
           param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
           config_id = params_value (params, "config_id");
           assert (config_id);
+          page_url_append_param (credentials, "config_id", config_id);
           free_entity (entity);
         }
       else

@@ -1780,6 +1780,7 @@ credentials_free (credentials_t *creds)
   g_free (creds->timezone);
   g_free (creds->token);
   g_free (creds->caller);
+  g_free (creds->current_page);
   g_free (creds->capabilities);
   g_free (creds->language);
   g_free (creds->severity);
