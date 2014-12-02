@@ -273,6 +273,8 @@ set (CPACK_SOURCE_IGNORE_FILES
 "Doxyfile$"
 "Doxyfile_full$"
 "VERSION$"
+"cpe-icons.xml$"
+"zones.xml$"
 )
 
 include (CPack)

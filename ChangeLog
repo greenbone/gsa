@@ -1,3 +1,8 @@
+2014-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Explicitly ignore generated CPE icon and timezone
+	dictionaries when creating a source package.
+
 2014-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Ensure that auto refresh goes to the current page when the previous page
