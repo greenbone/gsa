@@ -1,3 +1,8 @@
+2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_task_omp): Correct conditional.  Scanner of type
+	"1" must use the given slave, host_ordering, etc.
+
 2014-12-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (fill_empty_fields): Check

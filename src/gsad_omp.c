@@ -3322,7 +3322,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
   CHECK_PARAM (scanner_type, "Save Task", edit_task);
-  if (!strcmp (scanner_type, "1"))
+  if (strcmp (scanner_type, "1"))
     {
       scanner_id = params_value (params, "osp_scanner_id");
       config_id = params_value (params, "osp_config_id");
