@@ -3209,7 +3209,8 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                                " sort_order=\"ascending\"/>"
                              : "",
                             command_enabled (credentials, "GET_SLAVES")
-                             ? "<get_slaves/>"
+                             ? "<get_slaves"
+                               " filter=\"rows=-1 owner=any permission=any\"/>"
                              : "",
                             command_enabled (credentials, "GET_SCANNERS")
                              ? "<get_scanners/>" : "",
