@@ -551,6 +551,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'solution_type'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
 
       <xsl:call-template name="js-aggregate-chart">
         <xsl:with-param name="chart_name" select="'left-nvt-by-family'"/>
@@ -570,6 +578,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_column" select="'severity'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-nvt-by-solution_type'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'solution_type'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-nvt-by-solution_type'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'solution_type'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>
@@ -794,6 +821,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="chart_type" select="'bubbles'"/>
               <xsl:with-param name="group_column" select="'family'"/>
               <xsl:with-param name="data_column" select="'severity'"/>
+              <xsl:with-param name="chart_template" select="''"/>
+              <xsl:with-param name="auto_load" select="0"/>
+              <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_solution_type')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_solution_type_src')"/>
+              <xsl:with-param name="aggregate_type" select="'nvt'"/>
+              <xsl:with-param name="group_column" select="'solution_type'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'donut'"/>
               <xsl:with-param name="chart_template" select="''"/>
               <xsl:with-param name="auto_load" select="0"/>
               <xsl:with-param name="create_data_source" select="1"/>

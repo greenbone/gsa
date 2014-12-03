@@ -1,3 +1,25 @@
+2014-12-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add icons, a new list column and a donut chart for the solution_type
+	tag of NVTs.
+
+	* src/html/classic/graphics.xsl (js-secinfo-top-visualization)
+	(dashboard [secinfo]): Add donut chart of NVTs by solution_type.
+
+	* src/html/classic/omp.xsl (solution-icon): New template.
+	(list-window): Add image parameter to column-name template calls.
+	(column-name): New parameter image that replaces the column label text
+	with an image.
+	(info/nvt, html-nvt-table): Add new solution_type column.
+	(nvt [details]): Add icon for solution_type.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Apply new
+	fill_empty_fields function to data.
+
+	* src/html/classic/js/gsa_graphics_base.js (fill_empty_fields): New
+	function. Fills empty fields with "N/A" and moves records with empty
+	x axis field to the end of the records list.
+
 2014-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Explicitly ignore generated CPE icon and timezone

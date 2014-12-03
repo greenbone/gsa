@@ -2008,6 +2008,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="solution-icon">
+  <xsl:param name="solution_type" select="''"/>
+  <xsl:choose>
+    <xsl:when test="$solution_type = ''">
+    </xsl:when>
+    <xsl:when test="$solution_type = 'Workaround'">
+      <img src="/img/st_workaround.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:when>
+    <xsl:when test="$solution_type = 'Mitigation'">
+      <img src="/img/st_mitigation.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:when>
+    <xsl:when test="$solution_type = 'VendorFix'">
+      <img src="/img/st_vendorfix.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:when>
+    <xsl:when test="$solution_type = 'NoneAvailable'">
+      <img src="/img/st_nonavailable.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:when>
+    <xsl:when test="$solution_type = 'WillNotFix'">
+      <img src="/img/st_willnotfix.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/os_unknown.png" title="{$solution_type}" alt="{$solution_type}"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
 <xsl:template name="user-tags-window-checked">
@@ -4318,6 +4344,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:copy-of select="html/before/*"/>
                     <xsl:call-template name="column-name">
                       <xsl:with-param name="head" select="name"/>
+                      <xsl:with-param name="image" select="image"/>
                       <xsl:with-param name="name" select="$field"/>
                       <xsl:with-param name="type" select="$type"/>
                       <xsl:with-param name="current" select="$current"/>
@@ -4363,6 +4390,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
                         <xsl:with-param name="head" select="name"/>
+                        <xsl:with-param name="image" select="image"/>
                         <xsl:with-param name="name" select="$field"/>
                         <xsl:with-param name="type" select="$type"/>
                         <xsl:with-param name="current" select="$current"/>
@@ -11068,6 +11096,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="column-name">
   <xsl:param name="type">target</xsl:param>
   <xsl:param name="head"/>
+  <xsl:param name="image"/>
   <xsl:param name="name"/>
   <xsl:param name="current" select="."/>
   <xsl:param name="extra_params"/>
@@ -11076,6 +11105,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="i18n-context" select="''"/>
   <xsl:variable name="heading">
     <xsl:choose>
+      <xsl:when test="image">
+        <img src="{$image}"
+             alt="{gsa:i18n ($head, $i18n-context)}"
+             title="{gsa:i18n ($head, $i18n-context)}"/>
+      </xsl:when>
       <xsl:when test="contains ($head, '.png')">
         <img src="/img/{$head}"
              alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
@@ -16179,6 +16213,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:variable name="solution_type">
+        <xsl:for-each select="str:split (tags, '|')">
+          <xsl:if test="'solution_type' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:call-template name="solution-icon">
+        <xsl:with-param name="solution_type" select="$solution_type"/>
+      </xsl:call-template>
+    </td>
+    <td>
       <xsl:choose>
         <xsl:when test="cvss_base &gt;= 0.0">
           <xsl:call-template name="severity-bar">
@@ -16835,6 +16881,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>CVE</name>
+      </column>
+      <column>
+        <name>Solution type</name>
+        <image>/img/solution_type.png</image>
       </column>
       <column>
         <name>Severity</name>
@@ -18450,6 +18500,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:if test="'solution_type' = substring-before (., '=')">
             <p>
               <b><xsl:value-of select="gsa:i18n ('Solution type', 'NVT Window')"/>: </b>
+              <xsl:call-template name="solution-icon">
+                <xsl:with-param name="solution_type" select="substring-after (., '=')"/>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
               <xsl:value-of select="substring-after (., '=')"/>
             </p>
           </xsl:if>

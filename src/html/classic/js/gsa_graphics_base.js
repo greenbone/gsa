@@ -1217,6 +1217,53 @@ function resource_type_counts (old_data, params)
   return new_data;
 }
 
+/**
+ * Get counts by resource type, using the full type name for the x field.
+ */
+function fill_empty_fields (old_data, params)
+{
+  var new_data = { original_xml : old_data.original_xml,
+                   records : [],
+                   column_info : old_data.column_info,
+                   filter_info : old_data.filter_info };
+
+  empty_x_records = [];
+
+  var x_field = "value";
+  if (params)
+    {
+      if (params.type_field != null)
+        type_field = params.type_field;
+    }
+
+  for (var record in old_data.records)
+    {
+      var new_record = {};
+      var empty_x = false;
+      for (field in old_data.records [record])
+        {
+          if (old_data.records [record][field])
+            new_record[field] = old_data.records [record][field];
+          else
+            {
+              new_record[field] = "N/A";
+              if (field == x_field)
+                empty_x = true;
+            }
+        }
+
+      if (empty_x)
+        empty_x_records.push (new_record);
+      else
+        new_data.records.push (new_record);
+    }
+
+  for (var record in empty_x_records)
+    new_data.records.push (empty_x_records [record]);
+
+  return new_data;
+}
+
 
 /*
  * Generic display helper functions

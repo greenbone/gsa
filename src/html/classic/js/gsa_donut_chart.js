@@ -148,6 +148,7 @@ function DonutChartGenerator ()
         {
           case "get_aggregate":
             data = data_transform (original_data, gen_params);
+            data = fill_empty_fields (data);
             records = data.records;
             column_info = data.column_info;
             break;
