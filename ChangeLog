@@ -1,5 +1,9 @@
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_task): Get all slaves that the user may read.
+
+2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/img/clone_inactive.png: Make lighter so it's more
 	like the others.
 
@@ -9,7 +13,7 @@
 
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Enable mixing slaves and task with other users.
+	Enable mixing slaves and tasks with those of other users.
 
 	* src/gsad_omp.c (edit_task): Get all slaves the user may read.
 
