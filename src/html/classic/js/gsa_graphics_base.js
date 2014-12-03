@@ -1246,7 +1246,21 @@ function fill_empty_fields (old_data, params)
             new_record[field] = old_data.records [record][field];
           else
             {
-              new_record[field] = "N/A";
+              switch (old_data.column_info.columns [field].data_type)
+                {
+                  case "integer":
+                  case "decimal":
+                  case "cvss":
+                  case "unix_time":
+                    new_record[field] = 0;
+                    break;
+                  case "js_time":
+                    new_record[field] = new Date (0);
+                    break;
+                  default:
+                    new_record[field] = "N/A";
+                }
+
               if (field == x_field)
                 empty_x = true;
             }
