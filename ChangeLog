@@ -1,5 +1,10 @@
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/img/clone_inactive.png: Make lighter so it's more
+	like the others.
+
+2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* CMakeLists.txt: Add new icon from last commit.
 
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
