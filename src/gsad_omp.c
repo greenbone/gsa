@@ -2195,8 +2195,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get slaves to select in new task UI. */
       if (openvas_server_send (&session,
                                "<get_slaves"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>")
+                               " filter=\"rows=-1 owner=any permission=any\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
