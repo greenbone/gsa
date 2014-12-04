@@ -1,3 +1,8 @@
+2014-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_task_omp): Revert 21088. Conditional is true as
+	value 1 is for OSP Scanner type.
+
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (new_task): Get all slaves that the user may read.
