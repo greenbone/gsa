@@ -1,3 +1,17 @@
+2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21089.
+
+	Enable mixing slaves and task with other users.
+
+	* src/gsad_omp.c (edit_task): Get all slaves the user may read.
+
+	* src/html/classic/omp.xsl (task-icons): Mark slave unavailable if user
+	may not read it.
+	(slave [details]): Mark task unavailable if user may not read it.
+
+	* src/html/classic/img/details_inactive.png: New file.
+
 2014-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21074.
