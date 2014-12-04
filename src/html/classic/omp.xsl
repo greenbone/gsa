@@ -5062,10 +5062,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Task Window')"/></h3>
           </td>
         </tr>
-        <xsl:if test="count(get_scanners_response/scanner[type = 0]) &gt;= 0">
+        <xsl:if test="count(get_scanners_response/scanner[type = 2]) &gt;= 0">
           <tr>
             <td>
-              <input type="radio" name="scanner_type" value="0" checked="1"/>
+              <input type="radio" name="scanner_type" value="2" checked="1"/>
             </td>
             <td>
               <xsl:call-template name="scanner-type-name">
@@ -5522,6 +5522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <input type="hidden" name="cmd" value="save_task"/>
+      <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
       <input type="hidden" name="scanner_id" value="0"/>
       <input type="hidden" name="osp_scanner_id" value="0"/>
       <xsl:variable name="scanner_id">

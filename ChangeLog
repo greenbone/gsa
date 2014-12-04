@@ -1,5 +1,11 @@
 2014-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Use correct scanner type value.
+	(html-edit-task-scanner-disabled): Add scanner_type value to the save
+	form.
+
+2014-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (save_task_omp): Revert 21088. Conditional is true as
 	value 1 is for OSP Scanner type.
 
