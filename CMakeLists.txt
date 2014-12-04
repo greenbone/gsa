@@ -365,6 +365,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/start_inactive.png
                src/html/classic/img/alert_sign.png
                src/html/classic/img/details.png
+               src/html/classic/img/details_inactive.png
                src/html/classic/img/list_inactive.png
                src/html/classic/img/p_bar_done.png
                src/html/classic/img/start.png
