@@ -1,3 +1,10 @@
+2014-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21123.
+
+	* src/gsad_omp.c (page_url): Replace the cmd param in the URL.  Also be
+	more careful about what can come before the parameters.
+
 2014-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21093.

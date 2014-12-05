@@ -677,12 +677,57 @@ page_url (credentials_t *credentials, const gchar *cmd)
 {
   GString *url;
 
+  assert (cmd);
+
   url = g_string_new ("");
 
-  g_string_append_printf (url, "?cmd=%s", cmd);
-
   if (credentials->caller && strlen (credentials->caller))
-    g_string_append_printf (url, "&%s", credentials->caller + 1);
+    {
+      gchar **split_question, *page, *params;
+
+      split_question = g_strsplit (credentials->caller, "?", 2);
+
+      page = *split_question;
+
+      if (page)
+        {
+          g_string_append_printf (url, "%s?cmd=%s", page, cmd);
+          params = split_question[1];
+        }
+      else
+        {
+          g_string_append_printf (url, "cmd=%s", cmd);
+          params = credentials->caller;
+        }
+      if (params)
+        {
+          gchar **split_amp, **point;
+
+          point = split_amp = g_strsplit (params, "&", 0);
+          while (*point)
+            {
+              gchar *param;
+
+              param = *point;
+
+              g_strstrip (param);
+
+              if (strstr (param, "cmd=") == param)
+                {
+                  point++;
+                  continue;
+                }
+
+              g_string_append_printf (url, "&%s", param);
+
+              point++;
+            }
+          g_strfreev (split_amp);
+        }
+      g_strfreev (split_question);
+    }
+  else
+    g_string_append_printf (url, "?cmd=%s", cmd);
 
   return g_string_free (url, FALSE);
 }
