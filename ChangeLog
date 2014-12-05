@@ -1,3 +1,8 @@
+2014-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (page_url): Replace the cmd param in the URL.  Also be
+	more careful about what can come before the parameters.
+
 2014-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Use correct scanner type value.
