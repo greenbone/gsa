@@ -1,3 +1,10 @@
+2014-12-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (new-user-role-select): Remove exclusion
+	of Super Admin role, so that the caller can control this.
+	(html-create-user-form): Exclude Super Admin explicitly.
+	(user [edit]): Include Super Admin if the user is already a Super Admin.
+
 2014-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (page_url): Replace the cmd param in the URL.  Also be

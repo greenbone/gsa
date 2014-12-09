@@ -29754,8 +29754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="roles" select="get_roles_response"/>
   <select name="role_id_optional:{$position}">
     <option value="--">--</option>
-    <xsl:apply-templates select="$roles/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"
-                         mode="newuser"/>
+    <xsl:apply-templates select="$roles" mode="newuser"/>
   </select>
   <xsl:if test="$count &gt; 1">
     <br/>
@@ -29860,7 +29859,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:call-template name="new-user-role-select">
-                      <xsl:with-param name="roles" select="get_roles_response"/>
+                      <xsl:with-param name="roles" select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
                       <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
                       <xsl:with-param name="position" select="$count + 1"/>
                     </xsl:call-template>
@@ -30372,8 +30371,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
-              <xsl:variable name="roles"
-                            select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
+              <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
+              <xsl:variable name="roles" select="../../../get_roles_response/role[$super or @id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
               <xsl:choose>
                 <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']) &gt; 0">
                   <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']/value">
@@ -30442,7 +30441,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:variable>
               <xsl:call-template name="new-user-role-select">
-                <xsl:with-param name="roles" select="../../../get_roles_response"/>
+                <xsl:with-param name="roles" select="../../../get_roles_response/role[$super or @id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
                 <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
                 <xsl:with-param name="position" select="$count + 1"/>
               </xsl:call-template>
