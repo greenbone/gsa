@@ -1,3 +1,9 @@
+2014-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [result-header]): Add image param.
+	(result [result-headers], result [result-body], html-results-table)
+	(result): Add Solution type column.
+
 2014-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [trash]): Add observer icon.

@@ -24579,6 +24579,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" mode="result-header">
   <xsl:param name="name" select="'type'"/>
   <xsl:param name="capital-name" select="'Severity'"/>
+  <xsl:param name="image" select="''"/>
   <xsl:param name="current" select="."/>
   <xsl:variable name="details">
     <xsl:choose>
@@ -24600,21 +24601,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="label">
+    <xsl:choose>
+      <xsl:when test="$image != ''">
+        <img src="{$image}" alt="{gsa:i18n ($capital-name, 'Result Window')}" title="{gsa:i18n ($capital-name, 'Result Window')}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="gsa:i18n ($capital-name, 'Result Window')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
       <a class="gbntablehead2" href="{$link-start}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
-        <xsl:value-of select="gsa:i18n ($capital-name, 'Result Window')"/>
+        <xsl:copy-of select="$label"/>
       </a>
     </xsl:when>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
       <a class="gbntablehead2" href="{$link-start}&amp;filter=sort-reverse={$name} first=1 {filters/term}&amp;token={/envelope/token}">
-        <xsl:value-of select="gsa:i18n ($capital-name, 'Result Window')"/>
+        <xsl:copy-of select="$label"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
       <a class="gbntablehead2" href="{$link-start}&amp;filter=sort={$name} first=1 {filters/term}&amp;token={/envelope/token}">
-        <xsl:value-of select="gsa:i18n ($capital-name, 'Result Window')"/>
+        <xsl:copy-of select="$label"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -24647,6 +24658,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:apply-templates select="../../." mode="result-details-icon"/>
           </div>
         </xsl:if>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'solution_type'"/>
+              <xsl:with-param name="capital-name" select="'Solution type'"/>
+              <xsl:with-param name="image" select="'/img/solution_type.png'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/solution_type.png" alt="{gsa:i18n ('Solution type', 'Result Window')}" title="{gsa:i18n ('Solution type', 'Result Window')}"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
       <td>
         <xsl:choose>
@@ -24828,6 +24853,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <td> <!-- Solution type -->
+      <xsl:variable name="solution_type">
+        <xsl:for-each select="str:split (nvt/tags, '|')">
+          <xsl:if test="'solution_type' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:call-template name="solution-icon">
+        <xsl:with-param name="solution_type" select="$solution_type"/>
+      </xsl:call-template>
+    </td>
     <td> <!-- Severity -->
       <xsl:variable name="severity_title">
         <xsl:choose>
@@ -24995,7 +25032,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="prognostic"/>
 
   <tr>
-    <td colspan="5" style="padding: 0">
+    <td colspan="6" style="padding: 0">
       <!-- Tags -->
       <xsl:if test="count(user_tags/tag)">
         <div class="note_box_box">
@@ -25596,6 +25633,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Vulnerability</name>
       </column>
       <column>
+        <name>Solution type</name>
+        <image>/img/solution_type.png</image>
+      </column>
+      <column>
         <name>Severity</name>
         <html>
           <before>
@@ -25663,6 +25704,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </a>
+    </td>
+    <td>
+      <xsl:variable name="solution_type">
+        <xsl:for-each select="str:split (nvt/tags, '|')">
+          <xsl:if test="'solution_type' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:call-template name="solution-icon">
+        <xsl:with-param name="solution_type" select="$solution_type"/>
+      </xsl:call-template>
     </td>
     <td>
       <xsl:variable name="severity_title">
