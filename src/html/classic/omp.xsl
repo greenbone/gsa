@@ -21433,6 +21433,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </div>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Permission'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Permission', name)}">

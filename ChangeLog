@@ -1,3 +1,7 @@
+2014-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (permission): Add observer icon.
+
 2014-12-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (new-user-role-select): Remove exclusion
