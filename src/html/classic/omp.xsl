@@ -6375,6 +6375,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="task" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Task'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
