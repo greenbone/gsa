@@ -7341,6 +7341,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="agent" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Agent'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -8607,6 +8610,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="alert" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Alert'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -9061,6 +9067,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="filter" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Filter'"/>
+      </xsl:call-template>
       <b>
         <xsl:value-of select="name"/>
       </b>
@@ -9689,6 +9698,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="tag" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Tag'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -11343,6 +11355,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="target" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Target'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -13327,6 +13342,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="config" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Config'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -14742,6 +14760,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="schedule" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Schedule'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -15411,6 +15432,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="scanner" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Scanner'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -15733,6 +15757,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="slave" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Slave'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -19430,6 +19457,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Note'"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="{gsa:i18n ('Result was an open port.', 'Note Table Row')}"><xsl:value-of select="gsa:i18n ('No NVT', 'Note Table Row', 'None')"/></abbr>
@@ -20600,6 +20630,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Override'"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="{gsa:i18n ('Result was an open port.', 'Override Table Row')}"><xsl:value-of select="gsa:i18n ('None', 'Window')"/></abbr>
@@ -20987,6 +21020,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="group" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Group'"/>
+      </xsl:call-template>
       <b>
         <xsl:value-of select="name"/>
       </b>
@@ -21600,6 +21636,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </div>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Permission'"/>
+      </xsl:call-template>
       <b>
         <xsl:value-of select="name"/>
       </b>
@@ -22166,6 +22205,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="port_list" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Port List'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
@@ -22886,6 +22928,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report_format" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Report Format'"/>
+      </xsl:call-template>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="summary != ''">
@@ -28755,6 +28800,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Role'"/>
+      </xsl:call-template>
       <b>
         <xsl:value-of select="name"/>
       </b>

@@ -15306,11 +15306,11 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
 #define GET_TRASH_RESOURCE(capability, command, name)                         \
   if (command_enabled (credentials, capability))                              \
       {                                                                       \
-        if (openvas_server_sendf (&session,                                   \
-                                  "<" command                                 \
-                                  " trash=\"1\""                              \
-                                  " sort_field=\"name\""                      \
-                                  " sort_order=\"ascending\"/>")              \
+        if (openvas_server_sendf                                              \
+             (&session,                                                       \
+              "<" command                                                     \
+              " filter=\"rows=-1 sort=name owner=any permission=any\""        \
+              " trash=\"1\"/>")                                               \
             == -1)                                                            \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
