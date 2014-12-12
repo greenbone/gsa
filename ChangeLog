@@ -1,3 +1,26 @@
+2014-12-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c (init_validator, exec_omp_post): Renamed
+	resume_stopped_task to resume_task.
+
+	* src/gsad_omp.c (resume_stopped_task_omp): Renamed to resume_task_omp.
+	(create_permission_omp): Adjust to name change.
+	(resume_task_omp): Renamed command string from "resume_stopped"
+	to "resume".
+
+	* src/gsad_omp.h: Adjust proto accordingly.
+
+	* src/html/classic/gsad.xsl (template resume_stopped_task_response):
+	Renamed to resume_task_response.
+	(template html-gsa-logo): Adjust to name change.
+
+	* src/html/classic/omp.xsl (task-icons, get_task, get_tasks): Adjust
+	to name change.
+	(resume_stopped_task_response): Renamed to resume_task_response.
+
+	* src/html/classic/po/de.xml, src/html/classic/po/zh.xml: Update
+	strings about resume tasks.
+
 2014-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [result-header]): Add image param.

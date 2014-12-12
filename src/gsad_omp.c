@@ -3680,7 +3680,7 @@ stop_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Resume a stopped task, get all tasks, XSL transform the result.
+ * @brief Resume a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3688,9 +3688,9 @@ stop_task_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-resume_stopped_task_omp (credentials_t * credentials, params_t *params)
+resume_task_omp (credentials_t * credentials, params_t *params)
 {
-  return resource_action (credentials, params, "task", "resume_stopped");
+  return resource_action (credentials, params, "task", "resume");
 }
 
 /**
@@ -17369,7 +17369,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
                   "<subject id=\"%s\"><type>%s</type></subject>"
                   "</create_permission>"
                   "<create_permission>"
-                  "<name>resume_stopped_task</name>"
+                  "<name>resume_task</name>"
                   "<comment>%s</comment>"
                   "<resource id=\"%s\"/>"
                   "<subject id=\"%s\"><type>%s</type></subject>"

@@ -3623,14 +3623,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="status='Stopped'">
       <xsl:choose>
-        <xsl:when test="gsa:may ('resume_stopped_task') = 0">
+        <xsl:when test="gsa:may ('resume_task') = 0">
           <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task Table Row')}" title="{gsa:i18n ('Permission to resume task denied', 'Task Table Row')}"
              style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="resume-icon">
             <xsl:with-param name="type">task</xsl:with-param>
-            <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
+            <xsl:with-param name="cmd">resume_task</xsl:with-param>
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -4776,9 +4776,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="resume_stopped_task_response">
+<xsl:template match="resume_task_response">
   <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Resume Stopped Task</xsl:with-param>
+    <xsl:with-param name="operation">Resume Task</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -6503,7 +6503,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="stop_task_response"/>
   <xsl:apply-templates select="modify_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
-  <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="commands_response/get_tasks_response/task"
                        mode="details"/>
 </xsl:template>
@@ -6520,7 +6519,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="stop_task_response"/>
   <xsl:apply-templates select="modify_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
-  <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
 </xsl:template>
 

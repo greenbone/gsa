@@ -646,11 +646,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="resume_stopped_task_response" mode="response-indicator">
+<xsl:template match="resume_task_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Resume Stopped Task'"/>
+    <xsl:with-param name="command" select="'Resume Task'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -824,7 +824,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_task/stop_task_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_task/resume_stopped_task_response"
+        <xsl:apply-templates select="get_task/resume_task_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/create_report_response"
                              mode="response-indicator"/>
@@ -1286,7 +1286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/stop_task_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_tasks/resume_stopped_task_response"
+        <xsl:apply-templates select="get_tasks/resume_task_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_agent_response"
                              mode="response-indicator"/>

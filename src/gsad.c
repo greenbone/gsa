@@ -1008,7 +1008,7 @@ init_validator ()
                          "|(new_task)"
                          "|(new_user)"
                          "|(restore)"
-                         "|(resume_stopped_task)"
+                         "|(resume_task)"
                          "|(run_wizard)"
                          "|(test_alert)"
                          "|(save_agent)"
@@ -2200,7 +2200,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (import_port_list)
   ELSE (import_report_format)
   ELSE (restore)
-  ELSE (resume_stopped_task)
+  ELSE (resume_task)
   ELSE (run_wizard)
   ELSE (save_agent)
   ELSE (save_alert)

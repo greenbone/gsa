@@ -5368,7 +5368,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Fortsetzen- oder Start</str>
     </msg>
     <msg>
-      <id>resume stopped</id>
+      <id>resume</id>
       <str>Fortsetzen</str>
     </msg>
     <msg>
@@ -5507,7 +5507,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>darf Aufgaben fortsetzen oder starten</str>
     </msg>
     <msg>
-      <id>may resume stopped tasks</id>
+      <id>may resume tasks</id>
       <str>darf gestoppte Aufgaben fortsetzen</str>
     </msg>
     <msg>

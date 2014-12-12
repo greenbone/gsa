@@ -5303,7 +5303,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>允许继续或开始任务</str>
     </msg>
     <msg>
-      <id>may resume stopped tasks</id>
+      <id>may resume tasks</id>
       <str>允许继续已停止的任务</str>
     </msg>
     <msg>

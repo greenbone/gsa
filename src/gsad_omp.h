@@ -49,7 +49,7 @@ char * edit_task_omp (credentials_t *, params_t *);
 char * new_task_omp (credentials_t *, params_t *);
 char * save_task_omp (credentials_t *, params_t *);
 char * save_container_task_omp (credentials_t *, params_t *);
-char * resume_stopped_task_omp (credentials_t *, params_t *);
+char * resume_task_omp (credentials_t *, params_t *);
 char * start_task_omp (credentials_t *, params_t *);
 char * stop_task_omp (credentials_t *, params_t *);
 
