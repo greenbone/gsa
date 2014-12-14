@@ -1,5 +1,9 @@
 2014-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (minor-details): Add owner.
+
+2014-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_permission): Add filter, now that users have
 	owners.
 

@@ -4462,6 +4462,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><xsl:value-of select="gsa:i18n ('Last modified', 'Window')"/>:</td>
         <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
       </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Owner', 'Window')"/>:</td>
+        <td><xsl:value-of select="owner/name"/></td>
+      </tr>
     </table>
   </div>
 </xsl:template>
