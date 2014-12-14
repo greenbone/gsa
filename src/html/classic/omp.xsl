@@ -20995,6 +20995,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="group">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Group'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;group={../groups/term}&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Group', name)}">
@@ -28822,6 +28825,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'Role'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;role={../roles/term}&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Role', name)}">
@@ -30194,6 +30200,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="user">
   <tr class="{gsa:table-row-class(position())}">
     <td>
+      <xsl:call-template name="observers-icon">
+        <xsl:with-param name="type" select="'User'"/>
+      </xsl:call-template>
       <b>
         <a href="/omp?cmd=get_user&amp;user_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('User', name)}">
