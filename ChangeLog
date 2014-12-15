@@ -1,5 +1,10 @@
 2014-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (preference [edit-details]): Don't print the
+	value for osp_file preferences as files may be huge.
+
+2014-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (preference [edit-details]): Handle osp_file
 	case.
 

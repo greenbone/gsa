@@ -12166,7 +12166,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  value="{value}" size="30" maxlength="400"/>
         </xsl:when>
         <xsl:when test="type='osp_file'">
-          <input type="input" name="osp_pref_{name}" value="{value}"/>
+          <input type="file" name="osp_pref_{name}" value="{value}"/>
         </xsl:when>
         <xsl:when test="type='osp_boolean'">
           <select name="osp_pref_{name}">
@@ -12311,6 +12311,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="type = 'osp_boolean' and value = '0'">False</xsl:when>
         <xsl:when test="type = 'osp_boolean'">True</xsl:when>
+        <xsl:when test="type = 'osp_file'">
+          <xsl:if test="string-length(value) &gt; 0">Uploaded file</xsl:if>
+        </xsl:when>
         <xsl:when test="substring (type, 1, 4) ='osp_'">
           <xsl:value-of select="value"/>
         </xsl:when>
