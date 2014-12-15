@@ -1,3 +1,8 @@
+2014-12-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_omp.c (create_permission_omp): Don't create the dropped
+	permission "resume_or_start_task" anymore.
+
 2014-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (minor-details): Add owner.

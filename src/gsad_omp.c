@@ -17364,22 +17364,12 @@ create_permission_omp (credentials_t *credentials, params_t *params)
                   "<subject id=\"%s\"><type>%s</type></subject>"
                   "</create_permission>"
                   "<create_permission>"
-                  "<name>resume_or_start_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
                   "<name>resume_task</name>"
                   "<comment>%s</comment>"
                   "<resource id=\"%s\"/>"
                   "<subject id=\"%s\"><type>%s</type></subject>"
                   "</create_permission>"
                   "</commands>",
-                  comment ? comment : "",
-                  resource_id,
-                  subject_id,
-                  subject_type,
                   comment ? comment : "",
                   resource_id,
                   subject_id,
