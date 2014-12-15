@@ -1,5 +1,10 @@
 2014-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (preference [edit-details]): Handle osp_file
+	case.
+
+2014-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (preferences [details])
 	(preference [edit-details]): Rename osp_ovaldi_file to ovaldef_file for
 	consistency.

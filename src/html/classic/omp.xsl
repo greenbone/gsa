@@ -12165,6 +12165,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="text" name="osp_pref_{name}"
                  value="{value}" size="30" maxlength="400"/>
         </xsl:when>
+        <xsl:when test="type='osp_file'">
+          <input type="input" name="osp_pref_{name}" value="{value}"/>
+        </xsl:when>
         <xsl:when test="type='osp_boolean'">
           <select name="osp_pref_{name}">
             <xsl:call-template name="opt">
