@@ -12109,7 +12109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type='file' and string-length(value) &gt; 0">
           <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config Table Row')"/></i>
         </xsl:when>
-        <xsl:when test="type='osp_ovaldi_file'">Files list.</xsl:when>
+        <xsl:when test="type='osp_ovaldef_file'">Files list.</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
         </xsl:otherwise>
@@ -12144,7 +12144,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
 
         <!-- OSP config types. -->
-        <xsl:when test="type='osp_ovaldi_file'">
+        <xsl:when test="type='osp_ovaldef_file'">
           <xsl:variable name="value">
             <xsl:value-of select="value"/>
           </xsl:variable>
