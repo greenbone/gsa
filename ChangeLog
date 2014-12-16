@@ -1,3 +1,8 @@
+2014-12-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xl (preference [details])
+	(preference [edit-details]): Handle osp_selection case.
+
 2014-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (preference [edit-details]): Don't print the
