@@ -1,3 +1,8 @@
+2014-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Add owner=any to users case, now that users
+	have owners.
+
 2014-12-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xl (preference [details])
