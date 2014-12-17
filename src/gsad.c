@@ -798,7 +798,8 @@ init_validator ()
 
   openvas_validator_add (validator,
                          "cmd",
-                         "^(clone)"
+                         "^(bulk_delete)"
+                         "|(clone)"
                          "|(create_agent)"
                          "|(create_config)"
                          "|(create_alert)"
@@ -1007,6 +1008,7 @@ init_validator ()
                          "|(new_target)"
                          "|(new_task)"
                          "|(new_user)"
+                         "|(process_bulk)"
                          "|(restore)"
                          "|(resume_task)"
                          "|(run_wizard)"
@@ -1060,6 +1062,8 @@ init_validator ()
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
+  openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   openvas_validator_add (validator, "caller",     "^.*$");
   openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
@@ -1241,6 +1245,12 @@ init_validator ()
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
+  /* the "bulk_[...].x" parameters are used to identify the image type
+   *  form element used to submit the form for process_bulk */
+  openvas_validator_alias (validator, "bulk_delete.x", "number");
+  openvas_validator_alias (validator, "bulk_export.x", "number");
+  openvas_validator_alias (validator, "bulk_trash.x",  "number");
+  openvas_validator_alias (validator, "bulk_select",    "boolean");
   openvas_validator_alias (validator, "charts", "boolean");
   openvas_validator_alias (validator, "chart_type", "name");
   openvas_validator_alias (validator, "chart_template", "name");
@@ -1502,7 +1512,8 @@ params_append_mhd (params_t *params,
                    int chunk_size,
                    int chunk_offset)
 {
-  if ((strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+  if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
+      || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
@@ -2131,6 +2142,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_tasks");
     }
+  ELSE (bulk_delete)
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)
@@ -2308,7 +2320,8 @@ static int
 params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value)
 {
-  if ((strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+  if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
+      || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
@@ -2834,6 +2847,9 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_scanner)
   ELSE (new_schedule)
   ELSE (new_slave)
+  else if (!strcmp (cmd, "process_bulk"))
+    return process_bulk_omp (credentials, params, content_type,
+                             content_disposition, response_size);
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (verify_scanner)

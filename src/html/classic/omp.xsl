@@ -4336,59 +4336,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <div>
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <xsl:variable name="current" select="."/>
-            <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="exslt:node-set ($columns)/column">
-              <xsl:choose>
-                <xsl:when test="count (column) = 0">
-                  <xsl:variable name="field">
-                    <xsl:choose>
-                      <xsl:when test="field">
-                        <xsl:value-of select="field"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="gsa:column-filter-name (name)"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <td rowspan="2">
-                    <xsl:copy-of select="html/before/*"/>
-                    <xsl:call-template name="column-name">
-                      <xsl:with-param name="head" select="name"/>
-                      <xsl:with-param name="image" select="image"/>
-                      <xsl:with-param name="name" select="$field"/>
-                      <xsl:with-param name="type" select="$type"/>
-                      <xsl:with-param name="current" select="$current"/>
-                      <xsl:with-param name="token" select="$token"/>
-                      <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                      <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
-                      <xsl:with-param name="i18n-context" select="concat ($cap-type, ' Window')"/>
-                    </xsl:call-template>
-                    <xsl:copy-of select="html/after/*"/>
-                  </td>
-                </xsl:when>
-                <xsl:otherwise>
-                  <td colspan="{count (column)}">
-                    <xsl:value-of select="gsa:i18n (name, concat ($cap-type, ' Window'))"/>
-                  </td>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-            <xsl:if test="$icon-count &gt; 0">
-              <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
-            </xsl:if>
-          </tr>
-          <tr class="gbntablehead2">
-            <xsl:variable name="current" select="."/>
-            <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="exslt:node-set ($columns)/column">
-              <xsl:choose>
-                <xsl:when test="count (column) = 0">
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:for-each select="column">
+        <xsl:variable name="table">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <xsl:variable name="current" select="."/>
+              <xsl:variable name="token" select="/envelope/token"/>
+              <xsl:for-each select="exslt:node-set ($columns)/column">
+                <xsl:choose>
+                  <xsl:when test="count (column) = 0">
                     <xsl:variable name="field">
                       <xsl:choose>
                         <xsl:when test="field">
@@ -4399,7 +4354,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         </xsl:otherwise>
                       </xsl:choose>
                     </xsl:variable>
-                    <td style="font-size:10px;">
+                    <td rowspan="2">
                       <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
                         <xsl:with-param name="head" select="name"/>
@@ -4414,33 +4369,156 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:call-template>
                       <xsl:copy-of select="html/after/*"/>
                     </td>
-                  </xsl:for-each>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td colspan="{count (column)}">
+                      <xsl:value-of select="gsa:i18n (name, concat ($cap-type, ' Window'))"/>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+              <xsl:if test="$icon-count &gt; 0">
+                <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
+              </xsl:if>
+            </tr>
+            <tr class="gbntablehead2">
+              <xsl:variable name="current" select="."/>
+              <xsl:variable name="token" select="/envelope/token"/>
+              <xsl:for-each select="exslt:node-set ($columns)/column">
+                <xsl:choose>
+                  <xsl:when test="count (column) = 0">
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:for-each select="column">
+                      <xsl:variable name="field">
+                        <xsl:choose>
+                          <xsl:when test="field">
+                            <xsl:value-of select="field"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="gsa:column-filter-name (name)"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:variable>
+                      <td style="font-size:10px;">
+                        <xsl:copy-of select="html/before/*"/>
+                        <xsl:call-template name="column-name">
+                          <xsl:with-param name="head" select="name"/>
+                          <xsl:with-param name="image" select="image"/>
+                          <xsl:with-param name="name" select="$field"/>
+                          <xsl:with-param name="type" select="$type"/>
+                          <xsl:with-param name="current" select="$current"/>
+                          <xsl:with-param name="token" select="$token"/>
+                          <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                          <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
+                          <xsl:with-param name="i18n-context" select="concat ($cap-type, ' Window')"/>
+                        </xsl:call-template>
+                        <xsl:copy-of select="html/after/*"/>
+                      </td>
+                    </xsl:for-each>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </tr>
+
+            <xsl:variable name="bulk-elements">
+              <xsl:variable name="selection_type">
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/bulk_select != 0">selection</xsl:when>
+                  <xsl:otherwise>page contents</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <xsl:choose>
+                <xsl:when test="/envelope/params/bulk_select != 0">
+                  <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;bulk_select=0&amp;token={/envelope/token}" style="margin-right:5px">
+                    <img src="/img/list.png" alt="Normal view" title="{gsa:i18n ('Switch to normal view', 'Bulk Action')}"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;bulk_select=1&amp;token={/envelope/token}" style="margin-right:5px">
+                    <img src="/img/alterable.png" alt="Selection view" title="{gsa:i18n ('Switch to selection view', 'Bulk Action')}"/>
+                  </a>
                 </xsl:otherwise>
               </xsl:choose>
-            </xsl:for-each>
-          </tr>
-          <xsl:apply-templates select="$resources"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-                <div class="float_right">
-                  <xsl:call-template name="filter-window-pager">
-                    <xsl:with-param name="type" select="$type"/>
-                    <xsl:with-param name="list" select="$resources-summary"/>
-                    <xsl:with-param name="count" select="$count"/>
-                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
-                    <xsl:with-param name="full_count" select="$full-count"/>
-                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                  </xsl:call-template>
-                </div>
-                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter Box')"/>:
-                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
+              <xsl:text> </xsl:text>
+              <input type="hidden" name="cmd" value="process_bulk"/>
+              <input type="hidden" name="next" value="get_{$type}s"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <input type="hidden" name="filt_id" value="{filters/@id}"/>
+
+              <xsl:for-each select="exslt:node-set($extra_params)/param">
+                <input type="hidden" name="{name}" value="{value}"/>
+              </xsl:for-each>
+
+              <input type="hidden" name="resource_type" value="{$type}"/>
+              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report')">
+                <input style="margin-right:3px" type="image" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
+              </xsl:if>
+              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report')">
+                <input style="margin-right:3px" type="image" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
+              </xsl:if>
+              <xsl:if test="$type != 'report'">
+                <input style="margin-right:3px" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.png"/>
+              </xsl:if>
+            </xsl:variable>
+
+            <xsl:choose>
+              <xsl:when test="not (/envelope/params/bulk_select != 0)">
+                <xsl:apply-templates select="$resources"/>
+                <tr class="gbntablehead2">
+                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
+                    <form name="bulk-actions">
+                      <xsl:for-each select="$resources">
+                        <input type="hidden" name="bulk_selected:{@id}" value="1"/>
+                      </xsl:for-each>
+                      <xsl:copy-of select="$bulk-elements"/>
+                    </form>
+                  </td>
+                </tr>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="$resources"/>
+                <tr class="gbntablehead2">
+                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
+                    <xsl:copy-of select="$bulk-elements"/>
+                  </td>
+                </tr>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="string-length (filters/term) &gt; 0">
+              <tr>
+                <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
+                  <div class="float_right">
+                    <xsl:call-template name="filter-window-pager">
+                      <xsl:with-param name="type" select="$type"/>
+                      <xsl:with-param name="list" select="$resources-summary"/>
+                      <xsl:with-param name="count" select="$count"/>
+                      <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                      <xsl:with-param name="full_count" select="$full-count"/>
+                      <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                    </xsl:call-template>
+                  </div>
+                  (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter Box')"/>:
+                  <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                    <xsl:value-of select="filters/term"/>
+                  </a>)
+                </td>
+              </tr>
+            </xsl:if>
+          </table>
+        </xsl:variable>
+
+        <xsl:choose>
+          <xsl:when test="/envelope/params/bulk_select != 0">
+            <form name="bulk-actions">
+              <xsl:copy-of select="$table"/>
+            </form>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:copy-of select="$table"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:call-template name="wizard"/>
       </div>
     </div>
@@ -5380,65 +5458,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td class="threat_info_table">
       <xsl:value-of select="result_count/false_positive/full"/>
     </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="$delta = @id">
-          <img src="/img/delta_inactive.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"
-               title="{gsa:i18n ('Report is already selected for delta', 'Report Table Row')}"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:when test="string-length (../../filters/keywords/keyword[column='task_id']) = 0">
-          <img src="/img/delta_inactive.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"
-               title="{gsa:i18n ('Filter must be limited to a single Task to allow delta reports', 'Report Table Row')}"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:when test="string-length ($delta) &gt; 0">
-          <a href="/omp?cmd=get_report&amp;report_id={$delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Compare', 'Report Table Row')}"
-             style="margin-left:3px;">
-            <img src="/img/delta_second.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Compare', 'Report Table Row')}"
-             style="margin-left:3px;">
-            <img src="/img/delta.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="boolean ($observed)">
-          <img src="/img/delete_inactive.png"
-               border="0"
-               alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="{gsa:i18n ('Report is observed', 'Report Table Row')}"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested'">
-          <img src="/img/delete_inactive.png"
-               border="0"
-               alt="{gsa:i18n ('Delete', 'Table Row')}"
-               title="{gsa:i18n ('Scan is active', 'Report Table Row')}"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="delete-icon">
-            <xsl:with-param name="type">report</xsl:with-param>
-            <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="params">
-              <input type="hidden" name="task_id" value="{$task_id}"/>
-              <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-              <input type="hidden" name="next" value="get_reports"/>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="hidden" name="task_filter" value="{/envelope/params/task_filter}"/>
-              <input type="hidden" name="task_filt_id" value="{/envelope/params/task_filt_id}"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:choose>
+            <xsl:when test="$delta = @id">
+              <img src="/img/delta_inactive.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"
+                  title="{gsa:i18n ('Report is already selected for delta', 'Report Table Row')}"
+                  style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:when test="string-length (../../filters/keywords/keyword[column='task_id']) = 0">
+              <img src="/img/delta_inactive.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"
+                  title="{gsa:i18n ('Filter must be limited to a single Task to allow delta reports', 'Report Table Row')}"
+                  style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:when test="string-length ($delta) &gt; 0">
+              <a href="/omp?cmd=get_report&amp;report_id={$delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Compare', 'Report Table Row')}"
+                style="margin-left:3px;">
+                <img src="/img/delta_second.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Compare', 'Report Table Row')}"
+                style="margin-left:3px;">
+                <img src="/img/delta.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="boolean ($observed)">
+              <img src="/img/delete_inactive.png"
+                  border="0"
+                  alt="{gsa:i18n ('Delete', 'Table Row')}"
+                  title="{gsa:i18n ('Report is observed', 'Report Table Row')}"
+                  style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested'">
+              <img src="/img/delete_inactive.png"
+                  border="0"
+                  alt="{gsa:i18n ('Delete', 'Table Row')}"
+                  title="{gsa:i18n ('Scan is active', 'Report Table Row')}"
+                  style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="delete-icon">
+                <xsl:with-param name="type">report</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="task_id" value="{$task_id}"/>
+                  <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+                  <input type="hidden" name="next" value="get_reports"/>
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                  <input type="hidden" name="task_filter" value="{/envelope/params/task_filter}"/>
+                  <input type="hidden" name="task_filt_id" value="{/envelope/params/task_filt_id}"/>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -6363,14 +6452,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </td>
-        <td>
-          <xsl:call-template name="task-icons"/>
-          <xsl:call-template name="list-window-line-icons">
-            <xsl:with-param name="cap-type" select="'Task'"/>
-            <xsl:with-param name="type" select="'task'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </td>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/bulk_select != 0">
+            <td style="text-align:center">
+              <label style="width:100%">
+                <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+              </label>
+            </td>
+          </xsl:when>
+          <xsl:otherwise>
+            <td>
+              <xsl:call-template name="task-icons"/>
+              <xsl:call-template name="list-window-line-icons">
+                <xsl:with-param name="cap-type" select="'Task'"/>
+                <xsl:with-param name="type" select="'task'"/>
+                <xsl:with-param name="id" select="@id"/>
+              </xsl:call-template>
+            </td>
+          </xsl:otherwise>
+        </xsl:choose>
       </tr>
     </xsl:otherwise>
   </xsl:choose>
@@ -6558,38 +6658,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
         <html>
           <before>
-            <div style="float: right; display: inline">
-              <form method="get" action="">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_tasks"/>
-                <input type="hidden" name="filter" value="{filters/term}"/>
-                <input type="hidden"
-                       name="refresh_interval"
-                       value="{/envelope/autorefresh/@interval}"/>
-                <xsl:choose>
-                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="image"
-                           name="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           value="No Overrides"
-                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="0"/>
-                    <input type="image"
-                           name="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           value="Overrides are Applied"
-                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </form>
-            </div>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/bulk_select != 0">
+                <div style="float: right; display: inline">
+                  <xsl:choose>
+                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                      <img src="/img/overrides_disabled.png"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <img src="/img/overrides_enabled.png"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div style="float: right; display: inline">
+                  <form method="get" action="">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_tasks"/>
+                    <input type="hidden" name="filter" value="{filters/term}"/>
+                    <input type="hidden"
+                          name="refresh_interval"
+                          value="{/envelope/autorefresh/@interval}"/>
+                    <xsl:choose>
+                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                        <input type="hidden" name="overrides" value="1"/>
+                        <input type="image"
+                              name="No Overrides"
+                              src="/img/overrides_disabled.png"
+                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              value="No Overrides"
+                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="overrides" value="0"/>
+                        <input type="image"
+                              name="Overrides are Applied"
+                              src="/img/overrides_enabled.png"
+                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              value="Overrides are Applied"
+                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </form>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
           </before>
         </html>
       </column>
@@ -9597,24 +9719,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="gsa:date (modification_time)"/>
     </td>
-    <td>
-      <xsl:call-template name="toggle-tag-icon">
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="enable" select="number(active=0)"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="next" value="get_tags"/>
-          <input type="hidden" name="tag_id" value="{@id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        </xsl:with-param>
-        <xsl:with-param name="fragment" select="'#user_tags'"/>
-      </xsl:call-template>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Tag'"/>
-        <xsl:with-param name="type" select="'tag'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="toggle-tag-icon">
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="enable" select="number(active=0)"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="next" value="get_tags"/>
+              <input type="hidden" name="tag_id" value="{@id}"/>
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            </xsl:with-param>
+            <xsl:with-param name="fragment" select="'#user_tags'"/>
+          </xsl:call-template>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Tag'"/>
+            <xsl:with-param name="type" select="'tag'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -19449,15 +19582,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Note'"/>
-        <xsl:with-param name="type" select="'note'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params" select="$params-get"/>
-        <xsl:with-param name="next" select="$next"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Note'"/>
+            <xsl:with-param name="type" select="'note'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params" select="$params-get"/>
+            <xsl:with-param name="next" select="$next"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -20622,15 +20766,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Override'"/>
-        <xsl:with-param name="type" select="'override'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params" select="$params-get"/>
-        <xsl:with-param name="next" select="$next"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Override'"/>
+            <xsl:with-param name="type" select="'override'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params" select="$params-get"/>
+            <xsl:with-param name="next" select="$next"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -23804,38 +23959,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
         <html>
           <before>
-            <div style="float: right; display: inline">
-              <form method="get" action="">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_reports"/>
-                <input type="hidden" name="filter" value="{filters/term}"/>
-                <input type="hidden"
-                       name="refresh_interval"
-                       value="{/envelope/autorefresh/@interval}"/>
-                <xsl:choose>
-                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="image"
-                           name="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           value="No Overrides"
-                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="0"/>
-                    <input type="image"
-                           name="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           value="Overrides are Applied"
-                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </form>
-            </div>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/bulk_select != '0'">
+                <div style="float: right; display: inline">
+                  <xsl:choose>
+                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                      <img src="/img/overrides_disabled.png"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <img src="/img/overrides_enabled.png"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div style="float: right; display: inline">
+                  <form method="get" action="">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_reports"/>
+                    <input type="hidden" name="filter" value="{filters/term}"/>
+                    <input type="hidden"
+                          name="refresh_interval"
+                          value="{/envelope/autorefresh/@interval}"/>
+                    <xsl:choose>
+                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                        <input type="hidden" name="overrides" value="1"/>
+                        <input type="image"
+                              name="No Overrides"
+                              src="/img/overrides_disabled.png"
+                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              value="No Overrides"
+                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="overrides" value="0"/>
+                        <input type="image"
+                              name="Overrides are Applied"
+                              src="/img/overrides_enabled.png"
+                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              value="Overrides are Applied"
+                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </form>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
           </before>
         </html>
       </column>
@@ -25652,38 +25829,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Severity</name>
         <html>
           <before>
-            <div style="float: right; display: inline">
-              <form method="get" action="">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_results"/>
-                <input type="hidden" name="filter" value="{filters/term}"/>
-                <input type="hidden"
-                       name="refresh_interval"
-                       value="{/envelope/autorefresh/@interval}"/>
-                <xsl:choose>
-                  <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                    <input type="hidden" name="overrides" value="1"/>
-                    <input type="image"
-                           name="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           value="No Overrides"
-                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="overrides" value="0"/>
-                    <input type="image"
-                           name="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           value="Overrides are Applied"
-                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </form>
-            </div>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/bulk_select != 0">
+                <div style="float: right; display: inline">
+                  <xsl:choose>
+                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                      <img src="/img/overrides_disabled.png"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <img src="/img/overrides_enabled.png"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          style="margin-left:3px;margin-right:3px;"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div style="float: right; display: inline">
+                  <form method="get" action="">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_results"/>
+                    <input type="hidden" name="filter" value="{filters/term}"/>
+                    <input type="hidden"
+                          name="refresh_interval"
+                          value="{/envelope/autorefresh/@interval}"/>
+                    <xsl:choose>
+                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
+                        <input type="hidden" name="overrides" value="1"/>
+                        <input type="image"
+                              name="No Overrides"
+                              src="/img/overrides_disabled.png"
+                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              value="No Overrides"
+                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="overrides" value="0"/>
+                        <input type="image"
+                              name="Overrides are Applied"
+                              src="/img/overrides_enabled.png"
+                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              value="Overrides are Applied"
+                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                              style="margin-left:3px;margin-right:3px;"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </form>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
           </before>
         </html>
       </column>
@@ -25699,7 +25898,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -25791,6 +25990,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="gsa:long-time (creation_time)"/>
     </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -32518,6 +32727,67 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_settings_response"/>
 
+<!-- BEGIN BULK ACTION MANAGEMENT -->
+<xsl:template match="process_bulk">
+  <xsl:variable name="resources" select="selections/selection/@id"/>
+  <xsl:variable name="type_string">
+    <xsl:choose>
+      <xsl:when test="count ($resources) = 1">
+        <xsl:value-of select="gsa:i18n (gsa:type-name (type), gsa:type-name (type))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="gsa:i18n (gsa:type-name-plural (type), gsa:type-name (type))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="plural_string">
+    <xsl:choose>
+      <xsl:when test="count ($resources) = 1">
+        <xsl:text></xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text> PLURAL</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <div class="gb_window" style="width:500px">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
+    <div class="gb_window_part_content">
+      <form style="display:inline;" method="post">
+        <center>
+          <div style="margin-bottom:10px">
+            <xsl:choose>
+              <xsl:when test="action = 'delete'">
+                <xsl:value-of select="concat (gsa:i18n (concat ('#BULK DELETE CONFIRM PREFIX', $plural_string ,'#'), 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n (concat ('#BULK DELETE CONFIRM SUFFIX', $plural_string ,'#'), 'Bulk Action', ' will be deleted.'))"/>
+                <input type="hidden" name="cmd" value="bulk_delete"/>
+              </xsl:when>
+              <xsl:when test="action = 'trash'">
+                <xsl:value-of select="concat (gsa:i18n (concat ('#BULK TRASH CONFIRM PREFIX', $plural_string ,'#'), 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n (concat ('#BULK TRASH CONFIRM SUFFIX', $plural_string ,'#'), 'Bulk Action', ' will be moved to the trashcan.'))"/>
+                <input type="hidden" name="cmd" value="bulk_delete"/>
+              </xsl:when>
+            </xsl:choose>
+
+            <xsl:for-each select="/envelope/params/*">
+              <xsl:choose>
+                <xsl:when test="starts-with (name (), 'bulk_') or name() = 'cmd'">
+                </xsl:when>
+                <xsl:when test="name() = '_param'">
+                  <input type="hidden" name="{name}" value="{value}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="{name()}" value="{text()}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </div>
+          <input type="submit" value="OK"/>
+        </center>
+      </form>
+    </div>
+  </div>
+</xsl:template>
 
 <!-- BEGIN PROTOCOL DOC MANAGEMENT -->
 

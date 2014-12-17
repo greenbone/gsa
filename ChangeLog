@@ -1,3 +1,36 @@
+2014-12-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add bulk delete and export of page contents or checkbox selection
+	for Scan Management and Tags.
+
+	* src/gsad_omp.c (process_bulk_omp, bulk_delete_omp): New functions.
+
+	* src/gsad_omp.h (process_bulk_omp, bulk_delete_omp): New prototypes.
+
+	* src/gsad.c (init_validator): Add bulk_delete and process_bulk
+	commands. Add parameters bulk_selected:name, bulk_selected:value,
+	bulk_delete.x, bulk_export.x, bulk_delete.x, bulk_select.
+	(params_append_mhd): Add case for bulk_selected.
+	(exec_omp_post): Add case for bulk_delete command.
+	(params_mhd_add): Add case for bulk_selected.
+	(exec_omp_get): Add case for process_bulk command.
+
+	* src/html/classic/omp.xsl (list-window): Add table row for bulk action
+	icons. Either wrap table in a HTML form element for checkbox selections
+	or build a form in the new bulk actions row that selects all items on
+	the current page.
+	(report, task): Replace action icons with checkbox if bulk_select is on.
+	(html-tasks-table): Make overrides icon static if bulk_select is on.
+	(tag, note, override): Replace action icons with checkbox if
+	bulk_select is on.
+	(html-reports-table): Make overrides icon static if bulk_select is on.
+	(html-results-table): Make overrides icon static and add Actions column
+	if bulk_select is on.
+	(result): Add checkbox if bulk_select is on.
+	(process_bulk): New template.
+
+	* src/html/classic/po/de.xml: Add messages for bulk actions.
+
 2014-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_role): Limit groups for Super dropdown to those

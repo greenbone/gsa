@@ -346,6 +346,10 @@ char * save_auth_omp (credentials_t *, params_t *);
 char * save_chart_preference_omp (credentials_t *, params_t *, gchar **,
                                   gchar **);
 
+char * process_bulk_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
+char * bulk_delete_omp (credentials_t *, params_t *);
+
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);
 char * wizard_get_omp (credentials_t *, params_t *);

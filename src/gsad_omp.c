@@ -21356,6 +21356,210 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
   return wizard_get (credentials, params, NULL);
 }
 
+/**
+ * @brief Returns a process_bulk page.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+process_bulk_omp (credentials_t *credentials, params_t *params,
+                  enum content_type * content_type,
+                  char **content_disposition, gsize *content_length)
+{
+  GString *bulk_string;
+  const char *type, *action;
+  char *param_name;
+  params_t *selected_ids;
+  param_t *param;
+  params_iterator_t iter;
+
+  type = params_value (params, "resource_type");
+  if (type == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while performing a bulk action. "
+                         "Diagnostics: Required parameter 'resource_type' was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  if (params_valid (params, "bulk_delete.x"))
+    action = "delete";
+  else if (params_valid (params, "bulk_export.x"))
+    action = "export";
+  else if (params_value (params, "bulk_trash.x"))
+    action = "trash";
+  else
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while performing a bulk action. "
+                         "Diagnostics: Could not determine the action.",
+                         "/omp?cmd=get_tasks");
+
+  if (strcmp (action, "export") == 0)
+    {
+      bulk_string
+        = g_string_new ("owner=any permission=any first=1 rows=-1 uuid=");
+
+      selected_ids = params_values (params, "bulk_selected:");
+      if (selected_ids)
+        {
+          params_iterator_init (&iter, selected_ids);
+          while (params_iterator_next (&iter, &param_name, &param))
+            xml_string_append (bulk_string,
+                               " uuid=%s",
+                               param_name);
+        }
+      params_add (params, "filter", g_string_free (bulk_string, FALSE));
+
+      return export_many (type, credentials, params, content_type,
+                          content_disposition, content_length);
+    }
+
+  bulk_string = g_string_new ("<process_bulk>");
+
+  g_string_append_printf (bulk_string,
+                          "<type>%s</type>"
+                          "<action>%s</action>",
+                          type,
+                          action);
+
+  g_string_append (bulk_string, "<selections>");
+  selected_ids = params_values (params, "bulk_selected:");
+  if (selected_ids)
+    {
+      params_iterator_init (&iter, selected_ids);
+      while (params_iterator_next (&iter, &param_name, &param))
+        xml_string_append (bulk_string,
+                           "<selection id=\"%s\" />",
+                           param_name);
+    }
+  g_string_append (bulk_string, "</selections>");
+
+  g_string_append (bulk_string, "</process_bulk>");
+
+  return xsl_transform_omp (credentials, g_string_free (bulk_string, FALSE));
+}
+
+/**
+ * @brief Delete multiple resources, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+bulk_delete_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  const char *type;
+  GString *commands_xml;
+  params_t *selected_ids;
+  params_iterator_t iter;
+  param_t *param;
+  gchar *param_name;
+  gchar *html, *response;
+  entity_t entity;
+
+  type = params_value (params, "resource_type");
+  if (type == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting resources. "
+                         "The resources were not deleted. "
+                         "Diagnostics: Required parameter 'resource_type' was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  commands_xml = g_string_new ("<commands>");
+
+  selected_ids = params_values (params, "bulk_selected:");
+  if (selected_ids)
+    {
+      params_iterator_init (&iter, selected_ids);
+      while (params_iterator_next (&iter, &param_name, &param))
+        xml_string_append (commands_xml,
+                           "<delete_%s %s_id=\"%s\" ultimate=\"0\"/>",
+                           type,
+                           type,
+                           param_name);
+    }
+
+  g_string_append (commands_xml, "</commands>");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting resources. "
+                             "The resources were not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Delete the resources and get all resources. */
+
+  if (openvas_server_sendf_xml (&session,
+                                commands_xml->str)
+      == -1)
+    {
+      g_string_free (commands_xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting resources. "
+                           "The resources were not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  g_string_free (commands_xml, TRUE);
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting resources. "
+                           "It is unclear whether the resources have been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  if (params_given (params, "next") == 0)
+    {
+      gchar *next;
+      next = g_strdup_printf ("get_%ss", type);
+      params_add (params, "next", next);
+      g_free (next);
+    }
+  html = next_page (credentials, params, response);
+  g_free (response);
+
+  if (html == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting resources. "
+                         "Diagnostics: Error in parameter next.",
+                         "/omp?cmd=get_tasks");
+  return html;
+}
+
+
 
 /* Manager communication. */
 

@@ -505,6 +505,91 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   </grp>
 
+  <!-- 2.3.4    Bulk actions -->
+  <grp>
+    <ctxt>Bulk Action</ctxt>
+    <msg>
+      <id>Move page contents to trashcan</id>
+      <str>Seiteninhalt in den Mülleimer verschieben</str>
+    </msg>
+    <msg>
+      <id>Move selection to trashcan</id>
+      <str>Auswahl in den Mülleimer verschieben</str>
+    </msg>
+    <msg>
+      <id>Delete page contents</id>
+      <str>Seiteninhalt löschen</str>
+    </msg>
+    <msg>
+      <id>Delete selection</id>
+      <str>Auswahl löschen</str>
+    </msg>
+    <msg>
+      <id>Export page contents</id>
+      <str>Seiteninhalt exportieren</str>
+    </msg>
+    <msg>
+      <id>Export selection</id>
+      <str>Auswahl exportieren</str>
+    </msg>
+
+    <msg>
+      <id>Switch to normal view</id>
+      <str>Zur normalen Ansicht wechseln</str>
+    </msg>
+    <msg>
+      <id>Switch to selection view</id>
+      <str>Zur Auswahlansicht wechseln</str>
+    </msg>
+
+    <msg>
+      <id>Select for bulk action</id>
+      <str>Für Mehrfachverabeitung auswählen</str>
+    </msg>
+
+    <msg>
+      <id>Confirm action</id>
+      <str>Aktion bestätigen</str>
+    </msg>
+
+    <!-- N Resources will be deleted -->
+    <msg>
+      <id>#BULK DELETE CONFIRM PREFIX#</id>
+      <str></str>
+    </msg>
+    <msg>
+      <id>#BULK DELETE CONFIRM PREFIX PLURAL#</id>
+      <str></str>
+    </msg>
+    <msg>
+      <id>#BULK DELETE CONFIRM SUFFIX#</id>
+      <str> wird gelöscht.</str>
+    </msg>
+    <msg>
+      <id>#BULK DELETE CONFIRM SUFFIX PLURAL#</id>
+      <str> werden gelöscht.</str>
+    </msg>
+
+    <!-- N Resources will be deleted -->
+    <msg>
+      <id>#BULK TRASH CONFIRM PREFIX#</id>
+      <str></str>
+    </msg>
+    <msg>
+      <id>#BULK TRASH CONFIRM PREFIX PLURAL#</id>
+      <str></str>
+    </msg>
+    <msg>
+      <id>#BULK TRASH CONFIRM SUFFIX#</id>
+      <str> wird in den Mülleimer verschoben.</str>
+    </msg>
+    <msg>
+      <id>#BULK TRASH CONFIRM SUFFIX PLURAL#</id>
+      <str> werden in den Mülleimer verschoben.</str>
+    </msg>
+
+  </grp>
+
   <!-- 2.3.4    Actions with special availability rules -->
 
   <!-- 2.4      Common resource properties -->
