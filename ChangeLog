@@ -1,3 +1,9 @@
+2014-12-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r21233.
+
+	* src/gsad_omp.c (get_many): Do not remember new filt_id if it is "0".
+
 2014-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21123.
