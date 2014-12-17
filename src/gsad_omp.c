@@ -18577,9 +18577,10 @@ edit_role (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
-                   "<get_groups"
-                   " filter=\"rows=-1\"/>"))
+      switch (ompf (credentials, &response, &entity,
+                    "<get_groups"
+                    " filter=\"rows=-1 owner=%s\"/>",
+                    credentials->username))
         {
           case 0:
           case -1:
