@@ -885,23 +885,19 @@ page_url_append_param (credentials_t *credentials, const gchar *name,
 /* Generic page handlers. */
 
 /**
- * @brief Generate next page.
+ * @brief Generate a page.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[in]  next         Command.
  *
  * @return Result of XSL transformation.
  */
 static char *
-next_page (credentials_t *credentials, params_t *params, gchar *response)
+generate_page (credentials_t *credentials, params_t *params, gchar *response,
+               const gchar *next)
 {
-  const char *next;
-
-  next = params_value (params, "next");
-  if (next == NULL)
-    return NULL;
-
   credentials->current_page = page_url (credentials, next);
 
   if (strcmp (next, "edit_role") == 0)
@@ -1060,6 +1056,48 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return wizard_get (credentials, params, response);
 
   return NULL;
+}
+
+/**
+ * @brief Generate next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+next_page (credentials_t *credentials, params_t *params, gchar *response)
+{
+  const char *next;
+
+  next = params_value (params, "next");
+  if (next == NULL)
+    return NULL;
+
+  return generate_page (credentials, params, response, next);
+}
+
+/**
+ * @brief Generate next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+next_page_error (credentials_t *credentials, params_t *params, gchar *response)
+{
+  const char *next;
+
+  next = params_value (params, "next_error");
+  if (next == NULL)
+    return NULL;
+
+  return generate_page (credentials, params, response, next);
 }
 
 /**
@@ -17491,7 +17529,11 @@ create_permission_omp (credentials_t *credentials, params_t *params)
             html = get_permissions (credentials, params, response);
         }
       else
-        html = new_permission (credentials, params, response);
+        {
+          html = next_page_error (credentials, params, response);
+          if (html == NULL)
+            html = new_permission (credentials, params, response);
+        }
     }
   free_entity (entity);
   g_free (response);

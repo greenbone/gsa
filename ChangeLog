@@ -1,3 +1,19 @@
+2014-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Correct next page on Edit Role error.
+
+	* src/gsad.c (init_validator): Add next_error.
+
+	* src/gsad_omp.c (generate_page): New function.  Body from next_page.
+	(next_page): Call generate_page.
+	(next_page_error): New function.
+	(create_permission_omp): Check for an error next page param before
+	defaulting to New Permission.
+
+	* src/html/classic/omp.xl (html-edit-role-form): Specify next page for
+	error case in New Super Permission form, otherwise it goes to New
+	Permission.
+
 2014-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Add owner=any to users case, now that users
