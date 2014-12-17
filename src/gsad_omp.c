@@ -1381,8 +1381,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (given_filt_id)
     {
-      g_tree_replace (credentials->last_filt_ids, filter_type,
-                      g_strdup (given_filt_id));
+      if (strcmp (given_filt_id, "0"))
+        g_tree_replace (credentials->last_filt_ids, filter_type,
+                        g_strdup (given_filt_id));
       filt_id = given_filt_id;
     }
   else if (filter == NULL || strcmp (filter, "") == 0)
