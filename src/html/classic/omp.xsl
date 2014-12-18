@@ -2706,16 +2706,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="count(report/host) &gt; 0">
           <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
-          <xsl:if test = "report/hosts/@start &gt; 1">
-            <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test = "report/hosts/@start &gt; 1">
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result=1&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" border="0" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+              <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:value-of select="report/hosts/@start"/> -
           <xsl:value-of select="$last"/>
           <xsl:value-of select="gsa:i18n (' of ', 'Pagination')"/>
           <xsl:value-of select="report/host_count/filtered"/>
-          <xsl:if test = "$last &lt; report/host_count/filtered">
-            <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test = "$last &lt; report/host_count/filtered">
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={floor((report/host_count/filtered - 1) div report/hosts/@max) * report/hosts/@max + 1}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img style="margin-left:3px;" src="/img/next_inactive.png" border="0" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+              <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" border="0" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>

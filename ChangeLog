@@ -1,5 +1,9 @@
 2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xl (assets): Use new style page controls.
+
+2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add conceptual overview of permissions, and update predefined roles.
 
 	* src/html/classic/help.xl (users.html): Replace predefined role
