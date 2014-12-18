@@ -1,3 +1,15 @@
+2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add conceptual overview of permissions, and update predefined roles.
+
+	* src/html/classic/help.xl (users.html): Replace predefined role
+	description with link.
+	(permissions.html): Link to conceptual overview.  Update columns.
+	(new_permission.html): Update columns.  Add conceptual overview.
+	Mention "low level" in first paragraph.
+	(roles.html): Add new list of predefined roles.
+	(glossary.html): Add permission.  Link to it in roles.
+
 2014-12-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Do not remember new filt_id if it is "0".

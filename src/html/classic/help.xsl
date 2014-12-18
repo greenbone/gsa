@@ -2665,39 +2665,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        contain a list of comma-separated interface names.
       </p>
       <p>
-       Note on <b>Roles</b>:<br/>
+       Note on <b>Roles</b>:
+      </p>
+      <p>
        You can choose from all the Roles available on the
-       <a href="roles.html?token={/envelope/token}">Roles</a> page, including
-       the following predefined Roles:
-       <ul>
-         <li>
-           A "User" has enough privileges for everyday use.
-         </li>
-         <li>
-           An "Administrator" has extra administration privileges, like adding
-           users or synchronising the feed.
-         </li>
-         <li>
-           An "Observer" has only enough privileges to view resources.  That
-           is, an observer is forbidden from creating, removing, modifying
-           or using all tasks, targets, configs, etc.  Furthermore, an
-           observer may only view these resources when the owner of the
-           task adds the observer to the task's observer list.
-         </li>
-         <li>
-           "Info" users only have privileges to view SecInfo resources and
-           modify their own settings.  They do not have permissions to view,
-           create, modify or delete any other resources.
-         </li>
-         <li>
-           "Guest" users have the same permissions as "Info" user except
-           the one to change settings.
-         </li>
-         <li>
-           "Monitor" users are only allowed to get system reports to monitor
-           system performance.
-         </li>
-       </ul>
+       <a href="roles.html?token={/envelope/token}">Roles</a>
+       page, except for Super Admin.  This includes the
+       <a href="roles.html?token={/envelope/token}#predefined">predefined Roles</a>
+       described on the help page.
+      </p>
+      <p>
        It is possible to assign multiple roles to a User which will grant the
        permissions of each role. For example a User with the roles "Info" and
        "Monitor" will be able to view both SecInfo and system reports.
@@ -2857,10 +2834,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Permissions</h1>
       <p>
-       This table provides an overview of all configured
-       <a href="glossary.html?token={/envelope/token}#permission">Permissions</a>.
-       The complete contents of the permission entries
-       are shown (name, comment, resource type, resource, subject type, subject).
+        The help for
+        <a href="new_permission.html?token={/envelope/token}">New Permission</a>
+        gives an
+        <a href="new_permission.html?token={/envelope/token}#overview">overview</a>
+        of the permission concept.
+      </p>
+      <p>
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#permission">Permissions</a>.
+        The complete contents of the permission entries
+        are shown (name, comment, resource type, resource, subject type, subject).
       </p>
 
       <table class="gbntable">
@@ -2875,21 +2859,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               the name.</td>
         </tr>
         <tr class="even">
-          <td>Resource Type</td>
-          <td>Type of resource if one was provided.</td>
+          <td>Description</td>
+          <td>Description of the permission.</td>
         </tr>
         <tr class="odd">
-          <td>Resource</td>
-          <td>Name of resource on which permission applies.</td>
+          <td>Resource Type</td>
+          <td>Type of resource that the permission applies to, if one was provided.</td>
         </tr>
         <tr class="even">
-          <td>Subject Type</td>
-          <td>Type of subject on whom the permission applies: User, Role or
-              Group.</td>
+          <td>Resource</td>
+          <td>Name of resource that the permission applies to.</td>
         </tr>
         <tr class="odd">
+          <td>Subject Type</td>
+          <td>Type of subject to whom the permission is given: User, Role or
+              Group.</td>
+        </tr>
+        <tr class="even">
           <td>Subject</td>
-          <td>Subject on whom the permission applies.</td>
+          <td>Subject to whom the permission is given.</td>
         </tr>
       </table>
 
@@ -2936,9 +2924,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>New Permission</h1>
       <p>
-        For creating a new
-        <a href="glossary.html?token={/envelope/token}#permission">Permission</a>,
-        the dialog offers these entries.
+        The New Permission page provides a low level interface for creating
+        <a href="glossary.html?token={/envelope/token}#permission">permission</a>s.
+      </p>
+      <p>
+        For creating a new permission the dialog offers these entries.
         Hit the button "Create Permission" to submit the new permission.
         The Permissions page will be shown.
       </p>
@@ -2956,7 +2946,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>yes</td>
           <td>--</td>
           <td>Choice</td>
-          <td>create_task</td>
+          <td>CREATE_TASK</td>
         </tr>
         <tr class="even">
           <td>Comment</td>
@@ -2967,27 +2957,159 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>Subject</td>
-          <td>Yes</td>
+          <td>yes</td>
           <td>--</td>
           <td>Choice</td>
           <td>
             User: User1
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Resource ID</td>
           <td>no</td>
           <td>--</td>
           <td>UUID</td>
           <td>03c8aa9e-a062-4e32-bf8d-cd02d76902ec</td>
         </tr>
+        <tr class="odd">
+          <td>Resource Type</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Type: User, Role or Group</td>
+          <td>Role</td>
+        </tr>
       </table>
 
+      <a name="overview"></a>
+      <h4>Conceptual Overview</h4>
+
+      <p>
+        A permission applies to a <b>subject</b>.  The subject is either a user, role
+        or group.  The permission enables the subject to perform the associated
+        action.
+      </p>
+
+      <p>
+        There are two types of permissions:
+      </p>
+      <ul>
+        <li>
+          <b>Command Permissions</b>
+          <p>
+            Command permissions are linked to the protocol used by the task
+            management server, the
+            <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OpenVAS Management Protocol (OMP)</a>.
+            Each command permission applies to a specific
+            <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP</a>
+            command.  The name of the
+            permission is the relevant command.
+          </p>
+          <p>
+            A command permission may either be command level or resource level.
+          </p>
+          <ul>
+            <li>
+              <b>Command Level</b>
+              <p>
+                Omitting the resource creates a command level permission.  This
+                gives the subject the ability to run the associated OMP command.
+              </p>
+              <p>
+                For example, the predefined "Admin" role, has a command level
+                permission "GET_USERS".  This gives Admin users the
+                ability to access the list of users.
+              </p>
+              <p>
+                Command level permissions override resource level permissions.
+              </p>
+            </li>
+            <li>
+              <b>Resource Level</b>
+              <p>
+                A resource level permission allows the subject to run the given OMP
+                command on a specific resource.  Examples of resources include
+                tasks, targets and slaves.
+              </p>
+              <p>
+                For example, a permission named "GET_SLAVES" can be added with
+                "Resource ID" set to the ID of a slave, and subject set to a
+                particular user.  This will give the user the ability to view the
+                slave.  The slave will show up on the user's Slaves page.
+              </p>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <b>Super Permissions</b>
+          <p>
+            Every resource is either global, or has an owner.  Examples of
+            resources include tasks, targets and slaves.
+          </p>
+          <p>
+            Super permissions give the subject effective ownership of all the
+            resources owned by a user, role or group.
+          </p>
+          <p>
+            For example, a user Alice can be given Super permission on user Bob.
+            This gives gives Alice full access to all of Bob's resources.
+            Alice can modify and run all of Bob's tasks, view Bob's reports,
+            delete Bob's slaves, etc.
+          </p>
+          <p>
+            Super permissions can be given on:
+          </p>
+          <ul>
+            <li>
+              <b>Users</b>
+              <p>
+                Subject has access to all resources owned by the user.
+              </p>
+            </li>
+            <li>
+              <b>Roles</b>
+              <p>
+                Subject has access to all resources owned by any user who
+                has the role.
+              </p>
+            </li>
+            <li>
+              <b>Groups</b>
+              <p>
+                Subject has access to all resources owned by any user in
+                the group.
+              </p>
+            </li>
+            <li>
+              <b>Everyone</b>
+              <p>
+                Subject has access to all resources.
+              </p>
+              <p>
+                This is the permission given to the role Super Admin.  It
+                is not possible to create this permission.  The only way
+                to grant this permission is by assigning the Super Admin
+                role to the user, which can only be done on the command
+                line of the Management service.
+              </p>
+            </li>
+          </ul>
+          <p>
+            The commands that a user may run are still determined by the
+            command level permissions that have been granted to a user.
+          </p>
+          <p>
+            In order to contain privileges, users may only grant Super
+            permissions on users, roles and groups that they created.
+            The exception to this is a Super Admin user, who may grant
+            Super permissions on any user, role or group.
+          </p>
+        </li>
+      </ul>
       <h4>Permissions</h4>
       <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Permissions" title="Permissions"/>
-       will switch to the permissions page.
+        Pressing the list icon
+        <img src="/img/list.png" alt="Permissions" title="Permissions"/>
+        will switch to the permissions page.
       </p>
     </div>
   </div>
@@ -3057,6 +3179,79 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               the name.</td>
         </tr>
       </table>
+
+      <a name="predefined"></a>
+      <h3>Predefined Roles</h3>
+      <p>
+        Certain roles are always present.  It is not possible to modify these roles.
+      </p>
+
+      <ul>
+        <li>
+          <b>Super Admin</b>
+          <p>
+            Highest level of permission.  Able to perform
+            any action.  Automatically has full access to
+            all resources (Task, Targets, etc.) of all users.
+          </p>
+        </li>
+        <li>
+          <b>Admin</b>
+          <p>
+            An administrator.  Able to perform any action, including
+            administrative actions like creating users, roles and groups.
+          </p>
+          <p>
+            An Admin is capable of accessing the resources of other users.
+            However, the Admin must set this up manually, and this is limited
+            to the users, roles and groups that the Admin created.
+          </p>
+        </li>
+        <li>
+          <b>User</b>
+          <p>
+            A regular user.  May perform everyday actions like creating and
+            running tasks.
+          </p>
+        </li>
+        <li>
+          <b>Observer</b>
+          <p>
+            An observer.  Has read-only access.  Observers are capable only
+            of viewing.  That is, an observer is forbidden from creating,
+            removing, modifying or using all tasks, targets, configs, etc.
+          </p>
+          <p>
+            An Observer only has access to those resources
+            that have been explicitly shared with the observer.
+          </p>
+        </li>
+        <li>
+          <b>Info</b>
+          <p>
+            Access to SecInfo pages only.  Able to modify their personal
+            settings, for example to change their password.
+          </p>
+        </li>
+        <li>
+          <b>Guest</b>
+          <p>
+            Access to SecInfo pages only, for anonymous login.  Like the Info
+            role, but not able to modify personal settings.
+          </p>
+          <p>
+            This role caters for the optional "Login as guest" link on the
+            Login page.  The role has just enough capability to
+            view the security data in the SecInfo Management menu.
+          </p>
+        </li>
+        <li>
+          <b>Monitor</b>
+          <p>
+            A system performance monitor.  Access to the system reports only.
+          </p>
+        </li>
+      </ul>
 
       <h3>Exporting</h3>
       <p>
@@ -3949,6 +4144,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        observed scenario.
       </p>
 
+      <a name="permission"></a>
+      <h2>Permission</h2>
+      <p>
+        A permission grants a <a href="#user">user</a>, <a href="#role">role</a>
+        or <a href="#group">group</a> the right to perform a
+        specific action.
+      </p>
+
       <a name="port_list"></a>
       <h2>Port List</h2>
       <p>
@@ -4010,7 +4213,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="role"></a>
       <h2>Role</h2>
       <p>
-       A role defines a set of permissions that can be applied to a user or
+       A role defines a set of <a href="#permission">permissions</a> that can be applied to a user or
        a <a href="#group">group</a>.
       </p>
 
