@@ -1,5 +1,12 @@
 2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (lsc_credential, agent, alert, filter)
+	(target, config, schedule, scanner, slave, group, permission)
+	(port_list, report_format, role, user): Show checkboxes when if
+	bulk_select is on.
+
+2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Make the bulk actions row
 	a lighter grey.
 

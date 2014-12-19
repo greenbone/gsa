@@ -7073,16 +7073,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="login"/>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Credential'"/>
-        <xsl:with-param name="type" select="'lsc_credential'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-      <xsl:if test="type='gen'">
-        <xsl:call-template name="lsc-credential-download-icons"/>
-      </xsl:if>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Credential'"/>
+            <xsl:with-param name="type" select="'lsc_credential'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+          <xsl:if test="type='gen'">
+            <xsl:call-template name="lsc-credential-download-icons"/>
+          </xsl:if>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -7460,22 +7471,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Agent'"/>
-        <xsl:with-param name="type" select="'agent'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-      <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Download installer package', 'Agent Table Row')}" style="margin-left:3px;">
-        <img src="/img/agent.png" border="0" alt="{gsa:i18n ('Download Installer', 'Agent Table Row')}"/>
-      </a>
-      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}"
-         title="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"
-         style="margin-left:3px;">
-        <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"/>
-      </a>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Agent'"/>
+            <xsl:with-param name="type" select="'agent'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+          <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Download installer package', 'Agent Table Row')}" style="margin-left:3px;">
+            <img src="/img/agent.png" border="0" alt="{gsa:i18n ('Download Installer', 'Agent Table Row')}"/>
+          </a>
+          <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}"
+            title="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"
+            style="margin-left:3px;">
+            <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"/>
+          </a>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -8732,19 +8754,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Alert'"/>
-        <xsl:with-param name="type" select="'alert'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-      <xsl:call-template name="start-icon">
-        <xsl:with-param name="type">alert</xsl:with-param>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="cmd">test_alert</xsl:with-param>
-        <xsl:with-param name="alt"><xsl:value-of select="gsa:i18n ('Test', 'Alert Table Row')"/></xsl:with-param>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Alert'"/>
+            <xsl:with-param name="type" select="'alert'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+          <xsl:call-template name="start-icon">
+            <xsl:with-param name="type">alert</xsl:with-param>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="cmd">test_alert</xsl:with-param>
+            <xsl:with-param name="alt"><xsl:value-of select="gsa:i18n ('Test', 'Alert Table Row')"/></xsl:with-param>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -9195,13 +9228,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="term"/></td>
     <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Filter'"/>
-        <xsl:with-param name="type" select="'filter'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Filter'"/>
+            <xsl:with-param name="type" select="'filter'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -11494,13 +11538,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Target'"/>
-        <xsl:with-param name="type" select="'target'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Target'"/>
+            <xsl:with-param name="type" select="'target'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -13488,13 +13543,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Scan Config'"/>
-        <xsl:with-param name="type" select="'config'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Scan Config'"/>
+            <xsl:with-param name="type" select="'config'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -14906,13 +14972,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Schedule'"/>
-        <xsl:with-param name="type" select="'schedule'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Schedule'"/>
+            <xsl:with-param name="type" select="'schedule'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -15573,18 +15650,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="type"/>
       </xsl:call-template>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Scanner'"/>
-        <xsl:with-param name="type" select="'scanner'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-      <a href="/omp?cmd=verify_scanner&amp;scanner_id={@id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
-         style="margin-left:3px;">
-        <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
-      </a>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Scanner'"/>
+            <xsl:with-param name="type" select="'scanner'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+          <a href="/omp?cmd=verify_scanner&amp;scanner_id={@id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
+            style="margin-left:3px;">
+            <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
+          </a>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -15903,13 +15991,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="host"/></td>
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="login"/></td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Slave'"/>
-        <xsl:with-param name="type" select="'slave'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Slave'"/>
+            <xsl:with-param name="type" select="'slave'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -21191,13 +21290,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Group'"/>
-        <xsl:with-param name="type" select="'group'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Group'"/>
+            <xsl:with-param name="type" select="'group'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -21713,14 +21823,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Permission'"/>
-        <xsl:with-param name="type" select="'permission'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="grey-clone" select="writable='0'"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Permission'"/>
+            <xsl:with-param name="type" select="'permission'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="grey-clone" select="writable='0'"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -22376,13 +22497,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="port_count/udp"/>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Port List'"/>
-        <xsl:with-param name="type" select="'port_list'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Port List'"/>
+            <xsl:with-param name="type" select="'port_list'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -23083,29 +23215,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Report Format'"/>
-        <xsl:with-param name="type" select="'report_format'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-      <xsl:choose>
-        <xsl:when test="gsa:may ('verify_report_format')">
-          <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
-             style="margin-left:3px;">
-            <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/verify_inactive.png"
-               border="0"
-               alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
-               title="{gsa:i18n ('Permission to verify Report Format denied', 'Report Format Table Row')}"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Report Format'"/>
+            <xsl:with-param name="type" select="'report_format'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+          <xsl:choose>
+            <xsl:when test="gsa:may ('verify_report_format')">
+              <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
+                style="margin-left:3px;">
+                <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/verify_inactive.png"
+                  border="0"
+                  alt="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
+                  title="{gsa:i18n ('Permission to verify Report Format denied', 'Report Format Table Row')}"
+                  style="margin-left:3px;"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -29076,13 +29219,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Role'"/>
-        <xsl:with-param name="type" select="'role'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
-    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'Role'"/>
+            <xsl:with-param name="type" select="'role'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -30532,13 +30686,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'User'"/>
-        <xsl:with-param name="type" select="'user'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="notrash" select="1"/>
-        <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="/envelope/params/bulk_select != 0">
+          <td style="text-align:center">
+            <label style="width:100%">
+              <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+            </label>
+          </td>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="cap-type" select="'User'"/>
+            <xsl:with-param name="type" select="'user'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="notrash" select="1"/>
+            <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
