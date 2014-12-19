@@ -1,6 +1,14 @@
 2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/classic/omp.xl (assets): Use new style page controls.
+	Enable editing of user names.
+
+	* src/gsad_omp.c (save_user_omp): Add NEW_NAME to MODIFY_USER.
+
+	* src/html/classic/omp.xsl (user [edit]): Switch name to a text input.
+
+2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (assets): Use new style page controls.
 
 2014-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 

@@ -20622,9 +20622,11 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   command = g_string_new ("");
   buf = g_markup_printf_escaped ("<modify_user user_id=\"%s\">"
+                                 "<new_name>%s</new_name>"
                                  "<password modify=\"%s\">"
                                  "%s</password>",
                                  user_id,
+                                 login,
                                  modify_password,
                                  password);
   g_string_append (command, buf);
