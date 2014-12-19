@@ -4352,7 +4352,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <div>
         <xsl:variable name="table">
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0" style="margin-bottom:0px;">
             <tr class="gbntablehead2">
               <xsl:variable name="current" select="."/>
               <xsl:variable name="token" select="/envelope/token"/>
@@ -4444,18 +4444,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:variable>
               <input type="hidden" name="token" value="{/envelope/token}"/>
-              <xsl:choose>
-                <xsl:when test="/envelope/params/bulk_select != 0">
-                  <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;bulk_select=0&amp;token={/envelope/token}" style="margin-right:5px">
-                    <img src="/img/list.png" alt="Normal view" title="{gsa:i18n ('Switch to normal view', 'Bulk Action')}"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;bulk_select=1&amp;token={/envelope/token}" style="margin-right:5px">
-                    <img src="/img/alterable.png" alt="Selection view" title="{gsa:i18n ('Switch to selection view', 'Bulk Action')}"/>
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
               <xsl:text> </xsl:text>
               <input type="hidden" name="cmd" value="process_bulk"/>
               <input type="hidden" name="next" value="get_{$type}s"/>
@@ -4516,29 +4504,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="string-length (filters/term) &gt; 0">
-              <tr>
-                <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-                  <div class="float_right">
-                    <xsl:call-template name="filter-window-pager">
-                      <xsl:with-param name="type" select="$type"/>
-                      <xsl:with-param name="list" select="$resources-summary"/>
-                      <xsl:with-param name="count" select="$count"/>
-                      <xsl:with-param name="filtered_count" select="$filtered-count"/>
-                      <xsl:with-param name="full_count" select="$full-count"/>
-                      <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                    </xsl:call-template>
-                  </div>
-                  (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter Box')"/>:
-                  <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                    <xsl:value-of select="filters/term"/>
-                  </a>)
-                </td>
-              </tr>
-            </xsl:if>
           </table>
         </xsl:variable>
-
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select != 0">
             <form name="bulk-actions">
@@ -4549,6 +4516,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:copy-of select="$table"/>
           </xsl:otherwise>
         </xsl:choose>
+        <xsl:if test="not ($no_bulk)">
+          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-left:6px; text-align:left; height:26px">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+            <xsl:if test="$subtype">
+              <input type="hidden" name="{$type}_type" value="{$subtype}"/>
+            </xsl:if>
+            <xsl:for-each select="exslt:node-set($extra_params)/param">
+              <input type="hidden" name="{name}" value="{value}"/>
+            </xsl:for-each>
+            <input type="hidden" name="filter" value="{filters/term}"/>
+            <input type="hidden" name="filt_id" value="{filters/@id}"/>
+            <select name="bulk_select" onchange="bulk_select_type_form.submit()">
+              <!-- TODO selection by current parameter value + check marks -->
+              <xsl:choose>
+                <xsl:when test="not (/envelope/params/bulk_select != '0')">
+                  <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="0"><xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="/envelope/params/bulk_select = '1'">
+                  <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="1"><xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </select>
+            <xsl:text> </xsl:text>
+            <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Update', 'Window')}" title="{gsa:i18n ('Update', 'Window')}"/>
+          </form>
+        </xsl:if>
+        <xsl:if test="string-length (filters/term) &gt; 0">
+          <table style="width:100%; margin-bottom:10px">
+            <tr>
+              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
+                <div class="float_right">
+                  <xsl:call-template name="filter-window-pager">
+                    <xsl:with-param name="type" select="$type"/>
+                    <xsl:with-param name="list" select="$resources-summary"/>
+                    <xsl:with-param name="count" select="$count"/>
+                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                    <xsl:with-param name="full_count" select="$full-count"/>
+                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                  </xsl:call-template>
+                </div>
+                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter Box')"/>:
+                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </table>
+        </xsl:if>
         <xsl:call-template name="wizard"/>
       </div>
     </div>

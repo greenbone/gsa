@@ -534,12 +534,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </msg>
 
     <msg>
-      <id>Switch to normal view</id>
-      <str>Zur normalen Ansicht wechseln</str>
+      <id>Apply to page contents</id>
+      <str>Auf Seiteninhalt anwenden</str>
     </msg>
     <msg>
-      <id>Switch to selection view</id>
-      <str>Zur Auswahlansicht wechseln</str>
+      <id>Apply to selection</id>
+      <str>Auf Auswahl anwenden</str>
     </msg>
 
     <msg>

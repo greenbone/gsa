@@ -1,5 +1,15 @@
 2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Replace toggle icon for
+	bulk action mode (whole page or checkbox selection) with a dropdown
+	form. Separate table footer with filter and page controls from
+	table to allow this.
+
+	* src/html/classic/po/de.xml: Replace text of switch icon with new
+	dropdown text.
+
+2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Add parameter no_bulk to
 	hide bulk actions.
 	(html-allinfo-table): Hide bulk actions here.
