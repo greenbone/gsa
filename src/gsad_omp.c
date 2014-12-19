@@ -2082,22 +2082,46 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   filter = params_value (params, "filter");
 
-  if (openvas_server_sendf (&session,
-                            "<get_%ss"
-                            " export=\"1\""
-                            " details=\"1\""
-                            " filter=\"%s\"/>",
-                            type,
-                            filter ? filter : "")
-      == -1)
+  if (strcmp (type, "info") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a list. "
-                           "The list could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      if (openvas_server_sendf (&session,
+                                "<get_info"
+                                " type=\"%s\""
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                params_value (params, "info_type"),
+                                filter ? filter : "")
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a list. "
+                              "The list could not be delivered. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks");
+        }
+    }
+  else
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_%ss"
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                type,
+                                filter ? filter : "")
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a list. "
+                              "The list could not be delivered. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks");
+        }
     }
 
   entity = NULL;
@@ -21378,7 +21402,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                   char **content_disposition, gsize *content_length)
 {
   GString *bulk_string;
-  const char *type, *action;
+  const char *type, *subtype, *action;
   char *param_name;
   params_t *selected_ids;
   param_t *param;
@@ -21391,6 +21415,18 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                          "An internal error occurred while performing a bulk action. "
                          "Diagnostics: Required parameter 'resource_type' was NULL.",
                          "/omp?cmd=get_tasks");
+  if (strcmp (type, "info") == 0)
+    {
+      subtype = params_value (params, "info_type");
+      if (subtype == NULL)
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while performing a bulk action. "
+                            "Diagnostics: Required parameter 'info_type' was NULL.",
+                            "/omp?cmd=get_tasks");
+    }
+  else
+    subtype = NULL;
 
   if (params_valid (params, "bulk_delete.x"))
     action = "delete";

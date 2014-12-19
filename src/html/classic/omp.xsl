@@ -4460,6 +4460,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="next" value="get_{$type}s"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
               <input type="hidden" name="filt_id" value="{filters/@id}"/>
+              <xsl:if test="$subtype">
+                <input type="hidden" name="{$type}_type" value="{$subtype}"/>
+              </xsl:if>
 
               <xsl:for-each select="exslt:node-set($extra_params)/param">
                 <input type="hidden" name="{name}" value="{value}"/>
@@ -4483,9 +4486,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
                     <form name="bulk-actions">
-                      <xsl:for-each select="$resources">
-                        <input type="hidden" name="bulk_selected:{@id}" value="1"/>
-                      </xsl:for-each>
+                      <xsl:choose>
+                        <xsl:when test="$type = 'info'">
+                          <xsl:for-each select="$resources">
+                            <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
+                          </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:for-each select="$resources">
+                            <input type="hidden" name="bulk_selected:{@id}" value="1"/>
+                          </xsl:for-each>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       <xsl:copy-of select="$bulk-elements"/>
                     </form>
                   </td>
@@ -16350,6 +16362,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -16457,6 +16479,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
+      <xsl:choose>
+        <xsl:when test="/envelope/params/bulk_select != 0">
+          <td style="text-align:center" rowspan="2">
+            <label style="width:100%">
+              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+            </label>
+          </td>
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </tr>
     <tr>
       <td colspan="8" style="font-size: 80%;">
@@ -16552,6 +16584,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -16653,6 +16695,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
+      <xsl:choose>
+        <xsl:when test="/envelope/params/bulk_select != 0">
+          <td style="text-align:center" rowspan="2">
+            <label style="width:100%">
+              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+            </label>
+          </td>
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </tr>
     <tr>
       <td colspan="7" style="font-size: 80%;">
@@ -16712,6 +16764,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -16756,6 +16818,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select != 0">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
@@ -16822,6 +16894,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </td>
+      <xsl:choose>
+        <xsl:when test="/envelope/params/bulk_select != 0">
+          <td style="text-align:center" rowspan="2">
+            <label style="width:100%">
+              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+            </label>
+          </td>
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </tr>
     <tr>
       <td colspan="4" style="font-size: 95%;">
@@ -17075,7 +17157,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17140,7 +17222,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17203,7 +17285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17265,7 +17347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17320,7 +17402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17375,7 +17457,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17429,7 +17511,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
   </xsl:call-template>
 </xsl:template>
 

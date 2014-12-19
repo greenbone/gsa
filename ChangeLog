@@ -1,3 +1,18 @@
+2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (export_many): Add special case for type "info".
+	(process_bulk_omp): Check if info_type is given for type "info".
+
+	* src/html/classic/omp.xsl (list-window): Add hidden info_type input
+	and use correct path to id when type is "info".
+	(info/cpe, info/cve, info/nvt, info/ovaldef, info/cert_bund_adv)
+	(info/dfn_cert_adv, info/allinfo): Show checkboxes when if bulk_select
+	is on.
+	(html-cpe-table, html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-cert_bund_adv-table, html-dfn_cert_adv-table)
+	(html-allinfo-table): Set icon-count to 1 to show Actions column if
+	bulk_select is on.
+
 2014-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add current_user.
