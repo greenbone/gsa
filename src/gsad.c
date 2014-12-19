@@ -1255,6 +1255,7 @@ init_validator ()
   openvas_validator_alias (validator, "chart_type", "name");
   openvas_validator_alias (validator, "chart_template", "name");
   openvas_validator_alias (validator, "custom_severity", "boolean");
+  openvas_validator_alias (validator, "current_user", "boolean");
   openvas_validator_alias (validator, "dashboard_name", "name");
   openvas_validator_alias (validator, "debug",           "boolean");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");

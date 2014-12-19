@@ -30865,9 +30865,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/></td>
             <td>
               <input type="hidden" name="user_id" value="{@id}"/>
-              <input type="hidden" name="login" value="{name}"/>
-              <input type="text" name="login" value="{gsa:param-or ('login', name)}"
-                     size="30" maxlength="80"/>
+              <xsl:choose>
+                <xsl:when test="name=/envelope/login/text()">
+                  <xsl:value-of select="name"/>
+                  <input type="hidden" name="current_user" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="login" value="{gsa:param-or ('login', name)}"
+                         size="30" maxlength="80"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>

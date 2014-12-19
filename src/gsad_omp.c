@@ -20573,7 +20573,6 @@ save_user_omp (credentials_t * credentials, params_t *params,
         params_add (params, "groups", "2");
 
       CHECK_PARAM (user_id, "Edit User", edit_user);
-      CHECK_PARAM (login, "Edit User", edit_user);
       CHECK_PARAM (modify_password, "Edit User", edit_user);
       CHECK_PARAM (password, "Edit User", edit_user);
       CHECK_PARAM (hosts, "Edit User", edit_user);
@@ -20599,7 +20598,6 @@ save_user_omp (credentials_t * credentials, params_t *params,
         params_add (params, "roles", "2");
 
       CHECK_PARAM (user_id, "Edit User", edit_user);
-      CHECK_PARAM (login, "Edit User", edit_user);
       CHECK_PARAM (modify_password, "Edit User", edit_user);
       CHECK_PARAM (password, "Edit User", edit_user);
       CHECK_PARAM (hosts, "Edit User", edit_user);
@@ -20610,7 +20608,8 @@ save_user_omp (credentials_t * credentials, params_t *params,
     }
 
   CHECK_PARAM (user_id, "Save User", edit_user);
-  CHECK_PARAM (login, "Save User", edit_user);
+  if (params_given (params, "login"))
+    CHECK_PARAM (login, "Save User", edit_user);
   CHECK_PARAM (modify_password, "Save User", edit_user);
   CHECK_PARAM (password, "Save User", edit_user);
   CHECK_PARAM (hosts, "Save User", edit_user);
@@ -20622,15 +20621,21 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   command = g_string_new ("");
   buf = g_markup_printf_escaped ("<modify_user user_id=\"%s\">"
-                                 "<new_name>%s</new_name>"
                                  "<password modify=\"%s\">"
                                  "%s</password>",
                                  user_id,
-                                 login,
                                  modify_password,
                                  password);
   g_string_append (command, buf);
   g_free (buf);
+
+  if (login)
+    {
+      buf = g_markup_printf_escaped ("<new_name>%s</new_name>",
+                                     login);
+      g_string_append (command, buf);
+      g_free (buf);
+    }
 
   buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>"
                                  "<ifaces allow=\"%s\">%s</ifaces>",
@@ -20698,7 +20703,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
     {
       case 0:
         if (strcmp (modify_password, "0")
-            && (strcmp (login, credentials->username) == 0))
+            && params_given (params, "current_user"))
           {
             const char *status;
             status = entity_attribute (entity, "status");
