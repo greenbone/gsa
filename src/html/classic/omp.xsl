@@ -4218,6 +4218,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="value"/>
     </xsl:for-each>
   </xsl:param>
+  <xsl:param name="no_bulk" select="0"/>
   <xsl:param name="top-visualization" select="''"/>
   <xsl:variable name="apply-overrides"
                 select="filters/keywords/keyword[column='apply_overrides']/value"/>
@@ -4481,6 +4482,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:variable>
 
             <xsl:choose>
+              <xsl:when test="$no_bulk">
+                <xsl:apply-templates select="$resources"/>
+              </xsl:when>
               <xsl:when test="not (/envelope/params/bulk_select != 0)">
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
@@ -17485,6 +17489,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (info/allinfo)"/>
     <xsl:with-param name="filtered-count" select="info_count/filtered"/>
     <xsl:with-param name="full-count" select="info_count/text ()"/>
+    <xsl:with-param name="no_bulk" select="1"/>
     <xsl:with-param name="top-visualization">
       <xsl:call-template name="init-d3charts"/>
       <xsl:call-template name="js-secinfo-top-visualization">

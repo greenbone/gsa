@@ -1,5 +1,11 @@
 2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Add parameter no_bulk to
+	hide bulk actions.
+	(html-allinfo-table): Hide bulk actions here.
+
+2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (export_many): Add special case for type "info".
 	(process_bulk_omp): Check if info_type is given for type "info".
 
