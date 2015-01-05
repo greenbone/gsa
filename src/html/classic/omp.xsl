@@ -4517,7 +4517,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="not ($no_bulk)">
-          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-left:6px; text-align:left; height:26px">
+          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
             <xsl:if test="$subtype">

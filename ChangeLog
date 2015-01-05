@@ -1,3 +1,8 @@
+2015-01-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Right align form for choosing
+	bulk selection type.
+
 2014-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Replace toggle icon for
