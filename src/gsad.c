@@ -1087,7 +1087,7 @@ init_validator ()
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
-  openvas_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDMmTtUu])+$");
+  openvas_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "email_list", "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
@@ -1131,7 +1131,7 @@ init_validator ()
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "lang",         "^(Browser Language|Chinese|English|German)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
-  openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDMmTtUu])+$");
+  openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for Administrator users, LSC credentials, and slave login name. */
   openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
@@ -1173,7 +1173,7 @@ init_validator ()
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDMmTtUu])+$");
+  openvas_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_section",
                                     "^(summary|results|hosts|ports"

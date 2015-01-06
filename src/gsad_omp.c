@@ -1832,12 +1832,13 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
                   const char* type, const char* uuid,
                   entity_t resource_entity)
 {
-  gchar *creation_time, *modification_time;
+  gchar *creation_time, *modification_time, *name, *format_name;
   gchar *ret;
 
   if (resource_entity)
     {
       entity_t creation_time_entity, modification_time_entity;
+      entity_t task_entity, format_entity, format_name_entity, name_entity;
 
       creation_time_entity = entity_child (resource_entity,
                                            "creation_time");
@@ -1854,16 +1855,47 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
         modification_time = entity_text (modification_time_entity);
       else
         modification_time = NULL;
+
+      if (strcasecmp (type, "report") == 0)
+        {
+          task_entity = entity_child (resource_entity, "task");
+          if (task_entity)
+            name_entity = entity_child (task_entity, "name");
+          else
+            name_entity = NULL;
+
+          format_entity = entity_child (resource_entity, "report_format");
+          if (format_entity)
+            {
+              format_name_entity = entity_child (format_entity, "name");
+            }
+          else
+            format_name_entity = NULL;
+
+          format_name = entity_text (format_name_entity);
+        }
+      else
+        {
+          name_entity = entity_child (resource_entity, "name");
+          format_name = NULL;
+        }
+
+      if (name_entity)
+        name = entity_text (name_entity);
+      else
+        name = NULL;
     }
   else
     {
       creation_time = NULL;
       modification_time = NULL;
+      name = NULL;
+      format_name = NULL;
     }
 
   ret = openvas_export_file_name (fname_format, credentials->username,
-                                  type, uuid, creation_time, modification_time);
-
+                                  type, uuid, creation_time, modification_time,
+                                  name, format_name);
   return ret;
 }
 
@@ -11064,7 +11096,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
               *content_type = g_strdup (requested_content_type);
               *content_disposition
-                = g_strdup_printf ("attachment; filename=%s.%s",
+                = g_strdup_printf ("attachment; filename=\"%s.%s\"",
                                    file_name,
                                    extension);
 
@@ -11183,7 +11215,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
                   *content_type = g_strdup (requested_content_type);
                   *content_disposition
-                    = g_strdup_printf ("attachment; filename=%s.%s",
+                    = g_strdup_printf ("attachment; filename=\"%s.%s\"",
                                       file_name,
                                       extension);
 

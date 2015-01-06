@@ -4863,12 +4863,15 @@ Public License instead of this License.
         Falls back to the current time similar to %C.
         </li>
         <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
+        <li><b>%F</b> - The name of the format plugin used (XML for lists and types other than reports).</li>
         <li><b>%M</b> - The modification date in the format YYYYMMDD.<br/>
         If the modification date is not available this gives either creation
         date or the current date if a creation date is not available as well,
         e.g. when exporting lists of resources.</li>
         <li><b>%m</b> - The modification time in the format HHMMSS.<br/>
         Falls back to the creation time or current time similar to %M.</li>
+        <li><b>%N</b> - The name of the resource or the associated task for
+        reports. Lists and types without a name will use the type (see <b>%T</b>).</li>
         <li><b>%T</b> - The resource type, e.g. "task", "port_list".
         Pluralized for list pages.</li>
         <li><b>%t</b> - The current time in the format HHMMSS.</li>

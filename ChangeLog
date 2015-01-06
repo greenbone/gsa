@@ -1,3 +1,15 @@
+2015-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (format_file_name): Get task and report format name
+	for reports and resource name in case of other types for new params
+	of openvas_export_file_name.
+	(get_report): Put quotes around content_disposition file name.
+
+	* src/gsad.c (init_validator): Add new placeholders %F and %N to
+	details_fname, list_fname, report_fname.
+
+	* src/html/classic/help.xsl (my_settings.html): Add new placeholders.
+
 2015-01-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Right align form for choosing
