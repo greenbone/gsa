@@ -4439,7 +4439,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:variable name="bulk-elements">
               <xsl:variable name="selection_type">
                 <xsl:choose>
-                  <xsl:when test="/envelope/params/bulk_select != 0">selection</xsl:when>
+                  <xsl:when test="/envelope/params/bulk_select = 1">selection</xsl:when>
+                  <xsl:when test="/envelope/params/bulk_select = 2">all filtered</xsl:when>
                   <xsl:otherwise>page contents</xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
@@ -4449,6 +4450,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="next" value="get_{$type}s"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
               <input type="hidden" name="filt_id" value="{filters/@id}"/>
+              <input type="hidden" name="bulk_select" value="{/envelope/params/bulk_select}"/>
               <xsl:if test="$subtype">
                 <input type="hidden" name="{$type}_type" value="{$subtype}"/>
               </xsl:if>
@@ -4473,7 +4475,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="$no_bulk">
                 <xsl:apply-templates select="$resources"/>
               </xsl:when>
-              <xsl:when test="not (/envelope/params/bulk_select != 0)">
+              <xsl:when test="not (/envelope/params/bulk_select = 1)">
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
@@ -4507,7 +4509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="/envelope/params/bulk_select != 0">
+          <xsl:when test="/envelope/params/bulk_select = 1">
             <form name="bulk-actions">
               <xsl:copy-of select="$table"/>
             </form>
@@ -4531,7 +4533,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <select name="bulk_select" onchange="bulk_select_type_form.submit()">
               <!-- TODO selection by current parameter value + check marks -->
               <xsl:choose>
-                <xsl:when test="not (/envelope/params/bulk_select != '0')">
+                <xsl:when test="not (/envelope/params/bulk_select != 0)">
                   <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
@@ -4544,6 +4546,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <option value="1"><xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="/envelope/params/bulk_select = '2'">
+                  <option value="2" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="2"><xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </select>
@@ -5513,7 +5523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="result_count/false_positive/full"/>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -6507,7 +6517,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <xsl:choose>
-          <xsl:when test="/envelope/params/bulk_select != 0">
+          <xsl:when test="/envelope/params/bulk_select = 1">
             <td style="text-align:center">
               <label style="width:100%">
                 <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -6713,7 +6723,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <html>
           <before>
             <xsl:choose>
-              <xsl:when test="/envelope/params/bulk_select != 0">
+              <xsl:when test="/envelope/params/bulk_select = 1">
                 <div style="float: right; display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
@@ -7114,7 +7124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="login"/>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -7512,7 +7522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -8795,7 +8805,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -9269,7 +9279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="term"/></td>
     <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -9818,7 +9828,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:date (modification_time)"/>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -11579,7 +11589,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -13584,7 +13594,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -15013,7 +15023,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -15691,7 +15701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16032,7 +16042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="login"/></td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16391,7 +16401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16508,7 +16518,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <xsl:choose>
-        <xsl:when test="/envelope/params/bulk_select != 0">
+        <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
             <label style="width:100%">
               <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16613,7 +16623,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16724,7 +16734,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <xsl:choose>
-        <xsl:when test="/envelope/params/bulk_select != 0">
+        <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
             <label style="width:100%">
               <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16793,7 +16803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16847,7 +16857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -16923,7 +16933,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <xsl:choose>
-        <xsl:when test="/envelope/params/bulk_select != 0">
+        <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
             <label style="width:100%">
               <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -17185,7 +17195,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17250,7 +17260,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17313,7 +17323,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17375,7 +17385,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17430,7 +17440,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17485,7 +17495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -17540,7 +17550,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -19807,7 +19817,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -20991,7 +21001,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -21402,7 +21412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -21935,7 +21945,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -22609,7 +22619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="port_count/udp"/>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -23327,7 +23337,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -24228,7 +24238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <html>
           <before>
             <xsl:choose>
-              <xsl:when test="/envelope/params/bulk_select != '0'">
+              <xsl:when test="/envelope/params/bulk_select = 1">
                 <div style="float: right; display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
@@ -26098,7 +26108,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <html>
           <before>
             <xsl:choose>
-              <xsl:when test="/envelope/params/bulk_select != 0">
+              <xsl:when test="/envelope/params/bulk_select = 1">
                 <div style="float: right; display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
@@ -26166,7 +26176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select != 0"/>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -26259,7 +26269,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:long-time (creation_time)"/>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -29331,7 +29341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select != 0">
+      <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
           <label style="width:100%">
             <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -30798,7 +30808,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
-        <xsl:when test="/envelope/params/bulk_select != 0">
+        <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center">
             <label style="width:100%">
               <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
@@ -33069,7 +33079,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
             <xsl:for-each select="/envelope/params/*">
               <xsl:choose>
-                <xsl:when test="starts-with (name (), 'bulk_') or name() = 'cmd'">
+                <xsl:when test="starts-with (name (), 'bulk_') or name() = 'cmd' or (name() = '_param' and starts-with (name, 'bulk_'))">
                 </xsl:when>
                 <xsl:when test="name() = '_param'">
                   <input type="hidden" name="{name}" value="{value}"/>
@@ -33078,6 +33088,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="hidden" name="{name()}" value="{text()}"/>
                 </xsl:otherwise>
               </xsl:choose>
+            </xsl:for-each>
+
+            <xsl:for-each select="$resources">
+              <input type="hidden" name="bulk_selected:{.}" value="1"/>
             </xsl:for-each>
           </div>
           <input type="submit" value="OK"/>

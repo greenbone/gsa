@@ -21475,17 +21475,33 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
 
   if (strcmp (action, "export") == 0)
     {
-      bulk_string
-        = g_string_new ("owner=any permission=any first=1 rows=-1 uuid=");
-
-      selected_ids = params_values (params, "bulk_selected:");
-      if (selected_ids)
+      if (params_value (params, "bulk_select")
+          && strcmp (params_value (params, "bulk_select"), "1") == 0)
         {
-          params_iterator_init (&iter, selected_ids);
-          while (params_iterator_next (&iter, &param_name, &param))
-            xml_string_append (bulk_string,
-                               " uuid=%s",
-                               param_name);
+          bulk_string
+            = g_string_new ("owner=any permission=any first=1 rows=-1 uuid=");
+
+          selected_ids = params_values (params, "bulk_selected:");
+          if (selected_ids)
+            {
+              params_iterator_init (&iter, selected_ids);
+              while (params_iterator_next (&iter, &param_name, &param))
+                xml_string_append (bulk_string,
+                                  " uuid=%s",
+                                  param_name);
+            }
+        }
+      else if (params_value (params, "bulk_select")
+               && strcmp (params_value (params, "bulk_select"), "2") == 0)
+        {
+          bulk_string
+            = g_string_new ("first=1 rows=-1 ");
+          g_string_append (bulk_string, params_value (params, "filter") ? : "");
+        }
+      else
+        {
+          bulk_string
+            = g_string_new (params_value (params, "filter") ? : "");
         }
       params_add (params, "filter", g_string_free (bulk_string, FALSE));
 
@@ -21502,14 +21518,84 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                           action);
 
   g_string_append (bulk_string, "<selections>");
-  selected_ids = params_values (params, "bulk_selected:");
-  if (selected_ids)
+
+  if (params_value (params, "bulk_select")
+          && strcmp (params_value (params, "bulk_select"), "2") == 0)
     {
-      params_iterator_init (&iter, selected_ids);
-      while (params_iterator_next (&iter, &param_name, &param))
-        xml_string_append (bulk_string,
-                           "<selection id=\"%s\" />",
-                           param_name);
+      int ret;
+      entity_t entity;
+      gchar *response;
+
+      ret = ompf (credentials, &response, &entity,
+                  "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
+                  type,
+                  params_value (params, "filter") ? : "");
+
+      if (ret)
+        {
+          free_entity (entity);
+          g_free (response);
+          g_string_free (bulk_string, TRUE);
+        }
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Failure to send command to"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Failure to receive response from"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_my_settings");
+        }
+
+      entities_t entities = entity->entities;
+      entity_t child_entity;
+
+      while ((child_entity = first_entity (entities)))
+        {
+          if (strcmp (entity_name (child_entity), type) == 0)
+            {
+              const char *resource_id
+                = entity_attribute (child_entity, "id");
+
+              if (resource_id)
+                xml_string_append (bulk_string,
+                                   "<selection id=\"%s\" />",
+                                   resource_id);
+            }
+          entities = next_entities (entities);
+        }
+    }
+  else
+    {
+      selected_ids = params_values (params, "bulk_selected:");
+      if (selected_ids)
+        {
+          params_iterator_init (&iter, selected_ids);
+          while (params_iterator_next (&iter, &param_name, &param))
+            xml_string_append (bulk_string,
+                              "<selection id=\"%s\" />",
+                              param_name);
+        }
     }
   g_string_append (bulk_string, "</selections>");
 

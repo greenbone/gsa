@@ -517,12 +517,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <str>Auswahl in den Mülleimer verschieben</str>
     </msg>
     <msg>
+      <id>Move all filtered to trashcan</id>
+      <str>Gesamte Filterauswahl in den Mülleimer verschieben</str>
+    </msg>
+    <msg>
       <id>Delete page contents</id>
       <str>Seiteninhalt löschen</str>
     </msg>
     <msg>
       <id>Delete selection</id>
       <str>Auswahl löschen</str>
+    </msg>
+    <msg>
+      <id>Delete all filtered</id>
+      <str>Gesamte Filterauswahl löschen</str>
     </msg>
     <msg>
       <id>Export page contents</id>
@@ -532,6 +540,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>Export selection</id>
       <str>Auswahl exportieren</str>
     </msg>
+    <msg>
+      <id>Export all filtered</id>
+      <str>Gesamte Filterauswahl exportieren</str>
+    </msg>
 
     <msg>
       <id>Apply to page contents</id>
@@ -540,6 +552,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>Apply to selection</id>
       <str>Auf Auswahl anwenden</str>
+    </msg>
+    <msg>
+      <id>Apply to all filtered</id>
+      <str>Auf gesamte Filterauswahl anwenden</str>
     </msg>
 
     <msg>

@@ -1250,7 +1250,7 @@ init_validator ()
   openvas_validator_alias (validator, "bulk_delete.x", "number");
   openvas_validator_alias (validator, "bulk_export.x", "number");
   openvas_validator_alias (validator, "bulk_trash.x",  "number");
-  openvas_validator_alias (validator, "bulk_select",    "boolean");
+  openvas_validator_alias (validator, "bulk_select",   "number");
   openvas_validator_alias (validator, "charts", "boolean");
   openvas_validator_alias (validator, "chart_type", "name");
   openvas_validator_alias (validator, "chart_template", "name");

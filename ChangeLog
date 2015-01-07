@@ -1,3 +1,27 @@
+2015-01-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add option to apply bulk actions to all filtered items.
+
+	* src/gsad_omp.c (process_bulk_omp): Add cases for applying to all
+	filtered items. Use original filter when exporting page contents.
+
+	* src/gsad.c (init_validator): Make "bulk_select" alias of "number".
+
+	* src/html/classic/omp.xsl (list-window): Add new option to bulk select
+	all filtered items.
+	(report, task, html-tasks-table, lsc_credential, agent, alert, filter)
+	(tag, target, config, schedule, scanner, slave, info/cpe, info/cve)
+	(info/nvt, info/ovaldef, info/cert_bund_adv, info/dfn_cert_adv)
+	(info/allinfo, html-cpe-table, html-cve-table, html-nvt-table)
+	(html-ovaldef-table, html-cert_bund_adv-table, html-dfn_cert_adv-table)
+	(html-allinfo-table, note, override, group, permission, port_list)
+	(report_format, html-reports-table, html-results-table, result, role)
+	(user): Show checkboxes only if the parameter bulk_select equals 1.
+	(process_bulk): Create hidden bulk_selected inputs from selection XML
+	elements instead of copying parameters.
+
+	* src/html/classic/po/de.xml: Add text for "all filtered" bulk actions.
+
 2015-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (format_file_name): Get task and report format name
