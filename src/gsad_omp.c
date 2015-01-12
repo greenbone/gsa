@@ -5743,7 +5743,8 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
   /* Get Report Formats. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, "<get_report_formats/>");
+  ret = omp (credentials, &response, &entity,
+             "<get_report_formats filter=\"rows=-1 permission=any owner=any\"/>");
   switch (ret)
     {
       case 0:

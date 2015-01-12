@@ -1,5 +1,10 @@
 2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_alert): Get all report formats that user has
+	permission to access.
+
+2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl: Make sure that all forms have enctype set to
 	"multipart/form-data", for consistency, and also because otherwise the
 	page handlers get the parameters URL-escaped (at least with Firefox
