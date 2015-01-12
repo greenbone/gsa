@@ -13106,13 +13106,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="$config/family_count/growing=1">
               <label>
-                <input type="radio" name="trend:" value="1" checked="1"/>
+                <input type="radio" name="trend" value="1" checked="1"/>
                 <img src="/img/trend_more.png"
                      alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
                      title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Window')}"/>
               </label>
               <label>
-                <input type="radio" name="trend:" value="0"/>
+                <input type="radio" name="trend" value="0"/>
                 <img src="/img/trend_nochange.png"
                      alt="{gsa:i18n ('Static', 'Scan Config Window')}"
                      title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Window')}"/>
@@ -13120,13 +13120,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <label>
-                <input type="radio" name="trend:" value="1"/>
+                <input type="radio" name="trend" value="1"/>
                 <img src="/img/trend_more.png"
                      alt="{gsa:i18n ('Grows', 'Scan Config Window')}"
                      title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config Window')}"/>
               </label>
               <label>
-                <input type="radio" name="trend:" value="0" checked="0"/>
+                <input type="radio" name="trend" value="0" checked="0"/>
                 <img src="/img/trend_nochange.png"
                      alt="{gsa:i18n ('Static', 'Scan Config Window')}"
                      title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config Window')}"/>

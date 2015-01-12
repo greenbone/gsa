@@ -1,5 +1,15 @@
 2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Use "trend" instead of "trend:" for saving config families.
+
+	* src/gsad.c (init_validator): Add "trend".
+
+	* src/gsad_omp.c (save_config_omp): Use "trend".
+
+	* src/html/classic/omp.xsl (edit_families): Replace "trend:" with "trend".
+
+2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_alert): Get all report formats that user has
 	permission to access.
 

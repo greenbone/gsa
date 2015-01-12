@@ -9210,8 +9210,8 @@ save_config_omp (credentials_t * credentials, params_t *params)
                             "<growing>%i</growing>",
                             params_value (params, "config_id"),
                             trends
-                            && params_value (params, "trend:")
-                            && strcmp (params_value (params, "trend:"), "0"))
+                            && params_value (params, "trend")
+                            && strcmp (params_value (params, "trend"), "0"))
       == -1)
     {
       openvas_server_close (socket, session);

@@ -1211,6 +1211,7 @@ init_validator ()
   openvas_validator_add (validator, "term",       "^.{0,1000}");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
+  openvas_validator_add (validator, "trend",       "^(0|1)$");
   openvas_validator_add (validator, "trend:",      "^(0|1)$");
   openvas_validator_add (validator, "trend:value", "^(0|1)$");
   openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
