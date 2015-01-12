@@ -1,3 +1,34 @@
+gsa 6.0+beta5 (2015-01-12)
+
+This is the fifth beta version of the upcoming 6.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for sharing slaves, bulk actions and a "Modify Task"
+wizard as well as support for improved group administration and editing user
+names. It also improves support for OSP scanners and default resource selection
+in wizards and addresses a number of smaller issues.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner and Michael
+Wiegand.
+
+Main changes since 6.0+beta4:
+* Support for sharing slaves has been added.
+* Support for bulk actions has been added.
+* A "Modify Task" wizard has been added.
+* New super permissions for group administration have been added.
+* Support for editing user names has been added.
+* Support for OSP scanners has been improved.
+* Improved support for default resource selection in wizards.
+* Support for "Super Admin" role has been improved.
+* Ensured auto refresh refreshes the correct page.
+* Handling of solution type information has been improved and made more
+  accessible.
+* Documentation has been updated.
+* Numerous small improvements and bugfixes.
+
+
 gsa 6.0+beta4 (2014-11-21)
 
 This is the fourth beta version of the upcoming 6.0 release of the Greenbone
