@@ -946,7 +946,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <div style="float: right">
             <xsl:if test="gsa:may-op ('create_filter')">
-              <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+              <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
                 <div style="display: inline; padding: 2px; vertical-align:middle;">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="create_filter"/>
@@ -971,7 +971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </form>
             </xsl:if>
             <xsl:if test="gsa:may-op ('get_filters')">
-              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter">
+              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter" enctype="multipart/form-data">
                 <div style="display: inline; padding: 2px; vertical-align:middle;">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
@@ -1008,7 +1008,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:otherwise>
       </xsl:choose>
-      <form action="" method="get">
+      <form action="" method="get" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
         <xsl:for-each select="exslt:node-set($extra_params)/param">
@@ -1059,7 +1059,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </form>
       <xsl:if test="/envelope/params/filterbox &gt; 0">
-        <form action="" method="get">
+        <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
           <input type="hidden" name="build_filter" value="1"/>
@@ -2413,7 +2413,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="gb_window_part_content">
         <xsl:if test="gsa:may-op ('create_permission') and (gsa:may-op ('get_users') or gsa:may-op ('get_groups') or gsa:may-op ('get_roles'))">
-          <form method="post">
+          <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="create_permission"/>
             <input type="hidden" name="comment" value=""/>
             <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
@@ -2560,7 +2560,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png" border="0"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get" name="switch_overrides">
+        <form action="" method="get" name="switch_overrides" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
@@ -2598,7 +2598,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:variable name="sort_order">
           <xsl:value-of select="report/sort/field/order"/>
         </xsl:variable>
-        <form action="" method="get">
+        <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
@@ -3077,7 +3077,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" mode="filterbox">
   <xsl:if test="/envelope/params/filterbox &gt; 0">
     <div style="background-color: #EEEEEE;">
-      <form action="" method="get">
+      <form action="" method="get" enctype="multipart/form-data">
         <xsl:choose>
           <xsl:when test="/envelope/params/report_section != ''">
             <input type="hidden" name="report_section" value="{/envelope/params/report_section}"/>
@@ -3691,7 +3691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </div>
       <div id="small_inline_form" style="margin-left:40px; display: inline">
-        <form method="get" action="">
+        <form method="get" action="" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_task"/>
           <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
@@ -4287,7 +4287,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
           <div id="small_inline_form" style="margin-left:40px; display: inline">
-            <form method="get" action="">
+            <form method="get" action="" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
@@ -4479,7 +4479,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
-                    <form name="bulk-actions">
+                    <form name="bulk-actions" enctype="multipart/form-data">
                       <xsl:choose>
                         <xsl:when test="$type = 'info'">
                           <xsl:for-each select="$resources">
@@ -4510,7 +4510,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select = 1">
-            <form name="bulk-actions">
+            <form name="bulk-actions" enctype="multipart/form-data">
               <xsl:copy-of select="$table"/>
             </form>
           </xsl:when>
@@ -4519,7 +4519,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="not ($no_bulk)">
-          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px">
+          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
+                enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
             <xsl:if test="$subtype">
@@ -6743,7 +6744,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:otherwise>
                 <div style="float: right; display: inline">
-                  <form method="get" action="">
+                  <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_tasks"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -6982,7 +6983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_lsc_credential"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -23194,7 +23195,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_report_format"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -23785,7 +23786,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get">
+        <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
@@ -24258,7 +24259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:otherwise>
                 <div style="float: right; display: inline">
-                  <form method="get" action="">
+                  <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_reports"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -25154,7 +25155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <xsl:value-of select="gsa:i18n ('Severity', 'Result Window')"/>
             <div style="float: right; display: inline">
-              <form method="get" action="">
+              <form method="get" action="" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_result"/>
                 <input type="hidden" name="result_id" value="{@id}"/>
@@ -26128,7 +26129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:otherwise>
                 <div style="float: right; display: inline">
-                  <form method="get" action="">
+                  <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_results"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -26781,7 +26782,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div style="background-color: #EEEEEE;">
     <xsl:if test="/envelope/params/cmd!='get_report_section' or /envelope/params/report_section = 'results' or /envelope/params/report_section = 'summary'">
       <div style="float: right">
-        <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+        <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="create_filter"/>
@@ -26816,7 +26817,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
           </div>
         </form>
-        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter">
+        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter" enctype="multipart/form-data">
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="cmd" value="get_report_section"/>
             <input type="hidden" name="report_id" value="{@id}"/>
@@ -26865,7 +26866,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </div>
     </xsl:if>
-    <form action="" method="get">
+    <form action="" method="get" enctype="multipart/form-data">
       <input type="hidden" name="cmd" value="get_report_section"/>
       <input type="hidden" name="report_id" value="{@id}"/>
       <input type="hidden" name="report_section" value="{$section}"/>
@@ -27891,7 +27892,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="full-report-export-form">
-  <form action="" method="get">
+  <form action="" method="get" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="cmd" value="get_report"/>
     <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -27940,7 +27941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="apply-overrides" select="report/filters/apply_overrides"/>
   <xsl:param name="levels" select="report/filters/text()"/>
 
-  <form action="" method="get">
+  <form action="" method="get" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="cmd" value="get_report"/>
     <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -28426,7 +28427,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="cert"/>
 
-  <form action="" method="get">
+  <form action="" method="get" enctype="multipart/form-data">
     <input type="hidden" name="cmd" value="download_ssl_cert"/>
     <input type="hidden" name="name" value="{$name}"/>
     <input type="hidden" name="ssl_cert" value="{str:encode-uri($cert, true ())}"/>
@@ -28815,7 +28816,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <div id="small_form" style="float:right;">
-                  <form action="" method="post">
+                  <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -28888,7 +28889,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>
               <td>
                 <div id="small_form" style="float:right;">
-                  <form action="" method="post">
+                  <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -29692,7 +29693,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <div id="small_form" style="float:left;">
-                <form action="" method="get" name="switch_slave">
+                <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="get_system_reports"/>
                   <input type="hidden" name="duration" value="{$duration}"/>
@@ -33063,7 +33064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
     <div class="gb_window_part_content">
-      <form style="display:inline;" method="post">
+      <form style="display:inline;" method="post" enctype="multipart/form-data">
         <center>
           <div style="margin-bottom:10px">
             <xsl:choose>
@@ -33111,7 +33112,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Help: OMP
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get">
+        <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="export_omp_doc"/>
           <select style="margin-bottom: 0px;" name="protocol_format" size="1">
