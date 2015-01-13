@@ -1,3 +1,11 @@
+2015-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21348.
+
+	* src/gsad_omp.c (get_one): Improve error messages.
+	(get_task, get_config): Add NULL check on extra_xml and free entity in
+	all cases, as in get_one.
+
 2014-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21045.
