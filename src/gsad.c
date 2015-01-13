@@ -1161,7 +1161,6 @@ init_validator ()
   openvas_validator_add (validator, "port_type", "^tcp|udp$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "preference:",      "^$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
@@ -1192,7 +1191,6 @@ init_validator ()
   openvas_validator_add (validator, "optional_resource_type",
                          "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
                          "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
-  openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -1212,7 +1210,6 @@ init_validator ()
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
   openvas_validator_add (validator, "trend",       "^(0|1)$");
-  openvas_validator_add (validator, "trend:",      "^(0|1)$");
   openvas_validator_add (validator, "trend:value", "^(0|1)$");
   openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");

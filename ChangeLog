@@ -1,5 +1,12 @@
 2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Remove rules like "preference:", which are
+	for the single-parameter versions of hashtable params.  These are no
+	longer used, and they end up in the XML like <preference:> which causes
+	syntax warnings.
+
+2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_config_omp): Remove next check, as next is always
 	NULL.
 
