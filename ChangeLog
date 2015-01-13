@@ -1,5 +1,10 @@
 2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_config_omp): Remove next check, as next is always
+	NULL.
+
+2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Use "trend" instead of "trend:" for saving config families.
 
 	* src/gsad.c (init_validator): Add "trend".

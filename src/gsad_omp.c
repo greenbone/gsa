@@ -9084,7 +9084,6 @@ save_config_omp (credentials_t * credentials, params_t *params)
   int socket;
   char *ret;
   gchar *html;
-  const char *next;
   params_t *preferences, *selects, *trends;
   const char *config_id, *name, *comment;
 
@@ -9310,10 +9309,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
 
   /* Return the next page. */
 
-  next = params_value (params, "next:");
-  if (next == NULL || strcmp (next, "Save Config") == 0)
-    return get_config (credentials, params, NULL, 1);
-  return get_config_family (credentials, params, 1);
+  return get_config (credentials, params, NULL, 1);
 }
 
 /**
