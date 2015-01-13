@@ -1137,7 +1137,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a resource. "
-                             "Diagnostics: Required ID parameter was NULL.",
+                             "Diagnostics: extra_xml is NULL.",
                              "/omp?cmd=get_tasks");
 
       if (parse_entity (extra_xml, &entity) == 0)
@@ -1167,7 +1167,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a resource. "
-                                   "Diagnostics: Required ID parameter was NULL.",
+                                   "Diagnostics: Error parsing extra_xml.",
                                    "/omp?cmd=get_tasks");
             }
         }
@@ -4146,28 +4146,43 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
       /* Check for an ID in a CREATE_TASK response in extra_xml. */
 
-      if ((parse_entity (extra_xml, &entity) == 0)
-          && (strcmp (entity_name (entity), "create_task_response") == 0))
-        {
-          param_t *param;
+      if (extra_xml == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a task. "
+                             "Diagnostics: extra_xml is NULL.",
+                             "/omp?cmd=get_tasks");
 
-          param = params_add (params, "task_id", entity_attribute (entity, "id"));
-          param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-          task_id = params_value (params, "task_id");
-          assert (task_id);
-          page_url_append_param (credentials, "task_id", task_id);
-          free_entity (entity);
+      if (parse_entity (extra_xml, &entity) == 0)
+        {
+          if (strcmp (entity_name (entity), "create_task_response") == 0)
+            {
+              param_t *param;
+
+              param = params_add (params, "task_id", entity_attribute (entity, "id"));
+              param->valid = 1;
+              param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+              task_id = params_value (params, "task_id");
+              assert (task_id);
+              page_url_append_param (credentials, "task_id", task_id);
+              free_entity (entity);
+            }
+          else
+            {
+              free_entity (entity);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a task. "
+                                   "Diagnostics: CREATE_TASK response missing.",
+                                   "/omp?cmd=get_tasks");
+            }
         }
       else
-        {
-          free_entity (entity);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a task. "
-                               "Diagnostics: Required parameter task_id was NULL.",
-                               "/omp?cmd=get_tasks");
-        }
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a task. "
+                             "Diagnostics: Error parsing extra_xml.",
+                             "/omp?cmd=get_tasks");
     }
 
   overrides = params_value (params, "overrides");
@@ -8853,31 +8868,45 @@ get_config (credentials_t * credentials, params_t *params,
 
       /* Check for an ID in a CREATE_CONFIG response in extra_xml. */
 
-      if (extra_xml
-          && (parse_entity (extra_xml, &entity) == 0)
-          && (strcmp (entity_name (entity), "create_config_response") == 0))
-        {
-          param_t *param;
+      if (extra_xml == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a config. "
+                             "Diagnostics: extra_xml is NULL.",
+                             "/omp?cmd=get_configs");
 
-          param = params_add (params, "config_id", entity_attribute (entity, "id"));
-          param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-          config_id = params_value (params, "config_id");
-          assert (config_id);
-          page_url_append_param (credentials, "config_id", config_id);
-          free_entity (entity);
+      if (parse_entity (extra_xml, &entity) == 0)
+        {
+          if (strcmp (entity_name (entity), "create_config_response") == 0)
+            {
+              param_t *param;
+
+              param = params_add (params, "config_id", entity_attribute (entity, "id"));
+              param->valid = 1;
+              param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+              config_id = params_value (params, "config_id");
+              assert (config_id);
+              page_url_append_param (credentials, "config_id", config_id);
+              free_entity (entity);
+            }
+          else
+            {
+              free_entity (entity);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a config. "
+                                   "Diagnostics: CREATE_CONFIG response missing.",
+                                   "/omp?cmd=get_configs");
+            }
         }
       else
-        {
-          if (extra_xml)
-            free_entity (entity);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a task. "
+                             "Diagnostics: Error parsing extra_xml.",
+                             "/omp?cmd=get_configs");
 
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a config. "
-                               "Diagnostics: Required parameter config_id was NULL.",
-                               "/omp?cmd=get_configs");
-        }
+
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))

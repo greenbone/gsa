@@ -1,3 +1,9 @@
+2015-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one): Improve error messages.
+	(get_task, get_config): Add NULL check on extra_xml and free entity in
+	all cases, as in get_one.
+
 2015-01-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Remove rules like "preference:", which are
