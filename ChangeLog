@@ -1,5 +1,24 @@
 2015-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add the alert error dialog and indicator icon on the "Report: Summary
+	and Download" page.
+
+	* src/gsad_omp.c (get_report): Put the GET_REPORTS alert response inside
+	the GET_REPORTS_ALERT_RESPONSE element.  This was the XSL has the actual
+	error.
+
+	* src/html/classic/omp.xsl (get_reports_response [alert]): New template.
+	Was get_reports_alert_response.
+	(get_reports_alert_response): Remove.  Now get_reports_response.
+	(get_report_summary_response, get_report): Apply alert case response, so
+	that the error dialog show up.
+
+	* src/html/classic/gsad.xsl
+	(get_reports_response [response-idicator-alert]): New template.
+	(html-gsa-logo): Apply indicator.
+
+2015-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl: Use /envelope/current_page instead of
 	/envelope/caller in forms and links, because after a post current_page
 	is adjusted to take into account the "next" param, whereas caller is

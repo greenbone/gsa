@@ -10364,7 +10364,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
-  gchar *fname_format, *file_name;
+  gchar *fname_format, *file_name, *esc_response;
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -10724,7 +10724,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks");
         }
 
-      if (read_entity (&session, &entity))
+      if (read_entity_and_text (&session, &entity, &esc_response))
         {
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
@@ -10754,28 +10754,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "Diagnostics: Failure to parse response from manager daemon.",
                                "/omp?cmd=get_tasks");
         }
-      if (status[0] != '2')
-        {
-          char *ret;
-          gchar *msg;
-          msg = g_strdup_printf ("An internal error occurred while getting a report. "
-                                 "The report could not be delivered. "
-                                 "Diagnostics: GET_REPORT alert failed: %s.",
-                                 entity_attribute (entity, "status_text"));
-          ret = gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              msg, "/omp?cmd=get_tasks");
-          g_free (msg);
-          free_entity (entity);
-          openvas_server_close (socket, session);
-          g_string_free (commands_xml, TRUE);
-          g_string_free (delta_states, TRUE);
-          g_string_free (levels, TRUE);
-          if (error) *error = 1;
-          return ret;
-        }
       free_entity (entity);
     }
+  else
+    esc_response = NULL;
 
   result_id = params_value (params, "result_id");
   delta_report_id = params_value (params, "delta_report_id");
@@ -11314,9 +11296,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (levels, TRUE);
 
       if (strcmp (alert_id, "0"))
-        g_string_append_printf (xml, "<get_reports_alert_response"
-                                     " status=\"200\""
-                                     " status_text=\"OK\"/>");
+        {
+          g_string_append_printf (xml, "<get_reports_alert_response>");
+          if (esc_response)
+            {
+              g_string_append (xml, esc_response);
+              g_free (esc_response);
+            }
+          g_string_append_printf (xml, "</get_reports_alert_response>");
+        }
       else if (delta_report_id)
         g_string_append_printf (xml,
                                 "<delta>%s</delta>"
