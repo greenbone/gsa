@@ -950,7 +950,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div style="display: inline; padding: 2px; vertical-align:middle;">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="cmd" value="create_filter"/>
-                  <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                  <input type="hidden" name="caller" value="{/envelope/current_page}"/>
                   <input type="hidden" name="comment" value=""/>
                   <input type="hidden" name="term" value="{filters/term}"/>
                   <input type="hidden" name="optional_resource_type" value="{$type}"/>
@@ -1517,7 +1517,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div style="display: inline">
         <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="cmd" value="clone"/>
           <input type="hidden" name="resource_type" value="{$type}"/>
           <input type="hidden" name="next" value="get_{$type}"/>
@@ -1565,7 +1565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div style="display: inline">
     <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_trash_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Table Row')}"
@@ -1583,7 +1583,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div style="display: inline">
     <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Table Row')}"
@@ -1601,7 +1601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp"
             method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="cmd" value="restore"/>
         <input type="hidden" name="target_id" value="{$id}"/>
         <input type="image" src="/img/restore.png" alt="{gsa:i18n ('Restore', 'Trashcan')}"
@@ -1621,7 +1621,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form style="display: inline; font-size: 0px; margin-left: 3px"
           action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/resume.png" alt="{gsa:i18n ('Resume', 'Task Table Row')}"
@@ -1642,7 +1642,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form style="display: inline; font-size: 0px; margin-left: 3px"
           action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -1663,7 +1663,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form style="display: inline; font-size: 0px; margin-left: 3px"
           action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="stop_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/stop.png" alt="{gsa:i18n('Stop', 'Task Table Row')}"
@@ -1682,7 +1682,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div style="display: inline">
     <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Table Row')}"
@@ -2133,7 +2133,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     style="margin-left: 5px" />
               <input type="hidden" name="comment"/>
               <input type="hidden" name="active" value="1"/>
-              <input type="hidden" name="caller" value="{/envelope/caller}"/>
+              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="create_tag"/>
               <input type="hidden" name="resource_id" value="{$resource_id}"/>
@@ -2346,7 +2346,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="display: inline">
       <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="cmd" value="toggle_tag"/>
         <input type="hidden" name="enable" value="{$enable}"/>
         <input type="hidden" name="tag_id" value="{$id}"/>
@@ -3990,7 +3990,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="next" value="get_task"/>
           <input type="hidden" name="task_id" value="{@id}"/>
           <input type="hidden" name="overrides" value="{apply_overrides}"/>
@@ -4319,7 +4319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
-      <xsl:variable name="caller_escaped" select="gsa:escape-js (/envelope/caller)"/>
+      <xsl:variable name="caller_escaped" select="gsa:escape-js (/envelope/current_page)"/>
       <xsl:choose>
         <xsl:when test="$top-visualization = ''"/>
         <xsl:when test="/envelope/charts = '1'">
@@ -4328,10 +4328,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <xsl:choose>
             <xsl:when test="/envelope/params/charts = '1'">
-              <a class="charts-bar" href="{substring-before (/envelope/caller, '&amp;charts=1')}{substring-after (/envelope/caller, '&amp;charts=1')}&amp;charts=0&amp;token={/envelope/token}" title="Hide Charts">&#9650; &#9650; &#9650;</a>
+              <a class="charts-bar" href="{substring-before (/envelope/current_page, '&amp;charts=1')}{substring-after (/envelope/current_page, '&amp;charts=1')}&amp;charts=0&amp;token={/envelope/token}" title="Hide Charts">&#9650; &#9650; &#9650;</a>
             </xsl:when>
             <xsl:otherwise>
-              <a class="charts-bar" href="{/envelope/caller}&amp;charts=0&amp;token={/envelope/token}" title="Hide Charts">&#9650; &#9650; &#9650;</a>
+              <a class="charts-bar" href="{/envelope/current_page}&amp;charts=0&amp;token={/envelope/token}" title="Hide Charts">&#9650; &#9650; &#9650;</a>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -4659,7 +4659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="cmd" value="clone"/>
             <input type="hidden" name="resource_type" value="{$type}"/>
             <input type="hidden" name="next" value="get_{$type}"/>
@@ -5006,7 +5006,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="next" value="get_task"/>
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
@@ -5403,7 +5403,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_report"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="next" value="get_tasks"/>
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
@@ -6169,7 +6169,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="task_id"
                value="{commands_response/get_tasks_response/task/@id}"/>
@@ -6294,7 +6294,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="next" value="{next}"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -6825,7 +6825,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_lsc_credential"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_lsc_credential"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -6986,7 +6986,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_lsc_credential"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="lsc_credential_id"
                value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
@@ -7307,7 +7307,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_agent"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_agent"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -7400,7 +7400,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_agent"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="agent_id"
                value="{commands_response/get_agents_response/agent/@id}"/>
@@ -7757,7 +7757,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_alert"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_alert"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -8196,7 +8196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_alert"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="alert_id"
                value="{get_alerts_response/alert/@id}"/>
@@ -9466,7 +9466,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_filter"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_filter"/>
         <input type="hidden" name="filter_id" value="{/envelope/params/filter_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -9538,7 +9538,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_filter"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="filter_id"
                value="{commands_response/get_filters_response/filter/@id}"/>
@@ -10209,7 +10209,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_tag"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <xsl:if test="/envelope/params/next_type!=''">
           <xsl:if test="/envelope/params/next_id != ''">
@@ -10358,7 +10358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_tag"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="tag_id"
                value="{get_tags_response/tag/@id}"/>
@@ -10554,7 +10554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_target"/>
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
@@ -10751,7 +10751,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_target"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="target_id"
                value="{get_targets_response/target/@id}"/>
@@ -11953,7 +11953,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_config"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_config"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -12042,7 +12042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_config"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_config"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -12145,7 +12145,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="save_config_family"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="config_id" value="{$config_id}"/>
             <input type="hidden" name="name" value="{$config_name}"/>
             <input type="hidden" name="family" value="{$family}"/>
@@ -12838,7 +12838,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config_nvt"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="config_id" value="{config/@id}"/>
           <input type="hidden" name="name" value="{config/name}"/>
           <input type="hidden" name="family" value="{$family}"/>
@@ -13277,7 +13277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="config_id" value="{$config/@id}"/>
           <input type="hidden" name="name" value="{$config/name}"/>
 
@@ -13772,7 +13772,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -14336,7 +14336,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_schedule"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="schedule_id"
                value="{commands_response/get_schedules_response/schedule/@id}"/>
@@ -15325,7 +15325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_scanner"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_scanner"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -15474,7 +15474,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_scanner"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="scanner_id"
                value="{commands_response/get_scanners_response/scanner/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
@@ -15795,7 +15795,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_slave"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_slave"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -15949,7 +15949,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_slave"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="slave_id"
                value="{commands_response/get_slaves_response/slave/@id}"/>
@@ -19118,7 +19118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_note"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -19440,7 +19440,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_note"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="note_id"
                value="{get_notes_response/note/@id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -20155,7 +20155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_override"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -20497,7 +20497,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_override"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="override_id"
                value="{get_overrides_response/override/@id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -21556,7 +21556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_group"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_group"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -21619,7 +21619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_group"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="group_id"
                value="{commands_response/get_groups_response/group/@id}"/>
@@ -21748,7 +21748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <!-- FIX filter?. -->
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -22208,7 +22208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_permission"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="permission_id"
                value="{commands_response/get_permissions_response/permission/@id}"/>
@@ -22462,7 +22462,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_port_list"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_port_list"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -22785,7 +22785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_port_list"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="port_list_id"
                value="{commands_response/get_port_lists_response/port_list/@id}"/>
@@ -22831,7 +22831,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_port_range"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="port_list_id" value="{$id}"/>
         <input type="hidden" name="next" value="edit_port_list"/>
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
@@ -23008,7 +23008,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_port_list"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -23117,7 +23117,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_report_format"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -23198,7 +23198,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_report_format"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="report_format_id"
                value="{commands_response/get_report_formats_response/report_format/@id}"/>
@@ -24583,7 +24583,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div style="display: inline">
           <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="cmd" value="clone"/>
             <input type="hidden" name="resource_type" value="note"/>
             <input type="hidden" name="id" value="{@id}"/>
@@ -24827,7 +24827,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div style="display: inline">
           <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="cmd" value="clone"/>
             <input type="hidden" name="resource_type" value="override"/>
             <input type="hidden" name="id" value="{@id}"/>
@@ -26786,7 +26786,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="create_filter"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="optional_resource_type" value="result"/>
             <input type="hidden" name="next" value="get_report_section"/>
             <input type="hidden" name="overrides" value="{$apply-overrides}"/>
@@ -28431,7 +28431,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="cmd" value="download_ssl_cert"/>
     <input type="hidden" name="name" value="{$name}"/>
     <input type="hidden" name="ssl_cert" value="{str:encode-uri($cert, true ())}"/>
-    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="image" name="submit" value="Download SSL Cert"
            title="{gsa:i18n ('Download SSL Cert', 'Result Table Row')}" src="/img/download.png" border="0"
@@ -28818,7 +28818,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div id="small_form" style="float:right;">
                   <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
-                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
                     <input type="hidden" name="report_section" value="summary"/>
                     <input type="hidden" name="filter" value="{report/filters/term}"/>
@@ -28891,7 +28891,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div id="small_form" style="float:right;">
                   <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
-                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
                     <input type="hidden" name="report_section" value="summary"/>
                     <input type="hidden" name="filter" value="{report/filters/term}"/>
@@ -29016,7 +29016,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_role"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_role"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -29076,7 +29076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_role"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
                name="role_id"
                value="{$role_id}"/>
@@ -29132,7 +29132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="role_id" value="{$role_id}"/>
         <input type="hidden" name="next" value="edit_role"/>
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
@@ -29187,7 +29187,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="role_id" value="{$role_id}"/>
         <input type="hidden" name="next" value="edit_role"/>
         <input type="hidden" name="next_error" value="edit_role"/>
@@ -30042,7 +30042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="empty_trashcan"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="submit"
                    name="submit"
                    value="{gsa:i18n ('Empty Trashcan', 'Trashcan')}"
@@ -30406,7 +30406,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_user"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_user"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -30792,7 +30792,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="display: inline">
             <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="caller" value="{/envelope/caller}"/>
+              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
               <input type="hidden" name="cmd" value="delete_user"/>
               <input type="hidden" name="user_id" value="{@id}"/>
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -30978,7 +30978,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_user"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -31360,7 +31360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_auth"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="next" value="get_users"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -31470,7 +31470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="sync_feed"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -31604,7 +31604,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="sync_scap"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -31753,7 +31753,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="sync_cert"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -32432,7 +32432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_my_settings"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>

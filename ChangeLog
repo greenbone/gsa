@@ -1,3 +1,12 @@
+2015-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl: Use /envelope/current_page instead of
+	/envelope/caller in forms and links, because after a post current_page
+	is adjusted to take into account the "next" param, whereas caller is
+	always the page from which the user requested the post.  In particular,
+	after a create_task initiated from the "get_tasks" page, "caller" is
+	"get_tasks", whereas "current_page" is the landing page, "get_task".
+
 2015-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_one): Improve error messages.
