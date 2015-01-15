@@ -446,6 +446,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="get_reports_response" mode="response-indicator-alert">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Run Alert'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="get_reports_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -1150,6 +1158,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_summary_response/modify_tag_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_summary_response/get_report/get_reports_alert_response/get_reports_response"
+                             mode="response-indicator-alert"/>
         <xsl:apply-templates select="get_result/commands_response/create_note_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/create_note_response"
