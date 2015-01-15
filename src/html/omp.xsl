@@ -904,7 +904,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="all">
 </xsl:template>
 
-<xsl:template match="get_reports_alert_response">
+<xsl:template match="get_reports_response" mode="alert">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Run Alert</xsl:with-param>
     <xsl:with-param name="status">
@@ -17726,7 +17726,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_reports_alert_response"/>
+  <xsl:apply-templates select="get_reports_alert_response/get_reports_response"
+                       mode="alert"/>
   <xsl:apply-templates select="get_reports_response"/>
 </xsl:template>
 
