@@ -1,5 +1,17 @@
 2015-01-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r16383.  Patch by Michael Wiegand.
+
+	Make sure gsad is properly linked to libgcrypt.
+
+	* CMakeLists.txt: Add libgcrypt detection and retrieve linker and
+	compiler flags using libgcrypt-config.
+
+	* src/CMakeLists.txt: Use detected flags when compiling and linking
+	the gsad binary.
+
+2015-01-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r21384.
 
 	Add the alert error dialog and indicator icon on the "Report: Summary
