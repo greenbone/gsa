@@ -1,3 +1,8 @@
+2014-12-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner [details]): Show the fetched scanner
+	info.
+
 2015-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add the alert error dialog and indicator icon on the "Report: Summary

@@ -15586,6 +15586,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Scanner Name', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/scanner/name"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Scanner Version', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/scanner/version"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Daemon Name', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/daemon/name"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Daemon Version', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/daemon/version"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Protocol Name', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/protocol/name"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Protocol Version', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/protocol/version"/></td>
+        </tr>
       </table>
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
