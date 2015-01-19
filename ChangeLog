@@ -1,3 +1,9 @@
+2015-01-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Fix condition for
+	considering a donut slice a full circle and make it a bit fuzzy to
+	account for rounding errors.
+
 2014-12-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Show the fetched scanner

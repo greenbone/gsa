@@ -268,7 +268,8 @@ function DonutChartGenerator ()
                   .attr("d", function (d, i)
                           {
                             if (d.value != 0
-                                && (slices.length <= 1 || d.startAngle == d.endAngle))
+                                && (slices.length <= 1
+                                    || (d.startAngle == 0 && 2 * Math.PI - d.endAngle < 1e-12)))
                               return DonutChartGenerator.donut_full_top_path_d
                                       (d.startAngle,
                                        d.endAngle,
