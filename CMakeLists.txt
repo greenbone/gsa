@@ -104,17 +104,17 @@ endif (GTHREAD_REQUIRED)
 
 message (STATUS "Looking for libgcrypt...")
 find_library (LIBGCRYPT gcrypt)
-message (STATUS "Looking for libgcrypt... ${LIBGCRYPT}")
 if (NOT LIBGCRYPT)
-  message (FATAL_ERROR "The libgcrypt library is required.")
+  message (SEND_ERROR "The libgcrypt library is required.")
+else (NOT LIBGCRYPT)
+  message (STATUS "Looking for libgcrypt... ${LIBGCRYPT}")
+  execute_process (COMMAND libgcrypt-config --libs
+    OUTPUT_VARIABLE LIBGCRYPT_LDFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process (COMMAND libgcrypt-config --cflags
+    OUTPUT_VARIABLE LIBGCRYPT_CFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif (NOT LIBGCRYPT)
-
-execute_process (COMMAND libgcrypt-config --libs
-  OUTPUT_VARIABLE LIBGCRYPT_LDFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process (COMMAND libgcrypt-config --cflags
-  OUTPUT_VARIABLE LIBGCRYPT_CFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
     (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT

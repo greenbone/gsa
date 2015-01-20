@@ -1,5 +1,15 @@
 2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Make check for libgcrypt consistent with other library checks.
+
+	* CMakeLists.txt: Raise SEND_ERROR instead of FATAL_ERROR if libgcrypt
+	can not be found. Consequently, only call libgcrypt-config if
+	libgcrypt was found. Move status message to more appropriate place.
+
+	* INSTALL: Note libgcrypt as prerequisite.
+
+2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Simplify handling of library flags in CMakeLists.txt files, thereby
 	removing the need for clumsy workarounds.
 

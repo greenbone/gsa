@@ -15,6 +15,7 @@ some supported platforms.
 Prerequisites:
 * openvas-libraries (>= 8.0.0)
 * gnutls (>= 2.8)
+* libgcrypt
 * cmake
 * glib-2.0 (>= 2.16)
 * libxml
