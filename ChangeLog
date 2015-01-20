@@ -1,5 +1,10 @@
 2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* CMakeLists.txt: Remove find_program for long obsolete
+	libopenvas-config. It was removed before openvas-libraries 4.0.0.
+
+2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Make check for libgcrypt consistent with other library checks.
 
 	* CMakeLists.txt: Raise SEND_ERROR instead of FATAL_ERROR if libgcrypt

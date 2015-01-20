@@ -47,10 +47,6 @@ set (MANDATORY_TOOL_MISSING FALSE)
 find_program (PATH_TO_PKGCONFIG pkg-config DOC "pkg-config program to retrieve "
                         "information about installed libraries in the system.")
 
-find_program (PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
-                        " to retrieve information about installed"
-                        " openvas-libraries in the system.")
-
 if (NOT USE_LIBXSLT EQUAL 0)
   set (USE_LIBXSLT 1)
 endif (NOT USE_LIBXSLT EQUAL 0)
