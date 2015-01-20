@@ -25,20 +25,32 @@
 
 ## Config
 
+include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
+                     ${GLIB_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS}
+                     ${LIBOPENVAS_OMP_INCLUDE_DIRS}
+                     ${LIBOPENVAS_BASE_INCLUDE_DIRS}
+                     ${LIBOPENVAS_MISC_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS}
+                     ${GNUTLS_INCLUDE_DIRS})
 ## Libraries
 
 add_library (gsad_base STATIC gsad_base.c)
-set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
-target_link_libraries (gsad_base "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
+target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
+                       ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
+                       ${LIBOPENVAS_BASE_LDFLAGS} ${LIBOPENVAS_MISC_LDFLAGS}
+                       ${GNUTLS_LDFLAGS})
 
 add_library (gsad_omp STATIC gsad_omp.c)
-set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
-target_link_libraries (gsad_omp "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
+target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
+                       ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
+                       ${LIBOPENVAS_BASE_LDFLAGS} ${LIBOPENVAS_MISC_LDFLAGS}
+                       ${GNUTLS_LDFLAGS})
 
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base "${LIBGCRYPT_LDFLAGS}")
+target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
@@ -86,9 +98,6 @@ endif (GSA_CONFIG_DIR)
 
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
-
-set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-  "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS} ${LIBGCRYPT_CFLAGS}")
 
 ## Install
 
