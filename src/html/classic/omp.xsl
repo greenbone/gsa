@@ -15610,6 +15610,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="gsa:i18n ('Protocol Version', 'Scanner Window')"/>:</td>
           <td><xsl:value-of select="info/protocol/version"/></td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Scanner Description', 'Scanner Window')"/>:</td>
+          <td><xsl:value-of select="info/description"/></td>
+        </tr>
       </table>
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
