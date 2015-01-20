@@ -23,9 +23,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# Needed for 'pkg_check_modules' function
-include (FindPkgConfig)
-
 message ("-- Configuring greenbone-security-assistant...")
 
 project (greenbone-security-assistant C)
@@ -36,6 +33,13 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 OLD)
 endif (POLICY CMP0005)
 
+# Needed for 'pkg_check_modules' function
+include (FindPkgConfig)
+
+if (NOT PKG_CONFIG_FOUND)
+  message(FATAL_ERROR "pkg-config executable not found. Aborting.")
+endif (NOT PKG_CONFIG_FOUND)
+
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
 endif (NOT CMAKE_BUILD_TYPE)
@@ -43,9 +47,6 @@ endif (NOT CMAKE_BUILD_TYPE)
 ## Check existence required tools
 
 set (MANDATORY_TOOL_MISSING FALSE)
-
-find_program (PATH_TO_PKGCONFIG pkg-config DOC "pkg-config program to retrieve "
-                        "information about installed libraries in the system.")
 
 if (NOT USE_LIBXSLT EQUAL 0)
   set (USE_LIBXSLT 1)
@@ -57,17 +58,7 @@ if (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
   set (MANDATORY_TOOL_MISSING TRUE)
 endif (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
 
-## TODO this check is obsolete with the FindPkgConfig module (see below,
-## pkg_check_module sets OKG_CONFIG_FOUND)
-message (STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
-if (NOT PATH_TO_PKGCONFIG)
-  set (MANDATORY_TOOL_MISSING TRUE)
-endif (NOT PATH_TO_PKGCONFIG)
-
 if (MANDATORY_TOOL_MISSING)
-  if (NOT PATH_TO_PKGCONFIG)
-    message ("The pkg-config tool is required.")
-  endif (NOT PATH_TO_PKGCONFIG)
   if (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
     message ("The xsltproc tool or libxslt is required.")
   endif (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)

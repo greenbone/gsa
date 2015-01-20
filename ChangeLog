@@ -1,5 +1,10 @@
 2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* CMakeLists.txt: Simplify check for pkg-config and make it consistent
+	with the other modules.
+
+2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* CMakeLists.txt: Remove find_program for long obsolete
 	libopenvas-config. It was removed before openvas-libraries 4.0.0.
 
