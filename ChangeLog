@@ -1,3 +1,8 @@
+2015-01-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner [details]): Re-arranged the information
+	into ins own section and condensed and niced the content.
+
 2015-01-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Simplify check for pkg-config and make it consistent

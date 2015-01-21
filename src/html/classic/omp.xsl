@@ -15586,35 +15586,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Scanner Name', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/scanner/name"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Scanner Version', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/scanner/version"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Daemon Name', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/daemon/name"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Daemon Version', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/daemon/version"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Protocol Name', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/protocol/name"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Protocol Version', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/protocol/version"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Scanner Description', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="info/description"/></td>
-        </tr>
       </table>
+
+      <xsl:choose>
+        <xsl:when test="info/scanner/name">
+          <h1><xsl:value-of select="gsa:i18n ('Online Response of Scanner', 'Scanner Window')"/></h1>
+
+          <table>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Scanner Name', 'Scanner Window')"/>:</td>
+              <td><xsl:value-of select="info/scanner/name"/></td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Scanner Version', 'Scanner Window')"/>:</td>
+              <td><xsl:value-of select="info/scanner/version"/></td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('OSP Daemon', 'Scanner Window')"/>:</td>
+              <td>
+                <xsl:value-of select="info/daemon/name"/>
+                <xsl:value-of select="gsa:i18n (' ', 'Scanner Window')"/>
+                <xsl:value-of select="info/daemon/version"/>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Protocol', 'Scanner Window')"/>:</td>
+              <td>
+                <xsl:value-of select="info/protocol/name"/>
+                <xsl:value-of select="gsa:i18n (' ', 'Scanner Window')"/>
+                <xsl:value-of select="info/protocol/version"/>
+              </td>
+            </tr>
+          </table>
+
+          <h2><xsl:value-of select="gsa:i18n ('Description', 'Scanner Window')"/></h2>
+
+          <p>
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="info/description"/>
+            </xsl:call-template>
+          </p>
+
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('Scanner currently not online', 'Scanner Window')"/></h1>
+        </xsl:otherwise>
+      </xsl:choose>
+
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
           <h1><xsl:value-of select="gsa:i18n ('Tasks using this Scanner', 'Scanner Window')"/>: <xsl:value-of select="gsa:i18n ('None', 'Window')"/></h1>
