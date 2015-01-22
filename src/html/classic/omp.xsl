@@ -12364,6 +12364,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:when test="type='osp_ovaldef_file'">OVAL Definitions files list.</xsl:when>
         <xsl:when test="type='osp_selection'">List.</xsl:when>
+        <xsl:when test="type='osp_boolean' and default = '0'">False</xsl:when>
+        <xsl:when test="type='osp_boolean'">True</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
         </xsl:otherwise>
@@ -15626,6 +15628,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="string" select="info/description"/>
             </xsl:call-template>
           </p>
+
+          <h2><xsl:value-of select="gsa:i18n ('Scanner parameters', 'Scanner Window')"/></h2>
+
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>ID</td>
+              <td>Description</td>
+              <td>Type</td>
+              <td>Default</td>
+            </tr>
+            <xsl:for-each select="info/params/param">
+              <tr class="{gsa:table-row-class(position())}">
+                <td><xsl:value-of select="id"/></td>
+                <td><xsl:value-of select="description"/></td>
+                <td><xsl:value-of select="type"/></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="type='osp_ovaldef_file'">OVAL Definitions files list.</xsl:when>
+                    <xsl:when test="type='osp_selection'">List.</xsl:when>
+                    <xsl:when test="type='osp_boolean' and default = '0'">False</xsl:when>
+                    <xsl:when test="type='osp_boolean'">True</xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="default"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
 
         </xsl:when>
         <xsl:otherwise>

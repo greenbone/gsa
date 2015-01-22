@@ -1,3 +1,9 @@
+2015-12-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (preference [details]): Output an osp boolean
+	parameter's default value in string format.
+	(scanner [details]): Output a table for the OSP Scanner's parameters.
+
 2015-01-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Re-arranged the information
@@ -35,7 +41,7 @@
 	instead of target properties. Remove quotes in target_link_libraries
 	so that CMake lists get expanded correctly.
 
-2015-12-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2015-01-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Show the fetched scanner
 	description.
@@ -46,7 +52,7 @@
 	considering a donut slice a full circle and make it a bit fuzzy to
 	account for rounding errors.
 
-2015-12-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2015-01-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Show the fetched scanner
 	info.
