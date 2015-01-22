@@ -15642,7 +15642,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="id"/></td>
                 <td><xsl:value-of select="description"/></td>
-                <td><xsl:value-of select="type"/></td>
+                <td><xsl:value-of select="substring-after(type, 'osp_')"/></td>
                 <td>
                   <xsl:choose>
                     <xsl:when test="type='osp_ovaldef_file'">OVAL Definitions files list.</xsl:when>
