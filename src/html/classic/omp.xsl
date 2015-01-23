@@ -18993,6 +18993,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
+    <xsl:when test="contains(tags, 'qod_type=')">
+      <p>
+      <b><xsl:value-of select="gsa:i18n ('Quality of Detection', 'NVT Window')"/>: </b>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'qod_type' = substring-before (., '=')">
+          <xsl:value-of select="substring-after (., '=')"/>
+        </xsl:if>
+      </xsl:for-each>
+      </p>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
     <xsl:when  test="contains(tags, 'impact=')">
       <xsl:if test="not (contains(tags, 'impact=N/A'))">
         <h2><xsl:value-of select="gsa:i18n ('Impact', 'NVT Window')"/></h2>
@@ -19040,13 +19055,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- "NOTAG" means no tags, skip. -->
   <xsl:choose>
-    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') + contains(tags,'solution_type=') = count(str:split (tags, '|')))">
+    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') + contains(tags,'solution_type=') + contains(tags,'qod_type=')= count(str:split (tags, '|')))">
     </xsl:when>
     <xsl:otherwise>
       <h2><xsl:value-of select="gsa:i18n ('Other tags', 'NVT Window')"/></h2>
       <table>
       <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution|solution_type',substring-before (., '=')))">
+        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution|solution_type|qod_type',substring-before (., '=')))">
           <tr>
             <td valign="top"><xsl:value-of select="substring-before (., '=')"/>:</td>
             <td>

@@ -1,5 +1,10 @@
 2015-01-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl (nvt [details]): Move qod_type
+	into section "Vulnerability Detection Method".
+
+2015-01-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (nvt [details]): Add a link to
 	the Results view filtering for the OID of this NVT.
 
