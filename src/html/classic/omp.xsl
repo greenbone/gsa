@@ -18889,6 +18889,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </tr>
   </table>
 
+  <p>
+    <a href="/omp?cmd=get_results&amp;filter={@oid}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
+      <xsl:value-of select="gsa:i18n ('Show scan results for this NVT', 'Window')"/>
+    </a>
+  </p>
+
   <xsl:choose>
     <xsl:when test="contains(tags, 'summary=')">
       <h2><xsl:value-of select="gsa:i18n ('Summary', 'Window')"/></h2>
