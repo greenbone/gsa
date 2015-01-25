@@ -27195,6 +27195,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="gsa:i18n ('Ports', 'Result Window')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Apps', 'Result Window')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Distance', 'Result Window')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Auth', 'Result Window')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Start', 'Result Window')"/></td>
           <td><xsl:value-of select="gsa:i18n ('End', 'Result Window')"/></td>
           <td>
@@ -27262,6 +27263,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
+              <xsl:if test="detail[name = 'Auth-SSH-Success']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_ok.png" border="0" title="{detail[name = 'Auth-SSH-Success']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+              <xsl:if test="detail[name = 'Auth-SSH-Failure']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-SSH-Failure']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+            </td>
+            <td>
               <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
             </td>
             <td>
@@ -27324,6 +27337,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:for-each>
         <tr class="{gsa:table-row-class(count(report/host) + 1)}">
           <td><xsl:value-of select="gsa:i18n ('Total', 'Window')"/>: <xsl:value-of select="count(report/host_start)"/></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
