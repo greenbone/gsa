@@ -1,3 +1,10 @@
+2015-01-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/wizard.xsl (quick-task-wizard, modify-task-wizard):
+	Move date and time selection inputs outside the label element so
+	values can be selected without holding the mouse button. Use
+	"Create Schedule" as label for the radio button instead.
+
 2015-01-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [hosts]): Added column "Auth" to
