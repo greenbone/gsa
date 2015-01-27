@@ -27273,6 +27273,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-SSH-Failure']/value}" style="margin-left:3px;"/>
                 </a>
               </xsl:if>
+              <xsl:if test="detail[name = 'Auth-SMB-Success']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_ok.png" border="0" title="{detail[name = 'Auth-SMB-Success']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+              <xsl:if test="detail[name = 'Auth-SMB-Failure']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-SMB-Failure']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+              <xsl:if test="detail[name = 'Auth-ESXi-Success']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_ok.png" border="0" title="{detail[name = 'Auth-ESXi-Success']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+              <xsl:if test="detail[name = 'Auth-ESXi-Failure']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and &#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-ESXi-Failure']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
             </td>
             <td>
               <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
