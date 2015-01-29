@@ -1,3 +1,11 @@
+2015-01-29  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r21073 by Timo Pollmeier.
+
+	* src/html/classic/omp.xsl (html-reports-table): Add "permission=any"
+	and "owner=any" keywords to filter used by "Return to default filter
+	view" icon.
+
 2015-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21384.
