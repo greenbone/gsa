@@ -1,3 +1,33 @@
+gsa 5.0.5 (2015-01-29)
+
+This is the fifth maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release introduces support for mixing slaves and tasks with other users.
+It also makes report access more consistent and contains a number of smaller
+fixes and adjustments.
+
+Many thanks to everyone who contributed to this release:
+Matthew Mundell, Timo Pollmeier and Michael Wiegand.
+
+Main changes since 5.0.4:
+* Support for mixing slaves and task with other users has been added.
+* Report access has been made more consistent between users with direct and
+  indirect access.
+* An issue which caused incorrect filters to be applied after using the
+  override toggle button has been addressed.
+* An issue which cause the GSA logo to be sometimes displayed incorrectly in
+  Mozilla Firefox has been fixed.
+* An issue which could cause the GSA session to be terminated prematurely under
+  certain circumstances has been fixed.
+* Error messages for alerts with missing RFPs have been made more consistent.
+* The auto refresh feature has been improved.
+* Handling of URL parameters has been improved.
+* Handling of errors caused by incorrect database entries has been improved.
+
+
 gsa 5.0.4 (2014-11-04)
 
 This is the fourth maintenance release of the Greenbone Security Assistant (GSA)

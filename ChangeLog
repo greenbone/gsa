@@ -1,5 +1,11 @@
 2015-01-29  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 5.0.5 release.
+
+	* CHANGES: Updated.
+
+2015-01-29  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Backport r21073 by Timo Pollmeier.
 
 	* src/html/classic/omp.xsl (html-reports-table): Add "permission=any"
