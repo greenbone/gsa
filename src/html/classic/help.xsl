@@ -6494,18 +6494,24 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="even">
+          <td>QoD</td>
+          <td>
+            The quality of detection (QoD) percentage of the result.
+          </td>
+        </tr>
+        <tr class="odd">
           <td>Host</td>
           <td>
             The IP address of the host the result applies to.
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Port</td>
           <td>
             The port the result applies to.
           </td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Created</td>
           <td>
             The date the result was created.

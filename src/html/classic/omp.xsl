@@ -25344,6 +25344,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$collapse-details-button &gt; 0">
             <xsl:apply-templates select="../../." mode="result-header">
+              <xsl:with-param name="name" select="'qod'"/>
+              <xsl:with-param name="capital-name" select="'QoD'"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa:i18n ('QoD', 'Result')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="$collapse-details-button &gt; 0">
+            <xsl:apply-templates select="../../." mode="result-header">
               <xsl:with-param name="name" select="'host'"/>
               <xsl:with-param name="capital-name" select="'Host'"/>
             </xsl:apply-templates>
@@ -25551,6 +25564,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <td> <!-- QoD -->
+      <xsl:choose>
+        <xsl:when test="qod != ''">
+          <xsl:value-of select="qod"/>%
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </td>
     <td> <!-- Host -->
       <xsl:variable name="ip" select="host"/>
       <xsl:variable name="hostname"
@@ -25654,7 +25675,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="prognostic"/>
 
   <tr>
-    <td colspan="6" style="padding: 0">
+    <td colspan="7" style="padding: 0">
       <!-- Tags -->
       <xsl:if test="count(user_tags/tag)">
         <div class="note_box_box">
@@ -26320,6 +26341,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </html>
       </column>
       <column>
+        <name>QoD</name>
+        <sort-reverse/>
+      </column>
+      <column>
         <name>Host</name>
         <sort-reverse/>
       </column>
@@ -26410,6 +26435,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="title" select="$severity_title"/>
           </xsl:call-template>
         </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="qod != ''">
+          <xsl:value-of select="qod"/>%
+        </xsl:when>
+        <xsl:otherwise/>
       </xsl:choose>
     </td>
     <td>

@@ -1,5 +1,12 @@
 2015-01-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (result [result-headers])
+	(result [result_body], html-results-table, result): Add "QoD" column.
+
+	* src/html/classic/help.xsl (results.html): Add "QoD" column.
+
+2015-01-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/help.xsl (solution-types): New template.
 	(results.html, nvts.html): Add help for "Solution type" column and fix
 	table row CSS classes.
