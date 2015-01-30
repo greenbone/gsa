@@ -6423,6 +6423,24 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template name="solution-types">
+  <p>
+    <b><img src="/img/st_workaround.png"/> Workaround:</b> Information is available about a configuration or specific deployment scenario that can be used to avoid exposure to the vulnerability. There may be none, one, or more workarounds available. This is typically the “first line of defense” against a new vulnerability before a mitigation or vendor fix has been issued or even discovered.
+  </p>
+  <p>
+    <b><img src="/img/st_mitigate.png"/> Mitigation:</b> Information is available about a configuration or deployment scenario that helps to reduce the risk of the vulnerability but that does not resolve the vulnerability on the affected product. Mitigations may include using devices or access controls external to the affected product. Mitigations may or may not be issued by the original author of the affected product, and they may or may not be officially sanctioned by the document producer.
+  </p>
+  <p>
+    <b><img src="/img/st_vendorfix.png"/> VendorFix:</b> Information is available about an official fix that is issued by the original author of the affected product. Unless otherwise noted, it is assumed that this fix fully resolves the vulnerability.
+  </p>
+  <p>
+    <b><img src="/img/st_nonavailable.png"/> NoneAvailable:</b> Currently there is no fix available. Information should contain details about why there is no fix.
+  </p>
+  <p>
+    <b><img src="/img/st_willnotfix.png"/> WillNotFix:</b> There is no fix for the vulnerability and there never will be one. This is often the case when a product has been orphaned, end-of-lifed, or otherwise deprecated. Information should contain details about why there will be no fix issued.
+  </p>
+</xsl:template>
+
 <xsl:template mode="help" match="results.html">
   <div class="gb_window_part_center">Help: Results
     <a href="/omp?cmd=get_results&amp;overrides=1&amp;token={/envelope/token}"
@@ -6463,24 +6481,31 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="even">
+          <td>Solution Type (<img src="/img/solution_type.png" alt="Solution type" title="Solution type"/>)</td>
+          <td>
+            The type of solution available for the vulnerability.<br/><br/>
+            <xsl:call-template name="solution-types"/>
+          </td>
+        </tr>
+        <tr class="odd">
           <td>Severity</td>
           <td>
             The CVSS severity rating of the result.
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Host</td>
           <td>
             The IP address of the host the result applies to.
           </td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Port</td>
           <td>
             The port the result applies to.
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Created</td>
           <td>
             The date the result was created.
@@ -8971,11 +8996,18 @@ Public License instead of this License.
           <td>Modified</td>
           <td>This date the NVT was last modified.</td>
         </tr>
-        <tr>
+        <tr class="even">
           <td>Version</td>
           <td>The version of the NVT.</td>
         </tr>
-        <tr>
+        <tr class="odd">
+          <td>Solution Type (<img src="/img/solution_type.png" alt="Solution type" title="Solution type"/>)</td>
+          <td>
+            The type of solution available for the vulnerability.<br/><br/>
+            <xsl:call-template name="solution-types"/>
+          </td>
+        </tr>
+        <tr class="even">
           <td>Severity</td>
           <td>
             The combined score calculated from the metrics of the vulnerability.
