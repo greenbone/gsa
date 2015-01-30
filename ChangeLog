@@ -1,3 +1,19 @@
+2015-01-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Cater for the case where a user no longer has access to the alerts
+	and/or schedule of a task.  And where an alert or schedule is used on a
+	task that the user may not access.
+
+	* src/gsad_omp.c (new_task, edit_task): Add filter to GET_ALERTS and
+	GET_SCHEDULES, so that alerts and schedules of other users are included.
+	(get_report): Similarly, add filter.
+
+	* src/html/classic/gsad.xsl (task-icons): Grey icon if schedule is
+	unavailable.
+	(task [details]): Mark alerts and schedules unavailble if they are.
+	(alert [details], schedule [details]): If task is not availabe mark it
+	so.
+
 2015-01-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Add owner clause to

@@ -2750,8 +2750,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get alerts to select in new task UI. */
       if (openvas_server_sendf (&session,
                                 "<get_alerts"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+                                " filter=\"owner=any permission=any"
+                                "          rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2780,10 +2780,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCHEDULES"))
     {
       /* Get schedules to select in new task UI. */
-      if (openvas_server_sendf (&session,
-                                "<get_schedules"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+      if (openvas_server_sendf
+           (&session,
+            "<get_schedules"
+            " filter=\"rows=-1 sort=name owner=any permission=any\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3339,13 +3339,13 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             task_id,
                             command_enabled (credentials, "GET_ALERTS")
                              ? "<get_alerts"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>"
+                               " filter=\"owner=any permission=any"
+                               "          rows=-1 sort=name\"/>"
                              : "",
                             command_enabled (credentials, "GET_SCHEDULES")
                              ? "<get_schedules"
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>"
+                               " filter=\"owner=any permission=any"
+                               "          rows=-1 sort=name\"/>"
                              : "",
                             command_enabled (credentials, "GET_SLAVES")
                              ? "<get_slaves"
@@ -11540,9 +11540,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_ALERTS"))
         {
-          if (openvas_server_sendf (&session, "<get_alerts"
-                                              " sort_field=\"name\""
-                                              " sort_order=\"ascending\"/>")
+          if (openvas_server_sendf
+               (&session,
+                "<get_alerts"
+                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
