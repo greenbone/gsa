@@ -25750,6 +25750,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'solution')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
         <div class="result_section">
         <b><xsl:value-of select="gsa:i18n ('Solution', 'Result Window')"/></b>
+          <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution_type') != ''">
+            <p>
+              <b><xsl:value-of select="gsa:i18n ('Solution type', 'NVT Window')"/>: </b>
+              <xsl:call-template name="solution-icon">
+                <xsl:with-param name="solution_type" select="gsa:get-nvt-tag (nvt/tags, 'solution_type')"/>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:get-nvt-tag (nvt/tags, 'solution_type')"/>
+            </p>
+          </xsl:if>
           <xsl:call-template name="structured-text">
             <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
           </xsl:call-template>
