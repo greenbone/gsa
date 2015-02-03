@@ -84,7 +84,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:may-clone">
   <xsl:param name="type"/>
   <xsl:param name="owner" select="owner"/>
-  <func:result select="gsa:may-op (concat ('create_', $type)) and ($owner/name = /envelope/login/text() or (string-length ($owner/name) = 0 and ($type != 'permission' or /envelope/role = 'Admin')))"/>
+  <func:result select="gsa:may-op (concat ('create_', $type))"/>
 </func:function>
 
 <func:function name="gsa:may-get-trash">
