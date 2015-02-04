@@ -3466,6 +3466,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
             <li> <a href="user-tags.html?token={/envelope/token}">User Tags list</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="qod.html?token={/envelope/token}">Quality of Detection (QoD)</a></li>
             <li> Protocol Documentation</li>
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (OpenVAS Management Protocol)</a></li>
@@ -9421,6 +9422,212 @@ Public License instead of this License.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="qod.html">
+  <div class="gb_window_part_center">Help: Quality of Detection (QoD)</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <h1>Quality of Detection (QoD)</h1>
+
+      <p>
+      The QoD is a value between 0% and 100% describing the
+      reliability of the executed vulnerability detection
+      or product detection.
+      </p>
+      
+      <p>
+      Once of the the main reasons to introduce this concept was to handle
+      the challenge of potential vulnerabilities properly. The goal was to
+      keep such in the results database but only vivisible on demand.
+      </p>
+      
+      <p>
+      While the QoD range allows to express the quality pretty refined,
+      in fact most of the test routines use a standard methodology.
+      Therefore the <b>QoD Types</b> were introduced of which each
+      is associated with a QoD value. The current list of types might
+      be extended over time.
+      </p>
+      
+      <h2>Overview on QoD values and types</h2>
+      
+      <table>
+      
+      <tr>
+        <th align="left">QoD</th>
+        <th align="left">QoD Type(s)</th>
+        <th align="left">Description</th>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">100%</td>
+        <td valign="top">exploit</td>
+        <td valign="top">The detection happened via an exploit and therfore is fully verified.</td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">99%</td>
+        <td valign="top">remote_vul</td>
+        <td valign="top">
+          Remote active checks (code execution, traversal attack, sql injection etc.) where
+          the response clearly shows the presence of the vulnerability.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">98%</td>
+        <td valign="top">remote_app</td>
+        <td valign="top">
+          Remote active checks (code execution, traversal attack, sql injection etc.) where
+          the response clearly shows the presence of the vulnerable application.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">97%</td>
+        <td valign="top">
+          package
+        </td>
+        <td valign="top">
+          Authenticated package-based checks for Linux(oid) systems.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">97%</td>
+        <td valign="top">
+          registry
+        </td>
+        <td valign="top">
+          Authenticated registry-based checks for Windows systems.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">95%</td>
+        <td valign="top">remote_active</td>
+        <td valign="top">
+          Remote active checks (code execution, traversal attack, sql injection etc.)
+          where the response shows the likely presence of the vulnerable application
+          or of the vulerability.
+          "Likely" means that only rare circumstances are possible where the detection
+          would be wrong.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">80%</td>
+        <td valign="top">
+          remote_banner
+        </td>
+        <td valign="top">
+          Remote banner check of applications that offer patch level in version. Many
+          proprietary products do so.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">80%</td>
+        <td valign="top">
+          executable_version
+        </td>
+        <td valign="top">
+          Authenticated executable version checks for Linux(oid) or Windows systems where
+          applications offer patch level in version.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">75%</td>
+        <td valign="top"></td>
+        <td valign="top">
+          This value was assigned to any pre-qod results during migration to OpenVAS-8
+          and is also assigned for results from NVTs that do not own a qod. However,
+          some NVTs eventually might own this value for some reason.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">70%</td>
+        <td valign="top">remote_analysis</td>
+        <td valign="top">
+          Remote checks that do some analysis but which are not always
+          fully reliable.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">50%</td>
+        <td valign="top">remote_probe</td>
+        <td valign="top">
+          Remote checks where intermediate systems such as firewalls might pretend
+          correct detection so that it is actually not clear whether the application
+          itself answered. This can happen for example for non-TLS connections.</td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">30%</td>
+        <td valign="top">
+          remote_banner_unreliable
+        </td>
+        <td valign="top">
+          Remote Banner checks of applications that don't offer patch level in version identification.
+          For example, this is the case for many Open Source products due to backport patches.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">30%</td>
+        <td valign="top">
+          executable_version_unreliable
+        </td>
+        <td valign="top">
+          Authenticated executable version checks for Linux(oid) systems where applications
+          don't offer patch level in version identification.
+        </td>
+      </tr>
+      
+      <tr>
+        <td valign="top" align="right">1%</td>
+        <td valign="top">general_note</td>
+        <td valign="top">
+          General note on potential vulnerability without finding any present application.
+        </td>
+      </tr>
+      
+      </table>
+      
+      <h2>Transition phase for NVTs and results</h2>
+      
+      <p>
+      The value of 70% is the default minimum used for the default filtering
+      to display the results in the reports.
+      </p>
+      
+      <p>
+      The QoD is introduced with OpenVAS-8. Any results created with prior
+      versions are assigned the value of 75% during migration.
+      </p>
+      
+      <p>
+      The transition of the NVTs is a long-term activity. For NVTs that
+      have no QoD assigned yet, scan results will be assigned with 75%.
+      </p>
+      
+      <p>
+      This setting of 75% ensures that by default the results are visible
+      as before. However, eventually new results might occur with a QoD of 75%.
+      So, this value can not automatically be interpreted as "old pre-qod result".
       </p>
     </div>
   </div>
