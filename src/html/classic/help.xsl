@@ -4176,6 +4176,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         be vulnerable.
       </p>
 
+      <a name="qod"></a>
+      <h2>Quality of detection (QoD)</h2>
+      <p>
+        The QoD is a value between 0% and 100% describing the
+        reliability of the executed vulnerability detection
+        or product detection.
+      </p>
+      <p>
+        For a more detailed description see the
+        <a href="qod.html?token={/envelope/token}">QoD help page</a>.
+      </p>
+
       <a name="report"></a>
       <h2>Report</h2>
       <p>
@@ -6498,6 +6510,9 @@ Public License instead of this License.
           <td>QoD</td>
           <td>
             The quality of detection (QoD) percentage of the result.
+            See the
+            <a href="qod.html?token={/envelope/token}">QoD help page</a>
+            for more information.
           </td>
         </tr>
         <tr class="odd">

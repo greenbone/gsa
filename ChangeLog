@@ -1,5 +1,12 @@
 2015-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (glossary.html): Add entry for Quality of
+	detection, including a reference to qod.html.
+	(results.html): Add a reference to qod.html in the description of the
+	QoD column.
+
+2015-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add filtering of reports by minimum QoD.
 
 	* src/gsad_omp.c (get_report): Handle parameter min_qod and set a
