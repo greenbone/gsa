@@ -2799,6 +2799,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
 
+  <xsl:variable name="common_filter"
+                select="concat ('max_results=', report/results/@max,
+                                '&amp;levels=', $levels,
+                                '&amp;sort_field=', report/sort/field/text(),
+                                '&amp;sort_order=', report/sort/field/order,
+                                '&amp;notes=', report/filters/notes,
+                                '&amp;overrides=', report/filters/apply_overrides,
+                                '&amp;result_hosts_only=', report/filters/result_hosts_only,
+                                '&amp;apply_min_cvss_base=', number (string-length (report/filters/min_cvss_base) &gt; 0),
+                                '&amp;min_cvss_base=', report/filters/min_cvss_base,
+                                '&amp;apply_min_qod=', number (string-length (report/filters/min_qod) &gt; 0),
+                                '&amp;min_qod=', report/filters/min_qod,
+                                '&amp;search_phrase=', report/filters/phrase,
+                                '&amp;autofp=', report/filters/autofp,
+                                '&amp;delta_states=', report/filters/delta/text())"/>
+
   <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
   <xsl:choose>
     <xsl:when test = "report/results/@start &lt;= 1">
@@ -2808,18 +2824,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            src="/img/previous_inactive.png" border="0" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
     </xsl:when>
     <xsl:when test="../../delta">
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result=1&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
     </xsl:when>
     <xsl:when test="@type='prognostic'">
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}">
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result=1&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;token={/envelope/token}">
         <img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result=1&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;report_id={report/@id}&amp;first_result=1&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-right:3px;" src="/img/previous.png" border="0" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -2838,16 +2854,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            src="/img/last_inactive.png" border="0" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
     </xsl:when>
     <xsl:when test="../../delta">
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
     </xsl:when>
     <xsl:when test="@type='prognostic'">
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+      <a href="?cmd=get_report&amp;{$common_filter}&amp;report_id={report/@id}&amp;first_result={floor((report/result_count/filtered - 1) div report/results/@max) * report/results/@max + 1}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/last.png" border="0" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -3338,6 +3354,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
             </xsl:call-template>
           </select>
+        </div>
+        <div style="padding: 2px;">
+          <label>
+            <xsl:choose>
+              <xsl:when test="(report/filters/min_qod = '')">
+                <input type="checkbox" name="apply_min_qod" value="1"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="checkbox" name="apply_min_qod" value="1"
+                       checked="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            QoD &gt;=
+          </label>
+          <select name="min_qod">
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'100'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'90'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'80'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:choose>
+              <xsl:when test="report/filters/min_qod = ''">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'70'"/>
+                  <xsl:with-param name="select-value" select="'70'"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'70'"/>
+                  <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'60'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'50'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'40'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'30'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'20'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'10'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_qod"/>
+            </xsl:call-template>
+          </select>
+          %
         </div>
         <div style="padding: 2px;">
           <xsl:value-of select="gsa:i18n ('Text phrase', 'Report Filter')"/>:
@@ -29149,6 +29236,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="esc_min_cvss_base"
                            value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="esc_min_qod"
+                           value="{report/filters/min_qod}"/>
                     <input type="hidden" name="esc_notes" value="{report/filters/notes}"/>
                     <input type="hidden"
                            name="esc_overrides"

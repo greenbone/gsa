@@ -1,3 +1,20 @@
+2015-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add filtering of reports by minimum QoD.
+
+	* src/gsad_omp.c (get_report): Handle parameter min_qod and set a
+	default value of 70 if it is not given.
+
+	* src/gsad.c (init_validator): Add parameters min_qod, apply_min_qod,
+	esc_apply_min_qod and esc_min_qod.
+
+	* src/html/classic/omp.xsl (report [results-pager]): Move common
+	filter parameters to a variable. Add parameters apply_min_qod and
+	min_qod.
+	(report [filterbox]): Add checkbox and drop-down for min_qod filter
+	similar to min_cvss_base.
+	(report [summary]): Add hidden input for filter param esc_min_qod.
+
 2015-02-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl (contents.html): Added link to qod.

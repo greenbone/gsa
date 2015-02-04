@@ -1083,6 +1083,7 @@ init_validator ()
   openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
+  openvas_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
@@ -1240,6 +1241,7 @@ init_validator ()
   openvas_validator_alias (validator, "alerts",     "optional_number");
   openvas_validator_alias (validator, "alterable", "boolean");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
+  openvas_validator_alias (validator, "apply_min_qod", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
@@ -1268,10 +1270,12 @@ init_validator ()
   openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
+  openvas_validator_alias (validator, "esc_apply_min_qod", "boolean");
   openvas_validator_alias (validator, "esc_first_result", "first_result");
   openvas_validator_alias (validator, "esc_levels",       "levels");
   openvas_validator_alias (validator, "esc_max_results",  "max_results");
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
+  openvas_validator_alias (validator, "esc_min_qod", "min_qod");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "filter_id",          "id");

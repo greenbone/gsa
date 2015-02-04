@@ -10355,7 +10355,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *alert_id, *search_phrase, *min_cvss_base, *type, *zone;
+  const char *alert_id, *search_phrase, *min_cvss_base, *min_qod, *type, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
@@ -10416,6 +10416,22 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     }
   else
     min_cvss_base = "";
+
+  if (params_given (params, "min_qod"))
+    {
+      if (params_valid (params, "min_qod"))
+        {
+          if (params_value (params, "apply_min_qod")
+              && strcmp (params_value (params, "apply_min_qod"), "0"))
+            min_qod = params_value (params, "min_qod");
+          else
+            min_qod = "";
+        }
+      else
+        min_qod = NULL;
+    }
+  else
+    min_qod = "70";
 
   type = params_value (params, "type");
   host = params_value (params, "host");
@@ -10588,7 +10604,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     {
       const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
       const char *esc_first_result, *esc_max_results;
-      const char *esc_search_phrase, *esc_min_cvss_base, *esc_zone;
+      const char *esc_search_phrase, *esc_min_cvss_base, *esc_min_qod;
+      const char *esc_zone;
 
       esc_notes = params_value (params, "esc_notes");
       if (esc_notes == NULL)
@@ -10638,6 +10655,23 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         esc_min_cvss_base = "";
 
+      if (params_given (params, "esc_min_qod"))
+        {
+          if (params_valid (params, "esc_min_qod"))
+            {
+              if (params_value (params, "esc_apply_min_qod")
+                  && strcmp (params_value (params, "esc_apply_min_qod"),
+                                           "0"))
+                esc_min_qod = params_value (params, "esc_min_min_qod");
+              else
+                esc_min_qod = "";
+            }
+          else
+            esc_min_qod = NULL;
+        }
+      else
+        esc_min_qod = "";
+
       if (ignore_filter)
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
@@ -10657,6 +10691,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         " delta_states=\"\""
                                         " search_phrase=\"\""
                                         " min_cvss_base=\"\""
+                                        " min_qod=\"\""
                                         " alert_id=\"%s\"/>",
                                         report_id,
                                         alert_id);
@@ -10680,6 +10715,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         " delta_states=\"%s\""
                                         " search_phrase=\"%s\""
                                         " min_cvss_base=\"%s\""
+                                        " min_qod=\"%s\""
                                         " alert_id=\"%s\""
                                         " timezone=\"%s\"/>",
                                         ignore_pagination,
@@ -10707,6 +10743,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         delta_states->str,
                                         esc_search_phrase,
                                         esc_min_cvss_base,
+                                        esc_min_qod,
                                         alert_id,
                                         esc_zone);
       if (ret == -1)
@@ -10920,7 +10957,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " levels=\"hmlgfd\""
                                     " delta_states=\"\""
                                     " search_phrase=\"\""
-                                    " min_cvss_base=\"\"/>",
+                                    " min_cvss_base=\"\""
+                                    " min_qod=\"\"/>",
                                     (type && ((strcmp (type, "assets") == 0)
                                               || (strcmp (type, "prognostic")
                                                   == 0)))
@@ -10954,6 +10992,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " delta_states=\"%s\""
                                     " search_phrase=\"%s\""
                                     " min_cvss_base=\"%s\""
+                                    " min_qod=\"%s\""
                                     " timezone=\"%s\"/>",
                                     ignore_pagination,
                                     filt_id ? filt_id : "0",
@@ -10987,6 +11026,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     delta_states->str,
                                     search_phrase,
                                     min_cvss_base,
+                                    min_qod,
                                     zone);
   if (ret == -1)
     {
