@@ -22129,6 +22129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Permission'"/>
         <xsl:with-param name="type" select="'permission'"/>
+        <xsl:with-param name="nonew" select="not (gsa:may-op ('create_permission') and gsa:may-op ('get_users') and gsa:may-op ('get_roles') and gsa:may-op ('get_groups'))"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
