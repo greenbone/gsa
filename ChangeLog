@@ -1,5 +1,9 @@
 2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/classic/help.xsl: Fix more spelling issues.
+
+2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/classic/help.xsl (my_settings.html): Fix spelling and
 	whitespace issues.
 

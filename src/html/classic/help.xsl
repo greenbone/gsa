@@ -8784,12 +8784,12 @@ Public License instead of this License.
         </tr>
         <tr>
           <td>Title</td>
-          <td>The official title of the CPE, this is "Not Availabe" for unoffical CPEs.</td>
+          <td>The official title of the CPE, this is "N/A" for unofficial CPEs.</td>
         </tr>
         <tr>
           <td>Modified</td>
           <td>The date of the last official modification of the CPE,
-            this is "Not Availabe" for unoffical CPEs.
+            this is "N/A" for unofficial CPEs.
           </td>
         </tr>
         <tr>
@@ -8915,7 +8915,7 @@ Public License instead of this License.
       </table>
 
       <p>
-        <b>Tip:</b> Additionaly to the mentioned columns you can also use the
+        <b>Tip:</b> Additionally to the mentioned columns you can also use the
         <a href="/help/powerfilter.html?token={/envelope/token}">Powerfilter</a>
         to filter CVEs that affect specific products (CPE). The keyword for the filter is
         "products".
@@ -9461,9 +9461,9 @@ Public License instead of this License.
       </p>
       
       <p>
-      Once of the the main reasons to introduce this concept was to handle
+      Once of the main reasons to introduce this concept was to handle
       the challenge of potential vulnerabilities properly. The goal was to
-      keep such in the results database but only vivisible on demand.
+      keep such in the results database but only visible on demand.
       </p>
       
       <p>
@@ -9487,7 +9487,7 @@ Public License instead of this License.
       <tr>
         <td valign="top" align="right">100%</td>
         <td valign="top">exploit</td>
-        <td valign="top">The detection happened via an exploit and therfore is fully verified.</td>
+        <td valign="top">The detection happened via an exploit and therefore is fully verified.</td>
       </tr>
       
       <tr>
@@ -9534,7 +9534,7 @@ Public License instead of this License.
         <td valign="top">
           Remote active checks (code execution, traversal attack, sql injection etc.)
           where the response shows the likely presence of the vulnerable application
-          or of the vulerability.
+          or of the vulnerability.
           "Likely" means that only rare circumstances are possible where the detection
           would be wrong.
         </td>
