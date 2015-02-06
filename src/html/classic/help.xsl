@@ -4918,7 +4918,7 @@ Public License instead of this License.
             Information Security (Bundesamt für Sicherheit in der Informationstechnik, BSI)
             applies this mapping for their vulnerability traffic lights (german: "Schwachstellenampel").
             See also this document of BSI in german language:
-            https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/BSI-A-CS_003.pdf
+            https://www.allianz-fuer-cybersicherheit.de/ACS/DE/_downloads/cybersicherheitslage/schwachstellenampel/BSI-CS_028.pdf
             <ul>
               <li>High: 7.0 - 10.0  ("rot": kritische)</li>
               <li>Medium: 4.0 - 6.9 ("gelb": geringfügig-kritisch)</li>

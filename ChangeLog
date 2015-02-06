@@ -1,3 +1,8 @@
+2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/help.xsl (my_settings.html): Fix outdated link to
+	Schwachstellenampel information.
+
 2015-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (glossary.html): Add entry for Quality of
