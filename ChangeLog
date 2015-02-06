@@ -1,3 +1,10 @@
+2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r21571.
+
+	* src/html/classic/help.xsl (my_settings.html): Fix outdated link to
+	Schwachstellenampel information.
+
 2015-01-29  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
