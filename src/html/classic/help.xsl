@@ -4897,8 +4897,8 @@ Public License instead of this License.
       <p>
         The severity classes split up the CVSS range into 3 ranges: High,
         Medium and Low. These ranges are used to apply colors for the
-        severity bar in order to easily identy and compare severities of
-	interest.
+        severity bar in order to easily identify and compare severities of
+        interest.
       </p>
       <p>
         Possible values include:
@@ -4914,13 +4914,13 @@ Public License instead of this License.
             </ul>
           </li>
           <li>
-            <b>BSI Schwachstellenampel (Germany):</b> The german Federal Office for
+            <b>BSI Schwachstellenampel (Germany):</b> The German Federal Office for
             Information Security (Bundesamt für Sicherheit in der Informationstechnik, BSI)
-            applies this mapping for their vulnerability traffic lights (german: "Schwachstellenampel").
-            See also this document of BSI in german language:
+            applies this mapping for their vulnerability traffic lights (German: "Schwachstellenampel").
+            See also this document of BSI in German language:
             https://www.allianz-fuer-cybersicherheit.de/ACS/DE/_downloads/cybersicherheitslage/schwachstellenampel/BSI-CS_028.pdf
             <ul>
-              <li>High: 7.0 - 10.0  ("rot": kritische)</li>
+              <li>High: 7.0 - 10.0  ("rot": kritisch)</li>
               <li>Medium: 4.0 - 6.9 ("gelb": geringfügig-kritisch)</li>
               <li>Low: 0.0 - 3.9 ("grün": nicht kritisch)</li>
             </ul>
