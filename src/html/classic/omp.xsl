@@ -496,6 +496,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$field = 'modified'">
       <func:result select="'modification time'"/>
     </xsl:when>
+    <xsl:when test="$field = 'qod'">
+      <func:result select="'QoD'"/>
+    </xsl:when>
+    <xsl:when test="$field = 'qod_type'">
+      <func:result select="'QoD type'"/>
+    </xsl:when>
     <xsl:otherwise>
       <func:result select="translate ($field, '_', ' ')"/>
     </xsl:otherwise>
@@ -16842,6 +16848,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="qod/value != ''">
+          <xsl:value-of select="qod/value"/>%
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </td>
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
@@ -17540,6 +17554,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
       <column>
         <name>Severity</name>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name>QoD</name>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -19120,7 +19138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="contains(tags, 'vuldetect=')">
+    <xsl:when test="contains(tags, 'vuldetect=') or (qod != '')">
       <h2><xsl:value-of select="gsa:i18n ('Vulnerability Detection Method', 'NVT Window')"/></h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'vuldetect' = substring-before (., '=')">
@@ -19135,14 +19153,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="contains(tags, 'qod_type=')">
+    <xsl:when test="qod != ''">
       <p>
       <b><xsl:value-of select="gsa:i18n ('Quality of Detection', 'NVT Window')"/>: </b>
-      <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="'qod_type' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/>
+        <xsl:choose>
+          <xsl:when test="qod/type != ''">
+            <xsl:value-of select="qod/type"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <i>N/A</i>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="qod/value != ''">
+          (<xsl:value-of select="qod/value"/>%)
         </xsl:if>
-      </xsl:for-each>
       </p>
     </xsl:when>
     <xsl:otherwise>
@@ -25654,8 +25678,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td> <!-- QoD -->
       <xsl:choose>
-        <xsl:when test="qod != ''">
-          <xsl:value-of select="qod"/>%
+        <xsl:when test="qod/value != ''">
+          <xsl:value-of select="qod/value"/>%
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -26537,8 +26561,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="qod != ''">
-          <xsl:value-of select="qod"/>%
+        <xsl:when test="qod/value != ''">
+          <xsl:value-of select="qod/value"/>%
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>

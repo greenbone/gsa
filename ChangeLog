@@ -1,3 +1,21 @@
+2015-02-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart): Add new data
+	modifiers qod_type_counts and percentage_counts.
+	(js-secinfo-top-visualization, dashboard [secinfo]): Add NVTs by QoD
+	and QoD type.
+
+	* src/html/classic/omp.xsl (gsa:field-name): Add "QoD" and "QoD type".
+	(info/nvt, html-nvt-table): Add QoD column.
+	(nvt [details]): Show section "Vulnerability Detection Method" if
+	QoD data is present. Add QoD percentage.
+	(result [result-headers], result): Get QoD percentage from element
+	qod/value.
+
+	* src/html/classic/js/gsa_graphics_base.js (field-name): Add "QoD" and
+	"QoD type".
+	(qod_type_counts, percentage_counts): New functions.
+
 2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/classic/help.xsl: Fix more spelling issues.

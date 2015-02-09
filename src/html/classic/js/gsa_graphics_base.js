@@ -904,6 +904,10 @@ function field_name (field, type)
         return "creation time"
       case "modified":
         return "modification time"
+      case "qod":
+        return "QoD"
+      case "qod_type":
+        return "QoD type"
       default:
         return field;
     }
@@ -1214,6 +1218,118 @@ function resource_type_counts (old_data, params)
         }
       new_data.records.push (new_record);
     }
+  return new_data;
+}
+
+/**
+ * Get counts by qod type, using the full type name for the x field.
+ */
+function qod_type_counts (old_data, params)
+{
+  var new_data = { original_xml : old_data.original_xml,
+                   records : [],
+                   column_info : old_data.column_info,
+                   filter_info : old_data.filter_info };
+
+  var type_field = "value";
+  if (params)
+    {
+      if (params.type_field != null)
+        type_field = params.type_field;
+    }
+
+  for (var record in old_data.records)
+    {
+      var new_record = {};
+      for (field in old_data.records [record])
+        {
+          if (field == type_field)
+            switch (old_data.records [record][field])
+              {
+                case (""):
+                  new_record[field] = "None";
+                  break;
+                case ("exploit"):
+                  new_record[field] = "Exploit";
+                  break;
+                case ("remote_vul"):
+                  new_record[field] = "Remote vulnerability";
+                  break;
+                case ("package"):
+                  new_record[field] = "Package check";
+                  break;
+                case ("registry"):
+                  new_record[field] = "Registry check";
+                  break;
+                case ("executable_version"):
+                  new_record[field] = "Executable version";
+                  break;
+                case ("remote_analysis"):
+                  new_record[field] = "Remote analysis";
+                  break;
+                case ("remote_probe"):
+                  new_record[field] = "Remote probe";
+                  break;
+                case ("remote_banner_unreliable"):
+                  new_record[field] = "Unreliable rem. banner";
+                  break;
+                case ("executable_version_unreliable"):
+                  new_record[field] = "Unreliable exec. version";
+                  break;
+                default:
+                  new_record[field] = resource_type_name (old_data.records [record][field]);
+              }
+          else
+            new_record[field] = old_data.records [record][field];
+        }
+      new_data.records.push (new_record);
+    }
+
+  var sort_func
+    = function (a, b)
+        {
+          return b.count - a.count;
+        };
+
+  new_data.records.sort (sort_func);
+  return new_data;
+}
+
+/**
+ * Get counts by qod type, using the full type name for the x field.
+ */
+function percentage_counts (old_data, params)
+{
+  var new_data = { original_xml : old_data.original_xml,
+                   records : [],
+                   column_info : old_data.column_info,
+                   filter_info : old_data.filter_info };
+
+  var type_field = "value";
+  if (params)
+    {
+      if (params.type_field != null)
+        type_field = params.type_field;
+    }
+
+  for (var record in old_data.records)
+    {
+      new_data.records.push (old_data.records[record]);
+    }
+
+  var sort_func
+    = function (a, b)
+        {
+          return b[type_field] - a[type_field];
+        };
+  new_data.records.sort (sort_func);
+
+  for (var record in new_data.records)
+    {
+      new_data.records[record][type_field]
+        = new_data.records[record][type_field] + "%";
+    }
+
   return new_data;
 }
 

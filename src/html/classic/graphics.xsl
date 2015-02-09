@@ -236,6 +236,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         .data_transform (resource_type_counts)
     </xsl:when>
+    <xsl:when test="$chart_template = 'qod_type_counts'">
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        .data_transform (qod_type_counts)
+    </xsl:when>
+    <xsl:when test="$chart_template = 'percentage_counts'">
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        .data_transform (percentage_counts)
+    </xsl:when>
     <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
       gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         .data_transform (data_severity_level_counts)
@@ -559,6 +567,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod_type'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
+      </xsl:call-template>
 
       <xsl:call-template name="js-aggregate-chart">
         <xsl:with-param name="chart_name" select="'left-nvt-by-family'"/>
@@ -598,6 +622,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-nvt-by-qod_type'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod_type'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-nvt-by-qod_type'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod_type'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-nvt-by-qod'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-nvt-by-qod'"/>
+        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'qod'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
       </xsl:call-template>
     </xsl:if>
 
@@ -833,6 +895,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="display_name" select="$display_name"/>
               <xsl:with-param name="chart_type" select="'donut'"/>
               <xsl:with-param name="chart_template" select="''"/>
+              <xsl:with-param name="auto_load" select="0"/>
+              <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod_type')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_type_src')"/>
+              <xsl:with-param name="aggregate_type" select="'nvt'"/>
+              <xsl:with-param name="group_column" select="'qod_type'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'donut'"/>
+              <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
+              <xsl:with-param name="auto_load" select="0"/>
+              <xsl:with-param name="create_data_source" select="1"/>
+            </xsl:call-template>
+            <xsl:call-template name="js-aggregate-chart">
+              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod')"/>
+              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_src')"/>
+              <xsl:with-param name="aggregate_type" select="'nvt'"/>
+              <xsl:with-param name="group_column" select="'qod'"/>
+              <xsl:with-param name="display_name" select="$display_name"/>
+              <xsl:with-param name="chart_type" select="'donut'"/>
+              <xsl:with-param name="chart_template" select="'percentage_counts'"/>
               <xsl:with-param name="auto_load" select="0"/>
               <xsl:with-param name="create_data_source" select="1"/>
             </xsl:call-template>
