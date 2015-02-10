@@ -1,3 +1,13 @@
+2015-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21327.
+
+	* src/html/classic/omp.xsl: Make sure that all forms have enctype set to
+	"multipart/form-data", for consistency, and also because otherwise the
+	page handlers get the parameters URL-escaped (at least with Firefox
+	34.0.5).  This was preventing saving of report formats with spaces in
+	their names, for example.
+
 2015-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport r21571.
