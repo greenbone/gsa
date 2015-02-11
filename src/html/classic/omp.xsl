@@ -5278,6 +5278,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:for-each>
               </select>
+              <input name="schedule_periods" type="checkbox" value="1"
+                     title="{gsa:i18n ('Once', 'Time')}"/>
+              <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
             </td>
           </tr>
         </xsl:if>

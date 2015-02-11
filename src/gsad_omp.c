@@ -3034,11 +3034,13 @@ create_report_omp (credentials_t * credentials, params_t *params)
 }
 
 #define CHECK(name)                                                        \
-  if (name == NULL)                                                        \
-    return new_task (credentials,                                          \
-                     "Given " G_STRINGIFY (name) " was invalid",           \
-                     params,                                               \
-                     NULL)
+  do {                                                                     \
+    if (name == NULL)                                                      \
+      return new_task (credentials,                                        \
+                       "Given " G_STRINGIFY (name) " was invalid",         \
+                       params,                                             \
+                       NULL);                                              \
+  } while (0)
 
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
@@ -3056,7 +3058,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *schedule_element, *slave_element, *command;
   gchar *response, *html;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
-  const char *slave_id, *scanner_id, *schedule_id, *max_checks, *max_hosts;
+  const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
+  const char *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
   params_t *alerts;
   GString *alert_element;
@@ -3068,6 +3071,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   hosts_ordering = params_value (params, "hosts_ordering");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
+  schedule_periods = params_value (params, "schedule_periods");
   scanner_id = params_value (params, "scanner_id");
   config_id = params_value (params, "config_id");
   in_assets = params_value (params, "in_assets");
@@ -3109,6 +3113,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
       CHECK (slave_id);
       CHECK (scanner_id);
       CHECK (schedule_id);
+      if (params_given (params, "schedule_periods"))
+        CHECK (schedule_periods);
       CHECK (in_assets);
       CHECK (max_checks);
       CHECK (max_hosts);
@@ -3125,6 +3131,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (slave_id);
   CHECK (scanner_id);
   CHECK (schedule_id);
+  if (params_given (params, "schedule_periods"))
+    CHECK (schedule_periods);
+  else
+    schedule_periods = "0";
   CHECK (in_assets);
   CHECK (max_checks);
   CHECK (source_iface);
@@ -3159,6 +3169,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
 
   command = g_strdup_printf ("<create_task>"
                              "<config id=\"%s\"/>"
+                             "<schedule_periods>%s</schedule_periods>"
                              "%s%s%s"
                              "<target id=\"%s\"/>"
                              "<scanner id=\"%s\"/>"
@@ -3186,6 +3197,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              "<alterable>%i</alterable>"
                              "</create_task>",
                              config_id,
+                             schedule_periods,
                              schedule_element,
                              alert_element->str,
                              slave_element,
@@ -3512,6 +3524,10 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (hosts_ordering, "Save Task", edit_task);
   CHECK_PARAM (config_id, "Save Task", edit_task);
   CHECK_PARAM (schedule_id, "Save Task", edit_task);
+  if (params_given (params, "schedule_periods"))
+    CHECK (schedule_periods);
+  else
+    schedule_periods = "0";
   CHECK_PARAM (slave_id, "Save Task", edit_task);
   CHECK_PARAM (scanner_id, "Save Task", edit_task);
   CHECK_PARAM (next, "Save Task", edit_task);

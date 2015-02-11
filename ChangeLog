@@ -1,5 +1,16 @@
 2015-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add schedule periods to task creation.
+
+	* src/gsad_omp.c (CHECK): Wrap in "do" loop so that it can be used
+	safely as a lone "if" body when the "if" has an "else".
+	(create_task_omp): Add SCHEDULE_PERIODS to MODIFY_TASK.
+	(save_task_omp): Check schedule_periods.
+
+	* src/html/classic/omp.xsl (task [details]): Display period limit.
+
+2015-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add display and editing of task schedule periods.
 
 	* src/gsad.c (init_validator): Add schedule_periods.
