@@ -3439,7 +3439,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
-  const char *scanner_type;
+  const char *scanner_type, *schedule_periods;
   int ret;
   params_t *alerts;
   GString *alert_element;
@@ -3455,6 +3455,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   hosts_ordering = params_value (params, "hosts_ordering");
   config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
+  schedule_periods = params_value (params, "schedule_periods");
   slave_id = params_value (params, "slave_id");
   scanner_id = params_value (params, "scanner_id");
   max_checks = params_value (params, "max_checks");
@@ -3544,6 +3545,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "<target id=\"%%s\"/>"
                             "<config id=\"%%s\"/>"
                             "<schedule id=\"%%s\"/>"
+                            "<schedule_periods>%%s</schedule_periods>"
                             "<slave id=\"%%s\"/>"
                             "<scanner id=\"%%s\"/>"
                             "<preferences>"
@@ -3583,6 +3585,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
               target_id,
               config_id,
               schedule_id,
+              schedule_periods,
               slave_id,
               scanner_id,
               max_checks,

@@ -3895,7 +3895,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     (<xsl:value-of select="gsa:i18n ('Next due: over', 'Task Window')"/>)
                   </xsl:when>
                   <xsl:otherwise>
-                    (<xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>)
+                    <xsl:text> (</xsl:text>
+                    <xsl:value-of select="gsa:i18n ('Next due', 'Task Window')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>
+                    <xsl:choose>
+                      <xsl:when test="schedule_periods = 1">
+                        <xsl:value-of select="concat (', ', gsa:i18n ('Once', 'Time'))"/>
+                      </xsl:when>
+                      <xsl:when test="schedule_periods &gt; 1">
+                        <xsl:value-of select="concat (', ', schedule_periods, ' ', gsa:i18n ('more times', 'Time'))"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>)</xsl:text>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:if>
@@ -6102,6 +6114,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </xsl:for-each>
         </select>
+        <xsl:choose>
+          <xsl:when test="commands_response/get_tasks_response/task/schedule_periods = 1">
+            <input name="schedule_periods" type="checkbox" value="1" checked="1"
+                   title="{gsa:i18n ('Once', 'Time')}"/>
+            <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
+          </xsl:when>
+          <xsl:when test="commands_response/get_tasks_response/task/schedule_periods &gt; 1">
+            <input name="schedule_periods" type="text"
+                   value="{commands_response/get_tasks_response/task/schedule_periods}"
+                   style="width:40px" checked="1" title="{gsa:i18n ('Periods', 'Time')}"/>
+            <xsl:value-of select="gsa:i18n ('more times', 'Time')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input name="schedule_periods" type="checkbox" value="1"
+                   title="{gsa:i18n ('Once', 'Time')}"/>
+            <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
     </tr>
   </xsl:if>
@@ -6260,7 +6290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-name">
   <tr>
    <td valign="top" width="150"><xsl:value-of select="gsa:i18n ('Name', 'Task Window')"/></td>
-   <td width="280">
+   <td width="340">
      <input type="text" name="name"
             value="{gsa:param-or ('name', commands_response/get_tasks_response/task/name)}"
             size="30" maxlength="80"/>

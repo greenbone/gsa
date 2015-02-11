@@ -1,3 +1,16 @@
+2015-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add display and editing of task schedule periods.
+
+	* src/gsad.c (init_validator): Add schedule_periods.
+
+	* src/gsad_omp.c (save_task_omp): Add SCHEDULE_PERIODS to MODIFY_TASK.
+
+	* src/html/classic/omp.xsl (task [details]): Display period limit.
+	(html-edit-task-schedule): Add "Once" checkbox on schedule field.
+	(html-edit-task-name): Increase width so schedule field stays on one
+	line.
+
 2015-02-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-aggregate-chart): Add new data

@@ -1357,6 +1357,7 @@ init_validator ()
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "scanner_type", "number");
+  openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
