@@ -1,3 +1,9 @@
+2015-02-11  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0+beta6 release.
+
+	* CHANGES: Updated.
+
 2015-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add schedule periods to task creation.

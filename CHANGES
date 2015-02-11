@@ -1,3 +1,41 @@
+gsa 6.0+beta6 (2015-02-11)
+
+This is the sixth beta version of the upcoming 6.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for displaying OSP scanner details, Quality of
+Detection (QoD) information and authentication success or failure. It also adds
+support for editing task schedule periods and improves the display of solution
+type information and contains a number of other bug fixes and improvements.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner and Michael
+Wiegand.
+
+Main changes since 6.0+beta5:
+* Support for displaying OSP scanner details has been added.
+* Support for handling Quality of Detection (QoD) information has been added.
+* Support for displaying the success or failure of SSH, SMB and ESXi
+  authentication has been added.
+* Support for editing of task schedule periods has been added.
+* Support for displaying solution types has been improved.
+* An issue which could cause the GSA session to be terminated prematurely under
+  certain circumstances has been fixed.
+* An issue which prevented users with the "Super Admin" role from seeing notes
+  and overrides created by other users has been fixed.
+* An issue which prevented users with the "Super Admin" role from cloning
+  certain objects has been fixed.
+* Handling of errors caused by incorrect database entries has been improved.
+* MIME types for forms are now consistent.
+* Error messages for alerts with missing RFPs have been made more consistent.
+* Library checks during package configuration have been improved and are now
+  more comprehensive and consistent.
+* Handling of linker and compiler flags during package configuration has been
+  improved and simplified.
+* Documentation has been updated.
+
+
 gsa 6.0+beta5 (2015-01-12)
 
 This is the fifth beta version of the upcoming 6.0 release of the Greenbone
