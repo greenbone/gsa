@@ -9461,7 +9461,7 @@ Public License instead of this License.
       </p>
       
       <p>
-      Once of the main reasons to introduce this concept was to handle
+      One of the main reasons to introduce this concept was to handle
       the challenge of potential vulnerabilities properly. The goal was to
       keep such in the results database but only visible on demand.
       </p>

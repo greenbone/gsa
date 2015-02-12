@@ -1,3 +1,7 @@
+2015-02-12  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/help.xsl: Fix typo.
+
 2015-02-11  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
