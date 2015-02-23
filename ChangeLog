@@ -1,3 +1,10 @@
+2015-02-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (start_http_daemon, start_https_daemon): New functions.
+	Also set connection timeout and limit number of concurrent connections
+	per IP
+	(main): Refactor code to use new functions.
+
 2015-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Add Anonymous XML check.
@@ -183,12 +190,12 @@
 	* src/html/classic/omp.xsl (nvt [details]): Add a link to
 	the Results view filtering for the OID of this NVT.
 
-2015-01-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2015-01-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Drop the "osp_"
 	prefix from the parameter type.
 
-2015-12-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2015-01-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (preference [details]): Output an osp boolean
 	parameter's default value in string format.

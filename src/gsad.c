@@ -4434,6 +4434,43 @@ mhd_logger (void *arg, const char *fmt, va_list ap)
   g_warning ("MHD: %s", buf);
 }
 
+static struct MHD_Daemon *
+start_http_daemon (int port,
+                   int handler (void *, struct MHD_Connection *, const char *,
+                                const char *, const char *, const char *,
+                                size_t *, void **))
+{
+  return MHD_start_daemon
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, port, NULL, NULL,
+           handler, NULL, MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+           MHD_OPTION_SOCK_ADDR, &gsad_address,
+           MHD_OPTION_CONNECTION_TIMEOUT, 30,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 5,
+           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
+}
+
+static struct MHD_Daemon *
+start_https_daemon (int port, const char *key, const char *cert,
+                    const char *priorities, const char *dh_params)
+{
+  return MHD_start_daemon
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL, port,
+           NULL, NULL, &request_handler, NULL,
+           MHD_OPTION_HTTPS_MEM_KEY, key, MHD_OPTION_HTTPS_MEM_CERT, cert,
+           MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+           MHD_OPTION_SOCK_ADDR, &gsad_address,
+           MHD_OPTION_CONNECTION_TIMEOUT, 30,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 5,
+           MHD_OPTION_HTTPS_PRIORITIES, priorities,
+           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
+/* LibmicroHTTPD 0.9.35 and higher. */
+#if MHD_VERSION >= 0x00093500
+           dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS : MHD_OPTION_END,
+           dh_params,
+#endif
+           MHD_OPTION_END);
+}
+
 /**
  * @brief Main routine of Greenbone Security Assistant daemon.
  *
@@ -4765,17 +4802,11 @@ main (int argc, char **argv)
       /* Start the HTTP to HTTPS redirect server. */
 
       gsad_address.sin_port = htons (gsad_redirect_port);
-      gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
-                                      gsad_redirect_port, NULL, NULL, &redirect_handler,
-                                      NULL, MHD_OPTION_NOTIFY_COMPLETED,
-                                      free_resources, NULL,
-                                      MHD_OPTION_SOCK_ADDR, &gsad_address,
-                                      MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
-                                      MHD_OPTION_END);
+      gsad_daemon = start_http_daemon (gsad_redirect_port, redirect_handler);
 
       if (gsad_daemon == NULL)
         {
-          g_critical ("%s: MHD_start_daemon failed (redirector)!\n", __FUNCTION__);
+          g_warning ("%s: start_http_daemon redirect failed !", __FUNCTION__);
           return EXIT_FAILURE;
         }
       else
@@ -4796,21 +4827,7 @@ main (int argc, char **argv)
       /* Start the real server. */
       if (http_only)
         {
-          gsad_daemon =
-            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
-                              | MHD_USE_DEBUG,
-                              gsad_port,
-                              NULL, /* Policy callback. */
-                              NULL, /* Policy callback arg. */
-                              &request_handler,
-                              NULL, /* Access callback arg. */
-                              /* Option value(s) pairs. */
-                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                              MHD_OPTION_SOCK_ADDR, &gsad_address,
-                              MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
-                              /* End marker option. */
-                              MHD_OPTION_END);
-
+          gsad_daemon = start_http_daemon (gsad_port, request_handler);
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
               g_warning ("Binding to port %d failed, trying default port %d next.",
@@ -4818,20 +4835,7 @@ main (int argc, char **argv)
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address.sin_port = htons (gsad_port);
 
-              gsad_daemon =
-                MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
-                                  | MHD_USE_DEBUG,
-                                  gsad_port,
-                                  NULL, /* Policy callback. */
-                                  NULL, /* Policy callback arg. */
-                                  &request_handler,
-                                  NULL, /* Access callback arg. */
-                                  /* Option value(s) pairs. */
-                                  MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                                  MHD_OPTION_SOCK_ADDR, &gsad_address,
-                                  MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
-                                  /* End marker option. */
-                                  MHD_OPTION_END);
+              gsad_daemon = start_http_daemon (gsad_port, request_handler);
             }
         }
       else
@@ -4874,68 +4878,25 @@ main (int argc, char **argv)
               exit (EXIT_FAILURE);
             }
 
-          gsad_daemon =
-            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
-                              | MHD_USE_DEBUG
-                              | MHD_USE_SSL,
-                              gsad_port,
-                              NULL, /* Policy callback. */
-                              NULL, /* Policy callback arg. */
-                              &request_handler,
-                              NULL, /* Access callback arg. */
-                              /* Option value(s) pairs. */
-                              MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
-                              MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
-                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                              MHD_OPTION_SOCK_ADDR, &gsad_address,
-                              MHD_OPTION_HTTPS_PRIORITIES,
-                              gnutls_priorities,
-                              MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
-/* LibmicroHTTPD 0.9.35 and higher. */
-#if MHD_VERSION >= 0x00093500
-                              dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS
-                                        : MHD_OPTION_END, dh_params,
-#endif
-                              /* End marker option. */
-                              MHD_OPTION_END);
-
+          gsad_daemon = start_https_daemon (gsad_port, ssl_private_key,
+                                            ssl_certificate, gnutls_priorities,
+                                            dh_params);
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address.sin_port = htons (gsad_port);
-              gsad_daemon =
-                MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
-                                  | MHD_USE_DEBUG
-                                  | MHD_USE_SSL,
-                                  gsad_port,
-                                  NULL, /* Policy callback. */
-                                  NULL, /* Policy callback arg. */
-                                  &request_handler,
-                                  NULL, /* Access callback arg. */
-                                  /* Option value(s) pairs. */
-                                  MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
-                                  MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
-                                  MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                                  MHD_OPTION_SOCK_ADDR, &gsad_address,
-                                  MHD_OPTION_HTTPS_PRIORITIES,
-                                  gnutls_priorities,
-                                  MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
-/* LibmicroHTTPD 0.9.35 and higher. */
-#if MHD_VERSION >= 0x00093500
-                                  dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS
-                                            : MHD_OPTION_END, dh_params,
-#endif
-                                  /* End marker option. */
-                                  MHD_OPTION_END);
+              gsad_daemon = start_https_daemon
+                             (gsad_port, ssl_private_key, ssl_certificate,
+                              gnutls_priorities, dh_params);
             }
 
         }
 
       if (gsad_daemon == NULL)
         {
-          g_critical ("%s: MHD_start_daemon failed!\n", __FUNCTION__);
+          g_critical ("%s: start_https_daemon failed!\n", __FUNCTION__);
           return EXIT_FAILURE;
         }
       else
