@@ -1,3 +1,12 @@
+2015-02-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r21697.
+
+	* src/gsad.c (start_http_daemon, start_https_daemon): New functions.
+	Also set connection timeout and limit number of concurrent connections
+	per IP
+	(main): Refactor code to use new functions.
+
 2015-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r21327.
