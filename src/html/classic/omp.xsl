@@ -17345,13 +17345,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="nvt"/>
   <xsl:param name="oid"/>
   <xsl:param name="gsa_token"/>
+  <xsl:variable name="nvt_select">
+    <xsl:choose>
+      <xsl:when test="$oid">info_id=<xsl:value-of select="$oid"/></xsl:when>
+      <xsl:otherwise>info_name=<xsl:value-of select="normalize-space($nvt)"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;{$nvt_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
          title="{gsa:view_details_title ('NVT', $oid)}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;{$nvt_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
          title="{gsa:view_details_title ('NVT', $oid)}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>
@@ -18436,19 +18442,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="nvt-details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Details', 'NVT')"/>
-      <a href="/help/nvt_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="info/nvt" mode="details"/>
-    </div>
-  </div>
+  <xsl:call-template name="get_nvts">
+    <xsl:with-param name="nvts_response" select="info"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="ovaldef-details">
@@ -19312,6 +19308,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
     </xsl:otherwise>
   </xsl:choose>
+
+  <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
+  <xsl:for-each select="preferences">
+    <xsl:call-template name="preferences-details">
+    </xsl:call-template>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="get_notes_response">
@@ -19320,7 +19322,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_overrides_response">
 </xsl:template>
 
-<xsl:template match="get_nvts">
+<xsl:template match="get_nvts" name="get_nvts">
+  <xsl:param name="nvts_response" select="commands_response/get_nvts_response"/>
+
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_note_response"/>
   <xsl:apply-templates select="commands_response/delete_override_response"/>
@@ -19330,7 +19334,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
 
-  <xsl:variable select="commands_response/get_nvts_response" name="nvts_response"/>
   <xsl:choose>
       <xsl:when test="substring($nvts_response/@status, 1, 1) = '4' or substring($nvts_response/@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
@@ -19359,11 +19362,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
           </a>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
             </a>
-            <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={commands_response/get_nvts_response/nvt/@oid}&amp;oid={commands_response/get_nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
             </a>
@@ -19371,22 +19374,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="gb_window_part_content">
           <xsl:apply-templates
-            select="commands_response/get_nvts_response/nvt" mode="details"/>
-          <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
-          <xsl:for-each select="commands_response/get_nvts_response/nvt/preferences">
-            <xsl:call-template name="preferences-details">
-            </xsl:call-template>
-          </xsl:for-each>
+            select="$nvts_response/nvt" mode="details"/>
         </div>
       </div>
 
       <xsl:call-template name="user-tags-window">
-        <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'),' &quot;',commands_response/get_nvts_response/nvt/name,'&quot;:')"/>
-        <xsl:with-param name="user_tags" select="commands_response/get_nvts_response/nvt/user_tags"/>
+        <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'),' &quot;',$nvts_response/nvt/name,'&quot;:')"/>
+        <xsl:with-param name="user_tags" select="$nvts_response/nvt/user_tags"/>
         <xsl:with-param name="tag_names" select="get_tags_response"/>
         <xsl:with-param name="resource_type" select="'nvt'"/>
         <xsl:with-param name="next" select="'get_nvts'"/>
-        <xsl:with-param name="resource_id"   select="commands_response/get_nvts_response/nvt/@oid"/>
+        <xsl:with-param name="resource_id"   select="$nvts_response/nvt/@oid"/>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>

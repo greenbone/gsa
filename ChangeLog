@@ -1,3 +1,13 @@
+2015-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use GET_INFO for the SecInfo NVT link.
+
+	* src/html/classic/omp.xsl (get_info_nvt_lnk): Use GET_INFO.
+	(nvt-details): Call get_nvts because it does the same thing.
+	(nvt [details]): Add preferences.
+	(get_nvts): Make it possible to call this from nvt-details too.
+	Let nvt [details] do the preferences.
+
 2015-02-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (start_http_daemon, start_https_daemon): New functions.
