@@ -9841,17 +9841,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
-    <xsl:when test="$resource_type='nvt' and not ($resource_location)">
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_nvts') and $resource_location = '0'">
-          <a href="/omp?cmd=get_nvts&amp;oid={$resource_id}&amp;details=1&amp;token={$token}">
-            <xsl:value-of select="$resource_name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$resource_name"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:when test="$resource_type='nvt' and $resource_location = '0'">
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$resource_name"/>
+      </a>
+    </xsl:when>
+    <xsl:when test="$resource_type='nvt'">
+      <xsl:value-of select="$resource_name"/>
     </xsl:when>
     <xsl:when test="gsa:may-op (concat ('get_', $resource_type, 's')) and $resource_location = '0'">
       <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
@@ -18256,7 +18252,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr class="{gsa:table-row-class(position())}">
                     <td><xsl:value-of select="name"/></td>
                     <td width="100">
-                      <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={@oid}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
                         <img src="/img/details.png"
                           border="0"
                           alt="{gsa:i18n ('Details', 'Window')}"
@@ -19455,12 +19451,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Note Window')"/>
                     </xsl:when>
                     <xsl:when test="string-length($nvt/name) &gt; $max">
-                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <xsl:value-of select="$nvt/name"/>
                       </a>
                     </xsl:otherwise>
@@ -19773,12 +19769,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Note Window')"/>
                 </xsl:when>
                 <xsl:when test="string-length($nvt/name) &gt; $max">
-                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                     <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                     <xsl:value-of select="$nvt/name"/>
                   </a>
                 </xsl:otherwise>
@@ -20204,12 +20200,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', '')"/>
               </xsl:when>
               <xsl:when test="string-length(nvt/name) &gt; $max">
-                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
                 </a>
               </xsl:otherwise>
@@ -20492,12 +20488,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
                     </xsl:when>
                     <xsl:when test="string-length($nvt/name) &gt; $max">
-                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <xsl:value-of select="$nvt/name"/>
                       </a>
                     </xsl:otherwise>
@@ -20830,12 +20826,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
                 </xsl:when>
                 <xsl:when test="string-length($nvt/name) &gt; $max">
-                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                     <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                     <xsl:value-of select="$nvt/name"/>
                   </a>
                 </xsl:otherwise>
@@ -21388,12 +21384,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
               </xsl:when>
               <xsl:when test="string-length(nvt/name) &gt; $max">
-                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
                 </a>
               </xsl:otherwise>
@@ -25956,7 +25952,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:when test="string-length(nvt/@oid) &gt; 1 and starts-with(nvt/@oid, '1.3.6.1.4.1.25623.1.0.')">
               <xsl:variable name="max" select="80"/>
-              <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+              <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:choose>
                   <xsl:when test="string-length(nvt/name) &gt; $max">
                     <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
@@ -26001,7 +25997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
           </td></tr>
           <tr><td><xsl:value-of select="gsa:i18n ('Method', 'Result Window')"/>:</td><td>
-          <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
+          <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
             <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
             (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
           </a>
@@ -28518,7 +28514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:if>
                 </td>
                 <td>
-                  <a href="omp?cmd=get_nvts&amp;oid={$source_name}&amp;token={$token}">
+                  <a href="omp?cmd=get_info&amp;info_type=nvt&amp;info_id={$source_name}&amp;token={$token}">
                     <xsl:value-of select="$source_desc"/>
                   </a>
                 </td>
@@ -28855,7 +28851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="description"/>
             </td>
             <td>
-              <a href="omp?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+              <a href="omp?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:value-of select="nvt/name"/>
               </a>
             </td>

@@ -1,5 +1,13 @@
 2015-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (tagged_resource_link, cve-details)
+	(html-create-note-form, html-edit-note-form, note [details])
+	(html-create-override-form, html-edit-override-form, override [details])
+	(result [result-body], report [closed_cves], report [errors]): Use
+	GET_INFO instead of GET_NVTS to link to NVT Details page.
+
+2015-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Use GET_INFO for the SecInfo NVT link.
 
 	* src/html/classic/omp.xsl (get_info_nvt_lnk): Use GET_INFO.
