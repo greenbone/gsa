@@ -1,5 +1,12 @@
 2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (nvt [details]): Remove preferences, because
+	the Scan Config NVT Details used this template and adds its own
+	preferences.
+	(get_nvts): Move preferences back here.
+
+2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	More conversion from GET_NVTS to GET_INFO.
 
 	* src/html/classic/omp.xsl (get_nvts): Use get_info instead of get_nvts

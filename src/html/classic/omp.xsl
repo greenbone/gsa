@@ -19304,12 +19304,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
     </xsl:otherwise>
   </xsl:choose>
-
-  <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
-  <xsl:for-each select="preferences">
-    <xsl:call-template name="preferences-details">
-    </xsl:call-template>
-  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="get_notes_response">
@@ -19371,6 +19365,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_content">
           <xsl:apply-templates
             select="$nvts_response/nvt" mode="details"/>
+
+          <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT Window')"/></h2>
+          <xsl:for-each select="$nvts_response/nvt/preferences">
+            <xsl:call-template name="preferences-details">
+            </xsl:call-template>
+          </xsl:for-each>
         </div>
       </div>
 
