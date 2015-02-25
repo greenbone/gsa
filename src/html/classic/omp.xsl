@@ -19358,11 +19358,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
           </a>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=new_note&amp;next=get_nvts&amp;resource_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
             </a>
-            <a href="/omp?cmd=new_override&amp;next=get_nvts&amp;resource_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
             </a>
@@ -19378,9 +19378,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for', 'Tag Window'),' &quot;',$nvts_response/nvt/name,'&quot;:')"/>
         <xsl:with-param name="user_tags" select="$nvts_response/nvt/user_tags"/>
         <xsl:with-param name="tag_names" select="get_tags_response"/>
-        <xsl:with-param name="resource_type" select="'nvt'"/>
-        <xsl:with-param name="next" select="'get_nvts'"/>
+        <xsl:with-param name="resource_type" select="'info'"/>
         <xsl:with-param name="resource_id"   select="$nvts_response/nvt/@oid"/>
+        <xsl:with-param name="resource_subtype" select="'nvt'"/>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
@@ -19428,6 +19428,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <!-- get_report passthrough params. -->
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
+          </xsl:when>
+          <xsl:when test="/envelope/params/next='get_info'">
+            <!-- get_info (nvt) params. -->
+            <input type="hidden" name="info_id" value="{/envelope/params/oid}"/>
+            <input type="hidden" name="info_type" value="nvt"/>
           </xsl:when>
           <xsl:otherwise>
             <!-- get_report params. -->
@@ -19745,9 +19750,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="delta_report_id" value="{/envelope/params/delta_report_id}"/>
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
         <input type="hidden" name="details" value="{/envelope/params/details}"/>
-
-        <!-- get_nvts param. -->
-        <input type="hidden" name="oid" value="{/envelope/params/oid}"/>
 
         <!-- get_tasks param. -->
         <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
@@ -20466,6 +20468,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
           </xsl:when>
+          <xsl:when test="/envelope/params/next='get_info'">
+            <!-- get_info (nvt) params. -->
+            <input type="hidden" name="info_id" value="{/envelope/params/oid}"/>
+            <input type="hidden" name="info_type" value="nvt"/>
+          </xsl:when>
           <xsl:otherwise>
             <!-- get_report params. -->
             <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
@@ -20802,9 +20809,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="delta_report_id" value="{/envelope/params/delta_report_id}"/>
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
         <input type="hidden" name="details" value="{/envelope/params/details}"/>
-
-        <!-- get_nvts param. -->
-        <input type="hidden" name="oid" value="{/envelope/params/oid}"/>
 
         <!-- get_tasks param. -->
         <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>

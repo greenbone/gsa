@@ -1,3 +1,15 @@
+2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	More conversion from GET_NVTS to GET_INFO.
+
+	* src/html/classic/omp.xsl (get_nvts): Use get_info instead of get_nvts
+	as the next page for the new note and override icons, and the icons in
+	the user tags window
+	(html-create-note-form, html-create-override-form): Add params for
+	get_info case.
+	(html-edit-note-form, html-edit-override-form): Remove get_nvts param.
+	It's no longer possible to edit these from the NVT Details page.
+
 2015-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (tagged_resource_link, cve-details)
