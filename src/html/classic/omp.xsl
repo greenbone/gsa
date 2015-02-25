@@ -17868,7 +17868,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
                         or /envelope/params/info_id">
-          <xsl:call-template name="nvt-details"/>
+          <xsl:call-template name="get_nvts">
+            <xsl:with-param name="nvts_response" select="info"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="html-nvt-table"/>
@@ -18434,12 +18436,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resource_type" select="'info'"/>
     <xsl:with-param name="resource_id"   select="info/@id"/>
     <xsl:with-param name="resource_subtype" select="'cpe'"/>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="nvt-details">
-  <xsl:call-template name="get_nvts">
-    <xsl:with-param name="nvts_response" select="info"/>
   </xsl:call-template>
 </xsl:template>
 

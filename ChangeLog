@@ -1,5 +1,10 @@
 2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_info_response): Call get_nvts directly.
+	(nvt-details): Remove.  No longer used.
+
+2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (nvt [details]): Remove preferences, because
 	the Scan Config NVT Details used this template and adds its own
 	preferences.
