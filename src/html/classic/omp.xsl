@@ -10241,7 +10241,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
-  <xsl:if test="$select_type = 'nvt' or gsa:may-op ('get_nvts')">
+  <xsl:if test="$select_type = 'nvt' or gsa:may-op ('get_info')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'nvt'"/>
       <xsl:with-param name="content" select="gsa:i18n ('NVT', 'NVT')"/>
@@ -17868,7 +17868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
                         or /envelope/params/info_id">
-          <xsl:call-template name="get_nvts">
+          <xsl:call-template name="nvt-details">
             <xsl:with-param name="nvts_response" select="info"/>
           </xsl:call-template>
         </xsl:when>
@@ -19308,7 +19308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_overrides_response">
 </xsl:template>
 
-<xsl:template match="get_nvts" name="get_nvts">
+<xsl:template name="nvt-details">
   <xsl:param name="nvts_response" select="commands_response/get_nvts_response"/>
 
   <xsl:apply-templates select="gsad_msg"/>

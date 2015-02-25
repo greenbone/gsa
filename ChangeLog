@@ -1,5 +1,14 @@
 2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (tag_resource_types): Check GET_INFO instead
+	of GET_NVTS now that GET_INFO is used to get the NVT.
+	(get_info_response): Update call.
+	(get_nvts): Remove get_nvts match, because GET_NVTS is no longer usd to
+	get the NVT Details page.  Rename to nvt-details.
+	(nvt-details): New template.  Was nvt-details.
+
+2015-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_info_response): Call get_nvts directly.
 	(nvt-details): Remove.  No longer used.
 
