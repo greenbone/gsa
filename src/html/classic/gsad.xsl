@@ -25,7 +25,7 @@ Karl-Heinz Ruskowski <khruskowski@intevation.de>
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2009, 2010, 2012, 2013 Greenbone Networks GmbH
+Copyright (C) 2009, 2010, 2012-2015 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -1445,7 +1445,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </div>
-    Greenbone Security Assistant (GSA) Copyright 2009-2014 by Greenbone Networks
+    Greenbone Security Assistant (GSA) Copyright 2009-2015 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>
   </div>
   <xsl:choose>
