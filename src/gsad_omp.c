@@ -1488,6 +1488,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                search_phrase
                                 ? search_phrase
                                 : "");
+              filt_id = "-2";
               g_free (task);
             }
           else if (strcmp (type, "info") == 0

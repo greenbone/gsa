@@ -1,5 +1,10 @@
 2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Set filt_id to -2 when filter is built
+	from components so the filter is not overwritten with a default.
+
+2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-criteria, filter_extra): New
 	templates.
 	(filter-window-part): Move pagination, sorting, owner, permission and
