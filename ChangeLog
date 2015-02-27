@@ -1,5 +1,13 @@
 2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-simple, filter-rest): Remove. No
+	longer used with changes in filter-window-part.
+	(filter-window-part): Merge form with top filter term input with
+	expanded filter form. Remove now redundant expanded filter fields
+	"Simple search terms" and "Additional filter commands".
+
+2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Set filt_id to -2 when filter is built
 	from components so the filter is not overwritten with a default.
 

@@ -908,38 +908,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="filter-simple">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse'][column = '']">
-    <xsl:value-of select="column"/>
-    <xsl:choose>
-      <xsl:when test="column = ''">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="relation"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="boolean (quoted)">"</xsl:if>
-    <xsl:value-of select="value"/>
-    <xsl:if test="boolean (quoted)">"</xsl:if>
-    <xsl:text> </xsl:text>
-  </xsl:for-each>
-</xsl:template>
-
-<xsl:template name="filter-rest">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission' and column != '']">
-    <xsl:value-of select="column"/>
-    <xsl:choose>
-      <xsl:when test="column = ''">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="relation"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:value-of select="value"/>
-    <xsl:text> </xsl:text>
-  </xsl:for-each>
-</xsl:template>
-
 <xsl:template name="filter-criteria">
   <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission']">
     <xsl:value-of select="column"/>
@@ -1104,13 +1072,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              </xsl:call-template>
           </a>
         </div>
-        <div class="footnote" style="margin-left:40px;">
-          <xsl:value-of select="$extra"/>
-        </div>
-        <input type="hidden" name="filter_extra" value="{$extra}"/>
-      </form>
-      <xsl:if test="/envelope/params/filterbox &gt; 0">
-        <form action="" method="get" enctype="multipart/form-data">
+        <xsl:if test="not(/envelope/params/filterbox &gt; 0)">
+          <div class="footnote" style="margin-left:40px;">
+            <xsl:value-of select="$extra"/>
+          </div>
+          <input type="hidden" name="filter_extra" value="{$extra}"/>
+        </xsl:if>
+        <xsl:if test="/envelope/params/filterbox &gt; 0">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
           <input type="hidden" name="build_filter" value="1"/>
@@ -1297,29 +1265,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     maxlength="400"/>
             </div>
           </xsl:if>
-          <div style="padding: 2px;">
-            <xsl:value-of select="gsa:i18n ('Simple search terms', 'Filter Box')"/>:
-            <xsl:variable name="simple">
-              <xsl:call-template name="filter-simple"/>
-            </xsl:variable>
-            <input type="text" name="search_phrase" size="50"
-                   value="{$simple}"
-                   maxlength="400"/>
-          </div>
-          <div style="float: right; margin-right: 5px">
+          <div style="float: right; margin-right: 5px; margin-top: -25px">
             <input type="submit" value="{gsa:i18n ('Apply', 'Window')}" title="{gsa:i18n ('Apply', 'Window')}"/>
           </div>
-          <div style="padding: 2px;">
-            <xsl:value-of select="gsa:i18n ('Additional filter commands', 'Filter Box')"/>:
-            <xsl:variable name="rest">
-              <xsl:call-template name="filter-rest"/>
-            </xsl:variable>
-            <input type="text" name="filter" size="50"
-                   value="{$rest}"
-                   maxlength="400"/>
-          </div>
-        </form>
-      </xsl:if>
+        </xsl:if>
+      </form>
     </div>
   </div>
 </xsl:template>
