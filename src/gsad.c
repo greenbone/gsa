@@ -1278,6 +1278,7 @@ init_validator ()
   openvas_validator_alias (validator, "esc_min_qod", "min_qod");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "filt_id",            "id");
+  openvas_validator_alias (validator, "filter_extra",       "filter");
   openvas_validator_alias (validator, "filter_id",          "id");
   openvas_validator_alias (validator, "filterbox",          "boolean");
   openvas_validator_alias (validator, "from_file",          "boolean");

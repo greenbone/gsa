@@ -1,5 +1,19 @@
 2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-criteria, filter_extra): New
+	templates.
+	(filter-window-part): Move pagination, sorting, owner, permission and
+	apply_overrides from main filter input field to a hidden field and
+	static text.
+
+	* src/gsad_omp.c (get_many): Add option to a extra keywords with
+	filter_extra param.
+
+	* src/gsad.c (init_validator): Add "filter_extra" as alias for
+	"filter".
+
+2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	In the expanded filter box move "owner" and "permission" keywords to
 	new separate input fields.
 

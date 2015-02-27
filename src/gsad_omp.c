@@ -1358,13 +1358,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *filter_type, *html, *request, *built_filter;
-  const char *given_filt_id, *filt_id, *filter;
+  const char *given_filt_id, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value;
 
   given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
+  filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
   max = params_value (params, "max");
   replace_task_id = params_value (params, "replace_task_id");
@@ -1428,8 +1429,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       || (strcmp (filt_id, "--") == 0))
     {
       if (params_value (params, "build_filter")
-          || filter == NULL
-          || (strcmp (filter, "") == 0))
+          || ((filter == NULL || strcmp (filter, "") == 0)
+              && (filter_extra == NULL || strcmp (filter_extra, "") == 0)))
         {
           if (params_value (params, "build_filter"))
             {
@@ -1555,7 +1556,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   /* Get the list. */
 
   request = g_markup_printf_escaped (" %sfilt_id=\"%s\""
-                                     " %sfilter=\"%s\""
+                                     " %sfilter=\"%s%s%s%s\""
                                      " filter_replace=\"%s\""
                                      " first=\"%s\""
                                      " max=\"%s\""
@@ -1567,6 +1568,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                      built_filter
                                       ? built_filter
                                       : (filter ? filter : ""),
+                                     filter_extra ? " " : "",
+                                     filter_extra ? filter_extra : "",
+                                     filter_extra ? " " : "",
                                      replace_task_id ? "task_id" : "",
                                      first ? first : "1",
                                      max ? max : "-2",

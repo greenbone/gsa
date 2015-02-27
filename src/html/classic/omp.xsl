@@ -940,6 +940,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="filter-criteria">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission']">
+    <xsl:value-of select="column"/>
+    <xsl:choose>
+      <xsl:when test="column = ''">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="relation"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
+    <xsl:value-of select="value"/>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
+    <xsl:text> </xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="filter-extra">
+  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission')]">
+    <xsl:value-of select="column"/>
+    <xsl:choose>
+      <xsl:when test="column = ''">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="relation"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
+    <xsl:value-of select="value"/>
+    <xsl:if test="boolean (quoted)">"</xsl:if>
+    <xsl:text> </xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template name="filter-window-part">
   <xsl:param name="type"/>
   <xsl:param name="list"/>
@@ -1015,6 +1049,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <form action="" method="get" enctype="multipart/form-data">
+        <xsl:variable name="criteria">
+          <xsl:call-template name="filter-criteria"/>
+        </xsl:variable>
+        <xsl:variable name="extra">
+          <xsl:call-template name="filter-extra"/>
+        </xsl:variable>
+
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
         <xsl:for-each select="exslt:node-set($extra_params)/param">
@@ -1023,7 +1064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div style="padding: 2px;">
           <xsl:value-of select="gsa:i18n ('Filter', 'Filter Box')"/>:
           <input type="text" name="filter" size="53"
-                 value="{concat (filters/term, ' ')}"
+                 value="{$criteria}"
                  maxlength="1000"/>
           <input type="image"
                  name="Update Filter"
@@ -1063,6 +1104,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              </xsl:call-template>
           </a>
         </div>
+        <div class="footnote" style="margin-left:40px;">
+          <xsl:value-of select="$extra"/>
+        </div>
+        <input type="hidden" name="filter_extra" value="{$extra}"/>
       </form>
       <xsl:if test="/envelope/params/filterbox &gt; 0">
         <form action="" method="get" enctype="multipart/form-data">
