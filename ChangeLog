@@ -1,3 +1,21 @@
+2015-02-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	In the expanded filter box move "owner" and "permission" keywords to
+	new separate input fields.
+
+	* src/gsad_omp.c (get_many): Add "owner" and "permission" keywords
+	when building filter.
+
+	* src/gsad.c (init_validator): Add "owner" and "permission" as aliases
+	for "name".
+
+	* src/html/classic/omp.xsl (filter-rest): Exclude keyword columns
+	"owner" and "permission".
+	(filter-window-part): Add input fields "Owner" and "Permission".
+
+	* src/html/classic/po/de.xml (Filter Box): Add strings "Owner" and
+	"Permission".
+
 2015-02-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-footer): Updated year to 2015.

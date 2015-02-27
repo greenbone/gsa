@@ -1359,7 +1359,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   int socket;
   gchar *filter_type, *html, *request, *built_filter;
   const char *given_filt_id, *filt_id, *filter;
-  const char *first, *max, *sort_field, *sort_order;
+  const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value;
 
@@ -1370,6 +1370,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   replace_task_id = params_value (params, "replace_task_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
+  owner = params_value (params, "owner");
+  permission = params_value (params, "permission");
   overrides = params_value (params, "overrides");
   autofp = params_value (params, "autofp");
   autofp_value = params_value (params, "autofp_value");
@@ -1454,7 +1456,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               search_phrase = params_value (params, "search_phrase");
               task_id = params_value (params, "task_id");
               built_filter = g_strdup_printf
-                              ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+                              ("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
                                task ? task : "",
                                task_id ? "task_id=" : "",
                                task_id ? task_id : "",
@@ -1473,6 +1475,12 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                 : "",
                                sort_field ? sort_field : "",
                                sort_field ? " " : "",
+                               permission ? "permission=" : "",
+                               permission ? permission : "",
+                               permission ? " " : "",
+                               owner ? "owner=" : "",
+                               owner ? owner : "",
+                               owner ? " " : "",
                                (filter && search_phrase) ? " " : "",
                                filter ? filter : "",
                                search_phrase ? " " : "",

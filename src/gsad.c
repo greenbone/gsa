@@ -1336,8 +1336,10 @@ init_validator ()
   openvas_validator_alias (validator, "override_task_id", "optional_task_id");
   openvas_validator_alias (validator, "override_task_uuid", "override_task_id");
   openvas_validator_alias (validator, "override_result_uuid", "override_result_id");
+  openvas_validator_alias (validator, "owner", "name");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "password:name", "preference_name");
+  openvas_validator_alias (validator, "permission", "name");
   openvas_validator_alias (validator, "permission_id", "id");
   openvas_validator_alias (validator, "port_manual",       "number");
   openvas_validator_alias (validator, "port_range_end",    "number");

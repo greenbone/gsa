@@ -926,7 +926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-rest">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id'][column != '']">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission' and column != '']">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -1236,6 +1236,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Descending', 'Filter Box')"/>
               </label>
+            </div>
+          </xsl:if>
+          <xsl:if test="$type != 'info'">
+            <div style="padding: 2px;">
+              <xsl:value-of select="gsa:i18n ('Owner', 'Filter Box')"/>:
+              <input type="text" name="owner" size="25"
+                    value="{filters/keywords/keyword[column='owner']/value}"
+                    maxlength="400"/>
+            </div>
+            <div style="padding: 2px;">
+              <xsl:value-of select="gsa:i18n ('Permission', 'Filter Box')"/>:
+              <input type="text" name="permission" size="25"
+                    value="{filters/keywords/keyword[column='permission']/value}"
+                    maxlength="400"/>
             </div>
           </xsl:if>
           <div style="padding: 2px;">
