@@ -1,3 +1,11 @@
+2015-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r21725 by Jan-Oliver Wagner.
+
+	* src/html/classic/gsad.xsl (html-footer): Updated year to 2015.
+
+	* src/gsad.c (main): Updated year to 2015.
+
 2015-01-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r16383.  Patch by Michael Wiegand.
