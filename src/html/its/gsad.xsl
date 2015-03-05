@@ -17,7 +17,7 @@ Authors:
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2014 Greenbone Networks GmbH
+Copyright (C) 2014-2015 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
           <div style="text-align:center;float:center; padding: 10px"><input type="submit" value="Anmelden" /></div>
           <br clear="all" />
-          <div style="text-align:right">IT Schwachstellenampel Version 1.1</div>
+          <div style="text-align:right">IT Schwachstellenampel Version 1.2.2</div>
         </form>
       </center>
     </div>
@@ -289,7 +289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-footer">
   <div id="footer_logos">
     <hr/>
-    <p align="right">IT Schwachstellenampel Version 1.2</p>
+    <p align="right">IT Schwachstellenampel Version 1.2.2</p>
   </div>
 </xsl:template>
 

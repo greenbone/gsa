@@ -41,7 +41,7 @@ Authors:
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2014 Greenbone Networks GmbH
+Copyright (C) 2014-2015 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -188,8 +188,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="configs" select="/envelope/wizard/run_wizard_response/response/commands_response/get_configs_response"/>
   <xsl:variable name="scanners" select="/envelope/wizard/run_wizard_response/response/commands_response/get_scanners_response"/>
   <xsl:variable name="its_config" select="$configs/config[name='ITS-Scankonfiguration']/@id |/envelope/params/_param[name='event_data:config_id' and value!='' and value!='daba56c8-73ec-11df-a475-002264764cea' and not($configs)]/value"/>
-  <xsl:variable name="its_scanner" select="$scanners/scanner[name='ITS-Scanner']/@id |/envelope/params/_param[name='event_data:scanner_id' and value!='' and value!='08b69003-5fc2-4037-a479-93b440211c73' and not ($scanners)]/value"/>
-
+  <xsl:variable name="its_scanner" select="'08b69003-5fc2-4037-a479-93b440211c73'"/>
+<!--
+  <xsl:variable name="its_scanner" select="$scanners/scanner[name='ITS-Scanner']/@id |/envelope/params/_param[name='event_data:scanner_id' and value!='' and value!='08b69003-5fc2-4037-a479-93b440211c73' and not ($scanners)]/value|"/>
+-->
   <xsl:variable name="task_id">
     <xsl:choose>
       <xsl:when test="$task!=''">
