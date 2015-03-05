@@ -1,3 +1,9 @@
+2015-03-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner [details]): Adjust to properly
+	handle openvas scanner case, improve message wording and add code
+	comments.
+
 2015-03-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Use the "OpenVAS Default" scanner in IT-Schwachstellenampel.

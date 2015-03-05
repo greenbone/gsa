@@ -15777,7 +15777,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
 
       <xsl:choose>
-        <xsl:when test="info/scanner/name">
+        <!-- OpenVAS Scanner case -->
+        <xsl:when test="info/scanner/name = 'OpenVAS'">
+        </xsl:when>
+        <!-- OSP Scanner is online case -->
+        <xsl:when test="string-length(info/scanner/name)">
           <h1><xsl:value-of select="gsa:i18n ('Online Response of Scanner', 'Scanner Window')"/></h1>
 
           <table>
@@ -15845,8 +15849,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
 
         </xsl:when>
+        <!-- OSP Scanner is offline case -->
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Scanner currently not online', 'Scanner Window')"/></h1>
+          <h1><xsl:value-of select="gsa:i18n ('OSP Scanner is offline', 'Scanner Window')"/></h1>
         </xsl:otherwise>
       </xsl:choose>
 
