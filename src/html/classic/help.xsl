@@ -80,7 +80,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     New <xsl:value-of select="$name"/></a> page.
   </p>
 
-  <h4>Clone</h4>
+  <h4>Clone <xsl:value-of select="$name"/></h4>
   <p>
     To clone a <xsl:value-of select="$name"/> click the clone icon
     <img src="/img/clone.png" alt="Clone" title="Clone"/>
@@ -1092,6 +1092,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        specified address).
       </p>
 
+      <h1>New Alert</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#alert">Alert</a>
@@ -2342,6 +2343,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Scanner'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
+      <h4>Verify Scanner</h4>
+      <p>
+        Verify that the Scanner is online, and that the Manager is able to
+        connect to it with the provided certificates.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -2373,6 +2379,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
 
+      <h2>Online Response of Scanner</h2>
+      <p>
+        The following information is also provided when the scanner is of type
+        OSP and is currently online. This includes Scanner name, Scanner
+        version, OSP Daemon, Protocol version and Scanner description.
+      </p>
+
+      <h3>Scanner parameters</h3>
+      <p>
+        This table provides an overview of the Scanner parameters as fetched
+        from the OSP scanner.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -5495,6 +5513,120 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="new_scanner.html">
+  <div class="gb_window_part_center">Help: New Scanner
+    <a href="/omp?cmd=new_scanner&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_SCANNER'"/>
+      </xsl:call-template>
+
+      <h1>New Scanner</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a>
+        the dialog offers these entries.
+        Hit the button "Create Scanner" to submit the new scanner.
+        The Scanners page will be shown.
+      </p>
+      <p>
+        CA Public Key: The CA certificate with which, the certificate presented
+        by the Scanner is signed. It is used to verify the authenticity of the
+        connection.
+      </p>
+      <p>
+        Public Key: The public key that will be used to authenticate with the
+        Scanner.
+      </p>
+      <p>
+        Private Key: The private key that will be used to authenticate with the
+        Scanner.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td width="150"></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>OSP w3af Scanner</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>Scanner object for OSP w3af scanner</td>
+        </tr>
+        <tr class="odd">
+          <td>Host</td>
+          <td>Yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>192.168.3.200</td>
+        </tr>
+        <tr class="even">
+          <td>Port</td>
+          <td>Yes</td>
+          <td>80</td>
+          <td>Integer</td>
+          <td>1234</td>
+        </tr>
+        <tr class="odd">
+          <td>Type</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>OSP Scanner</td>
+        </tr>
+        <tr class="even">
+          <td>CA Public Key</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/usr/var/lib/openvas/CA/cacert.pem</td>
+        </tr>
+        <tr class="odd">
+          <td>Public Key</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/usr/var/lib/openvas/CA/clientcert.pem</td>
+        </tr>
+        <tr class="even">
+          <td>Private Key</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/usr/var/lib/openvas/private/CA/clientkey.pem</td>
+        </tr>
+      </table>
+
+      <h4>Scanners</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Scanners" title="Scanners"/>
+       will switch to the scanners page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="new_tag.html">
   <div class="gb_window_part_center">Help: New Tag
     <a href="/omp?cmd=new_tag&amp;max=-2&amp;token={/envelope/token}">
@@ -5606,8 +5738,6 @@ Public License instead of this License.
         Hit the button "Create Target" to submit the new target.
         The Targets page will be shown.
       </p>
-
-      <xsl:call-template name="hosts_note"/>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -5723,6 +5853,8 @@ Public License instead of this License.
       <xsl:if test="not (gsa:may-op ('get_port_lists')) or not (gsa:may-op ('get_lsc_credentials'))">
         <b>*</b> not available with the current OMP Server connection.
       </xsl:if>
+
+      <xsl:call-template name="hosts_note"/>
 
       <h4>Targets</h4>
       <p>
