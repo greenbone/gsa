@@ -1,3 +1,8 @@
+2015-03-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (format_file_name): Set variable to NULL directly,
+	instead of passing a NULL entity to entity_text, which segfaults.
+
 2015-03-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter-window-part, tag [for_resource])
