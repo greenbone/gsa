@@ -1,5 +1,10 @@
 2015-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js (generate): Add percentage to
+	bar tooltips.
+
+2015-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js (generate): Add tooltips to
 	all parts of the donut slices and to the legend entries.
 

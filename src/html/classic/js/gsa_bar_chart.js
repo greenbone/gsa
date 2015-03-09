@@ -202,6 +202,12 @@ function BarChartGenerator ()
       x_data = records.map (function (d) { return d [x_field]; });
       y_data = records.map (function (d) { return d [y_field]; });
 
+      var y_sum = 0;
+      for (var i in y_data)
+        {
+          y_sum += y_data[i];
+        }
+
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
       width = display.svg ().attr ("width") - margin.left - margin.right;
@@ -245,9 +251,11 @@ function BarChartGenerator ()
 
               if (y_label != "")
                 return "<strong>" + y_label + " (" + x + "):</strong><br/> "
-                        + d [y_field] + "";
+                        + d [y_field]
+                        + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
               else
-                return "<strong>" + x + ":</strong><br/> " + d [y_field];
+                return "<strong>" + x + ":</strong><br/> " + d [y_field]
+                       + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
             });
 
         }
