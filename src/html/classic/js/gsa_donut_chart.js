@@ -161,6 +161,12 @@ function DonutChartGenerator ()
       x_data = records.map (function (d) { return d [x_field]; });
       y_data = records.map (function (d) { return d [y_field]; });
 
+      var y_sum = 0;
+      for (var i in y_data)
+        {
+          y_sum += y_data[i];
+        }
+
       slice_f = d3.layout.pie()
                            .value (function(d) { return d[y_field]; })
                            .sort (null)
@@ -205,6 +211,13 @@ function DonutChartGenerator ()
       var legend_y = 0;
       for (var i = 0; i < x_data.length; i++)
         {
+          var d = slices [i];
+          var x;
+          if (d.data[x_field + "~long"])
+            x = d.data[x_field + "~long"];
+          else
+            x = d.data[x_field];
+
           legend.insert ("rect")
               .attr ("height", "15")
               .attr ("width", "15")
@@ -214,6 +227,8 @@ function DonutChartGenerator ()
               .attr ("stroke", "black")
               .attr ("stroke-width", "0.25")
               .style ("shape-rendering", "geometricPrecision")
+              .attr ("title",
+                     x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data[y_field] + ")")
 
           var new_text = legend.insert ("text")
                                 .attr ("x", 22)
@@ -221,6 +236,8 @@ function DonutChartGenerator ()
                                 .style ("font-size", "12px")
                                 .style ("font-weight", "bold")
                                 .text (x_data[i])
+                                .attr ("title",
+                                       x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data[y_field] + ")")
           wrap_text (new_text, legend_width - 25);
 
           legend_y += Math.max (20, new_text.node ().getBBox ().height + 5);
@@ -256,6 +273,16 @@ function DonutChartGenerator ()
                                       rx, ry, ri, h)
                           })
                   .attr ("fill", function (d, i) { return d3.lab (color_scale (d.data [x_field])).darker (); } )
+                  .attr ("title",
+                         function (d, i)
+                            {
+                              var x;
+                              if (d.data [x_field + "~long"])
+                                x = d.data [x_field + "~long"];
+                              else
+                                x = d.data [x_field];
+                              return x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data [y_field] + ")"
+                            })
 
       donut.selectAll(".slice_top")
             .data (slices)
@@ -289,7 +316,7 @@ function DonutChartGenerator ()
                                 x = d.data [x_field + "~long"];
                               else
                                 x = d.data [x_field];
-                              return x + ": " + (100 * (d.endAngle - d.startAngle) / (2 * Math.PI)).toFixed (1) + "% (" + d.data [y_field] + ")"
+                              return x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data [y_field] + ")"
                             })
 
       donut.selectAll(".slice_outer")
@@ -308,6 +335,16 @@ function DonutChartGenerator ()
                                       rx, ry, ri, h)
                           })
                   .attr ("fill", function (d, i) { return d3.lab (color_scale (d.data [x_field])).darker (); } )
+                  .attr ("title",
+                         function (d, i)
+                            {
+                              var x;
+                              if (d.data [x_field + "~long"])
+                                x = d.data [x_field + "~long"];
+                              else
+                                x = d.data [x_field];
+                              return x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data [y_field] + ")"
+                            })
 
       donut.selectAll(".slice_label")
             .data (slices)
@@ -325,7 +362,17 @@ function DonutChartGenerator ()
                   .attr ("y", function (d, i) { return -Math.cos ((d.startAngle + d.endAngle) / 2) * ry * ((1 + ri) / 2)})
                   .attr ("text-anchor", "middle")
                   .style ("font-weight", "bold")
-                  .style ("font-size", "7pt");
+                  .style ("font-size", "7pt")
+                  .attr ("title",
+                         function (d, i)
+                            {
+                              var x;
+                              if (d.data [x_field + "~long"])
+                                x = d.data [x_field + "~long"];
+                              else
+                                x = d.data [x_field];
+                              return x + ": " + (100 * d.data[y_field] / y_sum).toFixed (1) + "% (" + d.data [y_field] + ")"
+                            });
 
       // In case of missing data, draw a transparent grey donut
       if (slices.length == 0)
