@@ -1,3 +1,7 @@
+2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/help.xsl (scanners.html): Improve help documentation.
+
 2015-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (percentage_counts): Create

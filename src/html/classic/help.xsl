@@ -2348,6 +2348,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Verify that the Scanner is online, and that the Manager is able to
         connect to it with the provided certificates.
       </p>
+      <h4>Download CA Public Key</h4>
+        <p>
+         Pressing the "Download CA Public Key" icon
+         <img src="/img/key.png" alt="Download CA Public Key"
+              title="Download CA Public Key"/>
+         will download the CA's Public Key.
+        </p>
+      <h4>Download Public Key</h4>
+        <p>
+         Pressing the "Download Public Key" icon
+         <img src="/img/key.png" alt="Download Public Key"
+              title="Download Public Key"/>
+         will download the Public Key.
+        </p>
     </div>
   </div>
 </xsl:template>
