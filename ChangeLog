@@ -1,3 +1,8 @@
+2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (report_format): Use may-op template to check
+	for verify report format permission.
+
 2015-03-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (format_file_name): Set variable to NULL directly,

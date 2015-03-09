@@ -23659,7 +23659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
           <xsl:choose>
-            <xsl:when test="gsa:may ('verify_report_format')">
+            <xsl:when test="gsa:may-op ('verify_report_format')">
               <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Verify Report Format', 'Report Format Table Row')}"
                 style="margin-left:3px;">
