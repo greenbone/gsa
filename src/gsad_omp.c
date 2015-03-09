@@ -14252,7 +14252,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *scanner_id;
+  const char *scanner_id, *next;
   char *ret;
 
   scanner_id = params_value (params, "scanner_id");
@@ -14300,7 +14300,11 @@ verify_scanner_omp (credentials_t * credentials, params_t *params)
                "/omp?cmd=get_scanners");
     }
 
-  ret = get_scanners (credentials, params, xml->str);
+  next = params_value (params, "next");
+  if (next && !strcmp (next, "get_scanner"))
+    ret = get_scanner (credentials, params, xml->str);
+  else
+    ret = get_scanners (credentials, params, xml->str);
   openvas_server_close (socket, session);
   g_string_free (xml, TRUE);
   return ret;

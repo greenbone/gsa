@@ -15746,6 +15746,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Scanner'"/>
         <xsl:with-param name="type" select="'scanner'"/>
       </xsl:call-template>
+      <xsl:call-template name="scanner-icons">
+        <xsl:with-param name="scanner_id" select="@id"/>
+        <xsl:with-param name="ca_pub" select="ca_pub"/>
+        <xsl:with-param name="key_pub" select="key_pub"/>
+        <xsl:with-param name="next" select="'get_scanner'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="minor-details"/>
@@ -15891,7 +15897,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_scanner_response"/>
   <xsl:apply-templates select="modify_scanner_response"/>
-  <xsl:apply-templates select="verify_scanner_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
@@ -15988,6 +15993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="scanner_id" select="@id"/>
             <xsl:with-param name="ca_pub" select="ca_pub"/>
             <xsl:with-param name="key_pub" select="key_pub"/>
+            <xsl:with-param name="next" select="'get_scanners'"/>
           </xsl:call-template>
         </td>
       </xsl:otherwise>
@@ -28827,8 +28833,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="scanner_id"/>
   <xsl:param name="ca_pub"/>
   <xsl:param name="key_pub"/>
+  <xsl:param name="next">get_scanners</xsl:param>
 
-  <a href="/omp?cmd=verify_scanner&amp;scanner_id={$scanner_id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=verify_scanner&amp;scanner_id={$scanner_id}&amp;next={$next}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
     title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
     style="margin-left:3px;">
     <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>

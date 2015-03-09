@@ -1,5 +1,17 @@
 2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (verify_scanner_omp): Adjust to handle next page to
+	return.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Add response indicator for
+	verify scanner in scanner details page.
+
+	* src/html/classic/omp.xsl (scanner [details]): Add extra scanner icons.
+	(scanner-icons): Add next template argument, to specify next page.
+	(scanner): Add argument in scanner-icons template call.
+
+2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator, exec_omp_get): Handle download_ca_pub and
 	download_key_pub commands.
 
