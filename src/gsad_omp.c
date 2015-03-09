@@ -11986,6 +11986,66 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Get a Scanner's CA Public Key.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  response_size  Size of cert.
+ *
+ * @return CA Public Key.
+ */
+char *
+download_ca_pub (credentials_t * credentials, params_t *params,
+                 gsize *response_size)
+{
+  const char *ca_pub;
+  char *unescaped;
+
+  ca_pub = params_value (params, "ca_pub");
+  if (ca_pub == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred."
+                         " Diagnostics: ca_pub was NULL.",
+                         "/omp?cmd=get_reports");
+
+  /* The Base64 comes URI escaped as it may contain special characters. */
+  unescaped = g_uri_unescape_string (ca_pub, NULL);
+  *response_size = strlen (unescaped);
+  return unescaped;
+}
+
+/**
+ * @brief Get a Scanner's Public Key.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  response_size  Size of cert.
+ *
+ * @return Public Key.
+ */
+char *
+download_key_pub (credentials_t * credentials, params_t *params,
+                  gsize *response_size)
+{
+  const char *key_pub;
+  char *unescaped;
+
+  key_pub = params_value (params, "key_pub");
+  if (key_pub == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred."
+                         " Diagnostics: key_pub was NULL.",
+                         "/omp?cmd=get_reports");
+
+  /* The Base64 comes URI escaped as it may contain special characters. */
+  unescaped = g_uri_unescape_string (key_pub, NULL);
+  *response_size = strlen (unescaped);
+  return unescaped;
+}
+
+/**
  * @brief Export a result.
  *
  * @param[in]   credentials          Username and password for authentication.

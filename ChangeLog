@@ -1,5 +1,20 @@
 2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator, exec_omp_get): Handle download_ca_pub and
+	download_key_pub commands.
+
+	* src/gsad_omp.c (download_ca_pub, download_key_pub): New functions.
+
+	* src/gsad_omp.h: Add functions prototypes.
+
+	* src/html/classic/omp.xsl (html-scanners-table): Increase number of
+	actions icons.
+	(scanner-icons): New template, for verify scanner, Download CA Public
+	Key and Download Public Key buttons.
+	(scanner): Adjust to call scanner-icons template.
+
+2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (report_format): Use may-op template to check
 	for verify report format permission.
 

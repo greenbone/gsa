@@ -67,6 +67,8 @@ char * get_reports_omp (credentials_t *, params_t *);
 char * get_report_section_omp (credentials_t *, params_t *);
 
 char * download_ssl_cert (credentials_t *, params_t *, gsize *);
+char * download_ca_pub (credentials_t *, params_t *, gsize *);
+char * download_key_pub (credentials_t *, params_t *, gsize *);
 
 char * export_result_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *);

@@ -15642,7 +15642,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <name>Type</name>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="5"/>
+    <xsl:with-param name="icon-count" select="7"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -15984,11 +15984,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="type" select="'scanner'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <a href="/omp?cmd=verify_scanner&amp;scanner_id={@id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
-            style="margin-left:3px;">
-            <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
-          </a>
+          <xsl:call-template name="scanner-icons">
+            <xsl:with-param name="scanner_id" select="@id"/>
+            <xsl:with-param name="ca_pub" select="ca_pub"/>
+            <xsl:with-param name="key_pub" select="key_pub"/>
+          </xsl:call-template>
         </td>
       </xsl:otherwise>
     </xsl:choose>
@@ -28820,6 +28820,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="image" name="submit" value="Download SSL Cert"
            title="{gsa:i18n ('Download SSL Cert', 'Result Table Row')}" src="/img/download.png" border="0"
            style="margin-left:3px;" alt="{gsa:i18n ('Download SSL Cert', 'Result Table Row')}"/>
+  </form>
+</xsl:template>
+
+<xsl:template name="scanner-icons">
+  <xsl:param name="scanner_id"/>
+  <xsl:param name="ca_pub"/>
+  <xsl:param name="key_pub"/>
+
+  <a href="/omp?cmd=verify_scanner&amp;scanner_id={$scanner_id}&amp;next=get_scanners&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    title="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"
+    style="margin-left:3px;">
+    <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
+  </a>
+  <a href="/omp?cmd=download_key_pub&amp;scanner_id={$scanner_id}&amp;key_pub={str:encode-uri($key_pub, true ())}&amp;token={/envelope/token}"
+     title="{gsa:i18n ('Download Public Key', 'Credential Table Row')}"
+     style="margin-left:3px;">
+    <img src="/img/key.png" border="0"
+         alt="{gsa:i18n ('Download Public Key', 'Credential Table Row')}"/>
+  </a>
+  <a href="/omp?cmd=download_ca_pub&amp;scanner_id={$scanner_id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
+     title="{gsa:i18n ('Download CA Public Key', 'Credential Table Row')}"
+     style="margin-left:3px;">
+    <img src="/img/key.png" border="0"
+         alt="{gsa:i18n ('Download CA Public Key', 'Credential Table Row')}"/>
+  </a>
+</xsl:template>
+
+<xsl:template name="download_key_pub">
+  <xsl:param name="scanner_id"/>
+  <xsl:param name="key_pub"/>
+
+  <form action="" method="get" enctype="multipart/form-data">
+    <input type="hidden" name="cmd" value="download_key_pub"/>
+    <input type="hidden" name="scanner_id" value="{$scanner_id}"/>
+    <input type="hidden" name="key_pub" value="{str:encode-uri($key_pub, true ())}"/>
+    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="image" name="submit" value="Download Public Key"
+           title="{gsa:i18n ('Download Public Key', 'Scanner Table Row')}"
+           src="/img/key.png" border="0" style="margin-left:3px;"
+           alt="{gsa:i18n ('Download Public Key', 'Scanner Table Row')}"/>
   </form>
 </xsl:template>
 

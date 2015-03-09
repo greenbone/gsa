@@ -864,6 +864,8 @@ init_validator ()
                          "|(download_agent)"
                          "|(download_lsc_credential)"
                          "|(download_ssl_cert)"
+                         "|(download_ca_pub)"
+                         "|(download_key_pub)"
                          "|(edit_agent)"
                          "|(edit_alert)"
                          "|(edit_config)"
@@ -2771,6 +2773,26 @@ exec_omp_get (struct MHD_Connection *connection,
                                params_value (params, "name"));
 
       return download_ssl_cert (credentials, params, response_size);
+    }
+
+  else if (!strcmp (cmd, "download_ca_pub"))
+    {
+      *content_type = GSAD_CONTENT_TYPE_APP_KEY;
+      free (*content_disposition);
+      *content_disposition = g_strdup_printf
+                              ("attachment; filename=scanner-ca-pub-%s.pem",
+                               params_value (params, "scanner_id"));
+      return download_ca_pub (credentials, params, response_size);
+    }
+
+  else if (!strcmp (cmd, "download_key_pub"))
+    {
+      *content_type = GSAD_CONTENT_TYPE_APP_KEY;
+      free (*content_disposition);
+      *content_disposition = g_strdup_printf
+                              ("attachment; filename=scanner-key-pub-%s.pem",
+                               params_value (params, "scanner_id"));
+      return download_key_pub (credentials, params, response_size);
     }
 
   ELSE (get_aggregate)
