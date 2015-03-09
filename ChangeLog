@@ -1,3 +1,8 @@
+2015-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (percentage_counts): Create
+	copies of records so the original ones are not overwritten.
+
 2015-03-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (verify_scanner_omp): Adjust to handle next page to

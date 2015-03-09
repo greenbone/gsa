@@ -1314,7 +1314,12 @@ function percentage_counts (old_data, params)
 
   for (var record in old_data.records)
     {
-      new_data.records.push (old_data.records[record]);
+      var new_record = {};
+      for (var field in old_data.records[record])
+        {
+          new_record[field] = old_data.records[record][field];
+        }
+      new_data.records.push (new_record);
     }
 
   var sort_func
