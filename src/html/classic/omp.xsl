@@ -6474,6 +6474,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_task">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_task_response"/>
   <xsl:call-template name="html-edit-task-form"/>
 </xsl:template>
 
@@ -11537,6 +11538,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_target">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_target_response"/>
   <xsl:call-template name="html-edit-target-form"/>
 </xsl:template>
 
@@ -15733,6 +15735,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_scanner">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_scanner_response"/>
   <xsl:call-template name="html-edit-scanner-form"/>
 </xsl:template>
 
@@ -16289,6 +16292,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_slave">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_slave_response"/>
   <xsl:call-template name="html-edit-slave-form"/>
 </xsl:template>
 
@@ -23592,6 +23596,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_report_format">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_report_format_response"/>
   <xsl:call-template name="html-edit-report-format-form"/>
 </xsl:template>
 

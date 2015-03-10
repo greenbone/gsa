@@ -11986,13 +11986,13 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Get a Scanner's CA Public Key.
+ * @brief Get a Scanner's CA Certificate.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
  *
- * @return CA Public Key.
+ * @return CA Certificate.
  */
 char *
 download_ca_pub (credentials_t * credentials, params_t *params,
@@ -12016,13 +12016,13 @@ download_ca_pub (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Get a Scanner's Public Key.
+ * @brief Get a Scanner's Certificate.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
  *
- * @return Public Key.
+ * @return Certificate.
  */
 char *
 download_key_pub (credentials_t * credentials, params_t *params,
@@ -14485,10 +14485,13 @@ save_scanner_omp (credentials_t * credentials, params_t *params)
   switch (ompf (credentials, &response, &entity,
                 "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
                 "<comment>%s</comment><host>%s</host>"
-                "<port>%s</port><type>%s</type><ca_pub>%s</ca_pub>"
-                "<key_pub>%s</key_pub><key_priv>%s</key_priv></modify_scanner>",
+                "<port>%s</port><type>%s</type>%s%s%s"
+                "%s%s%s%s%s%s</modify_scanner>",
                 scanner_id, name, comment ?: "", host, port, type,
-                ca_pub, key_pub, key_priv))
+                ca_pub ?: "<ca_pub>", ca_pub ?: "", ca_pub ?: "</ca_pub>",
+                key_pub ?: "<key_pub>", key_pub ?: "", key_pub ?: "</key_pub>",
+                key_priv ?: "<key_priv>", key_priv ?: "",
+                key_priv ?: "</key_priv>"))
     {
       case 0:
       case -1:

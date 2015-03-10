@@ -1,3 +1,11 @@
+2015-03-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_scanner_omp): Don't send ca_pub, key_pub and
+	key_priv elements, when matching values aren't provided.
+
+	* src/html/classic/omp.xsl (edit_task, edit_target, edit_scanner)
+	(edit_slave, edit_report_format): Handle modify command response.
+
 2015-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js (generate): Add percentage to
