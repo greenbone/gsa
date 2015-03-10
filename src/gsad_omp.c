@@ -14485,13 +14485,10 @@ save_scanner_omp (credentials_t * credentials, params_t *params)
   switch (ompf (credentials, &response, &entity,
                 "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
                 "<comment>%s</comment><host>%s</host>"
-                "<port>%s</port><type>%s</type>%s%s%s"
-                "%s%s%s%s%s%s</modify_scanner>",
-                scanner_id, name, comment ?: "", host, port, type,
-                ca_pub ?: "<ca_pub>", ca_pub ?: "", ca_pub ?: "</ca_pub>",
-                key_pub ?: "<key_pub>", key_pub ?: "", key_pub ?: "</key_pub>",
-                key_priv ?: "<key_priv>", key_priv ?: "",
-                key_priv ?: "</key_priv>"))
+                "<port>%s</port><type>%s</type><ca_pub>%s</ca_pub>"
+                "<key_pub>%s</key_pub><key_priv>%s</key_priv></modify_scanner>",
+                scanner_id, name, comment ?: "", host, port, type, ca_pub,
+                key_pub, key_priv))
     {
       case 0:
       case -1:
