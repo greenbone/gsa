@@ -1,10 +1,15 @@
 2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_task, edit_task): Add filter to GET_CONFIGS, so
+	that targets of other users are included.
+
+2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Cater for the case where a user no longer has access to the configs of
 	a task.  And where a config is used on a task that the user may not
 	access.
 
-	* src/html/classic/gsad.xsl (task [details]): Mark configs unavailable
+	* src/html/classic/omp.xsl (task [details]): Mark configs unavailable
 	if they are.
 	(html-config-table): If task is not availabe mark it so.
 
