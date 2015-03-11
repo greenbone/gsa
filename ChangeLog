@@ -1,5 +1,10 @@
 2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_permission, edit_permission): Add filter so that
+	all available items are included.
+
+2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Cater for the case where a user no longer has access to the scanners of
 	a task.  And where a scanner is used on a task that the user may not
 	access.
