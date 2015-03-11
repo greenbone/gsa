@@ -1,3 +1,13 @@
+2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Cater for the case where a user no longer has access to the configs of
+	a task.  And where a config is used on a task that the user may not
+	access.
+
+	* src/html/classic/gsad.xsl (task [details]): Mark configs unavailable
+	if they are.
+	(html-config-table): If task is not availabe mark it so.
+
 2015-03-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Cater for the case where a user no longer has access to the targets of a

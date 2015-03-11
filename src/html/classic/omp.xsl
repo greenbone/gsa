@@ -3985,9 +3985,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td></td>
             <td>
               <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
-              <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="config/name"/>
-              </a>
+              <xsl:choose>
+                <xsl:when test="boolean (config/permissions) and count (config/permissions/permission) = 0">
+                  <xsl:text>Unavailable (</xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
+                  <xsl:text>: </xsl:text>
+                  <xsl:value-of select="config/name"/>
+                  <xsl:text>, </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="config/@id"/>
+                  <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="config/name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <xsl:if test="config/type = 0">
@@ -13617,17 +13630,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
           </tr>
           <xsl:for-each select="$config/tasks/task">
-
             <tr class="{gsa:table-row-class(position())}">
-              <td><xsl:value-of select="name"/></td>
-              <td width="100">
-                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
-                  <img src="/img/details.png"
-                       border="0"
-                       alt="{gsa:i18n ('Details', 'Window')}"
-                       style="margin-left:3px;"/>
-                </a>
-              </td>
+              <xsl:choose>
+                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                  <td><xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)</td>
+                  <td width="100">
+                    <img src="/img/details_inactive.png"
+                         border="0"
+                         alt="{gsa:i18n ('Details', 'Table Row')}"
+                         style="margin-left:3px;"/>
+                  </td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <td><xsl:value-of select="name"/></td>
+                  <td width="100">
+                    <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                      <img src="/img/details.png"
+                           border="0"
+                           alt="{gsa:i18n ('Details', 'Window')}"
+                           style="margin-left:3px;"/>
+                    </a>
+                  </td>
+                </xsl:otherwise>
+              </xsl:choose>
             </tr>
           </xsl:for-each>
         </table>
