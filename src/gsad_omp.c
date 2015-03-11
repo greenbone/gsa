@@ -2706,8 +2706,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   /* Get list of targets. */
   if (openvas_server_sendf (&session,
                             "<get_targets"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
+                            " filter=\"owner=any permission=any"
+                            "          rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3356,7 +3356,8 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "<commands>"
                             "<get_tasks task_id=\"%s\" details=\"1\" />"
                             "<get_targets"
-                            " filter=\"sort=name rows=-1\"/>"
+                            " filter=\"owner=any permission=any"
+                            "          rows=-1 sort=name\"/>"
                             "<get_configs"
                             " filter=\"sort=name rows=-1\"/>"
                             "%s"

@@ -1,3 +1,16 @@
+2015-03-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Cater for the case where a user no longer has access to the targets of a
+	task.  And where a target is used on a task that the user may not
+	access.
+
+	* src/gsad_omp.c (new_task, edit_task): Add filter to GET_TARGETS, so
+	that targets of other users are included.
+
+	* src/html/classic/gsad.xsl (task [details]): Mark targets unavailable
+	if they are.
+	(target [details]): If task is not availabe mark it so.
+
 2015-03-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_scanner_omp): Send command xml elements
