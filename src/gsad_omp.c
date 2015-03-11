@@ -2859,7 +2859,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
-      if (openvas_server_sendf (&session, "<get_scanners/>") == -1)
+      if (openvas_server_sendf (&session,
+                                "<get_scanners"
+                                " filter=\"rows=-1 owner=any permission=any\"/>")
+          == -1)
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -3382,7 +3385,9 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                                " filter=\"rows=-1 owner=any permission=any\"/>"
                              : "",
                             command_enabled (credentials, "GET_SCANNERS")
-                             ? "<get_scanners/>" : "",
+                             ? "<get_scanners"
+                               " filter=\"rows=-1 owner=any permission=any\"/>"
+                             : "",
                             command_enabled (credentials, "GET_GROUPS")
                              ? "<get_groups/>"
                              : "")

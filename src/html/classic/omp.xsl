@@ -3966,17 +3966,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
             <td>
               <xsl:choose>
-                <xsl:when test="gsa:may-op ('get_scanners')">
-                  <a href="/omp?cmd=get_scanner&amp;scanner_id={scanner/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="scanner/name"/>
-                  </a>
-                  (<xsl:value-of select="gsa:i18n ('Type', 'Scanner')"/>:
-                  <xsl:call-template name="scanner-type-name">
-                    <xsl:with-param name="type" select="scanner/type"/>
-                  </xsl:call-template>)
+                <xsl:when test="boolean (scanner/permissions) and count (scanner/permissions/permission) = 0">
+                  <xsl:text>Unavailable (</xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
+                  <xsl:text>: </xsl:text>
+                  <xsl:value-of select="scanner/name"/>
+                  <xsl:text>, </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="scanner/@id"/>
+                  <xsl:text>)</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="scanner/name"/>
+                  <xsl:choose>
+                    <xsl:when test="gsa:may-op ('get_scanners')">
+                      <a href="/omp?cmd=get_scanner&amp;scanner_id={scanner/@id}&amp;token={/envelope/token}">
+                        <xsl:value-of select="scanner/name"/>
+                      </a>
+                      (<xsl:value-of select="gsa:i18n ('Type', 'Scanner')"/>:
+                      <xsl:call-template name="scanner-type-name">
+                        <xsl:with-param name="type" select="scanner/type"/>
+                      </xsl:call-template>)
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="scanner/name"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -15926,14 +15939,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="tasks/task">
-
               <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="name"/></td>
-                <td width="100">
-                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
-                    <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Window')}" style="margin-left:3px;"/>
-                  </a>
-                </td>
+                <xsl:choose>
+                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                    <td><xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)</td>
+                    <td width="100">
+                      <img src="/img/details_inactive.png"
+                           border="0"
+                           alt="{gsa:i18n ('Details', 'Table Row')}"
+                           style="margin-left:3px;"/>
+                    </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td><xsl:value-of select="name"/></td>
+                    <td width="100">
+                      <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                        <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Window')}" style="margin-left:3px;"/>
+                      </a>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
               </tr>
             </xsl:for-each>
           </table>
