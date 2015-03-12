@@ -4431,6 +4431,8 @@ handle_signal_exit (int signal)
 /**
  * @brief Register the signal handlers.
  *
+ * @todo Use sigaction () instead of signal () to register signal handlers.
+ *
  * @return 0 on success, -1 on failure.
  */
 static int

@@ -1,3 +1,8 @@
+2015-03-12  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (register_signal_handlers): Add todo regarding signal
+	handler registration.
+
 2015-03-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (new_permission, edit_permission): Add filter so that
