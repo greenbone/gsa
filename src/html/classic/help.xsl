@@ -2348,19 +2348,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Verify that the Scanner is online, and that the Manager is able to
         connect to it with the provided certificates.
       </p>
-      <h4>Download CA Public Key</h4>
+      <h4>Download CA Certificate</h4>
         <p>
-         Pressing the "Download CA Public Key" icon
-         <img src="/img/key.png" alt="Download CA Public Key"
-              title="Download CA Public Key"/>
-         will download the CA's Public Key.
+         Pressing the "Download CA Certificate" icon
+         <img src="/img/key.png" alt="Download CA Certificate"
+              title="Download CA Certificate"/>
+         will download the CA's Certificate.
         </p>
-      <h4>Download Public Key</h4>
+      <h4>Download Certificate</h4>
         <p>
-         Pressing the "Download Public Key" icon
-         <img src="/img/key.png" alt="Download Public Key"
-              title="Download Public Key"/>
-         will download the Public Key.
+         Pressing the "Download Certificate" icon
+         <img src="/img/key.png" alt="Download Certificate"
+              title="Download Certificate"/>
+         will download the Certificate.
         </p>
     </div>
   </div>
@@ -5552,12 +5552,12 @@ Public License instead of this License.
         The Scanners page will be shown.
       </p>
       <p>
-        CA Public Key: The CA certificate with which, the certificate presented
+        CA Certificate: The CA certificate with which, the certificate presented
         by the Scanner is signed. It is used to verify the authenticity of the
         connection.
       </p>
       <p>
-        Public Key: The public key that will be used to authenticate with the
+        Certificate: The Certificate that will be used to authenticate with the
         Scanner.
       </p>
       <p>
@@ -5609,14 +5609,14 @@ Public License instead of this License.
           <td>OSP Scanner</td>
         </tr>
         <tr class="even">
-          <td>CA Public Key</td>
+          <td>CA Certificate</td>
           <td>yes</td>
           <td>--</td>
           <td>File</td>
           <td>/usr/var/lib/openvas/CA/cacert.pem</td>
         </tr>
         <tr class="odd">
-          <td>Public Key</td>
+          <td>Certificate</td>
           <td>yes</td>
           <td>--</td>
           <td>File</td>

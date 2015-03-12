@@ -15610,11 +15610,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Public Key', 'Scanner Window')"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Certificate', 'Scanner Window')"/></td>
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Public Key', 'Scanner Window')"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Scanner Window')"/></td>
             <td><input type="file" name="key_pub"/></td>
           </tr>
           <tr>
@@ -15768,11 +15768,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Public Key', 'Scanner Window')"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Certificate', 'Scanner Window')"/></td>
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Public Key', 'Scanner Window')"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Scanner Window')"/></td>
             <td><input type="file" name="key_pub"/></td>
           </tr>
           <tr>
@@ -28916,16 +28916,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
   </a>
   <a href="/omp?cmd=download_key_pub&amp;scanner_id={$scanner_id}&amp;key_pub={str:encode-uri($key_pub, true ())}&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download Public Key', 'Credential Table Row')}"
+     title="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"
      style="margin-left:3px;">
     <img src="/img/key.png" border="0"
-         alt="{gsa:i18n ('Download Public Key', 'Credential Table Row')}"/>
+         alt="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"/>
   </a>
   <a href="/omp?cmd=download_ca_pub&amp;scanner_id={$scanner_id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download CA Public Key', 'Credential Table Row')}"
+     title="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"
      style="margin-left:3px;">
     <img src="/img/key.png" border="0"
-         alt="{gsa:i18n ('Download CA Public Key', 'Credential Table Row')}"/>
+         alt="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"/>
   </a>
 </xsl:template>
 
@@ -28939,10 +28939,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="key_pub" value="{str:encode-uri($key_pub, true ())}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="token" value="{/envelope/token}"/>
-    <input type="image" name="submit" value="Download Public Key"
-           title="{gsa:i18n ('Download Public Key', 'Scanner Table Row')}"
+    <input type="image" name="submit" value="Download Certificate"
+           title="{gsa:i18n ('Download Certificate', 'Scanner Table Row')}"
            src="/img/key.png" border="0" style="margin-left:3px;"
-           alt="{gsa:i18n ('Download Public Key', 'Scanner Table Row')}"/>
+           alt="{gsa:i18n ('Download Certificate', 'Scanner Table Row')}"/>
   </form>
 </xsl:template>
 

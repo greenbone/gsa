@@ -1,3 +1,8 @@
+2015-03-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/help.xsl, src/html/classic/omp.xsl: Rename scanners'
+	Public Key to Certificate for accuracy.
+
 2015-03-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Simplify signal handler.
