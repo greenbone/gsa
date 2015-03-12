@@ -1,3 +1,14 @@
+2015-03-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Simplify signal handler.
+
+	* src/CMakeLists.txt: Add -lphtread to gsad.
+
+	* src/gsad.c (termination_signal): New variable.
+	(handle_signal_exit): Simply set flag.
+	(main): Check signal exit flag in main loop.  Block all signals and use
+	pselect to avoid race conditions.
+
 2015-03-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Adjust to show Slave field

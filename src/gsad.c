@@ -143,6 +143,11 @@
 #define DEFAULT_GSAD_FACE "classic"
 
 /**
+ * @brief Flag for signal handler.
+ */
+volatile int termination_signal = 0;
+
+/**
  * @brief Libgcrypt thread callback definition.
  */
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
@@ -4424,8 +4429,7 @@ gsad_cleanup ()
 void
 handle_signal_exit (int signal)
 {
-  g_critical ("Received Signal: %s. Exiting.\n", strsignal (signal));
-  exit (EXIT_SUCCESS);
+  termination_signal = signal;
 }
 
 /**
@@ -4513,6 +4517,7 @@ main (int argc, char **argv)
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
+  sigset_t sigmask_all, sigmask_current;
 
   /* Initialise. */
 
@@ -4954,9 +4959,36 @@ main (int argc, char **argv)
 
   /* Wait forever for input or interrupts. */
 
+
+  if (sigfillset (&sigmask_all))
+    {
+      g_critical ("%s: Error filling signal set\n", __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
+  if (pthread_sigmask (SIG_BLOCK, &sigmask_all, &sigmask_current))
+    {
+      g_critical ("%s: Error setting signal mask\n", __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
   while (1)
     {
-      select (0, NULL, NULL, NULL, NULL);
+      if (termination_signal)
+        {
+          g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "Received %s signal.\n",
+                 sys_siglist[termination_signal]);
+          gsad_cleanup ();
+          /* Raise signal again, to exit with the correct return value. */
+          signal (termination_signal, SIG_DFL);
+          raise (termination_signal);
+        }
+
+      if (pselect (0, NULL, NULL, NULL, NULL, &sigmask_current) == -1)
+        {
+          if (errno == EINTR)
+            continue;
+          g_critical ("%s: pselect: %s\n", __FUNCTION__, strerror (errno));
+          exit (EXIT_FAILURE);
+        }
     }
   return EXIT_SUCCESS;
 }

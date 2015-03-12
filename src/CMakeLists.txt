@@ -50,7 +50,7 @@ target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS})
+target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS} -lpthread)
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
