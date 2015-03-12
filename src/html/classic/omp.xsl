@@ -4017,12 +4017,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <xsl:if test="config/type = 0">
-            <tr>
-              <td></td>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:
-                <xsl:choose>
-                  <xsl:when test="gsa:may-op ('get_slaves')">
+            <xsl:if test="gsa:may-op ('get_slaves')">
+              <tr>
+                <td></td>
+                <td>
+                  <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:
                     <xsl:choose>
                       <xsl:when test="boolean (slave/permissions) and count (slave/permissions/permission) = 0">
                         <xsl:text>Unavailable (</xsl:text>
@@ -4039,13 +4038,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         </a>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="slave/name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
+                </td>
+              </tr>
+            </xsl:if>
             <tr>
               <td></td>
               <td>

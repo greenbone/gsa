@@ -1,3 +1,8 @@
+2015-03-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (task [details]): Adjust to show Slave field
+	only when slave feature is available.
+
 2015-03-12  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (register_signal_handlers): Add todo regarding signal
