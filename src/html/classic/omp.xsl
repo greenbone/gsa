@@ -11985,9 +11985,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:choose>
               <xsl:when test="gsa:may-op ('get_port_lists')">
-                <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="port_list/name"/>
-                </a>
+                <xsl:choose>
+                  <xsl:when test="boolean (port_list/permissions) and count (port_list/permissions/permission) = 0">
+                    <xsl:text>Unavailable (</xsl:text>
+                    <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
+                    <xsl:text>: </xsl:text>
+                    <xsl:value-of select="port_list/name"/>
+                    <xsl:text>, </xsl:text>
+                    <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="port_list/@id"/>
+                    <xsl:text>)</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="port_list/name"/>
+                    </a>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="port_list/name"/>
@@ -23130,17 +23143,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="targets/target">
-
               <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="name"/></td>
-                <td width="100">
-                  <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Table Row')}">
-                    <img src="/img/details.png"
-                         border="0"
-                         alt="{gsa:i18n ('Details', 'Table Row')}"
-                         style="margin-left:3px;"/>
-                  </a>
-                </td>
+                <xsl:choose>
+                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                    <td><xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)</td>
+                    <td width="100">
+                      <img src="/img/details_inactive.png"
+                           border="0"
+                           alt="{gsa:i18n ('Details', 'Table Row')}"
+                           style="margin-left:3px;"/>
+                    </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td><xsl:value-of select="name"/></td>
+                    <td width="100">
+                      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Table Row')}">
+                        <img src="/img/details.png"
+                             border="0"
+                             alt="{gsa:i18n ('Details', 'Table Row')}"
+                             style="margin-left:3px;"/>
+                      </a>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
               </tr>
             </xsl:for-each>
           </table>
