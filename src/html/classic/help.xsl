@@ -70,7 +70,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="name"/>
   <xsl:param name="ultimate"/>
-  <xsl:param name="used_by"/>
 
   <h4>New <xsl:value-of select="$name"/></h4>
   <p>
@@ -124,16 +123,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     Export the <xsl:value-of select="$name"/> as XML by clicking on the
     export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
   </p>
-  <xsl:if test="$used_by">
-    <h3><xsl:value-of select="$used_by"/>s using this <xsl:value-of select="$name"/></h3>
-    <p>
-      This table provides an overview of the <xsl:value-of select="$used_by"/>s
-      that are associated with this <xsl:value-of select="$name"/>.
-      Details of these <xsl:value-of select="$used_by"/>s can be seen after a
-      click on the Details
-      <img src="/img/details.png" alt="Details" title="Details"/> icon.
-    </p>
-  </xsl:if>
+</xsl:template>
+
+<xsl:template name="object-used-by">
+  <xsl:param name="name"/>
+  <xsl:param name="used_by"/>
+
+  <h3><xsl:value-of select="$used_by"/>s using this <xsl:value-of select="$name"/></h3>
+  <p>
+    This table provides an overview of the <xsl:value-of select="$used_by"/>s
+    that are associated with this <xsl:value-of select="$name"/>.
+    Details of these <xsl:value-of select="$used_by"/>s can be seen after a
+    click on the Details
+    <img src="/img/details.png" alt="Details" title="Details"/> icon.
+  </p>
 </xsl:template>
 
 <xsl:template name="list-window-line-actions">
@@ -1058,6 +1061,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'lsc_credential'"/>
         <xsl:with-param name="name" select="'Credential'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Credential'"/>
         <xsl:with-param name="used_by" select="'Target'"/>
       </xsl:call-template>
     </div>
@@ -1303,6 +1309,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'alert'"/>
+        <xsl:with-param name="name" select="'Alert'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Alert'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
@@ -1614,13 +1623,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'port_list'"/>
         <xsl:with-param name="name" select="'Port List'"/>
-        <xsl:with-param name="used_by" select="'Target'"/>
       </xsl:call-template>
 
       <h3>Port Ranges</h3>
       <p>
         This table lists all the port ranges in the port list.
       </p>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Port List'"/>
+        <xsl:with-param name="used_by" select="'Target'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -1874,7 +1886,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'report_format'"/>
         <xsl:with-param name="name" select="'Report Format'"/>
-        <xsl:with-param name="used_by" select="'Alert'"/>
       </xsl:call-template>
 
       <h3>Parameters</h3>
@@ -1882,6 +1893,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         This table provides a list of the parameters that control the
         creation of reports that have this format.
       </p>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Report Format'"/>
+        <xsl:with-param name="used_by" select="'Alert'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -2092,6 +2107,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'schedule'"/>
         <xsl:with-param name="name" select="'Schedule'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Schedule'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
     </div>
@@ -2273,6 +2291,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="scanner-actions">
+  <h4>Verify Scanner</h4>
+  <p>
+    Verify that the Scanner is online, and that the Manager is able to
+    connect to it with the provided certificates.
+  </p>
+  <h4>Download CA Certificate</h4>
+    <p>
+     Pressing the "Download CA Certificate" icon
+     <img src="/img/key.png" alt="Download CA Certificate"
+          title="Download CA Certificate"/>
+     will download the CA's Certificate.
+    </p>
+  <h4>Download Certificate</h4>
+    <p>
+     Pressing the "Download Certificate" icon
+     <img src="/img/key.png" alt="Download Certificate"
+          title="Download Certificate"/>
+     will download the Certificate.
+    </p>
+</xsl:template>
+
 <xsl:template mode="help" match="scanners.html">
   <div class="gb_window_part_center">Help: Scanners
     <a href="/omp?cmd=get_scanners&amp;token={/envelope/token}"
@@ -2343,25 +2383,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Scanner'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
-      <h4>Verify Scanner</h4>
-      <p>
-        Verify that the Scanner is online, and that the Manager is able to
-        connect to it with the provided certificates.
-      </p>
-      <h4>Download CA Certificate</h4>
-        <p>
-         Pressing the "Download CA Certificate" icon
-         <img src="/img/key.png" alt="Download CA Certificate"
-              title="Download CA Certificate"/>
-         will download the CA's Certificate.
-        </p>
-      <h4>Download Certificate</h4>
-        <p>
-         Pressing the "Download Certificate" icon
-         <img src="/img/key.png" alt="Download Certificate"
-              title="Download Certificate"/>
-         will download the Certificate.
-        </p>
+      <xsl:call-template name="scanner-actions"/>
     </div>
   </div>
 </xsl:template>
@@ -2390,8 +2412,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'scanner'"/>
         <xsl:with-param name="name" select="'Scanner'"/>
-        <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
+      <xsl:call-template name="scanner-actions"/>
 
       <h2>Online Response of Scanner</h2>
       <p>
@@ -2405,6 +2427,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         This table provides an overview of the Scanner parameters as fetched
         from the OSP scanner.
       </p>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Scanner'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -2433,6 +2459,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'slave'"/>
+        <xsl:with-param name="name" select="'Slave'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Slave'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
@@ -3904,6 +3933,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'filter'"/>
+        <xsl:with-param name="name" select="'Filter'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Filter'"/>
         <xsl:with-param name="used_by" select="'Alert'"/>
       </xsl:call-template>
@@ -7443,12 +7475,10 @@ Public License instead of this License.
        and all its preferences.
       </p>
 
-      <h2>Tasks using this Config</h2>
-      <p>
-       The tasks that use the shown config are listed.
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details"/> will open
-       the <a href="task_details.html?token={/envelope/token}">Task Details</a> page.
-      </p>
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Scan Config'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -7951,6 +7981,9 @@ Public License instead of this License.
 
       <xsl:call-template name="details-window-line-actions">
         <xsl:with-param name="type" select="'target'"/>
+        <xsl:with-param name="name" select="'Target'"/>
+      </xsl:call-template>
+      <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Target'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>

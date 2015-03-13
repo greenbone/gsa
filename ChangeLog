@@ -1,3 +1,14 @@
+2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/help.xsl (details-window-line-actions): Remove
+	used_by part.
+	(object-used-by, scanner-actions): New templates.
+	(lsc_credential_details.html, alert_details.html)
+	(port_list_details.html, report_format_details.html)
+	(schedule_details.html, scanner_details.html, slave_details.html)
+	(filter_details.html, config_details.html, target_details.html): Adjust
+	to use new templates, and add missing details documentation.
+
 2015-03-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Cater for the case where a user no longer has access to the port lists of
