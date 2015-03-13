@@ -1,5 +1,10 @@
 2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/help.xsl (new_scanner.html, scanner_details.html):
+	Detail help documentation.
+
+2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/help.xsl (details-window-line-actions): Remove
 	used_by part.
 	(object-used-by, scanner-actions): New templates.

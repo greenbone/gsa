@@ -2417,15 +2417,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h2>Online Response of Scanner</h2>
       <p>
-        The following information is also provided when the scanner is of type
-        OSP and is currently online. This includes Scanner name, Scanner
-        version, OSP Daemon, Protocol version and Scanner description.
+        If the Scanner is of type OSP, is available and it is possible to
+        connect and verify it using the provided CA Certificate, Certificate and
+        Private Key, the following information is also fetched and provided.
+      </p>
+      <p>
+        Scanner name: Name of the Scanner tool wrapped by the OSP Scanner.
+      </p>
+      <p>
+        Scanner version: Version of the Scanner tool wrapped by the OSP Scanner.
+      </p>
+      <p>
+        OSP Daemon: Name of the OSP daemon.
+      </p>
+      <p>
+        Protocol: Version of the OSP protocol.
+      </p>
+      <h3>Description</h3>
+      <p>
+        Detailed description as fetched from the Scanner.
       </p>
 
       <h3>Scanner parameters</h3>
       <p>
         This table provides an overview of the Scanner parameters as fetched
-        from the OSP scanner.
+        from the OSP scanner. This includes the ID, Description, Type and
+        Default value of the parameter. These will be used as Scanner
+        preferences When creating a new
+        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>
+        based on this Scanner.
       </p>
       <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Scanner'"/>
@@ -5585,16 +5605,17 @@ Public License instead of this License.
       </p>
       <p>
         CA Certificate: The CA certificate with which, the certificate presented
-        by the Scanner is signed. It is used to verify the authenticity of the
-        connection.
+        by the Scanner was signed. It is used by the Manager to verify the
+        authenticity of the remote host.
       </p>
       <p>
         Certificate: The Certificate that will be used to authenticate with the
-        Scanner.
+        Scanner. It should be signed by the CA Certificate, so that the Scanner
+        can verify that the Manager's connection is an authorized client connection.
       </p>
       <p>
-        Private Key: The private key that will be used to authenticate with the
-        Scanner.
+        Private Key: The private key matching the Certificate that will be used
+        to authenticate with the Scanner.
       </p>
 
       <table class="gbntable">
