@@ -2297,19 +2297,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     Verify that the Scanner is online, and that the Manager is able to
     connect to it with the provided certificates.
   </p>
-  <h4>Download CA Certificate</h4>
-    <p>
-     Pressing the "Download CA Certificate" icon
-     <img src="/img/key.png" alt="Download CA Certificate"
-          title="Download CA Certificate"/>
-     will download the CA's Certificate.
-    </p>
   <h4>Download Certificate</h4>
     <p>
      Pressing the "Download Certificate" icon
      <img src="/img/key.png" alt="Download Certificate"
           title="Download Certificate"/>
      will download the Certificate.
+    </p>
+  <h4>Download CA Certificate</h4>
+    <p>
+     Pressing the "Download CA Certificate" icon
+     <img src="/img/key.png" alt="Download CA Certificate"
+          title="Download CA Certificate"/>
+     will download the CA's Certificate.
     </p>
 </xsl:template>
 

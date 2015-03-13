@@ -1,5 +1,10 @@
 2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/help.xsl (scanner-actions): Reorder actions help
+	order to match current UI order.
+
+2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/help.xsl (new_scanner.html, scanner_details.html):
 	Detail help documentation.
 
