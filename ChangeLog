@@ -1,5 +1,11 @@
 2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (report_format): Enable verify icon when the
+	report format is global or the user may verify it, because this is what
+	Manager accepts.
+
+2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Cater for the case where a user no longer has access to the credentials
 	of a target.  And where a credential is used on a target that the user
 	may not access.
