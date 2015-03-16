@@ -9241,14 +9241,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           <xsl:variable name="id"
                                         select="method/data[name='notice_report_format']/text()"/>
                           <xsl:text> </xsl:text>
-                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:choose>
+                            <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
+                              <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <xsl:text>(Unavailable, UUID: </xsl:text>
+                              <xsl:value-of select="$id"/>
+                              <xsl:text>)</xsl:text>
+                            </xsl:otherwise>
+                          </xsl:choose>
                         </xsl:when>
                         <xsl:when test="method/data[name='notice']/text() = '2'">
                           <xsl:value-of select="gsa:i18n ('Attach report', 'Alert Window')"/>
                           <xsl:variable name="id"
                                         select="method/data[name='notice_attach_format']/text()"/>
                           <xsl:text> </xsl:text>
-                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:choose>
+                            <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
+                              <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <xsl:text>(Unavailable, UUID: </xsl:text>
+                              <xsl:value-of select="$id"/>
+                              <xsl:text>)</xsl:text>
+                            </xsl:otherwise>
+                          </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                           <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert Window')"/>
@@ -24095,17 +24113,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
             </tr>
             <xsl:for-each select="alerts/alert">
-
               <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="name"/></td>
-                <td width="100">
-                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
-                    <img src="/img/details.png"
-                         border="0"
-                         alt="{gsa:i18n ('Details', 'Window')}"
-                         style="margin-left:3px;"/>
-                  </a>
-                </td>
+                <xsl:choose>
+                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                    <td><xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)</td>
+                    <td width="100">
+                      <img src="/img/details_inactive.png"
+                           border="0"
+                           alt="{gsa:i18n ('Details', 'Table Row')}"
+                           style="margin-left:3px;"/>
+                    </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td><xsl:value-of select="name"/></td>
+                    <td width="100">
+                      <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Window')}">
+                        <img src="/img/details.png"
+                             border="0"
+                             alt="{gsa:i18n ('Details', 'Window')}"
+                             style="margin-left:3px;"/>
+                      </a>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
               </tr>
             </xsl:for-each>
           </table>

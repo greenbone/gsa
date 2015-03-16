@@ -6188,7 +6188,9 @@ get_alert (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<get_report_formats/>"))
+      switch (omp (credentials, &response, &entity,
+                   "<get_report_formats"
+                   " filter=\"rows=-1 owner=any permission=any\"/>"))
         {
           case 0:
           case -1:
@@ -6369,7 +6371,8 @@ edit_alert (credentials_t * credentials, params_t *params,
       /* Get the report formats. */
 
       if (openvas_server_sendf (&session,
-                                "<get_report_formats/>")
+                                "<get_report_formats"
+                                " filter=\"rows=-1 owner=any permission=any\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
