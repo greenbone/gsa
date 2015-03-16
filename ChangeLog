@@ -1,5 +1,12 @@
 2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (tagged_resource_link): Add resource_permission
+	arg.  Print name without link if resource is unavailable.
+	(tag): Pass permissions to tagged_resource_link.
+	(tag [details]): Mark resource unavailable if it is.
+
+2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Cater for the case where a user no longer has access to the filter of
 	an alert.  And where a filter is used on an alert that the user may not
 	access.

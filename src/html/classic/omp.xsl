@@ -9919,8 +9919,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_id"/>
   <xsl:param name="resource_name"/>
   <xsl:param name="resource_location" select="0"/>
+  <xsl:param name="resource_permissions"/>
   <xsl:param name="token"/>
   <xsl:choose>
+    <xsl:when test="boolean ($resource_permissions) and count ($resource_permissions/permission) = 0">
+      <xsl:value-of select="$resource_name"/>
+    </xsl:when>
     <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='cert_bund_adv' or $resource_type='dfn_cert_adv'">
       <xsl:choose>
         <xsl:when test="gsa:may-op ('get_info') and $resource_location = '0'">
@@ -9951,6 +9955,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
+    <xsl:when test="$resource_location != 0 and boolean ($resource_permissions) and count ($resource_permissions/permission) = 0">
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/>
+      <xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/>
+      <xsl:text>)</xsl:text>
+    </xsl:when>
     <xsl:when test="$resource_location != 0">
       <xsl:text> (</xsl:text>
       <xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>
@@ -10067,6 +10077,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="resource_id" select="resource/@id"/>
             <xsl:with-param name="resource_name" select="resource/name"/>
             <xsl:with-param name="resource_location" select="resource/trash"/>
+            <xsl:with-param name="resource_permissions" select="resource/permissions"/>
             <xsl:with-param name="token" select="/envelope/token"/>
           </xsl:call-template>
         </xsl:when>
@@ -10157,13 +10168,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Attached to Resource', 'Tag Window')"/>:</td>
               <td>
-                <xsl:call-template name="tagged_resource_link">
-                  <xsl:with-param name="resource_type" select="resource/type"/>
-                  <xsl:with-param name="resource_id" select="resource/@id"/>
-                  <xsl:with-param name="resource_name" select="resource/name"/>
-                  <xsl:with-param name="resource_location" select="resource/trash"/>
-                  <xsl:with-param name="token" select="/envelope/token"/>
-                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="boolean (resource/permissions) and count (resource/permissions/permission) = 0">
+                    <xsl:text>Unavailable (</xsl:text>
+                    <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
+                    <xsl:text>: </xsl:text>
+                    <xsl:value-of select="resource/name"/>
+                    <xsl:text>, </xsl:text>
+                    <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="resource/@id"/>
+                    <xsl:text>)</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="tagged_resource_link">
+                      <xsl:with-param name="resource_type" select="resource/type"/>
+                      <xsl:with-param name="resource_id" select="resource/@id"/>
+                      <xsl:with-param name="resource_name" select="resource/name"/>
+                      <xsl:with-param name="resource_location" select="resource/trash"/>
+                      <xsl:with-param name="resource_permissions" select="resource/permissions"/>
+                      <xsl:with-param name="token" select="/envelope/token"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
             </tr>
           </xsl:when>
