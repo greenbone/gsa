@@ -1,3 +1,17 @@
+2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Cater for the case where a user no longer has access to the credentials
+	of a target.  And where a credential is used on a target that the user
+	may not access.
+
+	* src/gsad_omp.c (new_target, edit_target): Add filter to
+	GET_LSC_CREDETIALS, so that credentials of other users are included.
+
+	* src/html/classic/omp.xsl (lsc_credential [details]): Mark targets
+	unavailable if they are.
+	(target): Print credential name without link if credential unavailable.
+	(target [details]): If credential is not availabe mark it so.
+
 2015-03-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/help.xsl (scanner-actions): Reorder actions help

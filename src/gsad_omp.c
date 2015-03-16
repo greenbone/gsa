@@ -6787,8 +6787,8 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
 
       if (openvas_server_sendf (&session,
                                 "<get_lsc_credentials"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+                                " filter=\"owner=any permission=any"
+                                "          rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8170,8 +8170,8 @@ edit_target (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_lsc_credentials"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+                                " filter=\"owner=any permission=any"
+                                "          rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
