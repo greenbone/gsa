@@ -5836,7 +5836,8 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   /* Get Report Filters. */
   ret = omp (credentials, &response, &entity,
-             "<get_filters filter=\"type=result\"/>");
+             "<get_filters filter=\"type=result rows=-1"
+             "                      owner=any permission=any\"/>");
 
   switch (ret)
     {
@@ -6403,8 +6404,9 @@ edit_alert (credentials_t * credentials, params_t *params,
       /* Get filters. */
 
       if (openvas_server_sendf (&session,
-                               "<get_filters"
-                               " filter=\"type=result\"/>")
+                                "<get_filters"
+                                " filter=\"type=result rows=-1"
+                                "          owner=any permission=any\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
