@@ -31388,6 +31388,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:for-each select="role">
         <xsl:choose>
+          <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+            <xsl:value-of select="name"/>
+          </xsl:when>
           <xsl:when test="gsa:may-op ('get_roles')">
             <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
               <xsl:value-of select="name"/>
@@ -31403,6 +31406,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:for-each select="groups/group">
         <xsl:choose>
+          <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+            <xsl:value-of select="name"/>
+          </xsl:when>
           <xsl:when test="gsa:may-op ('get_groups')">
             <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
               <xsl:value-of select="name"/>
@@ -31511,9 +31517,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/>:</td>
           <td>
             <xsl:for-each select="role">
-              <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="name"/>
-              </a>
+              <xsl:choose>
+                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                  <xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
               <xsl:if test="position() != last()">, </xsl:if>
             </xsl:for-each>
           </td>
@@ -31522,9 +31535,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/>:</td>
           <td>
             <xsl:for-each select="groups/group">
-              <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="name"/>
-              </a>
+              <xsl:choose>
+                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                  <xsl:value-of select="name"/> (Unavailable, UUID: <xsl:value-of select="@id"/>)
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
               <xsl:if test="position() != last()">, </xsl:if>
             </xsl:for-each>
           </td>
