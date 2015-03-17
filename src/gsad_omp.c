@@ -17527,7 +17527,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
       ret = ompf (credentials,
                   &subject_response,
                   &get_subject_entity,
-                  "<get_%ss filter=\"rows=1 name=%s\">"
+                  "<get_%ss filter=\"rows=1 name=%s owner=any permission=any\">"
                   "</get_%ss>",
                   subject_type,
                   subject_name,

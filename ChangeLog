@@ -1,10 +1,15 @@
+2015-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_permission_omp): Add filter to OMP for
+	getting subject UUID, because the subject may be owned by anyone.
+
 2015-03-17  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Post-release version bump.
 
 	* CMakeLists.txt, src/html/classic/help.xsl: 6.0.1
 
-2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+2015-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (user): Show name without link when filter
 	is unavailable.
