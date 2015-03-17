@@ -1,5 +1,10 @@
 2015-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (timezone-select): Check full timezone name
+	too.
+
+2015-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_permission_omp): Add filter to OMP for
 	getting subject UUID, because the subject may be owned by anyone.
 

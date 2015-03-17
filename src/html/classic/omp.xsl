@@ -33059,10 +33059,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="timezone" select="'utc'"/>
   <xsl:param name="input-name" select="'text'"/>
   <xsl:choose>
-    <xsl:when test="$timezone = 'UTC' or $timezone = 'utc' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
+    <xsl:when test="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
       <select name="{$input-name}">
         <xsl:choose>
-          <xsl:when test="$timezone = 'UTC'">
+          <xsl:when test="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME'">
             <option value="UTC" selected="1">Coordinated Universal Time</option>
           </xsl:when>
           <xsl:otherwise>
