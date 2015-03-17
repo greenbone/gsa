@@ -1,3 +1,78 @@
+gsa 6.0.0 (2015-03-17)
+
+This is the first release of the Greenbone Security Assistant (GSA) 6.0 module
+for the Open Vulnerability Assessment System release 8 (OpenVAS-8). It is the
+web client that makes the full feature set of OpenVAS Manager available in a web
+browser.
+
+GSA 6.0 implements all of the new features of the protocol OMP 6.0.
+This includes scanner management, new user roles and Quality of Detection (QoD)
+information. The new GSA also introduces support for charts and dashboards as
+well as bulk actions and contains a number of other new features and
+improvements. Please see the comprehensive list below for more details.
+
+Many thanks to everyone who has contributed to this release:
+Michal Ambroz, Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael
+Wiegand.
+
+Main changes compared to the 5.0 series:
+* Support for configuring OTP and OSP based scanners has been added. The classic
+  OpenVAS Scanner is pre-configured.
+* Support for displaying charts has been added.
+* A "SecInfo" dashboard showing 4 charts that can be individually be configured
+  regarding type, object type and filter has been added
+* A scan configuration editor for the OSP based scanner type "ovaldi" has been
+  added.
+* Support for the SecInfo object type "CERT-Bund" has been added.
+* Support for guest user logins has been added.
+* Support for new "Super Admin" role in Manager has been added.
+* Support for displaying the "Solution Type" of an NVT has been added.
+* A "Results" section has been added in the "Scan Management" menu.
+* Support for modifying the file name format of exported resource lists,
+  resource details and reports has been added.
+* Support for bulk actions has been added.
+* A "Modify Task" wizard has been added.
+* New super permissions for group administration have been added.
+* Support for editing user names has been added.
+* Support for handling Quality of Detection (QoD) information has been added.
+* Support for displaying the success or failure of SSH, SMB and ESXi
+  authentication has been added.
+* Support for editing of task schedule periods has been added.
+* A "Backend operation" line is now included in the page footer. This is the
+  time taken to get from the start of the page handler to the start of the XSL
+  transform.
+* GSA will now use libxslt by default for XSLT processing instead of spawning an
+  external 'xsltproc' process.
+* Users are now allowed to have multiple simultaneous sessions, as long as the
+  sessions are on different browsers.
+* Support for adding ESXi credentials to targets has been added.
+* The public key requirement has been removed from the Credentials creation.
+* The target locator feature has been removed as this is not being fully
+  supported by the back end anyway.
+* Support for mixing objects owned by different users has been extended.
+* The ITS (IT-Schwachstellenampel) face has been updated.
+* Setting the user timezone is now easier.
+* Permission handling has been improved.
+* Powerfilter configuration has been simplified.
+* Signal handling has been improved.
+* The auto refresh feature has been improved.
+* The handling of user groups when dropping privileges has been improved.
+* Library checks during package configuration have been improved and are now
+  more comprehensive and consistent.
+* Handling of linker and compiler flags during package configuration has been
+  improved and simplified.
+* Documentation has been updated.
+* Numerous small improvements and bugfixes.
+
+Main changes compared to 6.0+beta6:
+* Support for connection timeouts and limits for concurrent connections per IP
+  has been added.
+* Powerfilter configuration has been simplified.
+* Support for setting scanner keys and certificates has been added.
+* Signal handling has been improved.
+* Documentation has been updated.
+
+
 gsa 6.0+beta6 (2015-02-11)
 
 This is the sixth beta version of the upcoming 6.0 release of the Greenbone

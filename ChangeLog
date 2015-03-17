@@ -1,3 +1,13 @@
+2015-03-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0.0 release.
+
+	* CHANGES: Updated.
+
+	* src/html/classic/help.xsl: Set version to 6.0.0.
+
+	* CMakeLists.txt: Set version to 6.0.0. Switch version scheme.
+
 2015-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (tagged_resource_link): Add resource_permission
