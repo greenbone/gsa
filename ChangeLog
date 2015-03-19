@@ -1,3 +1,9 @@
+2015-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Use port for port_manual so that the user
+	can enter a full port string for notes and overrides.  Full strings are
+	required to match the port.
+
 2015-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (timezone-select): Check full timezone name
