@@ -1,3 +1,11 @@
+2015-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21904.
+
+	* src/gsad.c (init_validator): Use port for port_manual so that the user
+	can enter a full port string for notes and overrides.  Full strings are
+	required to match the port.
+
 2015-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
