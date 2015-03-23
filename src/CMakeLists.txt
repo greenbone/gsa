@@ -31,6 +31,9 @@ include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
                      ${LIBOPENVAS_BASE_INCLUDE_DIRS}
                      ${LIBOPENVAS_MISC_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS}
                      ${GNUTLS_INCLUDE_DIRS})
+
+find_package (Threads)
+
 ## Libraries
 
 add_library (gsad_base STATIC gsad_base.c)
@@ -50,7 +53,7 @@ target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS} -lpthread)
+target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
