@@ -1,3 +1,17 @@
+2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Note permission icon in help.
+
+	* src/html/classic/help.xsl (name-column): New template.
+	(agents.html, lsc_credentials.html, alerts.html, port_lists.html)
+	(report_formats.html, configs.html, schedules.html, scanners.html)
+	(slaves.html, users.html, permissions.html, roles.html, filters.html)
+	(filters.html, tags.html, targets.html): Use name-column, so that
+	permission icon is included.
+	(notes.html, overrides.html): Add permission icon.
+	(tasks.html): Remove sentence about observation, the task may be
+	writable.
+
 2015-03-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (powerfilter.html): Add description of

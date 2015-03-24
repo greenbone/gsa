@@ -228,6 +228,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="name-column">
+  <xsl:param name="type" select="'task'"/>
+  <xsl:param name="type-name" select="gsa:type-name ($type)"/>
+  <xsl:param name="comment" select="'comment'"/>
+  <tr class="odd">
+    <td>Name</td>
+    <td>
+      Shows the name of the <xsl:value-of select="$type-name"/>.
+      <br/>
+      <xsl:if test="boolean ($comment)">
+        If there is a <xsl:value-of select="$comment"/> on the
+        <xsl:value-of select="$type-name"/>
+        it is shown in brackets below the name.
+      </xsl:if>
+      <div>
+        The right hand side of this column may contain an icon:
+        <table style="margin-left: 10px">
+          <tr>
+            <td valign="top">
+              <img src="/img/view_other.png"
+                   border="0"
+                   alt="Global {$type-name}"
+                   title="Global {$type-name}"/>
+            </td>
+            <td>
+              The <xsl:value-of select="$type-name"/> is either owned by
+              another user, or it is global.  A global
+              <xsl:value-of select="$type-name"/> is accessible by anyone.
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</xsl:template>
 
 <xsl:template name="filtering">
   <a name="filtering"></a>
@@ -664,12 +699,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the agent and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'agent'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Trust</td>
           <td>
@@ -836,10 +868,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the credential.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'credential'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Login</td>
           <td>Shows the login name that was provided for this credential.</td>
@@ -1229,12 +1260,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the alert and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'alert'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Event</td>
           <td>Shows the event for which the condition has to be checked.</td>
@@ -1351,12 +1379,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the Port List and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'port_list'"/>
+        </xsl:call-template>
         <tr class="even">
          <td>Port Counts Total</td>
          <td>
@@ -1668,12 +1693,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the Report Format and,
-              if specified, the summary in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'report_format'"/>
+          <xsl:with-param name="comment" select="'summary'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Extension</td>
           <td>
@@ -1930,12 +1953,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the scan configuration and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'scan_config'"/>
+        </xsl:call-template>
         <tr>
           <td>Families: Total</td>
           <td>The number of NVT families that would be considered
@@ -2146,12 +2166,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the schedule and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'schedule'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>First Run</td>
           <td>
@@ -2342,12 +2359,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the scanner and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'scanner'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Host</td>
           <td>Host of the scanner.</td>
@@ -2519,12 +2533,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the slave and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'slave'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Host</td>
           <td>
@@ -2693,10 +2704,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Login name of the user.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'user'"/>
+          <xsl:with-param name="comment" select="false ()"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Role</td>
           <td>Shows the role of the user.</td>
@@ -2933,12 +2944,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the permission and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'permission'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Description</td>
           <td>Description of the permission.</td>
@@ -3253,12 +3261,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the role and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'role'"/>
+        </xsl:call-template>
       </table>
 
       <a name="predefined"></a>
@@ -3993,12 +3998,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the filter and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'filter'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Term</td>
           <td>The filter term.  This describes how filtering will take place.</td>
@@ -4828,12 +4830,9 @@ Public License instead of this License.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the group and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'group'"/>
+        </xsl:call-template>
       </table>
 
       <h3>New Group</h3>
@@ -6258,8 +6257,27 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>NVT</td>
-          <td>The name of the NVT to which the note applies.  The name is truncated if
-              it is too long for the column.</td>
+          <td>
+            The name of the NVT to which the note applies.  The name is truncated if
+            it is too long for the column.
+            <br/>
+            <div>
+              The right hand side of this column may contain an icon:
+              <table style="margin-left: 10px">
+                <tr>
+                  <td valign="top">
+                    <img src="/img/view_other.png"
+                         border="0"
+                         alt="Note owned by Sally"
+                         title="Note owned by Sally"/>
+                  </td>
+                  <td>
+                    The note is owned by another user.
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>Text</td>
@@ -6919,8 +6937,27 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>NVT</td>
-          <td>The name of the NVT to which the override applies.  The name is truncated if
-              it is too long for the column.</td>
+          <td>
+            The name of the NVT to which the override applies.  The name is truncated if
+            it is too long for the column.
+            <br/>
+            <div>
+              The right hand side of this column may contain an icon:
+              <table style="margin-left: 10px">
+                <tr>
+                  <td valign="top">
+                    <img src="/img/view_other.png"
+                         border="0"
+                         alt="Override owned by Sally"
+                         title="Override owned by Sally"/>
+                  </td>
+                  <td>
+                    The override is owned by another user.
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
         </tr>
         <tr class="even">
           <td>From</td>
@@ -8058,12 +8095,9 @@ Public License instead of this License.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the tag and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'tag'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Value</td>
           <td>The value associated with the tag.</td>
@@ -8210,12 +8244,9 @@ Public License instead of this License.
           <td>Column</td>
           <td>Description</td>
         </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the target and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'target'"/>
+        </xsl:call-template>
         <tr class="even">
           <td>Hosts</td>
           <td>The comma separated list of target hosts, specified
@@ -8360,7 +8391,7 @@ Public License instead of this License.
                          title="Observing task owned by user1"/>
                   </td>
                   <td>
-                    The task is only for observation.  It is owned another user.
+                    The task is owned by another user.
                   </td>
                 </tr>
               </table>
