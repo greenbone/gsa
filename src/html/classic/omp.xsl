@@ -909,7 +909,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-criteria">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission']">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id']">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -926,7 +926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-extra">
-  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id' and column != 'owner' and column != 'permission')]">
+  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id')]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -1249,20 +1249,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Descending', 'Filter Box')"/>
               </label>
-            </div>
-          </xsl:if>
-          <xsl:if test="$type != 'info'">
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('Owner', 'Filter Box')"/>:
-              <input type="text" name="owner" size="25"
-                    value="{filters/keywords/keyword[column='owner']/value}"
-                    maxlength="400"/>
-            </div>
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('Permission', 'Filter Box')"/>:
-              <input type="text" name="permission" size="25"
-                    value="{filters/keywords/keyword[column='permission']/value}"
-                    maxlength="400"/>
             </div>
           </xsl:if>
           <div style="float: right; margin-right: 5px; margin-top: -25px">
@@ -4104,7 +4090,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Reports', 'Report')"/>:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name permission=any owner=any&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
@@ -4115,7 +4101,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:if>
              <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task Window'), ': ')"/>
-             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name permission=any owner=any&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=status=Done and task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
@@ -4132,7 +4118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>:
           </td>
           <td>
-            <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Notes on Task', 'Task Window')} {name}">
               <xsl:value-of select="count (../../get_notes_response/note)"/>
             </a>
@@ -4143,7 +4129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>:
           </td>
           <td>
-            <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Overrides on Task', 'Task Window')} {name}">
               <xsl:value-of select="count (../../get_overrides_response/override)"/>
             </a>
@@ -6679,11 +6665,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} and status=Done sort-reverse=name permission=any owner=any&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=status=Done and task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all finished reports for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK FINSISHED REPORTS SUFFIX#', 'Task Table Row', '')}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name permission=any owner=any&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all reports for Task ', 'Task Table Row')}{name}{gsa:i18n (', including unfinished ones', 'Task Table Row')}">
                 <xsl:value-of select="report_count/text()"/>
                </a>)
@@ -19269,7 +19255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>:</td>
       <td>
-        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Notes on NVT', 'NVT Window')} {name}">
           <xsl:value-of select="count (../../get_notes_response/note)"/>
         </a>
@@ -19278,7 +19264,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>:</td>
       <td>
-        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt permission=any&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Overrides on NVT', 'NVT Window')} {name}">
           <xsl:value-of select="count (../../get_overrides_response/override)"/>
         </a>
@@ -24853,7 +24839,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </column>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="default-filter" select="'apply_overrides=1 permission=any owner=any sort-reverse=date'"/>
+    <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
     <xsl:with-param name="extra_params">
       <param>
         <name>task_filter</name>

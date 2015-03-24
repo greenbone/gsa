@@ -1500,25 +1500,22 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                 filter = "sort-reverse=created rows=-2";
             }
           else if (strcmp (type, "user") == 0)
-            filter = "sort=roles rows=-2 permission=any owner=any";
+            filter = "sort=roles rows=-2";
           else if (strcmp (type, "report") == 0)
             {
               const char *task_id;
               task_id = params_value (params, "task_id");
               if (task_id)
                 built_filter = g_strdup_printf ("task_id=%s apply_overrides=1"
-                                                " rows=-2 permission=any"
-                                                " owner=any sort-reverse=date",
+                                                " rows=-2 sort-reverse=date",
                                                 task_id);
               else
-                filter = "apply_overrides=1 rows=-2"
-                         " permission=any owner=any sort-reverse=date";
+                filter = "apply_overrides=1 rows=-2 sort-reverse=date";
             }
           else if (strcmp (type, "result") == 0)
             {
               built_filter
                 = g_strdup_printf("apply_overrides=%d autofp=%s rows=-2"
-                                  " permission=any owner=any"
                                   " sort-reverse=created",
                                   (overrides == NULL
                                    || strcmp (overrides, "0")),
@@ -1527,16 +1524,16 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                     : "0");
             }
           else if (strcmp (type, "task"))
-            filter = "rows=-2 permission=any owner=any";
+            filter = "rows=-2";
           else
-            filter = "apply_overrides=1 rows=-2 permission=any owner=any";
+            filter = "apply_overrides=1 rows=-2";
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
             filt_id = "0";
           else
             filt_id = "-2";
         }
-      else if ((strcmp (filter, "sort=nvt permission=any") == 0)
+      else if ((strcmp (filter, "sort=nvt") == 0)
                && ((strcmp (type, "note") == 0)
                    || (strcmp (type, "override") == 0)))
         filt_id = "-2";
@@ -1620,8 +1617,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf_xml (&session,
                                     "<get_filters"
-                                    " filter=\"owner=any permission=any"
-                                    "          rows=-1 type=%s or type=\"/>",
+                                    " filter=\"rows=-1 type=%s or type=\"/>",
                                     type)
           == -1)
         {
@@ -2706,8 +2702,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   /* Get list of targets. */
   if (openvas_server_sendf (&session,
                             "<get_targets"
-                            " filter=\"owner=any permission=any"
-                            "          rows=-1 sort=name\"/>")
+                            " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2735,8 +2730,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   /* Get configs to select in new task UI. */
   if (openvas_server_sendf (&session,
                             "<get_configs"
-                            " filter=\"owner=any permission=any"
-                            "          rows=-1 sort=name\"/>")
+                            " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2766,8 +2760,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get alerts to select in new task UI. */
       if (openvas_server_sendf (&session,
                                 "<get_alerts"
-                                " filter=\"owner=any permission=any"
-                                "          rows=-1 sort=name\"/>")
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2799,7 +2792,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       if (openvas_server_sendf
            (&session,
             "<get_schedules"
-            " filter=\"rows=-1 sort=name owner=any permission=any\"/>")
+            " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2830,7 +2823,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get slaves to select in new task UI. */
       if (openvas_server_sendf (&session,
                                 "<get_slaves"
-                                " filter=\"rows=-1 owner=any permission=any\"/>")
+                                " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2861,7 +2854,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get scanners to select in new task UI. */
       if (openvas_server_sendf (&session,
                                 "<get_scanners"
-                                " filter=\"rows=-1 owner=any permission=any\"/>")
+                                " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3359,11 +3352,9 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "<commands>"
                             "<get_tasks task_id=\"%s\" details=\"1\" />"
                             "<get_targets"
-                            " filter=\"owner=any permission=any"
-                            "          rows=-1 sort=name\"/>"
+                            " filter=\"rows=-1 sort=name\"/>"
                             "<get_configs"
-                            " filter=\"owner=any permission=any"
-                            "          rows=-1 sort=name\"/>"
+                            " filter=\"rows=-1 sort=name\"/>"
                             "%s"
                             "%s"
                             "%s"
@@ -3372,21 +3363,19 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             task_id,
                             command_enabled (credentials, "GET_ALERTS")
                              ? "<get_alerts"
-                               " filter=\"owner=any permission=any"
-                               "          rows=-1 sort=name\"/>"
+                               " filter=\"rows=-1 sort=name\"/>"
                              : "",
                             command_enabled (credentials, "GET_SCHEDULES")
                              ? "<get_schedules"
-                               " filter=\"owner=any permission=any"
-                               "          rows=-1 sort=name\"/>"
+                               " filter=\"rows=-1 sort=name\"/>"
                              : "",
                             command_enabled (credentials, "GET_SLAVES")
                              ? "<get_slaves"
-                               " filter=\"rows=-1 owner=any permission=any\"/>"
+                               " filter=\"rows=-1\"/>"
                              : "",
                             command_enabled (credentials, "GET_SCANNERS")
                              ? "<get_scanners"
-                               " filter=\"rows=-1 owner=any permission=any\"/>"
+                               " filter=\"rows=-1\"/>"
                              : "",
                             command_enabled (credentials, "GET_GROUPS")
                              ? "<get_groups/>"
@@ -4120,10 +4109,10 @@ params_toggle_overrides (params_t *params, const char *overrides)
         }
       else if (strcmp (overrides, "0"))
         params_add (params, "filter",
-                    "apply_overrides=1 rows=-2 permission=any owner=any");
+                    "apply_overrides=1 rows=-2");
       else
         params_add (params, "filter",
-                    "apply_overrides=0 rows=-2 permission=any owner=any");
+                    "apply_overrides=0 rows=-2");
     }
 }
 
@@ -5801,7 +5790,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
   response = NULL;
   entity = NULL;
   ret = omp (credentials, &response, &entity,
-             "<get_report_formats filter=\"rows=-1 permission=any owner=any\"/>");
+             "<get_report_formats filter=\"rows=-1\"/>");
   switch (ret)
     {
       case 0:
@@ -5836,8 +5825,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   /* Get Report Filters. */
   ret = omp (credentials, &response, &entity,
-             "<get_filters filter=\"type=result rows=-1"
-             "                      owner=any permission=any\"/>");
+             "<get_filters filter=\"type=result rows=-1\"/>");
 
   switch (ret)
     {
@@ -6191,7 +6179,7 @@ get_alert (credentials_t * credentials, params_t *params,
       entity = NULL;
       switch (omp (credentials, &response, &entity,
                    "<get_report_formats"
-                   " filter=\"rows=-1 owner=any permission=any\"/>"))
+                   " filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -6373,7 +6361,7 @@ edit_alert (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_report_formats"
-                                " filter=\"rows=-1 owner=any permission=any\"/>")
+                                " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -6405,8 +6393,7 @@ edit_alert (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_filters"
-                                " filter=\"type=result rows=-1"
-                                "          owner=any permission=any\"/>")
+                                " filter=\"type=result rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -6792,8 +6779,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
 
       if (openvas_server_sendf (&session,
                                 "<get_lsc_credentials"
-                                " filter=\"owner=any permission=any"
-                                "          rows=-1 sort=name\"/>")
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -6825,8 +6811,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
 
       if (openvas_server_sendf (&session,
                                 "<get_port_lists"
-                                " filter=\"owner=any permission=any"
-                                "          rows=-1 sort=name\"/>")
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8175,8 +8160,7 @@ edit_target (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_lsc_credentials"
-                                " filter=\"owner=any permission=any"
-                                "          rows=-1 sort=name\"/>")
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8208,8 +8192,7 @@ edit_target (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_port_lists"
-                                " filter=\"owner=any permission=any"
-                                "          rows=-1 sort=name\"/>")
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -11439,7 +11422,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (openvas_server_sendf
                (&session,
                 "<get_report_formats"
-                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
+                " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -11598,7 +11581,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (openvas_server_sendf
                (&session,
                 "<get_report_formats"
-                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
+                " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -11631,7 +11614,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (openvas_server_sendf
                (&session,
                 "<get_alerts"
-                " filter=\"owner=any permission=any rows=-1 sort=name\"/>")
+                " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -11903,7 +11886,7 @@ get_report_section (credentials_t * credentials, params_t *params,
                  &response,
                  NULL,
                  "<get_report_formats"
-                 " filter=\"owner=any permission=any rows=-1\"/>");
+                 " filter=\"rows=-1\"/>");
 
       switch (ret)
         {
@@ -15571,7 +15554,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
         if (openvas_server_sendf                                              \
              (&session,                                                       \
               "<" command                                                     \
-              " filter=\"rows=-1 sort=name owner=any permission=any\""        \
+              " filter=\"rows=-1 sort=name\""                                 \
               " trash=\"1\"/>")                                               \
             == -1)                                                            \
           {                                                                   \
@@ -17345,7 +17328,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_users filter=\"rows=-1 owner=any permission=any\"/>"))
+                   "<get_users filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -17387,7 +17370,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_groups filter=\"rows=-1 permission=any owner=any\"/>"))
+                   "<get_groups filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -17429,7 +17412,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_roles filter=\"rows=-1 permission=any owner=any\"/>"))
+                   "<get_roles filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -17527,7 +17510,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
       ret = ompf (credentials,
                   &subject_response,
                   &get_subject_entity,
-                  "<get_%ss filter=\"rows=1 name=%s owner=any permission=any\">"
+                  "<get_%ss filter=\"rows=1 name=%s\">"
                   "</get_%ss>",
                   subject_type,
                   subject_name,
@@ -17792,7 +17775,7 @@ edit_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_users filter=\"rows=-1 permission=any owner=any\"/>"))
+                   "<get_users filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -17834,7 +17817,7 @@ edit_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_groups filter=\"rows=-1 permission=any owner=any\"/>"))
+                   "<get_groups filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -17876,7 +17859,7 @@ edit_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_roles filter=\"rows=-1 permission=any owner=any\"/>"))
+                   "<get_roles filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -21651,7 +21634,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
           && strcmp (params_value (params, "bulk_select"), "1") == 0)
         {
           bulk_string
-            = g_string_new ("owner=any permission=any first=1 rows=-1 uuid=");
+            = g_string_new ("first=1 rows=-1 uuid=");
 
           selected_ids = params_values (params, "bulk_selected:");
           if (selected_ids)

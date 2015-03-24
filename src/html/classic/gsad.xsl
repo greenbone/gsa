@@ -1500,14 +1500,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <item>
             <page>get_notes</page>
             <name><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></name>
-            <filter>sort=nvt owner=any permission=any</filter>
+            <filter>sort=nvt</filter>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_OVERRIDES')">
           <item>
             <page>get_overrides</page>
             <name><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></name>
-            <filter>sort=nvt owner=any permission=any</filter>
+            <filter>sort=nvt</filter>
           </item>
         </xsl:if>
       </xsl:variable>

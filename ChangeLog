@@ -1,3 +1,24 @@
+2015-03-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_many, new_task, edit_task)
+	(params_toggle_overrides, new_alert, get_alert, edit_alert, new_target)
+	(edit_target, get_report, get_report_section, GET_TRASH_RESOURCE)
+	(new_permission, edit_permission, process_bulk_omp): Remove keywords
+	"permission=any" and "owner=any" from predefined filter terms.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Remove keywords
+	"permission=any" and "owner=any" from predefined filter terms for
+	notes and overrides.
+
+	* src/html/classic/omp.xsl (filter-criteria, filter-extra): Do not
+	consider "permission" and "owner" keywords special.
+	(filter-window-part): Remove input fields for owner and permission.
+	(task [details], task): Swap order of task_id and status filters.
+	Do not include "permission" and "owner" keywords in filter of reports,
+	notes and overrides links.
+	(nvt [details], html-reports-table): Do not include "permission" and
+	"owner" keywords in filter terms of links.
+
 2015-03-23  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/CMakeLists.txt: Make detection of thread library dynamic instead
