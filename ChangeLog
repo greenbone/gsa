@@ -1,5 +1,10 @@
 2015-03-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (powerfilter.html): Add description of
+	keywords "owner" and "permission".
+
+2015-03-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_many, new_task, edit_task)
 	(params_toggle_overrides, new_alert, get_alert, edit_alert, new_target)
 	(edit_target, get_report, get_report_section, GET_TRASH_RESOURCE)

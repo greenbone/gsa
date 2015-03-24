@@ -7296,6 +7296,23 @@ Public License instead of this License.
         The "tag" keyword supports the =, ~ and : relations. &gt; and &lt; will
         behave the same as =.
       </p>
+      <p>
+        The column keyword "<b>owner</b>" restricts the filtered items to those
+        owned by the user with a given name. For example "owner=user123" will
+        give only items owned by the user named "user123".<br/>
+        If no "owner" keyword is given or "any" is given instead of an user name
+        items that are either global or owned by any user are returned.<br/>
+        To get only global items and ones owned by the current user, use
+        "owner=".
+      </p>
+      <p>
+        The column keyword "<b>permission</b>" restricts the filtered items to
+        ones the current user has a certain permission for. For example
+        "permission=modify_task" on the tasks page will give tasks the user
+        is allowed to modify.<br/>
+        If no "permission" keyword is given or "any" is used as a permission
+        name, items for any permission are returned.
+      </p>
 
       <h4>Date format</h4>
       <p>
