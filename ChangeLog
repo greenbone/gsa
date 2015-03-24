@@ -1,5 +1,9 @@
 2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl: Flush trailing whitespace.
+
+2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Note permission icon in help.
 
 	* src/html/classic/help.xsl (name-column): New template.

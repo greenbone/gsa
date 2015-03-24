@@ -9707,13 +9707,13 @@ Public License instead of this License.
       reliability of the executed vulnerability detection
       or product detection.
       </p>
-      
+
       <p>
       One of the main reasons to introduce this concept was to handle
       the challenge of potential vulnerabilities properly. The goal was to
       keep such in the results database but only visible on demand.
       </p>
-      
+
       <p>
       While the QoD range allows to express the quality pretty refined,
       in fact most of the test routines use a standard methodology.
@@ -9721,23 +9721,23 @@ Public License instead of this License.
       is associated with a QoD value. The current list of types might
       be extended over time.
       </p>
-      
+
       <h2>Overview on QoD values and types</h2>
-      
+
       <table>
-      
+
       <tr>
         <th align="left">QoD</th>
         <th align="left">QoD Type(s)</th>
         <th align="left">Description</th>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">100%</td>
         <td valign="top">exploit</td>
         <td valign="top">The detection happened via an exploit and therefore is fully verified.</td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">99%</td>
         <td valign="top">remote_vul</td>
@@ -9746,7 +9746,7 @@ Public License instead of this License.
           the response clearly shows the presence of the vulnerability.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">98%</td>
         <td valign="top">remote_app</td>
@@ -9755,7 +9755,7 @@ Public License instead of this License.
           the response clearly shows the presence of the vulnerable application.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">97%</td>
         <td valign="top">
@@ -9765,7 +9765,7 @@ Public License instead of this License.
           Authenticated package-based checks for Linux(oid) systems.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">97%</td>
         <td valign="top">
@@ -9775,7 +9775,7 @@ Public License instead of this License.
           Authenticated registry-based checks for Windows systems.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">95%</td>
         <td valign="top">remote_active</td>
@@ -9787,7 +9787,7 @@ Public License instead of this License.
           would be wrong.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">80%</td>
         <td valign="top">
@@ -9798,7 +9798,7 @@ Public License instead of this License.
           proprietary products do so.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">80%</td>
         <td valign="top">
@@ -9809,7 +9809,7 @@ Public License instead of this License.
           applications offer patch level in version.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">75%</td>
         <td valign="top"></td>
@@ -9819,7 +9819,7 @@ Public License instead of this License.
           some NVTs eventually might own this value for some reason.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">70%</td>
         <td valign="top">remote_analysis</td>
@@ -9828,7 +9828,7 @@ Public License instead of this License.
           fully reliable.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">50%</td>
         <td valign="top">remote_probe</td>
@@ -9837,7 +9837,7 @@ Public License instead of this License.
           correct detection so that it is actually not clear whether the application
           itself answered. This can happen for example for non-TLS connections.</td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">30%</td>
         <td valign="top">
@@ -9848,7 +9848,7 @@ Public License instead of this License.
           For example, this is the case for many Open Source products due to backport patches.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">30%</td>
         <td valign="top">
@@ -9859,7 +9859,7 @@ Public License instead of this License.
           don't offer patch level in version identification.
         </td>
       </tr>
-      
+
       <tr>
         <td valign="top" align="right">1%</td>
         <td valign="top">general_note</td>
@@ -9867,26 +9867,26 @@ Public License instead of this License.
           General note on potential vulnerability without finding any present application.
         </td>
       </tr>
-      
+
       </table>
-      
+
       <h2>Transition phase for NVTs and results</h2>
-      
+
       <p>
       The value of 70% is the default minimum used for the default filtering
       to display the results in the reports.
       </p>
-      
+
       <p>
       The QoD is introduced with OpenVAS-8. Any results created with prior
       versions are assigned the value of 75% during migration.
       </p>
-      
+
       <p>
       The transition of the NVTs is a long-term activity. For NVTs that
       have no QoD assigned yet, scan results will be assigned with 75%.
       </p>
-      
+
       <p>
       This setting of 75% ensures that by default the results are visible
       as before. However, eventually new results might occur with a QoD of 75%.
