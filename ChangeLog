@@ -1,3 +1,9 @@
+2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (user [edit]): If the user has Super Admin
+	put it in a dummy dropdown above the others, instead of trying to set it
+	on the user, which is not permitted.
+
 2015-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details], task): Revert the order of

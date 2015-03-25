@@ -31680,7 +31680,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
-              <xsl:variable name="roles" select="../../../get_roles_response/role[$super or @id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
+              <xsl:variable name="roles" select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
+              <xsl:if test="$super">
+                <select disabled="disabled" name="dummy">
+                  <option value="" selected="1"><xsl:value-of select="role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']/name"/></option>
+                </select>
+                <br/>
+              </xsl:if>
               <xsl:choose>
                 <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']) &gt; 0">
                   <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']/value">
@@ -31709,7 +31715,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:for-each select="role">
+                  <xsl:for-each select="role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
                     <select name="role_id_optional:{position ()}">
                       <xsl:variable name="role_id" select="@id"/>
                       <xsl:choose>
@@ -31749,7 +31755,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:variable>
               <xsl:call-template name="new-user-role-select">
-                <xsl:with-param name="roles" select="../../../get_roles_response/role[$super or @id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
+                <xsl:with-param name="roles" select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
                 <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
                 <xsl:with-param name="position" select="$count + 1"/>
               </xsl:call-template>
