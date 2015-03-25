@@ -1,3 +1,9 @@
+2015-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (task [details], task): Revert the order of
+	task_id and status keywords as the replace_task_id param will change
+	the order again, putting the "and" in the wrong place.
+
 2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl: Flush trailing whitespace.
