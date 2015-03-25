@@ -1881,7 +1881,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
           else
             format_name_entity = NULL;
 
-          if (format_name_entity)
+          if (format_name_entity && strlen (entity_text (format_name_entity)))
             format_name = entity_text (format_name_entity);
           else
             format_name = NULL;

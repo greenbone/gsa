@@ -1,3 +1,9 @@
+2015-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (format_file_name): Set format_name to NULL if it's an
+	empty string, because openvas_export_file_name does not handle empty
+	strings.
+
 2015-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (new_override.html): Add missing text for
