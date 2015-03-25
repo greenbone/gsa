@@ -1,3 +1,9 @@
+2015-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/help.xsl (new_override.html): Add missing text for
+	"NVT OID" and "Active" inputs. Add syntax info and examples for input
+	fields besides the radio buttons. Fix table row coloring.
+
 2015-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (user [edit]): If the user has Super Admin

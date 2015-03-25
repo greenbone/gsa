@@ -5451,18 +5451,32 @@ Public License instead of this License.
           <td>Example</td>
         </tr>
         <tr class="odd">
+          <td>NVT OID</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>OID</td>
+          <td>1.3.6.1.4.1.25623.1.0.10263</td>
+        </tr>
+        <tr class="even">
+          <td>Active</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button + Numeric (second radio option)</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
           <td>Hosts</td>
           <td>yes</td>
           <td>--</td>
-          <td>Radio button</td>
-          <td></td>
+          <td>Radio button + Hosts List (second radio option)</td>
+          <td>192.168.0.123</td>
         </tr>
         <tr class="even">
           <td>Port</td>
           <td>yes</td>
           <td>--</td>
-          <td>Radio button</td>
-          <td></td>
+          <td>Radio button + Port Name (second radio option)</td>
+          <td>22/tcp</td>
         </tr>
         <tr class="odd">
           <td>Severity</td>
@@ -5471,28 +5485,28 @@ Public License instead of this License.
           <td>Radio button</td>
           <td></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>New Severity</td>
           <td>yes</td>
           <td>--</td>
-          <td>Predefined value from list or valid severity (CVSS) score</td>
-          <td></td>
+          <td>Radio button + Choice (second radio option) or severity (CVSS) score (third radio option)</td>
+          <td>7.5</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Task</td>
           <td>yes</td>
           <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="odd">
-          <td>Result</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
+          <td>Radio button + Choice (second radio option)</td>
           <td></td>
         </tr>
         <tr class="even">
+          <td>Result</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button + UUID (second radio option)</td>
+          <td>bb062bc9-4a61-45c2-af26-135e74be2f66</td>
+        </tr>
+        <tr class="odd">
           <td>Text</td>
           <td>yes</td>
           <td>600</td>
