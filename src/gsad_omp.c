@@ -17328,7 +17328,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_users filter=\"rows=-1\"/>"))
+                   "<get_users filter=\"rows=-1 permission=modify_user\"/>"))
         {
           case 0:
           case -1:
@@ -17370,7 +17370,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_groups filter=\"rows=-1\"/>"))
+                   "<get_groups filter=\"rows=-1 permission=modify_group\"/>"))
         {
           case 0:
           case -1:
@@ -17412,7 +17412,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_roles filter=\"rows=-1\"/>"))
+                   "<get_roles filter=\"rows=-1 permission=modify_role\"/>"))
         {
           case 0:
           case -1:

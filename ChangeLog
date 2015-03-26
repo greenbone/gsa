@@ -1,3 +1,16 @@
+2015-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Allow access to the Create Permissions page even if the user has limited
+	subject access.
+
+	* src/gsad_omp.c (new_permission): Restrict requests to users, roles
+	and groups that the user has modify_user permission on.
+
+	* src/html/classic/omp.xsl (html-create-permission-form): Disable the
+	subject dropdowns when the user may not access the associated type.
+	(html-permissions-table): Enable the new icon if the user may access
+	any one of the subject types.
+
 2015-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (format_file_name): Set format_name to NULL if it's an

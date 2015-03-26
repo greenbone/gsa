@@ -22276,38 +22276,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Subject', 'Permission Window')"/></td>
             <td>
-              <label>
-                <input type="radio" name="subject_type" value="user" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('User', 'User')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <select name="user_id">
-                <xsl:for-each select="get_users_response/user">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
-              <br/>
-              <label>
-                <input type="radio" name="subject_type" value="role"/>
-                <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <select name="role_id">
-                <xsl:for-each select="get_roles_response/role">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
-              <br/>
-              <label>
-                <input type="radio" name="subject_type" value="group"/>
-                <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <select name="group_id">
-                <xsl:for-each select="get_groups_response/group">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
+              <xsl:if test="gsa:may-op ('get_users')">
+                <label>
+                  <input type="radio" name="subject_type" value="user" checked="1"/>
+                  <xsl:value-of select="gsa:i18n ('User', 'User')"/>
+                  <xsl:text> </xsl:text>
+                </label>
+                <select name="user_id">
+                  <xsl:for-each select="get_users_response/user">
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:if>
+
+              <xsl:if test="gsa:may-op ('get_roles')">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="gsa:may-op ('get_users')">
+                      <input type="radio" name="subject_type" value="role"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="subject_type" value="role" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
+                  <xsl:text> </xsl:text>
+                </label>
+                <select name="role_id">
+                  <xsl:for-each select="get_roles_response/role">
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:if>
+
+              <xsl:if test="gsa:may-op ('get_groups')">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="gsa:may-op ('get_users') or gsa:may-op ('get_roles')">
+                      <input type="radio" name="subject_type" value="group"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="subject_type" value="group" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
+                  <xsl:text> </xsl:text>
+                </label>
+                <select name="group_id">
+                  <xsl:for-each select="get_groups_response/group">
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:for-each>
+                </select>
+              </xsl:if>
             </td>
           </tr>
           <tr>
@@ -22668,7 +22690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
-    <xsl:with-param name="new-icon" select="gsa:may-op ('create_permission') and gsa:may-op ('get_users') and gsa:may-op ('get_roles') and gsa:may-op ('get_groups')"/>
+    <xsl:with-param name="new-icon" select="gsa:may-op ('create_permission') and (gsa:may-op ('get_users') or gsa:may-op ('get_roles') or gsa:may-op ('get_groups'))"/>
   </xsl:call-template>
 </xsl:template>
 
