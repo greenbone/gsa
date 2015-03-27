@@ -8318,6 +8318,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
   const char *target_esxi_credential;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
+  GString *command;
 
   alive_tests = params_value (params, "alive_tests");
   name = params_value (params, "name");
@@ -8334,23 +8335,27 @@ save_target_omp (credentials_t * credentials, params_t *params)
   if (strcmp (in_use, "0"))
     {
       entity_t entity;
+      int ret;
 
       /* Target is in use.  Modify fewer fields. */
 
+      command = g_string_new ("");
+      xml_string_append (command,
+                         "<modify_target target_id=\"%s\">"
+                         "<name>%s</name>"
+                         "<comment>%s</comment>"
+                         "<alive_tests>%s</alive_tests>"
+                         "</modify_target>",
+                         target_id,
+                         name ? name : "",
+                         comment ? comment : "",
+                         alive_tests);
+
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials,
-                    &response,
-                    &entity,
-                    "<modify_target target_id=\"%s\">"
-                    "<name>%s</name>"
-                    "<comment>%s</comment>"
-                    "<alive_tests>%s</alive_tests>"
-                    "</modify_target>",
-                    target_id,
-                    name ? name : "",
-                    comment ? comment : "",
-                    alive_tests))
+      ret = omp (credentials, &response, &entity, command->str);
+      g_string_free (command, TRUE);
+      switch (ret)
         {
           case 0:
           case -1:
@@ -8485,38 +8490,44 @@ save_target_omp (credentials_t * credentials, params_t *params)
         g_strdup_printf ("<esxi_lsc_credential id=\"%s\"/>",
                          target_esxi_credential);
 
-    /* Modify the target. */
+    command = g_string_new ("");
+    xml_string_append (command,
+                       "<modify_target target_id=\"%s\">"
+                       "<name>%s</name>"
+                       "<hosts>%s</hosts>"
+                       "<exclude_hosts>%s</exclude_hosts>"
+                       "<reverse_lookup_only>%s</reverse_lookup_only>"
+                       "<reverse_lookup_unify>%s</reverse_lookup_unify>"
+                       "<port_list id=\"%s\"/>"
+                       "<alive_tests>%s</alive_tests>",
+                       target_id,
+                       name,
+                       strcmp (target_source, "file") == 0
+                         ? params_value (params, "file")
+                         : hosts,
+                       exclude_hosts ? exclude_hosts : "",
+                       reverse_lookup_only ? reverse_lookup_only : "0",
+                       reverse_lookup_unify ? reverse_lookup_unify : "0",
+                       port_list_id,
+                       alive_tests);
 
-    ret = openvas_server_sendf (&session,
-                                "<modify_target target_id=\"%s\">"
-                                "<name>%s</name>"
-                                "<hosts>%s</hosts>"
-                                "<exclude_hosts>%s</exclude_hosts>"
-                                "<reverse_lookup_only>%s</reverse_lookup_only>"
-                                "<reverse_lookup_unify>%s</reverse_lookup_unify>"
-                                "<port_list id=\"%s\"/>"
-                                "%s%s%s%s"
-                                "<alive_tests>%s</alive_tests>"
-                                "</modify_target>",
-                                target_id,
-                                name,
-                                strcmp (target_source, "file") == 0
-                                  ? params_value (params, "file")
-                                  : hosts,
-                                exclude_hosts ? exclude_hosts : "",
-                                reverse_lookup_only ? reverse_lookup_only : "0",
-                                reverse_lookup_unify ? reverse_lookup_unify : "0",
-                                port_list_id,
-                                comment_element,
-                                credentials_element,
-                                smb_credentials_element,
-                                esxi_credentials_element,
-                                alive_tests);
+    g_string_append_printf (command,
+                            "%s%s%s%s"
+                            "</modify_target>",
+                            comment_element,
+                            credentials_element,
+                            smb_credentials_element,
+                            esxi_credentials_element);
 
     g_free (comment_element);
     g_free (credentials_element);
     g_free (smb_credentials_element);
     g_free (esxi_credentials_element);
+
+    /* Modify the target. */
+
+    ret = openvas_server_sendf (&session, "%s", command->str);
+    g_string_free (command, TRUE);
 
     if (ret == -1)
       {

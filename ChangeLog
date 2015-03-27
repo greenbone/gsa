@@ -1,5 +1,11 @@
 2015-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_target_omp): Prepare the OMP command with
+	xml_string_append, so that the args are escaped, especially ALIVE_TESTS,
+	which may contain ampersands.
+
+2015-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (start_http_daemon): Remove limit on connection timeout,
 	because some operations take a long time, like getting very large
 	reports.
