@@ -1,3 +1,9 @@
+2015-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (start_http_daemon): Remove limit on connection timeout,
+	because some operations take a long time, like getting very large
+	reports.
+
 2015-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Allow access to the Create Permissions page even if the user has limited
