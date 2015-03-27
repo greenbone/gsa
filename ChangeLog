@@ -1,3 +1,11 @@
+2015-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r21976.
+
+	* src/gsad_omp.c (save_target_omp): Prepare the OMP command with
+	xml_string_append, so that the args are escaped, especially ALIVE_TESTS,
+	which may contain ampersands.
+
 2015-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport 21948.
