@@ -653,7 +653,7 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
         return -1;
     }
 
-  ret = openvas_server_sendf (&session, command);
+  ret = openvas_server_sendf (&session, "%s", command);
   if (ret == -1)
     {
       openvas_server_close (socket, session);

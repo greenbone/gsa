@@ -1,3 +1,9 @@
+2015-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (omp): Add format string, because command may
+	contain format specifiers, for example when saving an LDAP DN with
+	MODIFY_AUTH.
+
 2015-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_target_omp): Prepare the OMP command with
