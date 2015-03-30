@@ -1,5 +1,11 @@
 2015-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-override-form): Convert values of
+	"select-value" to text, because they will be compared to "value", which
+	is text.
+
+2015-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (omp): Add format string, because command may
 	contain format specifiers, for example when saving an LDAP DN with
 	MODIFY_AUTH.

@@ -21233,35 +21233,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="value" select="'10.0'"/>
                   <xsl:with-param
                     name="select-value"
-                    select="get_overrides_response/override/new_severity"/>
+                    select="format-number (get_overrides_response/override/new_severity, '#0.0')"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="content" select="concat ('5.0 (', gsa:i18n ('Medium', 'Severity'), ')')"/>
                   <xsl:with-param name="value" select="'5.0'"/>
                   <xsl:with-param
                     name="select-value"
-                    select="get_overrides_response/override/new_severity"/>
+                    select="format-number (get_overrides_response/override/new_severity, '#0.0')"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="content" select="concat ('2.0 (', gsa:i18n ('Low', 'Severity'), ')')"/>
                   <xsl:with-param name="value" select="'2.0'"/>
                   <xsl:with-param
                     name="select-value"
-                    select="get_overrides_response/override/new_severity"/>
+                    select="format-number (get_overrides_response/override/new_severity, '#0.0')"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="content" select="gsa:i18n ('Log', 'Severity')"/>
                   <xsl:with-param name="value" select="'0.0'"/>
                   <xsl:with-param
                     name="select-value"
-                    select="get_overrides_response/override/new_severity"/>
+                    select="format-number (get_overrides_response/override/new_severity, '#0.0')"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="content" select="gsa:i18n ('False Positive', 'Severity')"/>
                   <xsl:with-param name="value" select="'-1.0'"/>
                   <xsl:with-param
                     name="select-value"
-                    select="get_overrides_response/override/new_severity"/>
+                    select="format-number (get_overrides_response/override/new_severity, '#0.0')"/>
                 </xsl:call-template>
               </select>
               <label>
