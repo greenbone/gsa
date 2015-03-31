@@ -1,3 +1,8 @@
+2015-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-config-table): Add config icon, to
+	match other details pages.
+
 2015-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-override-form): Convert values of

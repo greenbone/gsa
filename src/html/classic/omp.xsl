@@ -13551,6 +13551,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{gsa:i18n ('New Scan Config', 'Scan Config')}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-clone ('config')">
+          <div style="display: inline">
+            <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+              <input type="hidden" name="cmd" value="clone"/>
+              <input type="hidden" name="resource_type" value="config"/>
+              <input type="hidden" name="next" value="get_config"/>
+              <input type="hidden" name="id" value="{$config/@id}"/>
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
+                     name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
+            </form>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/clone_inactive.png"
+               alt="{gsa:i18n ('Clone', 'Table Row')}"
+               value="Clone"
+               title="{gsa:i18n ('Permission to clone denied', 'Table Row')}"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
