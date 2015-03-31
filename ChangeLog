@@ -1,5 +1,12 @@
 2015-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [section-link]): Add missing host URL
+	params to prognostic case.
+	(report [section-filter]): Get prognostic params from ENVELOPE, where
+	they are available.
+
+2015-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-user-form): Make LDAP line "odd"
 	because the previous is "even".
 

@@ -27208,7 +27208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="$type = 'prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;apply_filter=', $apply_filter, '&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;apply_filter=', $apply_filter, '&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;host_levels=', /envelope/params/host_levels, '&amp;host_search_phrase=', /envelope/params/host_search_phrase, '&amp;host_first_result=', /envelope/params/host_first_result, '&amp;host_max_results=', /envelope/params/host_max_results, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="$type = 'delta'">
         <xsl:variable name="delta" select="delta/report/@id"/>
@@ -27405,10 +27405,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:if test="@type='prognostic'">
               <input type="hidden" name="type" value="prognostic"/>
               <input type="hidden" name="host" value="{filters/host}"/>
-              <input type="hidden" name="host_search_phrase" value="{../host_search_phrase}"/>
-              <input type="hidden" name="host_levels" value="{../host_levels}"/>
-              <input type="hidden" name="host_first_result" value="{../results/@start}"/>
-              <input type="hidden" name="host_max_results" value="{../results/@max}"/>
+              <input type="hidden" name="host_search_phrase" value="{/envelope/params/host_search_phrase}"/>
+              <input type="hidden" name="host_levels" value="{/envelope/params/host_levels}"/>
+              <input type="hidden" name="host_first_result" value="{/envelope/params/host_first_result}"/>
+              <input type="hidden" name="host_max_results" value="{/envelope/params/host_max_results}"/>
               <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
             </xsl:if>
             <xsl:if test="@type='delta'">
@@ -27438,10 +27438,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:if test="@type='prognostic'">
               <input type="hidden" name="type" value="prognostic"/>
               <input type="hidden" name="host" value="{filters/host}"/>
-              <input type="hidden" name="host_search_phrase" value="{../host_search_phrase}"/>
-              <input type="hidden" name="host_levels" value="{../host_levels}"/>
-              <input type="hidden" name="host_first_result" value="{../results/@start}"/>
-              <input type="hidden" name="host_max_results" value="{../results/@max}"/>
+              <input type="hidden" name="host_search_phrase" value="{/envelope/params/host_search_phrase}"/>
+              <input type="hidden" name="host_levels" value="{/envelope/params/host_levels}"/>
+              <input type="hidden" name="host_first_result" value="{/envelope/params/host_first_result}"/>
+              <input type="hidden" name="host_max_results" value="{/envelope/params/host_max_results}"/>
               <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
             </xsl:if>
             <xsl:if test="@type='delta'">
@@ -27485,10 +27485,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="@type='prognostic'">
         <input type="hidden" name="type" value="prognostic"/>
         <input type="hidden" name="host" value="{filters/host}"/>
-        <input type="hidden" name="host_search_phrase" value="{../host_search_phrase}"/>
-        <input type="hidden" name="host_levels" value="{../host_levels}"/>
-        <input type="hidden" name="host_first_result" value="{../results/@start}"/>
-        <input type="hidden" name="host_max_results" value="{../results/@max}"/>
+        <input type="hidden" name="host_search_phrase" value="{/envelope/params/host_search_phrase}"/>
+        <input type="hidden" name="host_levels" value="{/envelope/params/host_levels}"/>
+        <input type="hidden" name="host_first_result" value="{/envelope/params/host_first_result}"/>
+        <input type="hidden" name="host_max_results" value="{/envelope/params/host_max_results}"/>
         <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
       </xsl:if>
       <xsl:if test="@type='delta'">
