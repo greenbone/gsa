@@ -27353,11 +27353,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </li>
             <li>
-              <li>
-                <a href="?cmd=get_results&amp;filter={filters/term} and report_id={@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="gsa:i18n ('Results view', 'Report Section')"/>
-                </a>
-              </li>
+              <xsl:if test="$type != 'prognostic'">
+                <li>
+                  <a href="?cmd=get_results&amp;filter={filters/term} and report_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="gsa:i18n ('Results view', 'Report Section')"/>
+                  </a>
+                </li>
+              </xsl:if>
             </li>
             <li>
               <xsl:if test="$type != 'prognostic'">
