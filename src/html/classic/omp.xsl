@@ -68,6 +68,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN XPATH FUNCTIONS -->
 
+<func:function name="gsa:envelope-filter">
+  <func:result select="concat (/envelope/params/filter, ' ', /envelope/params/filter_extra)"/>
+</func:function>
+
 <func:function name="gsa:may">
   <xsl:param name="name"/>
   <xsl:param name="permissions" select="permissions"/>
@@ -963,7 +967,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="hidden" name="term" value="{filters/term}"/>
                   <input type="hidden" name="optional_resource_type" value="{$type}"/>
                   <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                   <xsl:for-each select="exslt:node-set($extra_params)/param">
                     <input type="hidden" name="{name}" value="{value}"/>
                   </xsl:for-each>
@@ -1314,12 +1318,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a href="/help/{$type}s.html?token={/envelope/token}#edit_{$type}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n (concat ('Edit ' ,$cap-type), $cap-type)}">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="{gsa:i18n ($cap-type-plural, $cap-type)}" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n (concat ($cap-type, ' Details'), $cap-type)}" style="margin-left:3px;">
       <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Window')}"/>
     </a>
@@ -1456,7 +1460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         </xsl:with-param>
       </xsl:call-template>
@@ -1483,7 +1487,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:choose>
         <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
@@ -1523,7 +1527,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="resource_type" value="{$type}"/>
           <input type="hidden" name="next" value="get_{$type}"/>
           <input type="hidden" name="id" value="{@id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
@@ -1549,7 +1553,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export ', 'Table Row')}{gsa:i18n ($cap-type, $cap-type)}{gsa:i18n ('#EXPORT_SUFFIX#', 'Table Row', '')}"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Table Row')}"/>
@@ -1646,7 +1650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <input type="image" src="/img/start.png" alt="{gsa:i18n($alt, 'Task Table Row')}"
              name="{$alt}" value="{$alt}" title="{gsa:i18n($alt, 'Task Table Row')}"/>
@@ -2076,21 +2080,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$resource_subtype != ''">
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New Tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('New Tag', 'Tag Window')}"
             style="margin-left:3px;">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag Window')}"/>
@@ -2253,7 +2257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="{concat($resource_type,'_id')}" value="{$resource_id}"/>
             </xsl:otherwise>
           </xsl:choose>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <xsl:if test="$resource_subtype != ''">
             <input type="hidden"
@@ -2287,7 +2291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="{concat($resource_type,'_id')}" value="{$resource_id}"/>
             </xsl:otherwise>
           </xsl:choose>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <xsl:if test="$resource_subtype != ''">
             <input type="hidden"
@@ -2315,19 +2319,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="$report_section != ''">
-          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
           title="{gsa:i18n ('Edit Tag', 'Tag')}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:when>
         <xsl:when test="$resource_subtype!=''">
-          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
               title="{gsa:i18n ('Edit Tag', 'Tag')}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
           title="{gsa:i18n ('Edit Tag', 'Tag')}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -2418,7 +2422,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="create_permission"/>
             <input type="hidden" name="comment" value=""/>
             <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="next" value="{$next}"/>
             <input type="hidden" name="{$resource_type}_id" value="{$resource_id}"/>
@@ -2479,7 +2483,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:with-param name="type" select="'permission'"/>
                       <xsl:with-param name="id" select="@id"/>
                       <xsl:with-param name="params">
-                        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                         <input type="hidden" name="next" value="{$next}"/>
                         <input type="hidden" name="{$resource_type}_id" value="{$resource_id}"/>
@@ -3670,7 +3674,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="type">task</xsl:with-param>
               <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
-                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                 <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                 <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                 <input type="hidden" name="next" value="{$next}"/>
@@ -3688,7 +3692,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type">task</xsl:with-param>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
           <input type="hidden" name="next" value="{$next}"/>
@@ -3703,7 +3707,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type">task</xsl:with-param>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
           <input type="hidden" name="next" value="{$next}"/>
@@ -3716,7 +3720,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="type">task</xsl:with-param>
       <xsl:with-param name="id" select="@id"/>
       <xsl:with-param name="params">
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
         <input type="hidden" name="next" value="{$next}"/>
@@ -3744,7 +3748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="cmd">resume_task</xsl:with-param>
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
               <input type="hidden" name="next" value="{$next}"/>
@@ -3792,7 +3796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_task"/>
           <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <xsl:call-template name="auto-refresh"/>
           <input type="image" name="Update" src="/img/refresh.png"
@@ -4090,7 +4094,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Reports', 'Report')"/>:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
@@ -4101,7 +4105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:if>
              <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task Window'), ': ')"/>
-             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
@@ -4829,7 +4833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="resource_type" value="{$type}"/>
             <input type="hidden" name="next" value="get_{$type}"/>
             <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
@@ -5158,11 +5162,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Wizard', 'Wizard')}">
       <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
@@ -5176,7 +5180,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
       </xsl:if>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <xsl:if test="not (gsa:may-op ('get_alerts'))">
         <input type="hidden" name="alerts" value="1"/>
@@ -5562,7 +5566,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
@@ -5576,7 +5580,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
       </xsl:if>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
@@ -5652,7 +5656,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </td>
     <td style="max-width: 100px; overflow: hidden;">
-      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
          title="{gsa:view_details_title ('Task', task/@id)}"
          style="margin-left:3px;">
         <xsl:value-of select="task/name"/>
@@ -5720,7 +5724,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/task_filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report Table Row')}"
                 style="margin-left:3px;">
                 <img src="/img/delta.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
@@ -5750,7 +5754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="hidden" name="task_id" value="{$task_id}"/>
                   <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                   <input type="hidden" name="next" value="get_reports"/>
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                   <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="task_filter" value="{/envelope/params/task_filter}"/>
                   <input type="hidden" name="task_filt_id" value="{/envelope/params/task_filt_id}"/>
@@ -6365,7 +6369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{next}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <xsl:if test="not (gsa:may-op ('get_alerts'))">
           <input type="hidden" name="alerts" value="1"/>
@@ -6483,7 +6487,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="next" value="{next}"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="file" name="xml_file" size="30"/>
         </form>
@@ -6665,11 +6669,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all finished reports for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK FINSISHED REPORTS SUFFIX#', 'Task Table Row', '')}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (/envelope/params/filter, true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all reports for Task ', 'Task Table Row')}{name}{gsa:i18n (', including unfinished ones', 'Task Table Row')}">
                 <xsl:value-of select="report_count/text()"/>
                </a>)
@@ -7003,7 +7007,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Credential', 'Credential'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_lsc_credentials&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_lsc_credentials&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Credentials', 'Credential')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Credentials', 'Credential')}"/>
       </a>
@@ -7014,7 +7018,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_lsc_credential"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_lsc_credential"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -7497,7 +7501,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Agent', 'Agent'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Agents', 'Agent')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Agents', 'Agent')}"/>
       </a>
@@ -7508,7 +7512,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_agent"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_agent"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -7740,7 +7744,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="{gsa:i18n ('Download installer package', 'Agent Table Row')}" style="margin-left:3px;">
             <img src="/img/agent.png" border="0" alt="{gsa:i18n ('Download Installer', 'Agent Table Row')}"/>
           </a>
-          <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}"
+          <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
             title="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"
             style="margin-left:3px;">
             <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Agent', 'Agent Table Row')}"/>
@@ -7947,7 +7951,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Alert', 'Alert'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_alerts&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_alerts&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Alerts', 'Alert')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Alerts', 'Alert')}"/>
       </a>
@@ -7958,7 +7962,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_alert"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_alert"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
@@ -9704,7 +9708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Filter', 'Filter'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Filters', 'Filter')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter')}"/>
       </a>
@@ -9716,7 +9720,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_filter"/>
         <input type="hidden" name="filter_id" value="{/envelope/params/filter_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
@@ -9790,7 +9794,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                name="filter_id"
                value="{commands_response/get_filters_response/filter/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -10098,7 +10102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="params">
               <input type="hidden" name="next" value="get_tags"/>
               <input type="hidden" name="tag_id" value="{@id}"/>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             </xsl:with-param>
             <xsl:with-param name="fragment" select="'#user_tags'"/>
@@ -10468,7 +10472,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Tag', 'Tag'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tags&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_tags&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tags', 'Tag')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tags', 'Tag')}"/>
       </a>
@@ -10813,7 +10817,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Target', 'Target'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Target')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Targets', 'Target')}"/>
       </a>
@@ -12274,7 +12278,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scan Config', 'Scan Config'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
@@ -12285,7 +12289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_config"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_config"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -12363,7 +12367,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Scan Config', 'Scan Config Window'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
@@ -13547,7 +13551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('New Scan Config', 'Scan Config')}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -13561,7 +13565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="resource_type" value="config"/>
               <input type="hidden" name="next" value="get_config"/>
               <input type="hidden" name="id" value="{$config/@id}"/>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Table Row')}"
                      name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Table Row')}"/>
@@ -13576,7 +13580,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
@@ -13587,7 +13591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="type" select="'config'"/>
               <xsl:with-param name="id" select="$config/@id"/>
               <xsl:with-param name="params">
-                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                 <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               </xsl:with-param>
             </xsl:call-template>
@@ -13612,13 +13616,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
               <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export ', 'Window')}{gsa:i18n ('Scan Config', 'Scan Config')}{gsa:i18n (' as XML', 'Window')}"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Scan Config')}"/>
@@ -14132,7 +14136,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Schedule', 'Schedule'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_schedules&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_schedules&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Schedules', 'Schedule')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Schedules', 'Schedule')}"/>
       </a>
@@ -14144,7 +14148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -15697,7 +15701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scanner', 'Scanner'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_scanners&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_scanners&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scanners', 'Scanner')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scanners', 'Scanner')}"/>
       </a>
@@ -15708,7 +15712,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_scanner"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_scanner"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -16266,7 +16270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Slave', 'Slave'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Slaves', 'Slave')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Slaves', 'Slave')}"/>
       </a>
@@ -16277,7 +16281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_slave"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_slave"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -18202,7 +18206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVE', 'CVE'),' (',gsa:i18n('CVE Details', 'CVE'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="{gsa:i18n ('CVEs', 'CVE')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
       </a>
@@ -18522,7 +18526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CPE', 'CPE'),' (',gsa:i18n('CPE Details', 'CPE'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="{gsa:i18n ('CPEs', 'CPE')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
       </a>
@@ -18675,7 +18679,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="{concat(gsa:i18n('Help', 'Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details', 'OVAL Definition'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
         title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
       </a>
@@ -18931,7 +18935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('CERT-Bund Details', 'CERT-Bund Advisory'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
         title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
       </a>
@@ -19114,7 +19118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details', 'DFN-CERT Advisory'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
         title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
       </a>
@@ -19570,16 +19574,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
             <img src="/img/help.png"/>
           </a>
-          <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
           </a>
           <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
             </a>
-            <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
             </a>
@@ -19621,7 +19625,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Note', 'Note')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_notes&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_notes&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Notes', 'Note')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Notes', 'Note')}"/>
       </a>
@@ -19634,7 +19638,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
         <xsl:choose>
@@ -19962,7 +19966,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="note_id"
                value="{get_notes_response/note/@id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
@@ -20660,7 +20664,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Override', 'Override')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_overrides&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_overrides&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Overrides', 'Override')}"/>
       </a>
@@ -20673,7 +20677,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_override"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
         <xsl:choose>
@@ -21021,7 +21025,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="override_id"
                value="{get_overrides_response/override/@id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
@@ -22076,7 +22080,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_group"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_group"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="group_id" value="{/envelope/params/group_id}"/>
         <input type="hidden" name="group" value="{/envelope/params/group}"/>
@@ -22257,7 +22261,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Permission', 'Permission'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_permissions&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_permissions&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Permissions', 'Permission')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Permissions', 'Permission')}"/>
       </a>
@@ -22755,7 +22759,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                value="{commands_response/get_permissions_response/permission/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -22994,7 +22998,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Port Lists', 'Port List')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
@@ -23005,7 +23009,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_port_list"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_port_list"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -23552,7 +23556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Port Lists" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
@@ -23661,7 +23665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'New Report Format'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Report Formats', 'Report Format')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report Formats', 'Report Format')}"/>
       </a>
@@ -23673,7 +23677,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -23758,7 +23762,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="report_format" value="{/envelope/params/report_format}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
@@ -25034,7 +25038,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="fragment" select="concat ('#notes-', ../../@id)"/>
             <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="hidden" name="details" value="{/envelope/params/details}"/>
               <xsl:choose>
@@ -25105,42 +25109,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
@@ -25154,7 +25158,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="clone"/>
             <input type="hidden" name="resource_type" value="note"/>
             <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
             <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
@@ -25278,7 +25282,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="fragment" select="concat ('#overrides-', ../../@id)"/>
             <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="hidden" name="details" value="{/envelope/params/details}"/>
               <xsl:choose>
@@ -25349,42 +25353,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Window')}"/>
@@ -25398,7 +25402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="clone"/>
             <input type="hidden" name="resource_type" value="override"/>
             <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
             <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
@@ -25532,13 +25536,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="$delta=0">
-          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
              title="{gsa:i18n ('Report', 'Report')}"
              style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
           </a>
           <div id="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
-            <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Export ', 'Window')}{gsa:i18n ('Result', 'Result')}{gsa:i18n (' as XML', 'Window')}"
                style="margin-left:3px;">
               <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Window')}"/>
@@ -25546,7 +25550,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+          <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
              title="{gsa:i18n ('Report', 'Report')}"
              style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
@@ -26017,7 +26021,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
@@ -26029,13 +26033,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
                   <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
@@ -26049,7 +26053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="delta">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
@@ -26061,13 +26065,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
                   <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
@@ -26278,7 +26282,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td></tr>
           <tr><td><xsl:value-of select="gsa:i18n ('Log', 'Result Window')"/>:</td><td>
           <!-- TODO This needs a case for delta reports. -->
-          <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Product detection results', 'Result Window')}">
             <xsl:value-of select="gsa:i18n ('View details of product detection', 'Result Window')"/>
           </a>
@@ -29279,7 +29283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="../../delta">
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/> 1:</td>
-              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
+              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
             </tr>
             <tr>
               <td><b><xsl:value-of select="gsa:i18n ('Scan 1 started', 'Report Window')"/>:</b></td>
@@ -29315,7 +29319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/> 2:</td>
               <td>
-                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
               </td>
             </tr>
             <tr>
@@ -31090,7 +31094,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Users', 'User'),' (',gsa:i18n ('New User', 'User'),')')}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Users', 'User')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Users', 'User')}"/>
       </a>
@@ -31101,7 +31105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_user"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_user"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <xsl:if test="not (gsa:may-op ('get_roles'))">
           <input type="hidden" name="role_id_optional:1" value="--"/>
@@ -31494,7 +31498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="caller" value="{/envelope/current_page}"/>
               <input type="hidden" name="cmd" value="delete_user"/>
               <input type="hidden" name="user_id" value="{@id}"/>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Table Row')}"
                      name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Table Row')}"/>
@@ -31694,7 +31698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'User Window')"/></td>
@@ -32082,7 +32086,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="next" value="get_users"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <!-- group name is e.g. of method:ldap -->
           <input type="hidden" name="group" value="{@name}"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
