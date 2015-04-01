@@ -1,5 +1,10 @@
 2015-04-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (permission [details]): Skip the resource
+	value when there is no resource.
+
+2015-04-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:envelope-filter): Only add the space
 	when it is needed.
 

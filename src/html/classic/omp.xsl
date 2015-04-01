@@ -22583,6 +22583,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/>
             <xsl:text> </xsl:text>
             <xsl:choose>
+              <xsl:when test="string-length (resource/@id) = 0"/>
               <xsl:when test="resource/deleted != 0">
                 <b><xsl:value-of select="gsa:i18n ('Orphan', 'Permission Window')"/></b>
               </xsl:when>
