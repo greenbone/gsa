@@ -1,3 +1,8 @@
+2015-04-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c, src/gsad_omp.c, src/gsad_base.c: Use g_free() and
+	g_malloc0() instead of free(), calloc() and malloc().
+
 2015-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [section-list]): Skip "Results view"

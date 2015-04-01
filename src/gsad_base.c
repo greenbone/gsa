@@ -584,13 +584,8 @@ params_append_bin (params_t *params, const char *name, const char *chunk_data,
     {
       char *value;
 
-      value = malloc (chunk_size + 1);
-      if (value == NULL)
-        return NULL;
-      memcpy (value + chunk_offset,
-              chunk_data,
-              chunk_size);
-      value[chunk_offset + chunk_size] = '\0';
+      value = g_malloc0 (chunk_size + 1);
+      memcpy (value + chunk_offset, chunk_data, chunk_size);
 
       param = params_add (params, name, "");
       g_free (param->value);

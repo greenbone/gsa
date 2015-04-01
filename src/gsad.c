@@ -1500,9 +1500,9 @@ free_resources (void *cls, struct MHD_Connection *connection,
     }
 
   params_free (con_info->params);
-  free (con_info->cookie);
-  free (con_info->language);
-  free (con_info);
+  g_free (con_info->cookie);
+  g_free (con_info->language);
+  g_free (con_info);
   *con_cls = NULL;
 }
 
@@ -2606,14 +2606,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
       /* Returned above if package_format was NULL. */
       content_type_from_format_string (content_type, package_format);
-      free (*content_disposition);
+      g_free (*content_disposition);
       *content_disposition = g_strdup_printf
                               ("attachment; filename=openvas-lsc-target-%s.%s",
                                lsc_credential_login,
                                (strcmp (package_format, "key") == 0
                                  ? "pub"
                                  : package_format));
-      free (lsc_credential_login);
+      g_free (lsc_credential_login);
 
       return html;
     }
@@ -2761,10 +2761,10 @@ exec_omp_get (struct MHD_Connection *connection,
         return html;
 
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
-      free (*content_disposition);
+      g_free (*content_disposition);
       *content_disposition = g_strdup_printf ("attachment; filename=%s",
                                               filename);
-      free (filename);
+      g_free (filename);
 
       return html;
     }
@@ -2772,7 +2772,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "download_ssl_cert"))
     {
       *content_type = GSAD_CONTENT_TYPE_APP_KEY;
-      free (*content_disposition);
+      g_free (*content_disposition);
       *content_disposition = g_strdup_printf
                               ("attachment; filename=ssl-cert-%s.pem",
                                params_value (params, "name"));
@@ -2783,7 +2783,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "download_ca_pub"))
     {
       *content_type = GSAD_CONTENT_TYPE_APP_KEY;
-      free (*content_disposition);
+      g_free (*content_disposition);
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-ca-pub-%s.pem",
                                params_value (params, "scanner_id"));
@@ -2793,7 +2793,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "download_key_pub"))
     {
       *content_type = GSAD_CONTENT_TYPE_APP_KEY;
-      free (*content_disposition);
+      g_free (*content_disposition);
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-key-pub-%s.pem",
                                params_value (params, "scanner_id"));
@@ -3184,12 +3184,8 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
       struct gsad_connection_info *con_info;
 
       /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
-      con_info = calloc (1, sizeof (struct gsad_connection_info));
-      if (NULL == con_info)
-        return MHD_NO;
-
+      con_info = g_malloc0 (sizeof (struct gsad_connection_info));
       con_info->params = params_new ();
-
       con_info->connectiontype = 2;
 
       *con_cls = (void *) con_info;
@@ -3391,7 +3387,7 @@ file_content_response (credentials_t *credentials,
                                                 MHD_NO, MHD_YES);
       g_free (path);
       g_free (xml);
-      free (res);
+      g_free (res);
       return response;
     }
 
@@ -3445,7 +3441,7 @@ file_content_response (credentials_t *credentials,
       fclose (file);
       ret = MHD_create_response_from_data (strlen (res), (void *) res,
                                            MHD_NO, MHD_YES);
-      free (res);
+      g_free (res);
       return ret;
     }
 
@@ -3506,7 +3502,7 @@ handler_send_response (struct MHD_Connection *connection,
     {
       MHD_add_response_header (response, "Content-Disposition",
                                content_disposition);
-      free (content_disposition);
+      g_free (content_disposition);
     }
   MHD_queue_response (connection, http_response_code, response);
   MHD_destroy_response (response);
@@ -3603,12 +3599,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       /* First call for this request, a GET. */
 
       /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
-      con_info = calloc (1, sizeof (struct gsad_connection_info));
-      if (NULL == con_info)
-        return MHD_NO;
-
+      con_info = g_malloc0 (sizeof (struct gsad_connection_info));
       con_info->params = params_new ();
-
       con_info->connectiontype = 2;
 
       *con_cls = (void *) con_info;
@@ -3784,7 +3776,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
-          free (res);
+          g_free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3852,7 +3844,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
-          free (res);
+          g_free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3898,7 +3890,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
-          free (res);
+          g_free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3961,7 +3953,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               g_free (content_type_string);
             }
 
-          free (res);
+          g_free (res);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
       else if (!strncmp (&url[0], "/system_report/",
@@ -4001,7 +3993,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
-          free (res);
+          g_free (res);
         }
       else if (!strncmp (&url[0], "/help/",
                          strlen ("/help/"))) /* flawfinder: ignore,
@@ -4070,7 +4062,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                 "/help/contents.html");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
-          free (res);
+          g_free (res);
         }
       else
         {
@@ -4124,9 +4116,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           struct gsad_connection_info *con_info;
 
           /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
-          con_info = calloc (1, sizeof (struct gsad_connection_info));
-          if (NULL == con_info)
-            return MHD_NO;
+          con_info = g_malloc0 (sizeof (struct gsad_connection_info));
 
           con_info->postprocessor =
             MHD_create_post_processor (connection, POST_BUFFER_SIZE,

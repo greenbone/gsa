@@ -2010,7 +2010,7 @@ export_resource (const char *type, credentials_t * credentials,
 
   if (resource_entity == NULL)
     {
-      free (content);
+      g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2027,7 +2027,7 @@ export_resource (const char *type, credentials_t * credentials,
                            &fname_format);
   if (ret)
     {
-      free (content);
+      g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2185,7 +2185,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                            &fname_format);
   if (ret)
     {
-      free (content);
+      g_free (content);
       free_entity (entity);
       openvas_server_close (socket, session);
       switch (ret)
@@ -11931,7 +11931,7 @@ get_report_section (credentials_t * credentials, params_t *params,
         }
 
       g_string_append (xml, response);
-      free (response);
+      g_free (response);
     }
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
