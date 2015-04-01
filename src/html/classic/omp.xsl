@@ -22459,6 +22459,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="resource/trash = '1'">
           <xsl:value-of select="resource/name"/> (<xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/> <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>)
         </xsl:when>
+        <xsl:when test="boolean (resource/permissions) and count (resource/permissions/permission) = 0">
+          <xsl:value-of select="resource/name"/>
+        </xsl:when>
         <xsl:when test="gsa:may-op (concat ('get_', resource/type, 's'))">
           <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('Details', 'Table Row')}">
@@ -22477,6 +22480,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="subject/trash = '1'">
           <xsl:value-of select="subject/name"/> (<xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/> <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>)
+        </xsl:when>
+        <xsl:when test="boolean (subject/permissions) and count (subject/permissions/permission) = 0">
+          <xsl:value-of select="subject/name"/>
         </xsl:when>
         <xsl:when test="gsa:may-op (concat ('get_', subject/type, 's'))">
           <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
@@ -22549,6 +22555,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="subject/trash = '1'">
                 <xsl:value-of select="subject/name"/> (<xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/> <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>)
               </xsl:when>
+              <xsl:when test="boolean (subject/permissions) and count (subject/permissions/permission) = 0">
+                <xsl:value-of select="subject/name"/> (Unavailable, UUID: <xsl:value-of select="subject/@id"/>)
+              </xsl:when>
               <xsl:when test="gsa:may-op (concat ('get_', subject/type, 's'))">
                 <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/@id}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Details', 'Table Row')}">
@@ -22572,6 +22581,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:when test="resource/trash = '1'">
                 <xsl:value-of select="resource/name"/> (<xsl:value-of select="gsa:i18n ('in ', 'Trashcan')"/> <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('trashcan', 'Trashcan')"/></a>)
+              </xsl:when>
+              <xsl:when test="boolean (resource/permissions) and count (resource/permissions/permission) = 0">
+                <xsl:value-of select="resource/name"/> (Unavailable, UUID: <xsl:value-of select="resource/@id"/>)
               </xsl:when>
               <xsl:when test="gsa:may-op (concat ('get_', resource/type, 's'))">
                 <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
