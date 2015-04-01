@@ -1,5 +1,11 @@
 2015-04-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Post-release version bump.
+
+	* CMakeLists.txt, src/html/classic/help.xsl: 6.0.2
+
+2015-04-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Preparing the gsa 6.0.1 release.
 
 	* CHANGES: Updated.
