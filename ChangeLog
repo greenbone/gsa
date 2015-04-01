@@ -1,5 +1,11 @@
 2015-04-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Post branch version bump.
+
+	* src/html/classic/help.xsl, CMakeLists.txt: Set version to 6.1+beta1.
+
+2015-04-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Post-release version bump.
 
 	* CMakeLists.txt, src/html/classic/help.xsl: 6.0.2
