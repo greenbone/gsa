@@ -1,3 +1,28 @@
+gsa 6.0.1 (2015-04-01)
+
+This is the first maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release addresses, apart from various fixes all over the GUI, especially
+the usability improvement for powerfilters, making the less crowded with
+standard filter elements.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael Wiegand.
+
+Main changes compared to 6.0.0:
+* Moved standard keywords away from the powerfilter string to
+  make the text entry less crowded. The elements are still visible
+  below the entry field and can be specified in the powerfilter
+  in case these should be changed.
+* Allow access to the Create Permissions page even if the user has limited
+  subject access.
+* Changed connection timeout to allow for very large report downloads.
+* Improvements to the package configure and build system.
+* Various improvements to the online help.
+* Various minor bugfixes.
+
+
 gsa 6.0.0 (2015-03-17)
 
 This is the first release of the Greenbone Security Assistant (GSA) 6.0 module
