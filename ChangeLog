@@ -1,5 +1,9 @@
 2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl: Missing file from last commit.
+
+2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r22039.
 
 	* src/html/classic/omp.xsl (gsa:envelope-filter): Only add the space

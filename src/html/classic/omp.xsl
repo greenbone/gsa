@@ -69,7 +69,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN XPATH FUNCTIONS -->
 
 <func:function name="gsa:envelope-filter">
-  <func:result select="concat (/envelope/params/filter, ' ', /envelope/params/filter_extra)"/>
+  <xsl:choose>
+    <xsl:when test="string-length (/envelope/params/filter) &gt; 0 and string-length (/envelope/params/filter_extra) &gt; 0">
+      <func:result select="concat (/envelope/params/filter, ' ', /envelope/params/filter_extra)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="concat (/envelope/params/filter, /envelope/params/filter_extra)"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </func:function>
 
 <func:function name="gsa:may">
