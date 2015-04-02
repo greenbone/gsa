@@ -1,3 +1,12 @@
+2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (simple_ompf): New function.
+	(get_info): Get notes and overrides when getting a single NVT, for the
+	count links.
+
+	* src/html/classic/omp.xsl (nvt [details]): Adjust path position of
+	notes and overrides, now that the NVT comes from GET_INFO.
+
 2015-04-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (permission [details]): Skip the resource
