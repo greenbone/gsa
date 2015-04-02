@@ -19293,7 +19293,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Notes on NVT', 'NVT Window')} {name}">
-          <xsl:value-of select="count (../../get_notes_response/note)"/>
+          <xsl:value-of select="count (../../../get_notes_response/note)"/>
         </a>
       </td>
     </tr>
@@ -19302,7 +19302,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Overrides on NVT', 'NVT Window')} {name}">
-          <xsl:value-of select="count (../../get_overrides_response/override)"/>
+          <xsl:value-of select="count (../../../get_overrides_response/override)"/>
         </a>
       </td>
     </tr>

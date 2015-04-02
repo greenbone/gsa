@@ -675,6 +675,111 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
 }
 
 /**
+ * @brief Run a single OMP command, preparing a response even on error.
+ *
+ * @param[out] message_operation  Operation for error message
+ * @param[in]  credentials        Username and password for authentication.
+ * @param[out] response           Response.
+ * @param[in]  format             Command.
+ * @param[in]  ...                Arguments for format string.
+ *
+ * @return 0 success, -1 internal error, 1 send error, 2 read error,
+ *         3 command failed, 4 connect error.
+ */
+static int
+simple_ompf (const gchar *message_operation, credentials_t *credentials,
+             gchar **response, const char *format, ...)
+{
+  int ret;
+  gchar *command;
+  va_list args;
+  entity_t entity;
+
+  va_start (args, format);
+  command = g_markup_vprintf_escaped (format, args);
+  va_end (args);
+
+  ret = omp (credentials, response, &entity, command);
+  g_free (command);
+  switch (ret)
+    {
+      case 0:
+        break;
+      case -1:
+        /* 'omp' set response. */
+        return 4;
+      case 1:
+        if (response)
+          {
+            gchar *message;
+            message = g_strdup_printf
+                       ("An internal error occurred while %s. "
+                        " The operation was not started."
+                        " Diagnostics: Failure to send command to manager"
+                        " daemon.",
+                        message_operation
+                         ? message_operation
+                         : "performing an operation");
+            *response = gsad_message (credentials, "Internal error",
+                                      __FUNCTION__, __LINE__,
+                                      message, "/omp?cmd=get_tasks");
+            g_free (message);
+          }
+        return 1;
+      case 2:
+        if (response)
+          {
+            gchar *message;
+            message = g_strdup_printf
+                       ("An internal error occurred while %s."
+                        " It is unclear whether the operation succeeded."
+                        " Diagnostics: Failure to receive response from manager"
+                        " daemon.",
+                        message_operation
+                         ? message_operation
+                         : "performing an operation");
+            *response = gsad_message (credentials, "Internal error",
+                                      __FUNCTION__, __LINE__,
+                                      message, "/omp?cmd=get_tasks");
+            g_free (message);
+          }
+        return 2;
+      default:
+        if (response)
+          {
+            gchar *message;
+            message = g_strdup_printf
+                       ("An internal error occurred while %s."
+                        " It is unclear whether the operation succeeded."
+                        " Diagnostics: Internal Error.",
+                        message_operation
+                         ? message_operation
+                         : "performing an operation");
+            *response = gsad_message (credentials, "Internal error",
+                                      __FUNCTION__, __LINE__,
+                                      message, "/omp?cmd=get_tasks");
+            g_free (message);
+          }
+        return -1;
+    }
+
+  switch (omp_success (entity))
+    {
+      case 0:
+        ret = 3;
+        break;
+      case 1:
+        ret = 0;
+        break;
+      default:
+        ret = -1;
+        break;
+    }
+  free_entity (entity);
+  return ret;
+}
+
+/**
  * @brief Run a single formatted OMP command.
  *
  * @param[in]  credentials    Username and password for authentication.
@@ -3973,7 +4078,7 @@ char *
 get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   char *ret;
-  GString *extra_attribs;
+  GString *extra_attribs, *extra_response;
   const char *info_type;
 
   info_type = params_value (params, "info_type");
@@ -4014,6 +4119,46 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "Diagnostics: Both ID and Name set.",
                          "/omp?cmd=get_info");
 
+  extra_response = g_string_new (extra_xml ? extra_xml : "");
+
+  if (command_enabled (credentials, "GET_NOTES")
+      && (strcasecmp (info_type, "NVT") == 0)
+      && params_value (params, "info_id"))
+    {
+      gchar *response;
+
+      if (simple_ompf ("getting SecInfo", credentials, &response,
+                       "<get_notes"
+                       " nvt_oid=\"%s\""
+                       " sort_field=\"notes.text\"/>",
+                       params_value (params, "info_id")))
+        {
+          g_string_free (extra_response, TRUE);
+          return response;
+        }
+
+      g_string_append (extra_response, response);
+    }
+
+  if (command_enabled (credentials, "GET_OVERRIDES")
+      && (strcasecmp (info_type, "NVT") == 0)
+      && params_value (params, "info_id"))
+    {
+      gchar *response;
+
+      if (simple_ompf ("getting SecInfo", credentials, &response,
+                       "<get_overrides"
+                       " nvt_oid=\"%s\""
+                       " sort_field=\"overrides.text\"/>",
+                       params_value (params, "info_id")))
+        {
+          g_string_free (extra_response, TRUE);
+          return response;
+        }
+
+      g_string_append (extra_response, response);
+    }
+
   extra_attribs = g_string_new("");
   g_string_append_printf(extra_attribs, "type=\"%s\"",
                          params_value (params, "info_type"));
@@ -4029,8 +4174,10 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
     g_string_append_printf (extra_attribs,
                             " details=\"%s\"",
                             params_value (params, "details"));
-  ret = get_many ("info", credentials, params, extra_xml, extra_attribs->str);
+  ret = get_many ("info", credentials, params, extra_response->str,
+                  extra_attribs->str);
 
+  g_string_free (extra_response, TRUE);
   g_string_free (extra_attribs, TRUE);
 
   return ret;
