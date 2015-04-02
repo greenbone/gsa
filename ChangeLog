@@ -1,5 +1,10 @@
 2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_config_nvt): Get notes and overrides, for count
+	links.
+
+2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (simple_ompf): New function.
 	(get_info): Get notes and overrides when getting a single NVT, for the
 	count links.
