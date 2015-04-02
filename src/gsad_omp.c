@@ -9913,6 +9913,65 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
     }
 
   g_string_append (xml, "</get_config_nvt_response>");
+
+  if (openvas_server_sendf (&session,
+                            "<get_notes"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"notes.text\"/>",
+                            nvt)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting list of notes. "
+                           "The current list of notes is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting list of notes. "
+                           "The current list of notes is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_overrides"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"overrides.text\"/>",
+                            nvt)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting list of overrides. "
+                           "The current list of overrides is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting list of overrides. "
+                           "The current list of overrides is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
