@@ -14513,18 +14513,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
               <select name="year">
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2012'"/>
-                  <xsl:with-param name="select-value" select="time/year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2013'"/>
-                  <xsl:with-param name="select-value" select="time/year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2014'"/>
-                  <xsl:with-param name="select-value" select="time/year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2015'"/>
                   <xsl:with-param name="select-value" select="time/year"/>
                 </xsl:call-template>
@@ -14534,6 +14522,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2017'"/>
+                  <xsl:with-param name="select-value" select="time/year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2018'"/>
+                  <xsl:with-param name="select-value" select="time/year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2019'"/>
+                  <xsl:with-param name="select-value" select="time/year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2020'"/>
                   <xsl:with-param name="select-value" select="time/year"/>
                 </xsl:call-template>
               </select>
@@ -15093,21 +15093,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="year">
                 <xsl:variable name="year"
                               select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>
-                <xsl:if test="$year &lt; 2012 or $year &gt; 2017">
+                <xsl:if test="$year &lt; 2015 or $year &gt; 2020">
                   <option value="{$year}"><xsl:value-of select="$year"/></option>
                 </xsl:if>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2012'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2013'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2014'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2015'"/>
                   <xsl:with-param name="select-value" select="$year"/>
@@ -15118,6 +15106,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2017'"/>
+                  <xsl:with-param name="select-value" select="$year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2018'"/>
+                  <xsl:with-param name="select-value" select="$year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2019'"/>
+                  <xsl:with-param name="select-value" select="$year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2020'"/>
                   <xsl:with-param name="select-value" select="$year"/>
                 </xsl:call-template>
               </select>
