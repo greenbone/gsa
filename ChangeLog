@@ -1,3 +1,8 @@
+2015-04-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-hosts-link): Prepend equals sign to
+	host search phrase to make it exact.
+
 2015-04-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (note-detailed): Grey edit and delete icons
