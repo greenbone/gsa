@@ -1,3 +1,10 @@
+2015-04-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22077.
+
+	* src/html/classic/omp.xsl (report-hosts-link): Prepend equals sign to
+	host search phrase to make it exact.
+
 2015-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22055.
