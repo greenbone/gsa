@@ -1,5 +1,12 @@
 2015-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (gsad_address_init): Set address family to AF_INET6 in ANY
+	case.
+	(start_http_daemon, start_https_daemon): Use MHD_USE_DUAL_STACK instead
+	of MHD_USE_IPv6.
+
+2015-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (start_http_daemon, start_https_daemon): Adjust
 	libmicrohttpd call to listen on IPv4 or IPv6 depending on address type.
 	(gsad_address_set_port, gsad_address_init): New functions.

@@ -4465,7 +4465,7 @@ start_http_daemon (int port,
   int ipv6_flag;
 
   if (address.ss_family == AF_INET6)
-    ipv6_flag = MHD_USE_IPv6;
+    ipv6_flag = MHD_USE_DUAL_STACK;
   else
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
@@ -4483,7 +4483,7 @@ start_https_daemon (int port, const char *key, const char *cert,
   int ipv6_flag;
 
   if (address.ss_family == AF_INET6)
-    ipv6_flag = MHD_USE_IPv6;
+    ipv6_flag = MHD_USE_DUAL_STACK;
   else
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
@@ -4550,6 +4550,7 @@ gsad_address_init (const char *address_str, int port)
     {
       gsad_address->sin_addr.s_addr = INADDR_ANY;
       gsad_address6->sin6_addr = in6addr_any;
+      address.ss_family = AF_INET6;
     }
   return 0;
 }
