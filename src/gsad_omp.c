@@ -1436,6 +1436,43 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources");
     }
 
+  /* Get permissions */
+
+  g_string_append (xml, "<permissions>");
+
+  if (openvas_server_sendf (&session,
+                            "<get_permissions"
+                            " filter=\"name:^.*(%s)s?$"
+                            "          and resource_uuid=%s"
+                            "          first=1 rows=-1\"/>",
+                            type,
+                            id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting permissions list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting permissions list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  g_string_append (xml, "</permissions>");
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);

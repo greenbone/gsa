@@ -1,3 +1,39 @@
+2015-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add a new permissions window to the Target details page and generally
+	allow the "New Permission" and "Edit Permission" pages to go to a
+	details page after submitting.
+
+	* src/gsad_omp.c (get_one): Get and add permissions for the resource.
+
+	* src/gsad.c (init_validator): Add "restrict_type" as alias of
+	"resource_type".
+
+	* src/html/classic/help.xsl (resource_permissions.html): New template.
+
+	* src/html/classic/help.xsl (html-gsa-logo): Add indicators for
+	Permission related responses to get_target page.
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Add parameters
+	next_type and next_id used for going to a details page after an action.
+	(task-permissions-window): New template. Content from previous version
+	of resource-permission-window.
+	(resource-permissions-window): Change to a permissions table using
+	the same rows as the get_permissions page. Replace the form for
+	granting permissions with a simple "New Permission" icon in the window
+	header. Add resource type text and Help button to window header.
+	(task [details]): Use task-permissions-window template instead of
+	resource-permissions-window.
+	(target [details]): Add resource permissions window.
+	(html-create-permission-form): Hide permissions unrelated to a resource
+	type if restrict_type parameter is given. Fill in resource ID if given
+	via resource_id parameter. Add resource id parameter if given by
+	next_id and next_type.
+	(permission): Add template parameters next, next_type, next_id and
+	pass them to list-window-line-icons.
+	(html-edit-permission-form): Add resource id parameter if given by
+	next_id and next_type.
+
 2015-04-09  Sven Haardiek <sven.haardiek@greenbone.net>
 
 	* gsa/src/html/classic/js/d3.v3.js: Add non-minified version of d3 for

@@ -1353,6 +1353,7 @@ init_validator ()
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
   openvas_validator_alias (validator, "pos",               "number");
+  openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");

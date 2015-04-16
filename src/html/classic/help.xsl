@@ -3232,6 +3232,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="resource_permissions.html">
+  <div class="gb_window_part_center">Help: Resource Permissions</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+      <br/>
+      <h1>Resource Permissions</h1>
+      <p>
+        The Resource Permissions window shown on details pages contains a list
+        of
+        <a href="glossary.html?token={/envelope/token}#permission">Permissions</a>
+        specific to the current resource. Its layout is the same as on to the
+        <a href="permissions.html?token={/envelope/token}">Permissions list</a>
+        page.
+      </p>
+      <h3>New Permission</h3>
+      <p>
+        The "New Permission" icon
+        <img src="/img/new.png" alt="New Permission" title="New Permission"/>
+        will open the
+        <a href="new_permission.html?token={/envelope/token}">New Permission</a>
+        page with the UUID of the current resource already filled into the form.
+      </p>
+      <p>
+        The selection of permissions will also be limited to ones relevant
+        to the current resource, with the "get" permission selected by default.
+        <br/>
+        For example, on a Target the available permissions are "delete_target",
+        "get_targets" and "modify_target", with "get_targets" preselected.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="roles.html">
   <div class="gb_window_part_center">Help: Roles
     <a href="/omp?cmd=get_roles&amp;token={/envelope/token}"
