@@ -1159,7 +1159,7 @@ init_validator ()
   /* Number is special cased in params_mhd_validate to remove the space. */
   openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
-  openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
+  openvas_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
@@ -1228,6 +1228,7 @@ init_validator ()
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");

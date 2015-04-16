@@ -1,3 +1,21 @@
+2015-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add CVE scanning.
+
+	* src/gsad.c (init_validator): Add CVE ID to OID.  Add cve_scanner_id.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Add CVE scanner case.
+
+	* src/html/classic/omp.xsl (scanner-type-name): Add CVE scanner case.
+	(task [details]): Make the config field optional.
+	(new_task, html-edit-task-scanner-disabled, html-edit-task-form): Add
+	CVE scanner case.
+	(html-create-note-form, note [details], html-create-override-form)
+	(html-edit-override-form, override [details]): Get the info_type value
+	from the NVT.  Rename Port to Location.
+	(result [result-headers], result-detailed): Add two comments.  Print
+	result as prognostic result when there's a CVE element.
+
 2015-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (gsad_address_init): Set address family to AF_INET6 in ANY

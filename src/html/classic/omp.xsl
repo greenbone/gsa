@@ -2019,6 +2019,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$type = '1'">OSP Scanner</xsl:when>
     <xsl:when test="$type = '2'">OpenVAS Scanner</xsl:when>
+    <xsl:when test="$type = '3'">CVE Scanner</xsl:when>
     <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -4076,28 +4077,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
           </tr>
-          <tr>
-            <td></td>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
-              <xsl:choose>
-                <xsl:when test="boolean (config/permissions) and count (config/permissions/permission) = 0">
-                  <xsl:text>Unavailable (</xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
-                  <xsl:text>: </xsl:text>
-                  <xsl:value-of select="config/name"/>
-                  <xsl:text>, </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="config/@id"/>
-                  <xsl:text>)</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
+          <xsl:if test="string-length (config/@id) &gt; 0">
+            <tr>
+              <td></td>
+              <td>
+                <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
+                <xsl:choose>
+                  <xsl:when test="boolean (config/permissions) and count (config/permissions/permission) = 0">
+                    <xsl:text>Unavailable (</xsl:text>
+                    <xsl:value-of select="gsa:i18n ('Name', 'Window')"/>
+                    <xsl:text>: </xsl:text>
                     <xsl:value-of select="config/name"/>
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
+                    <xsl:text>, </xsl:text>
+                    <xsl:value-of select="gsa:i18n ('ID', 'Window')"/>: <xsl:value-of select="config/@id"/>
+                    <xsl:text>)</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="config/name"/>
+                    </a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
           <xsl:if test="config/type = 0">
             <xsl:if test="gsa:may-op ('get_slaves')">
               <tr>
@@ -5640,6 +5643,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
+        <xsl:if test="count(get_scanners_response/scanner[type = 3])">
+          <tr>
+            <td>
+              <input type="radio" name="scanner_type" value="3"/>
+            </td>
+            <td>
+              <xsl:call-template name="scanner-type-name">
+                <xsl:with-param name="type" select="3"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:variable name="cve_scanner_id" select="cve_scanner_id"/>
+              <select name="cve_scanner_id">
+                <xsl:for-each select="get_scanners_response/scanner[type = 3]">
+                  <xsl:choose>
+                    <xsl:when test="@id = $cve_scanner_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
@@ -5947,6 +5977,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
       <input type="hidden" name="scanner_id" value="0"/>
       <input type="hidden" name="osp_scanner_id" value="0"/>
+      <input type="hidden" name="cve_scanner_id" value="0"/>
       <xsl:variable name="scanner_id">
         <xsl:choose>
           <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
@@ -6484,8 +6515,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </xsl:variable>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
+
+          <!-- Name. -->
           <xsl:call-template name="html-edit-task-name"/>
+
+          <!-- Comment. -->
           <xsl:call-template name="html-edit-task-comment"/>
+
+          <!-- FIX more. -->
           <xsl:choose>
             <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
               <input type="hidden" name="target_id" value="--"/>
@@ -6545,6 +6582,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="html-edit-task-config">
               <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
               <xsl:with-param name="type">1</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="html-edit-task-scanner">
+              <xsl:with-param name="title">
+                <xsl:call-template name="scanner-type-name">
+                  <xsl:with-param name="type" select="3"/>
+                </xsl:call-template>
+              </xsl:with-param>
+              <xsl:with-param name="type">3</xsl:with-param>
+              <xsl:with-param name="param_name">cve_scanner_id</xsl:with-param>
             </xsl:call-template>
           </table>
         </xsl:if>
@@ -19779,12 +19825,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Note Window')"/>
                     </xsl:when>
                     <xsl:when test="string-length($nvt/name) &gt; $max">
-                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <xsl:value-of select="$nvt/name"/>
                       </a>
                     </xsl:otherwise>
@@ -19868,7 +19914,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              <xsl:value-of select="gsa:i18n ('Port', 'Window')"/>
+              <xsl:value-of select="gsa:i18n ('Location', 'Window')"/>
             </td>
             <td>
               <xsl:choose>
@@ -20525,12 +20571,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', '')"/>
               </xsl:when>
               <xsl:when test="string-length(nvt/name) &gt; $max">
-                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type={nvt/type}&amp;info_id={nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type={nvt/type}&amp;info_id={nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
                 </a>
               </xsl:otherwise>
@@ -20818,12 +20864,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
                     </xsl:when>
                     <xsl:when test="string-length($nvt/name) &gt; $max">
-                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
                         <xsl:value-of select="$nvt/name"/>
                       </a>
                     </xsl:otherwise>
@@ -20907,7 +20953,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td valign="top" width="125">
-              <xsl:value-of select="gsa:i18n ('Port', 'Window')"/>
+              <xsl:value-of select="gsa:i18n ('Location', 'Window')"/>
             </td>
             <td>
               <xsl:choose>
@@ -21153,12 +21199,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
                 </xsl:when>
                 <xsl:when test="string-length($nvt/name) &gt; $max">
-                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;info_id={$nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                     <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;info_id={$nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                     <xsl:value-of select="$nvt/name"/>
                   </a>
                 </xsl:otherwise>
@@ -21711,12 +21757,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Override Window')"/>
               </xsl:when>
               <xsl:when test="string-length(nvt/name) &gt; $max">
-                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type={nvt/type}&amp;info_id={nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
+                <a href="?cmd=get_info&amp;info_type={nvt/type}&amp;info_id={nvt/@oid}&amp;details=1&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
                 </a>
               </xsl:otherwise>
@@ -25838,6 +25884,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="first-row"/>
   <xsl:param name="collapse-details-button"/>
 
+  <!-- Header line. -->
+
   <xsl:if test="$first-row &gt; 0">
     <tr class="gbntablehead2">
       <td>
@@ -25974,6 +26022,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
+  <!-- Result. -->
+
   <tr class="{$header_style} {gsa:table-row-class($class)}">
     <td> <!-- Vulnerability -->
       <div class="float_right">
@@ -26025,7 +26075,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="$prognostic=1">
+        <xsl:when test="$prognostic=1 or boolean (cve)">
           <xsl:call-template name="get_info_cve_lnk">
             <xsl:with-param name="cve" select="cve/@id"/>
           </xsl:call-template>
@@ -26162,7 +26212,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td> <!-- Location -->
       <xsl:choose>
-        <xsl:when test="$prognostic=1">
+        <xsl:when test="$prognostic=1 or boolean (cve)">
           <xsl:call-template name="get_info_cpe_lnk">
             <xsl:with-param name="cpe" select="cve/cpe/@id"/>
           </xsl:call-template>
@@ -26662,9 +26712,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="collapse-details-button"/>
   <xsl:param name="result-body">1</xsl:param>
 
-
   <a class="anchor" name="result-{@id}"/>
 
+<!-- FIX not very obvious that this only generates for the first result -->
+<!-- FIX not just headers, actually the results -->
   <xsl:apply-templates select="." mode="result-headers">
     <xsl:with-param name="note-buttons" select="$note-buttons"/>
     <xsl:with-param name="override-buttons" select="$override-buttons"/>
@@ -26680,7 +26731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
       <xsl:with-param name="show-overrides" select="$show-overrides"/>
-      <xsl:with-param name="prognostic" select="$prognostic"/>
+      <xsl:with-param name="prognostic" select="$prognostic or boolean (cve)"/>
     </xsl:apply-templates>
   </xsl:if>
 </xsl:template>
