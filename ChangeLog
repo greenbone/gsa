@@ -1,5 +1,10 @@
 2015-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_task): Correct manager response error message of
+	the get_permissions request.
+
+2015-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add a new permissions window to the Target details page and generally
 	allow the "New Permission" and "Edit Permission" pages to go to a
 	details page after submitting.
