@@ -1,3 +1,11 @@
+2015-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (start_http_daemon, start_https_daemon): Adjust
+	libmicrohttpd call to listen on IPv4 or IPv6 depending on address type.
+	(gsad_address_set_port, gsad_address_init): New functions.
+	(main): Refactor code to use gsad_address_set_port() and
+	gsad_address_init() adequately.
+
 2015-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Correct manager response error message of
