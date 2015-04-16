@@ -1,5 +1,18 @@
 2015-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Try make the result code clearer.
+
+	* src/html/classic/omp.xsl (html-edit-task-form): Add comments to make
+	it easier to find the parts.
+	(result [result-headers]): Remove the row part, so it just generates the
+	header.
+	(result [result-row]): New template.  Body is the row generation from
+	result-headers mode.
+	(result-detailed): Generate the headers separately and add comments, so
+	that it is clearer what is actually generated here.
+
+2015-04-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add CVE scanning.
 
 	* src/gsad.c (init_validator): Add CVE ID to OID.  Add cve_scanner_id.

@@ -6469,6 +6469,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-form">
   <div class="gb_window">
+
+    <!-- Header. -->
+
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Task', 'Task')"/>
@@ -6479,6 +6482,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         select="commands_response/get_tasks_response/task/@id"/>
       </xsl:call-template>
     </div>
+
+    <!-- Form. -->
+
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -6522,14 +6528,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <!-- Comment. -->
           <xsl:call-template name="html-edit-task-comment"/>
 
-          <!-- FIX more. -->
           <xsl:choose>
             <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+
+              <!-- Container -->
+
               <input type="hidden" name="target_id" value="--"/>
               <input type="hidden" name="cmd" value="save_container_task"/>
               <xsl:call-template name="html-edit-task-scan-options"/>
             </xsl:when>
             <xsl:otherwise>
+
+              <!-- Regular task.  Alterable. -->
+
               <xsl:call-template name="html-edit-task-target"/>
               <xsl:call-template name="html-edit-task-alert"/>
               <xsl:call-template name="html-edit-task-schedule"/>
@@ -6547,6 +6558,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </table>
         <xsl:if test="$new_task != 0">
+
+          <!-- Regular task.  Immutable. -->
+
           <table>
             <tr>
               <td>
@@ -6594,6 +6608,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </table>
         </xsl:if>
+
+        <!-- Submit button. -->
+
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td colspan="2" style="text-align:right;">
@@ -6605,6 +6622,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </form>
     </div>
   </div>
+
+  <!-- Import Report window. -->
+
   <xsl:if test="commands_response/get_tasks_response/task/target/@id = '' and gsa:may-op ('create_report')">
     <br/>
     <div class="gb_window">
@@ -25881,134 +25901,140 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
-  <xsl:param name="first-row"/>
   <xsl:param name="collapse-details-button"/>
 
   <!-- Header line. -->
 
-  <xsl:if test="$first-row &gt; 0">
-    <tr class="gbntablehead2">
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'vulnerability'"/>
-              <xsl:with-param name="capital-name" select="'Vulnerability'"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Vulnerability', 'Result Window')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="$collapse-details-button &gt; 0">
-          <div class="float_right">
-            <xsl:apply-templates select="../../." mode="result-details-icon"/>
-          </div>
-        </xsl:if>
-      </td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'solution_type'"/>
-              <xsl:with-param name="capital-name" select="'Solution type'"/>
-              <xsl:with-param name="image" select="'/img/solution_type.png'"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <img src="/img/solution_type.png" alt="{gsa:i18n ('Solution type', 'Result Window')}" title="{gsa:i18n ('Solution type', 'Result Window')}"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'severity'"/>
-              <xsl:with-param name="capital-name" select="'Severity'"/>
-            </xsl:apply-templates>
-            <div class="float_right">
-              <xsl:apply-templates select="../../." mode="result-overrides-icon"/>
-            </div>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Severity', 'Result Window')"/>
-            <div style="float: right; display: inline">
-              <form method="get" action="" enctype="multipart/form-data">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_result"/>
-                <input type="hidden" name="result_id" value="{@id}"/>
-                <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
-                <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
-                <input type="hidden" name="filter" value="{filters/term}"/>
-                <xsl:choose>
-                  <xsl:when test="/envelope/params/apply_overrides = 0">
-                    <input type="hidden" name="apply_overrides" value="1"/>
-                    <input type="image" name="No Overrides" value="No Overrides"
-                           src="/img/overrides_disabled.png"
-                           alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="apply_overrides" value="0"/>
-                    <input type="image" name="Overrides are Applied"
-                           value="Overrides are Applied"
-                           src="/img/overrides_enabled.png"
-                           alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                           style="margin-left:3px;margin-right:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </form>
-            </div>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'qod'"/>
-              <xsl:with-param name="capital-name" select="'QoD'"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('QoD', 'Result')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'host'"/>
-              <xsl:with-param name="capital-name" select="'Host'"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="$collapse-details-button &gt; 0">
-            <xsl:apply-templates select="../../." mode="result-header">
-              <xsl:with-param name="name" select="'location'"/>
-              <xsl:with-param name="capital-name" select="'Location'"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Location', 'Result Window')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-      <xsl:if test="$prognostic != 1">
-        <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Result Window')"/></td>
+  <tr class="gbntablehead2">
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'vulnerability'"/>
+            <xsl:with-param name="capital-name" select="'Vulnerability'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Vulnerability', 'Result Window')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="$collapse-details-button &gt; 0">
+        <div class="float_right">
+          <xsl:apply-templates select="../../." mode="result-details-icon"/>
+        </div>
       </xsl:if>
-    </tr>
-  </xsl:if>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'solution_type'"/>
+            <xsl:with-param name="capital-name" select="'Solution type'"/>
+            <xsl:with-param name="image" select="'/img/solution_type.png'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/solution_type.png" alt="{gsa:i18n ('Solution type', 'Result Window')}" title="{gsa:i18n ('Solution type', 'Result Window')}"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'severity'"/>
+            <xsl:with-param name="capital-name" select="'Severity'"/>
+          </xsl:apply-templates>
+          <div class="float_right">
+            <xsl:apply-templates select="../../." mode="result-overrides-icon"/>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Severity', 'Result Window')"/>
+          <div style="float: right; display: inline">
+            <form method="get" action="" enctype="multipart/form-data">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_result"/>
+              <input type="hidden" name="result_id" value="{@id}"/>
+              <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
+              <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
+              <input type="hidden" name="filter" value="{filters/term}"/>
+              <xsl:choose>
+                <xsl:when test="/envelope/params/apply_overrides = 0">
+                  <input type="hidden" name="apply_overrides" value="1"/>
+                  <input type="image" name="No Overrides" value="No Overrides"
+                         src="/img/overrides_disabled.png"
+                         alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                         title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                         style="margin-left:3px;margin-right:3px;"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="apply_overrides" value="0"/>
+                  <input type="image" name="Overrides are Applied"
+                         value="Overrides are Applied"
+                         src="/img/overrides_enabled.png"
+                         alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                         title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                         style="margin-left:3px;margin-right:3px;"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </form>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'qod'"/>
+            <xsl:with-param name="capital-name" select="'QoD'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('QoD', 'Result')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'host'"/>
+            <xsl:with-param name="capital-name" select="'Host'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="$collapse-details-button &gt; 0">
+          <xsl:apply-templates select="../../." mode="result-header">
+            <xsl:with-param name="name" select="'location'"/>
+            <xsl:with-param name="capital-name" select="'Location'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Location', 'Result Window')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <xsl:if test="$prognostic != 1">
+      <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Result Window')"/></td>
+    </xsl:if>
+  </tr>
+</xsl:template>
+
+<xsl:template match="result" mode="result-row">
+  <xsl:param name="note-buttons"/>
+  <xsl:param name="override-buttons"/>
+  <xsl:param name="result-details"/>
+  <xsl:param name="prognostic"/>
+  <xsl:param name="collapse-details-button"/>
+
   <xsl:variable name="class">
     <xsl:choose>
         <xsl:when test="/envelope/params/details &gt; 0 or /envelope/params/result_id or /envelope/params/cmd != 'get_report' and /envelope/params/cmd != 'get_report_section'">-1</xsl:when>
@@ -26714,16 +26740,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <a class="anchor" name="result-{@id}"/>
 
-<!-- FIX not very obvious that this only generates for the first result -->
-<!-- FIX not just headers, actually the results -->
-  <xsl:apply-templates select="." mode="result-headers">
+  <!-- The headers, if this is the first row. -->
+
+  <xsl:if test="$show-header &gt; 0">
+    <xsl:apply-templates select="." mode="result-headers">
+      <xsl:with-param name="note-buttons" select="$note-buttons"/>
+      <xsl:with-param name="override-buttons" select="$override-buttons"/>
+      <xsl:with-param name="result-details" select="$result-details"/>
+      <xsl:with-param name="prognostic" select="$prognostic"/>
+      <xsl:with-param name="collapse-details-button" select="$collapse-details-button"/>
+    </xsl:apply-templates>
+  </xsl:if>
+
+  <!-- The result row of the table. -->
+
+  <xsl:apply-templates select="." mode="result-row">
     <xsl:with-param name="note-buttons" select="$note-buttons"/>
     <xsl:with-param name="override-buttons" select="$override-buttons"/>
     <xsl:with-param name="result-details" select="$result-details"/>
     <xsl:with-param name="prognostic" select="$prognostic"/>
-    <xsl:with-param name="first-row" select="$show-header"/>
     <xsl:with-param name="collapse-details-button" select="$collapse-details-button"/>
   </xsl:apply-templates>
+
+  <!-- The detailed block under result row, if requested.  Summary, Notes... -->
 
   <xsl:if test="$result-body &gt; 0">
     <xsl:apply-templates select="." mode="result-body">
