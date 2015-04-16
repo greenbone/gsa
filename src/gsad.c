@@ -177,7 +177,7 @@ struct MHD_Daemon *gsad_daemon;
 /**
  * @brief The IP address of this program, "the GSAD".
  */
-struct sockaddr_in gsad_address;
+struct sockaddr_storage address;
 
 /**
  * @brief Location for redirection server.
@@ -4461,10 +4461,16 @@ start_http_daemon (int port,
                                 const char *, const char *, const char *,
                                 size_t *, void **))
 {
+  int ipv6_flag;
+
+  if (address.ss_family == AF_INET6)
+    ipv6_flag = MHD_USE_DUAL_STACK;
+  else
+    ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, port, NULL, NULL,
-           handler, NULL, MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-           MHD_OPTION_SOCK_ADDR, &gsad_address,
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | ipv6_flag, port,
+           NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
+           free_resources, NULL, MHD_OPTION_SOCK_ADDR, &address,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
@@ -4473,12 +4479,19 @@ static struct MHD_Daemon *
 start_https_daemon (int port, const char *key, const char *cert,
                     const char *priorities, const char *dh_params)
 {
+  int ipv6_flag;
+
+  if (address.ss_family == AF_INET6)
+    ipv6_flag = MHD_USE_DUAL_STACK;
+  else
+    ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL, port,
-           NULL, NULL, &request_handler, NULL,
-           MHD_OPTION_HTTPS_MEM_KEY, key, MHD_OPTION_HTTPS_MEM_CERT, cert,
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL
+           | ipv6_flag, port, NULL, NULL, &request_handler, NULL,
+           MHD_OPTION_HTTPS_MEM_KEY, key,
+           MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-           MHD_OPTION_SOCK_ADDR, &gsad_address,
+           MHD_OPTION_SOCK_ADDR, &address,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
            MHD_OPTION_HTTPS_PRIORITIES, priorities,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
@@ -4488,6 +4501,57 @@ start_https_daemon (int port, const char *key, const char *cert,
            dh_params,
 #endif
            MHD_OPTION_END);
+}
+
+/**
+ * @brief Set port to listen on.
+ *
+ * @param[in]  port             Port to listen on.
+ */
+static void
+gsad_address_set_port (int port)
+{
+  struct sockaddr_in *gsad_address = (struct sockaddr_in *) &address;
+  struct sockaddr_in6 *gsad_address6 = (struct sockaddr_in6 *) &address;
+
+  gsad_address->sin_port = htons (port);
+  gsad_address6->sin6_port = htons (port);
+}
+
+/**
+ * @brief Initalizes the address to listen on.
+ *
+ * @param[in]  address_str      Address to listen on.
+ * @param[in]  port             Port to listen on.
+ *
+ * @return 0 on success, 1 on failure.
+ */
+static int
+gsad_address_init (const char *address_str, int port)
+{
+  struct sockaddr_in *gsad_address = (struct sockaddr_in *) &address;
+  struct sockaddr_in6 *gsad_address6 = (struct sockaddr_in6 *) &address;
+
+  gsad_address_set_port (port);
+  if (address_str)
+    {
+      if (inet_pton (AF_INET6, address_str, &gsad_address6->sin6_addr) > 0)
+        address.ss_family = AF_INET6;
+      else if (inet_pton (AF_INET, address_str, &gsad_address->sin_addr) > 0)
+        address.ss_family = AF_INET;
+      else
+        {
+          g_warning ("Failed to create GSAD address %s", address_str);
+          return 1;
+        }
+    }
+  else
+    {
+      gsad_address->sin_addr.s_addr = INADDR_ANY;
+      gsad_address6->sin6_addr = in6addr_any;
+      address.ss_family = AF_INET6;
+    }
+  return 0;
 }
 
 /**
@@ -4805,23 +4869,13 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  gsad_address.sin_family = AF_INET;
-  gsad_address.sin_port = htons (gsad_port);
-  if (gsad_address_string)
-    {
-      if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
-        {
-          g_warning ("Failed to create GSAD address %s", gsad_address_string);
-          return 1;
-        }
-    }
-  else
-    gsad_address.sin_addr.s_addr = INADDR_ANY;
+  if (gsad_address_init (gsad_address_string, gsad_port))
+    return 1;
   if (redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
 
-      gsad_address.sin_port = htons (gsad_redirect_port);
+      gsad_address_set_port (gsad_redirect_port);
       gsad_daemon = start_http_daemon (gsad_redirect_port, redirect_handler);
 
       if (gsad_daemon == NULL)
@@ -4839,11 +4893,6 @@ main (int argc, char **argv)
     {
       omp_init (gsad_manager_address_string, gsad_manager_port);
 
-
-      tracef ("   GSAD will bind to address %s port %i\n",
-              gsad_address_string ? gsad_address_string : "*",
-              ntohs (gsad_address.sin_port));
-
       /* Start the real server. */
       if (http_only)
         {
@@ -4853,8 +4902,7 @@ main (int argc, char **argv)
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
-              gsad_address.sin_port = htons (gsad_port);
-
+              gsad_address_set_port (gsad_port);
               gsad_daemon = start_http_daemon (gsad_port, request_handler);
             }
         }
@@ -4906,7 +4954,7 @@ main (int argc, char **argv)
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
-              gsad_address.sin_port = htons (gsad_port);
+              gsad_address_set_port (gsad_port);
               gsad_daemon = start_https_daemon
                              (gsad_port, ssl_private_key, ssl_certificate,
                               gnutls_priorities, dh_params);
