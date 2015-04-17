@@ -1,3 +1,29 @@
+gsa 5.0.7 (2015-04-17)
+
+This is the seventh maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release adds support for listening ofnIPv6 addresses and allows full port
+strings for notes and overrides. It improves parameter handling when saving
+targets or searching for hosts. It removes the HTTP connection timeout
+introduced in the last release since the timeout interfered with operations
+taking a long time.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell and Timo Pollmeier.
+
+Main changes since 5.0.6:
+* Support for listening on IPv6 addresses has been added. If built with
+  libmicrohttpd 0.9.28 or newer, GSA will do dual stack listening.
+* GSA now accepts full port strings for notes and overrides.
+* Ensure that parameters are correctly escaped when saving targets.
+* Ensure exact search is used when searching for hosts.
+* The connection timeout introduced in 5.0.7 has been removed again.
+* Documentation has been updated.
+
+
 gsa 5.0.6 (2015-03-04)
 
 This is the sixth maintenance release of the Greenbone Security Assistant (GSA)
