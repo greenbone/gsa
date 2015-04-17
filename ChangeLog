@@ -1,3 +1,8 @@
+2015-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (start_http_daemon, start_https_daemon): Use MHD_USE_IPv6
+	instead of MHD_USE_DUAL_STACK with older libmicrohttpd versions.
+
 2015-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r22122 and r22128.
