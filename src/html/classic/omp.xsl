@@ -26101,9 +26101,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="$prognostic=1 or boolean (cve)">
+        <xsl:when test="$prognostic=1 or type = 'cve'">
           <xsl:call-template name="get_info_cve_lnk">
-            <xsl:with-param name="cve" select="cve/@id"/>
+            <xsl:with-param name="cve" select="nvt/@oid"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="nvt/@oid = 0">
@@ -26157,8 +26157,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="severity_title">
         <xsl:choose>
           <xsl:when test="$prognostic=1">
-            <xsl:if test="string-length(cve/cvss_base) &gt; 0">
-              <xsl:value-of select="cve/cvss_base"/>
+            <xsl:if test="string-length(nvt/cvss_base) &gt; 0">
+              <xsl:value-of select="nvt/cvss_base"/>
             </xsl:if>
           </xsl:when>
         </xsl:choose>
@@ -26203,9 +26203,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="title" select="$severity_title"/>
           </xsl:call-template>
         </xsl:when>
-        <xsl:when test="string-length (cve/cvss_base) &gt; 0">
+        <xsl:when test="string-length (nvt/cvss_base) &gt; 0">
           <xsl:call-template name="severity-bar">
-            <xsl:with-param name="cvss" select="cve/cvss_base"/>
+            <xsl:with-param name="cvss" select="nvt/cvss_base"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -26238,9 +26238,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td> <!-- Location -->
       <xsl:choose>
-        <xsl:when test="$prognostic=1 or boolean (cve)">
+        <xsl:when test="$prognostic=1 or type = 'cve'">
           <xsl:call-template name="get_info_cpe_lnk">
-            <xsl:with-param name="cpe" select="cve/cpe/@id"/>
+            <xsl:with-param name="cpe" select="nvt/cpe/@id"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -26439,7 +26439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <div class="result_section">
         <xsl:choose>
-          <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0) or (severity &gt; 0)">
+          <xsl:when test="(nvt/cvss_base &gt; 0) or (severity &gt; 0)">
             <b><xsl:value-of select="gsa:i18n ('Vulnerability Detection Method', 'Result Window')"/></b>
           </xsl:when>
           <xsl:otherwise>
@@ -26461,7 +26461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:when test="$prognostic=1">
               <xsl:call-template name="get_info_cve_lnk">
-                <xsl:with-param name="cve" select="cve/@id"/>
+                <xsl:with-param name="cve" select="nvt/@oid"/>
               </xsl:call-template>
             </xsl:when>
             <xsl:when test="string-length(nvt/@oid) &gt; 1 and starts-with(nvt/@oid, '1.3.6.1.4.1.25623.1.0.')">
@@ -26770,7 +26770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
       <xsl:with-param name="show-overrides" select="$show-overrides"/>
-      <xsl:with-param name="prognostic" select="$prognostic or boolean (cve)"/>
+      <xsl:with-param name="prognostic" select="$prognostic or type = 'cve'"/>
     </xsl:apply-templates>
   </xsl:if>
 </xsl:template>
@@ -28236,10 +28236,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td style="text-align:right">
               <xsl:for-each select="../results/result[host = $current_host]">
-                <xsl:sort data-type="number" select="cve/cvss_base" order="descending"/>
+                <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
                 <xsl:if test="position() = 1">
                   <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="cve/cvss_base"/>
+                    <xsl:with-param name="cvss" select="nvt/cvss_base"/>
                   </xsl:call-template>
                 </xsl:if>
               </xsl:for-each>
