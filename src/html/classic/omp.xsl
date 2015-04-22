@@ -16105,6 +16105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Scanner'"/>
         <xsl:with-param name="type" select="'scanner'"/>
+        <xsl:with-param name="grey-clone" select="type = 3"/>
       </xsl:call-template>
       <xsl:call-template name="scanner-icons">
         <xsl:with-param name="scanner_id" select="@id"/>
@@ -16126,11 +16127,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Host', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="host"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="type = 3">
+                N/A <i>(builtin scanner)</i>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="host"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Port', 'Scanner Window')"/>:</td>
-          <td><xsl:value-of select="port"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="type = 3">
+                N/A <i>(builtin scanner)</i>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="port"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Type', 'Scanner Window')"/>:</td>
@@ -29350,18 +29369,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     style="margin-left:3px;">
     <img src="/img/verify.png" border="0" alt="{gsa:i18n ('Verify Scanner', 'Scanner Table Row')}"/>
   </a>
-  <a href="/omp?cmd=download_key_pub&amp;scanner_id={$scanner_id}&amp;key_pub={str:encode-uri($key_pub, true ())}&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"
-     style="margin-left:3px;">
-    <img src="/img/key.png" border="0"
-         alt="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"/>
-  </a>
-  <a href="/omp?cmd=download_ca_pub&amp;scanner_id={$scanner_id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"
-     style="margin-left:3px;">
-    <img src="/img/key.png" border="0"
-         alt="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"/>
-  </a>
+  <xsl:if test="string-length ($key_pub) &gt; 0">
+    <a href="/omp?cmd=download_key_pub&amp;scanner_id={$scanner_id}&amp;key_pub={str:encode-uri($key_pub, true ())}&amp;token={/envelope/token}"
+       title="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"
+       style="margin-left:3px;">
+      <img src="/img/key.png" border="0"
+           alt="{gsa:i18n ('Download Certificate', 'Credential Table Row')}"/>
+    </a>
+  </xsl:if>
+  <xsl:if test="string-length ($ca_pub) &gt; 0">
+    <a href="/omp?cmd=download_ca_pub&amp;scanner_id={$scanner_id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
+       title="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"
+       style="margin-left:3px;">
+      <img src="/img/key.png" border="0"
+           alt="{gsa:i18n ('Download CA Certificate', 'Credential Table Row')}"/>
+    </a>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="download_key_pub">
