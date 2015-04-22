@@ -1,5 +1,10 @@
 2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (scanner): Blank host and port for CVE
+	scanner.
+
+2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (scanner [details]): Grey clone icon for CVE
 	scanner.  Mark host and port as N/A for CVE scanner.
 	(scanner-icons): Hide key icons if keys are empty.

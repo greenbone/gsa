@@ -16355,10 +16355,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="host"/>
+      <xsl:if test="type != 3">
+        <xsl:value-of select="host"/>
+      </xsl:if>
     </td>
     <td>
-      <xsl:value-of select="port"/>
+      <xsl:if test="type != 3">
+        <xsl:value-of select="port"/>
+      </xsl:if>
     </td>
     <td>
       <xsl:call-template name="scanner-type-name">
