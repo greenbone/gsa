@@ -1,5 +1,11 @@
 2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_permission): Get users with "get_users"
+	permission, because Manager now allows a user to create resource
+	permissions on these users.
+
+2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_note, new_override): Add port checks.
 
 2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
