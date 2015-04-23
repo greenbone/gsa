@@ -1,5 +1,10 @@
 2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (result [detailed]): Ensure the result-body prognostic
+	arg is integer.
+
+2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (scanner): Blank host and port for CVE
 	scanner.
 

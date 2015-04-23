@@ -26793,7 +26793,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
       <xsl:with-param name="show-overrides" select="$show-overrides"/>
-      <xsl:with-param name="prognostic" select="$prognostic or type = 'cve'"/>
+      <xsl:with-param name="prognostic">
+        <xsl:choose>
+          <xsl:when test="($prognostic = 1) or (type = 'cve')">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
     </xsl:apply-templates>
   </xsl:if>
 </xsl:template>
