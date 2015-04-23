@@ -12802,7 +12802,8 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
                      "<min_cvss_base>%s</min_cvss_base>",
                      oid,
                      hosts,
-                     port,
+                     /* port is NULL for CVE scan results. */
+                     port ? port : "",
                      severity,
                      task_id,
                      task_name,
@@ -13486,7 +13487,8 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
                      "<min_cvss_base>%s</min_cvss_base>",
                      oid,
                      hosts,
-                     port,
+                     /* port is NULL for CVE scan results. */
+                     port ? port : "",
                      severity,
                      task_id,
                      task_name,

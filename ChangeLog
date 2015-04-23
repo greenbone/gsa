@@ -1,5 +1,9 @@
 2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_note, new_override): Add port checks.
+
+2015-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (result [detailed]): Ensure the result-body prognostic
 	arg is integer.
 
