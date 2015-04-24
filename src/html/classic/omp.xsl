@@ -3859,6 +3859,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="task" mode="details">
   <xsl:variable name="apply-overrides" select="../apply_overrides"/>
+  <xsl:variable name="min-qod" select="/envelope/params/min_qod"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -4189,24 +4190,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Reports', 'Report')"/>:
           </td>
           <td>
-            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
             <xsl:if test="current_report/report/timestamp">
               <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task Window'), ': ')"/>
-              <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                 <xsl:call-template name="short_timestamp_current"/>
               </a>
             </xsl:if>
              <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task Window'), ': ')"/>
-             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Reports on Task', 'Task Window')} {name}">
               <xsl:value-of select="report_count/finished"/>
              </a>
              <xsl:if test="last_report/report/timestamp">
                <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task Window'), ': ')"/>
-               <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+               <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                  <xsl:call-template name="short_timestamp_last"/>
                </a>
              </xsl:if>)
@@ -5745,13 +5746,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="container">0</xsl:param>
   <xsl:param name="observed" select="0"/>
   <xsl:param name="apply_overrides" select="../../../../apply_overrides"/>
+  <xsl:param name="min_qod" select="../../filters/keywords/keyword[column='min_qod']/value"/>
   <xsl:param name="delta" select="/envelope/params/delta_report_id"/>
   <xsl:param name="task_id" select="/envelope/params/task_id"/>
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
-        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;apply_min_qod={number (string-length ($min_qod) != 0)}&amp;min_qod={$min_qod}&amp;result_hosts_only=1&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Report', @id)}">
           <xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/>
         </a>
@@ -5778,7 +5780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </td>
     <td style="max-width: 100px; overflow: hidden;">
-      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_task&amp;task_id={task/@id}&amp;overrides={../../filters/keywords/keyword[column='apply_overrides']/value}&amp;min_qod={$min_qod}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
          title="{gsa:view_details_title ('Task', task/@id)}"
          style="margin-left:3px;">
         <xsl:value-of select="task/name"/>
@@ -6752,7 +6754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}{gsa:token ()}"
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../filters/keywords/keyword[column='apply_overrides']/value}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}{gsa:token ()}"
                title="{gsa:view_details_title ('Task', name)}">
               <xsl:value-of select="name"/>
             </a>
@@ -6778,7 +6780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:variable>
           <xsl:choose>
             <xsl:when test="$current_or_last_report_id != ''">
-              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Window')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Window', '')}">
+              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;apply_min_qod={number (string-length (../filters/keywords/keyword[column='min_qod']/value) != 0)}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Window')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Window', '')}">
                 <xsl:call-template name="status_bar">
                   <xsl:with-param name="status">
                     <xsl:choose>
@@ -6827,11 +6829,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all finished reports for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK FINSISHED REPORTS SUFFIX#', 'Task Table Row', '')}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('View list of all reports for Task ', 'Task Table Row')}{name}{gsa:i18n (', including unfinished ones', 'Task Table Row')}">
                 <xsl:value-of select="report_count/text()"/>
                </a>)
@@ -6841,7 +6843,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Table Row', '')}">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;apply_min_qod={number (string-length (../filters/keywords/keyword[column='min_qod']/value) != 0)}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa:i18n ('View last report for Task ', 'Task Table Row')}{name}{gsa:i18n ('#TASK LAST REPORT SUFFIX#', 'Task Table Row', '')}">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -25834,7 +25836,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</td>
           <td>
-            <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}">
+            <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}">
               <xsl:value-of select="$task_name"/>
             </a>
           </td>
@@ -26156,7 +26158,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;min_qod={../../filters/min_qod}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}">
                 <xsl:value-of select="$vuln_name"/>
               </a>
             </xsl:otherwise>
@@ -27646,7 +27648,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li>
               <xsl:if test="$type != 'prognostic'">
                 <li class="last">
-                  <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;token={/envelope/token}">
+                  <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;min_qod={filters/min_qod}&amp;token={/envelope/token}">
                     <xsl:value-of select="concat (gsa:i18n ('Task', 'Task'), ': ', task/name)"/>
                   </a>
                 </li>
