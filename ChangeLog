@@ -1,3 +1,24 @@
+2015-04-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add a form to create permissions for the current Target and related
+	resources (Port List and LSC Credentials).
+
+	* src/gsad.c (init_validator): Add command "create_permissions" and
+	parameters "related", "include_related".
+	(params_append_mhd): Add hashtable parameter "related".
+	(exec_omp_post): Add command "create_permissions".
+	(params_append_mhd): Add hashtable parameter "related".
+
+	* src/gsad_omp.h (create_permissions_omp): New function prototype.
+
+	* src/gsad_omp.c (CHECK_OMPF_RET): New function-like macro.
+	(create_permissions_omp): New function.
+	
+	* src/html/classic/omp.xsl (resource-permissions-window): Add form to
+	create permissions for current and related resources.
+	(target [details]): Add parameter "related" for the template
+	resource-permissions-window.
+
 2015-04-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details], report, task)

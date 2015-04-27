@@ -814,6 +814,7 @@ init_validator ()
                          "|(create_note)"
                          "|(create_override)"
                          "|(create_permission)"
+                         "|(create_permissions)"
                          "|(create_port_list)"
                          "|(create_port_range)"
                          "|(create_report)"
@@ -1179,6 +1180,8 @@ init_validator ()
   openvas_validator_add (validator, "ca_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
+  openvas_validator_add (validator, "related:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "related:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
@@ -1307,6 +1310,7 @@ init_validator ()
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
+  openvas_validator_alias (validator, "include_related",   "number");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
@@ -1547,7 +1551,8 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "group_id_optional:", strlen ("group_id_optional:"))
           == 0)
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
-          == 0))
+          == 0)
+      || (strncmp (name, "related:", strlen ("related:")) == 0))
     {
       param_t *param;
       const char *colon;
@@ -2166,6 +2171,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_group)
   ELSE (create_lsc_credential)
   ELSE (create_permission)
+  ELSE (create_permissions)
   ELSE (create_port_list)
   ELSE (create_port_range)
   ELSE (create_report)
@@ -2355,7 +2361,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       || (strncmp (name, "group_id_optional:", strlen ("group_id_optional:"))
           == 0)
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
-          == 0))
+          == 0)
+      || (strncmp (name, "related:", strlen ("related:")) == 0))
     {
       param_t *param;
       const char *colon;

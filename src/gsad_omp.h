@@ -232,6 +232,7 @@ char * export_notes_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *);
 
 char * create_permission_omp (credentials_t *, params_t *);
+char * create_permissions_omp (credentials_t *, params_t *);
 char * delete_permission_omp (credentials_t *, params_t *);
 char * delete_trash_permission_omp (credentials_t *, params_t *);
 char * edit_permission_omp (credentials_t *, params_t *);

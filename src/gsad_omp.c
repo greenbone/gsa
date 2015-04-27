@@ -18025,6 +18025,254 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   return html;
 }
 
+#define CHECK_OMPF_RET \
+  switch (ret)                                                                \
+    {                                                                         \
+      case 0:                                                                 \
+      case -1:                                                                \
+        break;                                                                \
+      case 1:                                                                 \
+        return gsad_message (credentials,                                                    \
+                            "Internal error", __FUNCTION__, __LINE__,                        \
+                            "An internal error occurred while creating a permission. "       \
+                            "The permission was not created. "                               \
+                            "Diagnostics: Failure to send command to manager daemon.",       \
+                            "/omp?cmd=get_permissions");                                     \
+      case 2:                                                                                \
+        return gsad_message (credentials,                                                    \
+                            "Internal error", __FUNCTION__, __LINE__,                        \
+                            "An internal error occurred while creating a permission. "       \
+                            "It is unclear whether the permission has been created or not. " \
+                            "Diagnostics: Failure to receive response from manager daemon.", \
+                            "/omp?cmd=get_permissions");                                     \
+      default:                                                                               \
+        return gsad_message (credentials,                                                    \
+                            "Internal error", __FUNCTION__, __LINE__,                        \
+                            "An internal error occurred while creating a permission. "       \
+                            "It is unclear whether the permission has been created or not. " \
+                            "Diagnostics: Internal Error.",                                  \
+                            "/omp?cmd=get_permissions");                                     \
+    }                                                                         \
+  if (omp_success (entity))                                                   \
+    {                                                                         \
+      g_string_append (responses, response);                                  \
+      free_entity (entity);                                                   \
+      g_free (response);                                                      \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      g_string_free (responses, TRUE);                                        \
+      html = next_page_error (credentials, params, response);                 \
+      if (html == NULL)                                                       \
+        html = new_permission (credentials, params, response);                \
+      free_entity (entity);                                                   \
+      g_free (response);                                                      \
+      return html;                                                            \
+    }                                                                         \
+
+/**
+ * @brief Create multiple permission, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_permissions_omp (credentials_t *credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  GString *responses;
+  const char *permission, *comment, *resource_id, *resource_type;
+  const char *subject_id, *subject_type, *subject_name;
+  int include_related;
+
+  entity_t entity;
+
+  gchar *subject_response;
+  entity_t get_subject_entity = NULL;
+  entity_t subject_entity;
+
+  permission = params_value (params, "permission");
+  comment = params_value (params, "comment");
+  resource_id = params_value (params, "resource_id");
+  resource_type = params_value (params, "resource_type");
+  subject_type = params_value (params, "subject_type");
+  subject_name = params_value (params, "subject_name");
+
+  include_related = atoi (params_value (params, "include_related"));
+  CHECK_PARAM (params_value (params, "include_related"),
+               "Create Permission", new_permission);
+
+  CHECK_PARAM (permission, "Create Permission", new_permission);
+  CHECK_PARAM (comment, "Create Permission", new_permission);
+  CHECK_PARAM (resource_id, "Create Permission", new_permission);
+  CHECK_PARAM (subject_type, "Create Permission", new_permission);
+  CHECK_PARAM (resource_type, "Create Permission", new_permission);
+
+  if (params_given (params, "subject_name"))
+    {
+      CHECK_PARAM (subject_name, "Create Permission", new_permission);
+      subject_id = NULL;
+      ret = ompf (credentials,
+                  &subject_response,
+                  &get_subject_entity,
+                  "<get_%ss filter=\"rows=1 name=%s\">"
+                  "</get_%ss>",
+                  subject_type,
+                  subject_name,
+                  subject_type);
+
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to send command"
+                                " to manager daemon.",
+                                "/omp?cmd=get_permissions");
+          case 2:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Failure to receive response"
+                                " from manager daemon.",
+                                "/omp?cmd=get_permissions");
+          default:
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting"
+                                " the subject for a permission. "
+                                "The permission was not created. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_permissions");
+        }
+
+      subject_entity = entity_child (get_subject_entity, subject_type);
+
+      if (subject_entity)
+        subject_id = entity_attribute (subject_entity, "id");
+
+      if (subject_id == NULL)
+        {
+          gchar *msg;
+          msg = g_strdup_printf ("<gsad_msg status_text=\"Subject not found\""
+                                 "          operation=\"create_permission\">"
+                                 "Could not find a %s with name '%s'."
+                                 "</gsad_msg>",
+                                 subject_type,
+                                 subject_name ? subject_name : "");
+          return next_page (credentials, params, msg);
+        }
+    }
+  else if (strcmp (subject_type, "user") == 0)
+    subject_id = params_value (params, "user_id");
+  else if (strcmp (subject_type, "group") == 0)
+    subject_id = params_value (params, "group_id");
+  else if (strcmp (subject_type, "role") == 0)
+    subject_id = params_value (params, "role_id");
+  else
+    subject_id = NULL;
+  CHECK_PARAM (subject_id, "Create Permission", new_permission);
+
+  responses = g_string_new ("");
+
+  /* Create the permission(s). */
+
+  // Main resource permissions
+  if (include_related != 2)
+    {
+      g_message ("Creating permission for main resource...");
+      if (strcmp (permission, "read") == 0)
+      {
+        response = NULL;
+        entity = NULL;
+        ret = ompf (credentials,
+                    &response,
+                    &entity,
+                    "<create_permission>"
+                    "<name>get_%ss</name>"
+                    "<comment>%s</comment>"
+                    "<resource id=\"%s\">"
+                    "</resource>"
+                    "<subject id=\"%s\"><type>%s</type></subject>"
+                    "</create_permission>",
+                    resource_type,
+                    comment ? comment : "",
+                    resource_id,
+                    subject_id,
+                    subject_type);
+
+        CHECK_OMPF_RET
+      }
+    }
+
+  // Related permissions
+  if (include_related)
+    {
+      g_message ("Creating permission for related resources...");
+      params_t *related;
+      related = params_values (params, "related:");
+      if (related)
+        {
+          params_iterator_t iter;
+          char *name;
+          param_t *param;
+
+          params_iterator_init (&iter, related);
+          while (params_iterator_next (&iter, &name, &param))
+            {
+              char *related_id = name;
+              char *related_type = param->value;
+
+              if (strcmp (permission, "read") == 0)
+                {
+                  response = NULL;
+                  entity = NULL;
+                  ret = ompf (credentials,
+                              &response,
+                              &entity,
+                              "<create_permission>"
+                              "<name>get_%ss</name>"
+                              "<comment>%s</comment>"
+                              "<resource id=\"%s\">"
+                              "</resource>"
+                              "<subject id=\"%s\"><type>%s</type></subject>"
+                              "</create_permission>",
+                              related_type,
+                              comment ? comment : "",
+                              related_id,
+                              subject_id,
+                              subject_type);
+
+                  CHECK_OMPF_RET
+                }
+            }
+        }
+    }
+
+  if (get_subject_entity)
+    free_entity (get_subject_entity);
+
+  html = next_page (credentials, params, responses->str);
+  if (html == NULL)
+    html = get_permissions (credentials, params, responses->str);
+
+  g_string_free (responses, FALSE);
+  return html;
+}
+
+#undef CHECK_OMPF_RET
+
 /**
  * @brief Setup edit_permission XML, XSL transform the result.
  *
