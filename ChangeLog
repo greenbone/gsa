@@ -1,5 +1,9 @@
 2015-04-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_permissions_omp): Remove leftover test output.
+
+2015-04-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add a form to create permissions for the current Target and related
 	resources (Port List and LSC Credentials).
 

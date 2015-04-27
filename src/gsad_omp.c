@@ -18191,7 +18191,6 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
   // Main resource permissions
   if (include_related != 2)
     {
-      g_message ("Creating permission for main resource...");
       if (strcmp (permission, "read") == 0)
       {
         response = NULL;
@@ -18219,7 +18218,6 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
   // Related permissions
   if (include_related)
     {
-      g_message ("Creating permission for related resources...");
       params_t *related;
       related = params_values (params, "related:");
       if (related)
