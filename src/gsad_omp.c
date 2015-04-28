@@ -4544,7 +4544,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
+                           "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_resources");
