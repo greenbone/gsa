@@ -20792,6 +20792,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'note'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="title" select="concat(gsa:i18n ('Permissions for this Note', 'Note Window'),': ')"/>
+    <xsl:with-param name="resource_type" select="'note'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-notes-table">
@@ -22005,6 +22012,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
     <xsl:with-param name="resource_type" select="'override'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="title" select="concat(gsa:i18n ('Permissions for this Override', 'Override Window'),': ')"/>
+    <xsl:with-param name="resource_type" select="'override'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-overrides-table">
@@ -22699,6 +22713,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <select name="resource_type">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'note'"/>
+                      <xsl:with-param name="content" select="'Note'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'override'"/>
+                      <xsl:with-param name="content" select="'Override'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'target'"/>
                       <xsl:with-param name="content" select="'Target'"/>
