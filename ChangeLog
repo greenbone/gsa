@@ -1,5 +1,11 @@
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22223.
+
+	* src/gsad_omp.c (create_permissions_omp): Correct indentation.
+
+2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22222.
 
 	* src/html/classic/omp.xsl (html-create-permission-form): Make
