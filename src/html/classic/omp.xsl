@@ -22548,79 +22548,122 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
 
-  <xsl:if test="/envelope/params/restrict_type != '' and /envelope/params/resource_id != ''">
-    <div class="gb_window">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center">
-        <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
-        <a href="/help/new_permission.html?token={/envelope/token}#multiple"
-          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Create Multiple Permissions', 'Permission'))}">
-          <img src="/img/help.png"/>
-        </a>
-      </div>
-      <div class="gb_window_part_content">
-        <xsl:variable name="resource_type" select="/envelope/params/restrict_type"/>
-        <xsl:variable name="resource_id" select="/envelope/params/resource_id"/>
-        <xsl:variable name="related" select="/envelope/params/_param[starts-with (name, 'related:')]"/>
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="cmd" value="create_permissions"/>
-          <input type="hidden" name="comment" value=""/>
-          <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
-          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="next" value="{/envelope/params/next}"/>
-          <input type="hidden" name="next_type" value="{/envelope/params/next_type}"/>
-          <input type="hidden" name="{/envelope/params/next_type}_id" value="{$resource_id}"/>
-          <input type="hidden" name="resource_type" value="{$resource_type}"/>
-          <input type="hidden" name="resource_id" value="{$resource_id}"/>
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <table border="0" cellspacing="0" cellpadding="3" width="100%">
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Grant ', 'Permission Window')"/>
-                <select name="permission">
-                  <option value="read"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
-                  <xsl:if test="$resource_type = 'task'">
-                    <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
-                  </xsl:if>
-                </select>
-                <xsl:value-of select="gsa:i18n (' permissions to ', 'Permission Window')"/>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <xsl:call-template name="permission-subject-selection"/>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <select name="include_related">
-                  <xsl:if test="1">
-                    <option value="1"><xsl:value-of select="gsa:i18n ('including related resources', 'Permission Window')"/></option>
-                  </xsl:if>
-                  <xsl:if test="1">
-                    <option value="0"><xsl:value-of select="gsa:i18n ('for current resource only', 'Permission Window')"/></option>
-                  </xsl:if>
-                  <xsl:if test="1">
-                    <option value="2"><xsl:value-of select="gsa:i18n ('for related resources only', 'Permission Window')"/></option>
-                  </xsl:if>
-                </select>
-                <xsl:for-each select="$related">
-                  <input type="hidden" name="{name}" value="{value}"/>
-                </xsl:for-each>
-              </td>
-            </tr>
-            <tr style="text-align:right">
-              <td>
-                <input type="submit" name="submit" value="{gsa:i18n ('Create Permissions', 'Permission')}"/>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
+      <a href="/help/new_permission.html?token={/envelope/token}#multiple"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Create Multiple Permissions', 'Permission'))}">
+        <img src="/img/help.png"/>
+      </a>
     </div>
-  </xsl:if>
+    <div class="gb_window_part_content">
+      <xsl:variable name="resource_type" select="/envelope/params/restrict_type"/>
+      <xsl:variable name="resource_id" select="/envelope/params/resource_id"/>
+      <xsl:variable name="related" select="/envelope/params/_param[starts-with (name, 'related:')]"/>
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_permissions"/>
+        <input type="hidden" name="comment" value=""/>
+        <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="next_type" value="{/envelope/params/next_type}"/>
+        <input type="hidden" name="{/envelope/params/next_type}_id" value="{$resource_id}"/>
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td>
+              <xsl:value-of select="gsa:i18n ('Grant ', 'Permission Window')"/>
+            </td>
+            <td>
+              <select name="permission">
+                <option value="read"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
+                <xsl:if test="$resource_type = 'task'">
+                  <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
+                </xsl:if>
+              </select>
+              <xsl:value-of select="gsa:i18n (' permissions', 'Permission Window')"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <xsl:value-of select="gsa:i18n (' to ', 'Permission Window')"/>
+            </td>
+            <td>
+              <xsl:call-template name="permission-subject-selection"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <xsl:value-of select="gsa:i18n ('on ', 'Permission Window')"/>
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="$related">
+                  <select name="resource_type" readonly="1">
+                    <option value="{$resource_type}">
+                      <xsl:value-of select="gsa:type-name ($resource_type)"/>
+                    </option>
+                  </select>
+                </xsl:when>
+                <xsl:otherwise>
+                  <select name="resource_type">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'target'"/>
+                      <xsl:with-param name="content" select="'Target'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                  </select>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <xsl:value-of select="gsa:i18n ('with ID ', 'Permission Window')"/>
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="$related">
+                  <input type="text" name="resource_id" readonly="1" value="{$resource_id}" size="50" maxlength="100"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="resource_id" value="{$resource_id}" size="50" maxlength="100"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+              <select name="include_related">
+                <xsl:if test="$related">
+                  <option value="1"><xsl:value-of select="gsa:i18n ('including related resources', 'Permission Window')"/></option>
+                </xsl:if>
+                <xsl:if test="1">
+                  <option value="0"><xsl:value-of select="gsa:i18n ('for current resource only', 'Permission Window')"/></option>
+                </xsl:if>
+                <xsl:if test="$related">
+                  <option value="2"><xsl:value-of select="gsa:i18n ('for related resources only', 'Permission Window')"/></option>
+                </xsl:if>
+              </select>
+              <xsl:for-each select="$related">
+                <input type="hidden" name="{name}" value="{value}"/>
+              </xsl:for-each>
+            </td>
+          </tr>
+          <tr style="text-align:right">
+            <td colspan="2">
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Permissions', 'Permission')}"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template match="new_permission">
