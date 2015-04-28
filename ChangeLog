@@ -1,5 +1,16 @@
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22218.
+
+	* src/html/classic/omp.xsl (resource-permissions-window): Remove
+	multiple permissions form, moved to "New Permission" page. Add icon to
+	go to permissions list.
+	(permission-subject-selection): New template.
+	(html-create-permission-form): Move subject selection to new template.
+	Add form for creating multiple permissions.
+
+2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22212.
 
 	* src/gsad_omp.c (create_permissions_omp): Remove leftover test output.
