@@ -1,5 +1,12 @@
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_permissions_omp): Add "proxy" permissions.
+
+	* src/html/classic/omp.xsl (html-create-permission-form): Show option
+	for "proxy" permissions.
+
+2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (create_permissions_omp): Correct indentation.
 
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>

@@ -18191,7 +18191,8 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
   // Main resource permissions
   if (include_related != 2)
     {
-      if (strcmp (permission, "read") == 0)
+      if (strcmp (permission, "read") == 0
+          || strcmp (permission, "proxy") == 0)
         {
           response = NULL;
           entity = NULL;
@@ -18200,6 +18201,29 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                       &entity,
                       "<create_permission>"
                       "<name>get_%ss</name>"
+                      "<comment>%s</comment>"
+                      "<resource id=\"%s\">"
+                      "</resource>"
+                      "<subject id=\"%s\"><type>%s</type></subject>"
+                      "</create_permission>",
+                      resource_type,
+                      comment ? comment : "",
+                      resource_id,
+                      subject_id,
+                      subject_type);
+
+          CHECK_OMPF_RET
+        }
+
+      if (strcmp (permission, "proxy") == 0)
+        {
+          response = NULL;
+          entity = NULL;
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      "<create_permission>"
+                      "<name>modify_%s</name>"
                       "<comment>%s</comment>"
                       "<resource id=\"%s\">"
                       "</resource>"
@@ -18232,7 +18256,8 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
               char *related_id = name;
               char *related_type = param->value;
 
-              if (strcmp (permission, "read") == 0)
+              if (strcmp (permission, "read") == 0
+                  || strcmp (permission, "proxy") == 0)
                 {
                   response = NULL;
                   entity = NULL;
@@ -18241,6 +18266,29 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                               &entity,
                               "<create_permission>"
                               "<name>get_%ss</name>"
+                              "<comment>%s</comment>"
+                              "<resource id=\"%s\">"
+                              "</resource>"
+                              "<subject id=\"%s\"><type>%s</type></subject>"
+                              "</create_permission>",
+                              related_type,
+                              comment ? comment : "",
+                              related_id,
+                              subject_id,
+                              subject_type);
+
+                  CHECK_OMPF_RET
+                }
+
+              if (strcmp (permission, "proxy") == 0)
+                {
+                  response = NULL;
+                  entity = NULL;
+                  ret = ompf (credentials,
+                              &response,
+                              &entity,
+                              "<create_permission>"
+                              "<name>modify_%s</name>"
                               "<comment>%s</comment>"
                               "<resource id=\"%s\">"
                               "</resource>"

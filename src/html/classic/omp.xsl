@@ -22671,9 +22671,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="permission">
                 <option value="read"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
-                <xsl:if test="$resource_type = 'task'">
-                  <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
-                </xsl:if>
+                <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
               </select>
               <xsl:value-of select="gsa:i18n (' permissions', 'Permission Window')"/>
             </td>
