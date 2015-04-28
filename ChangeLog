@@ -1,5 +1,9 @@
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_permissions_omp): Correct indentation.
+
+2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Make
 	multiple permissions dialog always visible. Allow user input of
 	resource_type and resource_id if no related resources are given.
