@@ -1,5 +1,11 @@
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22212.
+
+	* src/gsad_omp.c (create_permissions_omp): Remove leftover test output.
+
+2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22211.
 
 	Add a form to create permissions for the current Target and related
