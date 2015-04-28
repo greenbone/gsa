@@ -1458,6 +1458,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="notrash"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type, 's')"/>
+  <xsl:param name="next_type" select="''"/>
+  <xsl:param name="next_id" select="''"/>
+
+  <xsl:variable name="next_params_string">
+    <xsl:choose>
+      <xsl:when test="$next_type != '' and $next_id != ''">
+        <xsl:value-of select="concat ('&amp;next_type=', $next_type, '&amp;next_id=', $next_id)"/>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:variable>
 
   <xsl:choose>
     <xsl:when test="$notrash">
@@ -1469,6 +1480,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="params">
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <xsl:if test="$next != ''">
+            <input type="hidden" name="next" value="{$next}"/>
+          </xsl:if>
+          <xsl:if test="$next_id != '' and $next_type != ''">
+            <input type="hidden" name="{$next_type}_id" value="{$next_id}"/>
+          </xsl:if>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
@@ -1494,7 +1511,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:choose>
         <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Table Row')}"/>
@@ -2390,7 +2407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- Resource Permissions -->
-<xsl:template name="resource-permissions-window">
+<xsl:template name="task-permissions-window">
   <xsl:param name="resource_type"/>
   <xsl:param name="resource_id" select="@id"/>
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
@@ -2516,6 +2533,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
           </xsl:for-each>
+        </table>
+      </div>
+    </div>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="resource-permissions-window">
+  <xsl:param name="resource_type"/>
+  <xsl:param name="resource_id" select="@id"/>
+  <xsl:param name="next" select="concat('get_',$resource_type)"/>
+  <xsl:param name="report_section" select="''"/>
+  <xsl:param name="title" select="concat(gsa:i18n('Permissions for', 'Permission Window'), ' ', gsa:type-name ($resource_type), ' &quot;',name,'&quot;:')"/>
+  <xsl:param name="permissions" select="../../permissions/get_permissions_response"/>
+  <xsl:variable name="title_shortened">
+    <xsl:choose>
+      <xsl:when test="string-length($title) > 80">
+        <xsl:value-of select="substring($title, 0, 80)"/>[...]<xsl:if test="substring($title, string-length($title)-1, 1) = '&quot;'">&quot;</xsl:if>:
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$title"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:if test="gsa:may-op ('get_permissions')">
+    <div class="gb_window">
+      <div class="gb_window_part_left"></div>
+      <div class="gb_window_part_right"></div>
+      <div class="gb_window_part_center">
+        <xsl:value-of select="$title_shortened"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$permissions/permission_count/filtered != 0">
+            <xsl:value-of select="$permissions/permission_count/filtered"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa:i18n ('none', 'Window')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="gsa:may-op ('create_permission')">
+            <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('New Permission', 'Permission')}">
+              <img style="margin-left:5px" src="/img/new.png" alt="{gsa:i18n ('New Permission', 'Permission')}"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+        <a href="/help/resource_permissions.html?token={/envelope/token}"
+           title="Help: Resource Permissions">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </div>
+      <div class="gb_window_part_content">
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Permission Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Description', 'Permission Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Permission Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Resource', 'Permission Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Subject Type', 'Permission Window')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission Window')"/></td>
+            <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
+          </tr>
+          <xsl:apply-templates select="$permissions/permission">
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="next_type" select="$resource_type"/>
+            <xsl:with-param name="next_id" select="$resource_id"/>
+          </xsl:apply-templates>
         </table>
       </div>
     </div>
@@ -4180,7 +4265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
   </xsl:call-template>
 
-  <xsl:call-template name="resource-permissions-window">
+  <xsl:call-template name="task-permissions-window">
     <xsl:with-param name="resource_type" select="'task'"/>
     <xsl:with-param name="permissions" select="../../../permissions/get_permissions_response"/>
   </xsl:call-template>
@@ -12228,6 +12313,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'target'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'target'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -22279,6 +22368,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_permission"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <xsl:if test="/envelope/params/next_id != '' and /envelope/params/next_type != ''">
+          <input type="hidden" name="{/envelope/params/next_type}_id" value="{/envelope/params/next_id}"/>
+        </xsl:if>
         <!-- FIX filter?. -->
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -22286,18 +22378,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
             <td>
               <select name="permission">
-                <option value="Super">
-                  <xsl:text>Super (Has super access)</xsl:text>
-                </option>
-                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
-                  <xsl:if test="gsa:may-op (name)">
-                    <option value="{gsa:lower-case (name)}">
-                      <xsl:value-of select="gsa:lower-case (name)"/>
-                      <xsl:text> (</xsl:text>
-                      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
-                      <xsl:text>)</xsl:text>
-                    </option>
-                  </xsl:if>
+                <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
+                <xsl:variable name="commands">
+                  <xsl:choose>
+                    <xsl:when test="not ($restrict_type)">
+                      <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[contains (gsa:lower-case (name), $restrict_type) and (gsa:lower-case (name) != concat ('create_', $restrict_type))]"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <xsl:if test="not ($restrict_type)">
+                  <option value="Super">
+                    <xsl:text>Super (Has super access)</xsl:text>
+                  </option>
+                </xsl:if>
+                <xsl:for-each select="exslt:node-set ($commands)/*">
+                  <xsl:choose>
+                    <xsl:when test="$restrict_type and gsa:may-op (name) and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
+                      <option value="{gsa:lower-case (name)}" selected="1">
+                        <xsl:value-of select="gsa:lower-case (name)"/>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                        <xsl:text>)</xsl:text>
+                      </option>
+                    </xsl:when>
+                    <xsl:when test="gsa:may-op (name)">
+                      <option value="{gsa:lower-case (name)}">
+                        <xsl:value-of select="gsa:lower-case (name)"/>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                        <xsl:text>)</xsl:text>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                  </xsl:choose>
                 </xsl:for-each>
               </select>
             </td>
@@ -22372,7 +22488,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Permission Window')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
             <td>
               <input type="text" name="id_or_empty"
-                     value=""
+                     value="{/envelope/params/resource_id}"
                      size="50"
                      maxlength="100"/>
             </td>
@@ -22422,6 +22538,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="permission">
+  <xsl:param name="next" select="''"/>
+  <xsl:param name="next_type" select="''"/>
+  <xsl:param name="next_id" select="''"/>
+
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <div class="float_right">
@@ -22511,6 +22631,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="type" select="'permission'"/>
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="grey-clone" select="writable='0'"/>
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="next_type" select="$next_type"/>
+            <xsl:with-param name="next_id" select="$next_id"/>
           </xsl:call-template>
         </td>
       </xsl:otherwise>
@@ -22765,6 +22888,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                name="permission_id"
                value="{commands_response/get_permissions_response/permission/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <xsl:if test="/envelope/params/next_id != '' and /envelope/params/next_type != ''">
+          <input type="hidden" name="{/envelope/params/next_type}_id" value="{/envelope/params/next_id}"/>
+        </xsl:if>
         <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
