@@ -1,5 +1,12 @@
 2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22250.
+
+	* src/html/classic/help.xsl (new_permission.html): Add section about
+	the "Create Multiple Permissions" dialog.
+
+2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22248.
 
 	* src/gsad_omp.c (create_permissions_omp): Add start_task, stop_task

@@ -3200,6 +3200,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/list.png" alt="Permissions" title="Permissions"/>
         will switch to the permissions page.
       </p>
+
+      <a name="multiple"/>
+      <h2>Create Multiple Permissions</h2>
+      <p>
+        This form on the New Permission page allows you to create a set of
+        predefined permissions for a specific resource. If you accessed the
+        page from a resource details page it can also create permissions for
+        related resources.
+      </p>
+      <h3>Permission types</h3>
+      <h4>Read</h4>
+      <p>
+        Granting "read" permissions means granting the permission to view the
+        the resource on list pages and its details page (get_[...]).
+      </p>
+      <h4>Proxy</h4>
+      <p>
+        Granting "proxy" permissions means granting the permissions for
+        normal viewing and manipulation of a resource, not including deleting
+        it. For most types this means granting reading permissions ("get_[...]")
+        as well as the permission to modify it ("modify_[...]").
+      </p>
+      <p>
+        However, some types also include additional permissions:
+        <ul>
+          <li><b>Tasks</b> also include permissions to start, stop and
+          resume the task (start_task, stop_task and resume_task).</li>
+          <li><b>Alerts</b> additionally have the permission to test them
+          (test_alert).</li>
+          <li><b>Report Formats, Agents</b> and <b>Scanners</b> include the
+          permission to validate them (validate_[...]).</li>
+        </ul>
+      </p>
+      <h3>Related resources</h3>
+      <p>
+        For some types the "Create Multiple Permissions" form can also create
+        permissions as described above for related resources:
+      </p>
+      <p>
+        <ul>
+          <li>For <b>Targets</b> this includes the up to three LSC Credentials
+          (SSH, SMB and ESXi) and the Port List.</li>
+          <li><b>Alerts</b> can include the Filter that is used on the Report.</li>
+        </ul>
+      </p>
+      <p>
+        You can select whether to include these or even to create permissions
+        just for the related resources from the last dropdown of the form.
+      </p>
+      <p>
+        Keep in mind that related resources are only available if the page
+        was accessed from a resource details page like
+        <a href="/help/task_details.html?token={/envelope/token}">Task Details</a>.<br/>
+        If related resources are available you will also not be able to
+        select a different type and ID.
+      </p>
     </div>
   </div>
 </xsl:template>
