@@ -2408,138 +2408,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- Resource Permissions -->
-<xsl:template name="task-permissions-window">
-  <xsl:param name="resource_type"/>
-  <xsl:param name="resource_id" select="@id"/>
-  <xsl:param name="next" select="concat('get_',$resource_type)"/>
-  <xsl:param name="report_section" select="''"/>
-  <xsl:param name="title" select="concat(gsa:i18n('Permissions for', 'Permission Window'),' &quot;',name,'&quot;:')"/>
-  <xsl:param name="permissions" select="../../permissions/get_permissions_response"/>
-  <xsl:variable name="title_shortened">
-    <xsl:choose>
-      <xsl:when test="string-length($title) > 80">
-        <xsl:value-of select="substring($title, 0, 80)"/>[...]<xsl:if test="substring($title, string-length($title)-1, 1) = '&quot;'">&quot;</xsl:if>:
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$title"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:if test="gsa:may-op ('get_permissions')">
-    <div class="gb_window">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center">
-        <xsl:value-of select="$title_shortened"/>
-        <xsl:text> </xsl:text>
-        <xsl:choose>
-          <xsl:when test="$permissions/permission_count/filtered != 0">
-            <xsl:value-of select="$permissions/permission_count/filtered"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('none', 'Window')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
-      <div class="gb_window_part_content">
-        <xsl:if test="gsa:may-op ('create_permission') and (gsa:may-op ('get_users') or gsa:may-op ('get_groups') or gsa:may-op ('get_roles'))">
-          <form action="/omp" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="cmd" value="create_permission"/>
-            <input type="hidden" name="comment" value=""/>
-            <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
-            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="hidden" name="next" value="{$next}"/>
-            <input type="hidden" name="{$resource_type}_id" value="{$resource_id}"/>
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <p style="">
-              <b><xsl:value-of select="gsa:i18n ('Grant ', 'Permission Window')"/></b>
-              <select name="permission">
-                <option value="{concat('get_',$resource_type)}s"><xsl:value-of select="gsa:i18n ('read', 'Permission Window')"/></option>
-                <xsl:if test="$resource_type = 'task'">
-                  <option value="task_proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission Window')"/></option>
-                </xsl:if>
-              </select>
-              <b><xsl:value-of select="gsa:i18n (' permissions to ', 'Permission Window')"/></b>
-              <select name="subject_type">
-                <xsl:if test="gsa:may-op ('get_users')">
-                  <option value="user"><xsl:value-of select="gsa:i18n ('User', 'User')"/></option>
-                </xsl:if>
-                <xsl:if test="gsa:may-op ('get_groups')">
-                  <option value="group"><xsl:value-of select="gsa:i18n ('Group', 'Group')"/></option>
-                </xsl:if>
-                <xsl:if test="gsa:may-op ('get_roles')">
-                  <option value="role"><xsl:value-of select="gsa:i18n ('Role', 'Role')"/></option>
-                </xsl:if>
-              </select>
-              <xsl:text> </xsl:text>
-              <input type="text" name="subject_name"/>
-              <input type="image"
-                     name="New Permission"
-                     src="/img/new.png"
-                     alt="{gsa:i18n ('Create Permission', 'Permission')}"
-                     title="{gsa:i18n ('Create Permission', 'Permission')}"
-                     style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-            </p>
-          </form>
-        </xsl:if>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Window')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Description', 'Window')"/></td>
-            <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Window')"/></td>
-          </tr>
-          <xsl:for-each select="$permissions/permission">
-            <tr class="{gsa:table-row-class(position())}">
-              <td>
-                <xsl:value-of select="gsa:lower-case (name)"/>
-              </td>
-              <td>
-                <xsl:value-of select="gsa:i18n (gsa:type-name (subject/type), gsa:type-name (subject/type))"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="subject/name"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="gsa:permission-description (name, resource)"/>
-              </td>
-              <td>
-                <xsl:choose>
-                  <xsl:when test="gsa:may ('delete_permission') and writable!='0' and in_use='0'">
-                    <xsl:call-template name="trashcan-icon">
-                      <xsl:with-param name="type" select="'permission'"/>
-                      <xsl:with-param name="id" select="@id"/>
-                      <xsl:with-param name="params">
-                        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-                        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                        <input type="hidden" name="next" value="{$next}"/>
-                        <input type="hidden" name="{$resource_type}_id" value="{$resource_id}"/>
-                      </xsl:with-param>
-                    </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:variable name="inactive_text">
-                      <xsl:choose>
-                        <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/><xsl:value-of select="gsa:i18n (' is still in use', 'Trashcan')"/></xsl:when>
-                        <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/><xsl:value-of select="gsa:i18n (' is not writable', 'Trashcan')"/></xsl:when>
-                        <xsl:when test="not(gsa:may ('delete_permission'))"><xsl:value-of select="gsa:i18n ('Permission to move ', 'Trashcan')"/><xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/><xsl:value-of select="gsa:i18n (' to trashcan denied', 'Trashcan')"/></xsl:when>
-                        <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move to trashcan.', 'Trashcan')"/></xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:variable>
-                    <img src="/img/trashcan_inactive.png"
-                        border="0"
-                        alt="{gsa:i18n ('To Trashcan', 'Trashcan')}"
-                        title="{$inactive_text}"
-                        style="margin-left:3px;"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-          </xsl:for-each>
-        </table>
-      </div>
-    </div>
-  </xsl:if>
-</xsl:template>
-
 <xsl:template name="resource-permissions-window">
   <xsl:param name="resource_type"/>
   <xsl:param name="resource_id" select="@id"/>
@@ -4284,7 +4152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
   </xsl:call-template>
 
-  <xsl:call-template name="task-permissions-window">
+  <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'task'"/>
     <xsl:with-param name="permissions" select="../../../permissions/get_permissions_response"/>
   </xsl:call-template>
@@ -22846,6 +22714,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'target'"/>
                       <xsl:with-param name="content" select="'Target'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'task'"/>
+                      <xsl:with-param name="content" select="'Task'"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                   </select>

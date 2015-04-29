@@ -18275,6 +18275,69 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
 
           CHECK_OMPF_RET
 
+          if (strcmp (resource_type, "task") == 0)
+            {
+              response = NULL;
+              entity = NULL;
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<create_permission>"
+                          "<name>start_%s</name>"
+                          "<comment>%s</comment>"
+                          "<resource id=\"%s\">"
+                          "</resource>"
+                          "<subject id=\"%s\"><type>%s</type></subject>"
+                          "</create_permission>",
+                          resource_type,
+                          comment ? comment : "",
+                          resource_id,
+                          subject_id,
+                          subject_type);
+
+              CHECK_OMPF_RET
+
+              response = NULL;
+              entity = NULL;
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<create_permission>"
+                          "<name>stop_%s</name>"
+                          "<comment>%s</comment>"
+                          "<resource id=\"%s\">"
+                          "</resource>"
+                          "<subject id=\"%s\"><type>%s</type></subject>"
+                          "</create_permission>",
+                          resource_type,
+                          comment ? comment : "",
+                          resource_id,
+                          subject_id,
+                          subject_type);
+
+              CHECK_OMPF_RET
+
+              response = NULL;
+              entity = NULL;
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<create_permission>"
+                          "<name>resume_%s</name>"
+                          "<comment>%s</comment>"
+                          "<resource id=\"%s\">"
+                          "</resource>"
+                          "<subject id=\"%s\"><type>%s</type></subject>"
+                          "</create_permission>",
+                          resource_type,
+                          comment ? comment : "",
+                          resource_id,
+                          subject_id,
+                          subject_type);
+
+              CHECK_OMPF_RET
+            }
+
           if (strcmp (resource_type, "alert") == 0)
             {
               response = NULL;
@@ -18389,6 +18452,69 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                               subject_type);
 
                   CHECK_OMPF_RET
+
+                  if (strcmp (related_type, "task") == 0)
+                    {
+                      response = NULL;
+                      entity = NULL;
+                      ret = ompf (credentials,
+                                  &response,
+                                  &entity,
+                                  "<create_permission>"
+                                  "<name>start_%s</name>"
+                                  "<comment>%s</comment>"
+                                  "<resource id=\"%s\">"
+                                  "</resource>"
+                                  "<subject id=\"%s\"><type>%s</type></subject>"
+                                  "</create_permission>",
+                                  related_type,
+                                  comment ? comment : "",
+                                  related_id,
+                                  subject_id,
+                                  subject_type);
+
+                      CHECK_OMPF_RET
+
+                      response = NULL;
+                      entity = NULL;
+                      ret = ompf (credentials,
+                                  &response,
+                                  &entity,
+                                  "<create_permission>"
+                                  "<name>stop_%s</name>"
+                                  "<comment>%s</comment>"
+                                  "<resource id=\"%s\">"
+                                  "</resource>"
+                                  "<subject id=\"%s\"><type>%s</type></subject>"
+                                  "</create_permission>",
+                                  related_type,
+                                  comment ? comment : "",
+                                  related_id,
+                                  subject_id,
+                                  subject_type);
+
+                      CHECK_OMPF_RET
+
+                      response = NULL;
+                      entity = NULL;
+                      ret = ompf (credentials,
+                                  &response,
+                                  &entity,
+                                  "<create_permission>"
+                                  "<name>resume_%s</name>"
+                                  "<comment>%s</comment>"
+                                  "<resource id=\"%s\">"
+                                  "</resource>"
+                                  "<subject id=\"%s\"><type>%s</type></subject>"
+                                  "</create_permission>",
+                                  related_type,
+                                  comment ? comment : "",
+                                  related_id,
+                                  subject_id,
+                                  subject_type);
+
+                      CHECK_OMPF_RET
+                    }
 
                   if (strcmp (related_type, "alert") == 0)
                     {
