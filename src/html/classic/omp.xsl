@@ -7555,6 +7555,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'lsc_credential'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'lsc_credential'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     GET_LSC_CREDENTIAL -->
@@ -7936,6 +7942,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'agent'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'agent'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -9531,6 +9543,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'alert'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'alert'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+      <xsl:if test="filter/@id != ''">
+        <filter id="{filter/@id}"/>
+      </xsl:if>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     GET_ALERT -->
@@ -9763,6 +9784,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'filter'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'filter'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -10319,6 +10346,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </div>
   </div>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'tag'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="tag" mode="trash">
@@ -13937,6 +13970,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="next" select="'get_config'"/>
     <xsl:with-param name="resource_id"   select="$config/@id"/>
   </xsl:call-template>
+
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'config'"/>
+    <xsl:with-param name="title" select="concat(gsa:i18n('Permissions for', 'Permission Window'), ' ', gsa:i18n('Config', 'Scan Config'), ' &quot;', $config/name,'&quot;:')"/>
+    <xsl:with-param name="permissions" select="permissions/get_permissions_response"/>
+    <xsl:with-param name="resource_id" select="$config/@id"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-configs-table">
@@ -15769,6 +15811,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'schedule'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'schedule'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     GET_SCHEDULE -->
@@ -16225,6 +16273,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'scanner'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'scanner'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -16794,6 +16848,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'slave'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'slave'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -22623,6 +22683,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:otherwise>
                   <select name="resource_type">
                     <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'agent'"/>
+                      <xsl:with-param name="content" select="'Agent'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'alert'"/>
+                      <xsl:with-param name="content" select="'Alert'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'config'"/>
+                      <xsl:with-param name="content" select="'Config'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'lsc_credential'"/>
+                      <xsl:with-param name="content" select="'Credential'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'filter'"/>
+                      <xsl:with-param name="content" select="'Filter'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'note'"/>
                       <xsl:with-param name="content" select="'Note'"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
@@ -22630,6 +22715,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'override'"/>
                       <xsl:with-param name="content" select="'Override'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'port_list'"/>
+                      <xsl:with-param name="content" select="'Port List'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'scanner'"/>
+                      <xsl:with-param name="content" select="'Scanner'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'report_format'"/>
+                      <xsl:with-param name="content" select="'Report Format'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'result'"/>
+                      <xsl:with-param name="content" select="'Result'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'schedule'"/>
+                      <xsl:with-param name="content" select="'Schedule'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'slave'"/>
+                      <xsl:with-param name="content" select="'Slave'"/>
+                      <xsl:with-param name="select-value" select="$resource_type"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'tag'"/>
+                      <xsl:with-param name="content" select="'Tag'"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
@@ -23627,6 +23747,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'port_list'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'port_list'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     EDIT_PORT_LIST -->
@@ -24530,6 +24656,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'report_format'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'report_format'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

@@ -9215,6 +9215,42 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs");
     }
 
+  /* Get the permissions */
+
+  g_string_append (xml, "<permissions>");
+
+  if (openvas_server_sendf (&session,
+                            "<get_permissions"
+                            " filter=\"name:^.*(config)s?$"
+                            "          and resource_uuid=%s"
+                            "          first=1 rows=-1\"/>",
+                            config_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting permissions list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting permissions list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  g_string_append (xml, "</permissions>");
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
@@ -18216,6 +18252,54 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                       subject_type);
 
           CHECK_OMPF_RET
+
+          if (strcmp (resource_type, "alert") == 0)
+            {
+              response = NULL;
+              entity = NULL;
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<create_permission>"
+                          "<name>test_%s</name>"
+                          "<comment>%s</comment>"
+                          "<resource id=\"%s\">"
+                          "</resource>"
+                          "<subject id=\"%s\"><type>%s</type></subject>"
+                          "</create_permission>",
+                          resource_type,
+                          comment ? comment : "",
+                          resource_id,
+                          subject_id,
+                          subject_type);
+
+              CHECK_OMPF_RET
+            }
+
+          if (strcmp (resource_type, "agent") == 0
+              || strcmp (resource_type, "report_format") == 0
+              || strcmp (resource_type, "scanner") == 0)
+            {
+              response = NULL;
+              entity = NULL;
+              ret = ompf (credentials,
+                          &response,
+                          &entity,
+                          "<create_permission>"
+                          "<name>verify_%s</name>"
+                          "<comment>%s</comment>"
+                          "<resource id=\"%s\">"
+                          "</resource>"
+                          "<subject id=\"%s\"><type>%s</type></subject>"
+                          "</create_permission>",
+                          resource_type,
+                          comment ? comment : "",
+                          resource_id,
+                          subject_id,
+                          subject_type);
+
+              CHECK_OMPF_RET
+            }
         }
     }
 
@@ -18262,7 +18346,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
 
               if ((strcmp (permission, "proxy") == 0)
                   && strcmp (related_type, "result")
-                  && strcmp (resource_type, "report"))
+                  && strcmp (related_type, "report"))
                 {
                   response = NULL;
                   entity = NULL;
@@ -18283,6 +18367,54 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                               subject_type);
 
                   CHECK_OMPF_RET
+
+                  if (strcmp (related_type, "alert") == 0)
+                    {
+                      response = NULL;
+                      entity = NULL;
+                      ret = ompf (credentials,
+                                  &response,
+                                  &entity,
+                                  "<create_permission>"
+                                  "<name>test_%s</name>"
+                                  "<comment>%s</comment>"
+                                  "<resource id=\"%s\">"
+                                  "</resource>"
+                                  "<subject id=\"%s\"><type>%s</type></subject>"
+                                  "</create_permission>",
+                                  related_type,
+                                  comment ? comment : "",
+                                  related_id,
+                                  subject_id,
+                                  subject_type);
+
+                      CHECK_OMPF_RET
+                    }
+
+                  if (strcmp (related_type, "agent") == 0
+                      || strcmp (related_type, "report_format") == 0
+                      || strcmp (related_type, "scanner") == 0)
+                    {
+                      response = NULL;
+                      entity = NULL;
+                      ret = ompf (credentials,
+                                  &response,
+                                  &entity,
+                                  "<create_permission>"
+                                  "<name>verify_%s</name>"
+                                  "<comment>%s</comment>"
+                                  "<resource id=\"%s\">"
+                                  "</resource>"
+                                  "<subject id=\"%s\"><type>%s</type></subject>"
+                                  "</create_permission>",
+                                  related_type,
+                                  comment ? comment : "",
+                                  related_id,
+                                  subject_id,
+                                  subject_type);
+
+                      CHECK_OMPF_RET
+                    }
                 }
             }
         }
