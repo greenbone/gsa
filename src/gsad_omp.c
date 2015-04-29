@@ -18193,7 +18193,9 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
           CHECK_OMPF_RET
         }
 
-      if (strcmp (permission, "proxy") == 0)
+      if ((strcmp (permission, "proxy") == 0)
+          && strcmp (resource_type, "result")
+          && strcmp (resource_type, "report"))
         {
           response = NULL;
           entity = NULL;
@@ -18258,7 +18260,9 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                   CHECK_OMPF_RET
                 }
 
-              if (strcmp (permission, "proxy") == 0)
+              if ((strcmp (permission, "proxy") == 0)
+                  && strcmp (related_type, "result")
+                  && strcmp (resource_type, "report"))
                 {
                   response = NULL;
                   entity = NULL;

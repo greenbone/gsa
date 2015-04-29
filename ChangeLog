@@ -1,3 +1,15 @@
+2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22240.
+
+	* src/gsad_omp.c (create_permissions_omp): Exclude reports and results
+	from creation of "modify_..." permissions.
+
+	* src/html/classic/omp.xsl (note [details], override [details]): Add
+	permissions list window.
+	(html-create-permission-form): Add resource types Note and Override
+	to multi-permission form.
+
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22224.
