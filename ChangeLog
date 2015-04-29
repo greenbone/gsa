@@ -1,3 +1,27 @@
+2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add permission window for details pages of other types in the
+	Configuration menu. Add permission related indicator icons.
+
+	* src/gsad_omp.c (get_config): Add the permissions for the config.
+	(create_permissions_omp): Handle permissions test_alert,
+	validate_agent, validate_report_format and validate_scanner as part
+	of "proxy" permissions. Correct check if related type is report.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Add indicator icons for
+	create_permission_response, delete_permission_response and
+	modify_permission_response in get_task, get_config_response,
+	get_lsc_credential, get_agent, get_alert, get_filter, get_note,
+	get_override, get_port_list, get_report_format, get_scanner,
+	get_schedule, get_slave, get_tag.
+
+	* src/html/classic/omp.xsl (lsc_credential [details], agent [details])
+	(alert [details], filter [details], tag [details], html-config-table)
+	(schedule [details], scanner [details], slave [details]): Add
+	permissions form.
+	(html-create-permissions-form): Add types from Configuration menu.
+	(port_list [details], report_format [details]): Add permissions form.
+
 2015-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_permissions_omp): Exclude reports and results
