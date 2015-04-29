@@ -1,5 +1,18 @@
 2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22248.
+
+	* src/gsad_omp.c (create_permissions_omp): Add start_task, stop_task
+	and resume_task as part of the "proxy" permissions for Tasks.
+
+	* src/html/classic/omp.xsl (task-permissions-window): Remove.
+	(task [details]): Use template resource-permissions-window instead of
+	task-permissions-window.
+	(html-create-permission-form): Add "Task" in type selection of
+	multi-permissions form.
+
+2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22245.
 
 	Add permission window for details pages of other types in the
