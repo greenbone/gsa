@@ -1,5 +1,10 @@
 2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (new_permission.html): Add section about
+	the "Create Multiple Permissions" dialog.
+
+2015-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (create_permissions_omp): Add start_task, stop_task
 	and resume_task as part of the "proxy" permissions for Tasks.
 
