@@ -1,3 +1,23 @@
+gsa 6.0.2 (2015-04-30)
+
+This is the second maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release features improved dialogs for permission handling and adds support
+for listening on IPv6 addresses as well as addressing an issue with note and
+override counts in the NVT details dialog.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell and Timo Pollmeier.
+
+Main changes compared to 6.0.1:
+* The dialogs for creating and modifying permissions have been reworked and
+  improved.
+* Support for listening on IPv6 addresses has been added.
+* An issue which caused the count of notes and overrides to be displayed
+  incorrectly in the NVT details has been addressed.
+
+
 gsa 6.0.1 (2015-04-01)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)
