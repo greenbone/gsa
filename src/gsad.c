@@ -4604,7 +4604,8 @@ main (int argc, char **argv)
   static gboolean foreground = FALSE;
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
-  static gboolean redirect = FALSE;
+  static gboolean redirect = TRUE;
+  static gboolean no_redirect = FALSE;
   static gboolean secure_cookie = FALSE;
   static int timeout = SESSION_TIMEOUT;
   static gchar *gsad_address_string = NULL;
@@ -4650,7 +4651,10 @@ main (int argc, char **argv)
      "Redirect HTTP from this port number <number>.", "<number>"},
     {"redirect", 'R',
      0, G_OPTION_ARG_NONE, &redirect,
-     "Redirect HTTP to HTTPS.", NULL },
+     "Redirect HTTP to HTTPS. This is the default behaviour.", NULL },
+    {"no-redirect", '\0',
+     0, G_OPTION_ARG_NONE, &no_redirect,
+     "Don't redirect HTTP to HTTPS.", NULL },
     {"verbose", 'v',
      0, G_OPTION_ARG_NONE, &verbose,
      "Print progress messages.", NULL },
@@ -4740,11 +4744,10 @@ main (int argc, char **argv)
     }
 
 
-  if ((redirect || gsad_redirect_port_string) && http_only)
+  if (no_redirect && gsad_redirect_port_string)
     {
-      g_critical ("%s: redirect options given with HTTP only option\n",
-                  __FUNCTION__);
-      exit (EXIT_FAILURE);
+      g_warning ("--no-redirect option given with --rport");
+      return 1;
     }
 
   /* Switch to UTC for scheduling. */
@@ -4844,6 +4847,9 @@ main (int argc, char **argv)
           break;
         }
     }
+
+  if (no_redirect || http_only)
+    redirect = FALSE;
 
   if (redirect)
     {
