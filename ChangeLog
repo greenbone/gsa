@@ -1,3 +1,9 @@
+2015-05-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (login_page): Correct typo in enctype, to
+	prevent form text from being escaped.  This was preventing login with
+	passwords that contain a space, for example.
+
 2015-05-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (main): Add --no-redirect option. Make --redirect the
@@ -99,7 +105,7 @@
 
 	* src/gsad_omp.c (CHECK_OMPF_RET): New function-like macro.
 	(create_permissions_omp): New function.
-	
+
 	* src/html/classic/omp.xsl (resource-permissions-window): Add form to
 	create permissions for current and related resources.
 	(target [details]): Add parameter "related" for the template

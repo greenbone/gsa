@@ -2198,7 +2198,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/gsa_splash.png" alt="" />
         <center>
           <div style="color: red"><xsl:value-of select="gsa:i18n (message, 'Login')"/></div>
-          <form action="/omp" method="post" enctype="multipart/formdata">
+          <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
               <xsl:when test="string-length(url) = 0">
