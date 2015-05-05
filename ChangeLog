@@ -1,3 +1,11 @@
+2015-05-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22281.
+
+	* src/html/classic/gsad.xsl (login_page): Correct typo in enctype, to
+	prevent form text from being escaped.  This was preventing login with
+	passwords that contain a space, for example.
+
 2015-05-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r22273.
