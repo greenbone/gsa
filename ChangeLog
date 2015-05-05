@@ -1,3 +1,7 @@
+2015-05-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (main), doc/gsad.8: Remove --redirect option.
+
 2015-05-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Get the Alerts and Target of the Task.

@@ -4605,7 +4605,6 @@ main (int argc, char **argv)
   static gboolean foreground = FALSE;
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
-  static gboolean redirect = TRUE;
   static gboolean no_redirect = FALSE;
   static gboolean secure_cookie = FALSE;
   static int timeout = SESSION_TIMEOUT;
@@ -4650,9 +4649,6 @@ main (int argc, char **argv)
     {"rport", 'r',
      0, G_OPTION_ARG_STRING, &gsad_redirect_port_string,
      "Redirect HTTP from this port number <number>.", "<number>"},
-    {"redirect", 'R',
-     0, G_OPTION_ARG_NONE, &redirect,
-     "Redirect HTTP to HTTPS. This is the default behaviour.", NULL },
     {"no-redirect", '\0',
      0, G_OPTION_ARG_NONE, &no_redirect,
      "Don't redirect HTTP to HTTPS.", NULL },
@@ -4849,10 +4845,10 @@ main (int argc, char **argv)
         }
     }
 
-  if (no_redirect || http_only)
-    redirect = FALSE;
+  if (http_only)
+    no_redirect = TRUE;
 
-  if (redirect)
+  if (!no_redirect)
     {
       /* Fork for the redirect server. */
       tracef ("Forking for redirect...\n");
@@ -4861,7 +4857,6 @@ main (int argc, char **argv)
         {
         case 0:
           /* Child. */
-          redirect = TRUE;
           redirect_location = g_strdup_printf ("https://%%s:%i/login/login.html",
                                                gsad_port);
           break;
@@ -4873,7 +4868,7 @@ main (int argc, char **argv)
         default:
           /* Parent. */
           redirect_pid = pid;
-          redirect = FALSE;
+          no_redirect = TRUE;
           break;
         }
     }
@@ -4896,7 +4891,7 @@ main (int argc, char **argv)
 
   if (gsad_address_init (gsad_address_string, gsad_port))
     return 1;
-  if (redirect)
+  if (!no_redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
 
