@@ -3240,7 +3240,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         <ul>
-          <li>For <b>Targets</b> this includes the up to three LSC Credentials
+          <li>For <b>Tasks</b> this can include the Alerts and their Filters, the Target as well as its related Credentials and Port List, the Schedule, the Scanner, the Scan Config and the Slave.</li>
+          <li><b>Targets</b> can include the up to three LSC Credentials
           (SSH, SMB and ESXi) and the Port List.</li>
           <li><b>Alerts</b> can include the Filter that is used on the Report.</li>
         </ul>
@@ -3248,6 +3249,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         You can select whether to include these or even to create permissions
         just for the related resources from the last dropdown of the form.
+        You can view the details of the related resources by clicking the
+        links listed below the dropdown.
       </p>
       <p>
         Keep in mind that related resources are only available if the page
