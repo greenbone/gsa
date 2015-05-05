@@ -2718,6 +2718,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <id>User Tags for this Note</id>
       <str>Benutzer-Tags für diese Notiz</str>
     </msg>
+    <!-- Permissions -->
+    <msg>
+      <id>Permissions for this Note</id>
+      <str>Berechtigungen für diese Notiz</str>
+    </msg>
     <!-- - - Other - - -->
     <msg>
       <id>Appearance</id>
@@ -2893,6 +2898,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>User Tags for this Override</id>
       <str>Benutzer-Tags für diese Übersteuerung</str>
+    </msg>
+    <msg>
+      <id>Permissions for this Override</id>
+      <str>Berechtigungen für diese Übersteuerung</str>
     </msg>
   </grp>
   <!-- 3.5.4    Override actions and properties - table rows only -->
@@ -5448,12 +5457,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <ctxt>Permission Window</ctxt>
     <!-- - - Actions - - -->
     <msg>
-      <id>Grant </id>
-      <str></str>
+      <id>Create Multiple Permissions</id>
+      <str>Mehrere Berechtigungen erstellen</str>
     </msg>
     <msg>
-      <id> permissions to </id>
-      <str>-Rechte vergeben an </str>
+      <id>Create Permissions</id>
+      <str>Berechtigungen erstellen</str>
+    </msg>
+
+    <msg>
+      <id>Grant </id>
+      <str>Vergebe </str>
+    </msg>
+    <msg>
+      <id> permissions</id>
+      <str>-Rechte</str>
+    </msg>
+    <msg>
+      <id> to </id>
+      <str> an </str>
+    </msg>
+    <msg>
+      <id> on </id>
+      <str> für </str>
+    </msg>
+    <msg>
+      <id> with ID </id>
+      <str> mit ID </str>
     </msg>
 
     <msg>
@@ -5483,6 +5513,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msg>
       <id>proxy</id>
       <str>Stellvertreter</str>
+    </msg>
+
+    <msg>
+      <id>including related resources</id>
+      <str>inklusive verwandter Ressourcen</str>
+    </msg>
+    <msg>
+      <id>for current resource only</id>
+      <str>nur für aktuelles Ressource</str>
+    </msg>
+    <msg>
+      <id>for related resources only</id>
+      <str>nur für verwandte Ressourcen</str>
     </msg>
     <!-- - - Properties - - -->
     <msg>

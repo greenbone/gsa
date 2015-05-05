@@ -1,3 +1,11 @@
+2015-05-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (resource-permissions-window)
+	(html-create-permission-form): Add or correct i18n function parameters.
+
+	* src/html/classic/po/de.xml: Add strings for permissions list and
+	multi-permissions dialog.
+
 2015-05-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (main), doc/gsad.8: Remove --redirect option.
