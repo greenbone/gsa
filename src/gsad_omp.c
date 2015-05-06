@@ -4544,42 +4544,43 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
           while ((child_entity = first_entity (child_entities)))
             {
-              if (get_target &&
+              if (get_alerts &&
                   strcmp (entity_name (child_entity), "alert") == 0)
                 {
                   const char *resource_id
                     = entity_attribute (child_entity, "id");
 
-                  if (resource_id == NULL || strcmp (resource_id, "") == 0)
-                    continue;
-
-                  if (openvas_server_sendf (&session,
-                                            "<get_alerts alert_id=\"%s\"/>",
-                                            resource_id))
+                  if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      openvas_server_close (socket, session);
-                      g_string_free (xml, TRUE);
-                      g_string_free (commands_xml, TRUE);
-                      free_entity (commands_entity);
-                      return gsad_message (credentials,
-                                           "Internal error",
-                                           __FUNCTION__, __LINE__,
-                                           "An internal error occurred while getting an alert of a task. "
-                                           "Diagnostics: Failure to send command to manager daemon.",
-                                           "/omp?cmd=get_tasks");
-                    }
-                  if (read_string (&session, &xml))
-                    {
-                      openvas_server_close (socket, session);
-                      g_string_free (commands_xml, TRUE);
-                      g_string_free (xml, TRUE);
-                      free_entity (commands_entity);
-                      return gsad_message (credentials,
-                                           "Internal error",
-                                           __FUNCTION__, __LINE__,
-                                           "An internal error occurred while getting an alert of a task. "
-                                           "Diagnostics: Failure to receive response from manager daemon.",
-                                           "/omp?cmd=get_tasks");
+                      if (openvas_server_sendf (&session,
+                                                "<get_alerts"
+                                                " alert_id=\"%s\"/>",
+                                                resource_id))
+                        {
+                          openvas_server_close (socket, session);
+                          g_string_free (xml, TRUE);
+                          g_string_free (commands_xml, TRUE);
+                          free_entity (commands_entity);
+                          return gsad_message (credentials,
+                                              "Internal error",
+                                              __FUNCTION__, __LINE__,
+                                              "An internal error occurred while getting an alert of a task. "
+                                              "Diagnostics: Failure to send command to manager daemon.",
+                                              "/omp?cmd=get_tasks");
+                        }
+                      if (read_string (&session, &xml))
+                        {
+                          openvas_server_close (socket, session);
+                          g_string_free (commands_xml, TRUE);
+                          g_string_free (xml, TRUE);
+                          free_entity (commands_entity);
+                          return gsad_message (credentials,
+                                              "Internal error",
+                                              __FUNCTION__, __LINE__,
+                                              "An internal error occurred while getting an alert of a task. "
+                                              "Diagnostics: Failure to receive response from manager daemon.",
+                                              "/omp?cmd=get_tasks");
+                        }
                     }
                 }
 
@@ -4589,36 +4590,37 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                   const char *resource_id
                     = entity_attribute (child_entity, "id");
 
-                  if (resource_id == NULL || strcmp (resource_id, "") == 0)
-                    continue;
-
-                  if (openvas_server_sendf (&session,
-                                            "<get_targets target_id=\"%s\"/>",
-                                            resource_id))
+                  if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      openvas_server_close (socket, session);
-                      g_string_free (xml, TRUE);
-                      g_string_free (commands_xml, TRUE);
-                      free_entity (commands_entity);
-                      return gsad_message (credentials,
-                                           "Internal error",
-                                           __FUNCTION__, __LINE__,
-                                           "An internal error occurred while getting the target of a task. "
-                                           "Diagnostics: Failure to send command to manager daemon.",
-                                           "/omp?cmd=get_tasks");
-                    }
-                  if (read_string (&session, &xml))
-                    {
-                      openvas_server_close (socket, session);
-                      g_string_free (commands_xml, TRUE);
-                      g_string_free (xml, TRUE);
-                      free_entity (commands_entity);
-                      return gsad_message (credentials,
-                                           "Internal error",
-                                           __FUNCTION__, __LINE__,
-                                           "An internal error occurred while getting the target of a task. "
-                                           "Diagnostics: Failure to receive response from manager daemon.",
-                                           "/omp?cmd=get_tasks");
+                      if (openvas_server_sendf (&session,
+                                                "<get_targets"
+                                                " target_id=\"%s\"/>",
+                                                resource_id))
+                        {
+                          openvas_server_close (socket, session);
+                          g_string_free (xml, TRUE);
+                          g_string_free (commands_xml, TRUE);
+                          free_entity (commands_entity);
+                          return gsad_message (credentials,
+                                              "Internal error",
+                                              __FUNCTION__, __LINE__,
+                                              "An internal error occurred while getting the target of a task. "
+                                              "Diagnostics: Failure to send command to manager daemon.",
+                                              "/omp?cmd=get_tasks");
+                        }
+                      if (read_string (&session, &xml))
+                        {
+                          openvas_server_close (socket, session);
+                          g_string_free (commands_xml, TRUE);
+                          g_string_free (xml, TRUE);
+                          free_entity (commands_entity);
+                          return gsad_message (credentials,
+                                              "Internal error",
+                                              __FUNCTION__, __LINE__,
+                                              "An internal error occurred while getting the target of a task. "
+                                              "Diagnostics: Failure to receive response from manager daemon.",
+                                              "/omp?cmd=get_tasks");
+                        }
                     }
                 }
 
