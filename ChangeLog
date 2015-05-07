@@ -1,3 +1,8 @@
+2015-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report): Add replace_task_id param to the
+	delta link, because it's present on the reports page.
+
 2015-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Correct check if GET_ALERTS command is

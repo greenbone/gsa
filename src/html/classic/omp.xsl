@@ -5771,7 +5771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_reports&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/task_filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/task_filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report Table Row')}"
                 style="margin-left:3px;">
                 <img src="/img/delta.png" border="0" alt="{gsa:i18n ('Compare', 'Report Table Row')}"/>
