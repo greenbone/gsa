@@ -1,3 +1,8 @@
+2015-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (host, report [assets], report-ports-link):
+	Make search phrase for selecting host exact in Report links.
+
 2015-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Set the parent death signal to SIGKILL in the
