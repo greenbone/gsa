@@ -1,3 +1,11 @@
+2015-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22302.
+
+	* src/gsad.c (main): Set the parent death signal to SIGKILL in the
+	redirect child.  This ensures that the child gets a SIGKILL when the
+	parent does.
+
 2015-05-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22281.
