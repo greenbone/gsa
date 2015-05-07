@@ -21903,7 +21903,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="start/text() != ''">
-                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter=&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}">
+                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}">
                   <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
                 </a>
               </xsl:when>
@@ -24135,7 +24135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="start/text() != ''">
               <xsl:variable name="report_id" select="detail[name = 'report/@id' and source/name = 'openvasmd']/value"/>
-              <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}"
                  title="View Report {$report_id}">
                 <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
               </a>
@@ -24809,7 +24809,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
-        <a href="/omp?cmd=get_report_section&amp;report_id={$report_id}&amp;report_section=ports&amp;filter=&#34;{$current_host}&#34; {$filter}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_report_section&amp;report_id={$report_id}&amp;report_section=ports&amp;filter==&#34;{$current_host}&#34; {$filter}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Report: Ports', 'Report Section')} ({$current_host})" style="margin-left:3px;">
         <xsl:value-of select="$count"/>
       </a>
