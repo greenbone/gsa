@@ -75,6 +75,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if __linux
+#include <sys/prctl.h>
+#endif
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -4857,6 +4860,14 @@ main (int argc, char **argv)
         {
         case 0:
           /* Child. */
+#if __linux
+          if (prctl (PR_SET_PDEATHSIG, SIGKILL))
+            g_warning ("%s: Failed to change parent death signal;"
+                       " redirect process will remain if parent is killed:"
+                       " %s\n",
+                       __FUNCTION__,
+                       strerror (errno));
+#endif
           redirect_location = g_strdup_printf ("https://%%s:%i/login/login.html",
                                                gsad_port);
           break;
