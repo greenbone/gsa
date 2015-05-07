@@ -1,5 +1,12 @@
 2015-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22305.
+
+	* src/html/classic/omp.xsl (report [hosts]): Add "host=" to filter
+	column for selecting the host in auth icons.
+
+2015-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22304.
 
 	* src/html/classic/omp.xsl (host, report [assets], report-ports-link):
