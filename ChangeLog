@@ -1,5 +1,12 @@
 2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22295.
+
+	* src/gsad_omp.c (get_task): Correct check if GET_ALERTS command is
+	enabled and handling of empty IDs.
+
+2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22290.
 
 	* src/html/classic/omp.xsl (resource-permissions-window)
