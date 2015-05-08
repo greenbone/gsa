@@ -1,3 +1,11 @@
+2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22206.
+
+	* src/html/classic/omp.xsl (task [details], report, task)
+	(result-details, result [result-row], report [section-list]): Add
+	min_qod to links to other Task, Report or Result pages.
+
 2015-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22305.
