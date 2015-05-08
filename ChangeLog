@@ -1,5 +1,15 @@
 2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22290.
+
+	* src/html/classic/omp.xsl (resource-permissions-window)
+	(html-create-permission-form): Add or correct i18n function parameters.
+
+	* src/html/classic/po/de.xml: Add strings for permissions list and
+	multi-permissions dialog.
+
+2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22285.
 
 	* src/gsad_omp.c (get_task): Get the Alerts and Target of the Task.

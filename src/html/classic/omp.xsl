@@ -2412,7 +2412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_id" select="@id"/>
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
   <xsl:param name="report_section" select="''"/>
-  <xsl:param name="title" select="concat(gsa:i18n('Permissions for', 'Permission Window'), ' ', gsa:type-name ($resource_type), ' &quot;',name,'&quot;:')"/>
+  <xsl:param name="title" select="concat(gsa:i18n('Permissions for', 'Permission Window'), ' ', gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type)), ' &quot;',name,'&quot;:')"/>
   <xsl:param name="permissions" select="../../permissions/get_permissions_response"/>
   <xsl:param name="related" select="''"/>
   <xsl:variable name="token" select="/envelope/token"/>
@@ -22536,9 +22536,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
+      <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission Window')"/>
       <a href="/help/new_permission.html?token={/envelope/token}#multiple"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Create Multiple Permissions', 'Permission'))}">
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Create Multiple Permissions', 'Permission Window'))}">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -22579,14 +22579,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td>
-              <xsl:value-of select="gsa:i18n ('on ', 'Permission Window')"/>
+              <xsl:value-of select="gsa:i18n (' on ', 'Permission Window')"/>
             </td>
             <td>
               <xsl:choose>
                 <xsl:when test="$related">
                   <select name="resource_type" readonly="1">
                     <option value="{$resource_type}">
-                      <xsl:value-of select="gsa:type-name ($resource_type)"/>
+                      <xsl:value-of select="gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type))"/>
                     </option>
                   </select>
                 </xsl:when>
@@ -22594,82 +22594,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <select name="resource_type">
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'agent'"/>
-                      <xsl:with-param name="content" select="'Agent'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Agent', 'Agent')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'alert'"/>
-                      <xsl:with-param name="content" select="'Alert'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Alert', 'Alert')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'config'"/>
-                      <xsl:with-param name="content" select="'Config'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Config', 'Config')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'lsc_credential'"/>
-                      <xsl:with-param name="content" select="'Credential'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Credential', 'Credential')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'filter'"/>
-                      <xsl:with-param name="content" select="'Filter'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Filter', 'Filter')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'note'"/>
-                      <xsl:with-param name="content" select="'Note'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Note', 'Note')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'override'"/>
-                      <xsl:with-param name="content" select="'Override'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Override', 'Override')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'port_list'"/>
-                      <xsl:with-param name="content" select="'Port List'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Port List', 'Port List')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'scanner'"/>
-                      <xsl:with-param name="content" select="'Scanner'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Scanner', 'Scanner')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'report_format'"/>
-                      <xsl:with-param name="content" select="'Report Format'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Report Format', 'Report Format')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'result'"/>
-                      <xsl:with-param name="content" select="'Result'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Result', 'Result')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'schedule'"/>
-                      <xsl:with-param name="content" select="'Schedule'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Schedule', 'Schedule')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'slave'"/>
-                      <xsl:with-param name="content" select="'Slave'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Slave', 'Slave')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'tag'"/>
-                      <xsl:with-param name="content" select="'Tag'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Tag', 'Tag')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'target'"/>
-                      <xsl:with-param name="content" select="'Target'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Target', 'Target')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
                       <xsl:with-param name="value" select="'task'"/>
-                      <xsl:with-param name="content" select="'Task'"/>
+                      <xsl:with-param name="content" select="gsa:i18n ('Task', 'Task')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                   </select>
@@ -22679,7 +22679,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr>
             <td>
-              <xsl:value-of select="gsa:i18n ('with ID ', 'Permission Window')"/>
+              <xsl:value-of select="gsa:i18n (' with ID ', 'Permission Window')"/>
             </td>
             <td>
               <xsl:choose>
@@ -22724,7 +22724,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr style="text-align:right">
             <td colspan="2">
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Permissions', 'Permission')}"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Permissions', 'Permission Window')}"/>
             </td>
           </tr>
         </table>
