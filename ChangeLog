@@ -1,5 +1,18 @@
 2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22285.
+
+	* src/gsad_omp.c (get_task): Get the Alerts and Target of the Task.
+
+	* src/html/classic/omp.xsl (task [details]): Set parameter "related"
+	of resource-permissions-window template call.
+	(html-create-permission-form): Add list of links to related resources.
+
+	* src/html/classic/omp.xsl (new_permission.html): Add related resources
+	for Tasks and sentence about the list of related resources.
+
+2015-05-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22206.
 
 	* src/html/classic/omp.xsl (task [details], report, task)

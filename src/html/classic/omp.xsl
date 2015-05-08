@@ -4152,6 +4152,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'task'"/>
     <xsl:with-param name="permissions" select="../../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+      <xsl:variable name="detailed_target" select="../../../get_targets_response/target"/>
+      <xsl:variable name="detailed_alerts" select="../../../get_alerts_response/alert"/>
+      <xsl:if test="target/@id != ''">
+        <target id="{target/@id}"/>
+        <xsl:if test="$detailed_target/ssh_lsc_credential/@id != ''">
+          <lsc_credential id="{$detailed_target/ssh_lsc_credential/@id}"/>
+        </xsl:if>
+        <xsl:if test="$detailed_target/smb_lsc_credential/@id != '' and $detailed_target/smb_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id">
+          <lsc_credential id="{$detailed_target/smb_lsc_credential/@id}"/>
+        </xsl:if>
+        <xsl:if test="$detailed_target/esxi_lsc_credential/@id != '' and $detailed_target/esxi_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id and $detailed_target/esxi_lsc_credential/@id != $detailed_target/smb_lsc_credential/@id">
+          <lsc_credential id="{$detailed_target/esxi_lsc_credential/@id}"/>
+        </xsl:if>
+        <xsl:if test="$detailed_target/port_list/@id != ''">
+          <port_list id="{$detailed_target/port_list/@id}"/>
+        </xsl:if>
+      </xsl:if>
+      <xsl:for-each select="alert">
+        <xsl:if test="@id != ''">
+          <xsl:variable name="alert_id" select="@id"/>
+          <alert id="{$alert_id}"/>
+          <xsl:if test="$detailed_alerts[@id=$alert_id]/filter/@id != ''">
+            <filter id="{$detailed_alerts[@id=$alert_id]/filter/@id}"/>
+          </xsl:if>
+        </xsl:if>
+      </xsl:for-each>
+      <xsl:if test="config/@id != ''">
+        <config id="{config/@id}"/>
+      </xsl:if>
+      <xsl:if test="scanner/@id != ''">
+        <scanner id="{scanner/@id}"/>
+      </xsl:if>
+      <xsl:if test="schedule/@id != ''">
+        <schedule id="{schedule/@id}"/>
+      </xsl:if>
+      <xsl:if test="slave/@id != ''">
+        <slave id="{slave/@id}"/>
+      </xsl:if>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -22667,9 +22707,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <option value="2"><xsl:value-of select="gsa:i18n ('for related resources only', 'Permission Window')"/></option>
                 </xsl:if>
               </select>
-              <xsl:for-each select="$related">
-                <input type="hidden" name="{name}" value="{value}"/>
-              </xsl:for-each>
+              <ul style="margin-top:2px; padding-left:15px; font-size:80%">
+                <xsl:for-each select="$related">
+                  <xsl:sort select="gsa:i18n (gsa:type-name (value), gsa:type-name (value))"/>
+                  <li>
+                    <a href="/omp?cmd=get_{value}&amp;{value}_id={substring-after (name, ':')}&amp;token={/envelope/token}">
+                      <xsl:value-of select="gsa:i18n (gsa:type-name (value), gsa:type-name (value))"/>
+                      <xsl:text> </xsl:text>
+                      <xsl:value-of select="substring-after (name, ':')"/>
+                    </a>
+                    <input type="hidden" name="{name}" value="{value}"/>
+                  </li>
+                </xsl:for-each>
+              </ul>
             </td>
           </tr>
           <tr style="text-align:right">
