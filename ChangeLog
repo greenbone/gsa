@@ -1,3 +1,9 @@
+2015-05-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-body]): Set the info_type
+	param in the Method link according to the format of the OID.  Add a
+	details param to the link so that it works for CVEs.
+
 2015-05-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [hosts]): Add "host=" to filter

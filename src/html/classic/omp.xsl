@@ -26753,6 +26753,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="count (detection)">
         <div class="result_section">
+          <xsl:variable name="info-type">
+            <xsl:choose>
+              <xsl:when test="substring (detection/result/details/detail[name = 'source_oid']/value/text(), 1, 4) = 'CVE-'">
+                <xsl:text>cve</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>nvt</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <b><xsl:value-of select="gsa:i18n ('Product Detection Result', 'Result Window')"/></b>
           <p>
           <table>
@@ -26763,7 +26773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
           </td></tr>
           <tr><td><xsl:value-of select="gsa:i18n ('Method', 'Result Window')"/>:</td><td>
-          <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
+          <a href="?cmd=get_info&amp;info_type={$info-type}&amp;details=1&amp;info_id={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
             <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
             (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
           </a>
