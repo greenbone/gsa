@@ -1,3 +1,27 @@
+gsa 6.0.3 (2015-05-11)
+
+This is the third maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release makes redirecting from HTTP to HTTPS the default behavior. It
+further improves permission management and addresses a number of smaller issues.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell and Timo Pollmeier.
+
+Main changes compared to 6.0.2:
+* Redirecting HTTP to HTTPS is now the default behavior. A "--no-redirect"
+  command line parameter has been added.
+* An issue which caused passwords containing spaces to be encoded incorrectly
+  has been addressed.
+* An issue which caused GSA processes to fail to terminate if their parent
+  process terminated unexpectedly has been fixed.
+* Filters used in links in Asset Management and Reports now use more exact
+  filtering.
+* Handling of QoD information has been improved.
+* The preview of related resources when editing permissions has been improved.
+
+
 gsa 6.0.2 (2015-04-30)
 
 This is the second maintenance release of the Greenbone Security Assistant (GSA)
