@@ -441,6 +441,7 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_netgear.png
                 src/html/classic/img/os_novell.png
                 src/html/classic/img/os_openbsd.png
+                src/html/classic/img/os_paloalto.png
                 src/html/classic/img/os_redhat.png
                 src/html/classic/img/os_slackware.png
                 src/html/classic/img/os_sun.png

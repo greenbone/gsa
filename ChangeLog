@@ -1,5 +1,15 @@
 2015-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22363 by Jan-Oliver Wagner using image file from r22364.
+
+	* src/html/classic/img/os_paloalto.png: New.
+
+	* CMakeLists.txt: Install the new icon.
+
+	* src/html/classic/os.xml: Added paloalto.
+
+2015-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22361.
 
 	* src/html/classic/omp.xsl (full-report-export-form)
