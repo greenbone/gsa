@@ -29069,6 +29069,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="overrides" value="1"/>
     <input type="hidden" name="result_hosts_only" value="1"/>
     <input type="hidden" name="levels" value="hmlgf"/>
+    <input type="hidden" name="min_qod" value="{report/filters/min_qod}"/>
+    <input type="hidden" name="apply_min_qod" value="1"/>
     <input type="hidden" name="autofp"
             value="{report/filters/autofp}"/>
     <xsl:variable name="outer_type" select="@type"/>
@@ -29140,6 +29142,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden"
             name="min_cvss_base"
             value="{report/filters/min_cvss_base}"/>
+    <input type="hidden"
+            name="min_qod"
+            value="{report/filters/min_qod}"/>
+    <input type="hidden"
+            name="apply_min_qod"
+            value="1"/>
     <input type="hidden"
             name="sort_field"
             value="{report/sort/field/text()}"/>
