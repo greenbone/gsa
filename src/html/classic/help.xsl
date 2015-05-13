@@ -5112,8 +5112,8 @@ Public License instead of this License.
           <li>
             <b>PCI-DSS:</b> Applies the following mapping.
             <ul>
-              <li>High: 4.3 - 10.0 </li>
-              <li>None: 0.0 - 4.2 </li>
+              <li>High: 4.0 - 10.0 </li>
+              <li>None: 0.0 - 3.9 </li>
             </ul>
           </li>
         </ul>
