@@ -1,3 +1,10 @@
+2015-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22361.
+
+	* src/html/classic/omp.xsl (full-report-export-form)
+	(filtered-report-export-form): Add min_qod and apply_min_qod params.
+
 2015-05-11  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
