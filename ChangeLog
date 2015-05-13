@@ -1,3 +1,11 @@
+2015-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22371.
+
+	* src/html/classic/omp.xsl (gsa:cvss-risk-factor): Update PCI-DSS min.
+
+	* src/html/classic/help.xsl (my_settings.html): Update PCI-DSS min.
+
 2015-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22363 by Jan-Oliver Wagner using image file from r22364.
