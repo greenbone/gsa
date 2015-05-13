@@ -423,6 +423,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:openbsd:openbsd</pattern><title>OpenBSD</title><icon>os_openbsd.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:altaware:palo_alto_networks_panos</pattern><title>PaloAlto</title><icon>os_paloalto.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:univention:univention_corporate_server:2.2</pattern><title>Univention Corporate Server (UCS) 2.2</title><icon>os_ucs.png</icon>
     </operating_system>
     <operating_system>
