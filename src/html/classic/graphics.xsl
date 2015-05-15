@@ -55,12 +55,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.charts = {};
 
     gsa.severity_levels =
-      {max_high : 10.0,
-       min_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium') + 0.1"/>,
+      {max_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('high')"/>,
+       min_high : <xsl:value-of select="gsa:risk-factor-min-cvss ('high')"/>,
        max_medium : <xsl:value-of select="gsa:risk-factor-max-cvss ('medium')"/>,
-       min_medium : <xsl:value-of select="gsa:risk-factor-max-cvss ('low') + 0.1"/>,
+       min_medium : <xsl:value-of select="gsa:risk-factor-min-cvss ('medium')"/>,
        max_low : <xsl:value-of select="gsa:risk-factor-max-cvss ('low')"/>,
-       min_low : 0.1};
+       min_low : <xsl:value-of select="gsa:risk-factor-min-cvss ('low')"/>,
+       max_log : <xsl:value-of select="gsa:risk-factor-max-cvss ('log')"/>};
   </script>
 </xsl:template>
 
@@ -265,6 +266,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           .bar_style (severity_bar_style ("value",
+                                          gsa.severity_levels.max_log,
                                           gsa.severity_levels.max_low,
                                           gsa.severity_levels.max_medium))
         </xsl:otherwise>

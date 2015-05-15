@@ -1,3 +1,35 @@
+2015-05-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Handle severity scores >= 0.0 not classified as "High", "Medium" or
+	"Low" as "Log" consistently and improve handling of jumps in the
+	severity classes like the "Log" to "High" for PCI-DSS.
+
+	* CMakeLists.txt: Install src/html/classic/img/p_bar_gray.png.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Get min and max values
+	of severity levels directly and also for "log".
+	(js-aggregate-chart): Add max_log parameter for severity_bar_style.
+
+	* src/html/classic/gsa-style.css (.progressbar_bar_gray): New class
+	style.
+
+	* src/html/classic/omp.xsl (gsa:cvss-risk-factor): Change "None" to
+	"Log" and count non-zero scores < 4.0 as log for pci-dss.
+	(gsa:risk-factor-max-cvss): Add "log" as alias for "none". Fix limits
+	for pci-dss. Always return 0.0 for unknown level names.
+	(gsa:risk-factor-min-cvss): New template.
+	(gsa:threat-color): Add "non"/"log" case.
+	(severity-bar): Add gray fill for "Log" level.
+
+	* src/html/classic/img/p_bar_gray.png: New image file.
+
+	* src/html/classic/js/gsa_bar_chart.js (severity_bar_style): Add
+	parameter max_log and handle the "Log" level as a range.
+
+	* src/html/classic/js/gsa_graphics_base.js (data_severity_level_counts):
+	Handle "log" level as a range.
+	(severity_level_color_scale): Rename "None" to "Log".
+
 2015-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:cvss-risk-factor): Update PCI-DSS min.

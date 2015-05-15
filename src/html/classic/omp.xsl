@@ -282,7 +282,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$type = 'classic'">
         <xsl:choose>
-          <xsl:when test="$cvss_score = 0.0">None</xsl:when>
+          <xsl:when test="$cvss_score = 0.0">Log</xsl:when>
           <xsl:when test="$cvss_score &gt;= 0.1 and $cvss_score &lt;= 2.0">Low</xsl:when>
           <xsl:when test="$cvss_score &gt;= 2.1 and $cvss_score &lt;= 5.0">Medium</xsl:when>
           <xsl:when test="$cvss_score &gt;= 5.1 and $cvss_score &lt;= 8.0">High</xsl:when>
@@ -292,7 +292,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:when test="$type = 'pci-dss'">
         <xsl:choose>
-          <xsl:when test="$cvss_score = 0.0">None</xsl:when>
+          <xsl:when test="$cvss_score &gt;= 0.0 and $cvss_score &lt; 4.0">Log</xsl:when>
           <xsl:when test="$cvss_score &gt;= 4.0">High</xsl:when>
           <xsl:otherwise>None</xsl:otherwise>
         </xsl:choose>
@@ -300,7 +300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- Default to nist/bsi -->
       <xsl:otherwise>
         <xsl:choose>
-          <xsl:when test="$cvss_score = 0.0">None</xsl:when>
+          <xsl:when test="$cvss_score = 0.0">Log</xsl:when>
           <xsl:when test="$cvss_score &gt;= 0.1 and $cvss_score &lt;= 3.9">Low</xsl:when>
           <xsl:when test="$cvss_score &gt;= 4.0 and $cvss_score &lt;= 6.9">Medium</xsl:when>
           <xsl:when test="$cvss_score &gt;= 7.0 and $cvss_score &lt;= 10.0">High</xsl:when>
@@ -336,7 +336,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$type = 'classic'">
         <xsl:choose>
-          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">0.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'low'">2.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'medium'">5.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
@@ -347,23 +347,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:when test="$type = 'pci-dss'">
         <xsl:choose>
-          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
-          <xsl:when test="gsa:lower-case($threat) = 'low'">0.0</xsl:when>
-          <xsl:when test="gsa:lower-case($threat) = 'medium'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">3.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">3.9</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
-          <xsl:otherwise>None</xsl:otherwise>
+          <xsl:otherwise>0.0</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <!-- Default to nist/bsi -->
       <xsl:otherwise>
         <xsl:choose>
-          <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">0.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'medium'">6.9</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
           <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
-          <xsl:otherwise>None</xsl:otherwise>
+          <xsl:otherwise>0.0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <func:result select="$cvss"/>
+</func:function>
+
+<func:function name="gsa:risk-factor-min-cvss">
+  <xsl:param name="threat"/>
+  <xsl:param name="type"><xsl:value-of select="/envelope/severity"/></xsl:param>
+  <xsl:variable name="cvss">
+    <xsl:choose>
+      <xsl:when test="$type = 'classic'">
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">0.1</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">2.1</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">5.1</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>0.0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+
+      <xsl:when test="$type = 'pci-dss'">
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">3.9</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">4.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>0.0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <!-- Default to nist/bsi -->
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">0.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'low'">0.1</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'medium'">4.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'high'">7.0</xsl:when>
+          <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+          <xsl:otherwise>0.0</xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
@@ -378,6 +420,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="gsa:lower-case($threat) = 'high'">red</xsl:when>
       <xsl:when test="gsa:lower-case($threat) = 'medium'">orange</xsl:when>
       <xsl:when test="gsa:lower-case($threat) = 'low'">lightskyblue</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'none' or gsa:lower-case($threat) = 'log'">silver</xsl:when>
       <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -1952,7 +1995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_bar_done" style="width:0px;"></div>
       </xsl:when>
       <xsl:when test="$threat = 'Log'">
-        <div class="progressbar_bar_done" style="width:0px;"></div>
+        <div class="progressbar_bar_gray" style="width:{$fill}px;"></div>
       </xsl:when>
       <xsl:when test="$threat = 'Low'">
         <div class="progressbar_bar_done" style="width:{$fill}px;"></div>
