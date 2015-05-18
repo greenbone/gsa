@@ -275,6 +275,11 @@ div.label_none {
  background: #bd8634 url('img/p_bar_request.png');
 }
 
+.progressbar_bar_gray {
+ height: 12px;
+ background: silver url('img/p_bar_gray.png');
+}
+
 .progressbar_text {
  z-index:3;
  position:relative;

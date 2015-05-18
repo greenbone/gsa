@@ -1102,8 +1102,10 @@ function data_severity_histogram (old_data, params)
  */
 function data_severity_level_counts (old_data, params)
 {
-  var bins = ["N/A", "None", "Low", "Medium", "High"]
-  var bins_long = ["N/A", "None (0.0)",
+  var bins = ["N/A", "Log", "Low", "Medium", "High"]
+  var bins_long = ["N/A",
+                   "Log (0.0 - "
+                   + gsa.severity_levels.max_log.toFixed (1) + ")",
                    "Low ("
                    + gsa.severity_levels.min_low.toFixed (1)
                    + " - " + gsa.severity_levels.max_low.toFixed (1) + ")",
@@ -1162,7 +1164,7 @@ function data_severity_level_counts (old_data, params)
       var val = old_data.records [i][severity_field];
       var count = old_data.records [i][count_field];
 
-      if (val !== "" && Number (val) <= 0.0)
+      if (val !== "" && Number (val) < gsa.severity_levels.min_low)
         records[1][count_field] += count;
       else if (Number (val) >= gsa.severity_levels.min_high)
         records[4][count_field] += count;
@@ -1573,7 +1575,7 @@ function title_total (title, count_field)
 severity_level_color_scale
   = d3.scale.ordinal ()
               .range (["silver", "#DDDDDD", "skyblue", "orange", "#D80000"])
-              .domain (["N/A", "None", "Low", "Medium", "High"]);
+              .domain (["N/A", "Log", "Low", "Medium", "High"]);
 
 /*
  * Severity gradient
