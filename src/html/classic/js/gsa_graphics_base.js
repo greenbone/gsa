@@ -1164,14 +1164,14 @@ function data_severity_level_counts (old_data, params)
       var val = old_data.records [i][severity_field];
       var count = old_data.records [i][count_field];
 
-      if (val !== "" && Number (val) < gsa.severity_levels.min_low)
+      if (val !== "" && Number (val) <= gsa.severity_levels.max_log)
         records[1][count_field] += count;
+      else if (Number (val) >= gsa.severity_levels.min_low && Number (val) <= gsa.severity_levels.max_low)
+        records[2][count_field] += count;
+      else if (Number (val) >= gsa.severity_levels.min_medium && Number (val) <= gsa.severity_levels.max_medium)
+        records[3][count_field] += count;
       else if (Number (val) >= gsa.severity_levels.min_high)
         records[4][count_field] += count;
-      else if (Number (val) >= gsa.severity_levels.min_medium)
-        records[3][count_field] += count;
-      else if (Number (val) >= gsa.severity_levels.min_low)
-        records[2][count_field] += count;
       else
         records[0][count_field] += count;
     };
@@ -1180,6 +1180,13 @@ function data_severity_level_counts (old_data, params)
     {
       records [i][severity_field + "~long"] = bins_long [i]
     }
+
+  if (gsa.severity_levels.min_high == gsa.severity_levels.max_medium)
+    delete records[4];
+  if (gsa.severity_levels.min_medium == gsa.severity_levels.max_low)
+    delete records[3];
+  if (gsa.severity_levels.min_low == gsa.severity_levels.max_log)
+    delete records[2];
 
   var data = {
               original_xml : old_data.original_xml,
@@ -1584,7 +1591,7 @@ severity_colors_gradient = function ()
 {
   return d3.scale.linear()
             .domain([-1.0,
-                      0.0,
+                      gsa.severity_levels.max_log,
                       gsa.severity_levels.max_low,
                       gsa.severity_levels.max_medium,
                       10.0])
