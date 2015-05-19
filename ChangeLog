@@ -1,3 +1,11 @@
+2015-05-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22196.
+
+	* src/gsad_omp.c (new_permission): Get users with "get_users"
+	permission, because Manager now allows a user to create resource
+	permissions on these users.
+
 2015-05-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22383.

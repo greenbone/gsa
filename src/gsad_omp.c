@@ -17747,7 +17747,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_users filter=\"rows=-1 permission=modify_user\"/>"))
+                   "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
           case -1:
