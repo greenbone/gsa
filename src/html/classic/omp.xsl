@@ -761,48 +761,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="substring-before ($lower, '_') = 'describe'">
         <xsl:variable name="described" select="substring-after ($lower, '_')"/>
         <xsl:variable name="text">
-          <xsl:text>may get details about </xsl:text>
           <xsl:choose>
             <xsl:when test="$described = 'auth'">
-              <xsl:text>the authentication configuration</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may get details about the authentication configuration', 'Permission Description')"/>
             </xsl:when>
             <xsl:when test="$described = 'cert'">
-              <xsl:text>the CERT feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may get details about the CERT feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:when test="$described = 'feed'">
-              <xsl:text>the NVT feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may get details about the NVT feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:when test="$described = 'scap'">
-              <xsl:text>the SCAP feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may get details about the SCAP feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="$described"/>
+              <!-- This should only be a fallback for unexpected output -->
+              <xsl:value-of select="concat (gsa:i18n ('may get details about ', 'Permission Description') , $described)"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="gsa:i18n ($text, 'Permission Description')"/>
+        <xsl:value-of select="$text"/>
       </xsl:when>
 
       <xsl:when test="substring-before ($lower, '_') = 'sync'">
         <xsl:variable name="to_sync" select="substring-after ($lower, '_')"/>
         <xsl:variable name="text">
-          <xsl:text>may sync </xsl:text>
           <xsl:choose>
             <xsl:when test="$to_sync = 'cert'">
-              <xsl:text>the CERT feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may sync the CERT feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:when test="$to_sync = 'feed'">
-              <xsl:text>the NVT feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may sync the NVT feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:when test="$to_sync = 'scap'">
-              <xsl:text>the SCAP feed</xsl:text>
+              <xsl:value-of select="gsa:i18n ('may sync the SCAP feed', 'Permission Description')"/>
             </xsl:when>
             <xsl:otherwise>
+              <!-- This should only be a fallback for unexpected output -->
+              <xsl:value-of select="gsa:i18n ('may sync ', 'Permission Description')"/>
               <xsl:value-of select="$to_sync"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="gsa:i18n ($text, 'Permission Description')"/>
+        <xsl:value-of select="$text"/>
       </xsl:when>
 
       <xsl:when test="contains ($lower, '_')">
@@ -1708,7 +1709,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
   <xsl:param name="cmd">start_<xsl:value-of select="$type"/></xsl:param>
-  <xsl:param name="alt">Start</xsl:param>
+  <xsl:param name="alt"><xsl:value-of select="gsa:i18n('Start', 'Task Table Row')"/></xsl:param>
+  <xsl:param name="name">Start</xsl:param>
 
   <div style="display: inline">
     <form style="display: inline; font-size: 0px; margin-left: 3px"
@@ -1719,8 +1721,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <input type="image" src="/img/start.png" alt="{gsa:i18n($alt, 'Task Table Row')}"
-             name="{$alt}" value="{$alt}" title="{gsa:i18n($alt, 'Task Table Row')}"/>
+      <input type="image" src="/img/start.png" alt="{$alt}"
+             name="{$name}" value="{$name}" title="{$alt}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -9169,6 +9171,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="cmd">test_alert</xsl:with-param>
             <xsl:with-param name="alt"><xsl:value-of select="gsa:i18n ('Test', 'Alert Table Row')"/></xsl:with-param>
+            <xsl:with-param name="name">Test</xsl:with-param>
           </xsl:call-template>
         </td>
       </xsl:otherwise>
@@ -34363,12 +34366,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <center>
           <div style="margin-bottom:10px">
             <xsl:choose>
+              <xsl:when test="action = 'delete' and count ($resources) = 1">
+                <xsl:value-of select="concat (gsa:i18n ('#BULK DELETE CONFIRM PREFIX#', 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n ('#BULK DELETE CONFIRM SUFFIX#', 'Bulk Action', ' will be deleted.'))"/>
+                <input type="hidden" name="cmd" value="bulk_delete"/>
+              </xsl:when>
               <xsl:when test="action = 'delete'">
-                <xsl:value-of select="concat (gsa:i18n (concat ('#BULK DELETE CONFIRM PREFIX', $plural_string ,'#'), 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n (concat ('#BULK DELETE CONFIRM SUFFIX', $plural_string ,'#'), 'Bulk Action', ' will be deleted.'))"/>
+                <xsl:value-of select="concat (gsa:i18n ('#BULK DELETE CONFIRM PREFIX PLURAL#', 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n ('#BULK DELETE CONFIRM SUFFIX PLURAL#', 'Bulk Action', ' will be deleted.'))"/>
+                <input type="hidden" name="cmd" value="bulk_delete"/>
+              </xsl:when>
+              <xsl:when test="action = 'trash' and count ($resources) = 1">
+                <xsl:value-of select="concat (gsa:i18n ('#BULK TRASH CONFIRM PREFIX#', 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n ('#BULK TRASH CONFIRM SUFFIX#', 'Bulk Action', ' will be moved to the trashcan.'))"/>
                 <input type="hidden" name="cmd" value="bulk_delete"/>
               </xsl:when>
               <xsl:when test="action = 'trash'">
-                <xsl:value-of select="concat (gsa:i18n (concat ('#BULK TRASH CONFIRM PREFIX', $plural_string ,'#'), 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n (concat ('#BULK TRASH CONFIRM SUFFIX', $plural_string ,'#'), 'Bulk Action', ' will be moved to the trashcan.'))"/>
+                <xsl:value-of select="concat (gsa:i18n ('#BULK TRASH CONFIRM PREFIX PLURAL#', 'Bulk Action', ''), count($resources), ' ', $type_string, gsa:i18n ('#BULK TRASH CONFIRM SUFFIX PLURAL#', 'Bulk Action', ' will be moved to the trashcan.'))"/>
                 <input type="hidden" name="cmd" value="bulk_delete"/>
               </xsl:when>
             </xsl:choose>
