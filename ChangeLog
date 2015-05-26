@@ -1,3 +1,8 @@
+2015-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (new_permission): Reduce permission to GET for getting
+	groups and roles, like for users.
+
 2015-05-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:permission-description): Do not build
