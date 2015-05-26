@@ -1,3 +1,10 @@
+2015-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22459.
+
+	* src/gsad_omp.c (new_permission): Reduce permission to GET for getting
+	groups and roles, like for users.
+
 2015-05-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22196.
