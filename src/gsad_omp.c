@@ -17733,7 +17733,7 @@ delete_permission_omp (credentials_t * credentials, params_t *params)
  */
 char *
 new_permission (credentials_t * credentials, params_t *params,
-                 const char *extra_xml)
+                const char *extra_xml)
 {
   GString *xml;
 
@@ -17789,7 +17789,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_groups filter=\"rows=-1 permission=modify_group\"/>"))
+                   "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
           case -1:
@@ -17831,7 +17831,7 @@ new_permission (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity,
-                   "<get_roles filter=\"rows=-1 permission=modify_role\"/>"))
+                   "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
           case -1:
