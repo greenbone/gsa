@@ -1,3 +1,34 @@
+2015-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add a libxslt extension that allows using gettext for translations
+	if internal transformations are enabled and convert the existing
+	translations to po files.
+
+	* CMakeLists.txt: Set new variable GSA_LOCALE_DIR.
+
+	* src/CMakeLists.txt: Add new static library gsad_xslt_ext currently
+	consisting of xslt_i18n and include po subdirectory.
+
+	* src/gsad_base.c: Add #include "xslt_i18n.h".
+	(xsl_transform_with_stylesheet): Register the i18n extension module.
+
+	* src/gsad_log_conf.cmake_in: Add new log domain "gsad xslt".
+
+	* src/xslt_i18n.c: New file. XSLT extension for i18n functions.
+
+	* src/xslt_i18n.h: New header file.
+
+	* src/html/classic/gsad.xsl: Add gsa-i18n namespace and extension.
+	(gsa:i18n): Use the gsa-i18n:gettext extension function if available.
+
+	* src/po/CMakeLists.txt: New file.
+
+	* src/po/gsad_xsl-de.po: New file. German gettext format translations
+	generated from src/html/classic/po/de.xml with tools/xml2po.
+
+	* src/po/gsad_xsl-zh.po: New file. Chinese gettext format translations
+	generated from src/html/classic/po/zh.xml with tools/xml2po.
+
 2015-05-28  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* tools/xsl2pot: Added, this utility generates pot files from the xslt

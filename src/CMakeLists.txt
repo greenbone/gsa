@@ -50,10 +50,17 @@ target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${LIBOPENVAS_BASE_LDFLAGS} ${LIBOPENVAS_MISC_LDFLAGS}
                        ${GNUTLS_LDFLAGS})
 
+add_library (gsad_xslt_ext STATIC xslt_i18n.c)
+target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
+                       ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
+                       ${LIBOPENVAS_BASE_LDFLAGS} ${LIBOPENVAS_MISC_LDFLAGS}
+                       ${GNUTLS_LDFLAGS})
+
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
@@ -98,6 +105,10 @@ endif (GSAD_PID_DIR)
 if (GSA_CONFIG_DIR)
   add_definitions (-DGSA_CONFIG_DIR=\\\"${GSA_CONFIG_DIR}\\\")
 endif (GSA_CONFIG_DIR)
+
+if (GSA_LOCALE_DIR)
+  add_definitions (-DGSA_LOCALE_DIR=\\\"${GSA_LOCALE_DIR}\\\")
+endif (GSA_LOCALE_DIR)
 
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
@@ -167,5 +178,8 @@ add_custom_target (ctags COMMENT "Building tags..."
                    COMMAND ctags ${C_FILES})
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
+
+## gettext translations
+add_subdirectory (po)
 
 ## End
