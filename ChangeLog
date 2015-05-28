@@ -1,5 +1,16 @@
 2015-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/xslt_i18n.c (GSA_I18N_EXT_URI): Remove cast and add doc.
+	(locale_env_mutex): Add doc.
+	(xslt_ext_gettext): Add doc and correct error message.
+	(init_i18n_module): Add doc, remove debug output and use URI passed
+	as parameter.
+	(shutdown_i18n_module): Add doc, remove debug output and unregister
+	gettext function.
+	(register_i18n_ext_module): Add doc and add cast for GSA_I18N_EXT_URI.
+
+2015-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add a libxslt extension that allows using gettext for translations
 	if internal transformations are enabled and convert the existing
 	translations to po files.

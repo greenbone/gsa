@@ -43,10 +43,22 @@
 #define GETTEXT_CONTEXT_GLUE "\004"
 #endif /* not GETTEXT_CONTEXT_GLUE */
 
-#define GSA_I18N_EXT_URI ((xmlChar*) "http://openvas.org/i18n")
+/**
+ * @brief Namespace URI for the i18n XSLT extension
+ */
+#define GSA_I18N_EXT_URI "http://openvas.org/i18n"
 
+/**
+ * @brief mutex for locale environment variables
+ */
 static GMutex locale_env_mutex;
 
+/**
+ * @brief XSLT extension function: gettext wrapper
+ *
+ * @param[in] ctxt    XPath parser context
+ * @param[in] nargs   Number of arguments
+ */
 static void
 xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
                   int nargs)
@@ -57,7 +69,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
 
   if (nargs < 2 && nargs > 3)
     {
-      xsltGenericError (ctxt, "Expected 2 arguments, got %d", nargs);
+      xsltGenericError (ctxt, "Expected 2 or 3 arguments, got %d", nargs);
       return;
     }
 
@@ -136,34 +148,49 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
   valuePush (ctxt, result_obj);
 }
 
+/**
+ * @brief Initialize the i18n XSLT extension module.
+ *
+ * @param[in] ctxt  xslt transform context
+ * @param[in] URI   namespace URI
+ */
 static void*
 init_i18n_module (xsltTransformContextPtr ctxt,
                   const xmlChar *URI)
 {
-  g_debug ("Initializing i18n XSLT module");
-
   xsltRegisterExtFunction (ctxt,
                            (xmlChar*) "gettext",
-                           GSA_I18N_EXT_URI,
+                           URI,
                            xslt_ext_gettext);
 
   return NULL;
 };
 
+/**
+ * @brief Initialize the i18n XSLT extension module.
+ *
+ * @param[in] ctxt  xslt transform context
+ * @param[in] URI   namespace URI
+ * @param[in] data  extra data
+ */
 static void
 shutdown_i18n_module (xsltTransformContextPtr ctxt,
                       const xmlChar *URI,
                       void *data)
 {
-  g_debug ("Shutting down i18n XSLT module");
+  xsltUnregisterExtModuleFunction ((xmlChar*) "gettext",
+                                   URI);
 };
 
+/**
+ * @brief Register the i18n XSLT extension module.
+ */
 void
 register_i18n_ext_module ()
 {
   g_debug ("Registering i18n XSLT module");
 
-  xsltRegisterExtModule(GSA_I18N_EXT_URI,
+  xsltRegisterExtModule((xmlChar*) GSA_I18N_EXT_URI,
                         init_i18n_module,
                         shutdown_i18n_module);
 
