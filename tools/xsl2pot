@@ -1,0 +1,75 @@
+#! /usr/bin/env python
+
+# Greenbone Security Assistant
+# $Id$
+# Description: Utility to generate pot files from gsa xslt sheets
+#
+# Authors:
+#  Benoit Allard <benoit.allard@greenbone.net>
+#
+# Copyright:
+#  Copyright (C) 2014 Greenbone Networks GmbH
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2,
+# or, at your option, any later version as published by the Free
+# Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# xgettext doesn't work for us:
+#  - our patterns are inside ""
+#  - the keyword contains a colon
+
+import os
+import polib
+import re
+
+gettext_re = re.compile('gsa:i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.+?)\'\s*)?\)')
+
+def process(filepath, po):
+    print "Processing %s" % filepath
+
+    with open(filepath) as xsl_file:
+        content = xsl_file.read()
+    
+    for m in gettext_re.finditer(content):
+        msgid = m.group('id')
+        msgctxt = m.group('context')
+        e = po.find(msgid, msgctxt=msgctxt)
+        if e is None:
+            e = polib.POEntry(msgid=m.group('id'), msgctxt=m.group('context'),
+                              occurrences=[(filepath, content.count("\n",0,m.start())+1)])
+            if m.group('default') is not None:
+                e.msgstr = m.group('default')
+            po.append(e)
+        else:
+            e.occurrences.append((filepath, content.count("\n",0,m.start())+1))
+
+def main(xsldirpath, potfilepath=None):
+    po = polib.POFile()
+    po.metadata = {}
+
+    for root, dirs, files in os.walk(xsldirpath):
+        for filepath in files:
+            if filepath.endswith('.xsl'):
+                process(os.path.join(root, filepath), po)
+
+    if potfilepath is None:
+        potfilepath = os.path.join(xsldirpath, 'messages.pot')
+
+    po.save(potfilepath)
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) == 1:
+        print "Usage: %s XSLIDIR [POTFILE]"
+        sys.exit(1)
+    main(*sys.argv[1:])
