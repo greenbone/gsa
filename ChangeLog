@@ -1,5 +1,9 @@
 2015-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/xslt_i18n.c (xslt_ext_gettext): Correct args count check.
+
+2015-05-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/xslt_i18n.c (GSA_I18N_EXT_URI): Remove cast and add doc.
 	(locale_env_mutex): Add doc.
 	(xslt_ext_gettext): Add doc and correct error message.
