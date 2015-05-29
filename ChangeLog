@@ -1,3 +1,8 @@
+2015-05-29  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* INSTALL: mention the prerequisities for the translation.
+	* src/gsad_omp.c (get_reports): Reduce the scope of a variable.
+
 2015-05-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* ChangeLog: Correct filename src/po/gsad_xsl-zh.po in last entry.

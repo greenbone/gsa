@@ -24,10 +24,14 @@ Prerequisites:
 * libexslt
 * pkg-config
 * xsltproc
+* gettext
 
 Prerequisites for building documentation:
 * Doxygen
 * xmltoman (optional, for building man page)
+
+Prerequisites to work on the translations:
+* python-polib
 
 Install prerequisites on Debian GNU/Linux:
 # apt-get install libmicrohttpd-dev libxml2-dev libxslt1-dev

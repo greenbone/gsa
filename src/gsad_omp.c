@@ -10833,7 +10833,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
-  gchar *fname_format, *file_name, *esc_response;
+  gchar *fname_format, *esc_response;
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -11553,6 +11553,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (extension && requested_content_type && content_type
               && content_disposition)
             {
+              gchar *file_name;
               ret = setting_get_value (&session,
                                        "e1a2ae0b-736e-4484-b029-330c9e15b900",
                                        &fname_format);
