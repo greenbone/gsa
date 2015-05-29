@@ -23,15 +23,23 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 include (FindGettext)
+include (FindPythonInterp)
 
 macro (MAKE_TRANSLATION _LANG)
-  make_directory (${CMAKE_CURRENT_BINARY_DIR}/${_LANG})
+  file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${_LANG})
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo
-                      DEPENDS gsad_xsl-${_LANG}.po
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
                       COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po -o ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo
            DESTINATION ${GSA_LOCALE_DIR}/${_LANG}/LC_MESSAGES)
+
+  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}.po
+                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
+                      COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
+                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
+                      ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
+                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}.po)
 endmacro ()
 
 if (GETTEXT_FOUND)
@@ -43,9 +51,25 @@ if (GETTEXT_FOUND)
                      ALL
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/de/gsad_xsl.mo
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh/gsad_xsl.mo
-                     COMMENT "Creating translation .mo files")
+                     COMMENT "Created translation .mo files")
 
+  add_custom_target (gettext-po-files
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de.po
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh.po
+                     COMMENT "Created translation .po files")
+
+  if (PYTHONINTERP_FOUND)
+    add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
+                        COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/xsl2pot"
+                        ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic"
+                                "${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot"
+                        COMMENT "Created translation template (.pot) files")
+    add_custom_target (gettext-pot-files
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot)
+  else (PYTHONINTERP_FOUND)
+    message (WARNING "Python interpreter not found, cannot run .pot generator.")
+  endif (PYTHONINTERP_FOUND)
 
 else (GETTEXT_FOUND)
-  message (WARNING "Could not build translation .mo files: gettext not found.")
+  message (WARNING "Could not build translation files: gettext not found.")
 endif (GETTEXT_FOUND)
