@@ -31,6 +31,7 @@ import polib
 CHUNK_SIZE = 2048
 
 in_context = False
+ctx = ''
 context = []
 in_msgid = False
 msgid = ''
@@ -58,6 +59,9 @@ def end_element(name):
         """ reset the context at the end of a group """
         global context
         context = []
+    elif name == 'ctxt':
+        context.append(ctx)
+        ctx = ''
     elif name == "msg":
         """ Add an entry """
         for ctx in context:
@@ -74,7 +78,7 @@ def end_element(name):
 
 def char_data(data):
     if in_context:
-        context.append(data)
+        ctx += data
     elif in_msgid:
         global msgid
         msgid += data

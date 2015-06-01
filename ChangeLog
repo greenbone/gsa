@@ -1,3 +1,7 @@
+2015-06-01  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* tools/xml2po (char_data): Group events that belong together.
+
 2015-05-29  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad_omp.c: Add variable definition.
