@@ -1,3 +1,8 @@
+2015-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* tools/xsl2pot (unescape): New function.
+	(process): Unescape extracted strings.
+
 2015-06-01  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* tools/xml2po: Don't use short variable names
