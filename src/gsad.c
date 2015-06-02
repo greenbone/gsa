@@ -1078,7 +1078,7 @@ init_validator ()
   openvas_validator_add (validator, "caller",     "^.*$");
   openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
-  openvas_validator_add (validator, "comment",    "^[-_;'()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  openvas_validator_add (validator, "comment",    "^[-_;':()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
