@@ -15110,7 +15110,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
                 &entity,
                 "<create_schedule>"
                 "<name>%s</name>"
-                "%s%s%s"
+                "<comment>%s</comment>"
                 "<first_time>"
                 "<hour>%s</hour>"
                 "<minute>%s</minute>"
@@ -15129,9 +15129,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
                 "<timezone>%s</timezone>"
                 "</create_schedule>",
                 name,
-                comment ? "<comment>" : "",
-                comment ? comment : "",
-                comment ? "</comment>" : "",
+                comment,
                 hour,
                 minute,
                 day_of_month,
