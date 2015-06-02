@@ -15115,6 +15115,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
   timezone = params_value (params, "timezone");
 
   CHECK_PARAM (name, "Create Schedule", new_schedule);
+  CHECK_PARAM (comment, "Create Schedule", new_schedule);
   CHECK_PARAM (hour, "Create Schedule", new_schedule);
   CHECK_PARAM (minute, "Create Schedule", new_schedule);
   CHECK_PARAM (day_of_month, "Create Schedule", new_schedule);
@@ -20931,14 +20932,14 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
-      || duration == NULL || duration_unit == NULL || month == NULL
-      || period == NULL || period_unit == NULL || year == NULL
+  if (name == NULL || comment == NULL || hour == NULL || minute == NULL
+      || day_of_month == NULL || duration == NULL || duration_unit == NULL
+      || month == NULL || period == NULL || period_unit == NULL || year == NULL
       || timezone == NULL)
     return edit_schedule (credentials, params,
                           GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
 
-  if (schedule_id == NULL || name == NULL || comment == NULL)
+  if (schedule_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a schedule. "

@@ -1,3 +1,9 @@
+2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_schedule_omp): Check comment.
+	(save_schedule_omp): Move comment to the invalid parameter check.
+	Remove redundant name comparison.
+
 2015-06-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/dynamic_strings.xsl: New file. Dummy templates for
