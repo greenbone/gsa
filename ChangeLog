@@ -1,5 +1,11 @@
 2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r22541.
+
+	* src/gsad.c (init_validator): Allow colons in comments.
+
+2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r22537.
 
 	* src/gsad_omp.c (create_schedule_omp): Check comment.
