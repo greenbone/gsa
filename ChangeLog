@@ -1,3 +1,16 @@
+2015-06-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/dynamic_strings.xsl: New file. Dummy templates for
+	xsl2pot, containing strings that are not used literally in the other
+	XSL files because they are generated before translation.
+
+	* src/html/classic/omp.xsl: Merge i18n contexts "<Type> Table Row" and
+	"<Type> Window" into "<Type>" and contexts "Table Row" and "Window"
+	into "Generic Resource".
+
+	* src/po/CMakeLists.txt (gettext-po-files): Add .pot file dependency.
+	(gsad_xsl.pot): Add .xsl files as dependencies.
+
 2015-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* tools/xsl2pot (unescape): New function.
