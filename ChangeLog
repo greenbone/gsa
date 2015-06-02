@@ -1,3 +1,11 @@
+2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22537.
+
+	* src/gsad_omp.c (create_schedule_omp): Check comment.
+	(save_schedule_omp): Move comment to the invalid parameter check.
+	Remove redundant name comparison.
+
 2015-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22459.
