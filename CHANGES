@@ -1,3 +1,22 @@
+gsa 5.0.8 (2015-06-02)
+
+This is the eighth maintenance release of the Greenbone Security Assistant (GSA)
+5.0 module for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release improves the filters used in links in Asset Management and Reports
+and adds an icon for Palo Alto devices.
+
+Many thanks to everyone who contributed to this release:
+Timo Pollmeier and Jan-Oliver Wagner.
+
+Main changes since 5.0.7:
+* Filters used in links in Asset Management and Reports now use more exact
+  filtering.
+* An icon for Palo Alto devices has been added.
+
+
 gsa 5.0.7 (2015-04-17)
 
 This is the seventh maintenance release of the Greenbone Security Assistant (GSA)
