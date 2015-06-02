@@ -4592,22 +4592,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:for-each select="exslt:node-set ($columns)/column">
                 <xsl:choose>
                   <xsl:when test="count (column) = 0">
-                    <xsl:variable name="field">
-                      <xsl:choose>
-                        <xsl:when test="field">
-                          <xsl:value-of select="field"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="gsa:column-filter-name (name)"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:variable>
                     <td rowspan="2">
                       <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
                         <xsl:with-param name="head" select="name"/>
                         <xsl:with-param name="image" select="image"/>
-                        <xsl:with-param name="name" select="$field"/>
+                        <xsl:with-param name="name" select="field"/>
                         <xsl:with-param name="type" select="$type"/>
                         <xsl:with-param name="current" select="$current"/>
                         <xsl:with-param name="token" select="$token"/>
@@ -4638,22 +4628,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:for-each select="column">
-                      <xsl:variable name="field">
-                        <xsl:choose>
-                          <xsl:when test="field">
-                            <xsl:value-of select="field"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="gsa:column-filter-name (name)"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:variable>
                       <td style="font-size:10px;">
                         <xsl:copy-of select="html/before/*"/>
                         <xsl:call-template name="column-name">
                           <xsl:with-param name="head" select="name"/>
                           <xsl:with-param name="image" select="image"/>
-                          <xsl:with-param name="name" select="$field"/>
+                          <xsl:with-param name="name" select="field"/>
                           <xsl:with-param name="type" select="$type"/>
                           <xsl:with-param name="current" select="$current"/>
                           <xsl:with-param name="token" select="$token"/>
@@ -7021,24 +7001,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="task_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Status</name>
+        <name><xsl:value-of select="gsa:i18n('Status', 'Task')"/></name>
+        <field>status</field>
       </column>
       <column>
-        <name>Reports</name>
+        <name><xsl:value-of select="gsa:i18n('Reports', 'Report')"/></name>
         <column>
-          <name>Total</name>
+          <name><xsl:value-of select="gsa:i18n('Total', 'Task|Reports')"/></name>
+          <field>total</field>
           <sort-reverse/>
         </column>
         <column>
-          <name>Last</name>
+          <name><xsl:value-of select="gsa:i18n('Last', 'Task|Reports')"/></name>
+          <field>last</field>
           <sort-reverse/>
         </column>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
         <html>
           <before>
@@ -7100,7 +7085,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </html>
       </column>
       <column>
-        <name>Trend</name>
+        <name><xsl:value-of select="gsa:i18n('Trend', 'Task')"/></name>
+        <field>trend</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="6"/>
@@ -7247,10 +7233,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="lsc_credential_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Login</name>
+        <name><xsl:value-of select="gsa:i18n('Login', 'Credential')"/></name>
+        <field>login</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="8"/>
@@ -7709,10 +7697,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="agent_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Trust</name>
+        <name><xsl:value-of select="gsa:i18n('Trust', 'Agent')"/></name>
+        <field>trust</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="6"/>
@@ -8476,19 +8466,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="alert_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Event</name>
+        <name><xsl:value-of select="gsa:i18n('Event', 'Alert')"/></name>
+        <field>event</field>
       </column>
       <column>
-        <name>Condition</name>
+        <name><xsl:value-of select="gsa:i18n('Condition', 'Alert')"/></name>
+        <field>condition</field>
       </column>
       <column>
-        <name>Method</name>
+        <name><xsl:value-of select="gsa:i18n('Method', 'Alert')"/></name>
+        <field>method</field>
       </column>
       <column>
-        <name>Filter</name>
+        <name><xsl:value-of select="gsa:i18n('Filter', 'Alert')"/></name>
+        <field>filter</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
@@ -9840,13 +9835,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="filter_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Term</name>
+        <name><xsl:value-of select="gsa:i18n('Term', 'Filter')"/></name>
+        <field>term</field>
       </column>
       <column>
-        <name>Type</name>
+        <name><xsl:value-of select="gsa:i18n('Type', 'Filter')"/></name>
+        <field>type</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -10158,22 +10156,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="tag_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Value</name>
+        <name><xsl:value-of select="gsa:i18n('Value', 'Tag')"/></name>
+        <field>value</field>
       </column>
       <column>
-        <name>Active</name>
+        <name><xsl:value-of select="gsa:i18n('Active', 'Tag')"/></name>
+        <field>active</field>
       </column>
       <column>
-        <name>Resource Type</name>
+        <name><xsl:value-of select="gsa:i18n('Resource Type', 'Tag')"/></name>
+        <field>resource_type</field>
       </column>
       <column>
-        <name>Resource Name</name>
+        <name><xsl:value-of select="gsa:i18n('Resource Name', 'Tag')"/></name>
+        <field>resource_name</field>
       </column>
       <column>
-        <name>Modified</name>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -11810,13 +11814,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="extra_params"/>
   <xsl:param name="sort-reverse"/>
   <xsl:param name="token" select="/envelope/token"/>
-  <xsl:param name="i18n-context" select="''"/>
   <xsl:variable name="heading">
     <xsl:choose>
       <xsl:when test="image">
         <img src="{$image}"
-             alt="{gsa:i18n ($head, $i18n-context)}"
-             title="{gsa:i18n ($head, $i18n-context)}"/>
+             alt="{$head}"
+             title="{$head}"/>
       </xsl:when>
       <xsl:when test="contains ($head, '.png')">
         <img src="/img/{$head}"
@@ -11829,7 +11832,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="gsa:i18n ($head, $i18n-context)"/>
+        <xsl:value-of select="$head"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -11866,29 +11869,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="target_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Hosts</name>
+        <name><xsl:value-of select="gsa:i18n('hosts', 'Target')"/></name>
+        <field>hosts</field>
       </column>
       <column>
-        <name>IPs</name>
+        <name><xsl:value-of select="gsa:i18n('IPs', 'Target')"/></name>
+        <field>ips</field>
       </column>
       <column>
-        <name>Port List</name>
+        <name><xsl:value-of select="gsa:i18n('Port List', 'Port List')"/></name>
+        <field>port_list</field>
       </column>
       <column>
-        <name>Credentials</name>
+        <name><xsl:value-of select="gsa:i18n('Credentials', 'Credential')"/></name>
         <column>
-          <name>SSH</name>
+          <name><xsl:value-of select="gsa:i18n('SSH', 'Target|Credentials')"/></name>
           <field>ssh_credential</field>
         </column>
         <column>
-          <name>SMB</name>
+          <name><xsl:value-of select="gsa:i18n('SMB', 'Target|Credentials')"/></name>
           <field>smb_credential</field>
         </column>
         <column>
-          <name>ESXi</name>
+          <name><xsl:value-of select="gsa:i18n('ESXi', 'Target|Credentials')"/></name>
           <field>esxi_credential</field>
         </column>
       </column>
@@ -14014,29 +14021,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="config_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Families</name>
+        <name><xsl:value-of select="gsa:i18n('Families', 'Scan Config')"/></name>
         <column>
-          <name>Total</name>
+          <name><xsl:value-of select="gsa:i18n('Total', 'Scan Config|Families')"/></name>
           <field>families_total</field>
           <sort-reverse/>
         </column>
         <column>
-          <name>Trend</name>
+          <name><xsl:value-of select="gsa:i18n('Trend', 'Scan Config|Families')"/></name>
           <field>families_trend</field>
         </column>
       </column>
       <column>
-        <name>NVTs</name>
+        <name><xsl:value-of select="gsa:i18n('NVTs', 'NVT')"/></name>
         <column>
-          <name>Total</name>
+          <name><xsl:value-of select="gsa:i18n('Total', 'Scan Config|NVTs')"/></name>
           <field>nvts_total</field>
           <sort-reverse/>
         </column>
         <column>
-          <name>Trend</name>
+          <name><xsl:value-of select="gsa:i18n('Trend', 'Scan Config|NVTs')"/></name>
           <field>nvts_total</field>
           <sort-reverse/>
         </column>
@@ -14790,21 +14798,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="schedule_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>First Run</name>
+        <name><xsl:value-of select="gsa:i18n('First Run', 'Schedule')"/></name>
+        <field>first_run</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Next Run</name>
+        <name><xsl:value-of select="gsa:i18n('Next Run', 'Schedule')"/></name>
+        <field>next_run</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Period</name>
+        <name><xsl:value-of select="gsa:i18n('Period', 'Schedule')"/></name>
+        <field>period</field>
       </column>
       <column>
-        <name>Duration</name>
+        <name><xsl:value-of select="gsa:i18n('Duration', 'Schedule')"/></name>
+        <field>duration</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -16020,18 +16033,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="scanner_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Host</name>
+        <name><xsl:value-of select="gsa:i18n('Host', 'Host')"/></name>
+        <field>host</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Port</name>
+        <name><xsl:value-of select="gsa:i18n('Port', 'Scanner')"/></name>
+        <field>port</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Type</name>
+        <name><xsl:value-of select="gsa:i18n('Type', 'Scanner')"/></name>
+        <field>type</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="7"/>
@@ -16579,16 +16596,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="slave_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Host</name>
+        <name><xsl:value-of select="gsa:i18n('Host', 'Host')"/></name>
+        <field>host</field>
       </column>
       <column>
-        <name>Port</name>
+        <name><xsl:value-of select="gsa:i18n('Port', 'Slave')"/></name>
+        <field>port</field>
       </column>
       <column>
-        <name>Login</name>
+        <name><xsl:value-of select="gsa:i18n('Login', 'Slave')"/></name>
+        <field>login</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -17908,20 +17929,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Title</name>
+        <name><xsl:value-of select="gsa:i18n('Title', 'CPE')"/></name>
+        <field>title</field>
       </column>
       <column>
-        <name>Modified</name>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>CVEs</name>
+        <name><xsl:value-of select="gsa:i18n('CVEs', 'CVE')"/></name>
+        <field>cves</field>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -17961,32 +17987,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Vector</name>
+        <name><xsl:value-of select="gsa:i18n('Vector', 'CVSS Vector')"/></name>
+        <field>vector</field>
       </column>
       <column>
-        <name>Complexity</name>
+        <name><xsl:value-of select="gsa:i18n('Complexity', 'CVSS Vector')"/></name>
+        <field>complexity</field>
       </column>
       <column>
-        <name>Authentication</name>
+        <name><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/></name>
+        <field>authentication</field>
       </column>
       <column>
-        <name>Confidentiality Impact</name>
+        <name><xsl:value-of select="gsa:i18n('Confidentiality Impact', 'CVSS Vector')"/></name>
+        <field>confidentiality_impact</field>
       </column>
       <column>
-        <name>Integrity Impact</name>
+        <name><xsl:value-of select="gsa:i18n('Integrity Impact', 'CVSS Vector')"/></name>
+        <field>integrity_impact</field>
       </column>
       <column>
-        <name>Availability Impact</name>
+        <name><xsl:value-of select="gsa:i18n('Availability Impact', 'CVSS Vector')"/></name>
+        <field>availability_impact</field>
       </column>
       <column>
-        <name>Published</name>
+        <name><xsl:value-of select="gsa:i18n('Published', 'Date')"/></name>
+        <field>published</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -18025,35 +18060,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Family</name>
+        <name><xsl:value-of select="gsa:i18n('Family', 'NVT')"/></name>
+        <field>family</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Modified</name>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Version</name>
+        <name><xsl:value-of select="gsa:i18n('Version', 'NVT')"/></name>
+        <field>version</field>
       </column>
       <column>
-        <name>CVE</name>
+        <name><xsl:value-of select="gsa:i18n('CVE', 'CVE')"/></name>
+        <field>cve</field>
       </column>
       <column>
-        <name>Solution type</name>
+        <name><xsl:value-of select="gsa:i18n('Solution type', 'NVT')"/></name>
+        <field>solution_type</field>
         <image>/img/solution_type.png</image>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>QoD</name>
+        <name><xsl:value-of select="gsa:i18n('QoD', 'NVT')"/></name>
+        <field>qod</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -18092,30 +18136,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Version</name>
+        <name><xsl:value-of select="gsa:i18n('Version', 'OVAL Definition')"/></name>
+        <field>version</field>
       </column>
       <column>
-        <name>Status</name>
+        <name><xsl:value-of select="gsa:i18n('Status', 'OVAL Definition')"/></name>
+        <field>status</field>
       </column>
       <column>
-        <name>Class</name>
+        <name><xsl:value-of select="gsa:i18n('Class', 'OVAL Definition')"/></name>
+        <field>class</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Modified</name>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>CVEs</name>
+        <name><xsl:value-of select="gsa:i18n('CVEs', 'CVE')"/></name>
+        <field>cves</field>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -18157,20 +18209,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Title</name>
+        <name><xsl:value-of select="gsa:i18n('Title', 'CERT-Bund Advisory')"/></name>
+        <field>title</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>CVEs</name>
+        <name><xsl:value-of select="gsa:i18n('CVEs', 'CVE')"/></name>
+        <field>cves</field>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -18212,20 +18269,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Title</name>
+        <name><xsl:value-of select="gsa:i18n('Title', 'DFN-CERT Advisory')"/></name>
+        <field>title</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>CVEs</name>
+        <name><xsl:value-of select="gsa:i18n('CVEs', 'CVE')"/></name>
+        <field>cves</field>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -18266,21 +18328,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Type</name>
+        <name><xsl:value-of select="gsa:i18n('Type', 'All SecInfo')"/></name>
+        <field>type</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Modified</name>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -20826,13 +20893,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="note_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Text</name>
+        <name><xsl:value-of select="gsa:i18n('Text', 'Note')"/></name>
+        <field>text</field>
       </column>
       <column>
-        <name>NVT</name>
+        <name><xsl:value-of select="gsa:i18n('NVT', 'NVT')"/></name>
+        <field>nvt</field>
       </column>
       <column>
-        <name>Active</name>
+        <name><xsl:value-of select="gsa:i18n('Active', 'Note')"/></name>
+        <field>active</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -22046,21 +22116,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="override_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Text</name>
+        <name><xsl:value-of select="gsa:i18n('Text', 'Override')"/></name>
+        <field>text</field>
       </column>
       <column>
-        <name>NVT</name>
+        <name><xsl:value-of select="gsa:i18n('NVT', 'NVT')"/></name>
+        <field>nvt</field>
       </column>
       <column>
-        <name>From</name>
+        <name><xsl:value-of select="gsa:i18n('From', 'Override|Severity')"/></name>
         <field>severity</field>
       </column>
       <column>
-        <name>To</name>
+        <name><xsl:value-of select="gsa:i18n('To', 'Override|Severity')"/></name>
         <field>new_severity</field>
       </column>
       <column>
-        <name>Active</name>
+        <name><xsl:value-of select="gsa:i18n('Active', 'Override')"/></name>
+        <field>active</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -22295,7 +22368,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="group_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -23192,24 +23266,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Description</name>
+        <name><xsl:value-of select="gsa:i18n('Description', 'Permission')"/></name>
+        <field>description</field>
       </column>
       <column>
-        <name>Resource Type</name>
+        <name><xsl:value-of select="gsa:i18n('Resource Type', 'Permission')"/></name>
         <field>type</field>
       </column>
       <column>
-        <name>Resource</name>
+        <name><xsl:value-of select="gsa:i18n('Resource', 'Permission')"/></name>
         <field>_resource</field>
       </column>
       <column>
-        <name>Subject Type</name>
+        <name><xsl:value-of select="gsa:i18n('Subject Type', 'Permission')"/></name>
+        <field>subject_type</field>
       </column>
       <column>
-        <name>Subject</name>
+        <name><xsl:value-of select="gsa:i18n('Subject', 'Permission')"/></name>
         <field>_subject</field>
       </column>
     </xsl:with-param>
@@ -23563,20 +23640,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="port_list_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Port Counts</name>
+        <name><xsl:value-of select="gsa:i18n('Port Counts', 'Port List')"/></name>
         <column>
-          <name>Total</name>
+          <name><xsl:value-of select="gsa:i18n('Total', 'Port Counts')"/></name>
+          <field>total</field>
           <sort-reverse/>
         </column>
         <column>
-          <name>TCP</name>
+          <name><xsl:value-of select="gsa:i18n('TCP', 'Port Counts')"/></name>
+          <field>tcp</field>
           <sort-reverse/>
         </column>
         <column>
-          <name>UDP</name>
+          <name><xsl:value-of select="gsa:i18n('UDP', 'Port Counts')"/></name>
+          <field>udp</field>
           <sort-reverse/>
         </column>
       </column>
@@ -24139,20 +24220,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="report_format_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
       <column>
-        <name>Extension</name>
+        <name><xsl:value-of select="gsa:i18n('Extension', 'Report Format')"/></name>
+        <field>extension</field>
       </column>
       <column>
-        <name>Content Type</name>
+        <name><xsl:value-of select="gsa:i18n('Content Type', 'Report Format')"/></name>
+        <field>content_type</field>
       </column>
       <column>
-        <name>Trust (Last Verified)</name>
+        <name><xsl:value-of select="gsa:i18n('Trust (Last Verified)', 'Report Format')"/></name>
         <field>trust</field>
       </column>
       <column>
-        <name>Active</name>
+        <name><xsl:value-of select="gsa:i18n('Active', 'Report Format')"/></name>
+        <field>active</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="5"/>
@@ -25305,17 +25390,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="report_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Date</name>
+        <name><xsl:value-of select="gsa:i18n('Date', 'Date')"/></name>
+        <field>date</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Status</name>
+        <name><xsl:value-of select="gsa:i18n('Status', 'Report')"/></name>
+        <field>status</field>
       </column>
       <column>
-        <name>Task</name>
+        <name><xsl:value-of select="gsa:i18n('Task', 'Task')"/></name>
+        <field>task</field>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <sort-reverse/>
         <html>
           <before>
@@ -25377,25 +25466,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </html>
       </column>
       <column>
-        <name>Scan Results</name>
+        <!-- Special case that is translated in the severity-label template -->
+        <name><xsl:value-of select="gsa:i18n('Scan Results', 'Report')"/></name>
         <column>
           <name>High</name>
+          <field>high</field>
           <sort-reverse/>
         </column>
         <column>
           <name>Medium</name>
+          <field>medium</field>
           <sort-reverse/>
         </column>
         <column>
           <name>Low</name>
+          <field>low</field>
           <sort-reverse/>
         </column>
         <column>
           <name>Log</name>
+          <field>log</field>
           <sort-reverse/>
         </column>
         <column>
           <name>False Positive</name>
+          <field>false_positive</field>
           <sort-reverse/>
         </column>
       </column>
@@ -27263,14 +27358,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
-        <name>Vulnerability</name>
+        <name><xsl:value-of select="gsa:i18n('Vulnerability', 'Result')"/></name>
+        <field>vulnerability</field>
       </column>
       <column>
-        <name>Solution type</name>
+        <name><xsl:value-of select="gsa:i18n('Solution type', 'Result')"/></name>
+        <field>solution_type</field>
         <image>/img/solution_type.png</image>
       </column>
       <column>
-        <name>Severity</name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <field>severity</field>
         <html>
           <before>
             <xsl:choose>
@@ -27331,18 +27429,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </html>
       </column>
       <column>
-        <name>QoD</name>
+        <name><xsl:value-of select="gsa:i18n('QoD', 'Result')"/></name>
+        <field>qod</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Host</name>
+        <name><xsl:value-of select="gsa:i18n('Host', 'Host')"/></name>
+        <field>host</field>
         <sort-reverse/>
       </column>
       <column>
-        <name>Location</name>
+        <name><xsl:value-of select="gsa:i18n('Location', 'Result')"/></name>
+        <field>location</field>
       </column>
       <column>
-        <name>Created</name>
+        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
+        <field>created</field>
         <sort-reverse/>
       </column>
     </xsl:with-param>
@@ -30817,7 +30919,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="role_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name>Name</name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -31893,34 +31996,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
           <column>
-            <name>Name</name>
+            <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+            <field>name</field>
           </column>
           <column>
-            <name>Roles</name>
+            <name><xsl:value-of select="gsa:i18n('Roles', 'Role')"/></name>
+            <field>roles</field>
           </column>
           <column>
-            <name>Groups</name>
+            <name><xsl:value-of select="gsa:i18n('Groups', 'Group')"/></name>
+            <field>groups</field>
           </column>
           <column>
-            <name>Host Access</name>
+            <name><xsl:value-of select="gsa:i18n('Host Access', 'User')"/></name>
+            <field>host_access</field>
           </column>
           <column>
-            <name>LDAP Authentication</name>
+            <name><xsl:value-of select="gsa:i18n('LDAP Authentication', 'User')"/></name>
             <field>ldap</field>
           </column>
         </xsl:when>
         <xsl:otherwise>
           <column>
-            <name>Name</name>
+            <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+            <field>name</field>
           </column>
           <column>
-            <name>Roles</name>
+            <name><xsl:value-of select="gsa:i18n('Roles', 'Role')"/></name>
+            <field>roles</field>
           </column>
           <column>
-            <name>Groups</name>
+            <name><xsl:value-of select="gsa:i18n('Groups', 'Group')"/></name>
+            <field>groups</field>
           </column>
           <column>
-            <name>Host Access</name>
+            <name><xsl:value-of select="gsa:i18n('Host Access', 'User')"/></name>
+            <field>host_access</field>
           </column>
         </xsl:otherwise>
       </xsl:choose>

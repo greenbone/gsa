@@ -1,3 +1,17 @@
+2015-06-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window, html-alerts-table)
+	(html-filters-table, html-tags-table, column-name, html-targets-table)
+	(html-configs-table, html-schedules-table, html-scanners-table)
+	(html-cpe-table, html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-cert_bund_adv-table, html-dfn_cert_adv-table, html-allinfo-table)
+	(html-notes-table, html-overrides-table, html-groups-table)
+	(html-permissions-table, html-port-lists-table)
+	(html-report-formats-table, html-reports-table, html-results-table)
+	(html-roles-table, html-users-table): Apply gsa:i18n directly to
+	the "name" element of the columns so xsl2pot can extract the strings.
+	Always set "field" of columns explicitly.
+
 2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_schedule_omp): Check comment.
