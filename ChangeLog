@@ -1,3 +1,18 @@
+2015-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22567.
+
+	* src/gsad.c (init_validator): Switch modify_password to a number.
+
+	* src/gsad_omp.c (save_user_omp): Also choose LDAP if modify_password
+	is 2.
+
+	* src/html/classic/omp.xsl (html-create-user-form, user [edit]): Move
+	the "Allow LDAP Authentication Only" field up into the password field.
+	This makes it clear that no password is stored when LDAP is chosen, and
+	forces the user to enter a password when switching from LDAP to regular
+	authentication.
+
 2015-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22543.
