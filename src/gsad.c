@@ -1321,7 +1321,7 @@ init_validator ()
   openvas_validator_alias (validator, "max_checks",   "number");
   openvas_validator_alias (validator, "max_hosts",    "number");
   openvas_validator_alias (validator, "method",       "condition");
-  openvas_validator_alias (validator, "modify_password", "boolean");
+  openvas_validator_alias (validator, "modify_password", "number");
   openvas_validator_alias (validator, "ldaphost",     "hostport");
   openvas_validator_alias (validator, "level_high",   "boolean");
   openvas_validator_alias (validator, "level_medium", "boolean");

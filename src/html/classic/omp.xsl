@@ -31800,11 +31800,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User')"/></td>
-            <td>
-              <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
-            </td>
+            <xsl:choose>
+              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'User')"/></td>
+                <td>
+                  <label>
+                    <input type="radio" name="enable_ldap_connect" value="0"/>
+                    <xsl:value-of select="gsa:i18n ('Password', 'User')"/>
+                    <input type="password" name="password" value="" size="30"
+                           maxlength="40"/>
+                  </label>
+                  <br/>
+                  <label>
+                    <input type="radio" name="enable_ldap_connect" value="1" checked="1"/>
+                    <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                  </label>
+                </td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User')"/></td>
+                <td>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
             <tr class="odd">
@@ -31963,15 +31983,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      size="30" maxlength="2000"/>
             </td>
           </tr>
-          <!-- Only if ldap-connect is enabled, it is per-user. !-->
-          <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-            <tr class="odd">
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Allow LDAP Authentication only', 'User')"/></td>
-              <td>
-                <input type="checkbox" name="enable_ldap_connect" value="1" checked="1"/>
-              </td>
-            </tr>
-          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create User', 'User')}"/>
@@ -32403,17 +32414,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User')"/></td>
-            <td>
-              <label>
-                <input type="radio" name="modify_password" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('Use existing value', 'User')"/>
-              </label>
-              <br/>
-              <input type="radio" name="modify_password" value="1"/>
-              <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
-            </td>
+            <xsl:choose>
+              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'User')"/></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'ldap_connect'">
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <label>
+                        <input type="radio" name="modify_password" value="0" checked="1"/>
+                        <xsl:value-of select="concat (gsa:i18n ('Password', 'User'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
+                      </label>
+                      <br/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <input type="radio" name="modify_password" value="1"/>
+                  <xsl:value-of select="concat (gsa:i18n ('Password', 'User'), ': ')"/>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
+                  <br/>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'ldap_connect'">
+                      <input type="radio" name="modify_password" value="2" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="modify_password" value="2"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                </td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'User')"/></td>
+                <td>
+                  <label>
+                    <input type="radio" name="modify_password" value="0" checked="1"/>
+                    <xsl:value-of select="gsa:i18n ('Use existing value', 'User')"/>
+                  </label>
+                  <br/>
+                  <input type="radio" name="modify_password" value="1"/>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
           </tr>
           <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Window')"/>)</td>
@@ -32667,22 +32712,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="2000"/>
             </td>
           </tr>
-          <!-- Only if per-user ldap enabled. -->
-          <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Authentication via LDAP', 'User')"/></td>
-              <td>
-               <xsl:choose>
-                 <xsl:when test="sources/source/text() = 'ldap_connect'">
-                   <input type="checkbox" name="enable_ldap_connect" value="1" checked="checked"/>
-                 </xsl:when>
-                 <xsl:otherwise>
-                   <input type="checkbox" name="enable_ldap_connect" value="1"/>
-                 </xsl:otherwise>
-               </xsl:choose>
-              </td>
-            </tr>
-          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
