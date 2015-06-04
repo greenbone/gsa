@@ -1,5 +1,11 @@
 2015-06-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Do not apply gsa:i18n
+	to column names as they should already be translated.
+	(task-icons): Set context for "Next due" strings to "Task|Schedule".
+
+2015-06-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Consolidate text made out of multiple parts into single strings and
 	ensure i18n default is always the same as msgid. Also add missing
 	comments referring to dummy templates and correct some template names
