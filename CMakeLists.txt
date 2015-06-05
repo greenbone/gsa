@@ -225,9 +225,12 @@ if (NOT DATADIR)
   set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 endif (NOT DATADIR)
 
+if (NOT GSAD_PID_DIR)
+  set (GSAD_PID_DIR "${LOCALSTATEDIR}/run")
+endif (NOT GSAD_PID_DIR)
+
 set (OPENVAS_STATE_DIR "${LOCALSTATEDIR}/lib/openvas")
 set (OPENVAS_LOG_DIR   "${LOCALSTATEDIR}/log/openvas")
-set (GSAD_PID_DIR   "${LOCALSTATEDIR}/run")
 set (GSA_DATA_DIR "${DATADIR}/openvas/gsa")
 set (GSA_LOCALE_DIR "${DATADIR}/locale")
 

@@ -1,3 +1,7 @@
+2015-06-06  Sven Haardiek <sven.haardiek@greenbone.net>
+
+	* CMakeLists.txt: Enable preprocessor defition for GSAD_PID_DIR
+
 2015-06-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c: Guard thread initialization macros deprecated in
