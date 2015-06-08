@@ -1,3 +1,10 @@
+2015-06-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (filter-criteria, filter-extra): Put
+	task_id in editable filter if there are any logical operator keywords.
+	(task [details]): Add number of results with a link to a list of
+	results for the task.
+
 2015-06-06  Sven Haardiek <sven.haardiek@greenbone.net>
 
 	* src/CMakeLists.txt: Remove obsolete checks with splint and rats.
