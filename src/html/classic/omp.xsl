@@ -963,7 +963,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-criteria">
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id']">
+  <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and (column != 'task_id' or $operator_count != 0)]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -980,7 +981,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="filter-extra">
-  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'task_id')]">
+  <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
+  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and (column != 'task_id' or $operator_count != 0))]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = ''">
@@ -4134,6 +4136,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  <xsl:call-template name="short_timestamp_last"/>
                </a>
              </xsl:if>)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Results', 'Result')"/>:
+          </td>
+          <td>
+            <a href="/omp?cmd=get_results&amp;filter=severity&gt;Error and task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="{gsa:i18n ('Results on Task', 'Task')} {name}">
+              <xsl:value-of select="sum (reports/report/result_count/*)"/>
+            </a>
           </td>
         </tr>
         <tr>
