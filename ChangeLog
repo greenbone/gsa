@@ -1,5 +1,13 @@
 2015-06-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/xslt_i18n.c (xslt_ext_gettext, xslt_ext_ngettext): Always use the
+	glib string duplication functions and free the result strings after
+	creating the result XPath object.
+	(xslt_ext_strformat): Free the result string, not just the GString
+	after creating the result XPath object.
+
+2015-06-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* tools/xsl2pot (process): Add empty msgstr_plural entries if
 	msgid_plural but no default plural is given.
 

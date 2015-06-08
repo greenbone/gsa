@@ -144,7 +144,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
       g_mutex_unlock (&locale_env_mutex);
     }
   else
-    result_str = (xmlChar*) strdup ("");
+    result_str = (xmlChar*) g_strdup ("");
 
   result_obj = xmlXPathNewString (result_str);
 
@@ -152,7 +152,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
   xmlXPathFreeObject (msgid_obj);
   if (context_obj)
     xmlXPathFreeObject (context_obj);
-//   free (result_str);
+  g_free (result_str);
 
   valuePush (ctxt, result_obj);
 }
@@ -282,7 +282,7 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
       g_mutex_unlock (&locale_env_mutex);
     }
   else
-    result_str = (xmlChar*) strdup ("");
+    result_str = (xmlChar*) g_strdup ("");
 
   result_obj = xmlXPathNewString (result_str);
 
@@ -292,7 +292,7 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
   xmlXPathFreeObject (count_obj);
   if (context_obj)
     xmlXPathFreeObject (context_obj);
-//   free (result_str);
+  g_free (result_str);
 
   valuePush (ctxt, result_obj);
 }
@@ -388,7 +388,8 @@ xslt_ext_strformat (xmlXPathParserContextPtr ctxt,
         }
     }
 
-  result_obj = xmlXPathNewString ((xmlChar*) g_string_free (result_str, FALSE));
+  result_obj = xmlXPathNewString ((xmlChar*) result_str->str);
+  g_string_free (result_str, TRUE);
   valuePush (ctxt, result_obj);
 }
 
