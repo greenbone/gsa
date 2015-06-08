@@ -732,13 +732,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="gsa:i18n (concat ('may delete an existing ', gsa:command-type ($lower)), 'Permission Description')"/>
       </xsl:when>
       <xsl:when test="$has-resource and substring-before ($lower, '_') = 'get'">
-        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('has read access to ', gsa:command-type ($lower), ' %1', 'Permission Description'), $resource/name)"/>
+        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n (concat ('has read access to ', gsa:command-type ($lower), ' %1'), 'Permission Description'), $resource/name)"/>
       </xsl:when>
       <xsl:when test="substring-before ($lower, '_') = 'get'">
         <xsl:value-of select="gsa:i18n (concat ('has read access to ', gsa:command-type-plural ($lower)), 'Permission Description')"/>
       </xsl:when>
       <xsl:when test="$has-resource and substring-before ($lower, '_') = 'modify'">
-        <xsl:value-of select="gsa:i18n (concat ('has write access to ', gsa:command-type ($lower), ' %1'), 'Permission Description')"/>
+        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n (concat ('has write access to ', gsa:command-type ($lower), ' %1'), 'Permission Description'), $resource/name)"/>
       </xsl:when>
       <xsl:when test="substring-before ($lower, '_') = 'modify'">
         <xsl:value-of select="gsa:i18n (concat ('has write access to ', gsa:command-type-plural ($lower)), 'Permission Description')"/>
