@@ -39,7 +39,7 @@ macro (MAKE_TRANSLATION _LANG)
                       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}.po)
+                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po)
 endmacro ()
 
 if (GETTEXT_FOUND)

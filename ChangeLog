@@ -1,5 +1,10 @@
 2015-06-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/po/CMakeLists.txt (MAKE_TRANSLATION): Also change name pattern
+	in -o argument of msgmerge command.
+
+2015-06-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/po/CMakeLists.txt (MAKE_TRANSLATION, gettext-po-files): Change
 	the name pattern of merged .po files to gsad_xsl-${_LANG}-merged.po to
 	avoid conflicts with source .po files when building in-source.
