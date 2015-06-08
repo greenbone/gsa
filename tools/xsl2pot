@@ -80,6 +80,12 @@ def process(filepath, po):
                 if unescape (m.group('default_plural')) is not None:
                     e.msgstr_plural[0] = unescape (m.group('default'))
                     e.msgstr_plural[1] = unescape (m.group('default_plural'))
+                elif (e.msgid_plural is not None):
+                    e.msgstr_plural[0] = ""
+                    e.msgstr_plural[1] = ""
+            elif (e.msgid_plural is not None):
+                e.msgstr_plural[0] = ""
+                e.msgstr_plural[1] = ""
             po.append(e)
         else:
             e.occurrences.append((filepath, content.count("\n",0,m.start())+1))
