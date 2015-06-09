@@ -4134,22 +4134,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
           <td>
             <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Reports on Task', 'Task')} {name}">
+               title="{gsa-i18n:strformat (gsa:i18n ('Reports on Task %1', 'Task'), name)}">
               <xsl:value-of select="report_count/text ()"/>
             </a>
             <xsl:if test="current_report/report/timestamp">
-              <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task'), ': ')"/>
+              <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task|Reports'), ': ')"/>
               <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                 <xsl:call-template name="short_timestamp_current"/>
               </a>
             </xsl:if>
-             <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task'), ': ')"/>
+             <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task|Reports'), ': ')"/>
              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Reports on Task', 'Task')} {name}">
+               title="{gsa-i18n:strformat (gsa:i18n ('Reports on Task %1', 'Task'), name)}">
               <xsl:value-of select="report_count/finished"/>
              </a>
              <xsl:if test="last_report/report/timestamp">
-               <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task'), ': ')"/>
+               <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task|Reports'), ': ')"/>
                <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                  <xsl:call-template name="short_timestamp_last"/>
                </a>
@@ -4162,7 +4162,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
           <td>
             <a href="/omp?cmd=get_results&amp;filter=severity&gt;Error and task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Results on Task', 'Task')} {name}">
+               title="{gsa-i18n:strformat (gsa:i18n ('Results on Task %1', 'Task'), name)}">
               <xsl:value-of select="sum (reports/report/result_count/*)"/>
             </a>
           </td>
@@ -4173,7 +4173,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
           <td>
             <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Notes on Task', 'Task')} {name}">
+               title="{gsa-i18n:strformat (gsa:i18n ('Notes on Task %1', 'Task'), name)}">
               <xsl:value-of select="count (../../get_notes_response/note)"/>
             </a>
           </td>
@@ -4184,7 +4184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
           <td>
             <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Overrides on Task', 'Task')} {name}">
+               title="{gsa-i18n:strformat (gsa:i18n ('Overrides on Task %1', 'Task'), name)}">
               <xsl:value-of select="count (../../get_overrides_response/override)"/>
             </a>
           </td>
@@ -13471,7 +13471,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="max_nvt_count='-1'">
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config')"/> <xsl:value-of select="max_nvt_count"/>
+              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/> <xsl:value-of select="max_nvt_count"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -13565,7 +13565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="max_nvt_count='-1'">
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config')"/>
+              <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/>
               <xsl:value-of select="max_nvt_count"/>
             </xsl:otherwise>
           </xsl:choose>
@@ -18384,7 +18384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>name</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Type', 'All SecInfo')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Type', 'All SecInfo Information')"/></name>
         <field>type</field>
       </column>
       <column>
@@ -19634,7 +19634,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>:</td>
       <td>
         <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Notes on NVT', 'NVT')} {name}">
+           title="{gsa-i18n:strformat (gsa:i18n ('Notes on NVT %1', 'NVT'), name)}">
           <xsl:value-of select="count (../../../get_notes_response/note)"/>
         </a>
       </td>
@@ -19643,7 +19643,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>:</td>
       <td>
         <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Overrides on NVT', 'NVT')} {name}">
+           title="{gsa-i18n:strformat (gsa:i18n ('Overrides on NVT %1', 'NVT'), name)}">
           <xsl:value-of select="count (../../../get_overrides_response/override)"/>
         </a>
       </td>
@@ -23656,7 +23656,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List')"/></td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></td>
             <td>
               <label>
                 <input type="radio" name="from_file" value="0" checked="1"/>
@@ -23847,7 +23847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/delete_inactive.png"
                border="0"
                alt="{gsa:i18n ('Delete', 'Generic Resource')}"
-               title="{gsa:i18n ('Port list is still in use', 'Port list')}"
+               title="{gsa:i18n ('Port List is still in use', 'Port List')}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -23891,12 +23891,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List')"/></h1>
+      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Start', 'Port List')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('End', 'Port List')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port List')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
         </tr>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="in_use" select="in_use"/>
@@ -24033,7 +24033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Start', 'Port List')"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -24048,7 +24048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('End', 'Port List')"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -24063,7 +24063,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Protocol', 'Port List')"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -24106,12 +24106,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </form>
-      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port List')"/></h1>
+      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Start', 'Port List')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('End', 'Port List')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port List')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Actions', 'Port List')"/></td>
         </tr>
         <xsl:for-each select="commands_response/get_port_lists_response/port_list/port_ranges/port_range">
@@ -24305,7 +24305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Report Format', 'Report Format')"/>
       <a href="/help/new_report_format.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'New Report Format'))}">
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'Report Format'))}">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -27315,10 +27315,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
         <xsl:choose>
           <xsl:when test="$os-cpe">
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
           </xsl:when>
           <xsl:otherwise>
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', '')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$os-name">
@@ -29677,16 +29677,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$available_report_formats/report_format[@id = $report_format]/trust/text() != 'yes'">
       <div class="error">
-        <xsl:value-of select="gsa:i18n ('Report format ', 'Report Image')"/>
-        <xsl:value-of select="$report_format"/>
-        <xsl:value-of select="gsa:i18n (' is not trusted.', 'Report Image')"/>
+        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report format %1 is not trusted', 'Report Image'), $report_format)"/>
       </div>
     </xsl:when>
     <xsl:when test="$available_report_formats/report_format[@id = $report_format]/active/text() != 1">
       <div class="error">
-        <xsl:value-of select="gsa:i18n ('Report format ', 'Report Image')"/>
-        <xsl:value-of select="$report_format"/>
-        <xsl:value-of select="gsa:i18n (' is not active.', '')"/>
+        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report format %1 is not active', 'Report Image'), $report_format)"/>
       </div>
     </xsl:when>
     <xsl:otherwise>
@@ -31424,9 +31420,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td width="{$trash-actions-width}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Task')"/></td>
       </tr>
       <tr class="gbntablehead2">
-        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Task')"/></td>
-        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('First', 'Task')"/></td>
-        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Last', 'Task')"/></td>
+        <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Task|Reports')"/></td>
+        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('First', 'Task|Reports')"/></td>
+        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Last', 'Task|Reports')"/></td>
       </tr>
       <xsl:apply-templates select="task" mode="trash"/>
     </table>
@@ -31625,7 +31621,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <a name="configs"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Configuration')"/></h1>
+        <h1><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/></h1>
         <!-- The for-each makes the get_configs_response the current node. -->
         <xsl:for-each select="get_configs_response">
           <xsl:call-template name="html-configs-trash-table"/>
