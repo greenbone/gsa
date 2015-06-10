@@ -1,5 +1,12 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22593.
+
+	* tools/xsl2pot (process): Add empty msgstr_plural entries if
+	msgid_plural but no default plural is given.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22592.
 
 	* src/po/CMakeLists.txt (MAKE_TRANSLATION): Also change name pattern
