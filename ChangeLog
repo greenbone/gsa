@@ -1,5 +1,11 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22506 by Benoît Allard.
+
+	* tools/xml2po (char_data): Group events that belong together.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22503.
 
 	* ChangeLog: Correct filename src/po/gsad_xsl-zh.po in last entry.
