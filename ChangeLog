@@ -1,5 +1,11 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22492.
+
+	* src/xslt_i18n.c (xslt_ext_gettext): Correct args count check.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22491.
 
 	* src/xslt_i18n.c (GSA_I18N_EXT_URI): Remove cast and add doc.

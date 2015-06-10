@@ -67,7 +67,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
   xmlChar* result_str;
   xmlXPathObjectPtr result_obj;
 
-  if (nargs < 2 && nargs > 3)
+  if (nargs < 2 || nargs > 3)
     {
       xsltGenericError (ctxt, "Expected 2 or 3 arguments, got %d", nargs);
       return;
