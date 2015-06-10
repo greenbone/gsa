@@ -1,5 +1,45 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22570.
+
+	Consolidate text made out of multiple parts into single strings and
+	ensure i18n default is always the same as msgid. Also add missing
+	comments referring to dummy templates and correct some template names
+	in dynamic_strings.xsl.
+
+	* src/html/classic/dynamic_strings.xsl: Give various templates their
+	correct names: type-details, type-filter, type-edit.
+	(type-global, type-owned): New templates.
+	(type-details): Add Report and Result.
+	(type-details-long, type-export, type-export-xml)
+	(type-export-multiple-filtered-xml): New templates.
+	(type-filter): Add Report and Result.
+	(type-permissions, type-new-filter, type-action-denied): New templates.
+	(permission-descriptions): Capitalize "Description" in context and
+	add strings for specific resources.
+	(type-bulk-delete-confirm, type-bulk-trash-confirm, bulk-actions): New
+	templates.
+
+	* src/html/classic/omp.xsl (): Add gsa-i18n extension prefix.
+	(gsa:permission-description, gsa:view_details_title)
+	(filter-window-part, edit-header-icons, get-settings-resource)
+	(list-window-line-icons, user-tags-window, resource-permissions-window)
+	(task-icons, list-window, details-header-icons, task)
+	(lsc_credential [trash], alert [trash], alert [details]
+	(filter [trash], tag [trash], target [trash], html-config-table)
+	(config [trash], schedule [trash], scanner [trash], slave [trash])
+	(get_info_allinfo_action, cve-details, cpe-details, ovaldef-details)
+	(cert_bund_adv-details, dfn_cert_adv-details, nvt-details)
+	(observers-icon, group [trash], permission [trash], port_list [trash])
+	(report_format [trash], note-detailed, override-detailed)
+	(result-details, report [assets])
+	(get_reports_response/report/report [report-assets])
+	(get_report_summary_response, html-edit-role-form, role [trash])
+	(get_trash, process_bulk): Consolidate text and add missing comments
+	referring to dummy templates.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22539.
 
 	* src/html/classic/omp.xsl (list-window, html-alerts-table)
