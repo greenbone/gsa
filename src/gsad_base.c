@@ -39,6 +39,7 @@
 
 #include <glib.h>
 #ifdef USE_LIBXSLT
+#include "xslt_i18n.h"
 #include <libxml/parser.h>
 #include <libexslt/exslt.h>
 #include <string.h> /* for strlen() */
@@ -173,6 +174,7 @@ xsl_transform_with_stylesheet (const char *xml_text,
   tracef ("text to transform: [%s]\n", xml_text);
 
   exsltRegisterAll ();
+  register_i18n_ext_module ();
 
   xmlSubstituteEntitiesDefault (1);
   xmlLoadExtDtdDefaultValue = 1;

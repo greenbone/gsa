@@ -4,8 +4,9 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:func = "http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
+    xmlns:gsa-i18n="http://openvas.org/i18n"
     xmlns:exslt="http://exslt.org/common"
-    extension-element-prefixes="func exslt gsa">
+    extension-element-prefixes="func exslt gsa gsa-i18n">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -61,19 +62,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="context"/>
   <xsl:param name="default" select="$id"/>
 
-  <!-- $new_msg must be whole message, not just id because existing translations may have empty strings -->
-  <xsl:variable name="new_msg" select="document($i18n_po_path)/i18n/grp[ctxt/text() = $context]/msg[id/text() = $id]"/>
-
-  <func:result>
-    <xsl:choose>
-      <xsl:when test="$new_msg != ''">
-        <xsl:value-of select="$new_msg/str"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </func:result>
+  <xsl:choose>
+    <xsl:when test="function-available('gsa-i18n:gettext')">
+      <!-- Use new gettext extension based i18n -->
+      <xsl:variable name="new_msg" select="gsa-i18n:gettext ($i18n_language, $id, $context)"/>
+      <func:result>
+        <xsl:choose>
+          <xsl:when test="$new_msg != '### N/A ###'">
+            <xsl:value-of select="$new_msg"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$default"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </func:result>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- fall back to old XML based i18n -->
+      <!-- $new_msg must be whole message, not just id because existing translations may have empty strings -->
+      <xsl:variable name="new_msg" select="document($i18n_po_path)/i18n/grp[ctxt/text() = $context]/msg[id/text() = $id]"/>
+      <func:result>
+        <xsl:choose>
+          <xsl:when test="$new_msg != ''">
+            <xsl:value-of select="$new_msg/str"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$default"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </func:result>
+    </xsl:otherwise>
+  </xsl:choose>
 </func:function>
 
 <!-- HEADERS, FOOTER, SIDEBARS -->
