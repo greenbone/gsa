@@ -1,5 +1,32 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22502.
+
+	Add a wrapper function for ngettext and a KDE-style text formatting
+	function. Remove support for the old XML-based translations.
+
+	* src/xslt_i18n.c (xslt_ext_gettext): Add comment with expected params
+	and free context_obj if it's not NULL.
+	(xslt_ext_ngettext, xslt_ext_strformat): New functions.
+	(init_i18n_module, shutdown_i18n_module): Add new functions ngettext
+	and strformat.
+
+	* src/html/classic/gsad.xsl (): Add comment about functions added via
+	libxslt extension.
+	(gsa:i18n): Remove old XML-based translation.
+	(gsa:n-i18n): New function.
+
+	* src/po/gsad_xsl-de.po: Add Plural-Forms clause to header.
+
+	* src/po/gsad_xsl-de.po: Add Plural-Forms clause to header.
+
+	* tools/xsl2pot (): Accept empty default strings in gettext_re. Add
+	ngettext_re.
+	(process): Mark msgstr values set to defaults as fuzzy. Add handling
+	of the ngettext wrapper.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22500.
 
 	* src/po/CMakeLists.txt (MAKE_TRANSLATION): Use file cmake command

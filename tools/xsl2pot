@@ -32,7 +32,8 @@ import os
 import polib
 import re
 
-gettext_re = re.compile('gsa:i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.+?)\'\s*)?\)')
+gettext_re = re.compile('gsa:i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.*?)\'\s*)?\)')
+ngettext_re = re.compile('gsa:n-i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<id_plural>.+?)\'\s*,.+?,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.*?)\'\s*(?:,\s*\'(?P<default_plural>.*?)\'\s*)?)?\)')
 
 def process(filepath, po):
     print "Processing %s" % filepath
@@ -49,6 +50,27 @@ def process(filepath, po):
                               occurrences=[(filepath, content.count("\n",0,m.start())+1)])
             if m.group('default') is not None:
                 e.msgstr = m.group('default')
+                e.flags.append ('fuzzy');
+            po.append(e)
+        else:
+            e.occurrences.append((filepath, content.count("\n",0,m.start())+1))
+
+    for m in ngettext_re.finditer(content):
+        msgid = m.group('id')
+        msgid_plural = m.group ('id_plural')
+        msgctxt = m.group('context')
+        e = po.find(msgid, msgctxt=msgctxt)
+        if e is None:
+            e = polib.POEntry(msgid=m.group('id'),
+                              msgid_plural=m.group('id_plural'),
+                              msgctxt=m.group('context'),
+                              occurrences=[(filepath, content.count("\n",0,m.start())+1)])
+            if m.group('default') is not None:
+                e.msgstr = m.group('default')
+                e.flags.append ('fuzzy');
+                if m.group('default_plural') is not None:
+                    e.msgstr_plural[0] = m.group('default')
+                    e.msgstr_plural[1] = m.group('default_plural')
             po.append(e)
         else:
             e.occurrences.append((filepath, content.count("\n",0,m.start())+1))

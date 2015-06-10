@@ -57,6 +57,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- XPATH FUNCTIONS -->
 
+<!--
+  The following functions are defined as extensions of libxslt:
+    gsa-i18n:gettext (language, msgid, [context])
+    gsa-i18n:ngettext (language, msgid, msgid_plural, count, [context])
+    gsa-i18n:strformat (format_string, [insert_1], [insert_2], ...)
+-->
+
 <func:function name="gsa:i18n">
   <xsl:param name="id"/>
   <xsl:param name="context"/>
@@ -78,18 +85,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </func:result>
     </xsl:when>
     <xsl:otherwise>
-      <!-- fall back to old XML based i18n -->
-      <!-- $new_msg must be whole message, not just id because existing translations may have empty strings -->
-      <xsl:variable name="new_msg" select="document($i18n_po_path)/i18n/grp[ctxt/text() = $context]/msg[id/text() = $id]"/>
+      <func:result>
+        <xsl:value-of select="$default"/>
+      </func:result>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
+<func:function name="gsa:n-i18n">
+  <xsl:param name="id"/>
+  <xsl:param name="id_plural"/>
+  <xsl:param name="count"/>
+  <xsl:param name="context"/>
+  <xsl:param name="default" select="$id"/>
+  <xsl:param name="default_plural" select="$id_plural"/>
+
+  <xsl:choose>
+    <xsl:when test="function-available('gsa-i18n:ngettext')">
+      <!-- Use new gettext extension based i18n -->
+      <xsl:variable name="new_msg" select="gsa-i18n:ngettext ($i18n_language, $id, $id_plural, $count, $context)"/>
       <func:result>
         <xsl:choose>
-          <xsl:when test="$new_msg != ''">
-            <xsl:value-of select="$new_msg/str"/>
+          <xsl:when test="$new_msg != '### N/A ###'">
+            <xsl:value-of select="$new_msg"/>
+          </xsl:when>
+          <xsl:when test="$new_msg = '### N/A ###' and $count &gt; 1">
+            <xsl:value-of select="$default_plural"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$default"/>
           </xsl:otherwise>
         </xsl:choose>
+      </func:result>
+    </xsl:when>
+    <xsl:when test="$count &gt; 1">
+      <!-- fall back to default plural -->
+      <func:result>
+        <xsl:value-of select="$default_plural"/>
+      </func:result>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- fall back to default singular -->
+      <func:result>
+        <xsl:value-of select="$default"/>
       </func:result>
     </xsl:otherwise>
   </xsl:choose>
