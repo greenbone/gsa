@@ -1,5 +1,12 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22592.
+
+	* src/po/CMakeLists.txt (MAKE_TRANSLATION): Also change name pattern
+	in -o argument of msgmerge command.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22591.
 
 	* src/po/CMakeLists.txt (MAKE_TRANSLATION, gettext-po-files): Change
