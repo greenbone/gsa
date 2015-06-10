@@ -1,5 +1,12 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22590.
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Correct
+	text for get and modify permissions on a specific resource.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22571.
 
 	* src/html/classic/omp.xsl (filter-window-part): Do not apply gsa:i18n
