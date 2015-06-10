@@ -54,6 +54,7 @@ if (GETTEXT_FOUND)
                      COMMENT "Created translation .mo files")
 
   add_custom_target (gettext-po-files
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de.po
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh.po
                      COMMENT "Created translation .po files")
@@ -63,7 +64,8 @@ if (GETTEXT_FOUND)
                         COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/xsl2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot"
-                        COMMENT "Created translation template (.pot) files")
+                        DEPENDS ${CMAKE_SOURCE_DIR}/src/html/classic/*.xsl
+                        COMMENT "Creating translation template (.pot) files")
     add_custom_target (gettext-pot-files
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot)
   else (PYTHONINTERP_FOUND)
