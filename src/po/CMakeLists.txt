@@ -34,7 +34,7 @@ macro (MAKE_TRANSLATION _LANG)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo
            DESTINATION ${GSA_LOCALE_DIR}/${_LANG}/LC_MESSAGES)
 
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}.po
+  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
@@ -55,8 +55,8 @@ if (GETTEXT_FOUND)
 
   add_custom_target (gettext-po-files
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de.po
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh.po
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de-merged.po
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh-merged.po
                      COMMENT "Created translation .po files")
 
   if (PYTHONINTERP_FOUND)

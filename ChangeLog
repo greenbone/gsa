@@ -1,5 +1,13 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22591.
+
+	* src/po/CMakeLists.txt (MAKE_TRANSLATION, gettext-po-files): Change
+	the name pattern of merged .po files to gsad_xsl-${_LANG}-merged.po to
+	avoid conflicts with source .po files when building in-source.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22590.
 
 	* src/html/classic/omp.xsl (gsa:permission-description): Correct
