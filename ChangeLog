@@ -1,5 +1,14 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22482 by Benoît Allard.
+
+	* tools/xsl2pot: Added, this utility generates pot files from the xslt
+	  sheets.
+	* tools/xml2po: Added, this utility converts the older xml translation
+	  files in the gettext format.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22394.
 
 	* src/html/classic/omp.xsl (gsa:permission-description): Do not build
