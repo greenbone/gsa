@@ -1,5 +1,29 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22598.
+
+	* src/html/classic/omp.xsl (task [details]): Change the labels for the
+	Report, Result, Note and Override counts to strformat strings. Change
+	i18n context of Report related strings to "Task|Reports".
+	(edit-families-family, family): Change context of " of " to
+	"Scan Config|NVTs"
+	(html-allinfo-table): Change i18n context for "Type" to
+	"All SecInfo Information".
+	(nvt [details]): Change the labels for the Note and Override counts to
+	strformat strings.
+	(port_list [trash]): Correct capitalization of "in use" string.
+	(port_list [details], html-edit-port-list-form): Change i18n context
+	of Port Range related strings to "Port Range".
+	(html-create-report-format-form): Correct i18n context of
+	"New Report Format" label.
+	(os-icon): Add missing i18n context to string "OS conflict".
+	(report-image): Change error messages to strformat strings.
+	(html-tasks-trash-table): Change i18n context of Report related strings
+	to "Task|Reports".
+	(get_trash): Change context for "Scan Configs" to "Scan Config".
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22594.
 
 	* src/xslt_i18n.c (xslt_ext_gettext, xslt_ext_ngettext): Always use the
