@@ -810,12 +810,12 @@ a.top_button:hover div.first_button_overlay {
  vertical-align: middle;
 }
 
-#small_inline_form select, #small_inline_form input {
+.small_inline_form select, .small_inline_form input {
  font-size: 10px;
  vertical-align: top;
 }
 
-#small_inline_form form {
+.small_inline_form form {
  display: inline;
 }
 

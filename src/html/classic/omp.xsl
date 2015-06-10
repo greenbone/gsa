@@ -1366,7 +1366,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <img src="/img/list.png" border="0" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
   <!-- i18n with concat : see dynamic_strings.xsl - type-name-details -->
-  <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+  <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
       <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n (concat ($cap-type, ' Details'), $cap-type)}" style="margin-left:3px;">
       <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Window')}"/>
@@ -2160,7 +2160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('none', 'Window')"/>
         </xsl:otherwise>
       </xsl:choose>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
@@ -2600,7 +2600,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/hosts.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
         <img src="/img/help.png" border="0"/>
       </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get" name="switch_overrides" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
@@ -3822,13 +3822,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                title="{gsa:i18n ('This is an Alterable Task. Reports may not relate to current Scan Config or Target!', 'Task')}"/>
         </xsl:otherwise>
       </xsl:choose>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:call-template name="task-icons">
           <xsl:with-param name="next" select="'get_task'"/>
           <xsl:with-param name="show-start-when-scheduled" select="1"/>
         </xsl:call-template>
       </div>
-      <div id="small_inline_form" style="margin-left:40px; display: inline">
+      <div class="small_inline_form" style="margin-left:40px; display: inline">
         <form method="get" action="" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_task"/>
@@ -4535,7 +4535,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
           <!-- i18n with concat : see dynamic_strings.xsl - type-export-multiple-filtered-xml -->
-          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
             <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
                title="{gsa-i18n:strformat (gsa:n-i18n (concat ('Export %1 filtered ', $cap-type, ' as XML'), concat ('Export %1 filtered ', $cap-type-plural, ' as XML'), $filtered-count, $cap-type), $filtered-count)}"
                style="margin-left:3px;">
@@ -4547,7 +4547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
-          <div id="small_inline_form" style="margin-left:40px; display: inline">
+          <div class="small_inline_form" style="margin-left:40px; display: inline">
             <form method="get" action="" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
@@ -4721,7 +4721,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="not (/envelope/params/bulk_select = 1)">
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
-                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
+                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
                     <form name="bulk-actions" enctype="multipart/form-data">
                       <xsl:choose>
                         <xsl:when test="$type = 'info'">
@@ -4743,7 +4743,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:otherwise>
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
-                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
+                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
                     <xsl:copy-of select="$bulk-elements"/>
                   </td>
                 </tr>
@@ -4762,7 +4762,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="not ($no_bulk)">
-          <form name="bulk_select_type_form" id="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
+          <form name="bulk_select_type_form" class="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
                 enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
@@ -4924,7 +4924,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      title="{gsa:i18n ($cap-type-plural, $cap-type)}" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
-  <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+  <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
       <xsl:when test="$type = 'user'">
         <xsl:choose>
@@ -13822,7 +13822,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
           <xsl:when test="$config/writable!='0' and $config/in_use='0'">
             <xsl:call-template name="trashcan-icon">
@@ -19927,7 +19927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
           </a>
-          <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
             <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
@@ -25004,7 +25004,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </a>
         </xsl:otherwise>
       </xsl:choose>
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
@@ -26214,7 +26214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
           </a>
-          <div id="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
+          <div class="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
             <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Export Result as XML', 'Result')}"
                style="margin-left:3px;">
@@ -29453,7 +29453,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-  <div id="small_inline_form" style="display:inline; margin-left: 7px" >
+  <div class="small_inline_form" style="display:inline; margin-left: 7px" >
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
 </xsl:template>
@@ -34582,7 +34582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Help: OMP
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+      <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="export_omp_doc"/>

@@ -1,3 +1,9 @@
+2015-06-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/gsa-style.css, src/html/classic/omp.xsl: Change
+	small_inline_form from id to class. Fixes libxml duplicate ID
+	definition error.
+
 2015-06-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Change the labels for the
