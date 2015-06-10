@@ -1,3 +1,15 @@
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22394.
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Do not build
+	text for describe_... and sync_... commands from parts so the strings
+	can be extracted more easily for translation.
+	(start-icon): Do not apply gsa:i18n to alt param, add name param
+	for untranslated name.
+	(alert): Add name param for start-icon template call.
+	(process_bulk): Do not build text from parts to simplify i18n.
+
 2015-06-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22588.
