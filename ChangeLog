@@ -1,5 +1,13 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22571.
+
+	* src/html/classic/omp.xsl (filter-window-part): Do not apply gsa:i18n
+	to column names as they should already be translated.
+	(task-icons): Set context for "Next due" strings to "Task|Schedule".
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22570.
 
 	Consolidate text made out of multiple parts into single strings and

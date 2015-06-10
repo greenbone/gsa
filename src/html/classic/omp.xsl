@@ -1235,17 +1235,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:choose>
                     <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
                       <option value="{$sort}" selected="1">
-                        <xsl:value-of select="gsa:i18n(name, gsa:type-name($type))"/>
+                        <xsl:value-of select="name"/>
                       </option>
                     </xsl:when>
                     <xsl:when test="$single and boolean (field)">
                       <option value="{field}">
-                        <xsl:value-of select="gsa:i18n(name, gsa:type-name($type))"/>
+                        <xsl:value-of select="name"/>
                       </option>
                     </xsl:when>
                     <xsl:when test="$single">
                       <option value="{gsa:column-filter-name (name)}">
-                        <xsl:value-of select="gsa:i18n(name, gsa:type-name($type))"/>
+                        <xsl:value-of select="name"/>
                       </option>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1253,17 +1253,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:choose>
                           <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
                             <option value="{$sort}" selected="1">
-                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), gsa:type-name($type))"/>
+                              <xsl:value-of select="concat(../name, ': ', name)"/>
                             </option>
                           </xsl:when>
                           <xsl:when test="boolean (field)">
                             <option value="{field}">
-                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), gsa:type-name($type))"/>
+                              <xsl:value-of select="concat(../name, ': ', name)"/>
                             </option>
                           </xsl:when>
                           <xsl:otherwise>
                             <option value="{gsa:column-filter-name (name)}">
-                              <xsl:value-of select="gsa:i18n(concat(../name, ': ', name), gsa:type-name($type))"/>
+                              <xsl:value-of select="concat(../name, ': ', name)"/>
                             </option>
                           </xsl:otherwise>
                         </xsl:choose>
@@ -3685,13 +3685,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="schedule/next_time = 'over'">
     <xsl:text>
     (</xsl:text>
-                <xsl:value-of select="gsa:i18n ('Next due: over', 'Task')"/>
+                <xsl:value-of select="gsa:i18n ('Next due: over', 'Task|Schedule')"/>
                 <xsl:text>)</xsl:text>
               </xsl:when>
               <xsl:otherwise>
     <xsl:text>
     (</xsl:text>
-                <xsl:value-of select="gsa:i18n ('Next due', 'Task')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>
+                <xsl:value-of select="gsa:i18n ('Next due', 'Task|Schedule')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>
                 <xsl:text>)</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
