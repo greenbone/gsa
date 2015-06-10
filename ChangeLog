@@ -1,5 +1,17 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22500.
+
+	* src/po/CMakeLists.txt (MAKE_TRANSLATION): Use file cmake command
+	instead of the deprecated make_directory one. Set dependency to the
+	.po file in the source directory explicitly. Add command to merge
+	.pot file with existing .po file.
+	(gettext-mo-files): Change message as it's shown after the mo files
+	were generated.
+	(gettext-po-files, gettext-pot-files): New optional targets.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22492.
 
 	* src/xslt_i18n.c (xslt_ext_gettext): Correct args count check.
