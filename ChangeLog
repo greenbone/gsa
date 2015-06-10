@@ -1,5 +1,11 @@
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22503.
+
+	* ChangeLog: Correct filename src/po/gsad_xsl-zh.po in last entry.
+
+2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22502.
 
 	Add a wrapper function for ngettext and a KDE-style text formatting
@@ -18,7 +24,7 @@
 
 	* src/po/gsad_xsl-de.po: Add Plural-Forms clause to header.
 
-	* src/po/gsad_xsl-de.po: Add Plural-Forms clause to header.
+	* src/po/gsad_xsl-zh.po: Add Plural-Forms clause to header.
 
 	* tools/xsl2pot (): Accept empty default strings in gettext_re. Add
 	ngettext_re.
