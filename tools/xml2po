@@ -31,7 +31,7 @@ import polib
 CHUNK_SIZE = 2048
 
 in_context = False
-ctx = ''
+ctxdata = ''
 context = []
 in_msgid = False
 msgid = ''
@@ -60,8 +60,9 @@ def end_element(name):
         global context
         context = []
     elif name == 'ctxt':
-        context.append(ctx)
-        ctx = ''
+        context.append(ctxdata)
+        global ctxdata
+        ctxdata = ''
     elif name == "msg":
         """ Add an entry """
         for ctx in context:
@@ -78,7 +79,8 @@ def end_element(name):
 
 def char_data(data):
     if in_context:
-        ctx += data
+        global ctxdata
+        ctxdata += data
     elif in_msgid:
         global msgid
         msgid += data
