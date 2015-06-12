@@ -1,5 +1,10 @@
 2015-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl: Replace the contexts "Window" and
+	"Generic Resource" with more specific ones.
+
+2015-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/dynamic_strings.xsl (type-filter, type-new-filter):
 	Correct contexts of the messages for Reports and Results.
 
