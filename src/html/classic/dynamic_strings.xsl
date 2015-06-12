@@ -300,8 +300,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- A filter label like "Task Filter" -->
 <xsl:template name="type-filter">
   <xsl:value-of select="gsa:i18n ('Task Filter', 'Task')"/>
-  <xsl:value-of select="gsa:i18n ('Report Filter', 'Task')"/>
-  <xsl:value-of select="gsa:i18n ('Result Filter', 'Task')"/>
+  <xsl:value-of select="gsa:i18n ('Report Filter', 'Report')"/>
+  <xsl:value-of select="gsa:i18n ('Result Filter', 'Result')"/>
   <xsl:value-of select="gsa:i18n ('Note Filter', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('Override Filter', 'Override')"/>
   <xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/>
@@ -354,8 +354,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- A new filter label like "New Task Filter from current term" -->
 <xsl:template name="type-new-filter">
   <xsl:value-of select="gsa:i18n ('New Task Filter from current term', 'Task')"/>
-  <xsl:value-of select="gsa:i18n ('New Report Filter from current term', 'Task')"/>
-  <xsl:value-of select="gsa:i18n ('New Result Filter from current term', 'Task')"/>
+  <xsl:value-of select="gsa:i18n ('New Report Filter from current term', 'Report')"/>
+  <xsl:value-of select="gsa:i18n ('New Result Filter from current term', 'Result')"/>
   <xsl:value-of select="gsa:i18n ('New Note Filter from current term', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('New Override Filter from current term', 'Override')"/>
   <xsl:value-of select="gsa:i18n ('New Info Filter from current term', 'Info')"/>
