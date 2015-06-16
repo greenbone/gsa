@@ -1,3 +1,13 @@
+2015-06-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/xslt_i18n.c (): Add #include <math.h>.
+	(xslt_ext_gettext): Improve error message. Move getenv calls to locked
+	section and reset environment variables with unsetenv if the getenv
+	returned NULL.
+	(xslt_ext_ngettext): Improve error messages. Push correct count object
+	back to value stack. Move getenv calls to locked section and reset
+	environment variables with unsetenv if the getenv returned NULL.
+
 2015-06-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl: Replace the contexts "Window" and
