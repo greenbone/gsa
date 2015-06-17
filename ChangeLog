@@ -1,3 +1,10 @@
+2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22634.
+
+	* src/html/classic/dynamic_strings.xsl (type-filter, type-new-filter):
+	Correct contexts of the messages for Reports and Results.
+
 2015-06-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22598.
