@@ -1,5 +1,12 @@
 2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22635.
+
+	* src/html/classic/omp.xsl: Replace the contexts "Window" and
+	"Generic Resource" with more specific ones.
+
+2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22634.
 
 	* src/html/classic/dynamic_strings.xsl (type-filter, type-new-filter):
