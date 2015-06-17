@@ -1,0 +1,147 @@
+#! /usr/bin/env python
+# Greenbone Security Assistant
+# $Id$
+# Description: Utility to test GSA pot files.
+#
+# Authors:
+#  Timo Pollmeier <timo.pollmeier@greenbone.net>
+#
+# Copyright:
+#  Copyright (C) 2015 Greenbone Networks GmbH
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2,
+# or, at your option, any later version as published by the Free
+# Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+
+import os
+
+import polib
+
+
+def main(potfilepath, pofilepath=None):
+    # Parse pot file and create new po
+    input_file = polib.pofile (potfilepath)
+    max_msgids = 10
+
+    print "Entry counts"
+    print "------------"
+    print "%d entries total" % len (input_file)
+    print ""
+
+    fuzzy = input_file.fuzzy_entries()
+    print "%d entries with fuzzy default translation" % len (fuzzy)
+    for entry in fuzzy:
+        print "\t'%s' (context: '%s')" % (entry.msgid, entry.msgctxt)
+    print ""
+
+    translated = input_file.translated_entries()
+    if len (translated):
+        print "WARNING: %d entries with non-fuzzy translation" % len (translated)
+        for entry in translated:
+            print "\t'%s' (context: '%s')" % (entry.msgid, entry.msgctxt)
+        print ""
+
+    print ""
+
+    multi_context_msgids = 0
+    multi_context_entries = 0
+    empty_context_entries = []
+    msgid_occurrences = {}
+    msgctxt_occurrences = {}
+    for entry in input_file:
+        if entry.msgid in msgid_occurrences:
+            if not (entry.msgctxt in msgid_occurrences [entry.msgid]):
+                msgid_occurrences [entry.msgid].append (entry.msgctxt)
+                multi_context_entries += 1
+        else:
+            msgid_occurrences [entry.msgid] = [entry.msgctxt]
+
+        if entry.msgctxt in msgctxt_occurrences:
+            if not (entry.msgid in msgctxt_occurrences [entry.msgctxt]):
+                msgctxt_occurrences [entry.msgctxt].append (entry.msgid)
+        else:
+            msgctxt_occurrences [entry.msgctxt] = [entry.msgid]
+
+        if entry.msgctxt == "":
+            empty_context_entries.append (entry)
+
+    print "Messages occurring in multiple contexts"
+    print "---------------------------------------"
+    for msgid in sorted (msgid_occurrences):
+        if len (msgid_occurrences [msgid]) > 1:
+            multi_context_msgids += 1
+            print "'%s' appears in multiple contexts:" % msgid
+
+            for msgctxt in sorted (msgid_occurrences [msgid]):
+                print "\t'%s'" % msgctxt
+
+    print ""
+    print "%d msgids / %d entries with multiple contexts found" % (multi_context_msgids, multi_context_entries)
+    print "Note: Some of these may be intentional"
+    print ""
+    print ""
+
+    print "Message counts per context"
+    print "--------------------------"
+    for context in sorted (msgctxt_occurrences, key=lambda item: len (msgctxt_occurrences [item])):
+        print "%d in '%s':" % (len (msgctxt_occurrences [context]), context)
+        if (len (msgctxt_occurrences [context]) <= max_msgids):
+            for msgid in msgctxt_occurrences [context]:
+                print "\t'%s'" % msgid
+        else:
+            print "\t-- more than %d msgids --" % max_msgids
+    print ""
+    print ""
+
+    print "Messages with empty context"
+    print "---------------------------"
+    if len (empty_context_entries):
+        for entry in empty_context_entries:
+            print "* '%s'" % entry.msgid
+    else:
+        print "none"
+    print ""
+    print ""
+
+    print "Coverage test file"
+    print "------------------"
+    if pofilepath != None:
+        print "Creating coverage test .po file \"%s\" ..." % pofilepath
+        for entry in input_file:
+            if entry.msgstr != "":
+                entry.msgstr = "{***" + entry.msgstr + "***}"
+            else:
+                entry.msgstr = "{***" + entry.msgid + "***}"
+
+            if entry.msgid_plural != "":
+                if len (entry.msgstr_plural):
+                    for i in xrange (0, len (entry.msgstr_plural) - 1):
+                        entry.msgstr_plural [i] = "{***" + entry.msgstr_plural [i] + "***}"
+                else:
+                    entry.msgstr_plural [0] = "{***" + entry.msgid + "***}"
+                    entry.msgstr_plural [1] = "{***" + entry.msgid_plural + "***}"
+
+            if "fuzzy" in entry.flags:
+                entry.flags.remove ("fuzzy")
+
+        input_file.save(pofilepath)
+        print "Coverage test .po file written to %s" % pofilepath
+    else:
+        print "No coverage test .po file created"
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) == 1:
+        print "Usage: %s POTFILE [POFILE]" % sys.argv[0]
+        sys.exit(1)
+    main(*sys.argv[1:])

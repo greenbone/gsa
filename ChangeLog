@@ -1,5 +1,10 @@
 2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* tools/pot-test: New file. Python script to gather data from .pot
+	files to test them for common problems like redundant contexts.
+
+2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Consolidate and clarify i18n contexts.
 
 	* src/html/classic/dynamic_strings.xsl (login-msgs): Change context
