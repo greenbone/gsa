@@ -1665,7 +1665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Scan Management', 'MM')"/>
+            <xsl:value-of select="gsa:i18n ('Scan Management', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1715,7 +1715,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may-op ('GET_REPORTS')">
           <a class="top_button"
              href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Asset Management', 'MM')"/>
+            <xsl:value-of select="gsa:i18n ('Asset Management', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1740,12 +1740,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may-op ('GET_INFO')">
           <a class="top_button" id="secinfo_button"
              href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('SecInfo Management', 'MM')"/>
+            <xsl:value-of select="gsa:i18n ('SecInfo Management', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
                 <li class="first_button_overlay" id="secinfo_button_overlay">
-                  <xsl:value-of select="gsa:i18n('NVTs', 'Dashboard')"/>
+                  <xsl:value-of select="gsa:i18n('NVTs', 'NVT')"/>
                 </li>
               </ul>
             </div>
@@ -1753,13 +1753,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li class="pointy"></li>
             <li id="secinfo_dashboard_button" style="display:none;"><a href="/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/></a></li>
-            <li id="secinfo_nvts_button"><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'Info')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'Info')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'Info')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'Info')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'Info')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'Info')"/></a></li>
-            <li class="section_start last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'Info')"/></a></li>
+            <li id="secinfo_nvts_button"><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></a></li>
+            <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></a></li>
+            <li class="section_start last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'All SecInfo Information')"/></a></li>
           </ul>
         </xsl:when>
         <xsl:otherwise>
@@ -1865,7 +1865,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Configuration', 'MM')"/>
+            <xsl:value-of select="gsa:i18n ('Configuration', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1923,7 +1923,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </xsl:variable>
      <a class="top_button"
         href="/omp?cmd={$page}&amp;token={/envelope/token}">
-       <xsl:value-of select="gsa:i18n ('Extras', 'MM')"/>
+       <xsl:value-of select="gsa:i18n ('Extras', 'Main Menu')"/>
        <div class="first_button_overlay">
          <ul class="first_button_overlay">
            <li class="pointy"></li>
@@ -1999,7 +1999,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_users&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Administration', 'MM')"/>
+            <xsl:value-of select="gsa:i18n ('Administration', 'Main Menu')"/>
             <xsl:if test="count (exslt:node-set ($items)/item) &gt; 0">
               <div class="first_button_overlay">
                 <ul class="first_button_overlay">
@@ -2254,7 +2254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window_part_content">
         <img src="/img/gsa_splash.png" alt="" />
         <center>
-          <div style="color: red"><xsl:value-of select="gsa:i18n (message, 'Login')"/></div>
+          <div style="color: red"><xsl:value-of select="gsa:i18n (message, 'Login Message')"/></div>
           <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
@@ -2267,15 +2267,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <table>
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('Username', 'Login')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></td>
                 <td><input type="text" autocomplete="off" name="login" value="" autofocus="autofocus"/></td>
               </tr>
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('Password', 'Login')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
                 <td><input type="password" autocomplete="off" name="password" value="" /></td>
               </tr>
             </table>
-            <div style="text-align:center;float:center;"><input type="submit" value="{gsa:i18n ('Login', 'Login')}" /></div>
+            <div style="text-align:center;float:center;"><input type="submit" value="{gsa:i18n ('Login', 'Action Verb')}" /></div>
             <br clear="all" />
           </form>
         </center>
@@ -2361,11 +2361,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left_error"></div>
     <div class="gb_window_part_right_error"></div>
     <div class="gb_window_part_center_error">
-      <xsl:value-of select="gsa:i18n ('Warning', 'Login')"/>
+      <xsl:value-of select="gsa:i18n ('Warning', 'Login Message')"/>
     </div>
     <div class="gb_window_part_content_error">
       <p>
-        <xsl:value-of select="gsa:i18n ('Your current password does not comply with the password policy:', 'Login')"/><br/>
+        <xsl:value-of select="gsa:i18n ('Your current password does not comply with the password policy:', 'Login Message')"/><br/>
         <xsl:value-of select="text()"/>
       </p>
     </div>

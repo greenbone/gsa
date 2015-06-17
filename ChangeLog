@@ -1,5 +1,47 @@
 2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22652.
+
+	Consolidate and clarify i18n contexts.
+
+	* src/html/classic/dynamic_strings.xsl (login-msgs): Change context
+	to "Login Message".
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Change context "MM"
+	to "Main Menu". Use the type names as contexts for SecInfo.
+	(login_page, password_warning) Use context "Login Message" for
+	login messages, "Auth Data" for "Username" and "Password",
+	"Action Verb" for "Login".
+
+	* src/html/classic/omp.xsl: Consolidate and clarify i18n contexts:
+	Change "Filter Box" to "Filter".  Use "Action Verb" for various generic
+	actions.  Use "Property" for generic properties like "Name", "Comment"
+	or "Description".  Use "Delta Result" for delta result types like
+	"same" and "new". Use "Time" for the message "Timezone".  Use
+	"Task|Schedule" for the "Next due" messages.  Use "Value" for "N/A"
+	and "Default".  Use the type name as context for itself more
+	consistently.  Use "Meta Property" for messages like "optional"
+	and "immutable".  Use "Auth Data" for messages related to data used for
+	authentication like "Username", "Password" and "Private key".  Clarify
+	some ambiguous contexts like the one for "Replace existing value with"
+	or "increased".  Use "Alert|Email" for properties specific to email
+	Alerts.  Use "Target|Credential" context more consistently. Use context
+	"List Conjunction" for "and".  Use "Port" for "Port" and "Host" for
+	"Host" and "Hosts" more consistently.  Change context "Reference List"
+	to "SecInfo|References".  Use the "Date" context more consistently.
+	Consolidate some generic SecInfo messages like "Referenced CVEs" into
+	"SecInfo" context.  Use "NVT or Result" for messages shared between
+	both types.  Use "Note or Override" more consistently for shared
+	messages.  Correct context for "no".  Use message "None" instead
+	of "No NVT", which was a placeholder.  Use the context "Actions" more
+	consistently.
+
+	* src/html/classic/wizard.xsl: Use context "Task Wizard" for messages
+	that can be used by all Task related wizards. Use the contexts from
+	omp.xsl for messages that also appear there.
+
+2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22641.
 
 	* src/xslt_i18n.c (): Add #include <math.h>.
