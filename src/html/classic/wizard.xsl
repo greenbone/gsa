@@ -267,7 +267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Advanced Task Wizard')"/>:
+          <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Task Wizard')"/>:
         </td>
         <td>
           <input type="text" name="event_data:target_hosts" value="" size="30" maxlength="80"/>
@@ -275,12 +275,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="gsa:i18n ('Start time', 'Advanced Task Wizard')"/>:
+          <xsl:value-of select="gsa:i18n ('Start time', 'Task Wizard')"/>:
         </td>
         <td>
           <label>
             <input type="radio" name="event_data:auto_start" value="2" checked="1"/>
-            <xsl:value-of select="gsa:i18n ('Start immediately', 'Advanced Task Wizard')"/>
+            <xsl:value-of select="gsa:i18n ('Start immediately', 'Task Wizard')"/>
           </label>
           <br/>
           <label>
@@ -660,9 +660,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="../run_wizard_response/response/commands_response/get_lsc_credentials_response">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Window')"/>
+            <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target|Credentials')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>):</xsl:text>
           </td>
           <td>
@@ -686,9 +686,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Window')"/>
+            <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target|Credentials')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>)</xsl:text>
           </td>
           <td>
@@ -710,9 +710,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target Window')"/>
+            <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target|Credentials')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>)</xsl:text>
           </td>
           <td>
@@ -736,9 +736,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Email report to', 'Advanced Task Wizard')"/>
+            <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>):</xsl:text>
           </td>
           <td>
@@ -751,7 +751,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>):</xsl:text>
           </td>
           <td>
@@ -872,12 +872,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr>
         <td>
-          <xsl:value-of select="gsa:i18n ('Start time', 'Modify Task Wizard')"/>:
+          <xsl:value-of select="gsa:i18n ('Start time', 'Task Wizard')"/>:
         </td>
         <td>
           <label>
             <input type="radio" name="event_data:reschedule" value="0" checked="1"/>
-            <xsl:value-of select="gsa:i18n ('Do not change', 'Modify Task Wizard')"/>
+            <xsl:value-of select="gsa:i18n ('Do not change', 'Task Wizard')"/>
           </label>
           <br/>
           <label>
@@ -1252,9 +1252,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Email report to', 'Modify Task Wizard')"/>
+            <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Window')"/>
+            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
             <xsl:text>):</xsl:text>
           </td>
           <td>

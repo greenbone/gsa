@@ -43,15 +43,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- Login page messages generated internally -->
 <xsl:template name="login-msgs">
-  <xsl:value-of select="gsa:i18n ('Successfully logged out.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Already logged out.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Logged out. OMP service is down.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Login failed.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Login failed.  OMP service is down.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Login failed.  Error during authentication.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Session has expired.  Please login again.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Cookie missing or bad.  Please login again.', 'Login')"/>
-  <xsl:value-of select="gsa:i18n ('Token missing or bad.  Please login again.', 'Login')"/>
+  <xsl:value-of select="gsa:i18n ('Successfully logged out.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Already logged out.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Logged out. OMP service is down.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Login failed.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Login failed.  OMP service is down.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Login failed.  Error during authentication.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Session has expired.  Please login again.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Cookie missing or bad.  Please login again.', 'Login Message')"/>
+  <xsl:value-of select="gsa:i18n ('Token missing or bad.  Please login again.', 'Login Message')"/>
 </xsl:stylesheet>
 
 
