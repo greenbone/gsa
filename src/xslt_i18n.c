@@ -29,6 +29,7 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 #include <libxslt/xsltutils.h>
+#include <math.h>
 #include <string.h>
 #include <locale.h>
 #include <stdlib.h>
@@ -76,7 +77,9 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
 
   if (nargs < 2 || nargs > 3)
     {
-      xsltGenericError (ctxt, "Expected 2 or 3 arguments, got %d", nargs);
+      xsltGenericError (xsltGenericErrorContext,
+                        "gettext : Expected 2 or 3 arguments, got %d\n",
+                        nargs);
       return;
     }
 
@@ -111,12 +114,15 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
 
   if (msgid_obj->stringval && strcmp ((char*) msgid_obj->stringval, ""))
     {
-      char *old_LC_ALL = getenv ("LC_ALL");
-      char *old_LANGUAGE = getenv ("LANGUAGE");
+      char *old_LC_ALL;
+      char *old_LANGUAGE;
       gchar *msgid = NULL;
       char *gettext_result = NULL;
 
       g_mutex_lock (&locale_env_mutex);
+
+      old_LC_ALL = getenv ("LC_ALL");
+      old_LANGUAGE = getenv ("LANGUAGE");
 
       setenv ("LC_ALL", "en_US.UTF8", 1);
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
@@ -137,8 +143,15 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
                                         : "### N/A ###");
       g_free (msgid);
 
-      setenv ("LC_ALL", old_LC_ALL, 1);
-      setenv ("LANGUAGE", old_LANGUAGE, 1);
+      if (old_LC_ALL)
+        setenv ("LC_ALL", old_LC_ALL, 1);
+      else
+        unsetenv ("LC_ALL");
+
+      if (old_LANGUAGE)
+        setenv ("LANGUAGE", old_LANGUAGE, 1);
+      else
+        unsetenv ("LANGUAGE");
       setlocale (LC_MESSAGES, "");
 
       g_mutex_unlock (&locale_env_mutex);
@@ -182,7 +195,9 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
 
   if (nargs < 4 || nargs > 5)
     {
-      xsltGenericError (ctxt, "Expected 4 or 5 arguments, got %d", nargs);
+      xsltGenericError (xsltGenericErrorContext,
+                        "ngettext : Expected 4 or 5 arguments, got %d\n",
+                        nargs);
       return;
     }
 
@@ -202,12 +217,14 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
   count_obj = valuePop (ctxt);
   if (count_obj->type != XPATH_NUMBER)
     {
-      valuePush (ctxt, context_obj);
+      valuePush (ctxt, count_obj);
       xmlXPathNumberFunction (ctxt, 1);
       count_obj = valuePop (ctxt);
 
-      if (count_obj->type != XPATH_NUMBER)
-        xsltGenericError (ctxt, "4th argument cannot be converted to a number");
+      if (count_obj->type != XPATH_NUMBER || isnan (count_obj->floatval))
+        xsltGenericError (xsltGenericErrorContext,
+                          "ngettext : 4th argument cannot be converted"
+                          " to a valid number\n");
     }
 
   msgid_pl_obj = valuePop (ctxt);
@@ -236,14 +253,17 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
 
   if (msgid_obj->stringval && strcmp ((char*) msgid_obj->stringval, ""))
     {
-      char *old_LC_ALL = getenv ("LC_ALL");
-      char *old_LANGUAGE = getenv ("LANGUAGE");
+      char *old_LC_ALL;
+      char *old_LANGUAGE;
       gchar *msgid = NULL;
       gchar *msgid_pl = NULL;
       unsigned long count;
       char *gettext_result = NULL;
 
       g_mutex_lock (&locale_env_mutex);
+
+      old_LC_ALL = getenv ("LC_ALL");
+      old_LANGUAGE = getenv ("LANGUAGE");
 
       setenv ("LC_ALL", "en_US.UTF8", 1);
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
@@ -257,7 +277,7 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
       else
         msgid = g_strdup ((gchar*) msgid_obj->stringval);
 
-      if (context_obj)
+      if (context_obj && context_obj->stringval)
         msgid_pl = g_strdup_printf ("%s%s%s",
                                  (gchar*) context_obj->stringval,
                                  GETTEXT_CONTEXT_GLUE,
@@ -275,8 +295,15 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
                                         : "### N/A ###");
       g_free (msgid);
 
-      setenv ("LC_ALL", old_LC_ALL, 1);
-      setenv ("LANGUAGE", old_LANGUAGE, 1);
+      if (old_LC_ALL)
+        setenv ("LC_ALL", old_LC_ALL, 1);
+      else
+        unsetenv ("LC_ALL");
+
+      if (old_LANGUAGE)
+        setenv ("LANGUAGE", old_LANGUAGE, 1);
+      else
+        unsetenv ("LANGUAGE");
       setlocale (LC_MESSAGES, "");
 
       g_mutex_unlock (&locale_env_mutex);
