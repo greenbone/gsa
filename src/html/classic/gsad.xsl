@@ -851,8 +851,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout', 'Logo')}" style="margin-left:3px;">
-          <xsl:value-of select="gsa:i18n('Logout', 'Logo')"/>
+        <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout', 'Action Verb')}" style="margin-left:3px;">
+          <xsl:value-of select="gsa:i18n('Logout', 'Action Verb')"/>
         </a>
         <br/>
         <br/>
@@ -1590,7 +1590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="not (boolean (/envelope/backend_operation))"/>
         <xsl:when test="/envelope/backend_operation = 0"/>
         <xsl:otherwise>
-          Backend operation: <xsl:value-of select="/envelope/backend_operation"/>s
+          <xsl:value-of select="gsa:i18n ('Backend operation', 'Performance Timing')"/>: <xsl:value-of select="/envelope/backend_operation"/>s
         </xsl:otherwise>
       </xsl:choose>
     </div>
@@ -1768,7 +1768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <script type="text/javascript">
         document.getElementById ("secinfo_button").setAttribute ("href", "/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token=<xsl:value-of select="/envelope/token"/>");
-        document.getElementById ("secinfo_button_overlay").innerHTML="SecInfo Dashboard";
+        document.getElementById ("secinfo_button_overlay").innerHTML="<xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>";
         document.getElementById ("secinfo_dashboard_button").setAttribute ("style", "");
         document.getElementById ("secinfo_nvts_button").setAttribute ("class", "section_start");
       </script>
@@ -2281,7 +2281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </center>
         <xsl:if test="string-length (guest/username) &gt; 0">
           <div style="text-align: right">
-            <a href="/omp?token=guest">Login as a guest</a>
+            <a href="/omp?token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
           </div>
         </xsl:if>
       </div>
