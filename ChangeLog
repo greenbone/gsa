@@ -1,3 +1,10 @@
+2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22655.
+
+	* tools/pot-test: New file. Python script to gather data from .pot
+	files to test them for common problems like redundant contexts.
+
 2015-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22652.
