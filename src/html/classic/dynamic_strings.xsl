@@ -864,8 +864,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:n-i18n ('%1 Agent will be deleted', '%1 Agents will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Scanner will be deleted', '%1 Scanners will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Filter will be deleted', '%1 Filters will be deleted', 0, 'Bulk Action')"/>
-  <xsl:value-of select="gsa:n-i18n ('%1 Tags will be deleted', '%1 Tags will be deleted', 0, 'Bulk Action')"/>
-  <xsl:value-of select="gsa:n-i18n ('%1 Permissions will be deleted', '%1 Permissions will be deleted', 0, 'Bulk Action')"/>
+  <xsl:value-of select="gsa:n-i18n ('%1 Tag will be deleted', '%1 Tags will be deleted', 0, 'Bulk Action')"/>
+  <xsl:value-of select="gsa:n-i18n ('%1 Permission will be deleted', '%1 Permissions will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 User will be deleted', '%1 Users will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Group will be deleted', '%1 Groups will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Role will be deleted', '%1 Roles will be deleted', 0, 'Bulk Action')"/>
@@ -888,8 +888,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:n-i18n ('%1 Agent will be moved to the trashcan', '%1 Agents will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Scanner will be moved to the trashcan', '%1 Scanners will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Filter will be moved to the trashcan', '%1 Filters will be moved to the trashcan', 0, 'Bulk Action')"/>
-  <xsl:value-of select="gsa:n-i18n ('%1 Tags will be moved to the trashcan', '%1 Tags will be moved to the trashcan', 0, 'Bulk Action')"/>
-  <xsl:value-of select="gsa:n-i18n ('%1 Permissions will be moved to the trashcan', '%1 Permissions will be moved to the trashcan', 0, 'Bulk Action')"/>
+  <xsl:value-of select="gsa:n-i18n ('%1 Tag will be moved to the trashcan', '%1 Tags will be moved to the trashcan', 0, 'Bulk Action')"/>
+  <xsl:value-of select="gsa:n-i18n ('%1 Permission will be moved to the trashcan', '%1 Permissions will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 User will be moved to the trashcan', '%1 Users will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Group will be moved to the trashcan', '%1 Groups will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Role will be moved to the trashcan', '%1 Roles will be moved to the trashcan', 0, 'Bulk Action')"/>
