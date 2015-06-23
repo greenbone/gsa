@@ -52,7 +52,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Session has expired.  Please login again.', 'Login Message')"/>
   <xsl:value-of select="gsa:i18n ('Cookie missing or bad.  Please login again.', 'Login Message')"/>
   <xsl:value-of select="gsa:i18n ('Token missing or bad.  Please login again.', 'Login Message')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 
 <!--
@@ -73,7 +73,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>
   <xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/>
   <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>
+  <xsl:value-of select="gsa:i18n ('Config', 'Config')"/>
   <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
+  <xsl:value-of select="gsa:i18n ('Scan Configuration', 'Scan Configuration')"/>
   <xsl:value-of select="gsa:i18n ('Alert', 'Alert')"/>
   <xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/>
   <xsl:value-of select="gsa:i18n ('Report Format', 'Report Format')"/>
@@ -86,10 +88,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('User', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A plural resource type name like "Tasks" -->
-<xsl:template name="type-name">
+<xsl:template name="type-name-plural">
   <xsl:value-of select="gsa:i18n ('Tasks', 'Task')"/>
   <xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>
@@ -103,7 +105,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Targets', 'Target')"/>
   <xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/>
   <xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/>
+  <xsl:value-of select="gsa:i18n ('Configs', 'Config')"/>
   <xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/>
+  <xsl:value-of select="gsa:i18n ('Scan Configurations', 'Scan Configuration')"/>
   <xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/>
   <xsl:value-of select="gsa:i18n ('Schedules', 'Schedule')"/>
   <xsl:value-of select="gsa:i18n ('Report Formats', 'Report Format')"/>
@@ -116,7 +120,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Users', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Groups', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Roles', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A resource type global label like "Global Task" -->
 <xsl:template name="type-global">
@@ -126,7 +130,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Global Target', 'Target')"/>
   <xsl:value-of select="gsa:i18n ('Global Port List', 'Port List')"/>
   <xsl:value-of select="gsa:i18n ('Global Credential', 'Credential')"/>
+  <xsl:value-of select="gsa:i18n ('Global Config', 'Config')"/>
   <xsl:value-of select="gsa:i18n ('Global Scan Config', 'Scan Config')"/>
+  <xsl:value-of select="gsa:i18n ('Global Scan Configuration', 'Scan Configuration')"/>
   <xsl:value-of select="gsa:i18n ('Global Alert', 'Alert')"/>
   <xsl:value-of select="gsa:i18n ('Global Schedule', 'Schedule')"/>
   <xsl:value-of select="gsa:i18n ('Global Report Format', 'Report Format')"/>
@@ -139,7 +145,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Global User', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Global Group', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Global Role', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A resource type "owned by" label like "Task owned by User123" -->
 <xsl:template name="type-owned">
@@ -164,12 +170,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('User owned by %1', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Group owned by %1', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Role owned by %1', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A details label like "Task Details" -->
 <xsl:template name="type-details">
   <xsl:value-of select="gsa:i18n ('Task Details', 'Task')"/>
   <xsl:value-of select="gsa:i18n ('Report Details', 'Report')"/>
+  <xsl:value-of select="gsa:i18n ('Host Details', 'Host')"/>
   <xsl:value-of select="gsa:i18n ('Result Details', 'Result')"/>
   <xsl:value-of select="gsa:i18n ('Note Details', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('Override Details', 'Override')"/>
@@ -195,12 +202,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('User Details', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Group Details', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Role Details', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A long details label like "View details of Task SomeTask" -->
 <xsl:template name="type-details-long">
   <xsl:value-of select="gsa:i18n ('View details of Task %1', 'Task')"/>
   <xsl:value-of select="gsa:i18n ('View details of Report %1', 'Report')"/>
+  <xsl:value-of select="gsa:i18n ('View details of Host %1', 'Host')"/>
   <xsl:value-of select="gsa:i18n ('View details of Result %1', 'Result')"/>
   <xsl:value-of select="gsa:i18n ('View details of Note %1', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('View details of Override %1', 'Override')"/>
@@ -226,7 +234,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('View details of User %1', 'User')"/>
   <xsl:value-of select="gsa:i18n ('View details of Group %1', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('View details of Role %1', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!--  A single resource export like "Export Task" -->
 <xsl:template name="type-export">
@@ -249,7 +257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Export User', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Export Group', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Export Role', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!--  A single resource export like "Export Task as XML" -->
 <xsl:template name="type-export-xml">
@@ -272,7 +280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Export User as XML', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Export Group as XML', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Export Role as XML', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A multiple resource export like "Export 10 filtered Tasks as XML" -->
 <xsl:template name="type-export-multiple-filtered-xml">
@@ -295,7 +303,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:n-i18n ('Export %1 filtered User as XML', 'Export %1 filtered Users as XML', 0, 'User')"/>
   <xsl:value-of select="gsa:n-i18n ('Export %1 filtered Group as XML', 'Export %1 filtered Groups as XML', 0, 'Group')"/>
   <xsl:value-of select="gsa:n-i18n ('Export %1 filtered Role as XML', 'Export %1 filtered Roles as XML', 0, 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A filter label like "Task Filter" -->
 <xsl:template name="type-filter">
@@ -310,8 +318,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/>
   <xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/>
   <xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/>
-  <xsl:value-of select="gsa:i18n ('Info Filter', 'Info')"/>
-  <xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'Info')"/>
+  <xsl:value-of select="gsa:i18n ('Info Filter', 'SecInfo')"/>
+  <xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'All SecInfo Information')"/>
   <xsl:value-of select="gsa:i18n ('Target Filter', 'Target')"/>
   <xsl:value-of select="gsa:i18n ('Port List Filter', 'Port List')"/>
   <xsl:value-of select="gsa:i18n ('Credential Filter', 'Credential')"/>
@@ -328,7 +336,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('User Filter', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Group Filter', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Role Filter', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A resource permissions label like "Permissions for Task" -->
 <xsl:template name="type-permissions">
@@ -349,7 +357,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Permissions for User &quot;%1&quot;', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Permissions for Group &quot;%1&quot;', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Permissions for Role &quot;%1&quot;', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A new filter label like "New Task Filter from current term" -->
 <xsl:template name="type-new-filter">
@@ -358,8 +366,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('New Result Filter from current term', 'Result')"/>
   <xsl:value-of select="gsa:i18n ('New Note Filter from current term', 'Note')"/>
   <xsl:value-of select="gsa:i18n ('New Override Filter from current term', 'Override')"/>
-  <xsl:value-of select="gsa:i18n ('New Info Filter from current term', 'Info')"/>
-  <xsl:value-of select="gsa:i18n ('New All SecInfo Filter from current term', 'Info')"/>
+  <xsl:value-of select="gsa:i18n ('New Info Filter from current term', 'All SecInfo Information')"/>
+  <xsl:value-of select="gsa:i18n ('New All SecInfo Filter from current term', 'All SecInfo Information')"/>
   <xsl:value-of select="gsa:i18n ('New Target Filter from current term', 'Target')"/>
   <xsl:value-of select="gsa:i18n ('New Port List Filter from current term', 'Port List')"/>
   <xsl:value-of select="gsa:i18n ('New Credential Filter from current term', 'Credential')"/>
@@ -376,7 +384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('New User Filter from current term', 'User')"/>
   <xsl:value-of select="gsa:i18n ('New Group Filter from current term', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('New Role Filter from current term', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- "New ..." label like "New Task" -->
 <xsl:template name="type-new">
@@ -399,7 +407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('New User', 'User')"/>
   <xsl:value-of select="gsa:i18n ('New Group', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('New Role', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- General text for denied actions like "Permission to delete Task denied" -->
 <xsl:template name="type-action-denied">
@@ -589,7 +597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('User must be owned or global', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Group must be owned or global', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Role must be owned or global', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- "Edit ..." label like "Edit Task" -->
 <xsl:template name="type-edit">
@@ -612,7 +620,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Edit User', 'User')"/>
   <xsl:value-of select="gsa:i18n ('Edit Group', 'Group')"/>
   <xsl:value-of select="gsa:i18n ('Edit Role', 'Role')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 
 <!--
@@ -837,7 +845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('may verify scanners', 'Permission Description')"/>
   <xsl:value-of select="gsa:i18n ('may verify %1', 'Permission Description')"/>
 
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A bulk delete confirmation message like "3 Tasks will be deleted" -->
 <xsl:template name="type-bulk-delete-confirm">
@@ -861,7 +869,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:n-i18n ('%1 User will be deleted', '%1 Users will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Group will be deleted', '%1 Groups will be deleted', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Role will be deleted', '%1 Roles will be deleted', 0, 'Bulk Action')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- A bulk trash confirmation message like "3 Tasks will be moved to the trashcan" -->
 <xsl:template name="type-bulk-trash-confirm">
@@ -885,7 +893,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:n-i18n ('%1 User will be moved to the trashcan', '%1 Users will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Group will be moved to the trashcan', '%1 Groups will be moved to the trashcan', 0, 'Bulk Action')"/>
   <xsl:value-of select="gsa:n-i18n ('%1 Role will be moved to the trashcan', '%1 Roles will be moved to the trashcan', 0, 'Bulk Action')"/>
-</xsl:stylesheet>
+</xsl:template>
 
 <!-- Bulk action names -->
 <xsl:template name="bulk-actions">
@@ -900,4 +908,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('Export selection', 'Bulk Action')"/>
   <xsl:value-of select="gsa:i18n ('Export all filtered', 'Bulk Action')"/>
   <xsl:value-of select="gsa:i18n ('Export page contents', 'Bulk Action')"/>
+</xsl:template>
+
+<!-- Scan status names -->
+<xsl:template name="status">
+  <xsl:value-of select="gsa:i18n ('Uploading', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Container', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Delete Requested', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Ultimate Delete Requested', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Done', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('New', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Running', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Stopped', 'Status')"/>
+  <xsl:value-of select="gsa:i18n ('Internal Error', 'Status')"/>
+</xsl:template>
+
+<!-- Trust status -->
+<xsl:template name="trust">
+  <xsl:value-of select="gsa:i18n ('unknown', 'Trust')"/>
+  <xsl:value-of select="gsa:i18n ('yes', 'Trust')"/>
+  <xsl:value-of select="gsa:i18n ('no', 'Trust')"/>
+</xsl:template>
+
 </xsl:stylesheet>

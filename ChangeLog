@@ -1,5 +1,72 @@
 2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22660. Not including the "builtin scanner" messages and a
+	"Note cannot be moved to trashcan" one in omp.xsl.
+
+	Correct various strings for i18n and add i18n for some text lacking it.
+
+	* src/html/classic/dynamic_strings.xsl: Use correct closing tags
+	for templates and add ending </xsl:stylesheet>. Correct template name
+	to type-name-plural for plural type nams.
+	(type-name, type-name-plural, type-global): Add messages for "Config"
+	and "Scan Configuration".
+	(status, trust): New templates.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Change context of "Logout"
+	to "Action Verb" for consistency with "Login".
+	(html-footer): Change context of "Backend operation" to
+	"Performance Timing".
+	(html-gsa-navigation): Apply i18n to "SecInfo Dashboard" text generated
+	by script.
+	(login_page): Apply i18n to text "Login as a guest".
+
+	* src/html/classic/omp.xsl (task [details]): Add i18n for "Unavailable".
+	(list-window): Add i18n for "Hide Charts" and "Show Charts".
+	(lsc_credential): Add i18n for "Unavailable" and "UUID".
+	(html-agents-table): Change context of "Trust" to "Trust".
+	(agent, agent [trash], agent [details]): Use context "Trust" for trust
+	related text.
+	(alert): Change context of "Test" to "Action Verb".
+	(alert [details], filter [details], tag [details]): Add i18n for
+	"Unavailable" and "UUID".
+	(html-targets-table): Correct table header "Hosts".
+	(target (details), html-config-table): Add i18n for "Unavailable"
+	and "UUID".
+	(schedule [details]): Add i18n for Tasks table headers, "Unavailable"
+	and "UUID".
+	(scanner [details]): Add i18n for "N/A", parameters table headers,
+	"Unavailable" and "UUID". Replace i18n of whitespace with xsl:text
+	elements.
+	(slave [details]): Add i18n for "Unavailable" and "UUID".
+	(ref_cve_list): Change context of "CVE" to "SecInfo|References"
+	(ref_bid_list, ref_cert_list, ref_xref_list): Add i18n to reference
+	type name.
+	(ovaldef-details): Add i18n for "Status".
+	(permission [details], port_list [details]): Add i18n for "Unavailable"
+	and "UUID".
+	(report_format, report_format [trash], report_format [details]): Use
+	context "Trust" for trust related text. Add i18n for "Unavailable"
+	and "UUID".
+	(host): Add i18n for "not finished". Correct contexts for trash icon.
+	(report [result_header]): Rename parameter "capital-name" to
+	"label-text" and do not apply i18n to it here.
+	(result [result-headers]): Apply i18n to header names and use new
+	param name.
+	(html-results-table): Apply i18n to "Vulnerability".
+	(report [assets]): Apply i18n to "IP" header, "View report" and
+	"not finished".
+	(get_reports_response/report/report [report-assets]): Add i18n for "IP"
+	and "not finished".
+	(report [section-filter]): Consolidate "New Result Filter ..." message.
+	(report [hosts]):  Add i18n for "not finished".
+	(html-agents-trash-table): Use context "Trust" for "Trust".
+	(user): Consolidate "User cannot be deleted" message.
+	(user [details]): Add i18n for "Unavailable" and "UUID".
+
+	* tools/pot-test (main): Correct and simplify coverage test generation.
+
+2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22655.
 
 	* tools/pot-test: New file. Python script to gather data from .pot

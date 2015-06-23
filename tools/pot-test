@@ -118,18 +118,11 @@ def main(potfilepath, pofilepath=None):
     if pofilepath != None:
         print "Creating coverage test .po file \"%s\" ..." % pofilepath
         for entry in input_file:
-            if entry.msgstr != "":
-                entry.msgstr = "{***" + entry.msgstr + "***}"
-            else:
-                entry.msgstr = "{***" + entry.msgid + "***}"
+            entry.msgstr = "{***" + entry.msgid + "***}"
 
             if entry.msgid_plural != "":
-                if len (entry.msgstr_plural):
-                    for i in xrange (0, len (entry.msgstr_plural) - 1):
-                        entry.msgstr_plural [i] = "{***" + entry.msgstr_plural [i] + "***}"
-                else:
-                    entry.msgstr_plural [0] = "{***" + entry.msgid + "***}"
-                    entry.msgstr_plural [1] = "{***" + entry.msgid_plural + "***}"
+                entry.msgstr_plural ["0"] = "{***" + entry.msgid + "***}"
+                entry.msgstr_plural ["1"] = "{***" + entry.msgid_plural + "***}"
 
             if "fuzzy" in entry.flags:
                 entry.flags.remove ("fuzzy")
