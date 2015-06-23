@@ -26834,7 +26834,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="result_section">
             <xsl:choose>
               <xsl:when test="delta/text() = 'changed'">
-                <b><xsl:value-of select="gsa:i18n ('Result', 'NVT or Result')"/> 1</b>
+                <b><xsl:value-of select="gsa:i18n ('Result', 'Result')"/> 1</b>
                 <p></p>
               </xsl:when>
             </xsl:choose>
