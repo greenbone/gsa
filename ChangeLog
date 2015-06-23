@@ -1,5 +1,11 @@
 2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22669 by Michael Wiegand.
+
+	* doc/i18n-howto.txt: Remove duplicate "the".
+
+2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (result [result-headers]): Correct contexts
 	for "Vulnerability" and "Solution type".
 
