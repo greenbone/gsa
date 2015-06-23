@@ -1,5 +1,10 @@
 2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (result [result-headers]): Correct contexts
+	for "Vulnerability" and "Solution type".
+
+2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22672.
 
 	* src/html/classic/omp.xsl (result [result-body]): Correct context of

@@ -26265,7 +26265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Vulnerability', 'NVT or Result')"/>
+            <xsl:value-of select="gsa:i18n ('Vulnerability', 'Result')"/>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$collapse-details-button &gt; 0">
@@ -26279,7 +26279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$collapse-details-button &gt; 0">
             <xsl:apply-templates select="../../." mode="result-header">
               <xsl:with-param name="name" select="'solution_type'"/>
-              <xsl:with-param name="label-text" select="gsa:i18n ('Solution type', 'Result')"/>
+              <xsl:with-param name="label-text" select="gsa:i18n ('Solution type', 'NVT or Result')"/>
               <xsl:with-param name="image" select="'/img/solution_type.png'"/>
             </xsl:apply-templates>
           </xsl:when>
