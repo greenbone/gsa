@@ -243,7 +243,7 @@ Value
 Translating help pages
 ======================
 Translations for the help pages are contained in a file called "help_<lc>.xsl",
-where <lc> is the the two-letter language code the translation is for.
+where <lc> is the two-letter language code the translation is for.
 
 For the stylesheet to work properly, it must include the default "help.xsl"
 at the beginning. 
