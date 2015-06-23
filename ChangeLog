@@ -1,5 +1,29 @@
 2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22667.
+
+	* doc/i18n-howto.txt: Rewrite to describe new gettext based format.
+
+	* src/html/classic/dynamic_strings.xsl (type-bulk-delete-confirm)
+	(type-bulk-trash-confirm): Correct singular of Tag and Permission
+	message.
+
+	* src/html/classic/omp.xsl (resume-icon, task-icons): Change context of
+	"Resume" to "Action Verb" for consistency.
+	(task [details], new_task, html-tasks-table): Change context of
+	"Sequential", "Random" and "Reverse" to "Task|Hosts Ordering" to
+	clarify. Change context of "Current" and "Last" to "Task|Report".
+	(report [apps]): Consolidate tooltip text for unknown installations
+	count with gsa-i18n:strformat and use gsa:n-i18n.
+	(report [summary]): Use correct context "Results" for "Total".
+	(html-tasks-trash-table): Change context of "First" and "Last" to
+	"Task|Report".
+
+	* src/po/gsad_xsl-de.po: Update to include new messages and contexts.
+	Remove unused messages.
+
+2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22660. Not including the "builtin scanner" messages and a
 	"Note cannot be moved to trashcan" one in omp.xsl.
 

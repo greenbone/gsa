@@ -1711,8 +1711,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/resume.png" alt="{gsa:i18n ('Resume', 'Task')}"
-             name="Resume" value="Resume" title="{gsa:i18n ('Resume', 'Task')}"/>
+      <input type="image" src="/img/resume.png" alt="{gsa:i18n ('Resume', 'Action Verb')}"
+             name="Resume" value="Resume" title="{gsa:i18n ('Resume', 'Action Verb')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -3764,17 +3764,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
-      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task')}" title="{gsa:i18n ('Task is a container', 'Task')}"
+      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"
          style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
-      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task')}" title="{gsa:i18n ('Task is scheduled', 'Task')}"
+      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is scheduled', 'Task')}"
            style="margin-left:3px;"/>
     </xsl:when>
     <xsl:when test="status='Stopped'">
       <xsl:choose>
         <xsl:when test="gsa:may ('resume_task') = 0">
-          <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task')}" title="{gsa:i18n ('Permission to resume task denied', 'Task')}"
+          <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Permission to resume task denied', 'Task')}"
              style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -3793,7 +3793,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Task')}" title="{gsa:i18n ('Task is not stopped', 'Task')}"
+      <img src="/img/resume_inactive.png" border="0" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is not stopped', 'Task')}"
            style="margin-left:3px;"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -4078,9 +4078,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task')"/>:
                 <xsl:choose>
-                  <xsl:when test="hosts_ordering = 'sequential'"><xsl:value-of select="gsa:i18n ('Sequential', 'Task')"/></xsl:when>
-                  <xsl:when test="hosts_ordering = 'random'"><xsl:value-of select="gsa:i18n ('Random', 'Task')"/></xsl:when>
-                  <xsl:when test="hosts_ordering = 'reverse'"><xsl:value-of select="gsa:i18n ('Reverse', 'Task')"/></xsl:when>
+                  <xsl:when test="hosts_ordering = 'sequential'"><xsl:value-of select="gsa:i18n ('Sequential', 'Task|Hosts Ordering')"/></xsl:when>
+                  <xsl:when test="hosts_ordering = 'random'"><xsl:value-of select="gsa:i18n ('Random', 'Task|Hosts Ordering')"/></xsl:when>
+                  <xsl:when test="hosts_ordering = 'reverse'"><xsl:value-of select="gsa:i18n ('Reverse', 'Task|Hosts Ordering')"/></xsl:when>
                   <xsl:otherwise><xsl:value-of select="gsa:i18n ('N/A', 'Value')"/></xsl:otherwise>
                 </xsl:choose>
               </td>
@@ -4141,7 +4141,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="report_count/text ()"/>
             </a>
             <xsl:if test="current_report/report/timestamp">
-              <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task|Reports'), ': ')"/>
+              <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task|Report'), ': ')"/>
               <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                 <xsl:call-template name="short_timestamp_current"/>
               </a>
@@ -4152,7 +4152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="report_count/finished"/>
              </a>
              <xsl:if test="last_report/report/timestamp">
-               <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task|Reports'), ': ')"/>
+               <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task|Report'), ': ')"/>
                <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                  <xsl:call-template name="short_timestamp_last"/>
                </a>
@@ -5570,9 +5570,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Order for target hosts', 'Task')"/></td>
             <td>
               <select name="hosts_ordering">
-                <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task')"/></option>
-                <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task')"/></option>
-                <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task')"/></option>
+                <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task|Hosts Ordering')"/></option>
+                <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task|Hosts Ordering')"/></option>
+                <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task|Hosts Ordering')"/></option>
               </select>
             </td>
           </tr>
@@ -6374,17 +6374,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     select="commands_response/get_tasks_response/task/hosts_ordering"/>
       <select name="hosts_ordering">
         <xsl:call-template name="opt">
-          <xsl:with-param name="content" select="gsa:i18n ('Sequential', 'Task')"/>
+          <xsl:with-param name="content" select="gsa:i18n ('Sequential', 'Task|Hosts Ordering')"/>
           <xsl:with-param name="value" select="'sequential'"/>
           <xsl:with-param name="select-value" select="$hosts_ordering"/>
         </xsl:call-template>
         <xsl:call-template name="opt">
-          <xsl:with-param name="content" select="gsa:i18n ('Random', 'Task')"/>
+          <xsl:with-param name="content" select="gsa:i18n ('Random', 'Task|Hosts Ordering')"/>
           <xsl:with-param name="value" select="'random'"/>
           <xsl:with-param name="select-value" select="$hosts_ordering"/>
         </xsl:call-template>
         <xsl:call-template name="opt">
-          <xsl:with-param name="content" select="gsa:i18n ('Reverse', 'Task')"/>
+          <xsl:with-param name="content" select="gsa:i18n ('Reverse', 'Task|Hosts Ordering')"/>
           <xsl:with-param name="value" select="'reverse'"/>
           <xsl:with-param name="select-value" select="$hosts_ordering"/>
         </xsl:call-template>
@@ -7007,7 +7007,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <sort-reverse/>
         </column>
         <column>
-          <name><xsl:value-of select="gsa:i18n('Last', 'Task|Reports')"/></name>
+          <name><xsl:value-of select="gsa:i18n('Last', 'Task|Report')"/></name>
           <field>last</field>
           <sort-reverse/>
         </column>
@@ -28997,7 +28997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="count(../../host/detail[name = $value]) + $no_cpe_detail_hosts"/>
               </a>
               <xsl:if test="$no_cpe_detail_hosts">
-                <abbr title="{gsa:i18n ('Includes ', 'Result')}{$no_cpe_detail_hosts}{gsa:i18n (' host(s) where CPE was found in inventory, but number of installations could not be determined', 'Result')}">*</abbr>
+                <abbr title="{gsa-i18n:strformat (gsa:n-i18n ('Includes %1 host where CPE was found in inventory, but number of installations could not be determined', 'Includes %1 hosts where CPE was found in inventory, but number of installations could not be determined', $no_cpe_detail_hosts, 'Result'), $no_cpe_detail_hosts)}">*</abbr>
               </xsl:if>
             </td>
             <td>
@@ -30055,7 +30055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="level" select="'False Positive'"/>
             </xsl:call-template>
           </td>
-          <td><xsl:value-of select="gsa:i18n ('Total', 'Report')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Total', 'Results')"/></td>
           <xsl:choose>
             <xsl:when test="@type='prognostic'">
               <td><xsl:value-of select="gsa:i18n ('Download', 'Report')"/></td>
@@ -31281,8 +31281,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <tr class="gbntablehead2">
         <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Task|Reports')"/></td>
-        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('First', 'Task|Reports')"/></td>
-        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Last', 'Task|Reports')"/></td>
+        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('First', 'Task|Report')"/></td>
+        <td  style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Last', 'Task|Report')"/></td>
       </tr>
       <xsl:apply-templates select="task" mode="trash"/>
     </table>

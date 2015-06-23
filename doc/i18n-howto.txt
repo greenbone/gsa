@@ -1,174 +1,243 @@
 GSA INTERNATIONALIZATION HOWTO
+##############################
+
+Requirements
+============
+In addition to the usual GSA requirements, the following are needed as well:
+- msgmerge (part of the GNU gettext tools)
+- Python (scripts were tested with version 2.7.3)
+- polib (Python gettext manipulation library)
+
+If you are using a .po file editor, make sure it supports "msgctxt" and
+ plural forms correctly. (Some older editors may not.)
+
+
+General notes
+=============
+- GSA uses UTF-8 text encoding, so you should use this for your translations
+ as well.
+- Most GSA pages now use gettext for translations while the custom XML-based
+ format is no longer used. (See section "Migrating old XML translations" on
+ how to migrate translations using this format.)
+- Help pages are translated separately. See "Translating help pages" for more.
+- Charts are currently not translated.
+
+
+Updating existing translations
 ==============================
+To update existing translations using the gettext format follow these steps.
+ For old XML-based translations, see "Migrating old XML translations".
 
-Usage of gsa:i18n
-=================
+1 - Creating a new template (.pot) file
+---------------------------------------
+To create a new template file run
 
-To allow a string in GSA to be translated, you must use the XPath function
-gsa:i18n with the following parameters:
+  make gettext-pot-files
 
-"id"      : The identifier that is used to look up the translated string.
-             Usually this is the untranslated version, but it can be different
-             if the parameter "default" is used.
-"context" : The context name which specifies which context groups should
-             be considered when looking up the string. See the section
-             "Contexts" for details on how this works
-"default" : The string to use when no translation is found. If omitted,
-             the id is used.
-            A common usage for not using the id as the default is for
-             allowing prefix or suffix strings that are used in translations
-             but not in the original. In this case the default is set to an
-             empty string ('').
+which will generate the file "gsad_xsl.pot" in the "src/po" subdirectory of
+ your build directory.
+You can then use this as a template for your new translation.
 
+Alternatively you can run the script directly:
 
-Contexts
-========
+  python "${SRC_DIR}/tools/xsl2pot" "${SRC_DIR}/src/html/classic" "${OUT_FILE}"
 
-To reduce the amount of time spent on finding strings in the translation
-XML files, the strings are placed inside "context groups".
-When looking up a string id, only context groups which are marked with the
-context given to the gsa:i18n function will be searched.
+with ${SRC_DIR} being the GSA source directory and ${OUT_FILE} being the path
+ to your desired output file.
 
 
-General guidelines for assigning and creating new contexts and groups
----------------------------------------------------------------------
+2 - Merge the template and existing translations
+------------------------------------------------
+To merge the template run
 
-When grouping strings, you should look for a compromise between the following:
+  make gettext-po-files
 
-* Generic terms should use generic contexts to avoid redundant definitions
-   or inclusion into contexts that do not use them.
+This will generate "gsad_xsl-XX-merged.po" files in the "src/po" subdirectory
+ of your build directory, with "XX" being ISO 639 language codes.
 
-* More specific strings should be used in specific contexts to keep the more
-   generic ones small.
+3 - Copying the merged .po
+--------------------------
+The next step is to copy the file for your language to "src/po" in the
+ source directory, removing the part "-merged" from the file name.
 
-* To make finding the correct context easier you can put semantically similar
-   strings into a group for more contexts than strictly necessary so they
-   are not scattered throughout different context groups.
+As this means overwrites the old source .po file, you should verify the new
+ file is correct and/or backup the old file first.
 
-* The amount of context assignments and groups should not grow too large to
-   reduce time searching them.
+4 - Update the translations
+---------------------------
+Finally you can can update the actual translations in the .po file.
+To apply the changes, build, install and restart GSA.
 
-
-Currently used contexts:
-------------------------
-"Logo"  : Strings used in the the logo header
-"MM"    : (Top level) main menu items
-"Login" : The login page
-"Help"  : Item labels for the Help menu / "Help: <Resource Type>"
-
-"Pagination" : Strings used for pagination labels
-"Filter Box" : The filter box at the top of table pages.
-"Time"       : Time related strings.
-"Severity"   : Severity related strings like the levels "High", "Medium", etc.
-"Status"     : Task status strings like "Running" or "Stop Requested"
-
-"Type"        : Capitalized singular resource type names, e.g. "Task"
-"Type Plural" : Capitalized plural resource type names, e.g. "Tasks"
-"Type Lower"        : Lower case singular resource type names, e.g. "task"
-"Type Plural Lower" : Lower case plural resource type names, e.g. "tasks"
-
-"Table Row"  : Generic actions, properties, etc. used inside table rows.
-               To be used many times on a single page.
-"Window"     : Generic actions, properties, etc. used everywhere except
-                table rows.
-               To be used sparsely, e.g. on details pages.
-
-"<RT>"           : The type name of the resource type <RT> as well as
-                   variants of very common terms like "New <RT>" or
-                   "<RT> Details".
-"<RT> Table Row" : Actions, properties, etc. specific to the resource type
-                   <RT> used inside table rows.
-                   To be used many times on a single page.
-"<RT> Window"    : Actions, properties, etc. specific to the resource type
-                   <RT> used everywhere except table rows.
-                   To be used sparsely, e.g. on details pages.
-
-"Trashcan"        : Strings used by the Trashcan page.
-"My Settings"     : Strings used by the "My Settings" page.
-"Performance"     : Strings used by the Performance page.
-"CVSS Calculator" : Strings used by the Performance page.
-"Feed Sync"       : Strings used by feed sync page like "NVT Sync"
-"Wizard"      : Strings shared by all wizards
-"Task Wizard" : Strings used by the Task Wizard
-"Advanced Task Wizard" : Strings used by the Advanced Task Wizard
+(Technically you can update the merged .po before copying and installing it,
+ but doing it last allows testing the translations in progress)
 
 
-Structure of translation files
-==============================
 
-Elements
---------
-  i18n : root element, contains multiple grp elements.
-  grp  : context group (See section "Contexts"), can contain multiple
-          ctxt and msg elements.
-  ctxt : context assignment, all messages in the same group will be available
-          in this context (See section "Contexts").
-  msg  : message, consisting of an id and a translated string (str).
-  id   : identifier string (usually untranslated version of a string)
-  str  : translated string
+Creating new translations
+=========================
+1 - Creating the template (.pot) file
+-------------------------------------
+The first step to a new translation is generating a new template (.pot) file.
+To do so, follow the first step under "Updating existing translations".
+
+The destination file of the make target is "gsad_xsl.pot" in the "src/po"
+ subdirectory of your GSA source directory.
 
 
-Template for new resource types
+2 - Preparing the .po file
+--------------------------
+Next you have to use the generated file as a template for your new translation.
+
+Once you are finished or want to install the in-progress translation for
+ testing, copy it to "src/po/gsad_xsl-XX.po" in your source directory with "XX"
+ being the ISO 639-1 code of your target language.
+If no ISO 639-1 code exists, use the ISO 639-2 three-letter code instead.
+
+
+3 - Setting up the installation
 -------------------------------
+In the file "CMakeLists.txt" in the "src/po" add a line
 
-  <!-- 3.X      RESOURCEs -->
-  <!-- 3.X.1    RESOURCE type name and common strings -->
-  <grp>
-    <ctxt>RESOURCE</ctxt>
-    <ctxt>RESOURCE Window</ctxt>
-    <!-- - - Type name - - -->
-    <!-- - - Common actions - - -->
-    <!-- - - Common references - - -->
-  </grp>
-  <!-- 3.X.2    RESOURCE actions and properties - all views -->
-  <grp>
-    <ctxt>RESOURCE Table Row</ctxt>
-    <ctxt>RESOURCE Window</ctxt>
-    <!-- - - Actions - - -->
-    <!-- - - Properties - - -->
-    <!-- - - References and reference actions - - -->
-  </grp>
-  <!-- 3.X.3    RESOURCE actions and properties - window / headers only -->
-  <grp>
-    <ctxt>RESOURCE Window</ctxt>
-    <!-- - - Actions - - -->
-    <!-- - - Properties - - -->
-    <!-- - - References and reference actions - - -->
-  </grp>
-  <!-- 3.X.4    RESOURCE actions and properties - table rows only -->
-  <grp>
-    <ctxt>RESOURCE Table Row</ctxt>
-    <!-- - - Actions - - -->
-    <!-- - - Properties - - -->
-    <!-- - - References and reference actions - - -->
-  </grp>
-  <!-- 3.X.5    (Groups of special specific strings like Task Status) -->
+  MAKE_TRANSLATION (XX)
+
+near the other MAKE_TRANSLATION (...) lines, with "XX" again being the ISO
+ language code.
+
+Also add your language to the dependencies of the targets "gettext-mo-files"
+ and "gettext-po-files", again replacing XX with the language code:
+
+  add_custom_target (gettext-mo-files
+                     [...]
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/XX/gsad_xsl.mo)
+
+  add_custom_target (gettext-po-files
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
+                     [...]
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-XX-merged.po)
 
 
-Creating new GSA page translations
-==================================
-The easiest way to create a new translation for GSA is to copy an existing,
-up-to-date language file (like de.xml) in the src/html/classic/po directory
-and replace the existing translated strings with ones in the language you are
-translating to.
-If you don't plan to translate all of GSA at once, you can also copy only
-the parts of the language file that contain the elements you wish to
-translate at the time. In this case the untranslated sections will fall back
-to the default language (English).
+Migrating old XML translations
+==============================
+Translations using the old XML-based format can be partially migrated by
+ converting the old XML file to PO.
 
-The new file must be UTF-8 encoded and named "<lc>.xml" where <lc> is the
-ISO 639‑1 two-letter language code like it is also used by HTTP Accept-Language
-headers (e.g. "fr" for French or "nl" for Dutch).
-You also have to add the language to the xsl:choose element of the xsl variable
-i18n_po_path, which is found in src/html/classic/gsad.html .
-The line added should look like this, "lc" again being the language code:
+1 - Convert the XML to PO
+-------------------------
+First run the XML to PO conversion script:
 
-    <xsl:when test="$i18n_language = 'lc'">po/lc.xml</xsl:when>
+  python "${SRC_DIR}/tools/xml2po" "${XML_FILE}" "${PO_FILE}"
 
-Finally, your new language file has to be installed in
-${GSA_DATA_DIR}/classic/po. To make it part of the standard installation,
-add it to the appropriate list of files in the CMakeList.txt file in the base
-GSA source directory.
+with ${SRC_DIR} being the GSA source directory, ${XML_FILE} the XML translation
+ file and ${PO_FILE} the destination po file.
+The destination file should be "gsad_xsl-XX.po" in the "src/po" subdirectory of
+ your GSA source directory, replacing "XX" with the ISO 639-1 or 639-2 code
+ of your target language.
+
+
+2 - Set up the build file
+-------------------------
+Next you should set up the build file for your newly migrated language as
+ described in point 3 of the section "Creating new translations".
+
+
+3 - Create and merge the .pot file
+----------------------------------
+Next create a new .pot file and merge it with the .po file you just generated
+ as described in the section "Updating existing translations".
+
+Many of the translations will be marked as unfinished / fuzzy as many context
+ names were changed as part of switching to the gettext format. You should be
+ able to quickly change them with a suitable .po file editor.
+Beware that there are also some cases where the actual message text has changed
+ as well, mostly to make messages less fragmented.
+
+After updating the messages, proceed as you would with a regular update of the
+ translation.
+Since the migration leaves many unused contexts and text fragments it may be
+ a good idea to remove the unused messages to reduce the file size once the
+ update is complete.
+
+
+Message Contexts
+================
+The messages in GSA all use the msgctxt to either point to the resource type
+ they are used (which can be important to determine the grammatical gender
+ of adjective for example) for or to disambiguate in another way how they are
+ used (for example if a word like "login" used as a noun or a verb).
+
+Resource-specific messages
+--------------------------
+Most messages that are specific to a certain resource type will use the
+ singular type name (e.g. "Port List") as the context.
+
+In cases where there is ambiguity regarding the number of resources referred
+ to, the plural (e.g. "Port Lists") will be used if the message is used
+ in a context where it can be referring to multiple resources.
+For examples if "None" refers to the selection of a single resource, the
+ singular is used, but when it refers to a list of resources, the plural is
+ used as the context.
+
+Nested contexts
+---------------
+In some cases contexts can contain subcontexts like groups or values of
+ properties of resource types, which are appended to the parent context
+ after a vertical line symbol.
+
+For example "Total" having the context "Task|Reports" means that the message
+ is referring to the total number of Reports of a Task.
+Or "Task|Hosts Ordering" means that a string is a possible value for the
+ "Hosts Ordering" property of a Task.
+
+Generic contexts
+----------------
+
+Actions
+  This is a context for the "Actions" column header in resource lists.
+
+Action Verb
+  Messages in this context are used for labeling UI elements performing an
+  action rather than referring to the concept of the action itself.
+  For example "Login" in this context is used on a button for actually logging
+  in while in another context it may be used as a noun, for example as
+  a short version of "Login name" or "Login attempt".
+  Most of these messages are verbs in the grammatical sense, but in some cases
+  the actual verb can be implied, for example "To Trashcan" is short for
+  "Move to Trashcan".
+
+Binary Choice
+  This refers to a simple choice with two options (yes/no, true/false) and is
+  mainly used to clarify that "no" is used this way, not in the sense of
+  "zero" as in "no items were found".
+
+Date
+  This means the string is referring to a calendar date. For example
+
+Login Data
+  Generic login data related messages like "Username" and "Password" not
+  specific to LSC Credential objects.
+
+Login Message
+  Messages returned by the GSA login page.
+
+Meta Property
+  This context is used for messages that describe properties, for example if
+  a property is optional or immutable.
+
+Pagination
+  These are messages used in the pagination, e.g. on buttons for the first
+  and last page or in text like "Results 1 to 10".
+
+Property
+  These messages are either frequently reused nouns that name something
+  describing a resource (for example "Name" or "Comment").
+
+Time
+  This means the message is referring to a time span or a point in time.
+  For example "second" in this context means the time unit, not an item after
+  a first one.
+
+Value
+  A common generic property value like "N/A"
 
 
 Translating help pages
