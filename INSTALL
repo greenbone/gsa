@@ -24,7 +24,12 @@ Prerequisites:
 * libexslt
 * pkg-config
 * xsltproc
+
+Prerequisites for using translations:
 * gettext
+  (when building from source)
+* an installed locale other than "C" and "POSIX"
+  (See "Setting up translations")
 
 Prerequisites for building documentation:
 * Doxygen
@@ -77,6 +82,23 @@ different from the other OpenVAS modules, you might need to set some paths
 explicitly before running cmake. The certificate and key locations in
 OPENVAS_SERVER_CERTIFICATE, OPENVAS_SERVER_KEY and OPENVAS_CA_CERTIFICATE in
 the top level CMakeLists.txt may need modifying.
+
+
+Setting up translations
+-----------------------
+
+To build the translation .mo files, you need to have the gettext tools like
+ msgfmt installed. Once the .mo files are built, the tools are no longer
+ needed.
+(For more information on the creation of translation files, see i18n-howto.txt
+ in the GSA source documentation.)
+
+To use the translations you need to have a locale other than "C", "POSIX"
+ or any equivalent installed, for example "en_US.UTF8".
+The name of this locale then has to be assigned to an environment variable
+ recognized by the libc function "setlocale" like LANG, LC_MESSAGES or LC_ALL.
+If these environment variables are all unset, set to "C" (or equivalent) or
+ invalid, translations will be disabled.
 
 
 Static code analysis with the Clang Static Analyzer
