@@ -435,6 +435,7 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_cyclades.png
                 src/html/classic/img/os_debian.png
                 src/html/classic/img/os_fedora.png
+                src/html/classic/img/os_fortinet.png
                 src/html/classic/img/os_freebsd.png
                 src/html/classic/img/os_gentoo.png
                 src/html/classic/img/os_gos.png

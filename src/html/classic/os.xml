@@ -411,6 +411,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:juniper</pattern><title>Juniper</title><icon>os_junos.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:fortinet:fortios</pattern><title>Fortinet</title><icon>os_fortinet.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:freebsd:freebsd</pattern><title>FreeBSD</title><icon>os_freebsd.png</icon>
     </operating_system>
     <operating_system>
