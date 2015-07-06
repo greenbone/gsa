@@ -50,6 +50,7 @@
 #include "gsad_base.h"
 #include "gsad_omp.h"
 #include "tracef.h"
+#include "xslt_i18n.h"
 
 #include <openvas/misc/openvas_server.h>
 #include <openvas/base/openvas_file.h>
@@ -16171,6 +16172,8 @@ get_my_settings (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
+  buffer_languages_xml (xml);
+
   g_string_append (xml, "</get_my_settings>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -16378,6 +16381,8 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_my_settings");
     }
+
+  buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
   openvas_server_close (socket, session);
@@ -16863,7 +16868,11 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           *language = g_strdup (lang);
         }
       else
-        credentials->language = g_strdup (accept_language);
+        {
+          g_free (credentials->language);
+          credentials->language = accept_language_to_env_fmt (accept_language);
+          *language = NULL;
+        }
     }
   else
     modify_failed = 1;

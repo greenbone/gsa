@@ -28,7 +28,7 @@ Prerequisites:
 Prerequisites for using translations:
 * gettext
   (when building from source)
-* an installed locale other than "C" and "POSIX"
+* an installed UTF-8 locale other than "C.UTF-8"
   (See "Setting up translations")
 
 Prerequisites for building documentation:
@@ -93,12 +93,12 @@ To build the translation .mo files, you need to have the gettext tools like
 (For more information on the creation of translation files, see i18n-howto.txt
  in the GSA source documentation.)
 
-To use the translations you need to have a locale other than "C", "POSIX"
+To use the translations you need to have an UTF-8 locale other than "C.UTF-8"
  or any equivalent installed, for example "en_US.UTF8".
 The name of this locale then has to be assigned to an environment variable
  recognized by the libc function "setlocale" like LANG, LC_MESSAGES or LC_ALL.
-If these environment variables are all unset, set to "C" (or equivalent) or
- invalid, translations will be disabled.
+If these environment variables are all unset, set to "C" or an equivalent like
+ "POSIX" or invalid, translations will be disabled.
 
 
 Static code analysis with the Clang Static Analyzer

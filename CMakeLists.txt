@@ -475,6 +475,9 @@ install (FILES src/html/classic/img/cpe/other.png
 install (FILES src/html/classic/img/charts/severity-bar-chart.png
          DESTINATION ${GSA_DATA_DIR}/classic/img/charts)
 
+install (FILES ${CMAKE_SOURCE_DIR}/src/language_names.tsv
+         DESTINATION ${GSA_DATA_DIR})
+
 install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 

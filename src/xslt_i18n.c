@@ -24,6 +24,9 @@
  */
 
 #include "xslt_i18n.h"
+#include <assert.h>
+#include <dirent.h>
+#include <errno.h>
 #include <glib.h>
 #include <libintl.h>
 #include <libxml/xpath.h>
@@ -50,6 +53,11 @@
 #define GSA_I18N_EXT_URI "http://openvas.org/i18n"
 
 /**
+ * @brief
+ */
+#define GSA_XSL_TEXTDOMAIN "gsad_xsl"
+
+/**
  * @brief mutex for locale environment variables
  */
 static GMutex locale_env_mutex;
@@ -58,6 +66,17 @@ static GMutex locale_env_mutex;
  * @brief Whether gettext functions are enabled
  */
 static int ext_gettext_enabled = 0;
+
+/**
+ * @brief Installed languages.
+ */
+static GList *installed_languages = NULL;
+
+/**
+ * @brief Known language names
+ */
+static GHashTable *language_names = NULL;
+static GHashTable *native_language_names = NULL;
 
 /**
  * @brief XSLT extension function: gettext wrapper
@@ -137,10 +156,10 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
 
       g_mutex_lock (&locale_env_mutex);
 
-      old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
+      old_locale = g_strdup (setlocale (LC_ALL, NULL));
       old_LANGUAGE = getenv ("LANGUAGE");
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
-      setlocale (LC_MESSAGES, "");
+      setlocale (LC_ALL, "");
 
       if (context_obj)
         msgid = g_strdup_printf ("%s%s%s",
@@ -150,7 +169,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
       else
         msgid = g_strdup ((gchar*) msgid_obj->stringval);
 
-      textdomain ("gsad_xsl");
+      textdomain (GSA_XSL_TEXTDOMAIN);
       gettext_result = gettext (msgid);
       result_str = (xmlChar*) g_strdup ((gettext_result != msgid)
                                         ? gettext_result
@@ -161,7 +180,7 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
         setenv ("LANGUAGE", old_LANGUAGE, 1);
       else
         unsetenv ("LANGUAGE");
-      setlocale (LC_MESSAGES, old_locale);
+      setlocale (LC_ALL, old_locale);
       g_free (old_locale);
 
       g_mutex_unlock (&locale_env_mutex);
@@ -297,10 +316,10 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
 
       g_mutex_lock (&locale_env_mutex);
 
-      old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
+      old_locale = g_strdup (setlocale (LC_ALL, NULL));
       old_LANGUAGE = getenv ("LANGUAGE");
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
-      setlocale (LC_MESSAGES, "");
+      setlocale (LC_ALL, "");
 
       if (context_obj)
         msgid = g_strdup_printf ("%s%s%s",
@@ -320,7 +339,7 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
 
       count = (unsigned long) count_obj->floatval;
 
-      textdomain ("gsad_xsl");
+      textdomain (GSA_XSL_TEXTDOMAIN);
       gettext_result = ngettext (msgid, msgid_pl, count);
       result_str = (xmlChar*) g_strdup ((gettext_result != msgid
                                          && gettext_result != msgid_pl)
@@ -332,7 +351,7 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
         setenv ("LANGUAGE", old_LANGUAGE, 1);
       else
         unsetenv ("LANGUAGE");
-      setlocale (LC_MESSAGES, old_locale);
+      setlocale (LC_ALL, old_locale);
       g_free (old_locale);
 
       g_mutex_unlock (&locale_env_mutex);
@@ -509,7 +528,7 @@ register_i18n_ext_module ()
                         init_i18n_module,
                         shutdown_i18n_module);
 
-  if (bindtextdomain ("gsad_xsl", GSA_LOCALE_DIR) == NULL)
+  if (bindtextdomain (GSA_XSL_TEXTDOMAIN, GSA_LOCALE_DIR) == NULL)
     {
       g_critical ("%s: Failed to bind text domain for gettext", __FUNCTION__);
       abort ();
@@ -537,4 +556,223 @@ void
 set_ext_gettext_enabled (int enabled)
 {
   ext_gettext_enabled = (enabled != 0);
+}
+
+/**
+ * @brief Initialize the list of available languages.
+ *
+ * @return 0: success, -1: error
+ */
+int
+init_language_lists ()
+{
+  FILE *lang_names_file;
+  DIR *locale_dir;
+  struct dirent *entry;
+
+  if (installed_languages != NULL)
+    {
+      g_warning ("%s: Language lists already initialized.", __FUNCTION__);
+      return -1;
+    }
+
+  /* Init data structures */
+  language_names = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                          g_free, g_free);
+
+  native_language_names = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                 g_free, g_free);
+
+  // installed_languages starts initialized as NULL
+
+  /* Add presets "Browser Language" and "English" */
+  installed_languages = g_list_append (installed_languages,
+                                       g_strdup ("Browser Language"));
+  installed_languages = g_list_append (installed_languages,
+                                       g_strdup ("en"));
+  g_hash_table_insert (language_names,
+                       g_strdup ("Browser Language"),
+                       g_strdup ("Browser Language"));
+  g_hash_table_insert (native_language_names,
+                       g_strdup ("Browser Language"),
+                       g_strdup ("Browser Language"));
+  g_hash_table_insert (language_names,
+                       g_strdup ("en"), g_strdup ("English"));
+  g_hash_table_insert (native_language_names,
+                       g_strdup ("en"), g_strdup ("English"));
+
+  /* Get language names */
+  lang_names_file = fopen (GSA_DATA_DIR "/language_names.tsv", "r");
+  if (lang_names_file)
+    {
+      size_t len;
+      char *line = NULL;
+      while (getline (&line, &len, lang_names_file) != -1)
+        {
+          g_strstrip (line);
+          if (line [0] != '\0' && line [0] != '#')
+            {
+              gchar **columns;
+              gchar *code, *name, *native_name;
+              columns = g_strsplit (line, "\t", 3);
+              code = columns [0];
+              name = code ? columns [1] : NULL;
+              native_name = name ? columns [2] : NULL;
+              if (code && name)
+                g_hash_table_insert (language_names,
+                                     g_strdup (code),
+                                     g_strdup (name));
+              if (code && native_name)
+                g_hash_table_insert (native_language_names,
+                                     g_strdup (code),
+                                     g_strdup (native_name));
+            }
+          g_free (line);
+          line = NULL;
+        }
+      fclose (lang_names_file);
+    }
+  else
+    {
+      g_warning ("%s: Failed to open language names file: %s",
+                 __FUNCTION__, strerror (errno));
+    }
+
+  /* Get installed translations */
+  locale_dir = opendir (GSA_LOCALE_DIR);
+
+  if (locale_dir == NULL)
+    {
+      g_warning ("%s: Failed to open locale directory \"%s\": %s",
+                 __FUNCTION__, GSA_LOCALE_DIR, strerror (errno));
+      return -1;
+    }
+
+  while ((entry = readdir (locale_dir)) != 0)
+    {
+      if (entry->d_name[0] != '.'
+          && strlen (entry->d_name) >= 2
+          && entry->d_type == DT_DIR
+          && strcmp (entry->d_name, "en")
+          && strcmp (entry->d_name, "Browser Language"))
+        {
+          FILE *mo_file;
+          gchar *lang_mo_path;
+          lang_mo_path = g_build_filename (GSA_LOCALE_DIR,
+                                           entry->d_name,
+                                           "LC_MESSAGES",
+                                           GSA_XSL_TEXTDOMAIN ".mo",
+                                           NULL);
+
+          mo_file = fopen (lang_mo_path, "r");
+          if (mo_file)
+            {
+              fclose (mo_file);
+              installed_languages
+                = g_list_insert_sorted (installed_languages,
+                                        g_strdup (entry->d_name),
+                                        (GCompareFunc) strcmp);
+            }
+          else
+            {
+              if (errno != ENOENT)
+                g_warning ("%s: Failed to open %s: %s",
+                           __FUNCTION__, lang_mo_path, strerror (errno));
+            }
+          g_free (lang_mo_path);
+        }
+    }
+  closedir (locale_dir);
+
+  GString *test = g_string_new ("");
+  buffer_languages_xml (test);
+  g_message ("%s: Initialized language lists", __FUNCTION__);
+  g_string_free (test, TRUE);
+
+  return 0;
+}
+
+/**
+ * @brief Write the list of installed languages to a buffer as XML.
+ * 
+ * @param[in] buffer  A GString buffer to write to.
+ */
+void
+buffer_languages_xml (GString *buffer)
+{
+  GList *langs_list;
+  assert (buffer);
+
+  langs_list = g_list_first (installed_languages);
+
+  g_string_append (buffer, "<gsa_languages>");
+  while (langs_list)
+    {
+      gchar *lang_code, *lang_name, *native_name, *language_escaped;
+
+      lang_code = (gchar*) langs_list->data;
+
+      lang_name = g_hash_table_lookup (language_names, lang_code);
+      if (lang_name == NULL)
+        lang_name = lang_code;
+
+      native_name = g_hash_table_lookup (native_language_names, lang_code);
+      if (native_name == NULL)
+        native_name = lang_name;
+
+      language_escaped
+        = g_markup_printf_escaped ("<language>"
+                                   "<code>%s</code>"
+                                   "<name>%s</name>"
+                                   "<native_name>%s</native_name>"
+                                   "</language>",
+                                   lang_code,
+                                   lang_name,
+                                   native_name);
+      g_string_append (buffer, language_escaped);
+      g_free (language_escaped);
+      langs_list = g_list_nth (langs_list, 1);
+    }
+  g_string_append (buffer, "</gsa_languages>");
+}
+
+/**
+ * @brief Convert an Accept-Language string to the LANGUAGE env variable form.
+ *
+ * Converts the language preferences as defined in a HTTP Accept-Language
+ *  header to a colon-separated list of language codes as used by gettext
+ *  in the LANGUAGE environment variable.
+ *
+ * @param[in]   accept_language  HTTP Accept-Language header text.
+ * @return      Newly allocated strig of language codes as used by gettext.
+ */
+gchar *
+accept_language_to_env_fmt (const char* accept_language)
+{
+  if (accept_language == NULL)
+    return g_strdup (DEFAULT_GSAD_LANGUAGE);
+
+  gchar *language;
+  // TODO: Convert to a colon-separated list of codes instead of
+  //        just extracting the first one
+  gchar **prefs, *pref;
+  prefs = g_strsplit_set (accept_language, ",;", -1);
+
+  pref = prefs [0];
+  if (pref)
+    {
+      char *pos;
+      g_strstrip (pref);
+      pos = pref;
+      while (pos[0] != '\0')
+        {
+          if (pos[0] == '-')
+            pos[0] = '_';
+          pos++;
+        };
+    }
+  language = g_strdup (pref ? pref : DEFAULT_GSAD_LANGUAGE);
+  g_strfreev (prefs);
+
+  return language;
 }

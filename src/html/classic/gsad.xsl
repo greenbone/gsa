@@ -45,7 +45,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- GLOBAL VARIABLES -->
 <!-- language code, needed where /envelope is not available -->
-<xsl:variable name="i18n_language" select="substring((/envelope | /login_page)/i18n, 1, 2)"/>
+<xsl:variable name="i18n_language" select="(/envelope | /login_page)/i18n"/>
 
 <xsl:variable name="i18n_po_path">
   <xsl:choose>
