@@ -11658,6 +11658,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               if (extension && requested_content_type && content_type
                   && content_disposition)
                 {
+                  gchar *file_name;
                   const char *id;
                   if (report_id)
                     id = report_id;

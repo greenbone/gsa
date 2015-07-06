@@ -1,5 +1,11 @@
 2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22505 by Benoît Allard.
+
+	* src/gsad_omp.c: Add variable definition.
+
+2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22504 by Benoît Allard.
 
 	* INSTALL: mention the prerequisities for the translation.
