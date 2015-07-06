@@ -110,7 +110,7 @@ set_language_code (gchar **lang, const gchar *language)
   else if (strcmp (language, "German") == 0)
     *lang = g_strdup ("de");
   else
-    *lang = NULL;
+    *lang = g_strdup (language);
 }
 
 /**

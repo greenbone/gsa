@@ -1,3 +1,54 @@
+2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use ISO codes for the User Interface Language setting and list of
+	supported languages dynamically at startup from the locale directory
+	and a TSV file of language names.
+
+	* CMakeLists.txt: Install file src/language_names.tsv.
+
+	* INSTALL: Note that the installed Locale must use UTF-8 encoding.
+
+	* src/gsad_base.c (set_language_code): Accept values other than the
+	predefined names to allow using ISO codes in the settings.
+
+	* src/gsad_omp.c: Add #include "xslt_i18n.h".
+	(get_my_settings, edit_my_settings): Add XML containing the installed
+	languages.
+	(save_my_settings_omp): Set language to null if language_code is NULL.
+
+	* src/gsad.c: Remove #define DEFAULT_GSAD_LANGUAGE, moved to file
+	src/xslt_i18n.h.
+	(user_set_language_code): Remove.
+	(exec_omp_post): Allow NULL (Browser Language) value for the language
+	setting in save_my_settings case.
+	(init_validator): Update regex of "lang" to accept ISO code lists.
+	(file_content_response, request_handler): Convert the Accept-Language
+	HTTP header to format used by gettext in LANGUAGE environment variable.
+	(main): Correct typo in debug message. Inititialize language lists.
+
+	* src/language_names.tsv: New file.
+
+	* src/xslt_i18n.c: Add #include <assert.h>, #include <dirent.h> and
+	#include <errno.h>. Add #define GSA_XSL_TEXTDOMAIN. Add static
+	variables for language lists: installed_languages, language_names,
+	native_language_names.
+	(xslt_ext_gettext, xslt_ext_ngettext): Use LC_ALL locale category.
+	Use GSA_XSL_TEXTDOMAIN macro to ensure consistency.
+	(register_i18n_ext_module): Use GSA_XSL_TEXTDOMAIN for consistency.
+	(init_language_lists, buffer_languages_xml, accept_language_to_env_fmt):
+	New functions.
+
+	* src/xslt_i18n.h: Add #include <glib/gstring.h> and #define
+	DEFAULT_GSAD_LANGUAGE.
+	(init_language_lists, buffer_languages_xml, accept_language_to_env_fmt):
+	New function prototypes.
+
+	* src/html/classic/gsad.xsl (i18n_language): Do not truncate language
+	codes.
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Use
+	choices from a generated list for the User Interface Language setting.
+
 2015-07-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* INSTALL: List prerequisites for translations separately and add a

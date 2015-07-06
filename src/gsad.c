@@ -137,11 +137,6 @@
 #define SESSION_TIMEOUT 15
 
 /**
- * @brief Default language code, used when Accept-Language header is missing.
- */
-#define DEFAULT_GSAD_LANGUAGE "en"
-
-/**
  * @brief Default face name.
  */
 #define DEFAULT_GSAD_FACE "classic"
@@ -580,36 +575,6 @@ user_set_language (const gchar *token, const gchar *language)
         {
           g_free (item->language);
           set_language_code (&item->language, language);
-          ret = 0;
-          break;
-        }
-    }
-  g_mutex_unlock (mutex);
-  return ret;
-}
-
-/**
- * @brief Set language of user, given a code.
- *
- * @param[in]   token     User token.
- * @param[in]   language  Language code.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_language_code (const gchar *token, const gchar *language)
-{
-  int index, ret;
-  ret = 1;
-  g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->language);
-          item->language = g_strdup (language);
           ret = 0;
           break;
         }
@@ -1144,7 +1109,10 @@ init_validator ()
   openvas_validator_add (validator, "ifaces_allow", "^0|1$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
-  openvas_validator_add (validator, "lang",         "^(Browser Language|Chinese|English|German)$");
+  openvas_validator_add (validator, "lang",
+                         "^(Browser Language|"
+                         "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
+                         "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for Administrator users, LSC credentials, and slave login name. */
@@ -2279,10 +2247,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         /* credentials->severity set in save_my_settings_omp before XSLT. */
         user_set_severity (credentials->token, severity);
       /* credentials->language is set in save_my_settings_omp before XSLT. */
-      if (language)
-        user_set_language (credentials->token, language);
-      else
-        user_set_language_code (credentials->token, credentials->language);
+      user_set_language (credentials->token, language);
 
       g_free (timezone);
       g_free (password);
@@ -3382,15 +3347,16 @@ file_content_response (credentials_t *credentials,
       gchar *xml;
       char *res;
       char ctime_now[200];
-      const char* language;
+      const char* accept_language;
+      gchar *language;
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
-      language = MHD_lookup_connection_value (connection,
-                                              MHD_HEADER_KIND,
-                                              "Accept-Language");
-
+      accept_language = MHD_lookup_connection_value (connection,
+                                                     MHD_HEADER_KIND,
+                                                     "Accept-Language");
+      language = (accept_language_to_env_fmt (accept_language));
       xml = g_strdup_printf ("<login_page>"
                              "<token></token>"
                              "<time>%s</time>"
@@ -3402,6 +3368,7 @@ file_content_response (credentials_t *credentials,
                               ? language
                               : DEFAULT_GSAD_LANGUAGE,
                              guest_username ? guest_username : "");
+      g_free (language);
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -3667,8 +3634,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (method, "GET"))
     {
-      const char *token, *cookie, *language;
+      const char *token, *cookie, *accept_language;
       const char *omp_cgi_base = "/omp";
+      gchar *language;
       struct MHD_Response *response;
       credentials_t *credentials;
       user_t *user;
@@ -3763,15 +3731,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
               time_t now;
               gchar *xml;
               char ctime_now[200];
-              const char* language;
 
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
-              language = MHD_lookup_connection_value (connection,
-                                                      MHD_HEADER_KIND,
-                                                      "Accept-Language");
-
+              accept_language = MHD_lookup_connection_value (connection,
+                                                             MHD_HEADER_KIND,
+                                                             "Accept-Language");
+              language = accept_language_to_env_fmt (accept_language);
               xml = g_strdup_printf ("<login_page>"
                                      "<message>"
                                      "Login failed.%s"
@@ -3791,6 +3758,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                       ? language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
+              g_free (language);
               res = xsl_transform (xml);
               g_free (xml);
             }
@@ -3829,10 +3797,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
                         || ((strcmp (cmd, "get_report") == 0)
                             && report_format_id)));
 
-          language = MHD_lookup_connection_value (connection,
-                                                  MHD_HEADER_KIND,
-                                                  "Accept-Language");
-
+          accept_language = MHD_lookup_connection_value (connection,
+                                                         MHD_HEADER_KIND,
+                                                         "Accept-Language");
+          language = accept_language_to_env_fmt (accept_language);
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
                  ("<login_page>"
@@ -3859,6 +3827,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     : ""),
                   language ? language : DEFAULT_GSAD_LANGUAGE,
                   guest_username ? guest_username : "");
+          g_free (language);
           g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
@@ -3890,10 +3859,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
           user_remove (user);
 
-          language = MHD_lookup_connection_value (connection,
-                                                  MHD_HEADER_KIND,
-                                                  "Accept-Language");
-
+          accept_language = MHD_lookup_connection_value (connection,
+                                                         MHD_HEADER_KIND,
+                                                         "Accept-Language");
+          language = accept_language_to_env_fmt (accept_language);
           xml = g_strdup_printf ("<login_page>"
                                  "<message>"
                                  "Successfully logged out."
@@ -3906,6 +3875,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  ctime_now,
                                  language ? language : DEFAULT_GSAD_LANGUAGE,
                                  guest_username ? guest_username : "");
+          g_free (language);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -3919,14 +3889,19 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      language = user->language;
+      language = g_strdup (user->language);
       if (!language)
         /* Accept-Language: de; q=1.0, en; q=0.5 */
-        language = MHD_lookup_connection_value
-                    (connection, MHD_HEADER_KIND, "Accept-Language");
-      if (!language)
-        language = DEFAULT_GSAD_LANGUAGE;
-      credentials = credentials_new (user, language);
+        {
+          accept_language = MHD_lookup_connection_value
+                              (connection, MHD_HEADER_KIND, "Accept-Language");
+          language = accept_language_to_env_fmt (accept_language);
+          credentials = credentials_new (user, language);
+          g_free (language);
+        }
+      else
+        credentials = credentials_new (user, language);
+
       credentials->caller = reconstruct_url (connection, url);
 
       sid = g_strdup (user->cookie);
@@ -4125,8 +4100,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "POST"))
     {
       user_t *user;
-      const char *sid, *language;
-      gchar *new_sid;
+      const char *sid, *accept_language;
+      gchar *language, *new_sid;
       int ret;
 
       if (NULL == *con_cls)
@@ -4170,12 +4145,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
       else
         con_info->cookie = g_strdup (sid);
 
-      language = MHD_lookup_connection_value (connection,
-                                              MHD_HEADER_KIND,
-                                              "Accept-Language");
+      accept_language = MHD_lookup_connection_value (connection,
+                                                     MHD_HEADER_KIND,
+                                                     "Accept-Language");
+      language = accept_language_to_env_fmt (accept_language);
       con_info->language = g_strdup (language
                                       ? language
                                       : DEFAULT_GSAD_LANGUAGE);
+      g_free (language);
 
       new_sid = NULL;
       ret = exec_omp_post (con_info, &user, &new_sid);
@@ -4848,7 +4825,7 @@ main (int argc, char **argv)
     }
   else
     {
-      g_debug ("%s: gettext translation extensions for are enabled"
+      g_debug ("%s: gettext translation extensions are enabled"
                " (using LC_MESSAGES locale \"%s\").",
                __FUNCTION__, locale);
       set_ext_gettext_enabled (1);
@@ -4856,6 +4833,8 @@ main (int argc, char **argv)
 
   setlocale (LC_MESSAGES, old_locale);
   g_free (old_locale);
+
+  init_language_lists ();
 
   if (gsad_redirect_port_string)
     {

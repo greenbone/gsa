@@ -33445,7 +33445,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="$lang"/>
+                <xsl:variable name="lang_entry" select="gsa_languages/language[code = $lang or name = $lang]"/>
+                <xsl:choose>
+                  <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name) and ($lang_entry/native_name != $lang_entry/name)">
+                    <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/native_name"/> [<xsl:value-of select="$lang_entry/name"/>]
+                  </xsl:when>
+                  <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name)">
+                    <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/name"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$lang"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
             </tr>
             <tr class="even">
@@ -33992,26 +34003,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:variable>
                 <select name="lang">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'Browser Language'"/>
-                    <xsl:with-param name="content" select="'Browser Language'"/>
-                    <xsl:with-param name="select-value" select="$lang"/>
-                  </xsl:call-template>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'English'"/>
-                    <xsl:with-param name="content" select="'English'"/>
-                    <xsl:with-param name="select-value" select="$lang"/>
-                  </xsl:call-template>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'German'"/>
-                    <xsl:with-param name="content" select="'German'"/>
-                    <xsl:with-param name="select-value" select="$lang"/>
-                  </xsl:call-template>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'Chinese'"/>
-                    <xsl:with-param name="content" select="'Chinese'"/>
-                    <xsl:with-param name="select-value" select="$lang"/>
-                  </xsl:call-template>
+                  <xsl:for-each select="gsa_languages/language">
+                    <xsl:variable name="label">
+                      <xsl:choose>
+                        <xsl:when test="(./code != ./name) and (./native_name != ./name)">
+                          <xsl:value-of select="./code"/> - <xsl:value-of select="./native_name"/> [<xsl:value-of select="./name"/>]
+                        </xsl:when>
+                        <xsl:when test="(./code != ./name)">
+                          <xsl:value-of select="./code"/> - <xsl:value-of select="./name"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="./code"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="code = $lang or name = $lang">
+                        <option value="{code}" selected="1">
+                          <xsl:value-of select="$label"/>
+                        </option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{code}">
+                          <xsl:value-of select="$label"/>
+                        </option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                  <xsl:if test="count (gsa_languages/language [code = $lang or name = $lang]) = 0">
+                    <option value="{$lang}" selected="1">
+                      <xsl:value-of select="$lang"/>
+                    </option>
+                  </xsl:if>
                 </select>
               </td>
             </tr>
