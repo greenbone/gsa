@@ -151,9 +151,11 @@
 volatile int termination_signal = 0;
 
 /**
- * @brief Libgcrypt thread callback definition.
+ * @brief Libgcrypt thread callback definition for libgcrypt < 1.6.0.
  */
+#if GCRYPT_VERSION_NUMBER < 0x010600
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
+#endif
 
 /**
  * @brief Last resort HTML on failure to open "default_file".
@@ -4354,7 +4356,10 @@ gsad_init ()
     }
 
   /* Init GCRYPT. */
+  /* Register thread callback structure for libgcrypt < 1.6.0. */
+#if GCRYPT_VERSION_NUMBER < 0x010600
   gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+#endif
 
   /* Version check should be the very first call because it makes sure that
    * important subsystems are intialized.

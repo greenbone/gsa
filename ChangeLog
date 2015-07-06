@@ -1,3 +1,10 @@
+2015-07-06  Sven Haardiek <sven.haardiek@greenbone.net>
+
+	Backport r22585
+
+	* src/gsad.c: Guard thread initialization macros deprecated in
+	libgcrypt >= 1.6.0 with defines.
+
 2015-06-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22669 by Michael Wiegand.
