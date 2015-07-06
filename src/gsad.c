@@ -89,6 +89,7 @@
 #include "gsad_omp.h"
 #include "tracef.h"
 #include "validator.h"
+#include "xslt_i18n.h"
 
 /**
  * @brief Name of the cookie used to store the SID.
@@ -2929,7 +2930,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
 {
   int ret;
   gchar *value;
-  char *locale;
+  gchar *locale;
   char expires[EXPIRES_LENGTH + 1];
   struct tm expire_time_broken;
   time_t now, expire_time;
@@ -2947,7 +2948,9 @@ attach_sid (struct MHD_Response *response, const char *sid)
     }
   tzset ();
 
-  locale = setlocale (LC_ALL, "C");
+  locale = g_strdup (setlocale (LC_ALL, NULL));
+  setlocale (LC_ALL, "C");
+
   now = time (NULL);
   expire_time = now + (session_timeout * 60) + 30;
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
@@ -2958,6 +2961,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
     abort ();
 
   setlocale (LC_ALL, locale);
+  g_free (locale);
 
   /* Revert to stored TZ. */
   if (tz)
@@ -3000,14 +3004,15 @@ remove_sid (struct MHD_Response *response)
 {
   int ret;
   gchar *value;
-  char *locale;
+  gchar *locale;
   char expires[EXPIRES_LENGTH + 1];
   struct tm expire_time_broken;
   time_t expire_time;
 
   /* Set up the expires param. */
+  locale = g_strdup (setlocale (LC_ALL, NULL));
+  setlocale (LC_ALL, "C");
 
-  locale = setlocale (LC_ALL, "C");
   expire_time = time (NULL);
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
@@ -3017,6 +3022,7 @@ remove_sid (struct MHD_Response *response)
     abort ();
 
   setlocale (LC_ALL, locale);
+  g_free (locale);
 
   /* Add the cookie.
    *
@@ -4592,6 +4598,8 @@ int
 main (int argc, char **argv)
 {
   gchar *rc_name;
+  gchar *old_locale;
+  char *locale;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
@@ -4821,6 +4829,36 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
     }
+
+  /* Set and test the base locale for XSLt gettext */
+  old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
+
+  locale = setlocale (LC_MESSAGES, "");
+  if (locale == NULL)
+    {
+      g_warning ("%s: "
+                 "Failed to set LC_MESSAGES locale for gettext extensions,"
+                 " gettext translations are disabled.",
+                 __FUNCTION__);
+      set_ext_gettext_enabled (0);
+    }
+  else if (strcmp (locale, "C") == 0)
+    {
+      g_message ("%s: LC_MESSAGES locale for gettext extensions set to \"C\","
+                 " gettext translations are disabled.",
+                 __FUNCTION__);
+      set_ext_gettext_enabled (0);
+    }
+  else
+    {
+      g_debug ("%s: gettext translation extensions for are enabled"
+               " (using LC_MESSAGES locale \"%s\").",
+               __FUNCTION__, locale);
+      set_ext_gettext_enabled (1);
+    }
+
+  setlocale (LC_MESSAGES, old_locale);
+  g_free (old_locale);
 
   if (gsad_redirect_port_string)
     {

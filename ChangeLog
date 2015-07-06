@@ -1,5 +1,27 @@
 2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22687.
+
+	* INSTALL: List prerequisites for translations separately and add a
+	non-"C" locale as prerequisite. Add section about disabling
+	translations or using a different locale.
+
+	* src/gsad.c (): Add #include "xslt_i18n.h".
+	(attach_sid, remove_sid): Reset the locale correctly.
+	(main): Test setting the locale for category LC_MESSAGES and disable
+	translations if it fails or is set to "C" and log test result.
+
+	* src/xslt_i18n.c (xslt_ext_gettext, xslt_ext_ngettext): Return
+	original message directly if gettext is disabled. Do not set LC_ALL
+	environment variable, set only LC_MESSAGES locale, not LC_ALL and reset
+	locale correctly.
+	(get_ext_gettext_enabled, set_ext_gettext_enabled): New functions.
+
+	* src/xslt_i18n.h (get_ext_gettext_enabled, set_ext_gettext_enabled):
+	New function prototypes.
+
+2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22505 by Benoît Allard.
 
 	* src/gsad_omp.c: Add variable definition.

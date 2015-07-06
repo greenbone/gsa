@@ -55,6 +55,11 @@
 static GMutex locale_env_mutex;
 
 /**
+ * @brief Whether gettext functions are enabled
+ */
+static int ext_gettext_enabled = 0;
+
+/**
  * @brief XSLT extension function: gettext wrapper
  *
  * @param[in] ctxt    XPath parser context
@@ -112,21 +117,30 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
       lang_obj = valuePop (ctxt);
     }
 
+  if (ext_gettext_enabled == 0)
+    {
+      valuePush (ctxt, msgid_obj);
+
+      xmlXPathFreeObject (lang_obj);
+      if (context_obj)
+        xmlXPathFreeObject (context_obj);
+
+      return;
+    }
+
   if (msgid_obj->stringval && strcmp ((char*) msgid_obj->stringval, ""))
     {
-      char *old_LC_ALL;
+      gchar *old_locale;
       char *old_LANGUAGE;
       gchar *msgid = NULL;
       char *gettext_result = NULL;
 
       g_mutex_lock (&locale_env_mutex);
 
-      old_LC_ALL = getenv ("LC_ALL");
+      old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
       old_LANGUAGE = getenv ("LANGUAGE");
-
-      setenv ("LC_ALL", "en_US.UTF8", 1);
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
-      setlocale (LC_ALL, "");
+      setlocale (LC_MESSAGES, "");
 
       if (context_obj)
         msgid = g_strdup_printf ("%s%s%s",
@@ -143,16 +157,12 @@ xslt_ext_gettext (xmlXPathParserContextPtr ctxt,
                                         : "### N/A ###");
       g_free (msgid);
 
-      if (old_LC_ALL)
-        setenv ("LC_ALL", old_LC_ALL, 1);
-      else
-        unsetenv ("LC_ALL");
-
       if (old_LANGUAGE)
         setenv ("LANGUAGE", old_LANGUAGE, 1);
       else
         unsetenv ("LANGUAGE");
-      setlocale (LC_MESSAGES, "");
+      setlocale (LC_MESSAGES, old_locale);
+      g_free (old_locale);
 
       g_mutex_unlock (&locale_env_mutex);
     }
@@ -251,9 +261,34 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
       lang_obj = valuePop (ctxt);
     }
 
+  if (ext_gettext_enabled == 0)
+    {
+      unsigned long count;
+
+      count = (unsigned long) count_obj->floatval;
+
+      if (count == 1)
+        {
+          xmlXPathFreeObject (msgid_pl_obj);
+          valuePush (ctxt, msgid_obj);
+        }
+      else
+        {
+          xmlXPathFreeObject (msgid_obj);
+          valuePush (ctxt, msgid_pl_obj);
+        }
+
+      xmlXPathFreeObject (lang_obj);
+      xmlXPathFreeObject (count_obj);
+      if (context_obj)
+        xmlXPathFreeObject (context_obj);
+
+      return;
+    }
+
   if (msgid_obj->stringval && strcmp ((char*) msgid_obj->stringval, ""))
     {
-      char *old_LC_ALL;
+      gchar *old_locale;
       char *old_LANGUAGE;
       gchar *msgid = NULL;
       gchar *msgid_pl = NULL;
@@ -262,12 +297,10 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
 
       g_mutex_lock (&locale_env_mutex);
 
-      old_LC_ALL = getenv ("LC_ALL");
+      old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
       old_LANGUAGE = getenv ("LANGUAGE");
-
-      setenv ("LC_ALL", "en_US.UTF8", 1);
       setenv ("LANGUAGE", (char*)lang_obj->stringval, 1);
-      setlocale (LC_ALL, "");
+      setlocale (LC_MESSAGES, "");
 
       if (context_obj)
         msgid = g_strdup_printf ("%s%s%s",
@@ -295,16 +328,12 @@ xslt_ext_ngettext (xmlXPathParserContextPtr ctxt,
                                         : "### N/A ###");
       g_free (msgid);
 
-      if (old_LC_ALL)
-        setenv ("LC_ALL", old_LC_ALL, 1);
-      else
-        unsetenv ("LC_ALL");
-
       if (old_LANGUAGE)
         setenv ("LANGUAGE", old_LANGUAGE, 1);
       else
         unsetenv ("LANGUAGE");
-      setlocale (LC_MESSAGES, "");
+      setlocale (LC_MESSAGES, old_locale);
+      g_free (old_locale);
 
       g_mutex_unlock (&locale_env_mutex);
     }
@@ -486,4 +515,26 @@ register_i18n_ext_module ()
       abort ();
     }
 
+}
+
+/**
+ * @brief Get whether gettext functions for extensions are enabled.
+ *
+ * @return  0 gettext is disabled, 1 gettext is enabled.
+ */
+int
+get_ext_gettext_enabled ()
+{
+  return ext_gettext_enabled;
+}
+
+/**
+ * @brief Enable or disable gettext functions for extensions.
+ *
+ * @param enabled  0 to disable, any other to enable.
+ */
+void
+set_ext_gettext_enabled (int enabled)
+{
+  ext_gettext_enabled = (enabled != 0);
 }
