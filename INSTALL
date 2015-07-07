@@ -28,7 +28,7 @@ Prerequisites:
 Prerequisites for using translations:
 * gettext
   (when building from source)
-* an installed UTF-8 locale other than "C.UTF-8"
+* an installed English UTF-8 locale (e.g. "en_US.UTF8", "en_GB.UTF8")
   (See "Setting up translations")
 
 Prerequisites for building documentation:
@@ -93,8 +93,8 @@ To build the translation .mo files, you need to have the gettext tools like
 (For more information on the creation of translation files, see i18n-howto.txt
  in the GSA source documentation.)
 
-To use the translations you need to have an UTF-8 locale other than "C.UTF-8"
- or any equivalent installed, for example "en_US.UTF8".
+To use the translations you need to have an English locale with UTF-8 encoding
+ installed, for example "en_US.UTF8" or "en_GB.UTF8".
 The name of this locale then has to be assigned to an environment variable
  recognized by the libc function "setlocale" like LANG, LC_MESSAGES or LC_ALL.
 If these environment variables are all unset, set to "C" or an equivalent like
