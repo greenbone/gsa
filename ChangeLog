@@ -1,5 +1,16 @@
 2015-07-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22709.
+
+	* INSTALL: Mention that locale should be an English one.
+
+	* src/gsad.c: Add #INCLUDE <langinfo.h>
+	(main): Test LC_ALL instead of LC_MESSAGES. Warn if locale is not an
+	"en_..." one or if the encoding is not UTF-8. Mention environment
+	variables in warning messages.
+
+2015-07-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22707.
 
 	* src/html/classic/omp.xsl (html-tasks-table, html-cpe-table)

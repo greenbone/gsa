@@ -61,6 +61,7 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
+#include <langinfo.h>
 #include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
@@ -4808,33 +4809,46 @@ main (int argc, char **argv)
     }
 
   /* Set and test the base locale for XSLt gettext */
-  old_locale = g_strdup (setlocale (LC_MESSAGES, NULL));
+  old_locale = g_strdup (setlocale (LC_ALL, NULL));
 
-  locale = setlocale (LC_MESSAGES, "");
+  locale = setlocale (LC_ALL, "");
   if (locale == NULL)
     {
       g_warning ("%s: "
-                 "Failed to set LC_MESSAGES locale for gettext extensions,"
+                 "Failed to set locale according to environment variables,"
                  " gettext translations are disabled.",
                  __FUNCTION__);
       set_ext_gettext_enabled (0);
     }
   else if (strcmp (locale, "C") == 0)
     {
-      g_message ("%s: LC_MESSAGES locale for gettext extensions set to \"C\","
+      g_message ("%s: Locale for gettext extensions set to \"C\","
                  " gettext translations are disabled.",
                  __FUNCTION__);
       set_ext_gettext_enabled (0);
     }
   else
     {
+      if (strcasestr (locale, "en_") != locale)
+          {
+            g_warning ("%s: Locale defined by environment variables"
+                       " is not an \"en_...\" one.",
+                      __FUNCTION__);
+            set_ext_gettext_enabled (0);
+          }
+
+      if (strcasecmp (nl_langinfo (CODESET), "UTF-8"))
+        g_warning ("%s: Locale defined by environment variables"
+                   " does not use UTF-8 encoding.",
+                   __FUNCTION__);
+
       g_debug ("%s: gettext translation extensions are enabled"
-               " (using LC_MESSAGES locale \"%s\").",
+               " (using locale \"%s\").",
                __FUNCTION__, locale);
       set_ext_gettext_enabled (1);
     }
 
-  setlocale (LC_MESSAGES, old_locale);
+  setlocale (LC_ALL, old_locale);
   g_free (old_locale);
 
   init_language_lists ();
