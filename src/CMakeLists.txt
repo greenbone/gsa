@@ -147,6 +147,10 @@ if (PATH_TO_XSLTPROC)
                                      COMMENT "Checking syntax of help_de.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_de.xsl
                                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_de.xsl)
+  add_custom_target (help_ru-xsl-syntax ALL
+                                     COMMENT "Checking syntax of help_ru.xsl"
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_ru.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_ru.xsl)
   add_custom_target (help_zh-xsl-syntax ALL
                                      COMMENT "Checking syntax of help_zh.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_zh.xsl

@@ -306,6 +306,7 @@ install (FILES src/html/classic/po/de.xml
          DESTINATION ${GSA_DATA_DIR}/classic/po)
 
 install (FILES src/html/classic/help_de.xsl
+               src/html/classic/help_ru.xsl
                src/html/classic/help_zh.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)
 
