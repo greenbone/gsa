@@ -1,3 +1,8 @@
+2015-07-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/xslt_i18n.h: Fix include to include only glib.h. Anything else
+	is regarded an error by glib.
+
 2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/language_names.tsv: Correct authors and copyright year.
