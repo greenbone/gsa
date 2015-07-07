@@ -7013,7 +7013,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </column>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
         <html>
@@ -17928,7 +17928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>cves</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -17973,27 +17973,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>name</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Vector', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Vector', 'CVSS Vector Short')"/></name>
         <field>vector</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Complexity', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Complexity', 'CVSS Vector Short')"/></name>
         <field>complexity</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector Short')"/></name>
         <field>authentication</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Confidentiality Impact', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Confidentiality Impact', 'CVSS Vector Short')"/></name>
         <field>confidentiality_impact</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Integrity Impact', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Integrity Impact', 'CVSS Vector Short')"/></name>
         <field>integrity_impact</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Availability Impact', 'CVSS Vector')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Availability Impact', 'CVSS Vector Short')"/></name>
         <field>availability_impact</field>
       </column>
       <column>
@@ -18002,7 +18002,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -18073,7 +18073,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <image>/img/solution_type.png</image>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity Short', 'Severity')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -18148,7 +18148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>cves</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -18208,7 +18208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>cves</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -18268,7 +18268,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>cves</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -18328,7 +18328,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
@@ -25374,7 +25374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>task</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
         <html>
@@ -27285,7 +27285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <image>/img/solution_type.png</image>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <html>
           <before>
@@ -34555,7 +34555,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <table border="0" cellspacing="0" cellpadding="3" width="50%">
                   <tr>
-                    <td>Access Vector:</td>
+                    <td><xsl:value-of select="gsa:i18n('Access Vector', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_av" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
@@ -34577,7 +34577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                   <tr>
-                    <td>Access Complexity:</td>
+                    <td><xsl:value-of select="gsa:i18n('Access Complexity', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_ac" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
@@ -34599,7 +34599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                   <tr>
-                    <td>Authentication:</td>
+                    <td><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_au" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
@@ -34621,7 +34621,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                   <tr>
-                    <td>Confidentiality:</td>
+                    <td><xsl:value-of select="gsa:i18n('Confidentiality', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_c" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
@@ -34643,7 +34643,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                   <tr>
-                    <td>Integrity:</td>
+                    <td><xsl:value-of select="gsa:i18n('Integrity', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_i" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">
@@ -34665,7 +34665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                   <tr>
-                    <td>Availability:</td>
+                    <td><xsl:value-of select="gsa:i18n('Availability', 'CVSS Vector')"/>:</td>
                     <td>
                       <select name="cvss_a" style="width:100px;" onchange="calc_from_metrics.submit()">
                         <xsl:call-template name="opt">

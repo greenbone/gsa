@@ -1,3 +1,17 @@
+2015-07-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22707.
+
+	* src/html/classic/omp.xsl (html-tasks-table, html-cpe-table)
+	(html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-cert_bund_adv-table, html-dfn_cert_adv-table, html-allinfo-table)
+	(html-reports-table, html-results-table): Use new "Severity Short"
+	and "CVSS Vector Short" components so table header text can be
+	abbreviated in tables without much space.
+	(cvss_calculator): Add i18n for vector components.
+
+	* src/po/gsad_xsl-de.po: Update translations.
+
 2015-07-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22702.

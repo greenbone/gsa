@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2015-06-23 09:56+0200\n"
+"PO-Revision-Date: 2015-07-07 11:35+0200\n"
 "Last-Translator: Timo Pollmeier <timo.pollmeier@greenbone.net>\n"
 "Language-Team: German <openvas-devel@wald.intevation.org>\n"
 "Language: de\n"
@@ -478,8 +478,8 @@ msgstr "Aktualisieren"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33256
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33351
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33399
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33930
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34679
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33941
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34702
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:111
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:182
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:795
@@ -737,7 +737,7 @@ msgstr "In den Mülleimer"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26072
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26079
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26086
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33930
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33941
 msgctxt "Action Verb"
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1059,7 +1059,7 @@ msgstr "mit Wert"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33118
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33267
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33414
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33946
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33957
 msgctxt "Property"
 msgid "Name"
 msgstr "Name"
@@ -1077,7 +1077,7 @@ msgstr "Name"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:31399
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32880
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33415
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33947
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33958
 msgctxt "Property"
 msgid "Value"
 msgstr "Wert"
@@ -1366,15 +1366,7 @@ msgstr "Textphrase"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:2667
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:3487
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:7082
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:12726
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18020
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18094
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18165
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18240
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18300
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18360
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18420
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18976
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:19009
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:19101
@@ -1387,12 +1379,10 @@ msgstr "Textphrase"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:21583
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:22068
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25337
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25479
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25944
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26312
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26412
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26419
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:27443
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:28702
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:28782
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:28879
@@ -1534,7 +1524,7 @@ msgstr "Nur Hosts mit Ergebnissen zeigen"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:15392
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:15822
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33418
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33950
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33961
 msgctxt "Time"
 msgid "Timezone"
 msgstr "Zeitzone"
@@ -2311,7 +2301,7 @@ msgstr "Aufgaben"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:31973
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32534
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32633
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33959
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33970
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:665
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:691
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:715
@@ -2537,6 +2527,19 @@ msgctxt "Task|Reports"
 msgid "Total"
 msgstr "Gesamt"
 
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:7082
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18020
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18094
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18240
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18300
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18360
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18420
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25479
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:27443
+msgctxt "Severity Short"
+msgid "Severity"
+msgstr "Schwereg."
+
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:7145
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:31438
 msgctxt "Severity"
@@ -2591,7 +2594,7 @@ msgstr "Anmeldedaten automatisch generieren"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32503
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32519
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33431
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33959
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33970
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/gsad.xsl:2274
 msgctxt "Auth Data"
 msgid "Password"
@@ -3228,8 +3231,8 @@ msgstr "Verwaist"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:12273
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:12282
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32397
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33485
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34070
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33496
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34093
 msgctxt "Binary Choice"
 msgid "No"
 msgstr "Nein"
@@ -3252,8 +3255,8 @@ msgstr "Nein"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:12272
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:12281
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:32394
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33486
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34075
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33497
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34098
 msgctxt "Binary Choice"
 msgid "Yes"
 msgstr "Ja"
@@ -3414,6 +3417,7 @@ msgstr "Berichtformat"
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25693
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:25951
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26822
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26837
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:27049
 msgctxt "Result"
 msgid "Result"
@@ -4594,34 +4598,34 @@ msgid "CVEs"
 msgstr "CVEs"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18065
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Vector"
 msgstr "Vektor"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18069
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Complexity"
 msgstr "Komplexität"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18073
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Authentication"
-msgstr "Authentifizierung"
+msgstr "Authentifiz."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18077
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Confidentiality Impact"
-msgstr "Vertraulichkeits-Ausw."
+msgstr "Vertraulichkeits-​Ausw."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18081
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Integrity Impact"
-msgstr "Intergritäts-Ausw."
+msgstr "Integritäts-​Ausw."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18085
-msgctxt "CVSS Vector"
+msgctxt "CVSS Vector Short"
 msgid "Availability Impact"
-msgstr "Verfügbarkeits-Ausw."
+msgstr "Verfügbarkeits-​Ausw."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18089
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18599
@@ -4650,6 +4654,11 @@ msgstr "Version"
 msgctxt "NVT or Result"
 msgid "Solution type"
 msgstr "Art der Lösung"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18165
+msgctxt "Severity"
+msgid "Severity Short"
+msgstr "Schweregr."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:18170
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26457
@@ -6249,11 +6258,6 @@ msgctxt "Result"
 msgid "Result Tags"
 msgstr "Ergebnis-Tags"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26837
-msgctxt "NVT or Result"
-msgid "Result"
-msgstr "Ergebnis"
-
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:26841
 msgctxt "NVT or Result"
 msgid "Vulnerability Detection Result"
@@ -7065,9 +7069,9 @@ msgstr "Erfahren Sie mehr über die Nebeneffekte der CERT-Feed-Synchonisierung!"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33397
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33399
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33930
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33934
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33935
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33941
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33945
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33946
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/gsad.xsl:1936
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/gsad.xsl:1948
 msgctxt "My Settings"
@@ -7075,340 +7079,370 @@ msgid "My Settings"
 msgstr "Eigene Einstellungen"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33404
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33928
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33939
 msgctxt "My Settings"
 msgid "Edit My Settings"
 msgstr "Eigene Einstellungen bearbeiten"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33436
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33980
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33991
 msgctxt "My Settings"
 msgid "User Interface Language"
 msgstr "Sprache der Benutzeroberfläche"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33452
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34019
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33463
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34042
 msgctxt "My Settings"
 msgid "Rows Per Page"
 msgstr "Zeilen pro Seite"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33456
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34026
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33467
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34049
 msgctxt "My Settings"
 msgid "Wizard Rows"
 msgstr "Wizard-Zeilen"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33460
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34033
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33471
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34056
 msgctxt "My Settings"
 msgid "Details Export File Name"
 msgstr "Details-Export-Dateiname"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33464
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34040
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33475
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34063
 msgctxt "My Settings"
 msgid "List Export File Name"
 msgstr "Listen-Export-Dateiname"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33468
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34047
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33479
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34070
 msgctxt "My Settings"
 msgid "Report Export File Name"
 msgstr "Bericht-Export-Dateiname"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33472
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34054
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33483
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34077
 msgctxt "My Settings"
 msgid "Severity Class"
 msgstr "Schweregrad-Klasse"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33481
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34063
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33492
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34086
 msgctxt "My Settings"
 msgid "Dynamic Severity"
 msgstr "Dynamischer Schweregrad"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33496
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34084
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33507
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34107
 msgctxt "Alert"
 msgid "Default Alert"
 msgstr "Standard-Benachrichtigung"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33510
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34099
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33521
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34122
 msgctxt "Scan Config"
 msgid "Default OpenVAS Scan Config"
 msgstr "Standard OpenVAS-Scan-Konfig"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33522
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34112
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33533
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34135
 msgctxt "Scan Config"
 msgid "Default OSP Scan Config"
 msgstr "Standard OSP-Scan-Konfig"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33536
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34127
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33547
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34150
 msgctxt "Credential"
 msgid "Default SSH Credential"
 msgstr "Standard-SSH-Anmeldedaten"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33548
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34140
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33559
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34163
 msgctxt "Credential"
 msgid "Default SMB Credential"
 msgstr "Standard-SMB-Anmeldedaten"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33560
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34153
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33571
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34176
 msgctxt "Credential"
 msgid "Default ESXi Credential"
 msgstr "Standard-ESXi-Anmeldedaten"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33574
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34168
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33585
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34191
 msgctxt "Port List"
 msgid "Default Port List"
 msgstr "Standard-Portliste"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33588
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34183
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33599
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34206
 msgctxt "Scanner"
 msgid "Default OpenVAS Scanner"
 msgstr "Standard-OpenVAS-Scanner"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33600
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34196
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33611
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34219
 msgctxt "Scanner"
 msgid "Default OSP Scanner"
 msgstr "Standard-OSP-Scanner"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33614
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34211
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33625
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34234
 msgctxt "Schedule"
 msgid "Default Schedule"
 msgstr "Standard-Zeitplan"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33628
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34226
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33639
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34249
 msgctxt "Slave"
 msgid "Default Slave"
 msgstr "Standard-Slave"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33642
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34241
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33653
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34264
 msgctxt "Target"
 msgid "Default Target"
 msgstr "Standard-Ziel"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33656
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34256
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33667
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34279
 msgctxt "Agent"
 msgid "Agents Filter"
 msgstr "Agenten-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33665
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34267
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33676
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34290
 msgctxt "Alert"
 msgid "Alerts Filter"
 msgstr "Benachrichtigungen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33674
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34278
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33685
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34301
 msgctxt "Scan Config"
 msgid "Configs Filter"
 msgstr "Konfigurationen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33683
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34289
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33694
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34312
 msgctxt "Credential"
 msgid "Credentials Filter"
 msgstr "Anmeldedaten-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33692
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34300
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33703
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34323
 msgctxt "Filter"
 msgid "Filters Filter"
 msgstr "Filter-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33701
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34311
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33712
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34334
 msgctxt "Note"
 msgid "Notes Filter"
 msgstr "Notizen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33710
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34322
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33721
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34345
 msgctxt "Override"
 msgid "Overrides Filter"
 msgstr "Übersteuerungen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33719
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34333
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33730
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34356
 msgctxt "Permission"
 msgid "Permissions Filter"
 msgstr "Berechtigungen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33728
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34344
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33739
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34367
 msgctxt "Port List"
 msgid "Port Lists Filter"
 msgstr "Portlisten-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33737
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34355
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33748
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34378
 msgctxt "Report"
 msgid "Reports Filter"
 msgstr "Berichte-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33746
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34366
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33757
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34389
 msgctxt "Report Format"
 msgid "Report Formats Filter"
 msgstr "Berichtformate-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33755
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34377
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33766
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34400
 msgctxt "Result"
 msgid "Results Filter"
 msgstr "Ergebnisse-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33764
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34388
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33775
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34411
 msgctxt "Role"
 msgid "Roles Filter"
 msgstr "Rollen-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33773
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34399
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33784
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34422
 msgctxt "Schedule"
 msgid "Schedules Filter"
 msgstr "Zeitpläne-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33782
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34410
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33793
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34433
 msgctxt "Slave"
 msgid "Slaves Filter"
 msgstr "Slaves-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33791
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34421
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33802
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34444
 msgctxt "Tag"
 msgid "Tags Filter"
 msgstr "Tags-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33800
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34432
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33811
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34455
 msgctxt "Target"
 msgid "Targets Filter"
 msgstr "Ziele-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33809
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34443
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33820
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34466
 msgctxt "Task"
 msgid "Tasks Filter"
 msgstr "Aufgaben-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33818
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34454
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33829
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34477
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:317
 msgctxt "CPE"
 msgid "CPE Filter"
 msgstr "CPE-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33827
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34465
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33838
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34488
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:316
 msgctxt "CVE"
 msgid "CVE Filter"
 msgstr "CVE-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33836
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34476
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33847
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34499
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:315
 msgctxt "NVT"
 msgid "NVT Filter"
 msgstr "NVT-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33845
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34487
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33856
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34510
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:318
 msgctxt "OVAL Definition"
 msgid "OVAL Filter"
 msgstr "OVAL-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33854
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34498
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33865
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34521
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:319
 msgctxt "CERT-Bund Advisory"
 msgid "CERT-Bund Filter"
 msgstr "CERT-Bund-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33863
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34509
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33874
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34532
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/dynamic_strings.xsl:320
 msgctxt "DFN-CERT Advisory"
 msgid "DFN-CERT Filter"
 msgstr "DFN-CERT-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33872
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34521
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33883
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34544
 msgctxt "SecInfo"
 msgid "All SecInfo Filter"
 msgstr "Alle-Sicherheitsinfos-Filter"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33963
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33974
 msgctxt "Auth Data|Password"
 msgid "Old"
 msgstr "Altes"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33970
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:33981
 msgctxt "Auth Data|Password"
 msgid "New"
 msgstr "Neues"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34535
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34558
 msgctxt "My Settings"
 msgid "Save My Settings"
 msgstr "Eigene Einstellungen speichern"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34553
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34576
 msgctxt "Bulk Action"
 msgid "Confirm action"
 msgstr "Aktion bestätigen"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34677
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34679
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34700
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34702
 msgctxt "CVSS Calculator"
 msgid "CVSS Base Score Calculator"
 msgstr "CVSS-Basisscore-Rechner"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34689
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34712
 msgctxt "CVSS Calculator"
 msgid "From Metrics"
 msgstr "Aus Metriken"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34829
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34846
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34717
+msgctxt "CVSS Vector"
+msgid "Access Vector"
+msgstr "Zugriffsvektor"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34739
+msgctxt "CVSS Vector"
+msgid "Access Complexity"
+msgstr "Zugriffskomplexität"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34761
+msgctxt "CVSS Vector"
+msgid "Authentication"
+msgstr "Authentifizierung"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34783
+msgctxt "CVSS Vector"
+msgid "Confidentiality"
+msgstr "Vertraulichkeit"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34805
+msgctxt "CVSS Vector"
+msgid "Integrity"
+msgstr "Intergrität"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34827
+msgctxt "CVSS Vector"
+msgid "Availability"
+msgstr "Verfügbarkeit"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34852
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34869
 msgctxt "CVSS Calculator"
 msgid "Calculate"
 msgstr "Berechnen"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34838
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34861
 msgctxt "CVSS Calculator"
 msgid "From Vector"
 msgstr "Aus Vektor"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34858
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34881
 msgctxt "CVSS Calculator"
 msgid "Base Vector"
 msgstr "Basisvektor"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34864
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34887
 msgctxt "CVSS Calculator"
 msgid "Base Score"
 msgstr "Basisscore"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34874
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/omp.xsl:34897
 msgctxt "CVSS Calculator"
 msgid ""
 "Invalid CVSS Base Vector value provided.  Use back button of your browser to "
@@ -7426,13 +7460,11 @@ msgid_plural ""
 "Includes %1 hosts where CPE was found in inventory, but number of "
 "installations could not be determined"
 msgstr[0] ""
-"Beinhaltet %1 Host, für den der CPE-Name im Inventar gefunden wurde, aber die "
-"Anzahl "
-"Installation nicht festgestellt werden konnte"
+"Beinhaltet %1 Host, für den der CPE-Name im Inventar gefunden wurde, aber "
+"die Anzahl Installation nicht festgestellt werden konnte"
 msgstr[1] ""
 "Beinhaltet %1 Hosts, für die der CPE-Name im Inventar gefunden wurde, aber "
-"die Anzahl "
-"Installation nicht festgestellt werden konnte"
+"die Anzahl Installation nicht festgestellt werden konnte"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:54
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/wizard.xsl:182
