@@ -1,3 +1,25 @@
+2015-07-08 Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22713.
+
+	Add Russian translation by Ilmar Habibulin and rebuild Chinese
+	translation.
+
+	* CMakeLists.txt: Install new src/html/classic/help_ru.xsl.
+
+	* src/CMakeLists.txt: Add syntax check for Russian translation.
+
+	* src/html/classic/help_ru.xsl: New help file. Originally created by
+	Ilmar Habibulin.
+
+	* src/po/CMakeLists.txt: Add Russian translation files.
+
+	* src/po/gsad_xsl-ru.po: New file. Generated from old style XML file
+	by Ilmar Habibulin and merged with .pot file.
+
+	* src/po/gsad_xsl-zh.po: Newly generated from old XML and merged with
+	.pot file.
+
 2015-07-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22709.

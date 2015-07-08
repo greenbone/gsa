@@ -45,17 +45,20 @@ endmacro ()
 if (GETTEXT_FOUND)
 
   MAKE_TRANSLATION (de)
+  MAKE_TRANSLATION (ru)
   MAKE_TRANSLATION (zh)
 
   add_custom_target (gettext-mo-files
                      ALL
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/de/gsad_xsl.mo
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ru/gsad_xsl.mo
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh/gsad_xsl.mo
                      COMMENT "Created translation .mo files")
 
   add_custom_target (gettext-po-files
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de-merged.po
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ru-merged.po
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh-merged.po
                      COMMENT "Created translation .po files")
 
