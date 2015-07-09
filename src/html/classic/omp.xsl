@@ -32347,7 +32347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <br/>
                   <xsl:choose>
                     <xsl:when test="sources/source/text() = 'ldap_connect'">
-                      <input type="radio" name="modify_password" value="2" checked="1"/>
+                      <input type="radio" name="modify_password" value="3" checked="1"/>
                     </xsl:when>
                     <xsl:otherwise>
                       <input type="radio" name="modify_password" value="2"/>

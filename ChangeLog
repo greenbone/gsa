@@ -1,5 +1,18 @@
 2015-07-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r22751.
+
+	Prevent logout the user saves themself with LDAP and the previous method
+	was also LDAP.
+
+	* src/gsad_omp.c (save_user_omp): If modify_password is 3 then specify
+	ldap_connect, but stay logged in.
+
+	* src/html/classic/omp.xsl (user [edit]): Make modify_password 3 for
+	LDAP when the source was already LDAP.
+
+2015-07-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r22750.
 
 	* src/gsad_omp.c (logout): New function.  Body from manager_connect.
