@@ -1,3 +1,37 @@
+gsa 6.0.4 (2015-07-09)
+
+This is the fourth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release introduces gettext support for internationalization and
+localization to GSA. It also addresses a number of issues discovered after the
+release of GSA 6.0.3 and incorporates several improvements from the development
+branch of OpenVAS. Please see below for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Benoît Allard, Sven Haardiek, Ilmar Habibulin, Matthew Mundell, Timo Pollmeier,
+Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes compared to 6.0.3:
+* GSA now uses gettext for internationalization (I18N) and localization (L10N).
+* A Russian translation for parts of the interface has been added.
+* The handling of position specific keywords in filters has been improved.
+* Handling of unclassified severity scores has been improved.
+* An issue which cause some user to not be listed when creating new permissions
+  has been fixed.
+* Comments on schedules now allow the ":" character.
+* An issue which caused comments to be lost when creating new schedules has been
+  fixed.
+* The "min_qod" filter is now applied correctly to report exports.
+* The critical range for the PCI-DSS severity class type now correctly starts at
+  4.0 instead of 4.3.
+* The interface for managing users when using LDAP authentication has been
+  improved.
+* The task details dialog now contains a link to the list of all results.
+* Compatibility with libgcrypt 1.6.0 and newer has been improved.
+* An icon for Palo Alto devices has been added.
+
+
 gsa 6.0.3 (2015-05-11)
 
 This is the third maintenance release of the Greenbone Security Assistant (GSA)

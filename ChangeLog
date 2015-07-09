@@ -1,3 +1,9 @@
+2015-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0.4 release.
+
+	* CHANGES: Updated.
+
 2015-07-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help_ru.xsl, src/po/gsad_xsl-ru.po: Add files
