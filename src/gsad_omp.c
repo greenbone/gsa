@@ -21870,7 +21870,8 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
   if ((enable_ldap_connect && strcmp (enable_ldap_connect, "1") == 0)
-      || (modify_password && strcmp (modify_password, "2") == 0))
+      || (modify_password && strcmp (modify_password, "2") == 0)
+      || (modify_password && strcmp (modify_password, "3") == 0))
     {
       g_string_append (command, "<sources><source>ldap_connect</source></sources>");
     }
@@ -21929,6 +21930,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
     {
       case 0:
         if (strcmp (modify_password, "0")
+            && strcmp (modify_password, "3")
             && params_given (params, "current_user"))
           {
             const char *status;
