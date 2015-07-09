@@ -1,3 +1,12 @@
+2015-07-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (logout): New function.  Body from manager_connect.
+	(save_user_omp): Logout if the user is modifying themself, and the
+	authentication method is set to LDAP.  We do not have the LDAP password
+	so we cannot run further OMP commands, and this is the simplest way to
+	get the password from the user.
+	(manager_connect): Use logout.
+
 2015-07-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Use HTTP POST method for process_bulk instead of GET to avoid issues
@@ -123,7 +132,7 @@
 	* INSTALL: List prerequisites for translations separately and add a
 	non-"C" locale as prerequisite. Add section about disabling
 	translations or using a different locale.
-	
+
 	* src/gsad.c (): Add #include "xslt_i18n.h".
 	(attach_sid, remove_sid): Reset the locale correctly.
 	(main): Test setting the locale for category LC_MESSAGES and disable
@@ -195,7 +204,7 @@
 	(html-gsa-navigation): Apply i18n to "SecInfo Dashboard" text generated
 	by script.
 	(login_page): Apply i18n to text "Login as a guest".
-	
+
 	* src/html/classic/omp.xsl (task [details]): Add i18n for "Unavailable".
 	(list-window): Add i18n for "Hide Charts" and "Show Charts".
 	(lsc_credential): Add i18n for "Unavailable" and "UUID".
