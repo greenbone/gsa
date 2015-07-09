@@ -1,3 +1,14 @@
+2015-07-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22750.
+
+	* src/gsad_omp.c (logout): New function.  Body from manager_connect.
+	(save_user_omp): Logout if the user is modifying themself, and the
+	authentication method is set to LDAP.  We do not have the LDAP password
+	so we cannot run further OMP commands, and this is the simplest way to
+	get the password from the user.
+	(manager_connect): Use logout.
+
 2015-07-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22746.

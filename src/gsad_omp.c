@@ -204,6 +204,8 @@ static char *wizard (credentials_t *, params_t *, const char *);
 
 static char *wizard_get (credentials_t *, params_t *, const char *);
 
+int token_user_remove (const char *);
+
 
 /* Helpers. */
 
@@ -21683,6 +21685,47 @@ edit_user_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_user XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  message      Login screen message.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+logout (credentials_t *credentials, const gchar *message)
+{
+  time_t now;
+  gchar *xml;
+  char *res;
+  char ctime_now[200];
+  int ret;
+
+  if (credentials->token == NULL)
+    return NULL;
+
+  ret = token_user_remove (credentials->token);
+  if (ret)
+    return NULL;
+
+  now = time (NULL);
+  ctime_r_strip_newline (&now, ctime_now);
+
+  xml = g_strdup_printf ("<login_page>"
+                         "<message>"
+                         "%s"
+                         "</message>"
+                         "<token></token>"
+                         "<time>%s</time>"
+                         "</login_page>",
+                         message,
+                         ctime_now);
+  res = xsl_transform (xml);
+  g_free (xml);
+  return res;
+}
+
+/**
  * @brief Modify a user, get all users, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -21903,9 +21946,17 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
-      if (html == NULL)
-        html = get_users (credentials, params, response);
+      if (strcmp (modify_password, "2") == 0
+          && params_given (params, "current_user"))
+        html = logout (credentials,
+                       "Authentication method changed."
+                       "  Please login with LDAP password.");
+      else
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = get_users (credentials, params, response);
+        }
     }
   else
     html = edit_user (credentials, params, response);
@@ -23047,9 +23098,6 @@ authenticate_omp (const gchar * username, const gchar * password,
     }
 }
 
-int
-token_user_remove (const char *);
-
 /**
  * @brief Connect to OpenVAS Manager daemon.
  *
@@ -23073,38 +23121,7 @@ manager_connect (credentials_t *credentials, int *socket,
                                  manager_port);
   if (*socket == -1)
     {
-      time_t now;
-      gchar *xml;
-      char *res;
-      char ctime_now[200];
-      int ret;
-
-      if (html == NULL)
-        return -1;
-
-      *html = NULL;
-
-      if (credentials->token == NULL)
-        return -1;
-
-      ret = token_user_remove (credentials->token);
-      if (ret)
-        return -1;
-
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
-      xml = g_strdup_printf ("<login_page>"
-                             "<message>"
-                             "Logged out. OMP service is down."
-                             "</message>"
-                             "<token></token>"
-                             "<time>%s</time>"
-                             "</login_page>",
-                             ctime_now);
-      res = xsl_transform (xml);
-      g_free (xml);
-      *html = res;
+      *html = logout (credentials, "Logged out.  OMP service is down.");
       return -1;
     }
 
