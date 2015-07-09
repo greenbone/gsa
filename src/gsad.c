@@ -1425,6 +1425,9 @@ struct gsad_connection_info
   char *language;                          ///< Value of Accept-Language header.
   int connectiontype;                      ///< 1=POST, 2=GET.
   int answercode;                          ///< HTTP response code.
+  enum content_type content_type;          ///< Content type of response.
+  char *content_disposition;               ///< Content disposition of reponse.
+  size_t content_length;                   ///< Content length.
 };
 
 /**
@@ -1481,6 +1484,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
   params_free (con_info->params);
   g_free (con_info->cookie);
+  g_free (con_info->content_disposition);
   g_free (con_info->language);
   g_free (con_info);
   *con_cls = NULL;
@@ -2208,6 +2212,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (import_config)
   ELSE (import_port_list)
   ELSE (import_report_format)
+  else if (!strcmp (cmd, "process_bulk"))
+    {
+      con_info->response =  process_bulk_omp (credentials,
+                                              con_info->params,
+                                              &con_info->content_type,
+                                              &con_info->content_disposition,
+                                              &con_info->content_length);
+    }
   ELSE (restore)
   ELSE (resume_task)
   ELSE (run_wizard)
@@ -2861,9 +2873,6 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_scanner)
   ELSE (new_schedule)
   ELSE (new_slave)
-  else if (!strcmp (cmd, "process_bulk"))
-    return process_bulk_omp (credentials, params, content_type,
-                             content_disposition, response_size);
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (verify_scanner)
@@ -3004,26 +3013,120 @@ remove_sid (struct MHD_Response *response)
 }
 
 /**
+ * @brief Adds content-type header fields to a response.
+ *
+ * This function should be called only once per response and is the only
+ * function where values of enum content_types are translated into strings.
+ *
+ * @param[in,out]  response  Response to add header to.
+ * @param[in]      ct        Content Type to set.
+ */
+static void
+gsad_add_content_type_header (struct MHD_Response *response,
+                              enum content_type* ct)
+{
+  if (!response)
+    return;
+
+  switch (*ct)
+    {
+      case GSAD_CONTENT_TYPE_APP_DEB:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/deb");
+        break;
+      case GSAD_CONTENT_TYPE_APP_EXE:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/exe");
+        break;
+      case GSAD_CONTENT_TYPE_APP_HTML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/html");
+        break;
+      case GSAD_CONTENT_TYPE_APP_KEY:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/key");
+        break;
+      case GSAD_CONTENT_TYPE_APP_NBE:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/nbe");
+        break;
+      case GSAD_CONTENT_TYPE_APP_PDF:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/pdf");
+        break;
+      case GSAD_CONTENT_TYPE_APP_RPM:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/rpm");
+        break;
+      case GSAD_CONTENT_TYPE_APP_XML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/xml; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_IMAGE_PNG:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "image/png");
+        break;
+      case GSAD_CONTENT_TYPE_OCTET_STREAM:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/octet-stream");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_CSS:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/css");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_HTML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/html; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_JS:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/javascript");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_PLAIN:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/plain; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_DONE:
+        break;
+      default:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/plain; charset=utf-8");
+        break;
+    }
+}
+
+/**
  * @brief Sends a HTTP response.
  *
- * @param[in]  connection   The connection handle.
- * @param[in]  page         The HTML page content.
- * @param[in]  status_code  The HTTP status code.
- * @param[in]  sid          Session ID, or NULL.
+ * @param[in]  connection           The connection handle.
+ * @param[in]  content              The content.
+ * @param[in]  status_code          The HTTP status code.
+ * @param[in]  sid                  Session ID, or NULL.
+ * @param[in]  content_type         The content type.
+ * @param[in]  content_disposition  The content disposition or NULL.
+ * @param[in]  content_length       Content length, 0 for strlen (content).
  *
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-send_response (struct MHD_Connection *connection, const char *page,
-               int status_code, const gchar *sid)
+send_response (struct MHD_Connection *connection, const char *content,
+               int status_code, const gchar *sid,
+               enum content_type content_type,
+               const char *content_disposition,
+               size_t content_length)
 {
   struct MHD_Response *response;
+  size_t size = (content_length ? content_length : strlen (content));
   int ret;
 
-  response = MHD_create_response_from_data (strlen (page),
-                                            (void *) page, MHD_NO, MHD_YES);
-  MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                           "text/html; charset=utf-8");
+  response = MHD_create_response_from_data (size, (void *) content,
+                                            MHD_NO, MHD_YES);
+  gsad_add_content_type_header (response, &content_type);
+
+  if (content_disposition)
+    MHD_add_response_header (response, "Content-Disposition",
+                             content_disposition);
+
   if (sid)
     {
       if (strcmp (sid, "0"))
@@ -3185,7 +3288,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
       send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
-                     NULL);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
 
@@ -3207,89 +3310,6 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
     }
   g_free (location);
   return MHD_YES;
-}
-
-/**
- * @brief Adds content-type header fields to a response.
- *
- * This function should be called only once per response and is the only
- * function where values of enum content_types are translated into strings.
- *
- * @param[in,out]  response  Response to add header to.
- * @param[in]      ct        Content Type to set.
- */
-static void
-gsad_add_content_type_header (struct MHD_Response *response,
-                              enum content_type* ct)
-{
-  if (!response)
-    return;
-
-  switch (*ct)
-    {
-      case GSAD_CONTENT_TYPE_APP_DEB:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/deb");
-        break;
-      case GSAD_CONTENT_TYPE_APP_EXE:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/exe");
-        break;
-      case GSAD_CONTENT_TYPE_APP_HTML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/html");
-        break;
-      case GSAD_CONTENT_TYPE_APP_KEY:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/key");
-        break;
-      case GSAD_CONTENT_TYPE_APP_NBE:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/nbe");
-        break;
-      case GSAD_CONTENT_TYPE_APP_PDF:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/pdf");
-        break;
-      case GSAD_CONTENT_TYPE_APP_RPM:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/rpm");
-        break;
-      case GSAD_CONTENT_TYPE_APP_XML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/xml; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_IMAGE_PNG:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "image/png");
-        break;
-      case GSAD_CONTENT_TYPE_OCTET_STREAM:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/octet-stream");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_CSS:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/css");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_HTML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/html; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_JS:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/javascript");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_PLAIN:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/plain; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_DONE:
-        break;
-      default:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/plain; charset=utf-8");
-        break;
-    }
 }
 
 /**
@@ -3602,7 +3622,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
       send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
-                     NULL);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
 
@@ -4121,6 +4141,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
           con_info->params = params_new ();
           con_info->connectiontype = 1;
           con_info->answercode = MHD_HTTP_OK;
+          con_info->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
+          con_info->content_disposition = NULL;
+          con_info->content_length = 0;
 
           *con_cls = (void *) con_info;
           return MHD_YES;
@@ -4170,7 +4193,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
 
       ret = send_response (connection, con_info->response, MHD_HTTP_OK,
-                           new_sid ? new_sid : "0");
+                           new_sid ? new_sid : "0",
+                           con_info->content_type,
+                           con_info->content_disposition,
+                           con_info->content_length);
       g_free (new_sid);
       return ret;
     }

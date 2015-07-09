@@ -1,3 +1,24 @@
+2015-07-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22746.
+
+	Use HTTP POST method for process_bulk instead of GET to avoid issues
+	with HTTP header memory limits.
+
+	* src/gsad.c (gsad_connection_info): Add fields content_type,
+	content_disposition and content_length.
+	(free_resources): Free content_disposition string.
+	(exec_omp_post): Add case for process_bulk.
+	(exec_omp_get): Remove case for process_bulk.
+	(gsad_add_content_type_header): Move above send_response function.
+	(send_response): Add parameters content_type, content_disposition and
+	content_length to responses that are not HTML pages, rename parameter
+	page to content.
+	(redirect_handler, request_handler): Add new send_response parameters.
+
+	* src/html/classic/omp.xsl (list-window): Use the POST method to send
+	the bulk action form.
+
 2015-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.

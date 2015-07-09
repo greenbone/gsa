@@ -4725,7 +4725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" id="small_inline_form">
-                    <form name="bulk-actions" enctype="multipart/form-data">
+                    <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
                       <xsl:choose>
                         <xsl:when test="$type = 'info'">
                           <xsl:for-each select="$resources">
@@ -4756,7 +4756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select = 1">
-            <form name="bulk-actions" enctype="multipart/form-data">
+            <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
               <xsl:copy-of select="$table"/>
             </form>
           </xsl:when>
