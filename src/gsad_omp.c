@@ -22917,6 +22917,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params)
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  * @param[out] chart_prefs   Chart preferences.
+ * @param[out] autorefresh   Autorefresh preference.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */

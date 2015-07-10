@@ -278,6 +278,7 @@ static GMutex *mutex = NULL;
  * @param[in]  language      User Interface Language setting.
  * @param[in]  pw_warning    Password policy warning.
  * @param[in]  chart_prefs   The chart preferences.
+ * @param[in]  autorefresh   The autorefresh preference.
  *
  * @return Added user.
  */
@@ -527,7 +528,7 @@ user_set_password (const gchar *token, const gchar *password)
 /**
  * @brief Set severity class of user.
  *
- * @param[in]   name      Username.
+ * @param[in]   token     User token.
  * @param[in]   severity  Severity class.
  *
  * @return 0 ok, 1 failed to find user.

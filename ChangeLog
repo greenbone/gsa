@@ -1,5 +1,10 @@
 2015-07-10  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad.c, src/gsad_omp.c: Fix documentation issues found with
+	Doxygen.
+
+2015-07-10  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* doc/Doxyfile_full.in: Harmonized settings with Doxygen configurations
 	of other OpenVAS modules.
 
