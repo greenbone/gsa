@@ -1,5 +1,13 @@
 2015-07-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* CMakeLists.txt: Remove installation of XML translation files.
+
+	* src/html/classic/po/de.xml: Remove. Obsoleted by gettext .po file.
+
+	* src/html/classic/po/zh.xml: Remove. Obsoleted by gettext .po file.
+
+2015-07-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/help_ru.xsl: Add author and update copyright info.
 
 	* src/po/gsad_xsl-de.po: Add author, license and copyright info.
