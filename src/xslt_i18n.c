@@ -686,7 +686,7 @@ init_language_lists ()
 
   GString *test = g_string_new ("");
   buffer_languages_xml (test);
-  g_message ("%s: Initialized language lists", __FUNCTION__);
+  g_debug ("%s: Initialized language lists", __FUNCTION__);
   g_string_free (test, TRUE);
 
   return 0;
