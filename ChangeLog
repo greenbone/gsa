@@ -1,3 +1,10 @@
+2015-07-14  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r22706 by Jan-Oliver Wagner.
+
+	* src/xslt_i18n.h: Fix include to include only glib.h. Anything else
+	is regarded an error by glib.
+
 2015-07-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22799.

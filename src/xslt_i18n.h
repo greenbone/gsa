@@ -27,7 +27,7 @@
 #define _XSLT_I18N_H
 
 #include <libxslt/extensions.h>
-#include <glib/gstring.h>
+#include <glib.h>
 
 /**
  * @brief Default language code, used when Accept-Language header is missing.
