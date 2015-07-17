@@ -1,3 +1,7 @@
+2015-07-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (manager_connect): Init html to keep compiler quiet.
+
 2015-07-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Remove installation of XML translation files.
