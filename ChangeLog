@@ -1,3 +1,13 @@
+2015-07-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add subject and message input for email alerts.
+
+	* src/gsad_omp.c (append_alert_method_data): Add "message" and
+	"subject".
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form, alert [details]): Add subject and message fields.
+
 2015-07-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
@@ -63,8 +73,9 @@
 
 	* src/gsad_omp.c (save_user_omp): If modify_password is 3 then specify
 	ldap_connect, but stay logged in.
-	(user [edit]): Make modify_password 3 for LDAP when the source was
-	already LDAP.
+
+	* src/html/classic/omp.xsl (user [edit]): Make modify_password 3 for
+	LDAP when the source was already LDAP.
 
 2015-07-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
