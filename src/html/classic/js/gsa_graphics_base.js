@@ -717,8 +717,19 @@ function create_uri (command, params, prefix, no_xml)
   for (var prop_name in params)
     {
       if (!no_xml || prop_name != "xml")
-        params_str = (params_str + "&" + prop_name
-                      + "=" + params[prop_name]);
+        {
+          if (params[prop_name] instanceof Array)
+            {
+              for (var i = 0; i < params[prop_name].length; i++)
+                {
+                  params_str = (params_str + "&" + prop_name + ":" + i
+                                + "=" + params[prop_name][i]);
+                }
+            }
+          else
+            params_str = (params_str + "&" + prop_name
+                          + "=" + params[prop_name]);
+        }
     }
   params_str = params_str + "&token=" + gsa.gsa_token;
   return encodeURI (params_str);
@@ -735,16 +746,35 @@ function extract_simple_records (xml_data, selector)
                     {
                       var record = {};
                       d3.select(this)
-                          .selectAll ("*")
+                          .selectAll ("value, count, c_count, stats")
                             .each (function (d, i)
                                     {
-                                      if (!isNaN (parseFloat (d3.select (this).text ()))
-                                          && isFinite (d3.select (this).text ()))
-                                        record [this.localName]
-                                          = parseFloat (d3.select (this).text ())
+                                      if (this.localName == "stats")
+                                        {
+                                          var col_name = d3.select (this).attr ("column");
+                                          d3.select (this)
+                                            .selectAll ("*")
+                                              .each (function (d, i)
+                                                      {
+                                                        if (!isNaN (parseFloat (d3.select (this).text ()))
+                                                            && isFinite (d3.select (this).text ()))
+                                                          record [col_name + "_" + this.localName]
+                                                            = parseFloat (d3.select (this).text ())
+                                                        else
+                                                          record [col_name + "_" + this.localName]
+                                                            = d3.select (this).text ()
+                                                      });
+                                        }
                                       else
-                                        record [this.localName]
-                                          = d3.select (this).text ()
+                                        {
+                                          if (!isNaN (parseFloat (d3.select (this).text ()))
+                                              && isFinite (d3.select (this).text ()))
+                                            record [this.localName]
+                                              = parseFloat (d3.select (this).text ())
+                                          else
+                                            record [this.localName]
+                                              = d3.select (this).text ()
+                                        }
                                     });
                       records.push (record);
                      });
@@ -908,6 +938,10 @@ function field_name (field, type)
         return "QoD"
       case "qod_type":
         return "QoD type"
+      case "high":
+        return "High"
+      case "high_per_host":
+        return "High / host"
       default:
         return field;
     }
@@ -989,6 +1023,8 @@ function format_data_default (value, col_info_item)
           return gsa.datetime_format (new Date (value * 1000));
         case "cvss":
           return value.toFixed (1);
+        case "decimal":
+          return value.toFixed(3).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')
         default:
           return String (value);
       }

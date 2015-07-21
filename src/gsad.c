@@ -1068,6 +1068,8 @@ init_validator ()
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
+  openvas_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
@@ -1514,6 +1516,7 @@ params_append_mhd (params_t *params,
 {
   if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+      || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
@@ -2329,6 +2332,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
 {
   if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+      || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)

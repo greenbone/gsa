@@ -6029,12 +6029,18 @@ export_agents_omp (credentials_t * credentials, params_t *params,
 char *
 get_aggregate_omp (credentials_t * credentials, params_t *params)
 {
+  params_t *data_columns;
+  params_iterator_t data_columns_iterator;
+  char *param_name;
+  param_t *param;
+
   const char *data_column, *group_column, *type, *filter, *filt_id, *xml_param;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
   int ret;
 
+  data_columns = params_values (params, "data_columns:");
   data_column = params_value (params, "data_column");
   group_column = params_value (params, "group_column");
   type = params_value (params, "aggregate_type");
@@ -6059,7 +6065,23 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
   if (filt_id && strcmp (filt_id, ""))
     g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
-  g_string_append (command, "/>");
+  g_string_append (command, ">");
+
+  if (data_columns)
+    {
+      params_iterator_init (&data_columns_iterator, data_columns);
+      while (params_iterator_next (&data_columns_iterator, &param_name, &param))
+        {
+          if (param->valid)
+            {
+              xml_string_append (command,
+                                "<data_column>%s</data_column>",
+                                param->value);
+            }
+        }
+    }
+
+  g_string_append (command, "</get_aggregates>");
 
   g_free (filter_escaped);
 

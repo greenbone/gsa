@@ -25527,6 +25527,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (report)"/>
     <xsl:with-param name="filtered-count" select="report_count/filtered"/>
     <xsl:with-param name="full-count" select="report_count/text ()"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-scan-management-top-visualization">
+        <xsl:with-param name="type" select="'report'"/>
+      </xsl:call-template>
+    </xsl:with-param>
     <xsl:with-param name="columns">
       <column>
         <name><xsl:value-of select="gsa:i18n('Date', 'Date')"/></name>

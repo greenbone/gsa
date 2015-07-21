@@ -377,7 +377,9 @@ function simple_bubble_data (old_data, params)
 {
   var label_field = (params && params.label_field) ? params.label_field : "value"
   var size_field = (params && params.size_field) ? params.size_field : "count"
-  var color_field = (params && params.color_field) ? params.color_field : "mean"
+  var color_field = (params && params.color_field)
+                      ? params.color_field
+                      : old_data.column_info.data_columns[0] + "_mean"
 
   var column_info = { group_columns: old_data.column_info.group_columns,
                       data_columns: old_data.column_info.data_columns,

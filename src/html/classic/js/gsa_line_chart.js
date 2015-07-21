@@ -281,13 +281,14 @@ function LineChartGenerator ()
                   {
                     new_record [field] = prev_values [field] ? prev_values [field] : 0;
                   }
-                else if (old_data.column_info.columns[field].stat == "count")
+                else if (old_data.column_info.columns[field].stat == "count"
+                         || old_data.column_info.columns[field].stat == "sum"
+                         || old_data.column_info.columns[field].stat == "min"
+                         || old_data.column_info.columns[field].stat == "max"
+                         || old_data.column_info.columns[field].stat == "mean")
                   {
                     new_record [field] = 0;
                   }
-                else
-                  console.debug ("!" + field);
-
               }
           }
         new_data.records.push (new_record);
@@ -496,6 +497,20 @@ function LineChartGenerator ()
             return;
         }
       display.header ().text (title (data));
+
+      if (column_info.data_columns.length)
+        {
+          // TODO: make more flexible
+          y_field = column_info.data_columns[0] + "_max";
+          y2_field = column_info.data_columns.length >= 2
+                      ? column_info.data_columns[1] + "_max"
+                      : "count"
+        }
+      else
+        {
+          y_field = "count";
+          y2_field = "c_count";
+        }
 
       var defined = function (d) { return d != undefined; }
       x_data = records.map (function (d) { return d [x_field]; });

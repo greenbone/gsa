@@ -1,3 +1,33 @@
+2015-07-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow using multiple data columns in charts. Add charts for reports.
+
+	* src/gsad_omp.c (get_aggregate_omp): Handle data_columns parameters.
+
+	* src/gsad.c (init_validator): Add data_columns:name and
+	data_columns:value.
+	(params_append_mhd, params_mhd_add): Add data_columns hashtable param.
+
+	* src/html/classic/graphics.xsl (js-aggregate-data-source): Add
+	data_columns parameter.
+	(js-scan-management-top-visualization): Add Reports charts.
+
+	* src/html/classic/omp.xsl (html-reports-table): Add Reports charts.
+
+	* src/html/classic/js/gsa_bubble_chart.js (simple_bubble_data):
+	Use new column name for mean of the first data column.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_uri): Handle
+	parameter arrays.
+	(extract_simple_records): Update column extraction to new OMP syntax
+	with multiple data columns.
+	(field_name): Add cases for "high" and "high_per_host".
+	(format_data_default): Round decimal numbers to three places.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Fill in 0 for all
+	statistics by default and remove debug output.
+	(generate): Use data columns as y data if available.
+
 2015-07-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add subject and message input for email alerts.
