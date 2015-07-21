@@ -1,5 +1,9 @@
 2015-07-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/po/gsad_xsl-zh.po: Update with translations by Winland Q. Yang.
+
+2015-07-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Allow using multiple data columns in charts. Add charts for reports.
 
 	* src/gsad_omp.c (get_aggregate_omp): Handle data_columns parameters.
