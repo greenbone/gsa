@@ -1129,7 +1129,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        specified address).
       </p>
 
-      <h1>New Alert</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#alert">Alert</a>
@@ -1196,15 +1195,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <b>*</b> not available with the current OMP Server connection.
       </xsl:if>
 
+      <h4>Alerts</h4>
+
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Alerts" title="Alerts"/>
+        will switch to the <a href="alerts.html?token={/envelope/token}">Alerts</a>
+        page.
+      </p>
+
       <h2>Alert Methods</h2>
+
+      <h3>Email</h3>
+
+      <p>
+        An email will be sent to the given address.
+      </p>
+
+      <p>
+        The following replacements will be done in the Subject:
+      </p>
+
+      <ul>
+        <li> $$: $ </li>
+        <li> $e: event description </li>
+        <li> $n: task name </li>
+      </ul>
+
+      <p>
+        The following replacements will be done in the Message:
+      </p>
+
+      <ul>
+        <li> $$: $ </li>
+        <li> $c: condition description </li>
+        <li> $e: event description </li>
+        <li> $n: task name </li>
+        <li> $r: report format name </li>
+        <li> $F: name of filter </li>
+        <li> $t: filter term </li>
+        <li> $z: timezone </li>
+      </ul>
 
       <h3>HTTP Get</h3>
 
       <p>
-      The URL will be issued as HTTP GET.
-      This can be used eg. to automatically send a SMS via
-      a HTTP GET gateway or automatically create a
-      bug report in an issue tracker.
+        The URL will be issued as HTTP GET.
+        This can be used eg. to automatically send a SMS via
+        a HTTP GET gateway or automatically create a
+        bug report in an issue tracker.
       </p>
 
       <p>
@@ -1212,19 +1251,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <ul>
-      <li> $$: $ </li>
-      <li> $n: task name </li>
-      <li> $e: event description </li>
-      <li> $c: condition description </li>
+        <li> $$: $ </li>
+        <li> $c: condition description </li>
+        <li> $e: event description </li>
+        <li> $n: task name </li>
       </ul>
-
-      <h4>Alerts</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Alerts" title="Alerts"/>
-       will switch to the <a href="alerts.html?token={/envelope/token}">Alerts</a>
-       page.
-      </p>
     </div>
   </div>
 </xsl:template>
