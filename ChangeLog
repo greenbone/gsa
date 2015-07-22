@@ -1,7 +1,11 @@
 2015-07-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/classic/help.xsl (new_alert.html): Remove extra heading.  Add
-	email section with message and subject format specifiers.
+	* ChangeLog: Repair last entry.
+
+2015-07-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (new_alert.html): Add $H.  Correct $f.
+	Reorder.
 
 2015-07-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
@@ -38,6 +42,11 @@
 	* src/po/gsad_xsl-zh.po: Remove. Renamed to src/po/gsad_xsl-zh_CN.po.
 
 	* src/po/gsad_xsl-zh_CN.po: New. Renamed src/po/gsad_xsl-zh.po.
+
+2015-07-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (new_alert.html): Remove extra heading.  Add
+	email section with message and subject format specifiers.
 
 2015-07-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
