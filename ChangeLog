@@ -1,3 +1,7 @@
+2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/language_names.tsv: Correct code for Japanese.
+
 2015-07-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Repair last entry.
