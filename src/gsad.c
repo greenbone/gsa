@@ -4023,7 +4023,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
-              gchar *preferred_language = g_strndup (credentials->language, 2);
+              gchar **preferred_languages;
+              gchar *help_language;
               gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
@@ -4031,6 +4032,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               time_t now;
               char ctime_now[200];
               gchar *xml, *pre;
+              int index;
 
               assert (credentials->token);
 
@@ -4060,14 +4062,40 @@ request_handler (void *cls, struct MHD_Connection *connection,
               g_free (pre);
               g_free (page);
 
-              xsl_filename = g_strdup_printf ("help_%s.xsl", preferred_language);
+              preferred_languages = g_strsplit (credentials->language, ":", 0);
 
-              if (access (xsl_filename, R_OK) == 0)
+              index = 0;
+              while (preferred_languages [index] && xsl_filename == NULL)
+                {
+                  help_language = g_strdup (preferred_languages [index]);
+                  xsl_filename = g_strdup_printf ("help_%s.xsl",
+                                                  help_language);
+                  if (access (xsl_filename, R_OK) != 0)
+                    {
+                      g_free (xsl_filename);
+                      xsl_filename = NULL;
+                      if (strchr (help_language, '_'))
+                        {
+                          *strchr (help_language, '_') = '\0';
+                          xsl_filename = g_strdup_printf ("help_%s.xsl",
+                                                          help_language);
+                          if (access (xsl_filename, R_OK) != 0)
+                            {
+                              g_free (xsl_filename);
+                              xsl_filename = NULL;
+                            }
+                        }
+                    }
+                  g_free (help_language);
+                  index ++;
+                }
+
+              if (xsl_filename)
                 res = xsl_transform_with_stylesheet (xml, xsl_filename);
               else
                 res = xsl_transform_with_stylesheet (xml, "help.xsl");
 
-              g_free (preferred_language);
+              g_strfreev (preferred_languages);
               g_free (xsl_filename);
             }
           if (res == NULL)

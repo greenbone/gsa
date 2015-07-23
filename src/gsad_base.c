@@ -104,7 +104,7 @@ set_language_code (gchar **lang, const gchar *language)
   if (language == NULL || strcmp (language, "Browser Language") == 0)
     *lang = NULL;
   else if (strcmp (language, "Chinese") == 0)
-    *lang = g_strdup ("zh");
+    *lang = g_strdup ("zh_CN");
   else if (strcmp (language, "English") == 0)
     *lang = g_strdup ("en");
   else if (strcmp (language, "German") == 0)

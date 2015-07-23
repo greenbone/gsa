@@ -46,6 +46,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- GLOBAL VARIABLES -->
 <!-- language code, needed where /envelope is not available -->
 <xsl:variable name="i18n_language" select="(/envelope | /login_page)/i18n"/>
+<!-- first language code in HTML attribute form -->
+<xsl:variable name="html-lang">
+  <xsl:choose>
+    <xsl:when test="contains ($i18n_language, ':')">
+      <xsl:value-of select="translate (substring-before ($i18n_language, ':'), '_', '-')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="translate ($i18n_language, '_', '-')"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
 
 <xsl:variable name="i18n_po_path">
   <xsl:choose>
@@ -2373,7 +2384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="/">
-  <html xmlns="http://www.w3.org/1999/xhtml">
+  <html xmlns="http://www.w3.org/1999/xhtml" lang="{$html-lang}">
     <xsl:call-template name="html-head"/>
     <body>
       <center>

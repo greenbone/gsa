@@ -300,7 +300,7 @@ install (FILES src/html/classic/img/gsa_splash.png
 
 install (FILES src/html/classic/help_de.xsl
                src/html/classic/help_ru.xsl
-               src/html/classic/help_zh.xsl
+               src/html/classic/help_zh_CN.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)
 
 install (FILES src/html/classic/img/style/window_dec_a.png

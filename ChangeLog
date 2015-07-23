@@ -1,5 +1,43 @@
 2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22870.
+
+	Change the language code of the current Chinese translation to zh_CN.
+	Allow selecting help files with country code suffixes in their name.
+	Add lang attribute to html root element in classic face.
+
+	* CMakeLists.txt: Rename src/html/classic/help_zh.xsl to
+	src/html/classic/help_zh_CN.xsl
+
+	* src/CMakeLists.txt: Rename help_zh-xsl-syntax to help_zh_CN-xsl-syntax
+	and update file name.
+
+	* src/gsad_base.c (set_language_code): Change the code for Chinese
+	to "zh_CN".
+
+	* src/gsad.c (request_handler): Try all languages in the user's
+	language string in full and shortened form.
+
+	* src/language_names.tsv: Change code for Chinese from zh to zh_CN and
+	rename to "Chinese (China)".
+
+	* src/html/classic/gsad.xsl (): Add variable "html-lang".
+	(/): Add lang attribute to html root element.
+
+	* src/html/classic/help_zh.xsl: Remove. Renamed to
+	src/html/classic/help_zh_CN.xsl.
+
+	* src/html/classic/help_zh_CN.xsl: New. Renamed
+	src/html/classic/help_zh.xsl.
+
+	* src/po/CMakeLists.txt: Change code for Chinese from zh to zh_CN.
+
+	* src/po/gsad_xsl-zh.po: Remove. Renamed to src/po/gsad_xsl-zh_CN.po.
+
+	* src/po/gsad_xsl-zh_CN.po: New. Renamed src/po/gsad_xsl-zh.po.
+
+2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22866.
 
 	* src/po/gsad_xsl-zh.po: Update with translations by Winland Q. Yang.
