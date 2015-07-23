@@ -1,5 +1,11 @@
 2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22889.
+
+	* src/language_names.tsv: Correct code for Japanese.
+
+2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22870.
 
 	Change the language code of the current Chinese translation to zh_CN.
