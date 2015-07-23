@@ -1,3 +1,9 @@
+2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r22866.
+
+	* src/po/gsad_xsl-zh.po: Update with translations by Winland Q. Yang.
+
 2015-07-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22802.
