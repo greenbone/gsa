@@ -8127,6 +8127,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN ALERTS MANAGEMENT -->
 
+<xsl:variable name="include-message-default">
+Task '$n': $e
+
+After the event $e,
+the following condition was met: $c
+
+This email escalation is configured to apply report format '$r'.
+Full details and other report formats are available on the scan engine.
+
+$t
+$i
+
+Note:
+This email was sent to you as a configured security scan escalation.
+Please contact your local system administrator if you think you
+should not have received it.
+</xsl:variable>
+
+<xsl:variable name="attach-message-default">
+Task '$n': $e
+
+After the event $e,
+the following condition was met: $c
+
+This email escalation is configured to attach report format '$r'.
+Full details and other report formats are available on the scan engine.
+
+$t
+
+Note:
+This email was sent to you as a configured security scan escalation.
+Please contact your local system administrator if you think you
+should not have received it.
+</xsl:variable>
+
 <xsl:template name="html-create-alert-form">
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
@@ -8257,6 +8292,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
+                  <td>
+                    <input type="text" name="method_data:subject"
+                           size="30" maxlength="80"
+                           value="[OpenVAS-Manager] Task '$n': $e"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
                     <table>
@@ -8294,6 +8338,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 </xsl:if>
                               </xsl:for-each>
                             </select>
+                            with message:
+                            <br/>
+                            <textarea style="margin-left:15px;"
+                                      name="method_data:message"
+                                      rows="3" cols="50">
+                              <xsl:value-of select="$include-message-default"/>
+                            </textarea>
                           </td>
                         </tr>
                         <tr>
@@ -8319,27 +8370,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 </xsl:choose>
                               </xsl:for-each>
                             </select>
+                            with message:
+                            <br/>
+                            <textarea style="margin-left:15px;"
+                                      name="method_data:message_attach"
+                                      rows="3" cols="50">
+                              <xsl:value-of select="$attach-message-default"/>
+                            </textarea>
                           </td>
                         </tr>
                       </xsl:if>
                     </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-                  <td>
-                    <input type="text" name="method_data:subject"
-                           size="30" maxlength="80"
-                           value=""/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-                  <td>
-                    <textarea name="method_data:message"
-                              rows="3" cols="50"/>
                   </td>
                 </tr>
               </table>
@@ -8790,6 +8831,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
+                  <td>
+                    <input type="text" name="method_data:subject"
+                           size="30" maxlength="80"
+                           value="{$method/data[name='subject']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
                     <table>
@@ -8833,6 +8883,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 </xsl:if>
                               </xsl:for-each>
                             </select>
+                            with message:
+                            <br/>
+                            <textarea style="margin-left:15px;"
+                                      name="method_data:message"
+                                      rows="3" cols="50">
+                              <xsl:choose>
+                                <xsl:when test="$method/data[name='notice']/text() = 0">
+                                  <xsl:value-of select="$method/data[name='message']/text()"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="$include-message-default"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </textarea>
                           </td>
                         </tr>
                         <tr>
@@ -8860,29 +8924,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 </xsl:choose>
                               </xsl:for-each>
                             </select>
+                            with message:
+                            <br/>
+                            <textarea style="margin-left:15px;"
+                                      name="method_data:message_attach"
+                                      rows="3" cols="50">
+                              <xsl:choose>
+                                <xsl:when test="$method/data[name='notice']/text() = 2">
+                                  <xsl:value-of select="$method/data[name='message']/text()"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="$attach-message-default"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </textarea>
                           </td>
                         </tr>
                       </xsl:if>
                     </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-                  <td>
-                    <input type="text" name="method_data:subject"
-                           size="30" maxlength="80"
-                           value="{$method/data[name='subject']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-                  <td>
-                    <textarea name="method_data:message"
-                              rows="3" cols="50">
-                      <xsl:value-of select="$method/data[name='message']/text()"/>
-                    </textarea>
                   </td>
                 </tr>
               </table>

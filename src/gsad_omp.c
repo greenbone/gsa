@@ -6338,7 +6338,6 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                 || (strcmp (method, "Email") == 0
                     && (strcmp (name, "to_address") == 0
                         || strcmp (name, "from_address") == 0
-                        || strcmp (name, "message") == 0
                         || strcmp (name, "subject") == 0
                         || strcmp (name, "notice") == 0
                         || (strcmp (name, "notice_report_format") == 0
@@ -6350,6 +6349,18 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
               xml_string_append (xml,
                                  "<data><name>%s</name>%s</data>",
                                  name,
+                                 param->value ? param->value : "");
+            else if (strcmp (method, "Email") == 0
+                     && notice == 0
+                     && strcmp (name, "message") == 0)
+              xml_string_append (xml,
+                                 "<data><name>message</name>%s</data>",
+                                 param->value ? param->value : "");
+            else if (strcmp (method, "Email") == 0
+                     && notice == 2
+                     && strcmp (name, "message_attach") == 0)
+              xml_string_append (xml,
+                                 "<data><name>message</name>%s</data>",
                                  param->value ? param->value : "");
         }
 
