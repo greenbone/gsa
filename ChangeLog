@@ -1,3 +1,15 @@
+2015-07-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22859.
+
+	Add subject and message input for email alerts.
+
+	* src/gsad_omp.c (append_alert_method_data): Add "message" and
+	"subject".
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form, alert [details]): Add subject and message fields.
+
 2015-07-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r22889.

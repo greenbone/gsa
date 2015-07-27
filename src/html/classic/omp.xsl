@@ -8259,6 +8259,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </table>
                   </td>
                 </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+                  <td>
+                    <input type="text" name="method_data:subject"
+                           size="30" maxlength="80"
+                           value=""/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+                  <td>
+                    <textarea name="method_data:message"
+                              rows="3" cols="50"/>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -8781,6 +8798,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         </tr>
                       </xsl:if>
                     </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+                  <td>
+                    <input type="text" name="method_data:subject"
+                           size="30" maxlength="80"
+                           value="{$method/data[name='subject']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+                  <td>
+                    <textarea name="method_data:message"
+                              rows="3" cols="50">
+                      <xsl:value-of select="$method/data[name='message']/text()"/>
+                    </textarea>
                   </td>
                 </tr>
               </table>
@@ -9399,6 +9435,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <xsl:otherwise>
                           <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
                         </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='subject']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='subject']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
+                          <xsl:choose>
+                            <xsl:when test="contains (method/data[name='message']/text(), '&#10;')">
+                              <xsl:value-of select="substring-before (method/data[name='message']/text(), '&#10;')"/>
+                              <xsl:text>...</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <xsl:value-of select="method/data[name='message']/text()"/>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </xsl:when>
                       </xsl:choose>
                     </td>
                   </tr>
