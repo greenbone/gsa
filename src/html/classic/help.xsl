@@ -1230,10 +1230,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li> $$: $ </li>
         <li> $c: condition description </li>
         <li> $e: event description </li>
+        <li> $F: name of filter </li>
+        <li> $f: filter term </li>
+        <li> $H: host summary </li>
         <li> $n: task name </li>
         <li> $r: report format name </li>
-        <li> $F: name of filter </li>
-        <li> $t: filter term </li>
         <li> $z: timezone </li>
       </ul>
 
