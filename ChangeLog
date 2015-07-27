@@ -1,9 +1,13 @@
 2015-07-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (new_alert.html): Add $t and $i.
+
+2015-07-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Adjust the email alert inputs to provide defaults that are the same as
 	in the past.
 
-	* src/html/classic/help.xsl (include-message-default)
+	* src/html/classic/omp.xsl (include-message-default)
 	(attach-message-default): New variables.
 	(html-create-alert-form, html-edit-alert-form): Move subject up.  Add
 	a message field for the email include and the email attach.  Remove the
