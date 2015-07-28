@@ -1,3 +1,25 @@
+2015-07-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/style/logo_l.png,
+	src/html/classic/img/style/logo_m.png,
+	src/html/classic/img/style/logo_r.png: Removed.
+
+	* src/html/classic/img/style/background.png,
+	src/html/classic/img/style/gsa-logo.png: New.
+
+	* CMakeLists.txt: Adjust the image installation
+	accordingly.
+
+	* src/html/classic/gsa-style.css: Add a background image
+	for the top header. Replace the logo_l, logo_m, logo_r
+	triple by a single logo class which is basically logo_l.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Use new class
+	logo instead of logo_[lmr]. Reduce height of logo and drop
+	the extra line to reduce total height and match the
+	background bar.
+
+
 2015-07-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (new_alert.html): Add $t and $i.

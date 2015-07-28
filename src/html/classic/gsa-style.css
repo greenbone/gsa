@@ -27,7 +27,7 @@
  */
 
 body {
- background-color: #FFFFFF;
+ background: #FFFFFF url(img/style/background.png) repeat-x left 0px;
  margin: 0px;
  font: small Verdana, sans-serif;
  font-size: 12px;
@@ -663,31 +663,20 @@ a.top_button:hover div.first_button_overlay {
  display: block;
 }
 
-/* Logo Bar */
+/* Logo */
 
-.logo_l {
+.logo {
  float:left;
  margin:0px;
 }
 
-.logo_l img {
+.logo img {
  margin-top: 0px;
 }
 
-.logo_l a {
+.logo a {
 }
 
-.logo_r {
- float:right;
- height: 51px;
- width: 9px;
- background: url('img/style/logo_r.png')
-}
-
-.logo_m {
- height: 51px;
- background: url('img/style/logo_m.png')
-}
 
 /* Logout panel */
 .logout_panel {

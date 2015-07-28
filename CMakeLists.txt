@@ -408,12 +408,11 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/p_bar_gray.png
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
-install (FILES src/html/classic/img/style/logo_l.png
-               src/html/classic/img/style/logo_r.png
+install (FILES src/html/classic/img/style/gsa-logo.png
+               src/html/classic/img/style/background.png
                src/html/classic/img/style/window_dec_a.png
                src/html/classic/img/style/window_dec_b.png
                src/html/classic/img/style/window_dec_c.png
-               src/html/classic/img/style/logo_m.png
                src/html/classic/img/style/window_dec_a_error.png
                src/html/classic/img/style/window_dec_b_error.png
                src/html/classic/img/style/window_dec_c_error.png
