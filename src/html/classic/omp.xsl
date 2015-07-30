@@ -32008,9 +32008,9 @@ should not have received it.
                   <label>
                     <input type="radio" name="enable_ldap_connect" value="0"/>
                     <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-                    <input type="password" name="password" value="" size="30"
-                           maxlength="40"/>
                   </label>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
                   <br/>
                   <label>
                     <input type="radio" name="enable_ldap_connect" value="1" checked="1"/>
