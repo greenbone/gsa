@@ -1,3 +1,11 @@
+2015-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r22934.
+
+	* src/html/classic/omp.xsl (html-create-user-form): Move the Password
+	INPUT outside the LABEL, as browsers like Iceweasel 31.7 have focus
+	problems when it is inside the LABEL.
+
 2015-07-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r22906.
