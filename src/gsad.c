@@ -3298,8 +3298,15 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
                                       "Host");
   if (host == NULL)
     return MHD_NO;
-  /* host.name:port */
-  if (sscanf (host, "%" G_STRINGIFY(MAX_HOST_LEN) "[^:]:%*i", name) == 1)
+  /* [IPv6]:port */
+  if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9:]]:%*i", name) == 1)
+    {
+      char *name6 = g_strdup_printf ("[%s]", name);
+      location = g_strdup_printf (redirect_location, name6);
+      g_free (name6);
+    }
+  /* IPv4:port */
+  else if (sscanf (host, "%" G_STRINGIFY(MAX_HOST_LEN) "[^:]:%*i", name) == 1)
     location = g_strdup_printf (redirect_location, name);
   else
     location = g_strdup_printf (redirect_location, host);
