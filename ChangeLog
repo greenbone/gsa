@@ -1,3 +1,7 @@
+2015-08-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (redirect_handler): Support IPv6 redirection case.
+
 2015-07-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-user-form): Move the Password
