@@ -23129,6 +23129,8 @@ int
 manager_connect (credentials_t *credentials, int *socket,
                  gnutls_session_t *session, gchar **html)
 {
+  *html = NULL;  /* Keep compiler quiet. */
+
   *socket = openvas_server_open (session,
                                  manager_address
                                   ? manager_address
