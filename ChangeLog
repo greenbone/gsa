@@ -1,5 +1,11 @@
 2015-08-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 6.0.5 release.
+
+	* CHANGES: Updated.
+
+2015-08-03  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Backport r22837 by Matthew Mundell.
 
 	* src/gsad_omp.c (manager_connect): Init html to keep compiler quiet.

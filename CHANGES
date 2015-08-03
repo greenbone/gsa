@@ -1,3 +1,32 @@
+gsa 6.0.5 (2015-08-03)
+
+This is the fifth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release adds support for configurable subjects and messages in email
+alerts. It also addresses a number of issues discovered after the release of
+GSA 6.0.4 and incorporates several improvements from the development branch of
+OpenVAS. Please see below for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner, Michael Wiegand and Winland
+Q. Yang.
+
+Main changes compared to 6.0.4:
+* Support for configurable subjects and messages in email alerts has been added.
+* An issue which caused bulk actions to fail under certain circumstances has
+  been fixed.
+* Session handling when changing authentication methods has been improved.
+* An issue which caused gsa to fail to build under certain circumstances due to
+  an incorrect include has been addressed.
+* Chinese translation has been updated.
+* The language code for the Chinese translation is now "zh_CN".
+* The "lang" attribute is now added to the HTML root element.
+* An issue which caused the password field to lose focus in some browsers when
+  creating a new user has been fixed.
+* Documentation has been updated.
+
+
 gsa 6.0.4 (2015-07-09)
 
 This is the fourth maintenance release of the Greenbone Security Assistant (GSA)
