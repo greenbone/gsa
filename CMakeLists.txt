@@ -295,7 +295,7 @@ install (FILES src/html/classic/js/d3.tip.min.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
 install (FILES src/html/classic/login/login.html
-               src/html/classic/gsa-style.css
+               src/html/classic/gsa-login.css
                src/html/classic/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/login)
 
