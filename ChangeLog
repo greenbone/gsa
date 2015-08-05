@@ -1,5 +1,12 @@
 2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r22969.
+
+	* CMakeLists.txt: Install gsa-login.css instead of gsa-style.css to
+	${GSA_DATA_DIR}/classic/login.
+
+2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r22966.
 
 	Use a separate smaller stylesheet for the login page of the classic
