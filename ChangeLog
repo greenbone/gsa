@@ -1,5 +1,21 @@
 2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Use a separate smaller stylesheet for the login page of the classic
+	face.
+
+	* CMakeLists.txt: Install src/html/classic/gsa-login.css.
+
+	* src/gsad.c (request_handler): Allow /gsa-login.css without token.
+
+	* src/html/classic/gsa-login.css: New stylesheet.
+
+	* src/html/classic/gsad.xsl (html-head): Use gsa-login.css stylesheet
+	on login pages.
+
+	* src/html/classic/login/login.html: Use gsa-login.css stylesheet.
+
+2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl: Add exclude-result-prefixes attribute to
 	root xsl:stylesheet element so namespaces are not added to the XHTML
 	output.
