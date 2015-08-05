@@ -3696,6 +3696,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
 
       if (!strcmp (url, "/gsa-style.css")
+          || !strcmp (url, "/gsa-login.css")
           || !strcmp (url, "/favicon.ico")
           || !strcmp (url, "/favicon.gif"))
         {

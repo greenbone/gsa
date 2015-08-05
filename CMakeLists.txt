@@ -272,6 +272,7 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 install (FILES src/html/classic/favicon.gif
                src/html/classic/gsad.xsl
                src/html/classic/gsa-style.css
+               src/html/classic/gsa-login.css
                src/html/classic/graphics.xsl
                src/html/classic/help.xsl
                src/html/classic/omp.xsl
