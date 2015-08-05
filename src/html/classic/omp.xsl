@@ -8096,6 +8096,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
       <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
+      <xsl:with-param name="data_columns">
+        <data_columns>
+          <xsl:for-each select="/envelope/params/_param[starts-with (name, 'data_columns:')]">
+            <column><xsl:value-of select="value"/></column>
+          </xsl:for-each>
+        </data_columns>
+      </xsl:with-param>
       <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>

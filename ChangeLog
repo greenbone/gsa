@@ -1,3 +1,18 @@
+2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_aggregate): Handle data_columns
+	parameters.
+
+	* src/html/classic/js/gsa_graphics_base.js (format_data_default):
+	Do not try to format null or undefined data.
+	(csv_from_records): Output null or or undefined data as empty string.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Insert records
+	only if values are defined or one of the y fields is count or c_count.
+	(mouse_moved): Handle missing records correctly.
+	(generate): Get y fields at start from original data. Add markers at
+	data points if the column is not count or c_count.
+
 2015-08-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (redirect_handler): Support IPv6 redirection case.

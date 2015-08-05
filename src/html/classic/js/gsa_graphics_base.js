@@ -1011,6 +1011,9 @@ function format_data (value, col_info_item)
  */
 function format_data_default (value, col_info_item)
 {
+  if (value === null || value === undefined)
+    return value;
+
   if (col_info_item)
     {
       switch (col_info_item.data_type)
@@ -1669,11 +1672,15 @@ csv_from_records = function (records, column_info, columns, headers, title)
       for (var col_i in columns)
         {
           var col = columns [col_i];
-          csv_data += "\""
-                      + format_data (records [row][col],
-                                      column_info.columns [col])
-                            .replace ("\"", "\"\"")
-                      + "\"";
+          if (records [row][col] != null)
+            csv_data += "\""
+                        + format_data (records [row][col],
+                                        column_info.columns [col])
+                              .replace ("\"", "\"\"")
+                        + "\"";
+          else
+            csv_data += "\"\"";
+
           if (col_i < columns.length - 1)
             csv_data += ",";
         }

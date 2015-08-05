@@ -222,6 +222,8 @@ function LineChartGenerator ()
         var t = times[t_index];
         var values = {};
         new_record[t_field] = t;
+        var has_values = false;
+
         while (data_index < old_data.records.length
                && (t_index >= times.length - 1
                    || isNaN (old_data.records [data_index][t_field])
@@ -268,6 +270,7 @@ function LineChartGenerator ()
                   {
                     prev_values [field] = values [field];
                     new_record [field] = values [field];
+                    has_values = true;
                   }
                 else if (fillers [field] == "!previous")
                   {
@@ -275,24 +278,29 @@ function LineChartGenerator ()
                   }
                 else if (fillers [field] != null)
                   {
-                    new_record [field] = fillers [field]
+                    new_record [field] = fillers [field];
                   }
                 else if (old_data.column_info.columns[field].stat == "c_count")
                   {
                     new_record [field] = prev_values [field] ? prev_values [field] : 0;
                   }
-                else if (old_data.column_info.columns[field].stat == "count"
-                         || old_data.column_info.columns[field].stat == "sum"
-                         || old_data.column_info.columns[field].stat == "min"
-                         || old_data.column_info.columns[field].stat == "max"
-                         || old_data.column_info.columns[field].stat == "mean")
+                else if (old_data.column_info.columns[field].stat == "count")
                   {
                     new_record [field] = 0;
                   }
+                else
+                  {
+                    new_record [field] = null;
+                  }
               }
           }
-        new_data.records.push (new_record);
+        // FIXME: make filling an explicit option
+        if (has_values
+            || y_field == "count" || y_field == "c_count"
+            || y2_field == "count" || y2_field == "c_count")
+          new_data.records.push (new_record);
       }
+
     return (new_data);
   }
 
@@ -357,15 +365,29 @@ function LineChartGenerator ()
 
           for (var line in info_text_lines)
             {
-              var d = data.records [line_index][info_text_lines [line].field];
               var bbox;
               var line_width;
+              var d = data.records [line_index];
+              if (d != null)
+                {
+                  d = d [info_text_lines [line].field];
+                  d = format_data (d, data.column_info.columns [info_text_lines [line].field])
 
-              d = format_data (d, data.column_info.columns [info_text_lines [line].field])
-
-              info_text_lines [line]
-                .elem
-                  .text (d)
+                  info_text_lines [line]
+                    .elem
+                      .text (d)
+                }
+              else
+                {
+                  if (line == 0)
+                    info_text_lines [line]
+                      .elem
+                        .text (format_data (rounded_x, {data_type:"js_date"}))
+                  else
+                    info_text_lines [line]
+                      .elem
+                        .text ("N/A");
+                }
 
               bbox = info_text_lines [line].elem.node ()
                                                   .getBoundingClientRect ();
@@ -484,6 +506,20 @@ function LineChartGenerator ()
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
+      if (original_data.column_info.data_columns.length)
+        {
+          // TODO: make more flexible
+          y_field = original_data.column_info.data_columns[0] + "_max";
+          y2_field = original_data.column_info.data_columns.length >= 2
+                      ? original_data.column_info.data_columns[1] + "_max"
+                      : "count"
+        }
+      else
+        {
+          y_field = "count";
+          y2_field = "c_count";
+        }
+
       // Extract records
       switch (data_src.command ())
         {
@@ -497,20 +533,6 @@ function LineChartGenerator ()
             return;
         }
       display.header ().text (title (data));
-
-      if (column_info.data_columns.length)
-        {
-          // TODO: make more flexible
-          y_field = column_info.data_columns[0] + "_max";
-          y2_field = column_info.data_columns.length >= 2
-                      ? column_info.data_columns[1] + "_max"
-                      : "count"
-        }
-      else
-        {
-          y_field = "count";
-          y2_field = "c_count";
-        }
 
       var defined = function (d) { return d != undefined; }
       x_data = records.map (function (d) { return d [x_field]; });
@@ -757,6 +779,31 @@ function LineChartGenerator ()
       svg.select ("#line_y2")
         .datum(records)
         .attr ("d", line_2);
+
+      svg.selectAll (".marker")
+            .data (records)
+              .exit ()
+                .remove ()
+
+      var enter = svg.selectAll(".marker")
+                      .data(records)
+                        .enter()
+      if (y_field != "count" && y_field != "c_count")
+        enter.insert("circle")
+                .attr("class", "marker")
+                .attr("cx", function (d) { return x_scale (d[x_field]); })
+                .attr("cy", function (d) { return y_scale (d[y_field]); })
+                .attr("r", 1.5)
+                .style("fill", d3.rgb("green"))
+                .style("stroke", d3.rgb("green"))
+      if (y2_field != "count" && y2_field != "c_count")
+        enter.insert("circle")
+                .attr("class", "marker")
+                .attr("cx", function (d) { return x_scale (d[x_field]); })
+                .attr("cy", function (d) { return y2_scale (d[y2_field]); })
+                .attr("r", 1.5)
+                .style("fill", "none")
+                .style("stroke", d3.rgb("green").brighter())
 
       if (records.length == 1)
         {
