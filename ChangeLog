@@ -1,5 +1,11 @@
 2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl: Add exclude-result-prefixes attribute to
+	root xsl:stylesheet element so namespaces are not added to the XHTML
+	output.
+
+2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_aggregate): Handle data_columns
 	parameters.
 
