@@ -914,6 +914,8 @@ init_validator ()
                          "|(get_agent)"
                          "|(get_agents)"
                          "|(get_aggregate)"
+                         "|(get_asset)"
+                         "|(get_assets)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -1038,6 +1040,9 @@ init_validator ()
   openvas_validator_add (validator, "aggregate_type", "agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
+  openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
+  openvas_validator_add (validator, "asset_type",   "host|os");
+  openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
@@ -2746,6 +2751,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (get_agent)
   ELSE (get_agents)
+  ELSE (get_asset)
+  ELSE (get_assets)
 
   else if (!strcmp (cmd, "download_agent"))
     {

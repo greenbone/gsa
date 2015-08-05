@@ -25116,7 +25116,7 @@ should not have received it.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="host">
+<xsl:template match="host" mode="classic">
   <xsl:variable name="apply-overrides" select="../filters/apply_overrides"/>
   <xsl:if test="../@scap_loaded = 0">
     <xsl:call-template name="error_window">
@@ -25558,7 +25558,7 @@ should not have received it.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="report/report/host"/>
+      <xsl:apply-templates select="report/report/host" mode="classic"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -34706,7 +34706,310 @@ should not have received it.
 
 <xsl:template match="get_settings_response"/>
 
+<!-- NEW ASSET MANAGEMENT -->
+
+<xsl:template match="asset" mode="os-details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('Operating System Details', 'Host')"/>
+      <a href="/help/os_details.html?token={/envelope/token}"
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'OS'),' (',gsa:i18n('Operating System Details', 'OS'),')')}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('OSs', 'OS')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('OSs', 'OS')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+          <td>
+            <xsl:call-template name="cpe-icon">
+              <xsl:with-param name="cpe" select="name"/>
+              <xsl:with-param name="hide_other" select="0"/>
+            </xsl:call-template>
+            <b><xsl:value-of select="name"/></b>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
+          <td><xsl:value-of select="os/title"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Installs', 'Property')"/>:</td>
+          <td><xsl:value-of select="os/installs"/></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="asset" mode="host-details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('Host Details', 'Host')"/>
+      <a href="/help/host_details.html?token={/envelope/token}"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Host', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Hosts', 'Host')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+      </table>
+      <h1><xsl:value-of select="gsa:i18n ('Identifiers', 'Assets')"/></h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Source Type', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        </tr>
+        <xsl:for-each select="identifiers/identifier">
+          <tr class="{gsa:table-row-class(position())}">
+            <td><xsl:value-of select="name"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="name = 'OS'">
+                  <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={os/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="value"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="value"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td><xsl:value-of select="gsa:date (creation_time)"/></td>
+            <td><xsl:value-of select="source/type"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="source/type = 'Report Host Detail'">
+                  <xsl:text>Report </xsl:text>
+                  <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                    <xsl:value-of select="source/@id"/>
+                  </a>
+                  <xsl:text> via NVT </xsl:text>
+                  <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={source/data}&amp;min_qod=&amp;token={/envelope/token}">
+                    <xsl:value-of select="source/data"/>
+                  </a>
+                </xsl:when>
+                <xsl:when test="substring (source/type, 1, 6) = 'Report'">
+                  <xsl:text>Report </xsl:text>
+                  <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                    <xsl:value-of select="source/@id"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="source/@id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td width="100">
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="resource_type" select="'asset'"/>
+    <xsl:with-param name="resource_id"   select="@id"/>
+    <xsl:with-param name="resource_subtype" select="'host'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_asset">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:choose>
+    <xsl:when test="/envelope/params/asset_type = 'HOST' or /envelope/params/asset_type = 'host'">
+      <xsl:apply-templates select="get_assets_response/asset" mode="host-details"/>
+    </xsl:when>
+    <xsl:when test="/envelope/params/asset_type = 'OS' or /envelope/params/asset_type = 'os'">
+      <xsl:apply-templates select="get_assets_response/asset" mode="os-details"/>
+    </xsl:when>
+    <xsl:otherwise>
+      otherwise
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="html-hosts-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'asset'"/>
+    <xsl:with-param name="subtype" select="'host'"/>
+    <xsl:with-param name="cap-type" select="'Host'"/>
+    <xsl:with-param name="resources-summary" select="assets"/>
+    <xsl:with-param name="resources" select="asset/host"/>
+    <xsl:with-param name="count" select="count (asset/host)"/>
+    <xsl:with-param name="filtered-count" select="asset_count/filtered"/>
+    <xsl:with-param name="full-count" select="asset_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-oss-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'asset'"/>
+    <xsl:with-param name="subtype" select="'os'"/>
+    <xsl:with-param name="cap-type" select="'Operating System'"/>
+    <xsl:with-param name="resources-summary" select="assets"/>
+    <xsl:with-param name="resources" select="asset/os"/>
+    <xsl:with-param name="count" select="count (asset/os)"/>
+    <xsl:with-param name="filtered-count" select="asset_count/filtered"/>
+    <xsl:with-param name="full-count" select="asset_count/text ()"/>
+    <xsl:with-param name="columns">
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Title', 'Property')"/></name>
+        <field>modified</field>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Installs', 'OS')"/></name>
+        <field>modified</field>
+        <sort-reverse/>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <field>modified</field>
+        <sort-reverse/>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_assets_response">
+  <xsl:choose>
+    <xsl:when test="/envelope/params/asset_type = 'HOST' or /envelope/params/asset_type = 'host'">
+      <xsl:call-template name="html-hosts-table"/>
+    </xsl:when>
+    <xsl:when test="/envelope/params/asset_type = 'OS' or /envelope/params/asset_type = 'os'">
+      <xsl:call-template name="html-oss-table"/>
+    </xsl:when>
+    <xsl:otherwise>
+      otherwise
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="get_assets">
+  <xsl:apply-templates select="get_assets_response"/>
+</xsl:template>
+
+<xsl:template match="asset/host">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={../@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
+           title="{gsa:view_details_title ('Asset', name)}">
+          <xsl:value-of select="../name"/>
+        </a>
+      </b>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../modification_time != ''">
+          <xsl:value-of select="gsa:date (../modification_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select = 1">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </tr>
+</xsl:template>
+
+<xsl:template match="asset/os">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <b>
+        <xsl:call-template name="cpe-icon">
+          <xsl:with-param name="cpe" select="../name"/>
+          <xsl:with-param name="hide_other" select="0"/>
+        </xsl:call-template>
+        <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={../@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../oss/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
+           title="{gsa:view_details_title ('Asset', name)}">
+          <xsl:value-of select="../name"/>
+        </a>
+      </b>
+    </td>
+    <td>
+      <xsl:value-of select="title"/>
+    </td>
+    <td>
+      <xsl:value-of select="installs"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../modification_time != ''">
+          <xsl:value-of select="gsa:date (../modification_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select = 1">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </tr>
+</xsl:template>
+
 <!-- BEGIN BULK ACTION MANAGEMENT -->
+
 <xsl:template match="process_bulk">
   <xsl:variable name="resources" select="selections/selection/@id"/>
   <div class="gb_window" style="width:500px">

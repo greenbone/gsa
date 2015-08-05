@@ -381,4 +381,7 @@ char * get_info_omp (credentials_t *, params_t *);
 char * get_nvts_omp (credentials_t *, params_t *);
 char * get_info (credentials_t *, params_t *, const char *);
 
+char * get_assets_omp (credentials_t *, params_t *);
+char * get_asset_omp (credentials_t *, params_t *);
+
 #endif /* not _GSAD_OMP_H */

@@ -1,3 +1,24 @@
+2015-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add new pages Hosts, Host Details, OSs and OS Details.
+
+	* src/gsad.c (init_validator): Add asset pages and params.
+	(exec_omp_get): Add asset pages.
+
+	* src/gsad_omp.c (generate_page): Add asset pages.
+	(get_asset, get_asset_omp, get_assets, get_assets_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add Hosts and
+	Operating Systems to Asset Management menu.
+
+	* src/html/classic/omp.xsl (host): Add classic mode.
+	(get_reports_response [asset]): Match host with classic mode.
+	(asset [os-details], asset [host-details], get_asset, html-hosts-table)
+	(html-oss-table, get_assets_response, get_assets, asset/os): New
+	templates.
+
 2015-08-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install gsa-login.css instead of gsa-style.css to

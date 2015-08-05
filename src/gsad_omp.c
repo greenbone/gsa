@@ -112,6 +112,10 @@ static char *get_agent (credentials_t *, params_t *, const char *);
 
 static char *get_agents (credentials_t *, params_t *, const char *);
 
+static char *get_asset (credentials_t *, params_t *, const char *);
+
+static char *get_assets (credentials_t *, params_t *, const char *);
+
 static char *get_task (credentials_t *, params_t *, const char *);
 
 static char *get_tasks (credentials_t *, params_t *, const char *);
@@ -1025,6 +1029,12 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "get_agent") == 0)
     return get_agent (credentials, params, response);
+
+  if (strcmp (next, "get_asset") == 0)
+    return get_asset (credentials, params, response);
+
+  if (strcmp (next, "get_assets") == 0)
+    return get_assets (credentials, params, response);
 
   if (strcmp (next, "get_config") == 0)
     return get_config (credentials, params, response, 0);
@@ -22936,6 +22946,157 @@ bulk_delete_omp (credentials_t * credentials, params_t *params)
   return html;
 }
 
+
+/* Assets. */
+
+/**
+ * @brief Request an asset.
+ *
+ * @param[in]  credentials  Credentials for the manager connection.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return XSL transformed asset response or error message.
+ */
+char *
+get_asset (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  char *ret;
+  GString *extra_attribs, *extra_response;
+  const char *asset_type;
+
+  asset_type = params_value (params, "asset_type");
+  if (asset_type == NULL)
+    {
+      param_t *param;
+      param = params_add (params, "asset_type", "host");
+      param->valid = 1;
+      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+      asset_type = params_value (params, "asset_type");
+    }
+
+  if (strcmp (asset_type, "host")
+      && strcmp (asset_type, "os"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting an asset. "
+                         "Diagnostics: Invalid asset_type parameter value",
+                         "/omp?cmd=get_asset");
+
+  if (params_value (params, "asset_name")
+      && params_value (params, "asset_id"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting an asset. "
+                         "Diagnostics: Both ID and Name set.",
+                         "/omp?cmd=get_asset");
+
+  extra_response = g_string_new (extra_xml ? extra_xml : "");
+
+  extra_attribs = g_string_new ("");
+  g_string_append_printf(extra_attribs, "type=\"%s\"",
+                         params_value (params, "asset_type"));
+  if (params_value (params, "asset_name"))
+    g_string_append_printf (extra_attribs,
+                            " name=\"%s\"",
+                            params_value (params, "asset_name"));
+  else if (params_value (params, "asset_id"))
+    g_string_append_printf (extra_attribs,
+                            " asset_id=\"%s\"",
+                            params_value (params, "asset_id"));
+  if (params_value (params, "details"))
+    g_string_append_printf (extra_attribs,
+                            " details=\"%s\"",
+                            params_value (params, "details"));
+
+  ret = get_one ("asset", credentials, params, extra_response->str,
+                 extra_attribs->str);
+
+  g_string_free (extra_response, TRUE);
+  g_string_free (extra_attribs, TRUE);
+
+  return ret;
+}
+
+/**
+ * @brief Get asset, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_asset_omp (credentials_t * credentials, params_t *params)
+{
+  return get_asset (credentials, params, NULL);
+}
+
+/**
+ * @brief Request assets.
+ *
+ * @param[in]  credentials  Credentials for the manager connection.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return XSL transformed assets response or error message.
+ */
+char *
+get_assets (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  char *ret;
+  GString *extra_attribs, *extra_response;
+  const char *asset_type;
+
+  asset_type = params_value (params, "asset_type");
+  if (asset_type == NULL)
+    {
+      param_t *param;
+      param = params_add (params, "asset_type", "host");
+      param->valid = 1;
+      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+      asset_type = params_value (params, "asset_type");
+    }
+
+  if (strcmp (asset_type, "host")
+      && strcmp (asset_type, "os"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting Assets. "
+                         "Diagnostics: Invalid asset_type parameter value",
+                         "/omp?cmd=get_assets");
+
+  extra_response = g_string_new (extra_xml ? extra_xml : "");
+
+  extra_attribs = g_string_new("");
+  g_string_append_printf (extra_attribs, "type=\"%s\"",
+                          params_value (params, "asset_type"));
+  if (params_value (params, "details"))
+    g_string_append_printf (extra_attribs,
+                            " details=\"%s\"",
+                            params_value (params, "details"));
+  ret = get_many ("asset", credentials, params, extra_response->str,
+                  extra_attribs->str);
+
+  g_string_free (extra_response, TRUE);
+  g_string_free (extra_attribs, TRUE);
+
+  return ret;
+}
+
+/**
+ * @brief Get assets, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_assets_omp (credentials_t * credentials, params_t *params)
+{
+  return get_assets (credentials, params, NULL);
+}
 
 
 /* Manager communication. */
