@@ -901,6 +901,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
+
+      <!-- Table has rows. -->
+
+      <!-- Left icons. -->
       <xsl:choose>
         <xsl:when test = "$list/@start &gt; 1">
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" border="0" title="{gsa:i18n ('First', 'Pagination')}"/></a>
@@ -920,6 +924,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img style="margin-right:3px;" src="/img/previous_inactive.png" border="0" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
         </xsl:otherwise>
       </xsl:choose>
+      <!-- Text. -->
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
       <xsl:value-of select="gsa:i18n (' of ', 'Pagination')"/>
@@ -927,6 +932,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="$full_count">
         (<xsl:value-of select="gsa:i18n ('total', 'Pagination')"/>: <xsl:value-of select="$full_count"/>)
       </xsl:if>
+      <!-- Right icons. -->
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
           <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" border="0" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
@@ -945,6 +951,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
+
+      <!-- Table is empty. -->
+
       <xsl:if test="$full_count">
         (<xsl:value-of select="gsa:i18n ('total', 'Pagination')"/>: <xsl:value-of select="$full_count"/>)
       </xsl:if>

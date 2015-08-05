@@ -1,5 +1,9 @@
 2015-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-pager): Add some comments.
+
+2015-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add new pages Hosts, Host Details, OSs and OS Details.
 
 	* src/gsad.c (init_validator): Add asset pages and params.
