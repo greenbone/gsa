@@ -1,3 +1,14 @@
+2015-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (GSAD_X_FRAME_OPTIONS, GSAD_CONTENT_SECURITY_POLICY)
+	(ADD_CONTENT_SECURITY_HEADERS): New #defines for adding HTTP headers
+	"X-Frame-Options" and "Content-Security-Policy".
+	(send_response, send_redirect_to_uri, handler_send_response): Add new
+	content security HTTP headers.
+	(main): Add new command line options --http-frame-opts and --http-csp.
+
+	* doc/gsad.8: Add new command line options.
+
 2015-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter-window-pager): Add some comments.
