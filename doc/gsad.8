@@ -59,6 +59,12 @@ Print progress messages.
 .BR -V ", " --version
 Print version.
 .TP
+.BR --http-frame-opts=\fIFRAME-OPTS\fR
+X-Frame-Options HTTP header. Defaults to "SAMEORIGIN".
+.TP
+.BR --http-csp=\fICSP\fR
+Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; frame-ancestors 'self'"
+.TP
 .BR -? ", " --help
 Show help.
 .SH EXAMPLES

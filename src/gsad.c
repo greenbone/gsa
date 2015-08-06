@@ -143,6 +143,28 @@
 #define DEFAULT_GSAD_FACE "classic"
 
 /**
+ * @brief Default value for HTTP header "X-Frame-Options"
+ */
+#define DEFAULT_GSAD_X_FRAME_OPTIONS "SAMEORIGIN"
+
+/**
+ * @brief Default value for HTTP header "Content-Security-Policy"
+ */
+#define DEFAULT_GSAD_CONTENT_SECURITY_POLICY\
+ "default-src 'self' 'unsafe-inline'; frame-ancestors 'self'"
+
+/**
+ * @brief Add content security headers to a MHD response.
+ */
+#define ADD_CONTENT_SECURITY_HEADERS(response)                                \
+{                                                                             \
+  MHD_add_response_header (response, "X-Frame-Options",                       \
+                           http_x_frame_options);                             \
+  MHD_add_response_header (response, "Content-Security-Policy",               \
+                           http_content_security_policy);                     \
+}
+
+/**
  * @brief Flag for signal handler.
  */
 volatile int termination_signal = 0;
@@ -230,6 +252,16 @@ gchar *guest_password = NULL;
  * @brief User session data.
  */
 GPtrArray *users = NULL;
+
+/**
+ * @brief Current value for HTTP header "X-Frame-Options"
+ */
+gchar *http_x_frame_options;
+
+/**
+ * @brief Current value for HTTP header "Content-Security-Policy"
+ */
+gchar *http_content_security_policy;
 
 /**
  * @brief User information structure, for sessions.
@@ -3146,6 +3178,7 @@ send_response (struct MHD_Connection *connection, const char *content,
             }
         }
     }
+  ADD_CONTENT_SECURITY_HEADERS (response);
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
@@ -3200,6 +3233,7 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
 
+  ADD_CONTENT_SECURITY_HEADERS (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
   MHD_destroy_response (response);
   return ret;
@@ -3518,6 +3552,7 @@ handler_send_response (struct MHD_Connection *connection,
                                content_disposition);
       g_free (content_disposition);
     }
+  ADD_CONTENT_SECURITY_HEADERS (response);
   MHD_queue_response (connection, http_response_code, response);
   MHD_destroy_response (response);
   return MHD_YES;
@@ -4677,6 +4712,8 @@ main (int argc, char **argv)
   static gchar *face_name = NULL;
   static gchar *guest_user = NULL;
   static gchar *guest_pass = NULL;
+  static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
+  static gchar *http_csp = DEFAULT_GSAD_CONTENT_SECURITY_POLICY;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -4750,6 +4787,14 @@ main (int argc, char **argv)
     {"guest-password", 0,
      0, G_OPTION_ARG_STRING, &guest_pass,
      "Password for guest user.  Defaults to guest username.", "<password>"},
+    {"http-frame-opts", 0,
+     0, G_OPTION_ARG_STRING, &http_frame_opts,
+     "X-Frame-Options HTTP header.  Defaults to \""
+     DEFAULT_GSAD_X_FRAME_OPTIONS "\".", "<frame-opts>"},
+    {"http-csp", 0,
+     0, G_OPTION_ARG_STRING, &http_csp,
+     "Content-Security-Policy HTTP header.  Defaults to \""
+     DEFAULT_GSAD_CONTENT_SECURITY_POLICY"\".", "<csp>"},
     {NULL}
   };
 
@@ -4762,6 +4807,9 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
   g_option_context_free (option_context);
+
+  http_x_frame_options = http_frame_opts;
+  http_content_security_policy = http_csp;
 
   if (register_signal_handlers ())
     {
