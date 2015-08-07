@@ -1,3 +1,8 @@
+2015-08-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (ADD_CONTENT_SECURITY_HEADERS): Do not add headers that
+	have been set to an empty string.
+
 2015-08-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (GSAD_X_FRAME_OPTIONS, GSAD_CONTENT_SECURITY_POLICY)

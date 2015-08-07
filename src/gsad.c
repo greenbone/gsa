@@ -158,10 +158,12 @@
  */
 #define ADD_CONTENT_SECURITY_HEADERS(response)                                \
 {                                                                             \
-  MHD_add_response_header (response, "X-Frame-Options",                       \
-                           http_x_frame_options);                             \
-  MHD_add_response_header (response, "Content-Security-Policy",               \
-                           http_content_security_policy);                     \
+  if (strcmp (http_x_frame_options, ""))                                      \
+    MHD_add_response_header (response, "X-Frame-Options",                     \
+                             http_x_frame_options);                           \
+  if (strcmp (http_content_security_policy, ""))                              \
+    MHD_add_response_header (response, "Content-Security-Policy",             \
+                             http_content_security_policy);                   \
 }
 
 /**
