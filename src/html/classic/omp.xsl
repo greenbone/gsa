@@ -16368,14 +16368,14 @@ should not have received it.
 
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n('ID', 'Property')"/></td>
+              <td><xsl:value-of select="gsa:i18n('Name', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n('Description', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n('Type', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n('Default', 'Property')"/></td>
             </tr>
             <xsl:for-each select="info/params/param">
               <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="id"/></td>
+                <td><xsl:value-of select="name"/></td>
                 <td><xsl:value-of select="description"/></td>
                 <td><xsl:value-of select="substring-after(type, 'osp_')"/></td>
                 <td>
