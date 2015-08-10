@@ -1513,11 +1513,12 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *filter_type, *html, *request, *built_filter;
-  const char *given_filt_id, *filt_id, *filter, *filter_extra;
+  const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value;
 
+  build_filter = params_value(params, "build_filter");
   given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
@@ -1583,11 +1584,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       || (strcmp (filt_id, "") == 0)
       || (strcmp (filt_id, "--") == 0))
     {
-      if (params_value (params, "build_filter")
+      if ((build_filter && (strcmp (build_filter, "1") == 0))
           || ((filter == NULL || strcmp (filter, "") == 0)
               && (filter_extra == NULL || strcmp (filter_extra, "") == 0)))
         {
-          if (params_value (params, "build_filter"))
+          if (build_filter && (strcmp (build_filter, "1") == 0))
             {
               gchar *task;
               const char *search_phrase, *task_id;

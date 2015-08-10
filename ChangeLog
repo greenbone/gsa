@@ -1,3 +1,8 @@
+2015-08-10  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Be more strict when validating the
+	  boolean parameter 'build_filter'.
+
 2015-08-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add - to hosts_opt, for ranges in Host
