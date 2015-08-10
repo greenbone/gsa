@@ -1,5 +1,10 @@
 2015-08-10  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/gsad.c (request_handler): Reduce the scope of the variable
+	  'help_language'.
+
+2015-08-10  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Be more strict when validating the
 	  boolean parameter 'build_filter'.
 

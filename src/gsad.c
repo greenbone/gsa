@@ -4082,7 +4082,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
           else
             {
               gchar **preferred_languages;
-              gchar *help_language;
               gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
@@ -4125,6 +4124,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               index = 0;
               while (preferred_languages [index] && xsl_filename == NULL)
                 {
+                  gchar *help_language;
                   help_language = g_strdup (preferred_languages [index]);
                   xsl_filename = g_strdup_printf ("help_%s.xsl",
                                                   help_language);
