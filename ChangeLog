@@ -1,3 +1,17 @@
+2015-08-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_base.h (credentials_t): Add client_address element.
+
+	* src/gsad.c (get_client_address): New function.
+	(request_handler): Add client address to envelope, adjust
+	functions calls.
+	(credentials_new, credentials_free, exec_omp_post): Adjust for
+	client_address.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add client address to envelope.
+
+	* src/html/classic/gsad.xsl (client_address): New template.
+
 2015-08-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add new parameters to charts for customizing the fields shown, the

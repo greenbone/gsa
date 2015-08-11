@@ -77,11 +77,12 @@ typedef struct
   char *language;     ///< Accept-Language browser header.
   char *severity;     ///< Severity class.
   char *pw_warning;   ///< Password policy warning message
-  int charts;         ///< Whether to show charts for this user.
+  char *client_address; ///< Client's address.
   GTree *chart_prefs; ///< Chart preferences.
   char *autorefresh;  ///< Auto-refresh interval.
   GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
+  int charts;         ///< Whether to show charts for this user.
 } credentials_t;
 
 int gsad_base_init ();

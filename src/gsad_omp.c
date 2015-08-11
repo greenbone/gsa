@@ -301,6 +301,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
                                  "<charts>%d</charts>"
+                                 "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
@@ -317,6 +318,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->severity,
                                  credentials->language,
                                  credentials->charts,
+                                 credentials->client_address,
                                  (double) ((tv.tv_sec
                                             - credentials->cmd_start.tv_sec)
                                            * 1000000L
