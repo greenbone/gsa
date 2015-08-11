@@ -25619,11 +25619,6 @@ should not have received it.
   <xsl:apply-templates select="get_reports_response"/>
 </xsl:template>
 
-<xsl:template match="get_asset">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_reports_response" mode="asset"/>
-</xsl:template>
-
 <xsl:template match="get_prognostic_report">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_response"/>
@@ -34897,7 +34892,7 @@ should not have received it.
       <xsl:apply-templates select="get_assets_response/asset" mode="os-details"/>
     </xsl:when>
     <xsl:otherwise>
-      otherwise
+      <xsl:apply-templates select="get_reports_response" mode="asset"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

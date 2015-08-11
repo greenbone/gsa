@@ -1,3 +1,8 @@
+2015-08-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_asset): Combine two versions of same
+	template.
+
 2015-08-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_base.h (credentials_t): Add client_address element.
