@@ -54,6 +54,8 @@ function DonutChartGenerator ()
   var x_field = "value";
   var y_field = "count";
 
+  var show_stat_type = true;
+
   var csv_data;
   var csv_blob;
   var csv_url;
@@ -142,6 +144,16 @@ function DonutChartGenerator ()
       var display = chart.display ();
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
+
+      // evaluate options set by gen_params
+      if (gen_params.x_field)
+        x_field = gen_params.x_field;
+
+      if (gen_params.y_fields && gen_params.y_fields[0])
+        y_field = gen_params.y_fields[0];
+
+      if (gen_params.extra.show_stat_type)
+        show_stat_type = !!JSON.parse (gen_params.extra.show_stat_type)
 
       // Extract records
       switch (data_src.command ())
@@ -413,8 +425,8 @@ function DonutChartGenerator ()
       csv_data = csv_from_records (records,
                                    column_info,
                                    [x_field, y_field],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true)],
+                                   [column_label (column_info.columns [x_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y_field], true, false, show_stat_type)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -431,8 +443,8 @@ function DonutChartGenerator ()
         = html_table_from_records (records,
                                    column_info,
                                    [x_field, y_field],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true)],
+                                   [column_label (column_info.columns [x_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y_field], true, false, show_stat_type)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)

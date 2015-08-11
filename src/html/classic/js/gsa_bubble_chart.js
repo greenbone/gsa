@@ -50,6 +50,8 @@ function BubbleChartGenerator ()
   var y_field = "count";
   var color_field = "mean";
 
+  var show_stat_type = true;
+
   var csv_data;
   var csv_blob;
   var csv_url;
@@ -160,6 +162,19 @@ function BubbleChartGenerator ()
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
+      // evaluate options set by gen_params
+      if (gen_params.x_field)
+        x_field = gen_params.x_field;
+
+      if (gen_params.y_fields && gen_params.y_fields[0])
+        y_field = gen_params.y_fields[0];
+
+      if (gen_params.z_fields && gen_params.z_fields[0])
+        color_field = gen_params.z_fields[0];
+
+      if (gen_params.extra.show_stat_type)
+        show_stat_type = !!JSON.parse (gen_params.extra.show_stat_type)
+
       // Extract records and column info
       switch (data_src.command ())
         {
@@ -167,7 +182,7 @@ function BubbleChartGenerator ()
             data = data_transform (original_data, gen_params);
             records = data.records;
             column_info = data.column_info;
-            color_label = column_label (column_info.columns ["color_value"], false, false, true);
+            color_label = column_label (column_info.columns ["color_value"], false, false, show_stat_type);
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
@@ -236,9 +251,9 @@ function BubbleChartGenerator ()
       csv_data = csv_from_records (records,
                                    column_info,
                                    ["label_value", "size_value", "color_value"],
-                                   [column_label (column_info.columns ["label_value"], true, false, true),
-                                    column_label (column_info.columns ["size_value"], true, false, true),
-                                    column_label (column_info.columns ["color_value"], true, false, true)],
+                                   [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
+                                    column_label (column_info.columns ["size_value"], true, false, show_stat_type),
+                                    column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -255,9 +270,9 @@ function BubbleChartGenerator ()
         = html_table_from_records (records,
                                    column_info,
                                    ["label_value", "size_value", "color_value"],
-                                   [column_label (column_info.columns ["label_value"], true, false, true),
-                                    column_label (column_info.columns ["size_value"], true, false, true),
-                                    column_label (column_info.columns ["color_value"], true, false, true)],
+                                   [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
+                                    column_label (column_info.columns ["size_value"], true, false, show_stat_type),
+                                    column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)
@@ -375,10 +390,10 @@ BubbleChartGenerator.create_bubble = function ()
 
 function simple_bubble_data (old_data, params)
 {
-  var label_field = (params && params.label_field) ? params.label_field : "value"
-  var size_field = (params && params.size_field) ? params.size_field : "count"
-  var color_field = (params && params.color_field)
-                      ? params.color_field
+  var label_field = (params && params.x_field) ? params.x_field : "value"
+  var size_field = (params && params.y_fields && params.y_fields[0]) ? params.y_fields[0] : "count"
+  var color_field = (params &&  params.z_fields && params.z_fields[0])
+                      ? params.z_fields[0]
                       : old_data.column_info.data_columns[0] + "_mean"
 
   var column_info = { group_columns: old_data.column_info.group_columns,

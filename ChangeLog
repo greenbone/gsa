@@ -1,3 +1,44 @@
+2015-08-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add new parameters to charts for customizing the fields shown, the
+	chart title and the field labels.
+
+	* src/gsad.c (init_validator): Add hashtable params chart_gen,
+	chart_init, y_fields, z_fields and add x_field.
+	(params_append_mhd, params_mhd_add): Add new hashtable params.
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart): Add parameters
+	init_params, gen_params, x_field, y_fields, z_fields to customize
+	charts.
+	(js-scan-management-top-visualization): Add parameters to set fields,
+	a custom title and to hide the "max." in the legend.
+
+	* src/html/classic/omp.xsl (get_aggregate): Copy new parameters to the
+	generated chart.
+
+	* src/html/classic/js/gsa_graphics_base.js (Chart): Add parameters to
+	set generator and init parameters.
+	(Chart [request_data]): Pass gen_params to generator.
+	(Chart [detached_url]): Add the new parameters to URL.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Get fields from
+	gen_params and hide statistic type if extra parameter show_stat_type
+	is set to false.
+
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Get fields from
+	gen_params and hide statistic type if extra parameter show_stat_type
+	is set to false.
+	(simple_bubble_data): Use the new x_field, y_fields, z_fields for
+	the label, size and color data.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Get fields from
+	gen_params and hide statistic type if extra parameter show_stat_type
+	is set to false.
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Get fields from
+	gen_params and hide statistic type if extra parameter show_stat_type
+	is set to false.
+
 2015-08-10  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad.c (request_handler): Reduce the scope of the variable

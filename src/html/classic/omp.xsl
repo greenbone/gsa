@@ -8126,6 +8126,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
       <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
+      <xsl:with-param name="init_params">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">
+          <params>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
+              <param name="{substring-after (name, 'chart_init:')}"><xsl:value-of select="value"/></param>
+            </xsl:for-each>
+          </params>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="gen_params">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
+          <params>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
+              <param name="{substring-after (name, 'chart_gen:')}"><xsl:value-of select="value"/></param>
+            </xsl:for-each>
+          </params>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="x_field" select="/envelope/params/x_field"/>
+      <xsl:with-param name="y_fields">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'y_fields:')]">
+          <fields>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'y_fields:')]">
+              <field><xsl:value-of select="value"/></field>
+            </xsl:for-each>
+          </fields>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="z_fields">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'z_fields:')]">
+          <fields>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'z_fields:')]">
+              <field><xsl:value-of select="value"/></field>
+            </xsl:for-each>
+          </fields>
+        </xsl:if>
+      </xsl:with-param>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
       <xsl:with-param name="auto_load" select="0"/>
     </xsl:call-template>

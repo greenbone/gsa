@@ -1085,6 +1085,10 @@ init_validator ()
   openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   openvas_validator_add (validator, "caller",     "^.*$");
+  openvas_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
+  openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
@@ -1258,7 +1262,12 @@ init_validator ()
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   openvas_validator_add (validator, "users",       "^[-_ [:alnum:],]*$");
+  openvas_validator_add (validator, "x_field", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
+  openvas_validator_add (validator, "y_fields:value", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
+  openvas_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
+  openvas_validator_add (validator, "z_fields:value", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
 
   /* Beware, the rule must be defined before the alias. */
@@ -1554,6 +1563,8 @@ params_append_mhd (params_t *params,
                    int chunk_offset)
 {
   if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
+      || (strncmp (name, "chart_gen:", strlen ("chart_gen:")) == 0)
+      || (strncmp (name, "chart_init:", strlen ("chart_init:")) == 0)
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
@@ -1574,7 +1585,9 @@ params_append_mhd (params_t *params,
           == 0)
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
           == 0)
-      || (strncmp (name, "related:", strlen ("related:")) == 0))
+      || (strncmp (name, "related:", strlen ("related:")) == 0)
+      || (strncmp (name, "y_fields:", strlen ("y_fields:")) == 0)
+      || (strncmp (name, "z_fields:", strlen ("z_fields:")) == 0))
     {
       param_t *param;
       const char *colon;
@@ -2370,6 +2383,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value)
 {
   if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
+      || (strncmp (name, "chart_gen:", strlen ("chart_gen:")) == 0)
+      || (strncmp (name, "chart_init:", strlen ("chart_init:")) == 0)
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
@@ -2390,7 +2405,9 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
           == 0)
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
           == 0)
-      || (strncmp (name, "related:", strlen ("related:")) == 0))
+      || (strncmp (name, "related:", strlen ("related:")) == 0)
+      || (strncmp (name, "y_fields:", strlen ("y_fields:")) == 0)
+      || (strncmp (name, "z_fields:", strlen ("z_fields:")) == 0))
     {
       param_t *param;
       const char *colon;

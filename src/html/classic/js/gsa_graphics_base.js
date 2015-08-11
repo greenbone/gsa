@@ -95,10 +95,12 @@ function create_chart_box (parent_id, container_id, width, height,
  */
 function Chart (p_data_src, p_generator, p_display,
                 p_chart_name, p_label, p_icon, add_to_display,
-                p_chart_type, p_chart_template)
+                p_chart_type, p_chart_template, p_gen_params, p_init_params)
 {
   var data_src = p_data_src;
   var generator = p_generator;
+  var gen_params = p_gen_params;
+  var init_params = p_init_params;
   var display = p_display;
   var chart_type = p_chart_type;
   var chart_template = p_chart_template;
@@ -185,8 +187,11 @@ function Chart (p_data_src, p_generator, p_display,
     }
 
   /* Delegates a data request to the data source */
-  my.request_data = function (gen_params)
+  my.request_data = function (p_gen_params)
     {
+      if (p_gen_params)
+        gen_params = p_gen_params;
+
       data_src.request_data (this, gen_params);
     }
 
@@ -205,12 +210,47 @@ function Chart (p_data_src, p_generator, p_display,
   /* Construct URL for detached chart */
   my.detached_url = function ()
     {
+      var extra_params_str = ""
+      if (gen_params.x_field != null)
+        {
+          extra_params_str = extra_params_str + "x_field=" + gen_params.x_field;
+        }
+      if (gen_params.y_fields != null)
+        {
+          for (var field in gen_params.y_fields)
+            {
+              extra_params_str = extra_params_str + "&y_fields:"
+                                  + (1 + Number(field))
+                                  + "=" + gen_params.y_fields[field]
+            }
+        }
+      if (gen_params.z_fields != null)
+        {
+          for (var field in gen_params.z_fields)
+            {
+              extra_params_str = extra_params_str + "&z_fields:"
+                                  + (1 + Number(field))
+                                  + "=" + gen_params.z_fields[field]
+            }
+        }
+      for (var param in init_params)
+        {
+          extra_params_str = extra_params_str + "&chart_init:" + param
+                              + "=\"" + init_params[param] + "\""
+        }
+      for (var param in gen_params.extra)
+        {
+          extra_params_str = extra_params_str + "&chart_gen:" + param
+                              + "=\"" + gen_params.extra[param] + "\""
+        }
+
       return create_uri (data_src.command (),
                          data_src.params (),
                          data_src.prefix (),
                          true)
              + "&chart_type=" + chart_type
              + "&chart_template=" + chart_template
+             + encodeURI (extra_params_str)
     }
 
   return my;

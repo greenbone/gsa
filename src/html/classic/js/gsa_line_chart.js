@@ -83,6 +83,8 @@ function LineChartGenerator ()
   var info_text_g;
   var info_text_lines;
 
+  var show_stat_type = true;
+
   var csv_data;
   var csv_blob;
   var csv_url;
@@ -506,19 +508,29 @@ function LineChartGenerator ()
       var data_src = chart.data_src ();
       var update = (display.last_generator () == my);
 
-      if (original_data.column_info.data_columns.length)
+      // evaluate options set by gen_params
+      if (gen_params.x_field)
+        x_field = gen_params.x_field;
+
+      if (gen_params.y_fields && gen_params.y_fields[0]
+          && gen_params.z_fields && gen_params.z_fields[0])
         {
-          // TODO: make more flexible
-          y_field = original_data.column_info.data_columns[0] + "_max";
-          y2_field = original_data.column_info.data_columns.length >= 2
-                      ? original_data.column_info.data_columns[1] + "_max"
-                      : "count"
+          y_field = gen_params.y_fields[0];
+          y2_field = gen_params.z_fields[0];
+        }
+      else if (gen_params.y_fields && gen_params.y_fields[0])
+        {
+          y_field = gen_params.y_fields[0];
+          y2_field = "count";
         }
       else
         {
           y_field = "count";
           y2_field = "c_count";
         }
+
+      if (gen_params.extra.show_stat_type)
+        show_stat_type = !!JSON.parse (gen_params.extra.show_stat_type)
 
       // Extract records
       switch (data_src.command ())
@@ -730,7 +742,7 @@ function LineChartGenerator ()
                   .style ("font-weight", "bold")
                   .attr ("x", 25)
                   .attr ("y", 15)
-                  .text (column_label (column_info.columns [y_field], true, false, true))
+                  .text (column_label (column_info.columns [y_field], true, false, show_stat_type))
 
       last_part_rect = legend_part.node ().getBoundingClientRect ()
       legend_part = legend_elem.append ("g");
@@ -748,7 +760,7 @@ function LineChartGenerator ()
                   .style ("font-style", "oblique")
                   .attr ("x", 25)
                   .attr ("y", 15)
-                  .text (column_label (column_info.columns [y2_field], true, false, true))
+                  .text (column_label (column_info.columns [y2_field], true, false, show_stat_type))
 
       current_part_rect = legend_part.node ().getBoundingClientRect ()
       if (legend_part_x + last_part_rect.width + current_part_rect.width + 10
@@ -834,9 +846,9 @@ function LineChartGenerator ()
       csv_data = csv_from_records (records,
                                    column_info,
                                    [x_field, y_field, y2_field],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true),
-                                    column_label (column_info.columns [y2_field], true, false, true)],
+                                   [column_label (column_info.columns [x_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y2_field], true, false, show_stat_type)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -853,9 +865,9 @@ function LineChartGenerator ()
         = html_table_from_records (records,
                                    column_info,
                                    [x_field, y_field, y2_field],
-                                   [column_label (column_info.columns [x_field], true, false, true),
-                                    column_label (column_info.columns [y_field], true, false, true),
-                                    column_label (column_info.columns [y2_field], true, false, true)],
+                                   [column_label (column_info.columns [x_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y_field], true, false, show_stat_type),
+                                    column_label (column_info.columns [y2_field], true, false, show_stat_type)],
                                    display.header(). text (),
                                    data_src.param ("filter"));
       if (html_table_url != null)
