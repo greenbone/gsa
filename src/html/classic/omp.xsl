@@ -34797,6 +34797,47 @@ should not have received it.
           <td><xsl:value-of select="os/installs"/></td>
         </tr>
       </table>
+
+      <xsl:choose>
+        <xsl:when test="count(os/hosts/asset) = 0">
+          <h1><xsl:value-of select="gsa:i18n ('Hosts using this Operating System', 'OS')"/>: <xsl:value-of select="gsa:i18n ('None', 'Hosts')"/></h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('Hosts using this Operating System', 'OS')"/></h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+            </tr>
+            <xsl:for-each select="os/hosts/asset">
+              <tr class="{gsa:table-row-class(position())}">
+                <xsl:choose>
+                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+                    <td width="100">
+                      <img src="/img/details_inactive.png"
+                           border="0"
+                           alt="{gsa:i18n ('Details', 'Generic Resource')}"
+                           style="margin-left:3px;"/>
+                    </td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td><xsl:value-of select="name"/></td>
+                    <td width="100">
+                      <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                        <img src="/img/details.png"
+                             border="0"
+                             alt="{gsa:i18n ('Details', 'Generic Resource')}"
+                             style="margin-left:3px;"/>
+                      </a>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
