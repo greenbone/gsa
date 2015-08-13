@@ -1,5 +1,14 @@
 2015-08-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_aggregate): Add text_columns parameter
+	to js-aggregate-data-source template call.
+
+	* src/html/classic/js/gsa_graphics_base.js (detached_url): Add missing
+	ampersand before x_field and remove superfluous quotes around
+	chart_init and chart_gen values.
+
+2015-08-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add text_columns support for charts and add new bubble chart
 	"'High' results per host of last report" for Tasks.
 

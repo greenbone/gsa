@@ -8113,6 +8113,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </data_columns>
       </xsl:with-param>
+      <xsl:with-param name="text_columns">
+        <text_columns>
+          <xsl:for-each select="/envelope/params/_param[starts-with (name, 'text_columns:')]">
+            <column><xsl:value-of select="value"/></column>
+          </xsl:for-each>
+        </text_columns>
+      </xsl:with-param>
       <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>

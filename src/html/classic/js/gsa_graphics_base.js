@@ -213,7 +213,7 @@ function Chart (p_data_src, p_generator, p_display,
       var extra_params_str = ""
       if (gen_params.x_field != null)
         {
-          extra_params_str = extra_params_str + "x_field=" + gen_params.x_field;
+          extra_params_str = extra_params_str + "&x_field=" + gen_params.x_field;
         }
       if (gen_params.y_fields != null)
         {
@@ -236,12 +236,12 @@ function Chart (p_data_src, p_generator, p_display,
       for (var param in init_params)
         {
           extra_params_str = extra_params_str + "&chart_init:" + param
-                              + "=\"" + init_params[param] + "\""
+                              + "=" + init_params[param] + ""
         }
       for (var param in gen_params.extra)
         {
           extra_params_str = extra_params_str + "&chart_gen:" + param
-                              + "=\"" + gen_params.extra[param] + "\""
+                              + "=" + gen_params.extra[param] + ""
         }
 
       return create_uri (data_src.command (),
