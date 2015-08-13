@@ -786,7 +786,7 @@ function extract_simple_records (xml_data, selector)
                     {
                       var record = {};
                       d3.select(this)
-                          .selectAll ("value, count, c_count, stats")
+                          .selectAll ("value, count, c_count, stats, text")
                             .each (function (d, i)
                                     {
                                       if (this.localName == "stats")
@@ -804,6 +804,11 @@ function extract_simple_records (xml_data, selector)
                                                           record [col_name + "_" + this.localName]
                                                             = d3.select (this).text ()
                                                       });
+                                        }
+                                      else if (this.localName == "text")
+                                        {
+                                          record [d3.select (this).attr ("column")]
+                                            = d3.select (this).text ()
                                         }
                                       else
                                         {
@@ -828,6 +833,7 @@ function extract_column_info (xml_data, gen_params)
 {
   var column_info = { group_columns : [],
                       data_columns : [],
+                      text_columns : [],
                       columns : {} };
 
   xml_data.selectAll ("aggregate column_info aggregate_column")
@@ -859,6 +865,12 @@ function extract_column_info (xml_data, gen_params)
             .each (function (d, i)
                     {
                       column_info.data_columns.push (d3.select (this).text ())
+                    })
+
+  xml_data.selectAll ("aggregate text_column")
+            .each (function (d, i)
+                    {
+                      column_info.text_columns.push (d3.select (this).text ())
                     })
 
   return column_info;

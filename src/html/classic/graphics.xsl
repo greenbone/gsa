@@ -89,6 +89,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="group_column"/>
   <xsl:param name="data_column"/>
   <xsl:param name="data_columns" select="''"/>
+  <xsl:param name="text_columns" select="''"/>
   <xsl:param name="filter"/>
   <xsl:param name="filt_id"/>
   <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
@@ -96,6 +97,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="data_columns_array">
     <xsl:if test="$data_columns">
       <xsl:for-each select="exslt:node-set ($data_columns)/data_columns/column">
+        <xsl:if test="position() != 1">, </xsl:if>
+        <xsl:value-of select="concat ('&quot;', gsa:escape-js (text()), '&quot;')"/>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="text_columns_array">
+    <xsl:if test="$text_columns">
+      <xsl:for-each select="exslt:node-set ($text_columns)/text_columns/column">
         <xsl:if test="position() != 1">, </xsl:if>
         <xsl:value-of select="concat ('&quot;', gsa:escape-js (text()), '&quot;')"/>
       </xsl:for-each>
@@ -122,6 +132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          group_column:"<xsl:value-of select="$group_column"/>",
                          data_column:"<xsl:value-of select="$data_column"/>",
                          data_columns: [<xsl:value-of select="$data_columns_array"/>],
+                         text_columns: [<xsl:value-of select="$text_columns_array"/>],
                          filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
                          filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:otherwise>
@@ -540,6 +551,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
 
     <xsl:if test="$type='task'">
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'uuid'"/>
+        <xsl:with-param name="data_columns">
+          <data_columns>
+            <column>severity</column>
+            <column>high_per_host</column>
+          </data_columns>
+        </xsl:with-param>
+        <xsl:with-param name="text_columns">
+          <text_columns>
+            <column>name</column>
+          </text_columns>
+        </xsl:with-param>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
       <xsl:call-template name="js-aggregate-chart">
         <xsl:with-param name="chart_name" select="'left-by-task-status'"/>
         <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
@@ -556,6 +587,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="group_column" select="'status'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-by-high-results'"/>
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="x_field" select="'name'"/>
+        <xsl:with-param name="y_fields">
+          <fields>
+            <field>high_per_host_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="z_fields">
+          <fields>
+            <field>severity_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="init_params">
+          <params>
+            <param name="title_text">Tasks: 'High' results per host of last report</param>
+          </params>
+        </xsl:with-param>
+        <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-by-high-results'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="x_field" select="'name'"/>
+        <xsl:with-param name="y_fields">
+          <fields>
+            <field>high_per_host_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="z_fields">
+          <fields>
+            <field>severity_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="init_params">
+          <params>
+            <param name="title_text">Tasks: 'High' results per host of last report</param>
+          </params>
+        </xsl:with-param>
+        <xsl:with-param name="chart_type" select="'bubbles'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>

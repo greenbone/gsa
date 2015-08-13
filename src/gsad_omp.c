@@ -6042,8 +6042,8 @@ export_agents_omp (credentials_t * credentials, params_t *params,
 char *
 get_aggregate_omp (credentials_t * credentials, params_t *params)
 {
-  params_t *data_columns;
-  params_iterator_t data_columns_iterator;
+  params_t *data_columns, *text_columns;
+  params_iterator_t data_columns_iterator, text_columns_iterator;
   char *param_name;
   param_t *param;
 
@@ -6055,6 +6055,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
 
   data_columns = params_values (params, "data_columns:");
   data_column = params_value (params, "data_column");
+  text_columns = params_values (params, "text_columns:");
   group_column = params_value (params, "group_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
@@ -6089,6 +6090,20 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
             {
               xml_string_append (command,
                                 "<data_column>%s</data_column>",
+                                param->value);
+            }
+        }
+    }
+
+  if (text_columns)
+    {
+      params_iterator_init (&text_columns_iterator, text_columns);
+      while (params_iterator_next (&text_columns_iterator, &param_name, &param))
+        {
+          if (param->valid)
+            {
+              xml_string_append (command,
+                                "<text_column>%s</text_column>",
                                 param->value);
             }
         }

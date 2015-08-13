@@ -1240,6 +1240,8 @@ init_validator ()
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "term",       "^.{0,1000}");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
+  openvas_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
+  openvas_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
   openvas_validator_add (validator, "trend",       "^(0|1)$");
   openvas_validator_add (validator, "trend:value", "^(0|1)$");
@@ -1577,6 +1579,7 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)
       || (strncmp (name, "select:", strlen ("select:")) == 0)
+      || (strncmp (name, "text_columns:", strlen ("text_columns:")) == 0)
       || (strncmp (name, "trend:", strlen ("trend:")) == 0)
       || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
       || (strncmp (name, "nvt:", strlen ("nvt:")) == 0)
@@ -2399,6 +2402,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)
       || (strncmp (name, "select:", strlen ("select:")) == 0)
+      || (strncmp (name, "text_columns:", strlen ("text_columns:")) == 0)
       || (strncmp (name, "trend:", strlen ("trend:")) == 0)
       || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
       || (strncmp (name, "nvt:", strlen ("nvt:")) == 0)
