@@ -34875,6 +34875,16 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Max Severity', 'Property')"/>:</td>
+          <td>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="host/max_severity/value"/>
+              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (host/max_severity/value), 'Severity'), ')')"/>
+              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (host/max_severity/value), 'Severity')"/>
+            </xsl:call-template>
+          </td>
+        </tr>
       </table>
       <h1><xsl:value-of select="gsa:i18n ('Identifiers', 'Assets')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
@@ -34968,8 +34978,12 @@ should not have received it.
     <xsl:with-param name="full-count" select="asset_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Max Severity', 'Property')"/></name>
+        <field>max_severity</field>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
@@ -34993,7 +35007,7 @@ should not have received it.
     <xsl:with-param name="full-count" select="asset_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
-        <name><xsl:value-of select="gsa:i18n('Name', 'Resource')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
       </column>
       <column>
@@ -35043,6 +35057,13 @@ should not have received it.
           <xsl:value-of select="../name"/>
         </a>
       </b>
+    </td>
+    <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="max_severity/value"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (max_severity/value), 'Severity'), ')')"/>
+        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (max_severity/value), 'Severity')"/>
+      </xsl:call-template>
     </td>
     <td>
       <xsl:choose>
