@@ -1,3 +1,8 @@
+2015-08-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Remove "of last report" from title of the Tasks high results chart.
+
 2015-08-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [host-details]): Add Max Severity.

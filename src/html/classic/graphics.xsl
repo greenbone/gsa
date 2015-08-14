@@ -608,7 +608,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
         <xsl:with-param name="init_params">
           <params>
-            <param name="title_text">Tasks: 'High' results per host of last report</param>
+            <param name="title_text">Tasks: 'High' results per host</param>
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
@@ -632,7 +632,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
         <xsl:with-param name="init_params">
           <params>
-            <param name="title_text">Tasks: 'High' results per host of last report</param>
+            <param name="title_text">Tasks: 'High' results per host</param>
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
