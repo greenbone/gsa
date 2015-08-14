@@ -1,9 +1,17 @@
+2015-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add OS icon to asset hosts.
+
+	* src/html/classic/omp.xsl (asset-os-icon): New template.
+	(asset [host-details[): Add OS field.
+	(html-hosts-table, asset/host): Add OS column.
+
 2015-08-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
 	Remove "of last report" from title of the Tasks high results chart.
 
-2015-08-11  Matthew Mundell <matthew.mundell@greenbone.net>
+2015-08-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [host-details]): Add Max Severity.
 	(html-hosts-table): Add Max Severity column.

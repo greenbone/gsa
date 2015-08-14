@@ -27507,6 +27507,80 @@ should not have received it.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="asset-os-icon">
+  <xsl:param name="host" select="host"/>
+  <xsl:param name="img-style"/>
+  <xsl:param name="os-name"/>
+  <xsl:param name="os-cpe" select="1"/>
+  <!-- Check for detected operating system(s) -->
+  <xsl:variable name="best_os_cpe" select="$host/detail[name/text() = 'best_os_cpe']/value"/>
+  <xsl:variable name="best_os_txt" select="$host/detail[name/text() = 'best_os_txt']/value"/>
+  <xsl:choose>
+    <xsl:when test="contains($best_os_txt, '[possible conflict]')">
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+        <xsl:choose>
+          <xsl:when test="$os-cpe">
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$os-name">
+          <xsl:value-of select="$best_os_txt"/>
+        </xsl:if>
+      </a>
+    </xsl:when>
+    <xsl:when test="not($best_os_cpe)">
+      <!-- nothing detected or matched by our CPE database -->
+      <xsl:variable name="img_desc">
+        <xsl:choose>
+          <xsl:when test="$best_os_txt">
+            <xsl:value-of select="$best_os_txt"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa:i18n ('No information on Operating System was gathered during scan.', 'Host')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+      <xsl:if test="$os-name">
+        <xsl:value-of select="$best_os_txt"/>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- One system detected: display the corresponding icon and name from our database -->
+      <xsl:variable name="report_id" select="$host/detail[name/text() = 'best_os_cpe']/source/@id"/>
+      <xsl:variable name="os_id" select="$host/../identifiers/identifier[name/text() = 'OS' and source/@id = $report_id and value = $best_os_cpe]/os/@id"/>
+      <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+      <xsl:variable name="img_desc">
+        <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+        <xsl:if test="$os-cpe">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="$best_os_cpe"/>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+      </xsl:variable>
+      <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={$os_id}&amp;token={/envelope/token}">
+        <xsl:choose>
+          <xsl:when test="$os_icon">
+            <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+            <xsl:if test="$os-name">
+              <xsl:value-of select="$img_desc"/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+            <xsl:if test="$os-name">
+              <xsl:value-of select="$img_desc"/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="os-icon">
   <xsl:param name="host"/>
   <xsl:param name="current_host"/>
@@ -34876,6 +34950,14 @@ should not have received it.
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
+          <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/>:</td>
+          <td>
+            <xsl:call-template name="asset-os-icon">
+              <xsl:with-param name="os-name" select="1"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Max Severity', 'Property')"/>:</td>
           <td>
             <xsl:call-template name="severity-bar">
@@ -34982,6 +35064,10 @@ should not have received it.
         <field>name</field>
       </column>
       <column>
+        <name><xsl:value-of select="gsa:i18n('OS', 'Host')"/></name>
+        <field>os</field>
+      </column>
+      <column>
         <name><xsl:value-of select="gsa:i18n('Max Severity', 'Property')"/></name>
         <field>max_severity</field>
       </column>
@@ -35057,6 +35143,12 @@ should not have received it.
           <xsl:value-of select="../name"/>
         </a>
       </b>
+    </td>
+    <td>
+      <xsl:call-template name="asset-os-icon">
+        <xsl:with-param name="host" select="."/>
+        <xsl:with-param name="os-name" select="0"/>
+      </xsl:call-template>
     </td>
     <td>
       <xsl:call-template name="severity-bar">
