@@ -5429,7 +5429,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </xsl:if>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Add results to Asset Management', 'Task')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Add results to Assets', 'Task')"/></td>
           <td>
             <xsl:variable name="yes" select="/envelope/params/in_assets"/>
             <label>
@@ -18710,7 +18710,7 @@ should not have received it.
       <div class="gb_window">
         <div class="gb_window_part_left"></div>
         <div class="gb_window_part_right"></div>
-        <div class="gb_window_part_center">SecInfo Management</div>
+        <div class="gb_window_part_center">SecInfo</div>
         <div class="gb_window_part_content">
           <xsl:choose>
             <xsl:when test="contains (@status_text, 'SCAP') and @status = '400'">

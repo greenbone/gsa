@@ -3455,7 +3455,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <p>
             This role caters for the optional "Login as guest" link on the
             Login page.  The role has just enough capability to
-            view the security data in the SecInfo Management menu.
+            view the security data in the SecInfo menu.
           </p>
         </li>
         <li>
@@ -3526,7 +3526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <div id="list">
         <ul>
-          <li> Scan Management</li>
+          <li> Scans </li>
           <ul>
             <li> <a href="tasks.html?token={/envelope/token}">Tasks</a></li>
               <ul>
@@ -3549,11 +3549,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="override_details.html?token={/envelope/token}">Override Details</a></li>
               </ul>
           </ul>
-          <li> Asset Management</li>
+          <li> Assets </li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
           </ul>
-          <li> SecInfo Management</li>
+          <li> SecInfo </li>
           <ul>
             <li> <a href="nvts.html?token={/envelope/token}">NVTs</a></li>
               <ul>
@@ -6146,7 +6146,7 @@ Public License instead of this License.
           <td></td>
         </tr>
         <tr class="even">
-          <td>Add results to Asset Management</td>
+          <td>Add results to Assets </td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>

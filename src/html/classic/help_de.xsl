@@ -598,7 +598,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <div id="list">
         <ul>
-          <li> Scan-Management</li>
+          <li> Scans </li>
           <ul>
             <li> <a href="tasks.html?token={/envelope/token}">Aufgaben</a></li>
               <!-- TODO: Translate further -->
@@ -621,11 +621,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="override_details.html?token={/envelope/token}">Override Details</a></li>
               </ul>
           </ul>
-          <li> Asset Management</li>
+          <li> Assets </li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
           </ul>
-          <li> SecInfo Management</li>
+          <li> SecInfo </li>
           <ul>
             <li> <a href="nvts.html?token={/envelope/token}">NVTs</a></li>
               <ul>

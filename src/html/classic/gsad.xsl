@@ -1680,7 +1680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a class="top_button"
              href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Scan Management', 'Main Menu')"/>
+            <xsl:value-of select="gsa:i18n ('Scans', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1730,7 +1730,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may-op ('GET_REPORTS')">
           <a class="top_button"
              href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Asset Management', 'Main Menu')"/>
+            <xsl:value-of select="gsa:i18n ('Assets', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
@@ -1757,7 +1757,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may-op ('GET_INFO')">
           <a class="top_button" id="secinfo_button"
              href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('SecInfo Management', 'Main Menu')"/>
+            <xsl:value-of select="gsa:i18n ('SecInfo', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
