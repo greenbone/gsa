@@ -34874,7 +34874,7 @@ should not have received it.
           <td><xsl:value-of select="os/title"/></td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Installs', 'Property')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n ('Hosts', 'Property')"/>:</td>
           <td><xsl:value-of select="os/installs"/></td>
         </tr>
       </table>
@@ -34958,7 +34958,7 @@ should not have received it.
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Max Severity', 'Property')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/>:</td>
           <td>
             <xsl:call-template name="severity-bar">
               <xsl:with-param name="cvss" select="host/max_severity/value"/>
@@ -35068,11 +35068,11 @@ should not have received it.
         <field>os</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Max Severity', 'Property')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Property')"/></name>
         <field>max_severity</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Updated', 'Date')"/></name>
         <field>modified</field>
         <sort-reverse/>
       </column>
@@ -35102,12 +35102,12 @@ should not have received it.
         <sort-reverse/>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Installs', 'OS')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Hosts', 'OS')"/></name>
         <field>modified</field>
         <sort-reverse/>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Modified', 'Date')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Updated', 'Date')"/></name>
         <field>modified</field>
         <sort-reverse/>
       </column>

@@ -1,3 +1,10 @@
+2015-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [os-details], html-oss-table): Rename
+	Installs column to Hosts.  Rename Modified to Updated.
+	(asset [host-details], html-hosts-table): Rename Max Severity to
+	Severity.  Rename Modified to Updated.
+
 2015-08-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/gsad.xsl, src/html/classic/help.xsl,
