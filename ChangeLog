@@ -1,3 +1,29 @@
+2015-08-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add new "Top 10" horizontal bar chart for tasks and options to sort
+	and limit aggregates in chart data sources.
+
+	* CMakeLists.txt: Install new file src/html/classic/h_bar_chart.xsl.
+
+	* src/gsad_omp.c (get_aggregate_omp): Add params sort_field, sort_stat,
+	sort_order, first_group and max_groups.
+
+	* src/gsad.c (init_validator): Add params sort_stat, first_group and
+	max_groups.
+
+	* src/html/classic/omp.xsl (get_aggregate): Add new params sort_field,
+	sort_stat, sort_order, first_group and max_groups.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Add js/h_bar_chart.xsl
+	script file.
+	(js-aggregate-data-source): Add new optional params sort_field,
+	sort_stat, sort_order, first_group and max_groups.
+	(js-aggregate-chart): Add chart type "horizontal_bar".
+	(js-scan-management-top-visualization): Add "Top 10" horizontal bar
+	chart for Tasks.
+
+	* src/html/classic/h_bar_chart.xsl: New file.
+
 2015-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [os-details], html-oss-table): Rename

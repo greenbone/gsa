@@ -1132,6 +1132,7 @@ init_validator ()
   openvas_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "first",        "^[0-9]+$");
+  openvas_validator_add (validator, "first_group", "^[0-9]+$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
@@ -1167,6 +1168,7 @@ init_validator ()
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
+  openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
   openvas_validator_add (validator, "month",      "^(0[0-9]{1,1})|10|11|12$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
@@ -1249,6 +1251,7 @@ init_validator ()
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "submit_plus",    "^\\+$");
   openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");

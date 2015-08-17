@@ -8120,6 +8120,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </text_columns>
       </xsl:with-param>
+      <xsl:with-param name="sort_field" select="/envelope/params/sort_field"/>
+      <xsl:with-param name="sort_stat" select="/envelope/params/sort_stat"/>
+      <xsl:with-param name="sort_order" select="/envelope/params/sort_order"/>
+      <xsl:with-param name="first_group" select="/envelope/params/first_group"/>
+      <xsl:with-param name="max_groups" select="/envelope/params/max_groups"/>
       <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>

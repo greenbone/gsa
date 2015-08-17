@@ -6048,6 +6048,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   param_t *param;
 
   const char *data_column, *group_column, *type, *filter, *filt_id, *xml_param;
+  const char *sort_field, *sort_stat, *sort_order, *first_group, *max_groups;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -6060,6 +6061,11 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
   filt_id = params_value (params, "filt_id");
+  sort_field = params_value (params, "sort_field");
+  sort_stat = params_value (params, "sort_stat");
+  sort_order = params_value (params, "sort_order");
+  first_group = params_value (params, "first_group");
+  max_groups = params_value (params, "max_groups");
   filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
   xml_param = params_value (params, "xml");
 
@@ -6079,6 +6085,16 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
   if (filt_id && strcmp (filt_id, ""))
     g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
+  if (sort_field && strcmp (sort_field, ""))
+    g_string_append_printf (command, " sort_field=\"%s\"", sort_field);
+  if (sort_stat && strcmp (sort_stat, ""))
+    g_string_append_printf (command, " sort_stat=\"%s\"", sort_stat);
+  if (sort_order && strcmp (sort_order, ""))
+    g_string_append_printf (command, " sort_order=\"%s\"", sort_order);
+  if (first_group && strcmp (first_group, ""))
+    g_string_append_printf (command, " first_group=\"%s\"", first_group);
+  if (max_groups && strcmp (max_groups, ""))
+    g_string_append_printf (command, " max_groups=\"%s\"", max_groups);
   g_string_append (command, ">");
 
   if (data_columns)

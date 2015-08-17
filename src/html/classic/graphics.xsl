@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_bar_chart.js"></script>
   <script src="/js/gsa_bubble_chart.js"></script>
   <script src="/js/gsa_donut_chart.js"></script>
+  <script src="/js/gsa_h_bar_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
     gsa.gsa_token = "<xsl:value-of select="/envelope/params/token"/>";
@@ -90,6 +91,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="data_column"/>
   <xsl:param name="data_columns" select="''"/>
   <xsl:param name="text_columns" select="''"/>
+  <xsl:param name="sort_field" select="''"/>
+  <xsl:param name="sort_order" select="''"/>
+  <xsl:param name="sort_stat" select="''"/>
+  <xsl:param name="first_group" select="''"/>
+  <xsl:param name="max_groups" select="''"/>
   <xsl:param name="filter"/>
   <xsl:param name="filt_id"/>
   <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
@@ -133,6 +139,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          data_column:"<xsl:value-of select="$data_column"/>",
                          data_columns: [<xsl:value-of select="$data_columns_array"/>],
                          text_columns: [<xsl:value-of select="$text_columns_array"/>],
+            <xsl:if test="$sort_field != ''">
+                         sort_field:"<xsl:value-of select="$sort_field"/>",
+            </xsl:if>
+            <xsl:if test="$sort_order != ''">
+                         sort_order:"<xsl:value-of select="$sort_order"/>",
+            </xsl:if>
+            <xsl:if test="$sort_stat != ''">
+                         sort_stat:"<xsl:value-of select="$sort_stat"/>",
+            </xsl:if>
+            <xsl:if test="$first_group != ''">
+                         first_group:"<xsl:value-of select="$first_group"/>",
+            </xsl:if>
+            <xsl:if test="$max_groups != ''">
+                         max_groups:"<xsl:value-of select="$max_groups"/>",
+            </xsl:if>
                          filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
                          filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:otherwise>
@@ -278,6 +299,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$chart_type = 'bubbles'">
       gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:when>
+    <xsl:when test="$chart_type = 'horizontal_bar'">
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = HorizontalBarChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'line'">
@@ -566,6 +592,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <column>name</column>
           </text_columns>
         </xsl:with-param>
+        <xsl:with-param name="sort_field" select="'high_per_host'"/>
+        <xsl:with-param name="sort_order" select="'descending'"/>
+        <xsl:with-param name="sort_stat" select="'max'"/>
         <xsl:with-param name="filter" select="$filter"/>
         <xsl:with-param name="filt_id" select="$filt_id"/>
         <xsl:with-param name="chart_template" select="''"/>
@@ -636,6 +665,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-top-high-results'"/>
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="x_field" select="'name'"/>
+        <xsl:with-param name="y_fields">
+          <fields>
+            <field>high_per_host_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="z_fields">
+          <fields>
+            <field>severity_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="init_params">
+          <params>
+            <param name="title_text">Tasks: 'High' results per host</param>
+          </params>
+        </xsl:with-param>
+        <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-top-high-results'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="x_field" select="'name'"/>
+        <xsl:with-param name="y_fields">
+          <fields>
+            <field>high_per_host_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="z_fields">
+          <fields>
+            <field>severity_max</field>
+          </fields>
+        </xsl:with-param>
+        <xsl:with-param name="init_params">
+          <params>
+            <param name="title_text">Tasks with most 'High' results per host</param>
+          </params>
+        </xsl:with-param>
+        <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>
