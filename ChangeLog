@@ -1,5 +1,10 @@
 2015-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (asset [host-details], html-hosts-table)
+	(asset/host): Rename GET_ASSETS MAX_SEVERITY to SEVERITY.
+
+2015-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (asset [host-details]): Skip the report link
 	if the report has been deleted.
 

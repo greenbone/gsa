@@ -34966,9 +34966,9 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/>:</td>
           <td>
             <xsl:call-template name="severity-bar">
-              <xsl:with-param name="cvss" select="host/max_severity/value"/>
-              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (host/max_severity/value), 'Severity'), ')')"/>
-              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (host/max_severity/value), 'Severity')"/>
+              <xsl:with-param name="cvss" select="host/severity/value"/>
+              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (host/severity/value), 'Severity'), ')')"/>
+              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (host/severity/value), 'Severity')"/>
             </xsl:call-template>
           </td>
         </tr>
@@ -35088,7 +35088,7 @@ should not have received it.
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Severity', 'Property')"/></name>
-        <field>max_severity</field>
+        <field>severity</field>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Updated', 'Date')"/></name>
@@ -35171,9 +35171,9 @@ should not have received it.
     </td>
     <td>
       <xsl:call-template name="severity-bar">
-        <xsl:with-param name="cvss" select="max_severity/value"/>
-        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (max_severity/value), 'Severity'), ')')"/>
-        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (max_severity/value), 'Severity')"/>
+        <xsl:with-param name="cvss" select="severity/value"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity'), ')')"/>
+        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity')"/>
       </xsl:call-template>
     </td>
     <td>
