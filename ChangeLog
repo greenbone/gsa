@@ -1,3 +1,8 @@
+2015-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [host-details]): Skip the report link
+	if the report has been deleted.
+
 2015-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_h_bar_chart.js: Add file missing from last

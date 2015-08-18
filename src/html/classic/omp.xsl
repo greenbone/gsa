@@ -35004,9 +35004,16 @@ should not have received it.
               <xsl:choose>
                 <xsl:when test="source/type = 'Report Host Detail'">
                   <xsl:text>Report </xsl:text>
-                  <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
-                    <xsl:value-of select="source/@id"/>
-                  </a>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/@id"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/@id"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <xsl:text> via NVT </xsl:text>
                   <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={source/data}&amp;min_qod=&amp;token={/envelope/token}">
                     <xsl:value-of select="source/data"/>
@@ -35014,9 +35021,16 @@ should not have received it.
                 </xsl:when>
                 <xsl:when test="substring (source/type, 1, 6) = 'Report'">
                   <xsl:text>Report </xsl:text>
-                  <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
-                    <xsl:value-of select="source/@id"/>
-                  </a>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/@id"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/@id"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="source/@id"/>
