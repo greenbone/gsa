@@ -1,3 +1,8 @@
+2015-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_h_bar_chart.js: Add file missing from last
+	commit.
+
 2015-08-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add new "Top 10" horizontal bar chart for tasks and options to sort
