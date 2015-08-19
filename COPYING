@@ -20,6 +20,11 @@ src/html/classic/js/d3.v3.min.js:
   Copyright: Michael Bostock
   Origin: http://d3js.org/
 
+src/html/classic/js/d3.layout.cloud.js:
+  License: BSD-3
+  Copyright: Jason Davies
+  Origin: https://github.com/jasondavies/d3-cloud
+
 src/html/classic/js/d3.tip.min.js:
   License: MIT
   Copyright: Justin Palmer

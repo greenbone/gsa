@@ -8125,6 +8125,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="sort_order" select="/envelope/params/sort_order"/>
       <xsl:with-param name="first_group" select="/envelope/params/first_group"/>
       <xsl:with-param name="max_groups" select="/envelope/params/max_groups"/>
+      <xsl:with-param name="aggregate_mode" select="/envelope/params/aggregate_mode"/>
       <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
@@ -27688,12 +27689,10 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="result_count/filtered"/>
     <xsl:with-param name="full-count" select="result_count/text()"/>
     <xsl:with-param name="top-visualization">
-    <!--
       <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
+      <xsl:call-template name="js-scan-management-top-visualization">
         <xsl:with-param name="type" select="'result'"/>
       </xsl:call-template>
-    -->
     </xsl:with-param>
     <xsl:with-param name="columns">
       <column>

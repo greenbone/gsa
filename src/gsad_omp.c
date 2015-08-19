@@ -6049,6 +6049,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
 
   const char *data_column, *group_column, *type, *filter, *filt_id, *xml_param;
   const char *sort_field, *sort_stat, *sort_order, *first_group, *max_groups;
+  const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -6066,6 +6067,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
   sort_order = params_value (params, "sort_order");
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
+  mode = params_value (params, "aggregate_mode");
   filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
   xml_param = params_value (params, "xml");
 
@@ -6095,6 +6097,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
     g_string_append_printf (command, " first_group=\"%s\"", first_group);
   if (max_groups && strcmp (max_groups, ""))
     g_string_append_printf (command, " max_groups=\"%s\"", max_groups);
+  if (mode && strcmp (mode, ""))
+    g_string_append_printf (command, " mode=\"%s\"", mode);
   g_string_append (command, ">");
 
   if (data_columns)

@@ -41,10 +41,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="init-d3charts">
   <script src="/js/d3.v3.min.js"></script>
+  <script src="/js/d3.layout.cloud.js"></script>
   <script src="/js/d3.tip.min.js"></script>
   <script src="/js/gsa_graphics_base.js"></script>
   <script src="/js/gsa_bar_chart.js"></script>
   <script src="/js/gsa_bubble_chart.js"></script>
+  <script src="/js/gsa_cloud_chart.js"></script>
   <script src="/js/gsa_donut_chart.js"></script>
   <script src="/js/gsa_h_bar_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
@@ -96,6 +98,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="sort_stat" select="''"/>
   <xsl:param name="first_group" select="''"/>
   <xsl:param name="max_groups" select="''"/>
+  <xsl:param name="aggregate_mode" select="''"/>
   <xsl:param name="filter"/>
   <xsl:param name="filt_id"/>
   <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
@@ -153,6 +156,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:if>
             <xsl:if test="$max_groups != ''">
                          max_groups:"<xsl:value-of select="$max_groups"/>",
+            </xsl:if>
+            <xsl:if test="$aggregate_mode != ''">
+                         aggregate_mode:"<xsl:value-of select="$aggregate_mode"/>",
             </xsl:if>
                          filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
                          filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
@@ -262,6 +268,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
         <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by CVSS')"/>
       </xsl:when>
+      <xsl:when test="$chart_type = 'cloud'">
+        <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' ', gsa:field-name ($group_column), ' word cloud')"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat (gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>
       </xsl:otherwise>
@@ -282,6 +291,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
                      "size_value")
       </xsl:when>
+      <xsl:when test="$chart_type = 'cloud'">
+        title_static ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' ', gsa:field-name ($group_column), ' word cloud (Loading...)')"/>", "<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' ', gsa:field-name ($group_column), ' word cloud')"/>")
+      </xsl:when>
       <xsl:otherwise>
         title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
                      "count")
@@ -299,6 +311,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$chart_type = 'bubbles'">
       gsa.generators ["<xsl:value-of select="$generator_name"/>"]
         = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:when>
+    <xsl:when test="$chart_type = 'cloud'">
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = CloudChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'horizontal_bar'">
@@ -388,12 +405,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
       <xsl:when test="$type='report'">e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071</xsl:when>
+      <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="auto_load_right_pref_id">
     <xsl:choose>
       <xsl:when test="$type='task'">ce8608af-7e66-45a8-aa8a-76def4f9f838</xsl:when>
       <xsl:when test="$type='report'">fc875cd4-16bf-42d1-98ed-c0c9bd6015cd</xsl:when>
+      <xsl:when test="$type='result'">cb7db2fe-3fe4-4704-9fa1-efd4b9e522a8</xsl:when>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="auto_load_left_default" select="'left-by-cvss'"/>
@@ -420,8 +439,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term | /envelope/get_reports/get_reports_response/filters/term"/>
-  <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id"/>
+  <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term | /envelope/get_reports/get_reports_response/filters/term | /envelope/get_results/get_results_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id"/>
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
@@ -714,6 +733,71 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="$type='result'">
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'vulnerability'"/>
+        <xsl:with-param name="aggregate_mode" select="'word_counts'"/>
+        <xsl:with-param name="sort_stat" select="'count'"/>
+        <xsl:with-param name="sort_order" select="'descending'"/>
+        <xsl:with-param name="max_groups" select="'250'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-data-source">
+        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'description'"/>
+        <xsl:with-param name="aggregate_mode" select="'word_counts'"/>
+        <xsl:with-param name="sort_stat" select="'count'"/>
+        <xsl:with-param name="sort_order" select="'descending'"/>
+        <xsl:with-param name="max_groups" select="'250'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-result-vuln-words'"/>
+        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'vulnerability'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'cloud'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-result-vuln-words'"/>
+        <xsl:with-param name="group_column" select="'vulnerability'"/>
+        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'cloud'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'left-result-desc-words'"/>
+        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="group_column" select="'description'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'cloud'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-aggregate-chart">
+        <xsl:with-param name="chart_name" select="'right-result-desc-words'"/>
+        <xsl:with-param name="group_column" select="'description'"/>
+        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
+        <xsl:with-param name="aggregate_type" select="$type"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'cloud'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>
