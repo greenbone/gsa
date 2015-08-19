@@ -689,8 +689,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="js-aggregate-chart">
         <xsl:with-param name="chart_name" select="'left-top-high-results'"/>
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
         <xsl:with-param name="y_fields">
@@ -705,10 +705,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
         <xsl:with-param name="init_params">
           <params>
-            <param name="title_text">Tasks: 'High' results per host</param>
+            <param name="title_text">Tasks with most 'High' results per host</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'bubbles'"/>
+        <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
       <xsl:call-template name="js-aggregate-chart">

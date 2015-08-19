@@ -1,5 +1,10 @@
 2015-08-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Add correct "Top 10" chart to left visualization box.
+
+2015-08-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add word cloud charts for Results.
 
 	* CMakeLists.txt: Install new JS files.
