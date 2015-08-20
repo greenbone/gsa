@@ -1,3 +1,15 @@
+2015-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (new_task): Get tag names list.
+	(create_task_omp): Add option for automatically adding a tag directly
+	after creating the task.
+
+	* src/gsad.c (init_validator): Add "add_tag" parameter.
+
+	* src/html/classic/omp.xsl (new_task): Add fields for adding a tag.
+
+	* src/html/classic/help.xsl (new_task.html): Add help for tag fields.
+
 2015-08-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):

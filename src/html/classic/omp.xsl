@@ -5687,6 +5687,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </xsl:if>
       </table>
+      <xsl:if test="gsa:may-op ('get_tags') and gsa:may-op ('create_task') and count(get_tags_response/tag) != 0">
+        <table>
+          <tr>
+            <td colspan="2">
+              <h3><xsl:value-of select="gsa:i18n ('Tag', 'Tag')"/></h3>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/add_tag != 0">
+                    <input type="checkbox" name="add_tag" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="add_tag" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Add Tag', 'Tag')"/>:
+              </label>
+            </td>
+            <td>
+              <select name="tag_name">
+                <xsl:for-each select="get_tags_response/tag">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="name"/>
+                    <xsl:with-param name="select-value" select="/envelope/params/tag_name"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:i18n ('with Value', 'Tag')"/>
+              <xsl:text> </xsl:text>
+              <input name="tag_value" type="text" value="{/envelope/params/tag_value}"/>
+            </td>
+          </tr>
+        </table>
+      </xsl:if>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
           <td colspan="2" style="text-align:right;">

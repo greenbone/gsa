@@ -3071,6 +3071,38 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         }
     }
 
+  if (command_enabled (credentials, "GET_TAGS"))
+    {
+      /* Get tag names. */
+
+      if (openvas_server_sendf (&session,
+                                "<get_tags names_only=\"1\""
+                                " filter=\"resource_type=task rows=-1\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting tag list. "
+                               "The current list of tags is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting tag list. "
+                               "The current list of tags is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
+
   if (extra_xml)
     g_string_append (xml, extra_xml);
   if (message)
@@ -3231,6 +3263,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
+  const char *add_tag, *tag_name, *tag_value;
   params_t *alerts;
   GString *alert_element;
 
@@ -3249,6 +3282,9 @@ create_task_omp (credentials_t * credentials, params_t *params)
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
+  add_tag = params_value (params, "add_tag");
+  tag_name = params_value (params, "tag_name");
+  tag_value = params_value (params, "tag_value");
   CHECK (scanner_type);
   if (!strcmp (scanner_type, "1"))
     {
@@ -3320,6 +3356,12 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (source_iface);
   CHECK (max_hosts);
   CHECK (alterable);
+  if (add_tag)
+    {
+      CHECK (add_tag);
+      CHECK (tag_name);
+      CHECK (tag_value);
+    }
 
   if (schedule_id == NULL || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
@@ -3432,9 +3474,91 @@ create_task_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response);
+      if (add_tag && strcmp (add_tag, "0"))
+        {
+          const char *new_task_id = entity_attribute (entity, "id");
+          gchar *tag_command, *tag_response, *combined_response;
+          entity_t tag_entity;
+
+          g_message ("!TEST! adding tag %s with value %s for task %s", tag_name, tag_value, new_task_id);
+
+          if (tag_value && strcmp (tag_value, ""))
+            tag_command
+              = g_markup_printf_escaped ("<create_tag>"
+                                         "<name>%s</name>"
+                                         "<resource id=\"%s\">"
+                                         "<type>task</type>"
+                                         "</resource>"
+                                         "<value>%s</value>"
+                                         "</create_tag>",
+                                         tag_name,
+                                         new_task_id,
+                                         tag_value);
+          else
+            tag_command
+              = g_markup_printf_escaped ("<create_tag>"
+                                         "<name>%s</name>"
+                                         "<resource id=\"%s\">"
+                                         "<type>task</type>"
+                                         "</resource>"
+                                         "</create_tag>",
+                                         tag_name,
+                                         new_task_id);
+
+          ret = omp (credentials,
+                     &tag_response,
+                     &tag_entity,
+                     tag_command);
+
+          switch (ret)
+            {
+              case 0:
+              case -1:
+                break;
+              case 1:
+                free_entity (entity);
+                g_free (response);
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while creating a new tag. "
+                                    "No new tag was created. "
+                                    "Diagnostics: Failure to send command to manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              case 2:
+                free_entity (entity);
+                g_free (response);
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while creating a new tag. "
+                                    "It is unclear whether the tag has been created or not. "
+                                    "Diagnostics: Failure to receive response from manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              default:
+                free_entity (entity);
+                g_free (response);
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while creating a new task. "
+                                    "It is unclear whether the tag has been created or not. "
+                                    "Diagnostics: Internal Error.",
+                                    "/omp?cmd=get_tasks");
+            }
+
+          combined_response = g_strconcat (response, tag_response, NULL);
+          free_entity (tag_entity);
+          g_free (tag_response);
+
+          html = next_page (credentials, params, combined_response);
+          if (html == NULL)
+            html = get_tasks (credentials, params, combined_response);
+          g_free (combined_response);
+        }
+      else
+        {
+          html = next_page (credentials, params, response);
+          if (html == NULL)
+            html = get_tasks (credentials, params, response);
+        }
     }
   else
     html = new_task (credentials, NULL, params, response);

@@ -6223,6 +6223,17 @@ Public License instead of this License.
         <b>*</b> not available with the current OMP Server connection.
       </xsl:if>
 
+      <xsl:if test="gsa:may-op ('get_tags') and gsa:may-op ('create_tag')">
+        <h2>Tag</h2>
+        <p>
+          To automatically add a
+          <a href="glossary.html?token={/envelope/token}#tg">Tag</a>
+          after creating the task, check "Add Tag" checkbox and select the
+          name of the tag from the dropdown box. Optionally, you can also
+          add a value to the tag in the "with Value" text field.
+        </p>
+      </xsl:if>
+
       <h1>New Container Task</h1>
 
       <p>

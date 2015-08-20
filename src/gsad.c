@@ -1278,6 +1278,7 @@ init_validator ()
 
   /* Beware, the rule must be defined before the alias. */
 
+  openvas_validator_alias (validator, "add_tag", "boolean");
   openvas_validator_alias (validator, "alert_id_2", "alert_id");
   openvas_validator_alias (validator, "alert_id_optional:name",  "number");
   openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
