@@ -1,5 +1,9 @@
 2015-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_task_omp): Remove leftover test output.
+
+2015-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (new_task): Get tag names list.
 	(create_task_omp): Add option for automatically adding a tag directly
 	after creating the task.

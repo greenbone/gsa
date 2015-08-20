@@ -3480,8 +3480,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
           gchar *tag_command, *tag_response, *combined_response;
           entity_t tag_entity;
 
-          g_message ("!TEST! adding tag %s with value %s for task %s", tag_name, tag_value, new_task_id);
-
           if (tag_value && strcmp (tag_value, ""))
             tag_command
               = g_markup_printf_escaped ("<create_tag>"
