@@ -150,8 +150,10 @@
 /**
  * @brief Default value for HTTP header "Content-Security-Policy"
  */
-#define DEFAULT_GSAD_CONTENT_SECURITY_POLICY\
- "default-src 'self' 'unsafe-inline'; frame-ancestors 'self'"
+#define DEFAULT_GSAD_CONTENT_SECURITY_POLICY \
+ "default-src 'self' 'unsafe-inline';"       \
+ " img-src 'self' blob:;"                    \
+ " frame-ancestors 'self'"
 
 /**
  * @brief Add content security headers to a MHD response.
