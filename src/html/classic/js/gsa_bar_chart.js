@@ -265,13 +265,26 @@ function BarChartGenerator ()
               else
                 x = d [x_field]
 
-              if (y_label != "")
-                return "<strong>" + y_label + " (" + x + "):</strong><br/> "
-                        + d [y_field]
-                        + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
+              if (y_field == "count")
+                {
+                  if (y_label != "")
+                    return "<strong>" + y_label + " (" + x + "):</strong><br/> "
+                            + d [y_field]
+                            + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
+                  else
+                    return "<strong>" + x + ":</strong><br/> " + d [y_field]
+                            + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
+                }
               else
-                return "<strong>" + x + ":</strong><br/> " + d [y_field]
-                       + " (" + (100 * d [y_field] / y_sum).toFixed (1) + "%)";
+                {
+                  if (y_label != "")
+                    return "<strong>" + y_label + " (" + x + "):</strong><br/> "
+                            + d [size_field]
+                            + " (" + (100 * d [y_field] / y_max).toFixed (1) + "%)";
+                  else
+                    return "<strong>" + x + ":</strong><br/> " + d [y_field]
+                            + " (" + (100 * d [y_field] / y_max).toFixed (1) + "%)";
+                }
             });
 
         }

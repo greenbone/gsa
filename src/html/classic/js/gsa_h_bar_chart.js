@@ -246,13 +246,26 @@ function HorizontalBarChartGenerator ()
               else
                 x = d [x_field]
 
-              if (y_label != "")
-                return "<strong>" + y_label + " (" + x + "):</strong><br/> "
-                        + d [size_field]
-                        + " (" + (100 * d [size_field] / size_sum).toFixed (1) + "%)";
+              if (size_field == "count")
+                {
+                  if (y_label != "")
+                    return "<strong>" + y_label + " (" + x + "):</strong><br/> "
+                            + d [size_field]
+                            + " (" + (100 * d [size_field] / size_sum).toFixed (1) + "%)";
+                  else
+                    return "<strong>" + x + ":</strong><br/> " + d [size_field]
+                            + " (" + (100 * d [size_field] / size_sum).toFixed (1) + "%)";
+                }
               else
-                return "<strong>" + x + ":</strong><br/> " + d [size_field]
-                       + " (" + (100 * d [size_field] / size_sum).toFixed (1) + "%)";
+                {
+                  if (y_label != "")
+                    return "<strong>" + y_label + " (" + x + "):</strong><br/> "
+                            + d [size_field]
+                            + " (" + (100 * d [size_field] / size_max).toFixed (1) + "%)";
+                  else
+                    return "<strong>" + x + ":</strong><br/> " + d [size_field]
+                            + " (" + (100 * d [size_field] / size_max).toFixed (1) + "%)";
+                }
             });
 
         }
