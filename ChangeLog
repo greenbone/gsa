@@ -1,5 +1,10 @@
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/wizard.xsl (quick-first-scan-wizard)
+	(quick-task-wizard): Insert client address into the target hosts field.
+
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-groups-table): Add missing
 	filtered-count param for list-window template call.
 
