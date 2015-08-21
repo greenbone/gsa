@@ -11344,7 +11344,7 @@ should not have received it.
                     </label>
                   </td>
                   <td>
-                    <input type="text" name="hosts" value="localhost" size="30"
+                    <input type="text" name="hosts" value="{/envelope/client_address}" size="30"
                             maxlength="2000"/>
                   </td>
                 </tr>
