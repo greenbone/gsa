@@ -22523,6 +22523,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (group)"/>
     <xsl:with-param name="grouped-count" select="group_count/grouped"/>
     <xsl:with-param name="full-count" select="group_count/text ()"/>
+    <xsl:with-param name="filtered-count" select="group_count/filtered"/>
     <xsl:with-param name="columns">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
