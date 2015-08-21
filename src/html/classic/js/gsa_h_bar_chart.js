@@ -52,7 +52,7 @@ function HorizontalBarChartGenerator ()
   var x_axis_elem;
   var size_axis_elem;
 
-  var data_transform = data_raw;
+  var data_transform = data_top_list;
   var bar_style = severity_bar_style ("severity_max",
                                       gsa.severity_levels.max_log,
                                       gsa.severity_levels.max_low,
@@ -177,8 +177,6 @@ function HorizontalBarChartGenerator ()
         {
           case "get_aggregate":
             data = data_transform (original_data, gen_params);
-            // Take only top 10 records
-            data.records = data.records.slice (0, 10);
             records = data.records;
             column_info = data.column_info;
             break;

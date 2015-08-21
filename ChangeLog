@@ -1,3 +1,12 @@
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (data_top_list): New
+	data transformation function. Selects only first 10 records with
+	non-zero y field.
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate): Get top 10 list
+	using data_transform function instead of doing it directly.
+
 2015-08-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Remove leftover test output.
