@@ -1367,7 +1367,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="cap-type-plural" select="concat ($cap-type, 's')"/>
   <xsl:param name="id"/>
   <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
-  <a href="/help/{$type}s.html?token={/envelope/token}#edit_{$type}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n (concat ('Edit ' ,$cap-type), $cap-type)}">
+  <xsl:variable name="help_url">
+    <xsl:choose>
+      <xsl:when test="$type = 'config'">
+        <xsl:value-of select="concat ('/help/config_editor.html?token=', /envelope/token)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat ('/help/', $type, 's.html?token=', /envelope/token, '#edit_', $type)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <a href="{$help_url}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n (concat ('Edit ' ,$cap-type), $cap-type)}">
     <img src="/img/help.png"/>
   </a>
   <!-- dynamic i18n : see dynamic_strings.xsl - type-name-plural -->

@@ -1,5 +1,10 @@
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (edit-header-icons): Use correct URL for
+	config editor help.
+
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (data_top_list): New
 	data transformation function. Selects only first 10 records with
 	non-zero y field.
