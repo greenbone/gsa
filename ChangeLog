@@ -1,5 +1,12 @@
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r23105.
+
+	* src/html/classic/omp.xsl (html-nvt-table): Fix swapped i18n msgid and
+	context for Severity column.
+
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r23104.
 
 	* src/html/classic/omp.xsl (edit-header-icons): Use correct URL for

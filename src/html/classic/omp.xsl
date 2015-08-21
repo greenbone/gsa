@@ -18246,7 +18246,7 @@ should not have received it.
         <image>/img/solution_type.png</image>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity Short', 'Severity')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
       </column>
