@@ -1,5 +1,15 @@
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js (generate),
+	src/html/classic/js/gsa_bubble_chart.js (generate),
+	src/html/classic/js/gsa_cloud_chart.js (generate),
+	src/html/classic/js/gsa_donut_chart.js (generate),
+	src/html/classic/js/gsa_h_bar_chart.js (generate),
+	src/html/classic/js/gsa_line_chart.js (generate): Generate HTML table
+	on demand so the actual chart finishes generating earlier.
+
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (DEFAULT_GSAD_CONTENT_SECURITY_POLICY): Change to include
 	blob: as an img-src as required by copyable SVG of charts.
 

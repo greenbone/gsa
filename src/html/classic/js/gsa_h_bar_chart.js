@@ -331,22 +331,32 @@ function HorizontalBarChartGenerator ()
                .text("Download CSV");
 
       // Generate HTML table
-      html_table_data
-        = html_table_from_records (records,
-                                   column_info,
-                                   [x_field, size_field],
-                                   [column_label (column_info.columns [x_field], true, false, show_stat_type),
-                                    column_label (column_info.columns [size_field], true, false, show_stat_type)],
-                                   display.header(). text (),
-                                   data_src.param ("filter"));
       if (html_table_url != null)
-        URL.revokeObjectURL (html_table_url);
-      html_table_blob = new Blob([html_table_data], { type: "text/html" });
-      html_table_url = URL.createObjectURL(html_table_blob);
-
+        {
+          URL.revokeObjectURL (html_table_url);
+          html_table_data = null;
+        }
+      var open_html_table = function ()
+        {
+          if (html_table_url == null)
+            {
+              html_table_data
+                = html_table_from_records (records,
+                                           column_info,
+                                           [x_field, size_field],
+                                           [column_label (column_info.columns [x_field], true, false, show_stat_type),
+                                            column_label (column_info.columns [size_field], true, false, show_stat_type)],
+                                           display.header(). text (),
+                                           data_src.param ("filter"));
+              html_table_blob = new Blob([html_table_data], { type: "text/html" });
+              html_table_url = URL.createObjectURL(html_table_blob);
+            }
+          window.open (html_table_url);
+          return true;
+        }
       display.create_or_get_menu_item ("html_table")
-                  .attr("href", html_table_url)
-                  .attr("target", "_blank")
+                  .attr("href", "#")
+                  .on("click", open_html_table)
                   .text("Show HTML table");
 
       // Generate SVG after transition
