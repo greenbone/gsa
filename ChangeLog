@@ -1,5 +1,10 @@
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-groups-table): Add missing
+	filtered-count param for list-window template call.
+
+2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-nvt-table): Fix swapped i18n msgid and
 	context for Severity column.
 
