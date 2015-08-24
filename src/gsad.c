@@ -1786,7 +1786,7 @@ params_mhd_validate (void *params)
     con_info->response = name ## _omp (credentials, con_info->params);
 
 static credentials_t *
-credentials_new (user_t *user, const char *language)
+credentials_new (user_t *user, const char *language, const char *client_address)
 {
   credentials_t *credentials;
 
@@ -1812,6 +1812,7 @@ credentials_new (user_t *user, const char *language)
   credentials->autorefresh = user->autorefresh
                               ? g_strdup (user->autorefresh) : NULL;
   credentials->last_filt_ids = user->last_filt_ids;
+  credentials->client_address = g_strdup (client_address);
 
   return credentials;
 }
@@ -1833,6 +1834,7 @@ credentials_free (credentials_t *creds)
   g_free (creds->language);
   g_free (creds->severity);
   g_free (creds->pw_warning);
+  g_free (creds->client_address);
   g_free (creds->autorefresh);
   /* params, chart_prefs and last_filt_ids are not duplicated. */
   g_free (creds);
@@ -1854,7 +1856,7 @@ credentials_free (credentials_t *creds)
  */
 int
 exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
-               gchar **new_sid)
+               gchar **new_sid, const char *client_address)
 {
   int ret;
   user_t *user;
@@ -2141,7 +2143,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
 
   language = user->language ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
-  credentials = credentials_new (user, language);
+  credentials = credentials_new (user, language, client_address);
   credentials->params = con_info->params;
   gettimeofday (&credentials->cmd_start, NULL);
 
@@ -3615,6 +3617,28 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
 }
 
 /**
+ * @brief Get the client's address.
+ *
+ * @param[in]   conn             Connection.
+ * @param[out]  client_address   Buffer to store client address.
+ */
+static void
+get_client_address (struct MHD_Connection *conn, char *client_address)
+{
+  const union MHD_ConnectionInfo* info;
+  struct sockaddr *addr;
+
+  info = MHD_get_connection_info (conn, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
+  addr = info->client_addr;
+  if (info->client_addr->sa_family == AF_INET)
+    inet_ntop (AF_INET, &(((struct sockaddr_in *) addr)->sin_addr),
+               client_address, INET_ADDRSTRLEN);
+  else
+    inet_ntop (AF_INET6, &(((struct sockaddr_in6 *) addr)->sin6_addr),
+               client_address, INET6_ADDRSTRLEN);
+}
+
+/**
  * @brief HTTP request handler for GSAD.
  *
  * This routine is an MHD_AccessHandlerCallback, the request handler for
@@ -3639,7 +3663,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                  size_t * upload_data_size, void **con_cls)
 {
   const char *url_base = "/";
-  char *default_file = "/login/login.html";
+  char *default_file = "/login/login.html", client_address[INET6_ADDRSTRLEN];
   enum content_type content_type;
   char *content_disposition = NULL;
   gsize response_size = 0;
@@ -3699,6 +3723,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   /* Set HTTP Header values. */
 
+  get_client_address (connection, client_address);
   if (!strcmp (method, "GET"))
     {
       const char *token, *cookie, *accept_language;
@@ -3964,11 +3989,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
           accept_language = MHD_lookup_connection_value
                               (connection, MHD_HEADER_KIND, "Accept-Language");
           language = accept_language_to_env_fmt (accept_language);
-          credentials = credentials_new (user, language);
+          credentials = credentials_new (user, language, client_address);
           g_free (language);
         }
       else
-        credentials = credentials_new (user, language);
+        credentials = credentials_new (user, language, client_address);
 
       credentials->caller = reconstruct_url (connection, url);
 
@@ -4087,21 +4112,24 @@ request_handler (void *cls, struct MHD_Connection *connection,
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
-              pre = g_markup_printf_escaped ("<envelope>"
-                                             "<token>%s</token>"
-                                             "<time>%s</time>"
-                                             "<login>%s</login>"
-                                             "<role>%s</role>"
-                                             "<i18n>%s</i18n>"
-                                             "<charts>%i</charts>"
-                                             "<help><%s/></help>",
-                                             credentials->token,
-                                             ctime_now,
-                                             credentials->username,
-                                             credentials->role,
-                                             credentials->language,
-                                             credentials->charts,
-                                             page);
+              pre = g_markup_printf_escaped
+                     ("<envelope>"
+                      "<token>%s</token>"
+                      "<time>%s</time>"
+                      "<login>%s</login>"
+                      "<role>%s</role>"
+                      "<i18n>%s</i18n>"
+                      "<charts>%i</charts>"
+                      "<client_address>%s</client_address>"
+                      "<help><%s/></help>",
+                      credentials->token,
+                      ctime_now,
+                      credentials->username,
+                      credentials->role,
+                      credentials->language,
+                      credentials->charts,
+                      credentials->client_address,
+                      page);
               xml = g_strdup_printf ("%s"
                                      "<capabilities>%s</capabilities>"
                                      "</envelope>",
@@ -4254,7 +4282,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       g_free (language);
 
       new_sid = NULL;
-      ret = exec_omp_post (con_info, &user, &new_sid);
+      ret = exec_omp_post (con_info, &user, &new_sid, client_address);
 
       if (ret == 1)
         {
