@@ -1959,6 +1959,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
+              g_warning ("Authentication failure for '%s' from %s",
+                         params_value (con_info->params, "login") ?: "",
+                         client_address);
             }
           else
             {
@@ -2015,6 +2018,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           res = xsl_transform (xml);
           g_free (xml);
           con_info->response = res;
+          g_warning ("Authentication failure for '%s' from %s",
+                     params_value (con_info->params, "login") ?: "",
+                     client_address);
         }
       else
         {

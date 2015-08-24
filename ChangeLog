@@ -1,3 +1,7 @@
+2015-08-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Log authentication failed attempts.
+
 2015-08-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js (generate),
