@@ -1,5 +1,11 @@
 2015-08-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r23134.
+
+	* src/gsad.c (exec_omp_post): Log authentication failed attempts.
+
+2015-08-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r23017.
 
 	* src/gsad_base.h (credentials_t): Add client_address element.
