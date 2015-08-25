@@ -1,3 +1,9 @@
+2015-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [os-details]): Add Average Severity
+	field.  Add Severity column for hosts.
+	(html-oss-table, asset/os): Add Latest and Average Severity columns.
+
 2015-08-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add options to set special content security headers for charts

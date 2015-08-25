@@ -34927,6 +34927,16 @@ should not have received it.
           <td><xsl:value-of select="os/title"/></td>
         </tr>
         <tr>
+          <td><xsl:value-of select="gsa:i18n ('Average Severity', 'Property')"/>:</td>
+          <td>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="os/average_severity/value"/>
+              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (os/average_severity/value), 'Severity'), ')')"/>
+              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (os/average_severity/value), 'Severity')"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Hosts', 'Property')"/>:</td>
           <td><xsl:value-of select="os/installs"/></td>
         </tr>
@@ -34941,6 +34951,7 @@ should not have received it.
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
             </tr>
             <xsl:for-each select="os/hosts/asset">
@@ -34957,6 +34968,13 @@ should not have received it.
                   </xsl:when>
                   <xsl:otherwise>
                     <td><xsl:value-of select="name"/></td>
+                    <td>
+                      <xsl:call-template name="severity-bar">
+                        <xsl:with-param name="cvss" select="severity/value"/>
+                        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity'), ')')"/>
+                        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity')"/>
+                      </xsl:call-template>
+                    </td>
                     <td width="100">
                       <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
                         <img src="/img/details.png"
@@ -35165,12 +35183,25 @@ should not have received it.
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Title', 'Property')"/></name>
-        <field>modified</field>
+        <field>title</field>
         <sort-reverse/>
       </column>
       <column>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Property')"/></name>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Latest', 'Property')"/></name>
+          <field>latest_severity</field>
+          <sort-reverse/>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Average', 'Property')"/></name>
+          <field>average_severity</field>
+          <sort-reverse/>
+        </column>
+      </column>
+      <column>
         <name><xsl:value-of select="gsa:i18n('Hosts', 'OS')"/></name>
-        <field>modified</field>
+        <field>hosts</field>
         <sort-reverse/>
       </column>
       <column>
@@ -35262,6 +35293,20 @@ should not have received it.
     </td>
     <td>
       <xsl:value-of select="title"/>
+    </td>
+    <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="latest_severity/value"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (latest_severity/value), 'Severity'), ')')"/>
+        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (latest_severity/value), 'Severity')"/>
+      </xsl:call-template>
+    </td>
+    <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="average_severity/value"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (average_severity/value), 'Severity'), ')')"/>
+        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (average_severity/value), 'Severity')"/>
+      </xsl:call-template>
     </td>
     <td>
       <xsl:value-of select="installs"/>
