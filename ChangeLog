@@ -1,3 +1,24 @@
+2015-08-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add options to set special content security headers for charts
+	requested by the guest user, which are less restrictive to allow
+	embedding by default.
+
+	* src/gsad.c (DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS)
+	(DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY)
+	(ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS): New #defines.
+	(http_guest_chart_x_frame_options)
+	(http_guest_chart_content_security_policy): New static variables.
+	(handler_send_response): No longer add content security headers here.
+	(request_handler): Add content security headers here, using special
+	guest chart ones if the user is the guest user and the command is
+	"get_aggregate".
+	(main): Add arguments http-guest-chart-frame-opts and
+	http-guest-chart-csp.
+
+	* doc/gsad.8: Add new options http-guest-chart-frame-opts and
+	http-guest-chart-csp.
+
 2015-08-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Log authentication failed attempts.
