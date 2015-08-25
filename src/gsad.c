@@ -156,6 +156,19 @@
  " frame-ancestors 'self'"
 
 /**
+ * @brief Default value for HTTP header "X-Frame-Options" for guest charts
+ */
+#define DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS ""
+
+/**
+ * @brief Default guest charts value for HTTP header "Content-Security-Policy"
+ */
+#define DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY \
+ "default-src 'self' 'unsafe-inline';"                   \
+ " img-src 'self' blob:;"                                \
+ " frame-ancestors *"
+
+/**
  * @brief Add content security headers to a MHD response.
  */
 #define ADD_CONTENT_SECURITY_HEADERS(response)                                \
@@ -166,6 +179,19 @@
   if (strcmp (http_content_security_policy, ""))                              \
     MHD_add_response_header (response, "Content-Security-Policy",             \
                              http_content_security_policy);                   \
+}
+
+/**
+ * @brief Add guest chart content security headers to a MHD response.
+ */
+#define ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS(response)                    \
+{                                                                             \
+  if (strcmp (http_x_frame_options, ""))                                      \
+    MHD_add_response_header (response, "X-Frame-Options",                     \
+                             http_guest_chart_x_frame_options);               \
+  if (strcmp (http_content_security_policy, ""))                              \
+    MHD_add_response_header (response, "Content-Security-Policy",             \
+                             http_guest_chart_content_security_policy);       \
 }
 
 /**
@@ -266,6 +292,16 @@ gchar *http_x_frame_options;
  * @brief Current value for HTTP header "Content-Security-Policy"
  */
 gchar *http_content_security_policy;
+
+/**
+ * @brief Current guest chart specific value for HTTP header "X-Frame-Options"
+ */
+gchar *http_guest_chart_x_frame_options;
+
+/**
+ * @brief Current guest chart value for HTTP header "Content-Security-Policy"
+ */
+gchar *http_guest_chart_content_security_policy;
 
 /**
  * @brief User information structure, for sessions.
@@ -3565,7 +3601,6 @@ handler_send_response (struct MHD_Connection *connection,
                                content_disposition);
       g_free (content_disposition);
     }
-  ADD_CONTENT_SECURITY_HEADERS (response);
   MHD_queue_response (connection, http_response_code, response);
   MHD_destroy_response (response);
   return MHD_YES;
@@ -3758,6 +3793,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3776,6 +3812,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3794,6 +3831,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3864,6 +3902,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           g_free (res);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3933,6 +3972,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           g_free (res);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -3980,6 +4020,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           g_free (res);
+          ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4200,10 +4241,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                             &content_type,
                                             &content_disposition);
         }
-      credentials_free (credentials);
 
       if (response)
         {
+          const char* cmd;
+          cmd = params_value (credentials->params, "cmd");
           if (attach_sid (response, sid) == MHD_NO)
             {
               g_free (sid);
@@ -4212,6 +4254,19 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           g_free (sid);
 
+          if (guest_password
+              && strcmp (credentials->username, guest_username) == 0
+              && cmd
+              && strcmp (cmd, "get_aggregate") == 0)
+            {
+              ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS (response);
+            }
+          else
+            {
+              ADD_CONTENT_SECURITY_HEADERS (response);
+            }
+
+          credentials_free (credentials);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4223,6 +4278,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           /* Severe memory or file access problem. */
           g_free (sid);
+          credentials_free (credentials);
           return MHD_NO;
         }
     }
@@ -4753,6 +4809,10 @@ main (int argc, char **argv)
   static gchar *guest_pass = NULL;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
   static gchar *http_csp = DEFAULT_GSAD_CONTENT_SECURITY_POLICY;
+  static gchar *http_guest_chart_frame_opts
+                  = DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
+  static gchar *http_guest_chart_csp
+                  = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -4834,6 +4894,14 @@ main (int argc, char **argv)
      0, G_OPTION_ARG_STRING, &http_csp,
      "Content-Security-Policy HTTP header.  Defaults to \""
      DEFAULT_GSAD_CONTENT_SECURITY_POLICY"\".", "<csp>"},
+    {"http-guest-chart-frame-opts", 0,
+     0, G_OPTION_ARG_STRING, &http_guest_chart_frame_opts,
+     "X-Frame-Options HTTP header for guest charts.  Defaults to \""
+     DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "\".", "<frame-opts>"},
+    {"http-guest-chart-csp", 0,
+     0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
+     "Content-Security-Policy HTTP header.  Defaults to \""
+     DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY"\".", "<csp>"},
     {NULL}
   };
 
@@ -4849,6 +4917,8 @@ main (int argc, char **argv)
 
   http_x_frame_options = http_frame_opts;
   http_content_security_policy = http_csp;
+  http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
+  http_guest_chart_content_security_policy = http_guest_chart_csp;
 
   if (register_signal_handlers ())
     {

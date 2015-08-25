@@ -64,6 +64,11 @@ X-Frame-Options HTTP header. Defaults to "SAMEORIGIN".
 .TP
 .BR --http-csp=\fICSP\fR
 Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; img-src 'self' blob:; frame-ancestors 'self'"
+.BR --http-frame-opts=\fIFRAME-OPTS\fR
+X-Frame-Options HTTP header. Defaults to ""
+.TP
+.BR --http-csp=\fICSP\fR
+Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; img-src 'self' blob:; frame-ancestors *"
 .TP
 .BR -? ", " --help
 Show help.
