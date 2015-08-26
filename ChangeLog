@@ -1,5 +1,9 @@
 2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* COPYING: Add paragraph about jQuery.
+
+2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Add jQuery on all pages except the login page.
 
 	* src/html/classic/js/jquery-2.1.4.js,

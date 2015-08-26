@@ -15,7 +15,7 @@ MIT: See file COPYING.MIT
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
 
-src/html/classic/js/d3.v3.min.js:
+src/html/classic/js/d3.v3.js:
   License: BSD-3
   Copyright: Michael Bostock
   Origin: http://d3js.org/
@@ -29,3 +29,8 @@ src/html/classic/js/d3.tip.min.js:
   License: MIT
   Copyright: Justin Palmer
   Origin: https://github.com/Caged/d3-tip
+
+src/html/classic/js/jquery-2.1.4.js:
+  License: MIT
+  Copyright: jQuery Foundation, Inc. and other contributors
+  Origin: http://jquery.com/download/
