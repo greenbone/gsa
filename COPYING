@@ -20,7 +20,7 @@ src/html/classic/js/d3.v3.min.js:
   Copyright: Michael Bostock
   Origin: http://d3js.org/
 
-src/html/classic/js/d3.tip.min.js:
+src/html/classic/js/d3.tip.js:
   License: MIT
   Copyright: Justin Palmer
   Origin: https://github.com/Caged/d3-tip
