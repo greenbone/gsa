@@ -25,7 +25,7 @@ src/html/classic/js/d3.layout.cloud.js:
   Copyright: Jason Davies
   Origin: https://github.com/jasondavies/d3-cloud
 
-src/html/classic/js/d3.tip.min.js:
+src/html/classic/js/d3.tip.js:
   License: MIT
   Copyright: Justin Palmer
   Origin: https://github.com/Caged/d3-tip

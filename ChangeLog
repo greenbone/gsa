@@ -1,3 +1,18 @@
+2015-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install src/html/classic/js/d3.tip.js instead of
+	the minified version.
+
+	* COPYING: Update file name for d3-tip.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Replace d3.tip.min.js
+	with d3.tip.js.
+
+	* src/html/classic/js/d3.tip.min.js: Remove. Replaced with d3.tip.js.
+
+	* src/html/classic/js/d3.tip.js: New. Current non-minified version of
+	d3-tip.
+
 2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Fix the path to the background

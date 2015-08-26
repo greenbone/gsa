@@ -287,7 +287,7 @@ install (FILES src/html/classic/css/gsa-login.css
                src/html/classic/css/gsa-style.css
          DESTINATION ${GSA_DATA_DIR}/classic/css)
 
-install (FILES src/html/classic/js/d3.tip.min.js
+install (FILES src/html/classic/js/d3.tip.js
                src/html/classic/js/d3.layout.cloud.js
                src/html/classic/js/d3.v3.min.js
                src/html/classic/js/gsa_bar_chart.js
