@@ -42,7 +42,7 @@ img {
 }
 
 .gb_window_part_left {
- background: url('img/style/window_dec_a.png') no-repeat;
+ background: url('/img/style/window_dec_a.png') no-repeat;
  width:6px;
  height:32px;
  float:left;
@@ -50,7 +50,7 @@ img {
 }
 
 .gb_window_part_center {
- background: url('img/style/window_dec_b.png') repeat-x;
+ background: url('/img/style/window_dec_b.png') repeat-x;
  height: 32px;
  background-color: #70C000;
  color: #FFFFFF;
@@ -62,7 +62,7 @@ img {
 }
 
 .gb_window_part_right {
- background: url('img/style/window_dec_c.png') no-repeat;
+ background: url('/img/style/window_dec_c.png') no-repeat;
  width: 76px;
  height: 32px;
  float: right;

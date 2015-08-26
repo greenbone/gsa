@@ -3836,9 +3836,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      if (!strcmp (url, "/gsa-style.css")
-          || !strcmp (url, "/gsa-login.css")
-          || !strcmp (url, "/favicon.ico")
+      if (!strcmp (url, "/favicon.ico")
           || !strcmp (url, "/favicon.gif"))
         {
           response = file_content_response (NULL,
@@ -3858,7 +3856,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       /* Allow the decorative images and scripts to anyone. */
 
       if (strncmp (url, "/img/", strlen ("/img/")) == 0
-          || strncmp (url, "/js/", strlen ("/js/")) == 0)
+          || strncmp (url, "/js/", strlen ("/js/")) == 0
+          || strncmp (url, "/css/", strlen ("/css/")) == 0)
         {
           response = file_content_response (NULL,
                                             connection, url,

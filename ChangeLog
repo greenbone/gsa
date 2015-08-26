@@ -1,3 +1,11 @@
+2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Move the CSS files in their own directory.
+
+	* CMakeLists.txt, src/gsad.c, src/html/classic/gsad.xsl: Updated
+	* src/html/classic/gsa-style.css -> src/html/classic/css/gsa-style.css
+	* src/html/classic/gsa-login.css -> src/html/classic/css/gsa-login.css
+
 2015-08-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (get_client_address): Use sockaddr_as_str().
