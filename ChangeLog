@@ -1,3 +1,7 @@
+2015-08-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (get_client_address): Use sockaddr_as_str().
+
 2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* COPYING: Add paragraph about jQuery.

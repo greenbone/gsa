@@ -66,6 +66,7 @@
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
 #include <openvas/base/openvas_file.h>
+#include <openvas/base/openvas_networking.h>
 #include <openvas/base/pidfile.h>
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
@@ -3706,16 +3707,10 @@ static void
 get_client_address (struct MHD_Connection *conn, char *client_address)
 {
   const union MHD_ConnectionInfo* info;
-  struct sockaddr *addr;
 
   info = MHD_get_connection_info (conn, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
-  addr = info->client_addr;
-  if (info->client_addr->sa_family == AF_INET)
-    inet_ntop (AF_INET, &(((struct sockaddr_in *) addr)->sin_addr),
-               client_address, INET_ADDRSTRLEN);
-  else
-    inet_ntop (AF_INET6, &(((struct sockaddr_in6 *) addr)->sin6_addr),
-               client_address, INET6_ADDRSTRLEN);
+  sockaddr_as_str ((struct sockaddr_storage *) info->client_addr,
+                   client_address);
 }
 
 /**
