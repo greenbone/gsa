@@ -1,3 +1,12 @@
+2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Add jQuery on all pages except the login page.
+
+	* src/html/classic/js/jquery-2.1.4.js,
+	  src/html/classic/js/jquery-2.1.4.min.js,
+	  src/html/classic/js/jquery-2.1.4.min.map: Add
+	* src/html/classic/gsad.xsl, CMakeLists.txt: Update
+
 2015-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [os-details]): Add Average Severity
