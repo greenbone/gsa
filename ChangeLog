@@ -1,5 +1,10 @@
 2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Fix the path to the background
+	  image.
+
+2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Move the CSS files in their own directory.
 
 	* CMakeLists.txt, src/gsad.c, src/html/classic/gsad.xsl: Updated
