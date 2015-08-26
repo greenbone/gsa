@@ -159,7 +159,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <title>Greenbone Security Assistant</title>
     <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
     <xsl:if test="not(/login_page != '')">
+      <link rel="stylesheet" type="text/css" href="/css/select2.min.css"/>
       <script src="/js/jquery-2.1.4.min.js"></script>
+      <script src="/js/select2.min.js"></script>
     </xsl:if>
   </head>
 </xsl:template>

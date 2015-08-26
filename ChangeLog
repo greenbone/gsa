@@ -1,3 +1,12 @@
+2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Add select2 to all pages, we still need to enable it.
+
+	* src/html/classic/js/select2.js, src/html/classic/js/select2.min.js,
+	  src/html/classic/css/select2.css,
+	  src/html/classic/css/select2.min.css: Added
+	* COPYING, CMakeLists.txt, src/html/classic/gsad.xsl: updated
+
 2015-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install src/html/classic/js/d3.tip.js instead of
