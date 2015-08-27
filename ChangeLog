@@ -1,3 +1,8 @@
+2015-08-27  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/gsad.xsl, src/html/classic/css/gsa-style.css: Enable
+	  select2 for all selects on all pages.
+
 2015-08-26  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Add select2 to all pages, we still need to enable it.

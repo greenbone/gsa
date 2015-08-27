@@ -808,6 +808,22 @@ a.top_button:hover div.first_button_overlay {
  display: inline;
 }
 
+.small_inline_form .select2 {
+ font-size: 10px;
+}
+
+.small_inline_form .select2-container .select2-selection--single {
+ height: 14px;
+}
+
+.small_inline_form .select2-container--default .select2-selection--single .select2-selection__rendered{
+ line-height: 14px;
+}
+
+.small_inline_form .select2-container--default .select2-selection--single .select2-selection__arrow{
+ height: 14px;
+}
+
 .threat_info_table {
 text-align:right;
 }
