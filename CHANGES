@@ -1,3 +1,29 @@
+gsa 6.0.6 (2015-XX-XX)
+
+This is the sixth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release adds support for redirecting IPv6 ports and for "X-Frame-Options"
+and "Content-Security-Policy" headers and incorporates several improvements from
+the development branch of OpenVAS. Please see below for a comprehensive list of
+changes.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell and Timo Pollmeier.
+
+Main changes compared to 6.0.5:
+* Support for redirecting IPv6 ports has been added.
+* The GSA login page now uses a reduced CSS.
+* Support for "X-Frame-Options" and "Content-Security-Policy" headers has been
+  added.
+* Support for displaying a scanner name in place of its ID has been added.
+* Support for using "-" in Host Access IP Ranges has been added.
+* Support for automatically adding a tag directly after creating a task has been
+  added.
+* The requesting IP is now available through the XML envelope.
+* Unsuccessful login attempts are now logged.
+
+
 gsa 6.0.5 (2015-08-03)
 
 This is the fifth maintenance release of the Greenbone Security Assistant (GSA)

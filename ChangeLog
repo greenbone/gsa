@@ -1,3 +1,7 @@
+2015-08-27  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CHANGES: Updated in preparation for the upcoming 6.0.6 release.
+
 2015-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23172.
