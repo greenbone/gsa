@@ -1,5 +1,13 @@
 2015-08-28  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Make the top menu flat, integrate the buttons with the header.
+
+	* CMakeLists.txt, src/html/classic/gsad.xsl,
+	  src/html/classic/css/gsa-style.css: Updated
+	* src/html/classic/img/style/top_menu_buttons.png: Removed
+
+2015-08-28  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Dynamically toggle the filterbox.
 
 2015-08-27  Benoît Allard  <benoit.allard@greenbone.net>

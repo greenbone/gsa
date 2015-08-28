@@ -470,9 +470,6 @@ td p {
 /* END Window decorations */
 
 /* Menu Bar */
-#gb_menu {
-
-}
 
 #gb_menu ul {
  list-style: none;
@@ -488,21 +485,20 @@ td p {
  display: block;
  width: 128px;
  height: 35px;
- background: url('/img/style/top_menu_buttons.png');
- background-position: -130px 0px;
+ background-color: #393637;
  line-height: 35px;
  font-size: 10px;
  color: #FFFFFF;
  text-decoration: none;
  font-weight: bold;
+ border: 
 }
 
 div.empty_top_button {
  display: block;
  width: 128px;
  height: 35px;
- background: url('/img/style/top_menu_buttons.png');
- background-position: -130px 0px;
+ background-color: #393637;
  line-height: 35px;
  font-size: 10px;
  color: #FFFFFF;
@@ -510,26 +506,16 @@ div.empty_top_button {
  font-weight: bold;
 }
 
-#gb_menu ul .first_button > a {
+#gb_menu ul:first > a {
  width: 130px;
- background-position: 0px 0px;
 }
 
-#gb_menu ul .first_button:hover a {
- background-position: 0px -35px;
-}
-
-#gb_menu ul .last_button > a {
+#gb_menu ul:last > a {
  width: 130px;
- background-position: -258px 0px;
 }
 
-#gb_menu ul .last_button:hover a {
- background-position: -258px -35px;
-}
-
-#gb_menu ul li:hover a {
- background-position: -130px -35px;
+#gb_menu ul > li:hover > a {
+ background-color: #66c430;
 }
 
 #gb_menu ul.first_button_overlay,

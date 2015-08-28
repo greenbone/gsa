@@ -425,7 +425,6 @@ install (FILES src/html/classic/img/style/gsa-logo.png
                src/html/classic/img/style/window_dec_a_error.png
                src/html/classic/img/style/window_dec_b_error.png
                src/html/classic/img/style/window_dec_c_error.png
-               src/html/classic/img/style/top_menu_buttons.png
                src/html/classic/img/style/menu_pointy.png
                src/html/classic/img/style/dropdown_arrow.png
                src/html/classic/img/style/dropdown_arrow_green.png

@@ -856,7 +856,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/style/gsa-logo.png" alt="Greenbone Security Assistant" width="202" height="40"/>
       </a>
     </div>
-    <div style="height: 51px">
+    <div style="height: 50px">
       <div class="logout_panel">
         <xsl:choose>
           <xsl:when test="$username = ''">
@@ -1571,7 +1571,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </div>
-  <br clear="all"/>
 </xsl:template>
 
 <xsl:template name="print-node">
@@ -1642,7 +1641,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  <center>
   <div id="gb_menu">
    <ul>
-    <li class="first_button">
+    <li>
       <xsl:variable name="items">
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
@@ -2055,7 +2054,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </li>
-    <li class="last_button">
+    <li>
      <a class="top_button"
         href="/help/contents.html?token={/envelope/token}">
        <xsl:value-of select="gsa:i18n ('Help', 'Help')"/>
