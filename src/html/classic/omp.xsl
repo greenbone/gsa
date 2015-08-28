@@ -1072,7 +1072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:otherwise>
       </xsl:choose>
-      <form action="" method="get" enctype="multipart/form-data">
+      <form action="" method="get" enctype="multipart/form-data" name="filterform">
         <xsl:variable name="criteria">
           <xsl:call-template name="filter-criteria"/>
         </xsl:variable>
@@ -1099,46 +1099,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                  src="/img/help.png" border="0"/>
           </a>
-          <xsl:variable name="fold">
-            <xsl:choose>
-              <xsl:when test="/envelope/params/filterbox &gt; 0">1</xsl:when>
-              <xsl:otherwise>0</xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
-          <xsl:variable name="title">
-            <xsl:choose>
-              <xsl:when test="$filterbox=1">
-                <xsl:value-of select="gsa:i18n ('Fold filter', 'Filter')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="gsa:i18n ('Unfold filter', 'Filter')"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
           <xsl:variable name="extras">
             <xsl:for-each select="exslt:node-set($extra_params)/param">
               <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
             </xsl:for-each>
           </xsl:variable>
-          <a href="/omp?cmd=get_{gsa:type-many($type)}{$extras}&amp;filterbox={$filterbox}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
-             title="{$title}">
-             <xsl:call-template name="fold-filter-icon-img">
-               <xsl:with-param name="fold" select="$fold"/>
-             </xsl:call-template>
+          <input type="hidden" name="filter_extra" value="{$extra}" />
+          <script>
+var toggleFilter = function(){
+  // Update the form parameter
+  document.filterform.build_filter.value ^= 1;
+  // Show/hide the detailled form
+  $('#filterbox').slideToggle();
+  // manage the button itself
+  var filtericon = $('#togglefiltericon');
+  filtericon.toggleClass('expand');
+  if (filtericon.hasClass('expand')){
+    filtericon.attr({
+      src:   "/img/unfold.png",
+      title: "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>",
+      alt:   "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>"
+    });
+  } else {
+    filtericon.attr({
+      src:   "/img/fold.png",
+      title: "<xsl:value-of select="gsa:i18n ('Fold filter')"/>",
+      alt:   "<xsl:value-of select="gsa:i18n ('Fold filter')"/>"
+    });
+  }
+};
+          </script>
+          <a href="javascript:void(0);"
+	     onclick="toggleFilter();">
+             <img id="togglefiltericon" class="expand"
+                  src="/img/unfold.png"
+                  style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+                  alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
           </a>
         </div>
-        <xsl:if test="not(/envelope/params/filterbox &gt; 0)">
-          <div class="footnote" style="margin-left:40px;">
-            <xsl:value-of select="$extra"/>
-          </div>
-          <input type="hidden" name="filter_extra" value="{$extra}"/>
-        </xsl:if>
-        <xsl:if test="/envelope/params/filterbox &gt; 0">
+        <div id="filterbox" style="display: none;">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-          <input type="hidden" name="build_filter" value="1"/>
-          <input type="hidden" name="filt_id" value="--"/>
+          <input type="hidden" name="build_filter" value="0"/>
           <xsl:for-each select="exslt:node-set($extra_params)/param">
             <input type="hidden" name="{name}" value="{value}"/>
           </xsl:for-each>
@@ -1310,7 +1312,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="float: right; margin-right: 5px; margin-top: -25px">
             <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
           </div>
-        </xsl:if>
+        </div>
       </form>
     </div>
   </div>
@@ -2849,7 +2851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="concat($name, ' ', $order)"/>
     </xsl:when>
     <xsl:otherwise>
-        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={delta/report/@id}&amp;delta_states={filters/delta/text()}&amp;sort_field={$field}&amp;sort_order={$order}&amp;max_results={results/@max}&amp;levels={$levels}&amp;notes={filters/notes}&amp;filterbox={/envelope/params/filterbox}&amp;details={/envelope/params/details}&amp;overrides={filters/overrides}&amp;result_hosts_only={filters/result_hosts_only}&amp;autofp={filters/autofp}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={delta/report/@id}&amp;delta_states={filters/delta/text()}&amp;sort_field={$field}&amp;sort_order={$order}&amp;max_results={results/@max}&amp;levels={$levels}&amp;notes={filters/notes}&amp;details={/envelope/params/details}&amp;overrides={filters/overrides}&amp;result_hosts_only={filters/result_hosts_only}&amp;autofp={filters/autofp}&amp;token={/envelope/token}">
         <xsl:value-of select="concat($name, ' ', $order)"/>
       </a>
     </xsl:otherwise>
@@ -2929,81 +2931,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="fold-filter-icon-img">
-  <xsl:param name="fold"/>
-  <xsl:choose>
-    <xsl:when test="$fold &gt; 0">
-      <img src="/img/fold.png"
-           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="{gsa:i18n ('Fold filter', 'Filter')}" title="{gsa:i18n ('Fold filter', 'Filter')}"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <img src="/img/unfold.png"
-           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template match="report" mode="fold-filter-icon">
-  <xsl:variable name="fold">
-    <xsl:choose>
-      <xsl:when test="/envelope/params/filterbox &gt; 0">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="filter_term">
-    <xsl:choose>
-      <xsl:when test="/envelope/params/cmd='get_report_section' and /envelope/params/report_section != 'results' and /envelope/params/report_section != 'summary'">
-        <xsl:value-of select="/envelope/params/filter"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="filters/term"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="filterbox" select="($fold - 1)*($fold - 1)"/>
-  <xsl:variable name="apply_filter" select="/envelope/params/apply_filter"/>
-  <xsl:variable name="host" select="/envelope/params/host"/>
-  <xsl:variable name="pos" select="/envelope/params/pos"/>
-  <xsl:variable name="delta" select="delta/report/@id"/>
-
-  <xsl:variable name="link">
-    <xsl:choose>
-      <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filterbox=', $filterbox, '&amp;apply_filter=', $apply_filter, '&amp;details=', /envelope/params/details, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
-      <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filterbox=', $filterbox, '&amp;apply_filter=', $apply_filter, '&amp;details=', /envelope/params/details, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
-      <xsl:when test="/envelope/params/cmd = 'get_report_section'">
-        <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', /envelope/params/report_section, '&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filterbox=', $filterbox, '&amp;apply_filter=', $apply_filter, '&amp;details=', /envelope/params/details, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;filterbox=', $filterbox, '&amp;apply_filter=', $apply_filter, '&amp;details=', /envelope/params/details, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="title">
-    <xsl:choose>
-      <xsl:when test="$fold=1">
-        <xsl:value-of select="gsa:i18n ('Fold filter', 'Filter')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="gsa:i18n ('Unfold filter', 'Filter')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <a href="{$link}"
-     title="{$title}">
-     <xsl:call-template name="fold-filter-icon-img">
-       <xsl:with-param name="fold" select="$fold"/>
-     </xsl:call-template>
-  </a>
-</xsl:template>
-
 <xsl:template name="result-details-icon-img">
   <xsl:param name="details"/>
   <xsl:choose>
@@ -3049,13 +2976,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -3124,13 +3051,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="link">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filterbox=', /envelope/params/filterbox, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -3152,7 +3079,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report" mode="filterbox">
-  <xsl:if test="/envelope/params/filterbox &gt; 0">
+  <div id="filterbox" style="display: none;">
     <div style="background-color: #EEEEEE;">
       <form action="" method="get" enctype="multipart/form-data">
         <xsl:choose>
@@ -3596,7 +3523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </form>
     </div>
-  </xsl:if>
+  </div>
 </xsl:template>
 
 <xsl:template match="report" mode="results">
@@ -26564,13 +26491,13 @@ should not have received it.
   <xsl:variable name="link-start">
     <xsl:choose>
       <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand)"/>
       </xsl:when>
       <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', delta/report/@id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', delta/report/@id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand, '&amp;filterbox=', /envelope/params/filterbox)"/>
+        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -28568,7 +28495,35 @@ should not have received it.
               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
                   src="/img/help.png" border="0"/>
             </a>
-            <xsl:apply-templates select="." mode="fold-filter-icon"/>
+            <script>
+var toggleFilter = function(){
+  // Show/hide the detailled form
+  $('#filterbox').toggleSlide();
+  // manage the button itself
+  var filtericon = $('#togglefiltericon');
+  filtericon.toggleClass('expand');
+  if (filtericon.hasClass('expand')){
+    filtericon.attr({
+      src:   "/img/unfold.png",
+      title: "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>",
+      alt:   "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>"
+    });
+  } else {
+    filtericon.attr({
+      src:   "/img/fold.png",
+      title: "<xsl:value-of select="gsa:i18n ('Fold filter')"/>",
+      alt:   "<xsl:value-of select="gsa:i18n ('Fold filter')"/>"
+    });
+  }
+}
+            </script>
+            <a href="javascript:void(0);"
+	       onclick="toggleFilter();">
+               <img id="togglefiltericon" class="expand"
+                    src="/img/unfold.png"
+                    style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+                    alt="{gsa:i18n ('Unfold filter')}" title="{gsa:i18n ('Unfold filter')}"/>
+            </a>
           </xsl:when>
           <xsl:otherwise>
             <select name="apply_filter" style="width:165px">

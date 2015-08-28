@@ -1,3 +1,7 @@
+2015-08-28  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl: Dynamically toggle the filterbox.
+
 2015-08-27  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/gsad.xsl, src/html/classic/css/gsa-style.css: Enable
