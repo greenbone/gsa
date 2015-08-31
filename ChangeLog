@@ -1,5 +1,11 @@
 2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r23211.
+
+	* src/gsad_omp.c (export_many): XML escape the filter.
+
+2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r23209.
 
 	* src/html/classic/gsad.xsl (login_page): Use last page URL for guest
