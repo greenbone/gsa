@@ -1,3 +1,8 @@
+2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (login_page): Use last page URL for guest
+	login if available.
+
 2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Make better use of the width of
