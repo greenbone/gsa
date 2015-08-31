@@ -1,5 +1,10 @@
 2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Make better use of the width of
+	  the display.
+
+2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: REstore the display of the extra filter\
 	  elements above the filterbox.
 
