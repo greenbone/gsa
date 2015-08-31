@@ -2264,6 +2264,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   char *content = NULL;
   gchar *html;
   const char *filter;
+  gchar *filter_escaped;
   gchar *type_many;
   gchar *fname_format, *file_name;
   int ret;
@@ -2289,6 +2290,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   filter = params_value (params, "filter");
 
+  filter_escaped = g_markup_escape_text (filter, -1);
+
   if (strcmp (type, "info") == 0)
     {
       if (openvas_server_sendf (&session,
@@ -2298,10 +2301,11 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 " details=\"1\""
                                 " filter=\"%s\"/>",
                                 params_value (params, "info_type"),
-                                filter ? filter : "")
+                                filter_escaped ? filter_escaped : "")
           == -1)
         {
           openvas_server_close (socket, session);
+          g_free (filter_escaped);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2318,10 +2322,11 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 " details=\"1\""
                                 " filter=\"%s\"/>",
                                 type,
-                                filter ? filter : "")
+                                filter_escaped ? filter_escaped : "")
           == -1)
         {
           openvas_server_close (socket, session);
+          g_free (filter_escaped);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2330,6 +2335,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                               "/omp?cmd=get_tasks");
         }
     }
+  g_free (filter_escaped);
 
   entity = NULL;
   if (read_entity_and_text (&session, &entity, &content))
