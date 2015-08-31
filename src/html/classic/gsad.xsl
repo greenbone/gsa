@@ -160,8 +160,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
     <xsl:if test="not(/login_page != '')">
       <link rel="stylesheet" type="text/css" href="/css/select2.min.css"/>
-      <script src="/js/jquery-2.1.4.min.js"></script>
-      <script src="/js/select2.min.js"></script>
+      <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+      <script src="/js/select2.min.js" type="text/javascript"></script>
     </xsl:if>
   </head>
 </xsl:template>
@@ -850,13 +850,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
-  <div style="text-align:left;">
+  <div id="gb_header">
+   <div class="envelope">
     <div class="logo">
       <a href="/omp?token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/gsa-logo.png" alt="Greenbone Security Assistant" width="202" height="40"/>
       </a>
     </div>
-    <div style="height: 50px">
+    <div>
       <div class="logout_panel">
         <xsl:choose>
           <xsl:when test="$username = ''">
@@ -1566,10 +1567,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <script type="text/javascript">
             document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"<xsl:value-of select="gsa:i18n('JavaScript is active', 'Logo')"/>\" title=\"<xsl:value-of select="gsa:i18n('JavaScript is active', 'Logo')"/>\"/&gt;");
           </script>
-          <noscript></noscript>
         </a>
       </div>
     </div>
+   </div>
   </div>
 </xsl:template>
 
@@ -1638,9 +1639,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-gsa-navigation">
   <xsl:variable name="token" select="/envelope/token"/>
- <center>
-  <div id="gb_menu">
-   <ul>
+  <div id="gb_menu" class="clearfix">
+   <ul class="envelope">
     <li>
       <xsl:variable name="items">
         <xsl:if test="gsa:may-op ('GET_TASKS')">
@@ -2075,9 +2075,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </li>
    </ul>
   </div>
-  <br clear="all" />
-  <br />
- </center>
 </xsl:template>
 
 <!-- DIALOGS -->
@@ -2363,16 +2360,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
+      <xsl:call-template name="html-gsa-logo">
+        <xsl:with-param name="username">
+          <xsl:value-of select="login/text()"/>
+        </xsl:with-param>
+        <xsl:with-param name="time">
+          <xsl:value-of select="time"/>
+        </xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="html-gsa-navigation"/>
       <div class="envelope">
-        <xsl:call-template name="html-gsa-logo">
-          <xsl:with-param name="username">
-            <xsl:value-of select="login/text()"/>
-          </xsl:with-param>
-          <xsl:with-param name="time">
-            <xsl:value-of select="time"/>
-          </xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="html-gsa-navigation"/>
         <xsl:apply-templates/>
         <xsl:call-template name="html-footer"/>
       </div>
@@ -2404,7 +2401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates/>
       </center>
       <xsl:if test="not(/login_page != '')">
-        <script>
+        <script type="text/javascript">
         $(document).ready(function(){
           $('select').select2();
         });

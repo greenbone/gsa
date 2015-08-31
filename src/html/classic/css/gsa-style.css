@@ -27,11 +27,20 @@
  */
 
 body {
- background: #FFFFFF url(/img/style/background.png) repeat-x left 0px;
  margin: 0px;
  font: small Verdana, sans-serif;
  font-size: 12px;
  color: #1A1A1A;
+}
+
+.clearfix:before,
+.clearfix:after {
+ content: " ";
+ display: table;
+}
+
+.clearfix:after {
+ clear:both;
 }
 
 a:link {
@@ -469,7 +478,21 @@ td p {
 
 /* END Window decorations */
 
+#gb_header {
+ text-align: left;
+ height: 40px;
+ background: linear-gradient(to bottom, #b4e941 0%,#57972e 100%);
+}
+
+#gb_header > div {
+ margin: auto;
+}
+
 /* Menu Bar */
+#gb_menu {
+ margin-bottom: 12px;
+ background-color: #393637;
+}
 
 #gb_menu ul {
  list-style: none;
@@ -485,7 +508,6 @@ td p {
  display: block;
  width: 128px;
  height: 35px;
- background-color: #393637;
  line-height: 35px;
  font-size: 10px;
  color: #FFFFFF;
@@ -506,10 +528,7 @@ div.empty_top_button {
  font-weight: bold;
 }
 
-#gb_menu ul:first > a {
- width: 130px;
-}
-
+#gb_menu ul:first > a,
 #gb_menu ul:last > a {
  width: 130px;
 }

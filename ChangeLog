@@ -1,3 +1,11 @@
+2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Integrate the menu bar into the header.
+
+	* CMakeLists.txt, src/html/classic/css/gsa-style.css,
+	  src/html/classic/gsad.xsl: Updated
+	* src/html/classic/img/style/background.png: Removed
+
 2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add Gantt chart of Task schedules and update D3.js.

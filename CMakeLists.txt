@@ -419,7 +419,6 @@ install (FILES src/html/classic/img/agent.png
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png
-               src/html/classic/img/style/background.png
                src/html/classic/img/style/window_dec_a.png
                src/html/classic/img/style/window_dec_b.png
                src/html/classic/img/style/window_dec_c.png
