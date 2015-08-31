@@ -2298,7 +2298,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </center>
         <xsl:if test="string-length (guest/username) &gt; 0">
           <div style="text-align: right">
-            <a href="/omp?token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+            <xsl:choose>
+              <xsl:when test="string-length(url) = 0">
+                <a href="/omp?r=1&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="{url}&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </xsl:if>
       </div>
