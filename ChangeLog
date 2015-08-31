@@ -1,5 +1,10 @@
 2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: REstore the display of the extra filter\
+	  elements above the filterbox.
+
+2015-08-31  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Integrate the menu bar into the header.
 
 	* CMakeLists.txt, src/html/classic/css/gsa-style.css,

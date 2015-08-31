@@ -1137,6 +1137,9 @@ var toggleFilter = function(){
                   alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
           </a>
         </div>
+        <div class="footnote" style="margin-left:40px;">
+          <xsl:value-of select="$extra"/>
+        </div>
         <div id="filterbox" style="display: none;">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
