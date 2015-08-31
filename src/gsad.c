@@ -1038,6 +1038,7 @@ init_validator ()
                          "|(get_targets)"
                          "|(get_task)"
                          "|(get_tasks)"
+                         "|(get_tasks_chart)"
                          "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
@@ -1384,6 +1385,7 @@ init_validator ()
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
   openvas_validator_alias (validator, "include_related",   "number");
+  openvas_validator_alias (validator, "ignore_pagination",   "boolean");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
@@ -1446,6 +1448,7 @@ init_validator ()
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "scanner_type", "number");
+  openvas_validator_alias (validator, "schedules_only", "boolean");
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "subject_id",   "id");
@@ -2637,6 +2640,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_role)
   ELSE (get_task)
   ELSE (get_tasks)
+  ELSE (get_tasks_chart)
   ELSE (edit_agent)
   ELSE (edit_alert)
   ELSE (edit_config)
@@ -4290,7 +4294,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (guest_password
               && strcmp (credentials->username, guest_username) == 0
               && cmd
-              && strcmp (cmd, "get_aggregate") == 0)
+              && (strcmp (cmd, "get_aggregate") == 0
+                  || strcmp (cmd, "get_tasks_chart") == 0))
             {
               ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS (response);
             }

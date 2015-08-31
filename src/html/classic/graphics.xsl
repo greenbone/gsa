@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_bubble_chart.js"></script>
   <script src="/js/gsa_cloud_chart.js"></script>
   <script src="/js/gsa_donut_chart.js"></script>
+  <script src="/js/gsa_gantt_chart.js"></script>
   <script src="/js/gsa_h_bar_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
@@ -160,6 +161,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:if test="$aggregate_mode != ''">
                          aggregate_mode:"<xsl:value-of select="$aggregate_mode"/>",
             </xsl:if>
+                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                         filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
+          </xsl:otherwise>
+        </xsl:choose>
+    }
+</xsl:template>
+
+<xsl:template name="js-tasks-data-source">
+  <xsl:param name="data_source_name" select="'tasks-source'"/>
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+    {
+      gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"]
+        =
+        <xsl:choose>
+          <xsl:when test="0">
+          </xsl:when>
+          <xsl:otherwise>
+            DataSource ("get_tasks",
+                        {xml:1,
+                         ignore_pagination : 1,
+                         schedules_only : 1,
                          filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
                          filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:otherwise>
@@ -399,6 +424,104 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </xsl:template>
 
+<xsl:template name="js-tasks-chart">
+  <xsl:param name="chart_name" select="'aggregate-chart'"/>
+  <xsl:param name="data_source_name" select="concat($chart_name, '-source')"/>
+  <xsl:param name="generator_name" select="concat($chart_name, '-generator')"/>
+  <xsl:param name="display_name" select="'chart-box'"/>
+
+  <xsl:param name="chart_type"/>
+  <xsl:param name="init_params" select="''"/>
+  <xsl:param name="gen_params" select="''"/>
+
+  <xsl:param name="chart_template"/>
+  <xsl:param name="auto_load" select="0"/>
+
+  <xsl:variable name="init_params_js">
+    {
+      <xsl:for-each select="exslt:node-set ($init_params)/params/param">
+        "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+        <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+      </xsl:for-each>
+    }
+  </xsl:variable>
+
+  <xsl:variable name="gen_params_js">
+    {
+      "extra" : {
+        <xsl:for-each select="exslt:node-set ($gen_params)/params/param">
+          "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+          <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+        </xsl:for-each>
+        }
+    }
+  </xsl:variable>
+
+  if (gsa.displays ["<xsl:value-of select="$display_name"/>"] == undefined)
+    {
+      console.error ("Display not found: <xsl:value-of select="$display_name"/>");
+    }
+
+  if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+    {
+      console.error ("Data source not found: <xsl:value-of select="$data_source_name"/>");
+    }
+
+  <!-- Select selector label -->
+  <xsl:variable name="selector_label">
+    <xsl:choose>
+      <xsl:when test="exslt:node-set ($init_params)/params/param[@name='title_text'] != ''">
+        <xsl:value-of select="gsa:escape-js (exslt:node-set ($init_params)/params/param[@name='title_text'])"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'Next scheduled tasks'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Select title generator -->
+  <xsl:variable name="title_generator">
+    <xsl:choose>
+      <xsl:when test="exslt:node-set ($init_params)/params/param[@name='title_text'] != ''">
+        title_static ("<xsl:value-of select="gsa:escape-js (exslt:node-set ($init_params)/params/param[@name='title_text'])"/> (Loading...)", "<xsl:value-of select="gsa:escape-js (exslt:node-set ($init_params)/params/param[@name='title_text'])"/>")
+      </xsl:when>
+      <xsl:otherwise>
+        title_static ("Next scheduled tasks (Loading...)", "Next scheduled tasks")
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Create chart generator -->
+  <xsl:choose>
+    <xsl:when test="0">
+    </xsl:when>
+    <xsl:otherwise>
+      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+        = GanttChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+            .title (<xsl:value-of select="$title_generator"/>)
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <!-- Create basic chart -->
+  gsa.charts ["<xsl:value-of select="$chart_name"/>"] =
+    Chart (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"],
+            gsa.generators ["<xsl:value-of select="$generator_name"/>"],
+            gsa.displays ["<xsl:value-of select="$display_name"/>"],
+            "<xsl:value-of select="$chart_name"/>",
+            "<xsl:value-of select="$selector_label"/>",
+            "/img/charts/severity-bar-chart.png",
+            1,
+            "<xsl:value-of select="$chart_type"/>",
+            "<xsl:value-of select="$chart_template"/>",
+            <xsl:value-of select="$gen_params_js"/>,
+            <xsl:value-of select="$init_params_js"/>);
+
+  <xsl:if test="$auto_load">
+    gsa.charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
+  </xsl:if>
+
+</xsl:template>
+
 <xsl:template name="js-scan-management-top-visualization">
   <xsl:param name="type" select="'task'"/>
   <xsl:param name="auto_load_left_pref_id">
@@ -619,6 +742,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
+      <xsl:call-template name="js-tasks-data-source">
+        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+
       <xsl:call-template name="js-aggregate-chart">
         <xsl:with-param name="chart_name" select="'left-by-task-status'"/>
         <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
@@ -733,6 +862,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="js-tasks-chart">
+        <xsl:with-param name="chart_name" select="'left-task-schedules'"/>
+        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
+        <xsl:with-param name="chart_type" select="'gantt'"/>
+        <xsl:with-param name="chart_template" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="js-tasks-chart">
+        <xsl:with-param name="chart_name" select="'right-by-task-status'"/>
+        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
+        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+        <xsl:with-param name="chart_type" select="'gantt'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>

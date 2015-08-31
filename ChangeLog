@@ -1,3 +1,44 @@
+2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add Gantt chart of Task schedules and update D3.js.
+
+	* CMakeLists.txt: Install file src/html/classic/js/gsa_gantt_chart.js.
+
+	* src/gsad_omp.c (generate_page): Add get_tasks_chart.
+	(get_tasks): Add parameters ignore_pagination and schedules_only.
+	(get_tasks_chart, get_tasks_chart_omp): New functions.
+
+	* src/gsad_omp.h (get_tasks_chart_omp): New function prototype.
+
+	* src/gsad.c (init_validator): Add command get_tasks_chart and params
+	ignore_pagination and schedules_only.
+	(exec_omp_get): Add case for get_tasks_chart.
+	(request_handler): Apply guest chart content security headers to
+	get_tasks_chart as well.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Add script
+	/js/gsa_gantt_chart.js.
+	(js-tasks-data-source, js-tasks-chart): New templates.
+	(js-scan-management-top-visualization): Add Gantt chart of Task
+	Schedules.
+
+	* src/html/classic/gsad.xsl (envelope): Do not add menus, logo and
+	footer for get_tasks_chart.
+
+	* src/html/classic/omp.xsl (get_tasks_chart): New template
+
+	* src/html/classic/js/d3.v3.js, src/html/classic/js/d3.v3.min.js:
+	Update to version 3.5.6.
+
+	* src/html/classic/js/gsa_gantt_chart.js: New JavaScript file for Gantt
+	charts.
+
+	* src/html/classic/js/gsa_graphics_base.js (Chart [detached_url]):
+	Use get_tasks_chart if command is get_tasks.
+	(DataSource): Add case for get_tasks.
+	(tasks_column_info, extract_task_records): New functions.
+	(fit_detached_window): Select #tasks-display as well.
+
 2015-08-28  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Make the top menu flat, integrate the buttons with the header.

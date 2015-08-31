@@ -295,6 +295,7 @@ install (FILES src/html/classic/js/d3.tip.js
                src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_cloud_chart.js
                src/html/classic/js/gsa_donut_chart.js
+               src/html/classic/js/gsa_gantt_chart.js
                src/html/classic/js/gsa_graphics_base.js
                src/html/classic/js/gsa_h_bar_chart.js
                src/html/classic/js/gsa_line_chart.js

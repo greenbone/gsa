@@ -120,6 +120,8 @@ static char *get_task (credentials_t *, params_t *, const char *);
 
 static char *get_tasks (credentials_t *, params_t *, const char *);
 
+static char *get_tasks_chart (credentials_t *, params_t *, const char *);
+
 static char *get_trash (credentials_t *, params_t *, const char *);
 
 static char *get_config_family (credentials_t *, params_t *, int);
@@ -1106,6 +1108,9 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "get_tasks") == 0)
     return get_tasks (credentials, params, response);
+
+  if (strcmp (next, "get_tasks_chart") == 0)
+    return get_tasks_chart (credentials, params, response);
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -4470,14 +4475,31 @@ params_toggle_overrides (params_t *params, const char *overrides)
 static char *
 get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  const char *overrides;
+  const char *overrides, *schedules_only, *ignore_pagination;
+  gchar *extra_attribs, *ret;
 
   overrides = params_value (params, "overrides");
+  schedules_only = params_value (params, "schedules_only");
+  ignore_pagination = params_value (params, "ignore_pagination");
+
   if (overrides)
     /* User toggled overrides.  Set the overrides value in the filter. */
     params_toggle_overrides (params, overrides);
 
-  return get_many ("task", credentials, params, extra_xml, NULL);
+  extra_attribs = g_strdup_printf ("%s%s%s"
+                                   "%s%s%s",
+                                   schedules_only ? "schedules_only=\"" : "",
+                                   schedules_only ? schedules_only : "",
+                                   schedules_only ? "\" " : "",
+                                   ignore_pagination
+                                    ? "ignore_pagination=\""
+                                    : "",
+                                   ignore_pagination ? ignore_pagination : "",
+                                   ignore_pagination ? "\" " : "");
+
+  ret = get_many ("task", credentials, params, extra_xml, extra_attribs);
+  g_free (extra_attribs);
+  return ret;
 }
 
 /**
@@ -4493,6 +4515,37 @@ get_tasks_omp (credentials_t * credentials, params_t *params)
 {
   return get_tasks (credentials, params, NULL);
 }
+
+/**
+ * @brief Get a tasks chart, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  params            Request parameters.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_tasks_chart (credentials_t *credentials, params_t *params,
+                 const char *extra_xml)
+{
+  return xsl_transform_omp (credentials, g_strdup ("<get_tasks_chart/>"));
+}
+
+/**
+ * @brief Get a tasks chart, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_tasks_chart_omp (credentials_t * credentials, params_t *params)
+{
+  return get_tasks_chart (credentials, params, NULL);
+}
+
 
 /**
  * @brief Get all tasks, XSL transform the result.

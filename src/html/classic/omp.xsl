@@ -7143,6 +7143,75 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
+<!-- GET_TASKS_CHART -->
+
+<xsl:template match="get_tasks_chart">
+  <xsl:variable name="filter_term" select="/envelope/params/filter"/>
+  <xsl:variable name="filt_id" select="/envelope/params/filt_id"/>
+
+  <xsl:call-template name="init-d3charts"/>
+  <div id="tasks-container"/>
+  <xsl:choose>
+    <xsl:when test="$filter_term != ''">
+      <div id="applied_filter" class="footnote" style="padding: 5px 10px">
+        <b><xsl:value-of select="gsa:i18n('Applied filter:', 'Filter')"/></b>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$filter_term"/>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <div id="applied_filter"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:call-template name="html-footer"/>
+  <script>
+    <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'tasks-container'"/>
+      <xsl:with-param name="container_id" select="'tasks-display'"/>
+      <xsl:with-param name="container_width" select="'98%'"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-tasks-data-source">
+      <xsl:with-param name="data_source_name" select="'tasks-source'"/>
+      <xsl:with-param name="filter" select="$filter_term"/>
+      <xsl:with-param name="filt_id" select="$filt_id"/>
+      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
+    </xsl:call-template>
+    <xsl:call-template name="js-tasks-chart">
+      <xsl:with-param name="chart_name" select="'tasks-chart'"/>
+      <xsl:with-param name="data_source_name" select="'tasks-source'"/>
+      <xsl:with-param name="generator_name" select="'tasks-generator'"/>
+      <xsl:with-param name="display_name" select="'tasks-display'"/>
+      <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
+      <xsl:with-param name="init_params">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">
+          <params>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
+              <param name="{substring-after (name, 'chart_init:')}"><xsl:value-of select="value"/></param>
+            </xsl:for-each>
+          </params>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="gen_params">
+        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
+          <params>
+            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
+              <param name="{substring-after (name, 'chart_gen:')}"><xsl:value-of select="value"/></param>
+            </xsl:for-each>
+          </params>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
+      <xsl:with-param name="auto_load" select="0"/>
+    </xsl:call-template>
+
+    if (this.fit_window)
+      fit_detached_window ()
+
+    window.onresize = detached_chart_resize_listener (gsa.displays ["tasks-display"])
+    window.onresize ();
+  </script>
+</xsl:template>
+
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
 

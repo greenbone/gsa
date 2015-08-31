@@ -244,7 +244,11 @@ function Chart (p_data_src, p_generator, p_display,
                               + "=" + gen_params.extra[param] + ""
         }
 
-      return create_uri (data_src.command (),
+      var command = data_src.command ();
+      if (command != "get_aggregate")
+        command = command + "_chart";
+
+      return create_uri (command,
                          data_src.params (),
                          data_src.prefix (),
                          true)
@@ -411,6 +415,30 @@ function DataSource (command, params, prefix)
                                            records : extract_simple_records (xml_select, "aggregate group"),
                                            column_info : extract_column_info (xml_select, gen_params),
                                            filter_info : extract_filter_info (xml_select, gen_params) };
+                                }
+                              else if (command == "get_tasks")
+                                {
+                                  var omp_status
+                                        = xml_select.select ("get_tasks get_tasks_response")
+                                                      .attr ("status");
+                                  var omp_status_text
+                                        = xml_select.select ("get_tasks get_tasks_response")
+                                                      .attr ("status_text");
+
+                                  if (omp_status != "200")
+                                    {
+                                      output_error (chart,
+                                                    "Error " + omp_status
+                                                    + ": " + omp_status_text,
+                                                    "OMP Error " + omp_status
+                                                    + ": " + omp_status_text)
+                                      return my;
+                                    }
+
+                                  data = { original_xml : xml_select,
+                                           records : extract_task_records (xml_select),
+                                           column_info : tasks_column_info (),
+                                           filter_info : extract_filter_info (xml_select) };
                                 }
                               else
                                 {
@@ -877,6 +905,94 @@ function extract_column_info (xml_data, gen_params)
 }
 
 /*
+ * Gets column info for get_tasks
+ */
+function tasks_column_info ()
+{
+  return {
+    columns : {
+      id : {
+        name : "id",
+        stat : "value",
+        type : "task",
+        column : "id",
+        data_type : "uuid"
+      },
+      name : {
+        name : "name",
+        stat : "value",
+        type : "task",
+        column : "name",
+        data_type : "text"
+      },
+      schedule_id : {
+        name : "schedule_id",
+        stat : "value",
+        type : "task",
+        column : "schedule_id",
+        data_type : "uuid"
+      },
+      schedule_name : {
+        name : "schedule_name",
+        stat : "value",
+        type : "task",
+        column : "schedule_name",
+        data_type : "text"
+      },
+      schedule_next_time : {
+        name : "schedule_next_time",
+        stat : "value",
+        type : "task",
+        column : "schedule_next_time",
+        data_type : "iso_time"
+      },
+      schedule_trash : {
+        name : "schedule_trash",
+        stat : "value",
+        type : "task",
+        column : "schedule_trash",
+        data_type : "integer"
+      },
+      schedule_next_time : {
+        name : "schedule_first_time",
+        stat : "value",
+        type : "task",
+        column : "schedule_first_time",
+        data_type : "iso_time"
+      },
+      schedule_period : {
+        name : "schedule_period",
+        stat : "value",
+        type : "task",
+        column : "schedule_period",
+        data_type : "integer"
+      },
+      schedule_period_months : {
+        name : "schedule_period_months",
+        stat : "value",
+        type : "task",
+        column : "schedule_period_months",
+        data_type : "integer"
+      },
+      schedule_duration : {
+        name : "schedule_duration",
+        stat : "value",
+        type : "task",
+        column : "schedule_duration",
+        data_type : "integer"
+      },
+      schedule_periods : {
+        name : "schedule_periods",
+        stat : "value",
+        type : "task",
+        column : "schedule_periods",
+        data_type : "integer"
+      }
+    }
+  }
+}
+
+/*
  * Extracts filter info from XML
  */
 function extract_filter_info (xml_data, gen_params)
@@ -892,6 +1008,41 @@ function extract_filter_info (xml_data, gen_params)
     filter_info.name = "";
 
   return filter_info;
+}
+
+
+/*
+ * Extracts records from XML
+ */
+function extract_task_records (xml_data)
+{
+  var records = [];
+  xml_data.selectAll ("task")
+            .each (function (d, i)
+                    {
+                      var task = d3.select (this);
+                      var schedule = task.select ("schedule");
+                      var periods = task.select ("schedule_periods");
+
+                      var record = { id : task.attr ("id"),
+                                     name : task.select ("name").text () };
+                      record ["schedule_id"] = schedule.attr ("id")
+                          schedule.selectAll ("*")
+                            .each (function (d, i)
+                                    {
+                                      record ["schedule_" + this.localName]
+                                        = this.textContent;
+                                    })
+
+                      if (periods.node())
+                        {
+                          record ["schedule_periods"] = periods.text ();
+                        }
+
+                      records.push (record);
+                     });
+
+  return records;
 }
 
 
@@ -1565,7 +1716,7 @@ function open_detached (url)
  */
 function fit_detached_window ()
 {
-  var display = d3.select ("#aggregate-display");
+  var display = d3.select ("#aggregate-display, #tasks-display");
   var display_width = Number (display.property ("scrollWidth"));
   var display_height = Number (display.property ("scrollHeight"));
   var filter = d3.select ("#applied_filter");
