@@ -1,3 +1,9 @@
+2015-09-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Only show "pass" type credentials in SMB and
+	ESXi dropdowns.
+
 2015-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (export_many): XML escape the filter.
