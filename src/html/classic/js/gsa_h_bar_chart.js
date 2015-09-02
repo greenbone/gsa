@@ -65,6 +65,8 @@ function HorizontalBarChartGenerator ()
   var x_data;
   var size_data;
 
+  var empty_text = "empty";
+
   var x_label = "";
   var y_label = "";
 
@@ -185,6 +187,12 @@ function HorizontalBarChartGenerator ()
             return;
         }
 
+      if (gen_params.extra.empty_text)
+        empty_text = gen_params.extra.empty_text;
+      else
+        empty_text = "No matching " + resource_type_name (column_info.columns
+                                                          [x_field].type);
+
       display.header ().text (title (data));
       x_data = records.map (function (d) { return d [x_field]; });
       size_data = records.map (function (d) { return d [size_field]; });
@@ -195,6 +203,16 @@ function HorizontalBarChartGenerator ()
           size_sum += size_data[i];
         }
       var size_max = Math.max.apply (null, size_data);
+
+      // Adjust margin to labels
+      var max_len = 0;
+      for (var i in x_data)
+        {
+          var len = x_data[i].toString().length;
+          if (len > max_len)
+            max_len = len;
+        }
+      margin.left = margin.right + Math.min (25, max_len) * 6.5;
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
@@ -269,6 +287,24 @@ function HorizontalBarChartGenerator ()
             });
 
         }
+
+      // Add a text if records list is empty
+      var dummy_data = [];
+      if (records.length == 0)
+        dummy_data.push ("dummy");
+      // Text if record set is empty
+       svg.selectAll(".empty_text")
+            .data (dummy_data)
+              .enter().insert("text")
+                .attr ("x", width/2)
+                .attr ("y", height/2)
+                .style ("dominant-baseline", "middle")
+                .style ("text-anchor", "middle")
+                .text (empty_text);
+      svg.selectAll(".empty_text")
+          .data (dummy_data)
+            .exit ()
+              .remove ()
 
       // Add new bars
       svg.selectAll(".bar")

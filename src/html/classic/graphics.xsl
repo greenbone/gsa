@@ -847,6 +847,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <param name="title_text">Tasks with most 'High' results per host</param>
           </params>
         </xsl:with-param>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No Tasks with 'High' severity found</param>
+          </params>
+        </xsl:with-param>
         <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
@@ -871,6 +876,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <param name="title_text">Tasks with most 'High' results per host</param>
           </params>
         </xsl:with-param>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No Tasks with 'High' severity found</param>
+          </params>
+        </xsl:with-param>
         <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
@@ -883,7 +893,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
       <xsl:call-template name="js-tasks-chart">
-        <xsl:with-param name="chart_name" select="'right-by-task-status'"/>
+        <xsl:with-param name="chart_name" select="'right-task-schedules'"/>
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
