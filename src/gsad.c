@@ -319,6 +319,7 @@ struct user
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language, in short form like "en".
   gchar *pw_warning;   ///< Password policy warning.
+  char *address;       ///< Client's IP address.
   time_t time;         ///< Login time.
   int charts;          ///< Whether to show charts for this user.
   GTree *chart_prefs;  ///< Chart preferences.
@@ -352,6 +353,7 @@ static GMutex *mutex = NULL;
  * @param[in]  pw_warning    Password policy warning.
  * @param[in]  chart_prefs   The chart preferences.
  * @param[in]  autorefresh   The autorefresh preference.
+ * @param[in]  address       Client's IP address.
  *
  * @return Added user.
  */
@@ -359,7 +361,7 @@ user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, GTree *chart_prefs,
-          const gchar *autorefresh)
+          const gchar *autorefresh, const char *address)
 {
   user_t *user = NULL;
   int index;
@@ -397,6 +399,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
     user->guest = strcmp (username, guest_username) ? 0 : 1;
   else
     user->guest = 0;
+  user->address = g_strdup (address);
   return user;
 }
 
@@ -407,14 +410,17 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  *
  * @param[in]   cookie       Token in cookie.
  * @param[in]   token        Token request parameter.
+ * @param[in]   address      Client's IP address.
  * @param[out]  user_return  User.
  *
  * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
  *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed,
- *         6 OMP down for guest login, -1 error during guest login.
+ *         6 OMP down for guest login, 7 IP address mismatch, -1 error during
+ *         guest login.
  */
 int
-user_find (const gchar *cookie, const gchar *token, user_t **user_return)
+user_find (const gchar *cookie, const gchar *token, const char *address,
+           user_t **user_return)
 {
   int ret;
   user_t *user = NULL;
@@ -475,16 +481,9 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
       else
         {
           user_t *user;
-          user = user_add (guest_username,
-                           guest_password,
-                           timezone,
-                           severity,
-                           role,
-                           capabilities,
-                           language,
-                           pw_warning,
-                           chart_prefs,
-                           autorefresh);
+          user = user_add (guest_username, guest_password, timezone, severity,
+                           role, capabilities, language, pw_warning,
+                           chart_prefs, autorefresh, address);
           *user_return = user;
           g_free (timezone);
           g_free (severity);
@@ -521,7 +520,10 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
     }
   if (user)
     {
-      if (time (NULL) - user->time > (session_timeout * 60))
+      /* Verify that the user address matches the client's address. */
+      if (strcmp (address, user->address))
+        ret = 7;
+      else if (time (NULL) - user->time > (session_timeout * 60))
         ret = 2;
       else
         {
@@ -2008,15 +2010,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             {
               user_t *user;
               user = user_add (params_value (con_info->params, "login"),
-                               password,
-                               timezone,
-                               severity,
-                               role,
-                               capabilities,
-                               language,
-                               pw_warning,
-                               chart_prefs,
-                               autorefresh);
+                               password, timezone, severity, role, capabilities,
+                               language, pw_warning, chart_prefs, autorefresh,
+                               client_address);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -2099,9 +2095,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 3;
     }
 
-  ret = user_find (con_info->cookie,
-                   params_value (con_info->params, "token"),
-                   &user);
+  ret = user_find (con_info->cookie, params_value (con_info->params, "token"),
+                   client_address, &user);
   if (ret == 1)
     {
       con_info->response
@@ -2151,7 +2146,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 2;
     }
 
-  if (ret == 3)
+  if (ret == 3 || ret == 7)
     {
       time_t now;
       gchar *xml;
@@ -2180,7 +2175,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 2;
     }
 
-  if (ret >= 5 || ret == -1)
+  if (ret == 5 || ret == 6 || ret == -1)
     {
       time_t now;
       gchar *xml;
@@ -3893,8 +3888,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (openvas_validate (validator, "token", cookie))
         cookie = NULL;
 
-      ret = user_find (cookie, token, &user);
-      if (ret == 1 || ret >= 5 || ret == -1)
+      ret = user_find (cookie, token, client_address, &user);
+      if (ret == 1 || ret == 5 || ret == 6 || ret == -1)
         {
           if (ret == 1)
             res = gsad_message (NULL,
@@ -3994,7 +3989,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     ? (strncmp (url, "/logout", strlen ("/logout"))
                         ? "Session has expired.  Please login again."
                         : "Already logged out.")
-                    : ((ret == 3)
+                    : ((ret == 3 || ret == 7)
                        ? "Cookie missing or bad.  Please login again."
                        : "Token missing or bad.  Please login again.")),
                   ctime_now,
