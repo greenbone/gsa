@@ -147,22 +147,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- HEADERS, FOOTER, SIDEBARS -->
 
 <xsl:template name="html-head">
-  <xsl:variable name="stylesheet">
-    <xsl:choose>
-      <xsl:when test="/login_page != ''">gsa-login.css</xsl:when>
-      <xsl:otherwise>gsa-style.css</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
   <head>
-    <link rel="stylesheet" type="text/css" href="/css/{$stylesheet}"/>
     <link rel="icon" href="/favicon.gif" type="image/x-icon"/>
     <title>Greenbone Security Assistant</title>
     <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
-    <xsl:if test="not(/login_page != '')">
-      <link rel="stylesheet" type="text/css" href="/css/select2.min.css"/>
-      <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
-      <script src="/js/select2.min.js" type="text/javascript"></script>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="/login_page != ''">
+        <link rel="stylesheet" type="text/css" href="/css/gsa-login.css"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <link rel="stylesheet" type="text/css" href="/css/select2.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/gsa-style.css"/>
+        <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script src="/js/select2.min.js" type="text/javascript"></script>
+      </xsl:otherwise>
+    </xsl:choose>
   </head>
 </xsl:template>
 

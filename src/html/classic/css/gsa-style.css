@@ -781,6 +781,30 @@ a.top_button:hover div.first_button_overlay {
  background:url('/img/download.png') no-repeat 0px 9px;
 }
 
+/* Drop-down lists */
+.select2-selection__arrow {
+  width: 30px
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+ line-height: 18px;
+ font-weight: normal;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+ height: 18px;
+}
+
+.select2-container--default .select2-selection--single {
+ height: 20px;
+}
+
+.select2-selection__rendered
+{
+  margin-left: -2px;
+  margin-right: -2px;
+}
+
 /* Small Form */
 
 #small_form select {
@@ -806,7 +830,7 @@ a.top_button:hover div.first_button_overlay {
 }
 
 .small_inline_form .select2-container .select2-selection--single {
- height: 14px;
+ height: 16px;
 }
 
 .small_inline_form .select2-container--default .select2-selection--single .select2-selection__rendered{
