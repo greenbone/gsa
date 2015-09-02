@@ -850,7 +850,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="username"/>
   <xsl:param name="time"/>
   <div id="gb_header">
-   <div class="envelope">
     <div class="logo">
       <a href="/omp?token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/gsa-logo.png" alt="Greenbone Security Assistant" width="202" height="40"/>
@@ -1569,7 +1568,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </div>
-   </div>
   </div>
 </xsl:template>
 
@@ -1639,7 +1637,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-gsa-navigation">
   <xsl:variable name="token" select="/envelope/token"/>
   <div id="gb_menu" class="clearfix">
-   <ul class="envelope">
+   <ul>
     <li>
       <xsl:variable name="items">
         <xsl:if test="gsa:may-op ('GET_TASKS')">
@@ -2115,7 +2113,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <xsl:param name="token"></xsl:param>
   <center>
-    <div class="envelope" style="width:500px;">
+    <div style="width:500px;">
       <div class="gb_window" style="margin-top:150px;">
         <div class="gb_window_part_left_error"></div>
         <div class="gb_window_part_right_error"></div>
@@ -2375,10 +2373,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="html-gsa-navigation"/>
-      <div class="envelope">
-        <xsl:apply-templates/>
-        <xsl:call-template name="html-footer"/>
-      </div>
+      <xsl:apply-templates/>
+      <xsl:call-template name="html-footer"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

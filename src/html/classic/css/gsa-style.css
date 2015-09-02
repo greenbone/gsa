@@ -106,11 +106,6 @@ table {
  font-size: 12px;
 }
 
-.envelope {
- width: 98%;
- max-width:2000px;
-}
-
 p {
  margin-left:5px;
 }
@@ -385,6 +380,7 @@ td p {
 /* BEGIN Window decorations */
 
 .gb_window {
+ margin: 10px;
 }
 
 .gb_window_part_left {
@@ -591,6 +587,7 @@ div.empty_top_button {
 
 a.top_button {
  position: relative;
+ text-align: center;
 }
 
 div.first_button_overlay {

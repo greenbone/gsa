@@ -1,3 +1,10 @@
+2015-09-02  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Remove the fixed max-width, use all the space available.
+
+	* src/html/classic/gsad.xsl, src/html/classic/css/gsa-style.css: 
+	  Updated.
+
 2015-09-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (struct user): Add address element.
