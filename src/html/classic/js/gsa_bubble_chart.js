@@ -42,6 +42,9 @@ function BubbleChartGenerator ()
   var column_info;
   var data;
 
+  var empty_text = "empty";
+  var records_empty = false;
+
   var x_label = "";
   var y_label = "";
   var color_label = "";
@@ -66,6 +69,9 @@ function BubbleChartGenerator ()
 
   var tooltip_func = function (d)
     {
+      if (records_empty)
+        return empty_text;
+
       var label_value = format_data (d ["label_value"],
                                      data.column_info.columns ["label_value"]);
       var size_value  = format_data (d ["size_value"],
@@ -190,6 +196,12 @@ function BubbleChartGenerator ()
         }
       display.header ().text (title (data));
 
+      if (gen_params.extra.empty_text)
+        empty_text = gen_params.extra.empty_text;
+      else
+        empty_text = "No matching " + resource_type_name (column_info.columns
+                                                          ["label_value"].type);
+
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
       width = display.svg ().attr ("width") - margin.left - margin.right;
@@ -214,7 +226,30 @@ function BubbleChartGenerator ()
           .value (function(d) { return d.size_value; })
           .padding(1.5);
 
-      var nodes = bubbles.nodes({children: records})
+      var filtered_records = [];
+      for (var i in records)
+        {
+          if (records[i].size_value != 0)
+            filtered_records.push (records[i])
+        }
+
+      if (filtered_records.length == 0)
+        {
+          records_empty = true;
+          var dummy
+                = {
+                    color_value : 0,
+                    size_value : 1,
+                    label_value : "* " + empty_text + " *"
+                  };
+          filtered_records.push (dummy);
+        }
+      else
+        {
+          records_empty = false;
+        }
+
+      var nodes = bubbles.nodes({children: filtered_records})
                         .filter (function(d) { return d.depth != 0; });
 
       svg.selectAll(".node")

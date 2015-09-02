@@ -1,3 +1,14 @@
+2015-09-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart, js-tasks-chart):
+	Use correct count of node-set parameters for placing commas.
+	(js-scan-management-top-visualization): Add empty_text to gen_params
+	of the "'High' results per host" bubble charts.
+
+	* src/html/classic/js/gsa_bubble_chart.js: Filter out records with
+	zero size_value for bubble creation. Add a dummy bubble if there are no
+	non-zero records.
+
 2015-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add deleting of host identifiers.

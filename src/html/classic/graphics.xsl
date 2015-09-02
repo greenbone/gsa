@@ -220,7 +220,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     {
       <xsl:for-each select="exslt:node-set ($init_params)/params/param">
         "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
-        <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+        <xsl:if test="position() &lt; count(exslt:node-set ($init_params)/params/param)">, </xsl:if>
       </xsl:for-each>
     }
   </xsl:variable>
@@ -234,7 +234,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         "y_fields" : [
           <xsl:for-each select="exslt:node-set ($y_fields)/fields/field">
             "<xsl:value-of select="gsa:escape-js (.)"/>"
-            <xsl:if test="position() &lt; count(../field)">, </xsl:if>
+            <xsl:if test="position() &lt; count(exslt:node-set ($y_fields)/fields/field)">, </xsl:if>
           </xsl:for-each>
         ],
       </xsl:if>
@@ -242,14 +242,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         "z_fields" : [
           <xsl:for-each select="exslt:node-set ($z_fields)/fields/field">
             "<xsl:value-of select="gsa:escape-js (.)"/>"
-            <xsl:if test="position() &lt; count(../field)">, </xsl:if>
+            <xsl:if test="position() &lt; count(exslt:node-set ($z_fields)/fields/field)">, </xsl:if>
           </xsl:for-each>
         ],
       </xsl:if>
       "extra" : {
         <xsl:for-each select="exslt:node-set ($gen_params)/params/param">
           "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
-          <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+          <xsl:if test="position() &lt; count(exslt:node-set ($gen_params)/params/param)">, </xsl:if>
         </xsl:for-each>
         }
     }
@@ -441,7 +441,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     {
       <xsl:for-each select="exslt:node-set ($init_params)/params/param">
         "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
-        <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+        <xsl:if test="position() &lt; count(exslt:node-set ($init_params)/params/param)">, </xsl:if>
       </xsl:for-each>
     }
   </xsl:variable>
@@ -451,7 +451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       "extra" : {
         <xsl:for-each select="exslt:node-set ($gen_params)/params/param">
           "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
-          <xsl:if test="position() &lt; count(../param)">, </xsl:if>
+          <xsl:if test="position() &lt; count(exslt:node-set ($gen_params)/params/param)">, </xsl:if>
         </xsl:for-each>
         }
     }
@@ -788,6 +788,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <param name="title_text">Tasks: 'High' results per host</param>
           </params>
         </xsl:with-param>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No Tasks with 'High' severity found</param>
+          </params>
+        </xsl:with-param>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
@@ -810,6 +815,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="init_params">
           <params>
             <param name="title_text">Tasks: 'High' results per host</param>
+          </params>
+        </xsl:with-param>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No Tasks with 'High' severity found</param>
           </params>
         </xsl:with-param>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
