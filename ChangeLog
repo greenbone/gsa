@@ -1,3 +1,13 @@
+2015-09-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r23229.
+
+	* src/gsad.c (struct user): Add address element.
+	(user_add): Add user's IP address.
+	(user_find): Check that the client's address matches the user's.
+	(exec_omp_post, request_handler): Adjust user_add() and user_find()
+	calls and handle return values accordingly.
+
 2015-09-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23214.
