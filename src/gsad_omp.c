@@ -2429,21 +2429,37 @@ delete_resource (const char *type, credentials_t * credentials,
 {
   gnutls_session_t session;
   int socket;
-  gchar *html, *response, *id_name;
-  const char *resource_id;
+  gchar *html, *response, *id_name, *resource_id;
+  const char *next_id;
   entity_t entity;
 
   id_name = g_strdup_printf ("%s_id", type);
-  resource_id = params_value (params, id_name);
-  g_free (id_name);
+  if (params_value (params, id_name))
+    resource_id = g_strdup (params_value (params, id_name));
+  else
+    {
+      g_free (id_name);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "The resource was not deleted. "
+                           "Diagnostics: Required parameter resource_id was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
-  if (resource_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a resource. "
-                         "The resource was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+  /* This is a hack for assets, because asset_id is the param name used for
+   * both the asset being deleted and the asset on the next page. */
+  next_id = params_value (params, "next_id");
+  if (next_id)
+    {
+      param_t *param;
+      param = params_get (params, id_name);
+      g_free (param->value);
+      param->value = g_strdup (next_id);
+      param->value_size = strlen (param->value);
+    }
+
+  g_free (id_name);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2451,9 +2467,13 @@ delete_resource (const char *type, credentials_t * credentials,
         break;
       case -1:
         if (html)
-          return html;
+          {
+            g_free (resource_id);
+            return html;
+          }
         /* Fall through. */
       default:
+        g_free (resource_id);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting a resource. "
@@ -2473,6 +2493,7 @@ delete_resource (const char *type, credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
+      g_free (resource_id);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2480,6 +2501,8 @@ delete_resource (const char *type, credentials_t * credentials,
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  g_free (resource_id);
 
   entity = NULL;
   if (read_entity_and_text (&session, &entity, &response))
@@ -23356,6 +23379,20 @@ char *
 get_assets_omp (credentials_t * credentials, params_t *params)
 {
   return get_assets (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete an asset, get all assets, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_asset_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("asset", credentials, params, 0, get_asset);
 }
 
 

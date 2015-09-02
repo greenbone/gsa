@@ -875,6 +875,7 @@ init_validator ()
                          "|(create_user)"
                          "|(dashboard)"
                          "|(delete_agent)"
+                         "|(delete_asset)"
                          "|(delete_config)"
                          "|(delete_alert)"
                          "|(delete_filter)"
@@ -2281,6 +2282,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_note)
   ELSE (create_override)
   ELSE (delete_agent)
+  ELSE (delete_asset)
   ELSE (delete_task)
   ELSE (delete_alert)
   ELSE (delete_filter)

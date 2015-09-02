@@ -35021,7 +35021,22 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
+<xsl:template match="delete_asset_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Asset
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="asset" mode="host-details">
+  <xsl:variable name="host_id" select="@id"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -35131,6 +35146,14 @@ var toggleFilter = function(){
               </xsl:choose>
             </td>
             <td width="100">
+              <xsl:call-template name="delete-icon">
+                <xsl:with-param name="type" select="'asset'"/>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="next_id" value="{$host_id}"/>
+                  <input type="hidden" name="next" value="get_asset"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </td>
           </tr>
         </xsl:for-each>
@@ -35146,7 +35169,7 @@ var toggleFilter = function(){
 
 <xsl:template match="get_asset">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="delete_asset_response"/>
   <xsl:choose>
     <xsl:when test="/envelope/params/asset_type = 'HOST' or /envelope/params/asset_type = 'host'">
       <xsl:apply-templates select="get_assets_response/asset" mode="host-details"/>
