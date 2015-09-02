@@ -1,3 +1,9 @@
+2015-09-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Increase envelope width
+	from 1200 to 2000. The GUI looks OK for upto that size and then
+	gets a bit harder to read (eg. the expanded results.
+
 2015-09-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-target-form)
