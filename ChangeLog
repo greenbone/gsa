@@ -1,3 +1,16 @@
+2015-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add deleting of all assets that came from a report.
+
+	* src/gsad_omp.c (delete_asset_omp): Do the delete by hand, in order to
+	pass report_id if given.
+
+	* src/html/classic/omp.xsl (get_report): Match delete_asset_response.
+	(report-icons): Add "Remove from Assets" icon.
+
+	* src/html/classic/gsad.xsl (delete_asset_response): New template.
+	(html-gsa-logo): Add indicator for report page DELETE_ASSET.
+
 2015-09-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
@@ -11,7 +24,7 @@
 
 	Remove the fixed max-width, use all the space available.
 
-	* src/html/classic/gsad.xsl, src/html/classic/css/gsa-style.css: 
+	* src/html/classic/gsad.xsl, src/html/classic/css/gsa-style.css:
 	  Updated.
 
 2015-09-02  Hani Benhabiles <hani.benhabiles@greenbone.net>

@@ -23382,7 +23382,7 @@ get_assets_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Delete an asset, get all assets, XSL transform the result.
+ * @brief Delete an asset, go to the next page.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -23392,7 +23392,107 @@ get_assets_omp (credentials_t * credentials, params_t *params)
 char *
 delete_asset_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("asset", credentials, params, 0, get_asset);
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response, *resource_id;
+  const char *next_id;
+  entity_t entity;
+
+  if (params_value (params, "asset_id"))
+    resource_id = g_strdup (params_value (params, "asset_id"));
+  else if (params_value (params, "report_id"))
+    resource_id = g_strdup (params_value (params, "report_id"));
+  else
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an asset. "
+                         "The asset was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  /* This is a hack, needed because asset_id is the param name used for
+   * both the asset being deleted and the asset on the next page. */
+  next_id = params_value (params, "next_id");
+  if (next_id
+      && params_value (params, "asset_id"))
+    {
+      param_t *param;
+      param = params_get (params, "asset_id");
+      g_free (param->value);
+      param->value = g_strdup (next_id);
+      param->value_size = strlen (param->value);
+    }
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          {
+            g_free (resource_id);
+            return html;
+          }
+        /* Fall through. */
+      default:
+        g_free (resource_id);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an asset. "
+                             "The asset is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Delete the resource and get all resources. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_asset %s_id=\"%s\"/>",
+                            params_value (params, "asset_id")
+                             ? "asset" : "report",
+                            resource_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      g_free (resource_id);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an asset. "
+                           "The asset is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  g_free (resource_id);
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an asset. "
+                           "It is unclear whether the asset has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  if (params_given (params, "next") == 0)
+    params_add (params, "next", "get_asset");
+  html = next_page (credentials, params, response);
+  g_free (response);
+  if (html == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an asset. "
+                         "Diagnostics: Error in parameter next.",
+                         "/omp?cmd=get_tasks");
+  return html;
 }
 
 
