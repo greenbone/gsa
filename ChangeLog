@@ -1,5 +1,10 @@
 2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Unify the greens used in the
+	  menu elements.
+
+2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Give the logo some breathing
 	  space.
 
