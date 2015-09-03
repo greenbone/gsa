@@ -1805,81 +1805,6 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<!-- This is called within a PRE. -->
-<xsl:template name="wrap">
-  <xsl:param name="string"></xsl:param>
-  <xsl:param name="width">90</xsl:param>
-  <xsl:param name="marker">&#8629;&#10;</xsl:param>
-
-  <xsl:for-each select="str:split($string, '&#10;&#10;')">
-    <xsl:for-each select="str:tokenize(text(), '&#10;')">
-      <xsl:call-template name="wrap-line">
-        <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
-        <xsl:with-param name="width" select="$width"/>
-        <xsl:with-param name="marker" select="$marker"/>
-      </xsl:call-template>
-      <xsl:text>
-</xsl:text>
-    </xsl:for-each>
-    <xsl:choose>
-      <xsl:when test="position() = last()">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>
-</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-</xsl:template>
-
-<!-- This is called within a PRE. -->
-<xsl:template name="wrap-line">
-  <xsl:param name="string"></xsl:param>
-  <xsl:param name="width">90</xsl:param>
-  <xsl:param name="marker">&#8629;</xsl:param>
-
-  <xsl:variable name="to-next-newline">
-    <xsl:value-of select="substring-before($string, '&#10;')"/>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="string-length($string) = 0">
-      <!-- The string is empty. -->
-    </xsl:when>
-    <xsl:when test="(string-length($to-next-newline) = 0) and (substring($string, 1, 1) != '&#10;')">
-      <!-- A single line missing a newline, output up to the edge. -->
-      <xsl:value-of select="substring($string, 1, number($width))"/>
-      <xsl:if test="string-length($string) &gt; number($width)"><xsl:value-of select="$marker" disable-output-escaping="yes"/>
-        <xsl:call-template name="wrap-line">
-          <xsl:with-param name="string"><xsl:value-of select="substring($string, number($width) + 1, string-length($string))"/></xsl:with-param>
-          <xsl:with-param name="width" select="$width"/>
-          <xsl:with-param name="marker" select="$marker"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:when>
-    <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; number($width))">
-      <!-- There's a newline before the edge, so output the line. -->
-      <xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
-      <xsl:call-template name="wrap-line">
-        <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
-        <xsl:with-param name="width" select="$width"/>
-        <xsl:with-param name="marker" select="$marker"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- Any newline comes after the edge, so output up to the edge. -->
-      <xsl:value-of select="substring($string, 1, number($width))"/>
-      <xsl:if test="string-length($string) &gt; numer($width)"><xsl:value-of select="$marker" disable-output-escaping="yes"/>
-        <xsl:call-template name="wrap-line">
-          <xsl:with-param name="string"><xsl:value-of select="substring($string, number($width) + 1, string-length($string))"/></xsl:with-param>
-          <xsl:with-param name="width" select="$width"/>
-          <xsl:with-param name="marker" select="$marker"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
 <xsl:template name="highlight-diff">
   <xsl:param name="string"></xsl:param>
 
@@ -25917,11 +25842,7 @@ should not have received it.
   <xsl:param name="next">get_report</xsl:param>
   <div class="note_box_box">
     <b><xsl:value-of select="gsa:i18n ('Note', 'Note')"/></b><xsl:if test="$delta and $delta &gt; 0"> (<xsl:value-of select="gsa:i18n ('Result', 'Result')"/> <xsl:value-of select="$delta"/>)</xsl:if><br/>
-    <pre>
-      <xsl:call-template name="wrap">
-        <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
-      </xsl:call-template>
-    </pre>
+    <pre><xsl:value-of select="text"/></pre>
     <div>
       <xsl:choose>
         <xsl:when test="active='0'">
@@ -26175,11 +26096,7 @@ should not have received it.
       </xsl:choose>
       <xsl:value-of select="gsa:i18n (' to ', 'Override')"/>
       <xsl:if test="number(new_severity) &gt; 0.0"><xsl:value-of select="new_severity"/>: </xsl:if> <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor(new_severity), 'Severity')"/></b><xsl:if test="$delta and $delta &gt; 0"> (<xsl:value-of select="gsa:i18n ('Result', 'Result')"/> <xsl:value-of select="$delta"/>)</xsl:if><br/>
-    <pre>
-      <xsl:call-template name="wrap">
-        <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
-      </xsl:call-template>
-    </pre>
+    <pre><xsl:value-of select="text"/></pre>
     <div>
       <xsl:choose>
         <xsl:when test="active='0'">
@@ -27072,9 +26989,7 @@ should not have received it.
                 </p>
               </xsl:when>
               <xsl:otherwise>
-                <pre>
-                  <xsl:value-of select="description"/>
-                </pre>
+                <pre><xsl:value-of select="description"/></pre>
               </xsl:otherwise>
             </xsl:choose>
           </div>
@@ -27278,11 +27193,7 @@ should not have received it.
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                  <pre>
-                    <xsl:call-template name="wrap">
-                      <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
-                    </xsl:call-template>
-                  </pre>
+                  <pre><xsl:value-of select="delta/result/description"/></pre>
                 </xsl:otherwise>
               </xsl:choose>
             </div>

@@ -1,3 +1,8 @@
+2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl: Get rid of the last occurences of the wrap
+	  template.
+
 2015-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
