@@ -890,6 +890,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No scheduled Tasks found</param>
+          </params>
+        </xsl:with-param>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
       <xsl:call-template name="js-tasks-chart">
@@ -897,6 +902,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
+        <xsl:with-param name="gen_params">
+          <params>
+            <param name="empty_text">No scheduled Tasks found</param>
+          </params>
+        </xsl:with-param>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>

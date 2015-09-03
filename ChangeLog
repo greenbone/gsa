@@ -1,3 +1,12 @@
+2015-09-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Add empty_text to gen_params of scheduled Tasks chart.
+
+	* src/html/classic/js/gsa_gantt_chart.js (generate): Add arrows to
+	indicate scheduled tasks that are out of view and text if the list of
+	scheduled tasks is empty.
+
 2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Cleanup erroneous usage of the wrap

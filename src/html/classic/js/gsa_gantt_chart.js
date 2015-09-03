@@ -54,7 +54,7 @@ function GanttChartGenerator ()
   var svg;
   var height;
   var width;
-  var margin = {top: 30, right: 30, bottom: 40, left: 30};
+  var margin = {top: 30, right: 40, bottom: 40, left: 30};
 
   var x_scale = d3.scale.ordinal ();
   var time_scale = d3.time.scale.utc ();
@@ -91,6 +91,8 @@ function GanttChartGenerator ()
   var column_info;
   var data;
   var x_data;
+
+  var empty_text = "empty";
 
   var x_label = "";
   var y_label = "";
@@ -199,12 +201,18 @@ function GanttChartGenerator ()
           case "get_tasks":
             data = data_transform (original_data, gen_params);
             records = data.records;
-            column_info = null;
+            column_info = data.column_info;
             break;
           default:
             console.error ("Unsupported command:" + data_src.command ());
             return;
         }
+
+      if (gen_params.extra.empty_text)
+        empty_text = gen_params.extra.empty_text;
+      else
+        empty_text = "No matching " + resource_type_name (column_info.columns
+                                                          [x_field].type);
 
       if (limit)
         display_records = records.slice (0, limit);
@@ -264,6 +272,25 @@ function GanttChartGenerator ()
                             .call(time_axis);
         }
 
+      // Add a text if records list is empty
+      var dummy_data = [];
+      if (records.length == 0)
+        dummy_data.push ("dummy");
+      // Text if record set is empty
+       svg.selectAll(".empty_text")
+            .data (dummy_data)
+              .enter().insert("text")
+                .attr ("x", width/2)
+                .attr ("y", height/2)
+                .style ("dominant-baseline", "middle")
+                .style ("text-anchor", "middle")
+                .text (empty_text);
+      svg.selectAll(".empty_text")
+          .data (dummy_data)
+            .exit ()
+              .remove ()
+
+      // Update chart
       time_axis_elem.attr("transform",
                           "translate (" + 0 + "," + height +")")
 
@@ -311,9 +338,14 @@ function GanttChartGenerator ()
                       var offset = +(time_scale.domain ()[0])
 
                       var bar_starts = [];
+                      var future_runs = 0;
                       new_date = new Date (r_start)
                       if (+new_date <= +end_date)
                         bar_starts.push (new_date);
+                      else if (r_periods == 0 && (r_period != 0 || r_period_months != 0))
+                        future_runs = Number.POSITIVE_INFINITY
+                      else
+                        future_runs = 1;
 
                       for (var i = 1;
                            (+new_date <= +end_date)
@@ -326,7 +358,17 @@ function GanttChartGenerator ()
                                                 + i * r_period_months);
 
                           if (+new_date > +end_date)
-                            break;
+                            {
+                              if (r_periods == 0)
+                                {
+                                  future_runs = Number.POSITIVE_INFINITY
+                                  break;
+                                }
+                              else
+                                {
+                                  future_runs++;
+                                }
+                            }
 
                           bar_starts.push (new_date)
                         }
@@ -350,13 +392,35 @@ function GanttChartGenerator ()
                                                                     text += "\nEnd: " + gsa.datetime_format (new Date (+start + r_duration * 1000));
                                                                   else
                                                                     text += "\nNo scheduled end"
-                                                                  text += "\nCurrent scheduled run: " + gsa.datetime_format (new_date)
+                                                                  text += "\nNext scheduled run: " + gsa.datetime_format (new_date)
                                                                   return text })
 
                       sel.selectAll ("rect")
                             .data (bar_starts)
                               .exit ()
                                 .remove ()
+
+                      if (future_runs == Number.POSITIVE_INFINITY)
+                        future_runs_text = "More runs not shown";
+                      else if (future_runs == 1)
+                        future_runs_text = "1 more run not shown";
+                      else
+                        future_runs_text = future_runs + " more runs not shown"
+                      future_runs_text += "\nNext scheduled run: " + gsa.datetime_format (new_date)
+
+                      sel.selectAll (".future-marker")
+                            .data (future_runs ? [1] : [])
+                              .enter ()
+                                .insert ("polygon")
+                                  .attr ("class", "future-marker")
+                                  .style ("opacity", 0.5)
+                                  .style ("fill", "#549330")
+                                  .style ("stroke", "#549330")
+                                  .attr ("points",
+                                         (width+5) + "," + (x_scale.rangeBand() / 8)
+                                         + " " + (width+20) + "," + (x_scale.rangeBand() / 2)
+                                         + " " + (width+5) + "," + (7 * x_scale.rangeBand() / 8))
+                                  .attr ("title", future_runs_text)
                     })
 
       svg.selectAll (".bar-label")
