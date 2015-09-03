@@ -478,6 +478,7 @@ td p {
  text-align: left;
  height: 40px;
  background: linear-gradient(to bottom, #b4e941 0%,#57972e 100%);
+ padding: 0px 5px 0px 5px;
 }
 
 #gb_header > div {

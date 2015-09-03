@@ -1,3 +1,8 @@
+2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Give the logo some breathing
+	  space.
+
 2015-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add deleting of all assets that came from a report.
