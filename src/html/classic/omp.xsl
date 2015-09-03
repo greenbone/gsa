@@ -18098,11 +18098,7 @@ should not have received it.
     </xsl:if>
     <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;{$cpe_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
        title="{gsa:view_details_title ('CPE', $cpe)}">
-      <xsl:call-template name="wrap" disable-output-escaping="yes">
-        <xsl:with-param name="string" select="$cpe"/>
-        <xsl:with-param name="width" select="'55'"/>
-        <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
-      </xsl:call-template>
+      <xsl:value-of select="$cpe"/>
     </a>
   </span>
 </xsl:template>
@@ -18162,11 +18158,7 @@ should not have received it.
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;{$ovaldef_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
      title="{gsa:view_details_title ('OVAL Definition', $ovaldef)}">
-     <xsl:call-template name="wrap" disable-output-escaping="yes">
-      <xsl:with-param name="string" select="$ovaldef"/>
-      <xsl:with-param name="width" select="'55'"/>
-      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
-    </xsl:call-template>
+     <xsl:value-of select="$ovaldef"/>
   </a>
 </xsl:template>
 
@@ -18181,11 +18173,7 @@ should not have received it.
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;{$cert_bund_adv_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
      title="{gsa:view_details_title ('CERT-Bund Advisory', $cert_bund_adv)}">
-    <xsl:call-template name="wrap" disable-output-escaping="yes">
-      <xsl:with-param name="string" select="$cert_bund_adv"/>
-      <xsl:with-param name="width" select="'55'"/>
-      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
-    </xsl:call-template>
+    <xsl:value-of select="$cert_bund_adv"/>
   </a>
 </xsl:template>
 
@@ -18200,11 +18188,7 @@ should not have received it.
   </xsl:variable>
   <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;{$dfn_cert_adv_select}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
      title="{gsa:view_details_title ('DFN-CERT Advisory', $dfn_cert_adv)}">
-    <xsl:call-template name="wrap" disable-output-escaping="yes">
-      <xsl:with-param name="string" select="$dfn_cert_adv"/>
-      <xsl:with-param name="width" select="'55'"/>
-      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
-    </xsl:call-template>
+    <xsl:value-of select="$dfn_cert_adv"/>
   </a>
 </xsl:template>
 
