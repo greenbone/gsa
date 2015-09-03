@@ -53,6 +53,11 @@ a:hover, a:focus {
  text-decoration: underline;
 }
 
+pre {
+ white-space: pre-wrap;
+ word-wrap: break-word;
+}
+
 .footnote {
  font-size:10px;
  color: #787878;

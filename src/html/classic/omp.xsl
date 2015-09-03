@@ -27089,9 +27089,7 @@ should not have received it.
               </xsl:when>
               <xsl:otherwise>
                 <pre>
-                  <xsl:call-template name="wrap">
-                    <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-                  </xsl:call-template>
+                  <xsl:value-of select="description"/>
                 </pre>
               </xsl:otherwise>
             </xsl:choose>
