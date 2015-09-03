@@ -23382,6 +23382,75 @@ get_assets_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Create an asset, get report, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_asset_omp (credentials_t *credentials, params_t *params)
+{
+  char *ret;
+  gchar *response;
+  const char *report_id;
+  entity_t entity;
+
+  report_id = params_value (params, "report_id");
+
+  CHECK_PARAM (report_id, "Create Asset", get_report_section);
+
+  response = NULL;
+  entity = NULL;
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                "<create_asset>"
+                "<report id=\"%s\"/>"
+                "</create_asset>",
+                report_id))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating an asset. "
+                             "No new asset was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating an asset. "
+                             "It is unclear whether the asset has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating an asset. "
+                             "It is unclear whether the asset has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_report_section (credentials, params, response);
+    }
+  else
+    ret = get_report_section (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
  * @brief Delete an asset, go to the next page.
  *
  * @param[in]  credentials  Username and password for authentication.

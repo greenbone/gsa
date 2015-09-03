@@ -854,6 +854,7 @@ init_validator ()
                          "^(bulk_delete)"
                          "|(clone)"
                          "|(create_agent)"
+                         "|(create_asset)"
                          "|(create_config)"
                          "|(create_alert)"
                          "|(create_filter)"
@@ -2257,6 +2258,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)
+  ELSE (create_asset)
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_lsc_credential)

@@ -204,6 +204,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_asset_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Asset'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_config_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -1243,6 +1251,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_port_list/commands_response/delete_port_list_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_port_lists/delete_port_list_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report/create_asset_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/create_filter_response"
                              mode="response-indicator"/>

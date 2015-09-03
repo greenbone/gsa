@@ -25583,6 +25583,7 @@ should not have received it.
   <xsl:apply-templates select="create_note_response"/>
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="create_filter_response"/>
+  <xsl:apply-templates select="create_asset_response"/>
   <xsl:apply-templates select="delete_asset_response"/>
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_alert_response/get_reports_response"
@@ -29710,6 +29711,20 @@ var toggleFilter = function(){
   <div class="small_inline_form" style="display:inline; margin-left: 7px" >
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
+  <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+    <input type="hidden" name="cmd" value="create_asset"/>
+    <input type="image" src="/img/os_unknown.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
+           name="Add to Assets" value="Add to Assets"
+           title="{gsa:i18n ('Add to Assets', 'Action Verb')}"/>
+
+    <input type="hidden" name="report_id" value="{@id}"/>
+    <input type="hidden" name="next" value="get_report_section"/>
+    <input type="hidden" name="report_section" value="{$section}"/>
+    <input type="hidden" name="filter" value=""/>
+    <input type="hidden" name="filt_id" value=""/>
+  </form>
   <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -34927,6 +34942,20 @@ var toggleFilter = function(){
       </xsl:choose>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="create_asset_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Create Asset
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="delete_asset_response">

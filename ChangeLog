@@ -1,3 +1,20 @@
+2015-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make it possible to add all assets from a report.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add create_asset.
+
+	* src/gsad_omp.c (create_asset_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/classic/omp.xsl (get_report): Match create_asset_response.
+	(report-icons): Add "Add to Assets" icon.
+	(create_asset_response): New template.
+
+	* src/html/classic/gsad.xsl (create_asset_response): New template.
+	(html-gsa-logo): Add indicator for report page CREATE_ASSET.
+
 2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Get rid of the last occurences of the wrap
