@@ -28553,7 +28553,7 @@ should not have received it.
             <script>
 var toggleFilter = function(){
   // Show/hide the detailled form
-  $('#filterbox').toggleSlide();
+  $('#filterbox').slideToggle();
   // manage the button itself
   var filtericon = $('#togglefiltericon');
   filtericon.toggleClass('expand');

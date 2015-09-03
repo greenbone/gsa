@@ -9,6 +9,10 @@
 
 2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix typo in the method name.
+
+2015-09-03  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Cleanup erroneous usage of the wrap
 	  template. There are better ways to limit the length of a field.
 	  `text-overflow: ellipsis` is an option for instance.
