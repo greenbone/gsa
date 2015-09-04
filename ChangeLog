@@ -1,3 +1,11 @@
+2015-09-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp-doc.xsl (match="type" mode="details"): Removed
+	usage of "wrap" because this is now done via style of <pre>.
+
+	* src/html/classic/rnc.xsl (rnc-wrap, rnc-wrap-line): Removed. These
+	were never used.
+
 2015-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make it possible to add all assets from a report.

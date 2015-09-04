@@ -288,11 +288,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pre>
           <xsl:value-of select="name"/>
           <xsl:text> = </xsl:text>
-          <xsl:call-template name="wrap">
-            <xsl:with-param name="string">
-              <xsl:value-of select="normalize-space (pattern)"/>
-            </xsl:with-param>
-          </xsl:call-template>
+          <xsl:value-of select="normalize-space (pattern)"/>
           <xsl:call-template name="newline"/>
         </pre>
       </div>
