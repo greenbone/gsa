@@ -104,6 +104,8 @@ int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
 static char *edit_role (credentials_t *, params_t *, const char *);
 
+static char *edit_task (credentials_t *, params_t *, const char *);
+
 static char *get_alert (credentials_t *, params_t *, const char *);
 
 static char *get_alerts (credentials_t *, params_t *, const char *);
@@ -1018,6 +1020,9 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "edit_role") == 0)
     return edit_role (credentials, params, response);
+
+  if (strcmp (next, "edit_task") == 0)
+    return edit_task (credentials, params, response);
 
   if (strcmp (next, "get_alerts") == 0)
     return get_alerts (credentials, params, response);
@@ -4168,6 +4173,67 @@ start_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Reassign a task to a new slave.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+move_task_omp (credentials_t * credentials, params_t *params)
+{
+  gchar *command, *response, *html;
+  const char *task_id, *slave_id;
+  int ret;
+  entity_t entity;
+
+  slave_id = params_value (params, "slave_id");
+  task_id = params_value (params, "task_id");
+
+  command = g_strdup_printf ("<move_task task_id=\"%s\" slave_id=\"%s\"/>",
+                             task_id ? task_id : "",
+                             slave_id ? slave_id : "");
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, command);
+  g_free (command);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while moving a task. "
+                             "The task was not moved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while moving a task. "
+                             "It is unclear whether the task has been moved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while moving a task. "
+                             "It is unclear whether the task has been moved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_tasks (credentials, params, response);
+  return html;
+}
+
+/**
  * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
@@ -4851,6 +4917,39 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 
   g_string_free (commands_xml, TRUE);
   free_entity (commands_entity);
+
+  /* Get slaves */
+  if (command_enabled (credentials, "GET_SLAVES"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_slaves"
+                                " filter=\"first=1"
+                                "          rows=-1\""
+                                " />")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting slaves list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting slaves list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to receive response from manager daemon.",
+                              "/omp?cmd=get_tasks");
+        }
+    }
 
   /* Get tag names */
 

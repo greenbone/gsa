@@ -716,6 +716,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="move_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Move Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="restore_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -907,6 +915,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="commands_response/create_note_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/create_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="move_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_task/move_task_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_task/delete_report_response"
                              mode="response-indicator"/>

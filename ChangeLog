@@ -1,3 +1,26 @@
+2015-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add option to move a Task to a new slave on the details and edit pages.
+
+	* src/gsad_omp.c (edit_task): Add static header.
+	(generate_page): Add edit_task.
+	(move_task_omp): New function.
+	(get_task): Get slaves list.
+
+	* src/gsad_omp.h (move_task_omp): New function prototype.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add move_task command.
+
+	* src/html/classic/gsad.xsl (move_task_response [response-indicator]):
+	New template.
+	(html-gsa-logo): Add indicator for move_task on get_task and edit_task
+	pages.
+
+	* src/html/classic/omp.xsl (move_task_icon): New template.
+	(task [details]): Add "Move task" menu icon.
+	(move_task_response): New template.
+	(html-edit-task-form): Add "Move task" menu icon.
+
 2015-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [os-details]): Add delete icon.

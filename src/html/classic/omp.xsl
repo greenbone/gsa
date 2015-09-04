@@ -3675,6 +3675,58 @@ var toggleFilter = function(){
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="move_task_icon">
+  <xsl:param name="task" select="."/>
+  <xsl:param name="slaves" select="../../../get_slaves_response/slave"/>
+  <xsl:param name="next" select="'get_task'"/>
+  <xsl:variable name="current_slave_id" select="$task/slave/@id"/>
+  <xsl:choose>
+    <xsl:when test="gsa:may-op ('get_slaves') and gsa:may-op ('modify_task') and count ($slaves)">
+      <span class="menu_icon" id="#wizard_list">
+        <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
+        <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+        <ul>
+          <xsl:if test="$current_slave_id != ''">
+            <xsl:variable name="class">
+              <xsl:text>first</xsl:text>
+              <xsl:if test="$slave_count = 0"> last</xsl:if>
+            </xsl:variable>
+            <li class="{$class}">
+              <a href="#" class="{$class}" onclick="move_task_form.submit();">
+                <xsl:value-of select="gsa:i18n ('Move to Master', 'Task')"/>
+              </a>
+            </li>
+          </xsl:if>
+
+          <xsl:for-each select="$slaves [@id != $current_slave_id]">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="$slave_count = 1 and $current_slave_id = ''">first last</xsl:when>
+                <xsl:when test="position () = 1 and $current_slave_id = ''">first</xsl:when>
+                <xsl:when test="position () = last ()">last</xsl:when>
+              </xsl:choose>
+            </xsl:variable>
+            <li class="{$class}">
+              <a href="#" class="{$class}" onclick="move_task_form.slave_id.value = '{@id}'; move_task_form.submit();">
+                <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Move to Slave &quot;%1&quot;', 'Task'), name)"/>
+              </a>
+            </li>
+          </xsl:for-each>
+        </ul>
+      </span>
+      <form style="display:none" method="post" name="move_task_form" action="">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="move_task"/>
+        <input type="hidden" name="task_id" value="{$task/@id}"/>
+        <input type="hidden" name="slave_id" value=""/>
+        <input type="hidden" name="next" value="{$next}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      </form>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="task" mode="details">
   <xsl:variable name="apply-overrides" select="../apply_overrides"/>
   <xsl:variable name="min-qod" select="/envelope/params/min_qod"/>
@@ -3703,6 +3755,7 @@ var toggleFilter = function(){
           <xsl:with-param name="show-start-when-scheduled" select="1"/>
         </xsl:call-template>
       </div>
+      <xsl:call-template name="move_task_icon"/>
       <div class="small_inline_form" style="margin-left:40px; display: inline">
         <form method="get" action="" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -5080,6 +5133,18 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="move_task_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Move Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- NEW_TASK -->
 
 <xsl:template name="new-task-alert-select">
@@ -6401,6 +6466,11 @@ var toggleFilter = function(){
         <xsl:with-param name="id"
                         select="commands_response/get_tasks_response/task/@id"/>
       </xsl:call-template>
+      <xsl:call-template name="move_task_icon">
+        <xsl:with-param name="slaves" select="commands_response/get_slaves_response/slave"/>
+        <xsl:with-param name="task" select="commands_response/get_tasks_response/task"/>
+        <xsl:with-param name="next" select="'edit_task'"/>
+      </xsl:call-template>
     </div>
 
     <!-- Form. -->
@@ -6577,6 +6647,7 @@ var toggleFilter = function(){
 <xsl:template match="edit_task">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="modify_task_response"/>
+  <xsl:apply-templates select="move_task_response"/>
   <xsl:call-template name="html-edit-task-form"/>
 </xsl:template>
 
@@ -6941,6 +7012,7 @@ var toggleFilter = function(){
   <xsl:apply-templates select="stop_task_response"/>
   <xsl:apply-templates select="modify_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
+  <xsl:apply-templates select="move_task_response"/>
   <xsl:apply-templates select="commands_response/get_tasks_response/task"
                        mode="details"/>
 </xsl:template>

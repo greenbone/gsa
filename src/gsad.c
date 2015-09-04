@@ -1050,6 +1050,7 @@ init_validator ()
                          "|(import_port_list)"
                          "|(import_report_format)"
                          "|(login)"
+                         "|(move_task)"
                          "|(new_agent)"
                          "|(new_alert)"
                          "|(new_config)"
@@ -2335,6 +2336,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                               &con_info->content_disposition,
                                               &con_info->content_length);
     }
+  ELSE (move_task)
   ELSE (restore)
   ELSE (resume_task)
   ELSE (run_wizard)
