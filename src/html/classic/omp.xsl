@@ -35196,6 +35196,11 @@ var toggleFilter = function(){
         <field>modified</field>
         <sort-reverse/>
       </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Actions', 'Actions')"/></name>
+        <field>Actions</field>
+        <sort-reverse/>
+      </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
   </xsl:call-template>
@@ -35216,6 +35221,8 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="get_assets">
+  <xsl:apply-templates select="create_asset_response"/>
+  <xsl:apply-templates select="delete_asset_response"/>
   <xsl:apply-templates select="get_assets_response"/>
 </xsl:template>
 
@@ -35317,6 +35324,26 @@ var toggleFilter = function(){
       </xsl:when>
       <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../in_use='0'">
+          <xsl:call-template name="delete-icon">
+            <xsl:with-param name="type" select="'asset'"/>
+            <xsl:with-param name="id" select="../@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="next" value="get_assets"/>
+              <input type="hidden" name="asset_type" value="os"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+               title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
   </tr>
 </xsl:template>
 
