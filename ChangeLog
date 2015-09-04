@@ -1,5 +1,9 @@
 2015-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (asset [os-details]): Add delete icon.
+
+2015-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add deleting to OSs page.
 
 	* src/html/classic/omp.xsl (html-oss-table): Add Actions column.
