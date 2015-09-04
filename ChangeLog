@@ -1,3 +1,17 @@
+2015-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add deleting of Hosts.
+
+	* src/html/classic/omp.xsl (asset [os-details]): Correct asset_type and
+	title.
+	(asset [host-details]): Add delete icon.
+	(html-hosts-table): Use actual icon count, because there is one.
+	(html-oss-table): Remove Action column and use actual icon count, so
+	that Action column is produced automatically.
+	(asset/host): Add delete icon.
+	(asset/os): Move delete icon into bulk action check, else an extra
+	column is produced.
+
 2015-09-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add option to move a Task to a new slave on the details and edit pages.

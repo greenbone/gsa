@@ -34938,14 +34938,14 @@ var toggleFilter = function(){
               <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="next" value="get_assets"/>
-                <input type="hidden" name="asset_type" value="os"/>
+                <input type="hidden" name="asset_type" value="host"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
             <img src="/img/delete_inactive.png"
                  border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                 title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
+                 title="{gsa:i18n ('Host is in use', 'Hosts')}"
                  style="margin-left:3px;"/>
           </xsl:otherwise>
         </xsl:choose>
@@ -35079,6 +35079,26 @@ var toggleFilter = function(){
         title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Hosts', 'Host')}"/>
       </a>
+      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <xsl:choose>
+          <xsl:when test="in_use='0'">
+            <xsl:call-template name="delete-icon">
+              <xsl:with-param name="type" select="'asset'"/>
+              <xsl:with-param name="id" select="@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="next" value="get_assets"/>
+                <input type="hidden" name="asset_type" value="os"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/delete_inactive.png"
+                 border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                 title="{gsa:i18n ('OS is in use', 'Assets')}"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="minor-details"/>
@@ -35241,7 +35261,7 @@ var toggleFilter = function(){
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
+    <xsl:with-param name="icon-count" select="1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -35288,13 +35308,8 @@ var toggleFilter = function(){
         <field>modified</field>
         <sort-reverse/>
       </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Actions', 'Actions')"/></name>
-        <field>Actions</field>
-        <sort-reverse/>
-      </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
+    <xsl:with-param name="icon-count" select="1"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -35358,7 +35373,28 @@ var toggleFilter = function(){
           </label>
         </td>
       </xsl:when>
-      <xsl:otherwise></xsl:otherwise>
+      <xsl:otherwise>
+        <td>
+          <xsl:choose>
+            <xsl:when test="../in_use='0'">
+              <xsl:call-template name="delete-icon">
+                <xsl:with-param name="type" select="'asset'"/>
+                <xsl:with-param name="id" select="../@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="next" value="get_assets"/>
+                  <input type="hidden" name="asset_type" value="host"/>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/delete_inactive.png"
+                   border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                   title="{gsa:i18n ('Host is in use', 'Hosts')}"
+                   style="margin-left:3px;"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </xsl:otherwise>
     </xsl:choose>
   </tr>
 </xsl:template>
@@ -35414,28 +35450,29 @@ var toggleFilter = function(){
           </label>
         </td>
       </xsl:when>
-      <xsl:otherwise></xsl:otherwise>
+      <xsl:otherwise>
+        <td>
+          <xsl:choose>
+            <xsl:when test="../in_use='0'">
+              <xsl:call-template name="delete-icon">
+                <xsl:with-param name="type" select="'asset'"/>
+                <xsl:with-param name="id" select="../@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="next" value="get_assets"/>
+                  <input type="hidden" name="asset_type" value="os"/>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/delete_inactive.png"
+                   border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                   title="{gsa:i18n ('OS is in use', 'OS')}"
+                   style="margin-left:3px;"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </xsl:otherwise>
     </xsl:choose>
-    <td>
-      <xsl:choose>
-        <xsl:when test="../in_use='0'">
-          <xsl:call-template name="delete-icon">
-            <xsl:with-param name="type" select="'asset'"/>
-            <xsl:with-param name="id" select="../@id"/>
-            <xsl:with-param name="params">
-              <input type="hidden" name="next" value="get_assets"/>
-              <input type="hidden" name="asset_type" value="os"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
   </tr>
 </xsl:template>
 
