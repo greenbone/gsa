@@ -27560,7 +27560,7 @@ should not have received it.
             <xsl:value-of select="$best_os_txt"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('No information on Operating System was gathered during scan.', 'Host')"/>
+            <xsl:value-of select="gsa:i18n ('No information on Operating System.', 'Host')"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
