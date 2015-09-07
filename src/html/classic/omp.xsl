@@ -4452,6 +4452,13 @@ var toggleFilter = function(){
       <xsl:choose>
         <xsl:when test="$type = 'report'"/>
         <xsl:when test="$type = 'info'"/>
+        <xsl:when test="$new-icon and $subtype != ''">
+          <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
+          <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
         <xsl:when test="$new-icon">
           <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -34915,6 +34922,55 @@ var toggleFilter = function(){
 <xsl:template match="get_settings_response"/>
 
 <!-- NEW ASSET MANAGEMENT -->
+
+<xsl:template name="html-create-host-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('New Host', 'Host')"/>
+      <a href="/help/new_host.html?token={/envelope/token}"
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Host', 'Host'))}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_hosts&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Hosts', 'Host')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_host"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="next" value="get_host"/>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td>
+              <input type="text" name="name" value="127.0.0.1" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="{gsa:i18n ('Create Host', 'Host')}"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_host">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_asset_response"/>
+  <xsl:apply-templates select="commands_response/delete_asset_response"/>
+  <xsl:call-template name="html-create-host-form"/>
+</xsl:template>
 
 <xsl:template match="asset" mode="os-details">
   <div class="gb_window">

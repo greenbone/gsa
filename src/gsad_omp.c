@@ -23332,6 +23332,120 @@ bulk_delete_omp (credentials_t * credentials, params_t *params)
 /* Assets. */
 
 /**
+ * @brief Returns page to create a new host.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_host (credentials_t *credentials, params_t *params,
+           const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_host>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_host>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new host page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_host_omp (credentials_t *credentials, params_t *params)
+{
+  return new_host (credentials, params, NULL);
+}
+
+/**
+ * @brief Create a host, serve next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_host_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *name;
+  entity_t entity;
+  GString *xml;
+
+  name = params_value (params, "name");
+  CHECK_PARAM (name, "Create Host", new_host);
+
+  /* Create the host. */
+
+  xml = g_string_new ("");
+
+  xml_string_append (xml,
+                     "<create_asset>"
+                     "<asset>"
+                     "<type>host</type>"
+                     "<name>%s</name>"
+                     "</asset>"
+                     "</create_asset>",
+                     name);
+
+  ret = omp (credentials,
+             &response,
+             &entity,
+             xml->str);
+  g_string_free (xml, TRUE);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new host. "
+                            "No new host was created. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            "/omp?cmd=get_hosts");
+      case 2:
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new host. "
+                            "It is unclear whether the host has been created or not. "
+                            "Diagnostics: Failure to receive response from manager daemon.",
+                            "/omp?cmd=get_hosts");
+      default:
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new host. "
+                            "It is unclear whether the host has been created or not. "
+                            "Diagnostics: Internal Error.",
+                            "/omp?cmd=get_hosts");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_assets (credentials, params, response);
+    }
+  else
+    html = new_host (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+/**
  * @brief Request an asset.
  *
  * @param[in]  credentials  Credentials for the manager connection.

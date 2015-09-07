@@ -383,9 +383,15 @@ char * get_info_omp (credentials_t *, params_t *);
 char * get_nvts_omp (credentials_t *, params_t *);
 char * get_info (credentials_t *, params_t *, const char *);
 
+char * new_host_omp (credentials_t *, params_t *);
 char * create_asset_omp (credentials_t *, params_t *);
+char * create_host_omp (credentials_t *, params_t *);
 char * delete_asset_omp (credentials_t *, params_t *);
 char * get_assets_omp (credentials_t *, params_t *);
 char * get_asset_omp (credentials_t *, params_t *);
+char * export_asset_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
+char * export_assets_omp (credentials_t *, params_t *, enum content_type *,
+                          char **, gsize *);
 
 #endif /* not _GSAD_OMP_H */

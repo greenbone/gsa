@@ -859,6 +859,7 @@ init_validator ()
                          "|(create_alert)"
                          "|(create_filter)"
                          "|(create_group)"
+                         "|(create_host)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
@@ -1056,6 +1057,7 @@ init_validator ()
                          "|(new_config)"
                          "|(new_filter)"
                          "|(new_group)"
+                         "|(new_host)"
                          "|(new_lsc_credential)"
                          "|(new_note)"
                          "|(new_override)"
@@ -2262,6 +2264,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_asset)
   ELSE (create_filter)
   ELSE (create_group)
+  ELSE (create_host)
   ELSE (create_lsc_credential)
   ELSE (create_permission)
   ELSE (create_permissions)
@@ -2989,6 +2992,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
   ELSE (new_agent)
+  ELSE (new_host)
   ELSE (new_config)
   ELSE (new_lsc_credential)
   ELSE (new_note)

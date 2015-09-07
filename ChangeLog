@@ -1,3 +1,21 @@
+2015-09-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add manual creating of host assets.
+
+	* src/gsad.c (init_validator, exec_omp_get, exec_omp_post): Add
+	create_host and new_host.
+
+	* src/gsad_omp.c (new_host, new_host_omp, create_host_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Add CREATE_ASSET indicator.
+
+	* src/html/classic/omp.xsl (list-window): Use the subtype in the new
+	command, if a subtype is given.
+	(html-create-host-form, new_host): New templates.
+
 2015-09-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_gantt_chart.js: Add CSV and HTML tables as
