@@ -35143,7 +35143,7 @@ var toggleFilter = function(){
               <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="next" value="get_assets"/>
-                <input type="hidden" name="asset_type" value="os"/>
+                <input type="hidden" name="asset_type" value="host"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
