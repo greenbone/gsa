@@ -255,6 +255,51 @@ function GanttChartGenerator ()
         {
           display.svg ().text ("");
 
+          var defs = display.svg ().append ("defs");
+          var gradient1 = defs.append ("linearGradient")
+                                .attr ("id", "green_fill_gradient")
+                                .attr ("x1", "0%")
+                                .attr ("x2", "100%")
+                                .attr ("y1", "0%")
+                                .attr ("y1", "0%")
+
+          gradient1.append ("stop")
+                    .attr ("offset", "0%")
+                    .style ("stop-color", "#71C000")
+                    .style ("stop-opacity", "1.0")
+
+          gradient1.append ("stop")
+                    .attr ("offset", "25%")
+                    .style ("stop-color", "#71C000")
+                    .style ("stop-opacity", "1.0")
+
+          gradient1.append ("stop")
+                    .attr ("offset", "100%")
+                    .style ("stop-color", "#71C000")
+                    .style ("stop-opacity", "0.1")
+
+          var gradient2 = defs.append ("linearGradient")
+                                .attr ("id", "green_stroke_gradient")
+                                .attr ("x1", "0%")
+                                .attr ("x2", "100%")
+                                .attr ("y1", "0%")
+                                .attr ("y1", "0%")
+
+          gradient2.append ("stop")
+                    .attr ("offset", "0%")
+                    .style ("stop-color", "#549330")
+                    .style ("stop-opacity", "1.0")
+
+          gradient2.append ("stop")
+                    .attr ("offset", "25%")
+                    .style ("stop-color", "#549330")
+                    .style ("stop-opacity", "1.0")
+
+          gradient2.append ("stop")
+                    .attr ("offset", "100%")
+                    .style ("stop-color", "#549330")
+                    .style ("stop-opacity", "0.1")
+
           svg = display.svg ().append ("g");
 
           display.svg ().on ("mousemove", null)
@@ -377,12 +422,11 @@ function GanttChartGenerator ()
                           .data (bar_starts)
                             .enter ()
                               .insert ("rect")
-                              .style ("fill", "#71C000")
-                              .style ("stroke", "#549330")
 
                       sel.selectAll ("rect")
                             .data (bar_starts)
-                              .style ("fill-opacity", function (d) { return r_duration ? 1.0 : 0.25 })
+                              .style ("fill", function (d) { return r_duration ? "#71C000" : "url(#green_fill_gradient)" })
+                              .style ("stroke", function (d) { return r_duration ? "#549330" : "url(#green_stroke_gradient)" })
                               .attr ("x", function (start) { return time_scale (start); })
                               .attr ("width", function (start) { return time_scale (offset + Math.min (r_length, end_date - start)) })
                               .attr ("height", x_scale.rangeBand())
@@ -392,7 +436,6 @@ function GanttChartGenerator ()
                                                                     text += "\nEnd: " + gsa.datetime_format (new Date (+start + r_duration * 1000));
                                                                   else
                                                                     text += "\nNo scheduled end"
-                                                                  text += "\nNext scheduled run: " + gsa.datetime_format (new_date)
                                                                   return text })
 
                       sel.selectAll ("rect")

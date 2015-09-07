@@ -1,3 +1,9 @@
+2015-09-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_gantt_chart.js (generate): Use an opacity
+	gradient on bars without a well-defined end. Remove "Next scheduled
+	run" from tooltip of bars.
+
 2015-09-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset-os-icon): Make tooltip for os icon
