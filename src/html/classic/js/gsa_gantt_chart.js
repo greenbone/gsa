@@ -97,7 +97,8 @@ function GanttChartGenerator ()
   var x_label = "";
   var y_label = "";
 
-  var x_field = "id";
+  var x_field = "name";
+  var time_field = "schedule_next_time"
 
   var show_stat_type = true;
 
@@ -134,8 +135,8 @@ function GanttChartGenerator ()
   my.y_field = function (value)
     {
       if (!arguments.length)
-        return size_field;
-      size_field = value;
+        return time_field;
+      time_field = value;
       return my;
     }
 
@@ -348,6 +349,18 @@ function GanttChartGenerator ()
               .insert ("g")
                 .attr ("class", "bar-group")
 
+      svg.selectAll(".bar-label-shadow")
+          .data (display_records)
+            .enter ()
+            .insert ("text")
+              .attr ("class", "bar-label-shadow")
+              .attr ("x", "3px")
+              .style ("dominant-baseline", "middle")
+              .style ("font-size", "10px")
+              .style ("stroke", "#EEEEEE")
+              .style ("stroke-opacity", "0.75")
+              .style ("stroke-width", "3px")
+
       svg.selectAll(".bar-label")
           .data (display_records)
             .enter ()
@@ -356,10 +369,6 @@ function GanttChartGenerator ()
               .attr ("x", "3px")
               .style ("dominant-baseline", "middle")
               .style ("font-size", "10px")
-              .style ("stroke", "#EEEEEE")
-              .style ("stroke-opacity", "0.75")
-              .style ("stroke-width", "3px")
-              .style ("paint-order", "stroke")
 
       svg.selectAll (".bar-group")
           .data (display_records)
@@ -466,17 +475,23 @@ function GanttChartGenerator ()
                                   .attr ("title", future_runs_text)
                     })
 
+      svg.selectAll (".bar-label-shadow")
+          .data (display_records)
+            .text (function (d) { return d.name })
+            .attr ("y", function (d) { return (height - x_scale(d [x_field]) - (x_scale.rangeBand() /2)) })
+
       svg.selectAll (".bar-label")
           .data (display_records)
             .text (function (d) { return d.name })
             .attr ("y", function (d) { return (height - x_scale(d [x_field]) - (x_scale.rangeBand() /2)) })
+
+
       // Generate CSV
-/*
       csv_data = csv_from_records (records,
                                    column_info,
-                                   [x_field, size_field],
+                                   [x_field, time_field],
                                    [column_label (column_info.columns [x_field], true, false, show_stat_type),
-                                    column_label (column_info.columns [size_field], true, false, show_stat_type)],
+                                    column_label (column_info.columns [time_field], true, false, show_stat_type)],
                                    display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
@@ -501,9 +516,9 @@ function GanttChartGenerator ()
               html_table_data
                 = html_table_from_records (records,
                                            column_info,
-                                           [x_field, size_field],
+                                           [x_field, time_field],
                                            [column_label (column_info.columns [x_field], true, false, show_stat_type),
-                                            column_label (column_info.columns [size_field], true, false, show_stat_type)],
+                                            column_label (column_info.columns [time_field], true, false, show_stat_type)],
                                            display.header(). text (),
                                            data_src.param ("filter"));
               html_table_blob = new Blob([html_table_data], { type: "text/html" });
@@ -537,7 +552,7 @@ function GanttChartGenerator ()
                                .attr("download", "gsa_bar_chart-" + new Date().getTime() + ".svg")
                                .text("Download SVG");
                   }, 600);
-*/
+
       display.update_gen_data (my, gen_params);
     };
 

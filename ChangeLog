@@ -1,5 +1,16 @@
 2015-09-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_gantt_chart.js: Add CSV and HTML tables as
+	well as SVG export. Create label shadows as separate elements as
+	paint-order attribute is not well supported.
+
+	* src/html/classic/js/gsa_graphics_base.js (tasks_column_info): Correct
+	"schedule_first_time" entry.
+	(svg_from_elem): Insert CSS into an existing "defs" subelement if one
+	exists.
+
+2015-09-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_gantt_chart.js (generate): Use an opacity
 	gradient on bars without a well-defined end. Remove "Next scheduled
 	run" from tooltip of bars.

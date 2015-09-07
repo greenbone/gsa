@@ -953,7 +953,7 @@ function tasks_column_info ()
         column : "schedule_trash",
         data_type : "integer"
       },
-      schedule_next_time : {
+      schedule_first_time : {
         name : "schedule_first_time",
         stat : "value",
         type : "task",
@@ -2045,6 +2045,14 @@ svg_from_elem = function (svg_elem, title)
   var svg_clone = d3.select (svg_elem.node().cloneNode(true));
   svg_clone.selectAll (".remove_on_static").remove ();
 
+  var defs = svg_clone.selectAll ("defs");
+  if (defs.empty ())
+    defs = svg_clone.insert ("defs", ":first-child");
+
+  defs.insert ("style")
+        .attr ("type", "text/css")
+        .html (css_text)
+
   // create SVG
   var svg_data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                   + "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/SVG/DTD/svg10.dtd\"> "
@@ -2052,9 +2060,8 @@ svg_from_elem = function (svg_elem, title)
                   + " viewBox=\"0 " + (title != null ? "-14" : "0") + " " + width + " " + height + "\""
                   + " width=\"" + width + "\""
                   + " height=\"" + (height + (title != null ? 14 : 0)) + "\">"
-                  + " <defs><style type=\"text/css\">" + css_text + "</style></defs>"
-                  + title_xml
                   + svg_clone.html ()
+                  + title_xml
                   + "</svg>";
   return svg_data;
 }
