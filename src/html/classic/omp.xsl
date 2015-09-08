@@ -34787,7 +34787,8 @@ var toggleFilter = function(){
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_host"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="next" value="get_host"/>
+        <input type="hidden" name="next" value="get_asset"/>
+        <input type="hidden" name="asset_type" value="host"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">

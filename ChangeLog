@@ -1,5 +1,11 @@
 2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-host-form): Correct next and add
+	asset_type params, so that the next page is the created host and not the
+	host list.
+
+2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (asset [host-details]): Add new icon, like on
 	other details pages.
 
