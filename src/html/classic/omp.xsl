@@ -35103,6 +35103,19 @@ var toggleFilter = function(){
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:when>
+                <xsl:when test="substring (source/type, 1, 4) = 'User'">
+                  <xsl:text>User </xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_user&amp;user_id={source/@id}&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/name"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/name"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="source/@id"/>
                 </xsl:otherwise>
