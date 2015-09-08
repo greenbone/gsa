@@ -25428,6 +25428,22 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Identifier', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
         </tr>
+        <xsl:if test="count (detail[name = 'host_status']) > 0">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Status', 'Host')"/></td>
+            <xsl:choose>
+              <xsl:when test="detail[name = 'host_status']/value = '0'">
+                <td>Dead</td>
+              </xsl:when>
+              <xsl:when test="detail[name = 'host_status']/value = '1'">
+                <td>Alive</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td>Unknown</td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+        </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Scanned IP', 'Host')"/></td>
           <td><xsl:value-of select="ip"/></td>

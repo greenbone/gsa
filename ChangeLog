@@ -1,3 +1,8 @@
+2015-09-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (host [classic]): Handle host_status host
+	detail.
+
 2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add Asset to resource types.
