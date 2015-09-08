@@ -1,3 +1,15 @@
+2015-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Serve the login pages with different HTTP status codes depending on
+	the situation.
+
+	* src/gsad.c (exec_omp_post, request_handler): Send login form response
+	with HTTP status code 503 if OMP service is down or an authorization
+	error occurs. Send code 401 if the credentials are wrong, the token or
+	cookie is bad or missing, or if the session is expired. Send code 400
+	if the credentials contain invalid characters or the user tries logging
+	out while already logged out.
+
 2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-host-form): Correct next and add

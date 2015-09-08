@@ -2009,6 +2009,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
+              if (ret == -1 || ret == 2)
+                con_info->answercode = MHD_HTTP_SERVICE_UNAVAILABLE;
+              else
+                con_info->answercode = MHD_HTTP_UNAUTHORIZED;
+
               g_warning ("Authentication failure for '%s' from %s",
                          params_value (con_info->params, "login") ?: "",
                          client_address);
@@ -2062,6 +2067,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           res = xsl_transform (xml);
           g_free (xml);
           con_info->response = res;
+          con_info->answercode = MHD_HTTP_UNAUTHORIZED;
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
@@ -2075,8 +2081,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                              "An internal error occurred inside GSA daemon. "
                                              "Diagnostics: Error in login or password.",
                                              "/omp?cmd=get_tasks");
+          con_info->answercode = MHD_HTTP_BAD_REQUEST;
         }
-      con_info->answercode = MHD_HTTP_OK;
       return 3;
     }
 
@@ -2149,7 +2155,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_OK;
+      con_info->answercode = MHD_HTTP_UNAUTHORIZED;
       return 2;
     }
 
@@ -2178,7 +2184,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_OK;
+      con_info->answercode = MHD_HTTP_UNAUTHORIZED;
       return 2;
     }
 
@@ -2212,7 +2218,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_OK;
+      con_info->answercode = MHD_HTTP_SERVICE_UNAVAILABLE;
       return 2;
     }
 
@@ -3948,6 +3954,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                       ? language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
+              http_response_code = MHD_HTTP_SERVICE_UNAVAILABLE;
               g_free (language);
               res = xsl_transform (xml);
               g_free (xml);
@@ -3993,6 +4000,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                          "Accept-Language");
           language = accept_language_to_env_fmt (accept_language);
           full_url = reconstruct_url (connection, url);
+
+          if (ret == 2)
+            {
+              if (strncmp (url, "/logout", strlen ("/logout")))
+                http_response_code = MHD_HTTP_UNAUTHORIZED;
+              else
+                http_response_code = MHD_HTTP_BAD_REQUEST;
+            }
+          else
+            http_response_code = MHD_HTTP_UNAUTHORIZED;
+
           xml = g_markup_printf_escaped
                  ("<login_page>"
                   "<message>"
@@ -4018,6 +4036,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     : ""),
                   language ? language : DEFAULT_GSAD_LANGUAGE,
                   guest_username ? guest_username : "");
+          if (ret == 2)
+            {
+              if (strncmp (url, "/logout", strlen ("/logout")))
+                http_response_code = MHD_HTTP_UNAUTHORIZED;
+              else
+                http_response_code = MHD_HTTP_BAD_REQUEST;
+            }
+          else
+            http_response_code = MHD_HTTP_UNAUTHORIZED;
+
           g_free (language);
           g_free (full_url);
           res = xsl_transform (xml);
@@ -4412,7 +4440,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           return MHD_YES;
         }
 
-      ret = send_response (connection, con_info->response, MHD_HTTP_OK,
+      ret = send_response (connection, con_info->response, con_info->answercode,
                            new_sid ? new_sid : "0",
                            con_info->content_type,
                            con_info->content_disposition,
