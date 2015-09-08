@@ -4494,6 +4494,9 @@ var toggleFilter = function(){
               <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
               <input type="hidden" name="filter" value="{filters/term}"/>
               <input type="hidden" name="filt_id" value="{filters/@id}"/>
+              <xsl:if test="$subtype != ''">
+                <input type="hidden" name="{$type}_type" value="{$subtype}"/>
+              </xsl:if>
               <xsl:call-template name="auto-refresh"/>
               <input type="image"
                      name="Update"
