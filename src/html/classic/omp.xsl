@@ -5217,9 +5217,10 @@ var toggleFilter = function(){
   <xsl:apply-templates select="create_task_response"/>
   <xsl:apply-templates select="create_report_response"/>
 
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+  <div class="gb_window">
+   <div class="gb_window_part_left"></div>
+   <div class="gb_window_part_right"></div>
+   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
@@ -5231,8 +5232,8 @@ var toggleFilter = function(){
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
-  </div>
-  <div class="gb_window_part_content">
+   </div>
+   <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
@@ -5684,11 +5685,13 @@ var toggleFilter = function(){
       </table>
       <br/>
     </form>
+   </div>
   </div>
 
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+  <div class="gb_window">
+   <div class="gb_window_part_left"></div>
+   <div class="gb_window_part_right"></div>
+   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
@@ -5696,8 +5699,8 @@ var toggleFilter = function(){
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
-  </div>
-  <div class="gb_window_part_content">
+   </div>
+   <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_report"/>
@@ -5734,6 +5737,7 @@ var toggleFilter = function(){
       </table>
       <br/>
     </form>
+   </div>
   </div>
 </xsl:template>
 

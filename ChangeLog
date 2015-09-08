@@ -21,6 +21,11 @@
 
 2015-09-08  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Make sure the gb_window class is used
+	  everywhere.
+
+2015-09-08  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Add a datepicker to support the date entry for new schedules.
 
 	* src/gsad.c, src/html/classic/js/jquery-ui.min.js,
