@@ -4483,8 +4483,8 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   extra_attribs = g_string_new("");
-  g_string_append_printf(extra_attribs, "type=\"%s\"",
-                         params_value (params, "info_type"));
+  g_string_append_printf (extra_attribs, "type=\"%s\"",
+                          params_value (params, "info_type"));
   if (params_value (params, "info_name"))
     g_string_append_printf (extra_attribs,
                             " name=\"%s\"",
@@ -23518,8 +23518,8 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml)
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
   extra_attribs = g_string_new ("");
-  g_string_append_printf(extra_attribs, "type=\"%s\"",
-                         params_value (params, "asset_type"));
+  g_string_append_printf (extra_attribs, "type=\"%s\"",
+                          params_value (params, "asset_type"));
   if (params_value (params, "asset_name"))
     g_string_append_printf (extra_attribs,
                             " name=\"%s\"",
