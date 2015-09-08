@@ -4647,10 +4647,10 @@ var toggleFilter = function(){
               <input type="hidden" name="resource_type" value="{$type}"/>
 
               <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
-              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report')">
+              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
                 <input style="margin-right:3px" type="image" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
               </xsl:if>
-              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report')">
+              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report' or $type = 'asset')">
                 <input style="margin-right:3px" type="image" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
               </xsl:if>
               <xsl:if test="$type != 'report'">

@@ -1267,12 +1267,12 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory)$");
+                         "^(agent|alert|asset|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|asset|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");

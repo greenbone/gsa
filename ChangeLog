@@ -1,5 +1,12 @@
 2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add Asset to resource types.
+
+	* src/html/classic/omp.xsl (list-window): Use delete instead of trashcan
+	for assets.
+
+2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Add subtype to refresh icon if
 	given.
 
