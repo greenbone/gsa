@@ -951,6 +951,8 @@ init_validator ()
                          "|(export_agents)"
                          "|(export_alert)"
                          "|(export_alerts)"
+                         "|(export_asset)"
+                         "|(export_assets)"
                          "|(export_config)"
                          "|(export_configs)"
                          "|(export_lsc_credential)"
@@ -1463,6 +1465,7 @@ init_validator ()
   openvas_validator_alias (validator, "subject_name",   "name");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
+  openvas_validator_alias (validator, "subtype", "asset_type");
   openvas_validator_alias (validator, "task_filter",  "filter");
   openvas_validator_alias (validator, "task_filt_id", "filt_id");
   openvas_validator_alias (validator, "timeout",      "boolean");
@@ -2682,6 +2685,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_alerts"))
     return export_alerts_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_asset"))
+    return export_asset_omp (credentials, params, content_type,
+                             content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_assets"))
+    return export_assets_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_config"))

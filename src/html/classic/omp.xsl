@@ -4474,6 +4474,16 @@ var toggleFilter = function(){
       <xsl:choose>
         <xsl:when test="$type = 'report'"/>
         <xsl:when test="$type = 'info'"/>
+        <xsl:when test="$subtype != ''">
+          <!-- i18n with concat : see dynamic_strings.xsl - type-export-multiple-filtered-xml -->
+          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+            <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;subtype={$subtype}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
+               title="{gsa-i18n:strformat (gsa:n-i18n (concat ('Export %1 filtered ', $cap-type, ' as XML'), concat ('Export %1 filtered ', $cap-type-plural, ' as XML'), $filtered-count, $cap-type), $filtered-count)}"
+               style="margin-left:3px;">
+              <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+            </a>
+          </div>
+        </xsl:when>
         <xsl:otherwise>
           <!-- i18n with concat : see dynamic_strings.xsl - type-export-multiple-filtered-xml -->
           <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
@@ -34831,10 +34841,15 @@ var toggleFilter = function(){
           <xsl:otherwise>
             <img src="/img/delete_inactive.png"
                  border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                 title="{gsa:i18n ('Host is in use', 'Hosts')}"
-                 style="margin-left:3px;"/>
+                 style="margin-left:3px;"
+                 title="{gsa:i18n ('OS is in use', 'Hosts')}"/>
           </xsl:otherwise>
         </xsl:choose>
+        <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=os&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Export Asset as XML')}"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+        </a>
       </div>
     </div>
     <div class="gb_window_part_content">
@@ -34980,10 +34995,14 @@ var toggleFilter = function(){
           <xsl:otherwise>
             <img src="/img/delete_inactive.png"
                  border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                 title="{gsa:i18n ('OS is in use', 'Assets')}"
-                 style="margin-left:3px;"/>
+                 title="{gsa:i18n ('Host is in use', 'Assets')}"/>
           </xsl:otherwise>
         </xsl:choose>
+        <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=host&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Export Asset as XML')}"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+        </a>
       </div>
     </div>
     <div class="gb_window_part_content">

@@ -1,3 +1,20 @@
+2015-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Implement exporting of assets.
+
+	* src/gsad.c (init_validator): Add export commands and subtype.
+	(exec_omp_get): Add export commands.
+
+	* src/gsad_omp.c (export_resource): If there's a subtype then add it to
+	the OMP.
+	(export_many): Add asset special case.
+	(export_asset_omp, export_assets_omp): New functions.
+
+	* src/html/classic/omp.xsl (list-window): Add special case for asset
+	export icon.
+	(asset [os-details], asset [host-details]): Correct tooltip.  Add export
+	icon.
+
 2015-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (manager_connect): Add tests if param "html" is NULL.

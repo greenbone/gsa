@@ -2106,8 +2106,7 @@ export_resource (const char *type, credentials_t * credentials,
   gchar *html, *id_name;
   gchar *fname_format, *file_name;
   int ret;
-
-  const char *resource_id;
+  const char *resource_id, *subtype;
 
   *content_length = 0;
 
@@ -2141,14 +2140,21 @@ export_resource (const char *type, credentials_t * credentials,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
+  subtype = params_value (params, "subtype");
+
   if (openvas_server_sendf (&session,
                             "<get_%ss"
                             " %s_id=\"%s\""
+                            "%s%s%s"
                             " export=\"1\""
                             " details=\"1\"/>",
                             type,
                             type,
-                            resource_id)
+                            resource_id,
+                            subtype ? " type=\"" : "",
+                            subtype ? subtype : "",
+                            subtype ? "\"" : "")
+
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2306,6 +2312,28 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 " details=\"1\""
                                 " filter=\"%s\"/>",
                                 params_value (params, "info_type"),
+                                filter_escaped ? filter_escaped : "")
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          g_free (filter_escaped);
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a list. "
+                              "The list could not be delivered. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks");
+        }
+    }
+  else if (strcmp (type, "asset") == 0)
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_assets"
+                                " type=\"%s\""
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                params_value (params, "subtype"),
                                 filter_escaped ? filter_escaped : "")
           == -1)
         {
@@ -23775,6 +23803,47 @@ delete_asset_omp (credentials_t * credentials, params_t *params)
                          "Diagnostics: Error in parameter next.",
                          "/omp?cmd=get_tasks");
   return html;
+}
+
+/**
+ * @brief Export an asset.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Asset XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_asset_omp (credentials_t * credentials, params_t *params,
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
+{
+  return export_resource ("asset", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of assets.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Assets XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_assets_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_many ("asset", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 
