@@ -34980,6 +34980,10 @@ var toggleFilter = function(){
         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Host', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=new_host&amp;next=get_asset&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;asset_id={@id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('New Host')}">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
       <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Hosts', 'Host')}"/>
