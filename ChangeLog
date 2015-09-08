@@ -1,3 +1,14 @@
+2015-09-08  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Add a datepicker to support the date entry for new schedules.
+
+	* src/gsad.c, src/html/classic/js/jquery-ui.min.js,
+	  src/html/classic/js/jquery-ui.js, src/html/classic/gsad.xsl,
+	  src/html/classic/css/jquery-ui.css,
+	  src/html/classic/css/jquery-ui.min.css,
+	  src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl,
+	  CMakeLists.txt: Updated.
+
 2015-09-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (host [classic]): Handle host_status host

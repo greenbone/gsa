@@ -1156,7 +1156,7 @@ init_validator ()
   openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
-  openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
+  openvas_validator_add (validator, "day_of_month", "^([0-9]|[012][0-9]|3[01])$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
@@ -1218,7 +1218,7 @@ init_validator ()
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
-  openvas_validator_add (validator, "month",      "^(0[0-9]{1,1})|10|11|12$");
+  openvas_validator_add (validator, "month",      "^((0??[0-9])|1[012])$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");

@@ -157,8 +157,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <link rel="stylesheet" type="text/css" href="/css/select2.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
         <link rel="stylesheet" type="text/css" href="/css/gsa-style.css"/>
         <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
         <script src="/js/select2.min.js" type="text/javascript"></script>
       </xsl:otherwise>
     </xsl:choose>

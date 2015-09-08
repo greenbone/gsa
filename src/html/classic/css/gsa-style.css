@@ -1314,3 +1314,14 @@ text-align:right;
   top: 100%;
   left: 0;
 }
+
+#datevalue {
+  border: none;
+  background: none;
+}
+
+.ui-datepicker-trigger {
+  padding: 0;
+  border: none;
+  background: none;
+}
