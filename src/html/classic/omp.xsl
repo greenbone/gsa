@@ -14676,21 +14676,21 @@ should not have received it.
         <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
+        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
             <td>
               <input id="datevalue" size="30"/>
@@ -14870,7 +14870,7 @@ $(document).ready(function() {
               </select>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
             <td>
               <xsl:call-template name="timezone-select">
@@ -14879,7 +14879,7 @@ $(document).ready(function() {
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text"
@@ -14895,7 +14895,7 @@ $(document).ready(function() {
               </select>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text"
@@ -14910,7 +14910,7 @@ $(document).ready(function() {
               </select>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create Schedule', 'Schedule')}"/>
             </td>
