@@ -15059,8 +15059,8 @@ $(document).ready(function() {
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="schedule" value="{/envelope/params/schedule}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
+        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+          <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
@@ -15077,9 +15077,36 @@ $(document).ready(function() {
                      value="{commands_response/get_schedules_response/schedule/comment}"/>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
             <td>
+              <input id="datevalue" size="30"/>
+              <input id="datepicker" type="hidden"/>,
+              <script>
+$(document).ready(function() {
+  var updateForm = function(dateText, inst){
+    var date = $(this).datepicker("getDate");
+    $('input[name=day_of_month]').val(date.getDate())
+    $('input[name=month]').val(date.getMonth() + 1)
+    $('input[name=year]').val(date.getFullYear())
+  };
+  var curDate = "<xsl:value-of select="format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')"/>/<xsl:value-of select="format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')"/>/<xsl:value-of select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>";
+  $( "#datepicker" ).datepicker({
+    showOn: "button",
+    buttonImage: "img/calendar.png",
+    buttonText: "Select date",
+    altField: "#datevalue",
+    altFormat: "DD, d MM, yy",
+    minDate: curDate,
+    maxDate: "+3Y",
+    onClose: updateForm,
+  });
+  $("#datepicker").datepicker("setDate", curDate);
+});
+  </script>
+              <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
+              <input name="month" type="hidden" value="{time/month}"/>
+              <input name="year" type="hidden" value="{time/year}"/>
               <xsl:variable name="hour"
                             select="format-number (date:hour-in-day (commands_response/get_schedules_response/schedule/first_time), '00')"/>
               <select name="hour">
@@ -15233,233 +15260,9 @@ $(document).ready(function() {
                   <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
                 </xsl:call-template>
               </select>
-              ,
-              <select name="day_of_month">
-                <xsl:variable name="day"
-                              select="format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')"/>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'01'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'02'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'03'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'04'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'06'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'07'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'08'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'09'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'11'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'12'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'13'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'14'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'15'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'16'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'17'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'18'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'19'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'21'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'22'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'23'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'24'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'25'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'26'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'27'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'28'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'29'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'30'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'31'"/>
-                  <xsl:with-param name="select-value" select="$day"/>
-                </xsl:call-template>
-              </select>
-              <select name="month">
-                <xsl:variable name="month"
-                              select="format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')"/>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'01'"/>
-                  <xsl:with-param name="content" select="'Jan'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'02'"/>
-                  <xsl:with-param name="content" select="'Feb'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'03'"/>
-                  <xsl:with-param name="content" select="'Mar'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'04'"/>
-                  <xsl:with-param name="content" select="'Apr'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="content" select="'May'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'06'"/>
-                  <xsl:with-param name="content" select="'Jun'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'07'"/>
-                  <xsl:with-param name="content" select="'Jul'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'08'"/>
-                  <xsl:with-param name="content" select="'Aug'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'09'"/>
-                  <xsl:with-param name="content" select="'Sep'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="content" select="'Oct'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'11'"/>
-                  <xsl:with-param name="content" select="'Nov'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'12'"/>
-                  <xsl:with-param name="content" select="'Dec'"/>
-                  <xsl:with-param name="select-value" select="$month"/>
-                </xsl:call-template>
-              </select>
-              <select name="year">
-                <xsl:variable name="year"
-                              select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>
-                <xsl:if test="$year &lt; 2015 or $year &gt; 2020">
-                  <option value="{$year}"><xsl:value-of select="$year"/></option>
-                </xsl:if>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2015'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2016'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2017'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2018'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2019'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2020'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-              </select>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
             <td>
               <xsl:call-template name="timezone-select">
@@ -15468,7 +15271,7 @@ $(document).ready(function() {
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:choose>
@@ -15534,7 +15337,7 @@ $(document).ready(function() {
               </xsl:choose>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:choose>
