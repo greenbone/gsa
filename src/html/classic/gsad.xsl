@@ -1648,6 +1648,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Backend operation', 'Performance Timing')"/>: <xsl:value-of select="/envelope/backend_operation"/>s
         </xsl:otherwise>
       </xsl:choose>
+      <span id="gsa-token" style="display: none;"><xsl:value-of select="/envelope/token"/></span>
     </div>
     Greenbone Security Assistant (GSA) Copyright 2009-2015 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>

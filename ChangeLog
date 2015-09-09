@@ -1,5 +1,10 @@
 2015-09-09  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/gsad.xsl: Insert the 'token' in the DOM of the page
+	  for easy access.
+
+2015-09-09  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Use the datepicker in the edit schedule
 	  dialog.
 
