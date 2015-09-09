@@ -5290,6 +5290,9 @@ var toggleFilter = function(){
                 </xsl:choose>
               </xsl:for-each>
             </select>
+            <a href="#" class="newTarget" title="{ gsa:i18n('Create a new target') }" onClick="javascript:newDialog('new_target'); return false;">
+              <img src="/img/new.png"/>
+            </a>
           </td>
         </tr>
         <xsl:if test="gsa:may-op ('get_alerts')">

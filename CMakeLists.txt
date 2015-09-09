@@ -320,6 +320,7 @@ install (FILES src/html/classic/js/d3.tip.js
                src/html/classic/js/jquery-2.1.4.min.js
                src/html/classic/js/jquery-ui.min.js
                src/html/classic/js/select2.min.js
+               src/html/classic/js/greenbone.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
 install (FILES src/html/classic/login/login.html
