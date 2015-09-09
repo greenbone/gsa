@@ -341,6 +341,8 @@ install (FILES src/html/classic/img/style/window_dec_a.png
          DESTINATION ${GSA_DATA_DIR}/classic/login/img/style)
 
 install (FILES src/html/classic/img/agent.png
+               src/html/classic/img/add_to_assets.png
+               src/html/classic/img/calendar.png
                src/html/classic/img/descending.png
                src/html/classic/img/key.png
                src/html/classic/img/p_bar_bg.png
@@ -428,6 +430,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/last.png
                src/html/classic/img/last_inactive.png
                src/html/classic/img/feedback.png
+               src/html/classic/img/remove_from_assets.png
                src/html/classic/img/st_workaround.png
                src/html/classic/img/solution_type.png
                src/html/classic/img/st_vendorfix.png

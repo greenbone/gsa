@@ -14705,7 +14705,7 @@ $(document).ready(function() {
   };
   $( "#datepicker" ).datepicker({
     showOn: "button",
-    buttonImage: "img/refresh.png",
+    buttonImage: "img/calendar.png",
     buttonText: "Select date",
     altField: "#datevalue",
     altFormat: "DD, d MM, yy",
@@ -29638,7 +29638,7 @@ var toggleFilter = function(){
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="create_asset"/>
-    <input type="image" src="/img/os_unknown.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
+    <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
            name="Add to Assets" value="Add to Assets"
            title="{gsa:i18n ('Add to Assets', 'Action Verb')}"/>
 
@@ -29652,7 +29652,7 @@ var toggleFilter = function(){
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="delete_asset"/>
-    <input type="image" src="/img/os_unknown.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
+    <input type="image" src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
            name="Remove from Assets" value="Remove from Assets"
            title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
