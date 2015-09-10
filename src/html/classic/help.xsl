@@ -4340,84 +4340,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        terms as they are used in GSA.
       </p>
 
-      <a name="cpe"></a>
-      <h2>CPE</h2>
-      <p>
-        Common Platform Enumeration is a structured naming scheme for
-        information technology systems, platforms, and packages. Based upon the
-        generic syntax for Uniform Resource Identifiers (URI), CPE includes a
-        formal name format, a language for describing complex platforms, a
-        method for checking names against a system, and a description format
-        for binding text and tests to a name.
-      </p>
-
-      <p>
-        (Source http://cpe.mitre.org).
-      </p>
-
-      <p>
-        A CPE name starts with "cpe:/", followed by up to seven colon-separated components:
-        <ul>
-          <li>part (h, o or a)</li>
-          <li>vendor</li>
-          <li>product</li>
-          <li>version</li>
-          <li>update</li>
-          <li>edition</li>
-          <li>language</li>
-        </ul>
-        e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
-      </p>
-
-      <a name="cve"></a>
-      <h2>CVE</h2>
-      <p>
-        Common Vulnerabilities and Exposures is a dictionary of publicly known
-        information security vulnerabilities and exposures.
-      </p>
-      <p>
-        (Source: http://cve.mitre.org).
-      </p>
-
-      <a name="cvss"></a>
-      <h2>CVSS</h2>
-      <p>
-        The Common Vulnerability Scoring System (CVSS) is an open framework to
-        characterize vulnerabilities.
-      </p>
-      <p>
-        (Source: http://www.first.org/cvss/cvss-guide).
-      </p>
-
-      <a name="cert_bund_adv"></a>
-      <h2>CERT-Bund Advisory (CERT_BUND_ADV)</h2>
-      <p>
-        An advisory published by CERT-Bund. See the
-        <a href="/help/cert_bund_advs.html?token={/envelope/token}#about">
-        &quot;About CERT-Bund&quot; section of the CERT-Bund Advisories page</a>
-        for more information.
-      </p>
-
-      <a name="dfn_cert_adv"></a>
-      <h2>DFN-CERT Advisory (DFN_CERT_ADV)</h2>
-      <p>
-        An advisory published by DFN-CERT. See the
-        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#about">
-        &quot;About DFN-CERT&quot; section of the DFN-CERT Advisories page</a>
-        for more information.
-      </p>
-
-      <a name="ovaldef"></a>
-      <h2>OVAL Definition (OVALDEF)</h2>
-      <p>
-        A definition as specified by the OVAL (Open Vulnerability and Assessment
-        Language), version 5.10.1. It can be used for different classes of
-        security data like vulnerabilities, patches or compliance policies.
-      </p>
-      <p>
-        (Source: http://oval.mitre.org).
-      </p>
-
       <a name="agent"></a>
       <h2>Agent</h2>
       <p>
@@ -4469,6 +4391,73 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Currently Assets include Hosts and Operating Systems.
       </p>
 
+      <a name="cert_bund_adv"></a>
+      <h2>CERT-Bund Advisory (CERT_BUND_ADV)</h2>
+      <p>
+        An advisory published by CERT-Bund. See the
+        <a href="/help/cert_bund_advs.html?token={/envelope/token}#about">
+        &quot;About CERT-Bund&quot; section of the CERT-Bund Advisories page</a>
+        for more information.
+      </p>
+
+      <a name="cpe"></a>
+      <h2>CPE</h2>
+      <p>
+        Common Platform Enumeration is a structured naming scheme for
+        information technology systems, platforms, and packages. Based upon the
+        generic syntax for Uniform Resource Identifiers (URI), CPE includes a
+        formal name format, a language for describing complex platforms, a
+        method for checking names against a system, and a description format
+        for binding text and tests to a name.
+      </p>
+
+      <p>
+        (Source http://cpe.mitre.org).
+      </p>
+
+      <p>
+        A CPE name starts with "cpe:/", followed by up to seven colon-separated components:
+        <ul>
+          <li>part (h, o or a)</li>
+          <li>vendor</li>
+          <li>product</li>
+          <li>version</li>
+          <li>update</li>
+          <li>edition</li>
+          <li>language</li>
+        </ul>
+        e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
+      </p>
+
+      <a name="cve"></a>
+      <h2>CVE</h2>
+      <p>
+        Common Vulnerabilities and Exposures is a dictionary of publicly known
+        information security vulnerabilities and exposures.
+      </p>
+      <p>
+        (Source: http://cve.mitre.org).
+      </p>
+
+      <a name="cvss"></a>
+      <h2>CVSS</h2>
+      <p>
+        The Common Vulnerability Scoring System (CVSS) is an open framework to
+        characterize vulnerabilities.
+      </p>
+      <p>
+        (Source: http://www.first.org/cvss/cvss-guide).
+      </p>
+
+      <a name="dfn_cert_adv"></a>
+      <h2>DFN-CERT Advisory (DFN_CERT_ADV)</h2>
+      <p>
+        An advisory published by DFN-CERT. See the
+        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#about">
+        &quot;About DFN-CERT&quot; section of the DFN-CERT Advisories page</a>
+        for more information.
+      </p>
+
       <a name="filter"></a>
       <h2>Filter</h2>
       <p>
@@ -4512,6 +4501,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        tests. The selection of families and/or
        single NVTs is part of a
        <a href="#config">Scan Configuration</a>.
+      </p>
+
+      <a name="ovaldef"></a>
+      <h2>OVAL Definition (OVALDEF)</h2>
+      <p>
+        A definition as specified by the OVAL (Open Vulnerability and Assessment
+        Language), version 5.10.1. It can be used for different classes of
+        security data like vulnerabilities, patches or compliance policies.
+      </p>
+      <p>
+        (Source: http://oval.mitre.org).
       </p>
 
       <a name="override"></a>
