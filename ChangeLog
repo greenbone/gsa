@@ -1,3 +1,17 @@
+2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (user-tags-window-checked)
+	(tag [for_resource], lsc_credential [details], alert [details])
+	(filter [details], target [details], html-config-family-table)
+	(preference, family, config [families], html-config-table)
+	(schedule [details], scanner [details], slave [details])
+	(cve-details, port-list [details], report_format [details])
+	(role [details], asset [os-details]): Remove the details icon from
+	the Action column, and remove the action column if it was the only
+	icon.  Make the name column a link to the details.
+
+	(get_info_allinfo_action): Remove.  Not used.
+
 2015-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c: Add a response_data output param to the command
