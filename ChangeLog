@@ -1,3 +1,19 @@
+2015-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c: Add a response_data output param to the command
+	functions for returning additional data for the HTTP response like
+	HTTP status codes.
+	(cmd_response_data_init, cmd_response_data_reset): New functions.
+
+	* src/gsad_omp.h: Add a response_data output param to the command
+	functions.
+	(cmd_response_data_t): New type.
+	(cmd_response_data_init, cmd_response_data_reset): New prototypes.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get, request_handler): Add
+	response_data output param to the command functions and set HTTP
+	status code according to http_status_code field in response_data.
+
 2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset/host, asset/os): Add export to

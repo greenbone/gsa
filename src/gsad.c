@@ -1864,7 +1864,8 @@ params_mhd_validate (void *params)
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    con_info->response = name ## _omp (credentials, con_info->params);
+    con_info->response = name ## _omp (credentials, con_info->params, \
+                                       &response_data);
 
 static credentials_t *
 credentials_new (user_t *user, const char *language, const char *client_address)
@@ -2256,6 +2257,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* Handle the usual commands. */
 
+  cmd_response_data_t response_data;
+  cmd_response_data_init (&response_data);
+
   if (!cmd)
     {
       con_info->response = gsad_message (credentials,
@@ -2335,7 +2339,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if (!strcmp (cmd, "alert_report"))
     {
       con_info->response = get_report_section_omp
-                            (credentials, con_info->params);
+                            (credentials, con_info->params, &response_data);
     }
   ELSE (import_config)
   ELSE (import_port_list)
@@ -2346,7 +2350,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                               con_info->params,
                                               &con_info->content_type,
                                               &con_info->content_disposition,
-                                              &con_info->content_length);
+                                              &con_info->content_length,
+                                              &response_data);
     }
   ELSE (move_task)
   ELSE (restore)
@@ -2361,7 +2366,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       con_info->response = save_chart_preference_omp (credentials,
                                                       con_info->params,
-                                                      &pref_id, &pref_value);
+                                                      &pref_id, &pref_value,
+                                                      &response_data);
       if (pref_id && pref_value)
         user_set_chart_pref (credentials->token, pref_id, pref_value);
     }
@@ -2377,7 +2383,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response = save_my_settings_omp (credentials, con_info->params,
                                                  con_info->language,
                                                  &timezone, &password,
-                                                 &severity, &language);
+                                                 &severity, &language,
+                                                 &response_data);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->token, timezone);
@@ -2412,7 +2419,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       char *password;
       con_info->response = save_user_omp (credentials, con_info->params,
-                                          &password);
+                                          &password, &response_data);
       if (password)
         /* credentials->password set in save_user_omp before XSLT. */
         user_set_password (credentials->token, password);
@@ -2437,7 +2444,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "/omp?cmd=get_tasks");
     }
 
-  con_info->answercode = MHD_HTTP_OK;
+  con_info->answercode = response_data.http_status_code;
+
+  cmd_response_data_reset (&response_data);
   credentials_free (credentials);
   return 0;
 }
@@ -2528,7 +2537,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    return name ## _omp (credentials, params);
+    return name ## _omp (credentials, params, response_data);
 
 /**
  * @brief Handle a complete GET request.
@@ -2553,7 +2562,8 @@ exec_omp_get (struct MHD_Connection *connection,
               enum content_type* content_type,
               gchar **content_type_string,
               char** content_disposition,
-              gsize* response_size)
+              gsize* response_size,
+              cmd_response_data_t *response_data)
 {
   char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
@@ -2636,13 +2646,13 @@ exec_omp_get (struct MHD_Connection *connection,
   /* Check cmd and precondition, start respective OMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
-    return cvss_calculator (credentials, params);
+    return cvss_calculator (credentials, params, response_data);
 
   else if (!strcmp (cmd, "dashboard"))
-    return dashboard (credentials, params);
+    return dashboard (credentials, params, response_data);
 
   else if (!strcmp (cmd, "new_filter"))
-    return new_filter_omp (credentials, params);
+    return new_filter_omp (credentials, params, response_data);
 
   ELSE (new_target)
   ELSE (new_tag)
@@ -2679,51 +2689,63 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_agent"))
     return export_agent_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_agents"))
     return export_agents_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_alert"))
     return export_alert_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_alerts"))
     return export_alerts_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_asset"))
     return export_asset_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_assets"))
     return export_assets_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_config"))
     return export_config_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_configs"))
     return export_configs_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_filter"))
     return export_filter_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_filters"))
     return export_filters_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_group"))
     return export_group_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_groups"))
     return export_groups_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "download_lsc_credential"))
     {
@@ -2737,7 +2759,8 @@ exec_omp_get (struct MHD_Connection *connection,
                                        params,
                                        response_size,
                                        &html,
-                                       &lsc_credential_login))
+                                       &lsc_credential_login,
+                                       response_data))
         return html;
 
       /* Returned above if package_format was NULL. */
@@ -2756,131 +2779,163 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_lsc_credential"))
     return export_lsc_credential_omp (credentials, params, content_type,
-                                      content_disposition, response_size);
+                                      content_disposition, response_size,
+                                      response_data);
 
   else if (!strcmp (cmd, "export_lsc_credentials"))
     return export_lsc_credentials_omp (credentials, params, content_type,
-                                       content_disposition, response_size);
+                                       content_disposition, response_size,
+                                       response_data);
 
   else if (!strcmp (cmd, "export_note"))
     return export_note_omp (credentials, params, content_type,
-                            content_disposition, response_size);
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_notes"))
     return export_notes_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_omp_doc"))
     return export_omp_doc_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_override"))
     return export_override_omp (credentials, params, content_type,
-                                content_disposition, response_size);
+                                content_disposition, response_size,
+                                response_data);
 
   else if (!strcmp (cmd, "export_overrides"))
     return export_overrides_omp (credentials, params, content_type,
-                                 content_disposition, response_size);
+                                 content_disposition, response_size,
+                                 response_data);
 
   else if (!strcmp (cmd, "export_permission"))
     return export_permission_omp (credentials, params, content_type,
-                                  content_disposition, response_size);
+                                  content_disposition, response_size,
+                                  response_data);
 
   else if (!strcmp (cmd, "export_permissions"))
     return export_permissions_omp (credentials, params, content_type,
-                                   content_disposition, response_size);
+                                   content_disposition, response_size,
+                                   response_data);
 
   else if (!strcmp (cmd, "export_port_list"))
     return export_port_list_omp (credentials, params, content_type,
-                                 content_disposition, response_size);
+                                 content_disposition, response_size,
+                                 response_data);
 
   else if (!strcmp (cmd, "export_port_lists"))
     return export_port_lists_omp (credentials, params, content_type,
-                                  content_disposition, response_size);
+                                  content_disposition, response_size,
+                                  response_data);
 
   else if (!strcmp (cmd, "export_preference_file"))
     return export_preference_file_omp (credentials, params, content_type,
-                                       content_disposition, response_size);
+                                       content_disposition, response_size,
+                                       response_data);
 
   else if (!strcmp (cmd, "export_report_format"))
     return export_report_format_omp (credentials, params, content_type,
-                                     content_disposition, response_size);
+                                     content_disposition, response_size,
+                                     response_data);
 
   else if (!strcmp (cmd, "export_report_formats"))
     return export_report_formats_omp (credentials, params, content_type,
-                                      content_disposition, response_size);
+                                      content_disposition, response_size,
+                                      response_data);
 
   else if (!strcmp (cmd, "export_result"))
     return export_result_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_results"))
     return export_results_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_role"))
     return export_role_omp (credentials, params, content_type,
-                            content_disposition, response_size);
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_roles"))
     return export_roles_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_scanner"))
     return export_scanner_omp (credentials, params, content_type,
-                                content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_scanners"))
     return export_scanners_omp (credentials, params, content_type,
-                                 content_disposition, response_size);
+                                 content_disposition, response_size,
+                                response_data);
 
   else if (!strcmp (cmd, "export_schedule"))
     return export_schedule_omp (credentials, params, content_type,
-                                content_disposition, response_size);
+                                content_disposition, response_size,
+                                response_data);
 
   else if (!strcmp (cmd, "export_schedules"))
     return export_schedules_omp (credentials, params, content_type,
-                                 content_disposition, response_size);
+                                 content_disposition, response_size,
+                                 response_data);
 
   else if (!strcmp (cmd, "export_slave"))
     return export_slave_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_slaves"))
     return export_slaves_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_tag"))
     return export_tag_omp (credentials, params, content_type,
-                           content_disposition, response_size);
+                           content_disposition, response_size,
+                           response_data);
 
   else if (!strcmp (cmd, "export_tags"))
     return export_tags_omp (credentials, params, content_type,
-                            content_disposition, response_size);
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_target"))
     return export_target_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                              content_disposition, response_size,
+                              response_data);
 
   else if (!strcmp (cmd, "export_targets"))
     return export_targets_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                               content_disposition, response_size,
+                               response_data);
 
   else if (!strcmp (cmd, "export_task"))
     return export_task_omp (credentials, params, content_type,
-                            content_disposition, response_size);
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_tasks"))
     return export_tasks_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   else if (!strcmp (cmd, "export_user"))
     return export_user_omp (credentials, params, content_type,
-                            content_disposition, response_size);
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_users"))
     return export_users_omp (credentials, params, content_type,
-                             content_disposition, response_size);
+                             content_disposition, response_size,
+                             response_data);
 
   ELSE (get_agent)
   ELSE (get_agents)
@@ -2895,7 +2950,8 @@ exec_omp_get (struct MHD_Connection *connection,
                               params,
                               response_size,
                               &html,
-                              &filename))
+                              &filename,
+                              response_data))
         return html;
 
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
@@ -2915,7 +2971,8 @@ exec_omp_get (struct MHD_Connection *connection,
                               ("attachment; filename=ssl-cert-%s.pem",
                                params_value (params, "name"));
 
-      return download_ssl_cert (credentials, params, response_size);
+      return download_ssl_cert (credentials, params, response_size,
+                                response_data);
     }
 
   else if (!strcmp (cmd, "download_ca_pub"))
@@ -2925,7 +2982,8 @@ exec_omp_get (struct MHD_Connection *connection,
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-ca-pub-%s.pem",
                                params_value (params, "scanner_id"));
-      return download_ca_pub (credentials, params, response_size);
+      return download_ca_pub (credentials, params, response_size,
+                              response_data);
     }
 
   else if (!strcmp (cmd, "download_key_pub"))
@@ -2935,7 +2993,8 @@ exec_omp_get (struct MHD_Connection *connection,
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-key-pub-%s.pem",
                                params_value (params, "scanner_id"));
-      return download_key_pub (credentials, params, response_size);
+      return download_key_pub (credentials, params, response_size,
+                               response_data);
     }
 
   ELSE (get_aggregate)
@@ -2966,7 +3025,8 @@ exec_omp_get (struct MHD_Connection *connection,
                             params,
                             response_size,
                             &content_type_omp,
-                            content_disposition);
+                            content_disposition,
+                            response_data);
 
       if (content_type_omp)
         {
@@ -4138,9 +4198,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
           unsigned int res_len = 0;
           gchar *content_type_string = NULL;
 
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
+
           res = exec_omp_get (connection, credentials, &content_type,
                               &content_type_string, &content_disposition,
-                              &response_size);
+                              &response_size, &response_data);
           if (response_size > 0)
             {
               res_len = response_size;
@@ -4168,7 +4231,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        content_type_string);
               g_free (content_type_string);
             }
-
+          http_response_code = response_data.http_status_code;
+          cmd_response_data_reset (&response_data);
           g_free (res);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
@@ -4195,12 +4259,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
               return MHD_NO;
             }
 
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
+
           res = get_system_report_omp (credentials,
                                        &url[0] + strlen ("/system_report/"),
                                        duration,
                                        slave_id,
                                        &content_type,
-                                       &res_len);
+                                       &res_len,
+                                       &response_data);
           if (res == NULL)
             {
               g_free (sid);
@@ -4209,6 +4277,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
+
+          http_response_code = response_data.http_status_code;
+          cmd_response_data_reset (&response_data);
           g_free (res);
         }
       else if (!strncmp (&url[0], "/help/",

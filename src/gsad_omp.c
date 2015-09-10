@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include <assert.h>
 
+#include <microhttpd.h>
+
 #include "gsad_base.h"
 #include "gsad_omp.h"
 #include "tracef.h"
@@ -102,115 +104,168 @@ ompf (credentials_t *, gchar **, entity_t *, const char *, ...);
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
-static char *edit_role (credentials_t *, params_t *, const char *);
+static char *edit_role (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *edit_task (credentials_t *, params_t *, const char *);
+static char *edit_task (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_alert (credentials_t *, params_t *, const char *);
+static char *get_alert (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_alerts (credentials_t *, params_t *, const char *);
+static char *get_alerts (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_agent (credentials_t *, params_t *, const char *);
+static char *get_agent (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_agents (credentials_t *, params_t *, const char *);
+static char *get_agents (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_asset (credentials_t *, params_t *, const char *);
+static char *get_asset (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_assets (credentials_t *, params_t *, const char *);
+static char *get_assets (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_task (credentials_t *, params_t *, const char *);
+static char *get_task (credentials_t *, params_t *, const char *,
+                       cmd_response_data_t*);
 
-static char *get_tasks (credentials_t *, params_t *, const char *);
+static char *get_tasks (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_tasks_chart (credentials_t *, params_t *, const char *);
+static char *get_tasks_chart (credentials_t *, params_t *, const char *,
+                              cmd_response_data_t*);
 
-static char *get_trash (credentials_t *, params_t *, const char *);
+static char *get_trash (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_config_family (credentials_t *, params_t *, int);
+static char *get_config_family (credentials_t *, params_t *, int,
+                                cmd_response_data_t*);
 
-static char *get_config (credentials_t *, params_t *, const char *, int);
+static char *get_config (credentials_t *, params_t *, const char *, int,
+                         cmd_response_data_t*);
 
-static char *get_configs (credentials_t *, params_t *, const char *);
+static char *get_configs (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
-static char *get_filter (credentials_t *, params_t *, const char *);
+static char *get_filter (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_filters (credentials_t *, params_t *, const char *);
+static char *get_filters (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
-static char *get_group (credentials_t *, params_t *, const char *);
+static char *get_group (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_groups (credentials_t *, params_t *, const char *);
+static char *get_groups (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_lsc_credential (credentials_t *, params_t *, const char *);
+static char *get_lsc_credential (credentials_t *, params_t *, const char *,
+                                 cmd_response_data_t*);
 
-static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
+static char *get_lsc_credentials (credentials_t *, params_t *, const char *,
+                                  cmd_response_data_t*);
 
-static char *get_notes (credentials_t *, params_t *, const char *);
+static char *get_notes (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_note (credentials_t *, params_t *, const char *);
+static char *get_note (credentials_t *, params_t *, const char *,
+                       cmd_response_data_t*);
 
 static char *get_nvts (credentials_t *credentials, params_t *,
-                       const char *, const char *);
+                       const char *, const char *, cmd_response_data_t*);
 
-static char *get_overrides (credentials_t *, params_t *, const char *);
+static char *get_overrides (credentials_t *, params_t *, const char *,
+                            cmd_response_data_t*);
 
-static char *get_override (credentials_t *, params_t *, const char *);
+static char *get_override (credentials_t *, params_t *, const char *,
+                           cmd_response_data_t*);
 
-static char *get_permission (credentials_t *, params_t *, const char *);
+static char *get_permission (credentials_t *, params_t *, const char *,
+                             cmd_response_data_t*);
 
-static char *get_permissions (credentials_t *, params_t *, const char *);
+static char *get_permissions (credentials_t *, params_t *, const char *,
+                              cmd_response_data_t*);
 
-static char *get_port_list (credentials_t *, params_t *, const char *);
+static char *get_port_list (credentials_t *, params_t *, const char *,
+                            cmd_response_data_t*);
 
-static char *get_port_lists (credentials_t *, params_t *, const char *);
+static char *get_port_lists (credentials_t *, params_t *, const char *,
+                             cmd_response_data_t*);
 
-static char *edit_port_list (credentials_t *, params_t *, const char *);
+static char *edit_port_list (credentials_t *, params_t *, const char *,
+                             cmd_response_data_t*);
 
-static char *get_tag (credentials_t *, params_t *, const char *);
+static char *get_tag (credentials_t *, params_t *, const char *,
+                      cmd_response_data_t*);
 
-static char *get_tags (credentials_t *, params_t *, const char *);
+static char *get_tags (credentials_t *, params_t *, const char *,
+                       cmd_response_data_t*);
 
-static char *get_target (credentials_t *, params_t *, const char *);
+static char *get_target (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_targets (credentials_t *, params_t *, const char *);
+static char *get_targets (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
 static char *get_report (credentials_t *, params_t *, const char *, gsize *,
-                         gchar **, char **, const char *, int *);
+                         gchar **, char **, const char *, int *,
+                         cmd_response_data_t*);
 
-static char *get_report_format (credentials_t *, params_t *, const char *);
+static char *get_report_format (credentials_t *, params_t *, const char *,
+                                cmd_response_data_t*);
 
-static char *get_report_formats (credentials_t *, params_t *, const char *);
+static char *get_report_formats (credentials_t *, params_t *, const char *,
+                                 cmd_response_data_t*);
 
-static char *get_report_section (credentials_t *, params_t *, const char *);
+static char *get_report_section (credentials_t *, params_t *, const char *,
+                                 cmd_response_data_t*);
 
-static char *get_reports (credentials_t *, params_t *, const char *);
+static char *get_reports (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
-static char *get_result_page (credentials_t *, params_t *, const char *);
+static char *get_result_page (credentials_t *, params_t *, const char *,
+                              cmd_response_data_t*);
 
-static char *get_results (credentials_t *, params_t *, const char *);
+static char *get_results (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
-static char *get_role (credentials_t *, params_t *, const char *);
+static char *get_role (credentials_t *, params_t *, const char *,
+                       cmd_response_data_t*);
 
-static char *get_roles (credentials_t *, params_t *, const char *);
+static char *get_roles (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_scanner (credentials_t *, params_t *, const char *);
+static char *get_scanner (credentials_t *, params_t *, const char *,
+                          cmd_response_data_t*);
 
-static char *get_scanners (credentials_t *, params_t *, const char *);
+static char *get_scanners (credentials_t *, params_t *, const char *,
+                           cmd_response_data_t*);
 
-static char *get_schedule (credentials_t *, params_t *, const char *);
+static char *get_schedule (credentials_t *, params_t *, const char *,
+                           cmd_response_data_t*);
 
-static char *get_schedules (credentials_t *, params_t *, const char *);
+static char *get_schedules (credentials_t *, params_t *, const char *,
+                            cmd_response_data_t*);
 
-static char *get_slave (credentials_t *, params_t *, const char *);
+static char *get_slave (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *get_slaves (credentials_t *, params_t *, const char *);
+static char *get_slaves (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
-static char *get_user (credentials_t *, params_t *, const char *);
+static char *get_user (credentials_t *, params_t *, const char *,
+                       cmd_response_data_t*);
 
-static char *get_users (credentials_t *, params_t *, const char *);
+static char *get_users (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
 
-static char *wizard (credentials_t *, params_t *, const char *);
+static char *wizard (credentials_t *, params_t *, const char *,
+                     cmd_response_data_t*);
 
-static char *wizard_get (credentials_t *, params_t *, const char *);
+static char *wizard_get (credentials_t *, params_t *, const char *,
+                         cmd_response_data_t*);
 
 int token_user_remove (const char *);
 
@@ -242,6 +297,26 @@ omp_init (const gchar *address_manager, int port_manager)
   if (address_manager)
     manager_address = g_strdup (address_manager);
   manager_port = port_manager;
+}
+
+/**
+ * @brief Initializes a cmd_response_data_t struct.
+ *
+ * @param[in]  data  The cmd_response_data_t struct to initialize
+ */
+void cmd_response_data_init (cmd_response_data_t* data)
+{
+  data->http_status_code = MHD_HTTP_OK;
+}
+
+/**
+ * @brief Frees resources of a cmd_response_data_t struct.
+ *
+ * @param[in]  response_data
+ */
+void cmd_response_data_reset (cmd_response_data_t* data)
+{
+  memset (data, 0, sizeof (cmd_response_data_t));
 }
 
 /**
@@ -905,7 +980,7 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                              "Given " G_STRINGIFY (name) " was invalid",       \
                              op_name);                                         \
-      ret_html = ret_func (credentials, params, msg);                          \
+      ret_html = ret_func (credentials, params, msg, response_data);           \
       g_free (msg);                                                            \
       return ret_html;                                                         \
     }
@@ -1009,113 +1084,114 @@ page_url_append_param (credentials_t *credentials, const gchar *name,
  * @param[in]  params       Request parameters.
  * @param[in]  response     Extra XML to insert inside page element for XSLT.
  * @param[in]  next         Command.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 generate_page (credentials_t *credentials, params_t *params, gchar *response,
-               const gchar *next)
+               const gchar *next, cmd_response_data_t* response_data)
 {
   credentials->current_page = page_url (credentials, next);
 
   if (strcmp (next, "edit_role") == 0)
-    return edit_role (credentials, params, response);
+    return edit_role (credentials, params, response, response_data);
 
   if (strcmp (next, "edit_task") == 0)
-    return edit_task (credentials, params, response);
+    return edit_task (credentials, params, response, response_data);
 
   if (strcmp (next, "get_alerts") == 0)
-    return get_alerts (credentials, params, response);
+    return get_alerts (credentials, params, response, response_data);
 
   if (strcmp (next, "get_alert") == 0)
-    return get_alert (credentials, params, response);
+    return get_alert (credentials, params, response, response_data);
 
   if (strcmp (next, "edit_port_list") == 0)
-    return edit_port_list (credentials, params, response);
+    return edit_port_list (credentials, params, response, response_data);
 
   if (strcmp (next, "get_agents") == 0)
-    return get_agents (credentials, params, response);
+    return get_agents (credentials, params, response, response_data);
 
   if (strcmp (next, "get_agent") == 0)
-    return get_agent (credentials, params, response);
+    return get_agent (credentials, params, response, response_data);
 
   if (strcmp (next, "get_asset") == 0)
-    return get_asset (credentials, params, response);
+    return get_asset (credentials, params, response, response_data);
 
   if (strcmp (next, "get_assets") == 0)
-    return get_assets (credentials, params, response);
+    return get_assets (credentials, params, response, response_data);
 
   if (strcmp (next, "get_config") == 0)
-    return get_config (credentials, params, response, 0);
+    return get_config (credentials, params, response, 0, response_data);
 
   if (strcmp (next, "get_configs") == 0)
-    return get_configs (credentials, params, response);
+    return get_configs (credentials, params, response, response_data);
 
   if (strcmp (next, "get_filter") == 0)
-    return get_filter (credentials, params, response);
+    return get_filter (credentials, params, response, response_data);
 
   if (strcmp (next, "get_filters") == 0)
-    return get_filters (credentials, params, response);
+    return get_filters (credentials, params, response, response_data);
 
   if (strcmp (next, "get_group") == 0)
-    return get_group (credentials, params, response);
+    return get_group (credentials, params, response, response_data);
 
   if (strcmp (next, "get_groups") == 0)
-    return get_groups (credentials, params, response);
+    return get_groups (credentials, params, response, response_data);
 
   if (strcmp (next, "get_lsc_credential") == 0)
-    return get_lsc_credential (credentials, params, response);
+    return get_lsc_credential (credentials, params, response, response_data);
 
   if (strcmp (next, "get_lsc_credentials") == 0)
-    return get_lsc_credentials (credentials, params, response);
+    return get_lsc_credentials (credentials, params, response, response_data);
 
   if (strcmp (next, "get_note") == 0)
-    return get_note (credentials, params, response);
+    return get_note (credentials, params, response, response_data);
 
   if (strcmp (next, "get_notes") == 0)
-    return get_notes (credentials, params, response);
+    return get_notes (credentials, params, response, response_data);
 
   if (strcmp (next, "get_nvts") == 0)
-    return get_nvts (credentials, params, NULL, response);
+    return get_nvts (credentials, params, NULL, response, response_data);
 
   if (strcmp (next, "get_override") == 0)
-    return get_override (credentials, params, response);
+    return get_override (credentials, params, response, response_data);
 
   if (strcmp (next, "get_overrides") == 0)
-    return get_overrides (credentials, params, response);
+    return get_overrides (credentials, params, response, response_data);
 
   if (strcmp (next, "get_permission") == 0)
-    return get_permission (credentials, params, response);
+    return get_permission (credentials, params, response, response_data);
 
   if (strcmp (next, "get_permissions") == 0)
-    return get_permissions (credentials, params, response);
+    return get_permissions (credentials, params, response, response_data);
 
   if (strcmp (next, "get_port_list") == 0)
-    return get_port_list (credentials, params, response);
+    return get_port_list (credentials, params, response, response_data);
 
   if (strcmp (next, "get_port_lists") == 0)
-    return get_port_lists (credentials, params, response);
+    return get_port_lists (credentials, params, response, response_data);
 
   if (strcmp (next, "get_tag") == 0)
-    return get_tag (credentials, params, response);
+    return get_tag (credentials, params, response, response_data);
 
   if (strcmp (next, "get_tags") == 0)
-    return get_tags (credentials, params, response);
+    return get_tags (credentials, params, response, response_data);
 
   if (strcmp (next, "get_target") == 0)
-    return get_target (credentials, params, response);
+    return get_target (credentials, params, response, response_data);
 
   if (strcmp (next, "get_targets") == 0)
-    return get_targets (credentials, params, response);
+    return get_targets (credentials, params, response, response_data);
 
   if (strcmp (next, "get_task") == 0)
-    return get_task (credentials, params, response);
+    return get_task (credentials, params, response, response_data);
 
   if (strcmp (next, "get_tasks") == 0)
-    return get_tasks (credentials, params, response);
+    return get_tasks (credentials, params, response, response_data);
 
   if (strcmp (next, "get_tasks_chart") == 0)
-    return get_tasks_chart (credentials, params, response);
+    return get_tasks_chart (credentials, params, response, response_data);
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -1123,67 +1199,67 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
       int error = 0;
 
       result = get_report (credentials, params, NULL, NULL, NULL,
-                           NULL, response, &error);
+                           NULL, response, &error, response_data);
 
       return error ? result : xsl_transform_omp (credentials, result);
     }
 
   if (strcmp (next, "get_report_format") == 0)
-    return get_report_format (credentials, params, response);
+    return get_report_format (credentials, params, response, response_data);
 
   if (strcmp (next, "get_report_formats") == 0)
-    return get_report_formats (credentials, params, response);
+    return get_report_formats (credentials, params, response, response_data);
 
   if (strcmp (next, "get_report_section") == 0)
-    return get_report_section (credentials, params, response);
+    return get_report_section (credentials, params, response, response_data);
 
   if (strcmp (next, "get_reports") == 0)
-    return get_reports (credentials, params, response);
+    return get_reports (credentials, params, response, response_data);
 
   if (strcmp (next, "get_results") == 0)
-    return get_results (credentials, params, response);
+    return get_results (credentials, params, response, response_data);
 
   if (strcmp (next, "get_result") == 0)
-    return get_result_page (credentials, params, response);
+    return get_result_page (credentials, params, response, response_data);
 
   if (strcmp (next, "get_role") == 0)
-    return get_role (credentials, params, response);
+    return get_role (credentials, params, response, response_data);
 
   if (strcmp (next, "get_roles") == 0)
-    return get_roles (credentials, params, response);
+    return get_roles (credentials, params, response, response_data);
 
   if (strcmp (next, "get_scanner") == 0)
-    return get_scanner (credentials, params, response);
+    return get_scanner (credentials, params, response, response_data);
 
   if (strcmp (next, "get_scanners") == 0)
-    return get_scanners (credentials, params, response);
+    return get_scanners (credentials, params, response, response_data);
 
   if (strcmp (next, "get_schedule") == 0)
-    return get_schedule (credentials, params, response);
+    return get_schedule (credentials, params, response, response_data);
 
   if (strcmp (next, "get_schedules") == 0)
-    return get_schedules (credentials, params, response);
+    return get_schedules (credentials, params, response, response_data);
 
   if (strcmp (next, "get_slave") == 0)
-    return get_slave (credentials, params, response);
+    return get_slave (credentials, params, response, response_data);
 
   if (strcmp (next, "get_slaves") == 0)
-    return get_slaves (credentials, params, response);
+    return get_slaves (credentials, params, response, response_data);
 
   if (strcmp (next, "get_user") == 0)
-    return get_user (credentials, params, response);
+    return get_user (credentials, params, response, response_data);
 
   if (strcmp (next, "get_users") == 0)
-    return get_users (credentials, params, response);
+    return get_users (credentials, params, response, response_data);
 
   if (strcmp (next, "get_info") == 0)
-    return get_info (credentials, params, response);
+    return get_info (credentials, params, response, response_data);
 
   if (strcmp (next, "wizard") == 0)
-    return wizard (credentials, params, response);
+    return wizard (credentials, params, response, response_data);
 
   if (strcmp (next, "wizard_get") == 0)
-    return wizard_get (credentials, params, response);
+    return wizard_get (credentials, params, response, response_data);
 
   return NULL;
 }
@@ -1194,11 +1270,13 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-next_page (credentials_t *credentials, params_t *params, gchar *response)
+next_page (credentials_t *credentials, params_t *params, gchar *response,
+           cmd_response_data_t* response_data)
 {
   const char *next;
 
@@ -1206,7 +1284,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (next == NULL)
     return NULL;
 
-  return generate_page (credentials, params, response, next);
+  return generate_page (credentials, params, response, next, response_data);
 }
 
 /**
@@ -1215,11 +1293,13 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-next_page_error (credentials_t *credentials, params_t *params, gchar *response)
+next_page_error (credentials_t *credentials, params_t *params, gchar *response,
+                 cmd_response_data_t* response_data)
 {
   const char *next;
 
@@ -1227,7 +1307,7 @@ next_page_error (credentials_t *credentials, params_t *params, gchar *response)
   if (next == NULL)
     return NULL;
 
-  return generate_page (credentials, params, response, next);
+  return generate_page (credentials, params, response, next, response_data);
 }
 
 /**
@@ -1238,12 +1318,14 @@ next_page_error (credentials_t *credentials, params_t *params, gchar *response)
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[in]  extra_attribs  Extra attributes for OMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_one (const char *type, credentials_t * credentials, params_t *params,
-         const char *extra_xml, const char *extra_attribs)
+         const char *extra_xml, const char *extra_attribs,
+         cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -1513,12 +1595,14 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[in]  extra_attribs  Extra attributes for OMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_many (const char *type, credentials_t * credentials, params_t *params,
-          const char *extra_xml, const char *extra_attribs)
+          const char *extra_xml, const char *extra_attribs,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
@@ -1906,12 +1990,13 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_resource (const char *type, credentials_t *credentials, params_t *params,
-               const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -2089,13 +2174,15 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Resource XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_resource (const char *type, credentials_t * credentials,
                  params_t *params, enum content_type * content_type,
-                 char **content_disposition, gsize *content_length)
+                 char **content_disposition, gsize *content_length,
+                 cmd_response_data_t* response_data)
 {
   GString *xml;
   entity_t entity;
@@ -2261,13 +2348,14 @@ export_resource (const char *type, credentials_t * credentials,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 static char *
 export_many (const char *type, credentials_t * credentials, params_t *params,
              enum content_type * content_type, char **content_disposition,
-             gsize *content_length)
+             gsize *content_length, cmd_response_data_t* response_data)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -2452,13 +2540,16 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  params       Request parameters.
  * @param[in]  ultimate     0 move to trash, 1 remove entirely.
  * @param[in]  get          Next page get function.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 delete_resource (const char *type, credentials_t * credentials,
                  params_t *params, int ultimate,
-                 char *get (credentials_t *, params_t *, const char *))
+                 char *get (credentials_t *, params_t *, const char *,
+                            cmd_response_data_t*),
+                 cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -2555,7 +2646,7 @@ delete_resource (const char *type, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   if (get)
-    html = get (credentials, params, response);
+    html = get (credentials, params, response, response_data);
   else
     {
       if (params_given (params, "next") == 0)
@@ -2565,7 +2656,7 @@ delete_resource (const char *type, credentials_t * credentials,
           params_add (params, "next", next);
           g_free (next);
         }
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
     }
   g_free (response);
   if (html == NULL)
@@ -2584,12 +2675,13 @@ delete_resource (const char *type, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[in]  type         Type of resource.
  * @param[in]  action       Action to perform.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 resource_action (credentials_t *credentials, params_t *params, const char *type,
-                 const char *action)
+                 const char *action, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *param_name;
   const char *resource_id;
@@ -2655,7 +2747,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                              "/omp?cmd=get_tasks");
     }
 
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   if (html == NULL)
     {
       int success;
@@ -2769,12 +2861,13 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * @param[in]  params       Request parameters.
  * @param[in]  message      If not NULL, display message.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_task (credentials_t * credentials, const char *message, params_t *params,
-          const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3192,13 +3285,15 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_task_omp (credentials_t * credentials, params_t *params)
+new_task_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return new_task (credentials, NULL, params, NULL);
+  return new_task (credentials, NULL, params, NULL, response_data);
 }
 
 /**
@@ -3206,11 +3301,13 @@ new_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_report_omp (credentials_t * credentials, params_t *params)
+create_report_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   entity_t entity;
   int ret;
@@ -3226,7 +3323,8 @@ create_report_omp (credentials_t * credentials, params_t *params)
   if (((task_id == NULL) && (name == NULL))
       || ((task_id == NULL) && (comment == NULL))
       || (xml_file == NULL))
-    return new_task (credentials, "Invalid parameter", params, NULL);
+    return new_task (credentials, "Invalid parameter", params, NULL,
+                     response_data);
 
   xml_file_array = g_strsplit (xml_file, "%", -1);
   if (xml_file_array != NULL && xml_file_array[0] != NULL)
@@ -3291,12 +3389,12 @@ create_report_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_tasks (credentials, params, response);
+        html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = new_task (credentials, NULL, params, response);
+    html = new_task (credentials, NULL, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -3308,7 +3406,8 @@ create_report_omp (credentials_t * credentials, params_t *params)
       return new_task (credentials,                                        \
                        "Given " G_STRINGIFY (name) " was invalid",         \
                        params,                                             \
-                       NULL);                                              \
+                       NULL,                                               \
+                       response_data);                                     \
   } while (0)
 
 /**
@@ -3316,11 +3415,13 @@ create_report_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_task_omp (credentials_t * credentials, params_t *params)
+create_task_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   entity_t entity;
   int ret;
@@ -3403,7 +3504,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
       CHECK (max_hosts);
       CHECK (alterable);
 
-      return new_task_omp (credentials, params);
+      return new_task_omp (credentials, params, response_data);
     }
 
   CHECK (name);
@@ -3613,20 +3714,22 @@ create_task_omp (credentials_t * credentials, params_t *params)
           free_entity (tag_entity);
           g_free (tag_response);
 
-          html = next_page (credentials, params, combined_response);
+          html = next_page (credentials, params, combined_response,
+                            response_data);
           if (html == NULL)
-            html = get_tasks (credentials, params, combined_response);
+            html = get_tasks (credentials, params, combined_response,
+                              response_data);
           g_free (combined_response);
         }
       else
         {
-          html = next_page (credentials, params, response);
+          html = next_page (credentials, params, response, response_data);
           if (html == NULL)
-            html = get_tasks (credentials, params, response);
+            html = get_tasks (credentials, params, response, response_data);
         }
     }
   else
-    html = new_task (credentials, NULL, params, response);
+    html = new_task (credentials, NULL, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -3638,13 +3741,15 @@ create_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (credentials_t * credentials, params_t *params)
+delete_task_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("task", credentials, params, 0, NULL);
+  return delete_resource ("task", credentials, params, 0, NULL, response_data);
 }
 
 /**
@@ -3653,11 +3758,13 @@ delete_task_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
+edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3796,13 +3903,15 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (credentials_t * credentials, params_t *params)
+edit_task_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return edit_task (credentials, params, NULL);
+  return edit_task (credentials, params, NULL, response_data);
 }
 
 /**
@@ -3810,11 +3919,13 @@ edit_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_task_omp (credentials_t * credentials, params_t *params)
+save_task_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
@@ -3894,7 +4005,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
       CHECK_PARAM (max_hosts, "Edit Task", edit_task);
       CHECK_PARAM (in_assets, "Edit Task", edit_task);
 
-      return edit_task_omp (credentials, params);
+      return edit_task_omp (credentials, params, response_data);
     }
 
   CHECK_PARAM (name, "Save Task", edit_task);
@@ -4021,12 +4132,12 @@ save_task_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_tasks (credentials, params, response);
+        html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = edit_task (credentials, params, response);
+    html = edit_task (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -4039,11 +4150,13 @@ save_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_container_task_omp (credentials_t * credentials, params_t *params)
+save_container_task_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
   gchar *format, *response, *html;
   const char *comment, *name, *task_id;
@@ -4106,12 +4219,12 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_tasks (credentials, params, response);
+        html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = edit_task (credentials, params, response);
+    html = edit_task (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -4125,16 +4238,17 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_task_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("task", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -4145,6 +4259,7 @@ export_task_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Tasks XML on success.  HTML result of XSL transformation
  *         on error.
@@ -4152,10 +4267,10 @@ export_task_omp (credentials_t * credentials, params_t *params,
 char *
 export_tasks_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("task", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -4163,13 +4278,15 @@ export_tasks_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-stop_task_omp (credentials_t * credentials, params_t *params)
+stop_task_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return resource_action (credentials, params, "task", "stop");
+  return resource_action (credentials, params, "task", "stop", response_data);
 }
 
 /**
@@ -4177,13 +4294,15 @@ stop_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_task_omp (credentials_t * credentials, params_t *params)
+resume_task_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return resource_action (credentials, params, "task", "resume");
+  return resource_action (credentials, params, "task", "resume", response_data);
 }
 
 /**
@@ -4191,13 +4310,15 @@ resume_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (credentials_t * credentials, params_t *params)
+start_task_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return resource_action (credentials, params, "task", "start");
+  return resource_action (credentials, params, "task", "start", response_data);
 }
 
 /**
@@ -4205,11 +4326,13 @@ start_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-move_task_omp (credentials_t * credentials, params_t *params)
+move_task_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
   const char *task_id, *slave_id;
@@ -4255,9 +4378,9 @@ move_task_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_tasks");
     }
 
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   if (html == NULL)
-    html = get_tasks (credentials, params, response);
+    html = get_tasks (credentials, params, response, response_data);
   return html;
 }
 
@@ -4268,12 +4391,13 @@ move_task_omp (credentials_t * credentials, params_t *params)
  * @param[in]  params            Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed NVT details response or error message.
  */
 static char*
 get_nvts (credentials_t *credentials, params_t *params, const char *commands,
-          const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -4394,11 +4518,13 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed SecInfo response or error message.
  */
 char *
-get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   char *ret;
   GString *extra_attribs, *extra_response;
@@ -4498,7 +4624,7 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " details=\"%s\"",
                             params_value (params, "details"));
   ret = get_many ("info", credentials, params, extra_response->str,
-                  extra_attribs->str);
+                  extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
   g_string_free (extra_attribs, TRUE);
@@ -4511,13 +4637,15 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_info_omp (credentials_t * credentials, params_t *params)
+get_info_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_info (credentials, params, NULL);
+  return get_info (credentials, params, NULL, response_data);
 }
 
 /**
@@ -4525,13 +4653,15 @@ get_info_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvts_omp (credentials_t *credentials, params_t *params)
+get_nvts_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_nvts (credentials, params, NULL, NULL);
+  return get_nvts (credentials, params, NULL, NULL, response_data);
 }
 
 /**
@@ -4592,11 +4722,13 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   const char *overrides, *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
@@ -4620,7 +4752,8 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
                                    ignore_pagination ? ignore_pagination : "",
                                    ignore_pagination ? "\" " : "");
 
-  ret = get_many ("task", credentials, params, extra_xml, extra_attribs);
+  ret = get_many ("task", credentials, params, extra_xml, extra_attribs,
+                  response_data);
   g_free (extra_attribs);
   return ret;
 }
@@ -4630,13 +4763,15 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_omp (credentials_t * credentials, params_t *params)
+get_tasks_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_tasks (credentials, params, NULL);
+  return get_tasks (credentials, params, NULL, response_data);
 }
 
 /**
@@ -4645,12 +4780,13 @@ get_tasks_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_tasks_chart (credentials_t *credentials, params_t *params,
-                 const char *extra_xml)
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return xsl_transform_omp (credentials, g_strdup ("<get_tasks_chart/>"));
 }
@@ -4660,13 +4796,15 @@ get_tasks_chart (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_chart_omp (credentials_t * credentials, params_t *params)
+get_tasks_chart_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return get_tasks_chart (credentials, params, NULL);
+  return get_tasks_chart (credentials, params, NULL, response_data);
 }
 
 
@@ -4676,11 +4814,13 @@ get_tasks_chart_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml = NULL;
   GString *commands_xml = NULL;
@@ -5059,13 +5199,15 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_task_omp (credentials_t * credentials, params_t *params)
+get_task_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_task (credentials, params, NULL);
+  return get_task (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5074,12 +5216,13 @@ get_task_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_lsc_credential (credentials_t *credentials, params_t *params,
-                    const char *extra_xml)
+                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_lsc_credential>");
@@ -5094,11 +5237,13 @@ new_lsc_credential (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_lsc_credential_omp (credentials_t * credentials, params_t *params)
+create_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                           cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -5199,12 +5344,13 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_lsc_credentials (credentials, params, response);
+        html = get_lsc_credentials (credentials, params, response,
+                                    response_data);
     }
   else
-    html = new_lsc_credential (credentials, params, response);
+    html = new_lsc_credential (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -5216,15 +5362,16 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
  * @param[in]   credentials        Username and password for authentication.
  * @param[in]   params             Request parameters.
  * @param[in]   commands           Extra commands to run before the others.
+ * @param[out]  response_data      Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_lsc_credential (credentials_t * credentials, params_t *params,
-                    const char *extra_xml)
+                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("lsc_credential", credentials, params, extra_xml,
-                  "targets=\"1\"");
+                  "targets=\"1\"", response_data);
 }
 
 /**
@@ -5232,13 +5379,15 @@ get_lsc_credential (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_lsc_credential_omp (credentials_t * credentials, params_t *params)
+get_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return get_lsc_credential (credentials, params, NULL);
+  return get_lsc_credential (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5250,6 +5399,7 @@ get_lsc_credential_omp (credentials_t * credentials, params_t *params)
  * @param[out]  html         Result of XSL transformation.  Required.
  * @param[out]  login        Login name return.  NULL to skip.  Only set on
  *                           success with lsc_credential_id.
+ * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
@@ -5258,7 +5408,8 @@ download_lsc_credential_omp (credentials_t * credentials,
                              params_t *params,
                              gsize *result_len,
                              char ** html,
-                             char ** login)
+                             char ** login,
+                             cmd_response_data_t* response_data)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -5453,6 +5604,7 @@ download_lsc_credential_omp (credentials_t * credentials,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return LSC Credential XML on success.  HTML result of XSL transformation
  *         on error.
@@ -5460,10 +5612,11 @@ download_lsc_credential_omp (credentials_t * credentials,
 char *
 export_lsc_credential_omp (credentials_t * credentials, params_t *params,
                            enum content_type * content_type,
-                           char **content_disposition, gsize *content_length)
+                           char **content_disposition, gsize *content_length,
+                           cmd_response_data_t* response_data)
 {
   return export_resource ("lsc_credential", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -5474,6 +5627,7 @@ export_lsc_credential_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return LSC Credentials XML on success.  HTML result of XSL transformation
  *         on error.
@@ -5481,10 +5635,11 @@ export_lsc_credential_omp (credentials_t * credentials, params_t *params,
 char *
 export_lsc_credentials_omp (credentials_t * credentials, params_t *params,
                             enum content_type * content_type,
-                            char **content_disposition, gsize *content_length)
+                            char **content_disposition, gsize *content_length,
+                            cmd_response_data_t* response_data)
 {
   return export_many ("lsc_credential", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -5494,14 +5649,16 @@ export_lsc_credentials_omp (credentials_t * credentials, params_t *params,
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others when
  *                          lsc_credential_id is NULL.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 static char *
 get_lsc_credentials (credentials_t * credentials, params_t *params,
-                     const char *extra_xml)
+                     const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("lsc_credential", credentials, params, extra_xml, NULL);
+  return get_many ("lsc_credential", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -5509,13 +5666,15 @@ get_lsc_credentials (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 char *
-get_lsc_credentials_omp (credentials_t * credentials, params_t *params)
+get_lsc_credentials_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
-  return get_lsc_credentials (credentials, params, NULL);
+  return get_lsc_credentials (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5523,14 +5682,16 @@ get_lsc_credentials_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
+delete_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                           cmd_response_data_t* response_data)
 {
   return delete_resource ("lsc_credential", credentials, params, 0,
-                          get_lsc_credentials);
+                          get_lsc_credentials, response_data);
 }
 
 /**
@@ -5538,13 +5699,15 @@ delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_lsc_credential_omp (credentials_t *credentials, params_t *params)
+new_lsc_credential_omp (credentials_t *credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return new_lsc_credential (credentials, params, NULL);
+  return new_lsc_credential (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5553,14 +5716,16 @@ new_lsc_credential_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 edit_lsc_credential (credentials_t * credentials, params_t *params,
-                     const char *extra_xml)
+                     const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("lsc_credential", credentials, params, extra_xml);
+  return edit_resource ("lsc_credential", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -5568,13 +5733,15 @@ edit_lsc_credential (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
+edit_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
-  return edit_lsc_credential (credentials, params, NULL);
+  return edit_lsc_credential (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5582,11 +5749,13 @@ edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_lsc_credential_omp (credentials_t * credentials, params_t *params)
+save_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
   int ret, change_password;
   gchar *html, *response;
@@ -5695,12 +5864,12 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_lsc_credentials (credentials, params, response);
+        html = get_lsc_credentials (credentials, params, response, response_data);
     }
   else
-    html = edit_lsc_credential (credentials, params, response);
+    html = edit_lsc_credential (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -5712,12 +5881,13 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_agent (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_agent>");
@@ -5732,13 +5902,15 @@ new_agent (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_agent_omp (credentials_t *credentials, params_t *params)
+new_agent_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return new_agent (credentials, params, NULL);
+  return new_agent (credentials, params, NULL, response_data);
 }
 
 /**
@@ -5746,11 +5918,13 @@ new_agent_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials          Username and password for authentication.
  * @param[in]  params               Request parameters.
+ * @param[out] response_data        Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (credentials_t * credentials, params_t *params)
+create_agent_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   entity_t entity;
   gchar *response, *html;
@@ -5771,7 +5945,9 @@ create_agent_omp (credentials_t * credentials, params_t *params)
   howto_use_size = params_value_size (params, "howto_use");
 
   if (name == NULL || comment == NULL)
-    return get_agents (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
+    return get_agents (credentials, params,
+                       GSAD_MESSAGE_INVALID_PARAM ("Create Agent"),
+                       response_data);
   else
     {
       int ret;
@@ -5861,12 +6037,12 @@ create_agent_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_agents (credentials, params, response);
+        html = get_agents (credentials, params, response, response_data);
     }
   else
-    html = new_agent (credentials, params, response);
+    html = new_agent (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -5877,13 +6053,16 @@ create_agent_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (credentials_t * credentials, params_t *params)
+delete_agent_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 0, get_agents);
+  return delete_resource ("agent", credentials, params, 0, get_agents,
+                          response_data);
 }
 
 /**
@@ -5895,6 +6074,7 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
  * @param[out]  html         Result of XSL transformation.  Required.
  * @param[out]  filename     Agent filename return.  NULL to skip.  Only set
  *                           on success with agent_id.
+ * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
@@ -5903,7 +6083,8 @@ download_agent_omp (credentials_t * credentials,
                     params_t *params,
                     gsize *result_len,
                     char ** html,
-                    char ** filename)
+                    char ** filename,
+                    cmd_response_data_t* response_data)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -6081,14 +6262,15 @@ download_agent_omp (credentials_t * credentials,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_agent (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("agent", credentials, params, extra_xml);
+  return edit_resource ("agent", credentials, params, extra_xml, response_data);
 }
 
 /**
@@ -6096,13 +6278,15 @@ edit_agent (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_agent_omp (credentials_t * credentials, params_t *params)
+edit_agent_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return edit_agent (credentials, params, NULL);
+  return edit_agent (credentials, params, NULL, response_data);
 }
 
 /**
@@ -6110,11 +6294,13 @@ edit_agent_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_agent_omp (credentials_t * credentials, params_t *params)
+save_agent_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -6174,12 +6360,12 @@ save_agent_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_agents (credentials, params, response);
+        html = get_agents (credentials, params, response, response_data);
     }
   else
-    html = edit_agent (credentials, params, response);
+    html = edit_agent (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -6191,14 +6377,15 @@ save_agent_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_agent (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("agent", credentials, params, extra_xml, NULL);
+  return get_one ("agent", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -6206,13 +6393,15 @@ get_agent (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_agent_omp (credentials_t * credentials, params_t *params)
+get_agent_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_agent (credentials, params, NULL);
+  return get_agent (credentials, params, NULL, response_data);
 }
 
 /**
@@ -6221,13 +6410,16 @@ get_agent_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_agents (credentials_t * credentials, params_t *params, const char *extra_xml)
+get_agents (credentials_t * credentials, params_t *params,
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("agent", credentials, params, extra_xml, NULL);
+  return get_many ("agent", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -6235,13 +6427,15 @@ get_agents (credentials_t * credentials, params_t *params, const char *extra_xml
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
+ * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_agents_omp (credentials_t * credentials, params_t *params)
+get_agents_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_agents (credentials, params, NULL);
+  return get_agents (credentials, params, NULL, response_data);
 }
 
 /**
@@ -6249,11 +6443,13 @@ get_agents_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-verify_agent_omp (credentials_t * credentials, params_t *params)
+verify_agent_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -6315,7 +6511,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_agents");
     }
 
-  ret = get_agents (credentials, params, xml->str);
+  ret = get_agents (credentials, params, xml->str, response_data);
   openvas_server_close (socket, session);
   g_string_free (xml, TRUE);
   return ret;
@@ -6329,16 +6525,17 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Agent XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_agent_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("agent", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -6349,6 +6546,7 @@ export_agent_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Agents XML on success.  HTML result of XSL transformation
  *         on error.
@@ -6356,10 +6554,10 @@ export_agent_omp (credentials_t * credentials, params_t *params,
 char *
 export_agents_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                    gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("agent", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -6367,11 +6565,13 @@ export_agents_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return The aggregate.
  */
 char *
-get_aggregate_omp (credentials_t * credentials, params_t *params)
+get_aggregate_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   params_t *data_columns, *text_columns;
   params_iterator_t data_columns_iterator, text_columns_iterator;
@@ -6508,11 +6708,13 @@ get_aggregate_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   int ret;
@@ -6605,17 +6807,19 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_alert_omp (credentials_t *credentials, params_t *params)
+new_alert_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return new_alert (credentials, params, NULL);
+  return new_alert (credentials, params, NULL, response_data);
 }
 
 char *
-get_alerts (credentials_t *, params_t *, const char *);
+get_alerts (credentials_t *, params_t *, const char *, cmd_response_data_t*);
 
 /**
  * @brief Send event data for an alert.
@@ -6778,11 +6982,13 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_alert_omp (credentials_t * credentials, params_t *params)
+create_alert_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -6800,7 +7006,9 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 
   if (name == NULL || comment == NULL || condition == NULL || event == NULL
       || method == NULL || filter_id == NULL)
-    return new_alert (credentials, params, GSAD_MESSAGE_INVALID_PARAM ("Create Alert"));
+    return new_alert (credentials, params,
+                      GSAD_MESSAGE_INVALID_PARAM ("Create Alert"),
+                      response_data);
 
   /* Create the alert. */
 
@@ -6876,12 +7084,12 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_alerts (credentials, params, response);
+        html = get_alerts (credentials, params, response, response_data);
     }
   else
-    html = new_alert (credentials, params, response);
+    html = new_alert (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -6892,13 +7100,16 @@ create_alert_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_alert_omp (credentials_t * credentials, params_t *params)
+delete_alert_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 0, get_alerts);
+  return delete_resource ("alert", credentials, params, 0, get_alerts,
+                          response_data);
 }
 
 /**
@@ -6907,12 +7118,13 @@ delete_alert_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_alert (credentials_t * credentials, params_t *params,
-           const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -6963,7 +7175,8 @@ get_alert (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
-  html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"");
+  html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"",
+                  response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -6973,13 +7186,15 @@ get_alert (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_alert_omp (credentials_t * credentials, params_t *params)
+get_alert_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_alert (credentials, params, NULL);
+  return get_alert (credentials, params, NULL, response_data);
 }
 
 /**
@@ -6988,14 +7203,16 @@ get_alert_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_alerts (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("alert", credentials, params, extra_xml, NULL);
+  return get_many ("alert", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -7003,13 +7220,15 @@ get_alerts (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_alerts_omp (credentials_t * credentials, params_t *params)
+get_alerts_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_alerts (credentials, params, NULL);
+  return get_alerts (credentials, params, NULL, response_data);
 }
 
 /**
@@ -7018,12 +7237,13 @@ get_alerts_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_alert (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7183,13 +7403,15 @@ edit_alert (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_alert_omp (credentials_t * credentials, params_t *params)
+edit_alert_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return edit_alert (credentials, params, NULL);
+  return edit_alert (credentials, params, NULL, response_data);
 }
 
 /**
@@ -7197,11 +7419,13 @@ edit_alert_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_alert_omp (credentials_t * credentials, params_t *params)
+save_alert_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   GString *xml;
   int ret;
@@ -7303,12 +7527,12 @@ save_alert_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_alerts (credentials, params, response);
+        html = get_alerts (credentials, params, response, response_data);
     }
   else
-    html = edit_alert (credentials, params, response);
+    html = edit_alert (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -7319,11 +7543,13 @@ save_alert_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-test_alert_omp (credentials_t * credentials, params_t *params)
+test_alert_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -7386,7 +7612,7 @@ test_alert_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  html = get_alerts (credentials, params, response);
+  html = get_alerts (credentials, params, response, response_data);
   g_free (response);
   return html;
 }
@@ -7399,16 +7625,17 @@ test_alert_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Alert XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_alert_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("alert", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -7419,6 +7646,7 @@ export_alert_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Alerts XML on success.  HTML result of XSL transformation
  *         on error.
@@ -7426,10 +7654,10 @@ export_alert_omp (credentials_t * credentials, params_t *params,
 char *
 export_alerts_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("alert", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -7438,11 +7666,13 @@ export_alerts_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7605,13 +7835,15 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_target_omp (credentials_t *credentials, params_t *params)
+new_target_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return new_target (credentials, params, NULL);
+  return new_target (credentials, params, NULL, response_data);
 }
 
 /**
@@ -7619,11 +7851,13 @@ new_target_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_target_omp (credentials_t * credentials, params_t *params)
+create_target_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response, *command;
@@ -7656,14 +7890,15 @@ create_target_omp (credentials_t * credentials, params_t *params)
   CHECK_PARAM (target_source, "Create Target", new_target)
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     return new_target (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
+                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
+                       response_data);
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       gchar *msg;
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_source was invalid",
                             "Create Target");
-      html = new_target (credentials, params, msg);
+      html = new_target (credentials, params, msg, response_data);
       g_free (msg);
       return html;
     }
@@ -7777,12 +8012,12 @@ create_target_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_targets (credentials, params, response);
+        html = get_targets (credentials, params, response, response_data);
     }
   else
-    html = new_target (credentials, params, response);
+    html = new_target (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -7808,11 +8043,13 @@ create_target_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-clone_omp (credentials_t *credentials, params_t *params)
+clone_omp (credentials_t *credentials, params_t *params,
+           cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -7909,7 +8146,7 @@ clone_omp (credentials_t *credentials, params_t *params)
       g_free (next);
     }
   free_entity (entity);
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   g_free (response);
   if (html == NULL)
     return gsad_message (credentials,
@@ -7928,13 +8165,16 @@ clone_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (credentials_t * credentials, params_t *params)
+delete_target_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 0, get_targets);
+  return delete_resource ("target", credentials, params, 0, get_targets,
+                          response_data);
 }
 
 /**
@@ -7942,13 +8182,16 @@ delete_target_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_agent_omp (credentials_t * credentials, params_t *params)
+delete_trash_agent_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 1, get_trash);
+  return delete_resource ("agent", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -7956,13 +8199,16 @@ delete_trash_agent_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_config_omp (credentials_t * credentials, params_t *params)
+delete_trash_config_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 1, get_trash);
+  return delete_resource ("config", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -7970,13 +8216,16 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_alert_omp (credentials_t * credentials, params_t *params)
+delete_trash_alert_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 1, get_trash);
+  return delete_resource ("alert", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -7984,13 +8233,16 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params)
+delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("lsc_credential", credentials, params, 1, get_trash);
+  return delete_resource ("lsc_credential", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -7998,13 +8250,16 @@ delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_report_format_omp (credentials_t * credentials, params_t *params)
+delete_trash_report_format_omp (credentials_t * credentials, params_t *params,
+                                cmd_response_data_t* response_data)
 {
-  return delete_resource ("report_format", credentials, params, 1, get_trash);
+  return delete_resource ("report_format", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8012,13 +8267,16 @@ delete_trash_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_schedule_omp (credentials_t * credentials, params_t *params)
+delete_trash_schedule_omp (credentials_t * credentials, params_t *params,
+                           cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 1, get_trash);
+  return delete_resource ("schedule", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8026,13 +8284,16 @@ delete_trash_schedule_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_slave_omp (credentials_t * credentials, params_t *params)
+delete_trash_slave_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("slave", credentials, params, 1, get_trash);
+  return delete_resource ("slave", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8040,13 +8301,16 @@ delete_trash_slave_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_target_omp (credentials_t * credentials, params_t *params)
+delete_trash_target_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 1, get_trash);
+  return delete_resource ("target", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8054,13 +8318,16 @@ delete_trash_target_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_task_omp (credentials_t * credentials, params_t *params)
+delete_trash_task_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("task", credentials, params, 1, get_trash);
+  return delete_resource ("task", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8068,11 +8335,13 @@ delete_trash_task_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-restore_omp (credentials_t * credentials, params_t *params)
+restore_omp (credentials_t * credentials, params_t *params,
+             cmd_response_data_t* response_data)
 {
   GString *xml;
   gchar *ret;
@@ -8143,7 +8412,7 @@ restore_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
+  ret = get_trash (credentials, params, xml->str, response_data);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -8153,11 +8422,13 @@ restore_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-empty_trashcan_omp (credentials_t * credentials, params_t *params)
+empty_trashcan_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
   GString *xml;
   gchar *ret;
@@ -8212,7 +8483,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
+  ret = get_trash (credentials, params, xml->str, response_data);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -8223,11 +8494,13 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_tag (credentials_t *credentials, params_t *params, const char *extra_xml,
+         cmd_response_data_t* response_data)
 {
   GString *xml;
   gchar *end;
@@ -8270,13 +8543,15 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_tag_omp (credentials_t *credentials, params_t *params)
+new_tag_omp (credentials_t *credentials, params_t *params,
+             cmd_response_data_t* response_data)
 {
-  return new_tag (credentials, params, NULL);
+  return new_tag (credentials, params, NULL, response_data);
 }
 
 /**
@@ -8284,11 +8559,13 @@ new_tag_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_tag_omp (credentials_t *credentials, params_t *params)
+create_tag_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -8358,12 +8635,12 @@ create_tag_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_tags (credentials, params, response);
+        ret = get_tags (credentials, params, response, response_data);
     }
   else
-    ret = new_tag (credentials, params, response);
+    ret = new_tag (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -8374,13 +8651,15 @@ create_tag_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_tag_omp (credentials_t * credentials, params_t *params)
+delete_tag_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return delete_resource ("tag", credentials, params, 0, NULL);
+  return delete_resource ("tag", credentials, params, 0, NULL, response_data);
 }
 
 /**
@@ -8388,13 +8667,16 @@ delete_tag_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_tag_omp (credentials_t * credentials, params_t *params)
+delete_trash_tag_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
-  return delete_resource ("tag", credentials, params, 1, get_trash);
+  return delete_resource ("tag", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -8403,12 +8685,13 @@ delete_trash_tag_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_tag (credentials_t * credentials, params_t *params,
-          const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -8492,13 +8775,15 @@ edit_tag (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_tag_omp (credentials_t * credentials, params_t *params)
+edit_tag_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return edit_tag (credentials, params, NULL);
+  return edit_tag (credentials, params, NULL, response_data);
 }
 
 /**
@@ -8506,11 +8791,13 @@ edit_tag_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_tag_omp (credentials_t * credentials, params_t *params)
+save_tag_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
@@ -8588,12 +8875,12 @@ save_tag_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_tags (credentials, params, response);
+        ret = get_tags (credentials, params, response, response_data);
     }
   else
-    ret = edit_tag (credentials, params, response);
+    ret = edit_tag (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -8609,6 +8896,7 @@ save_tag_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Target XML on success.  HTML result of XSL transformation
  *         on error.
@@ -8616,10 +8904,10 @@ save_tag_omp (credentials_t * credentials, params_t *params)
 char *
 export_tag_omp (credentials_t * credentials, params_t *params,
                 enum content_type * content_type, char **content_disposition,
-                gsize *content_length)
+                gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("tag", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -8630,6 +8918,7 @@ export_tag_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Targets XML on success.  HTML result of XSL transformation
  *         on error.
@@ -8637,10 +8926,10 @@ export_tag_omp (credentials_t * credentials, params_t *params,
 char *
 export_tags_omp (credentials_t * credentials, params_t *params,
                  enum content_type * content_type, char **content_disposition,
-                 gsize *content_length)
+                 gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("tag", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -8649,14 +8938,15 @@ export_tags_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_tag (credentials_t * credentials, params_t *params,
-         const char *extra_xml)
+         const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("tag", credentials, params, extra_xml, NULL);
+  return get_one ("tag", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -8664,13 +8954,15 @@ get_tag (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_tag_omp (credentials_t * credentials, params_t *params)
+get_tag_omp (credentials_t * credentials, params_t *params,
+             cmd_response_data_t* response_data)
 {
-  return get_tag (credentials, params, NULL);
+  return get_tag (credentials, params, NULL, response_data);
 }
 
 /**
@@ -8679,14 +8971,15 @@ get_tag_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_tags (credentials_t * credentials, params_t *params,
-          const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("tag", credentials, params, extra_xml, NULL);
+  return get_many ("tag", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -8694,13 +8987,15 @@ get_tags (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_tags_omp (credentials_t * credentials, params_t *params)
+get_tags_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_tags (credentials, params, NULL);
+  return get_tags (credentials, params, NULL, response_data);
 }
 
 /**
@@ -8708,11 +9003,13 @@ get_tags_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-toggle_tag_omp (credentials_t * credentials, params_t *params)
+toggle_tag_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -8797,9 +9094,9 @@ toggle_tag_omp (credentials_t * credentials, params_t *params)
 
   /* Cleanup, and return transformed XML. */
 
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   if (html == NULL)
-    html = get_tags (credentials, params, response);
+    html = get_tags (credentials, params, response, response_data);
   g_free (response);
   return html;
 }
@@ -8810,12 +9107,13 @@ toggle_tag_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_target (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -8980,13 +9278,15 @@ edit_target (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_target_omp (credentials_t * credentials, params_t *params)
+edit_target_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return edit_target (credentials, params, NULL);
+  return edit_target (credentials, params, NULL, response_data);
 }
 
 /**
@@ -8995,14 +9295,16 @@ edit_target_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_target (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("target", credentials, params, extra_xml, "tasks=\"1\"");
+  return get_one ("target", credentials, params, extra_xml, "tasks=\"1\"",
+                  response_data);
 }
 
 /**
@@ -9010,13 +9312,15 @@ get_target (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (credentials_t * credentials, params_t *params)
+get_target_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_target (credentials, params, NULL);
+  return get_target (credentials, params, NULL, response_data);
 }
 
 /**
@@ -9025,14 +9329,16 @@ get_target_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_targets (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("target", credentials, params, extra_xml, NULL);
+  return get_many ("target", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -9040,13 +9346,15 @@ get_targets (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (credentials_t * credentials, params_t *params)
+get_targets_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return get_targets (credentials, params, NULL);
+  return get_targets (credentials, params, NULL, response_data);
 }
 
 /**
@@ -9054,11 +9362,13 @@ get_targets_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_target_omp (credentials_t * credentials, params_t *params)
+save_target_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -9135,12 +9445,12 @@ save_target_omp (credentials_t * credentials, params_t *params)
 
       if (omp_success (entity))
         {
-          html = next_page (credentials, params, response);
+          html = next_page (credentials, params, response, response_data);
           if (html == NULL)
-            html = get_targets_omp (credentials, params);
+            html = get_targets_omp (credentials, params, response_data);
         }
       else
-        html = edit_target (credentials, params, response);
+        html = edit_target (credentials, params, response, response_data);
 
       free_entity (entity);
       g_free (response);
@@ -9189,7 +9499,8 @@ save_target_omp (credentials_t * credentials, params_t *params)
     {
       openvas_server_close (socket, session);
       return new_target (credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("Modify Target"));
+                         GSAD_MESSAGE_INVALID_PARAM ("Modify Target"),
+                         response_data);
     }
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
@@ -9198,7 +9509,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_source was invalid",
                             "Modify Target");
-      html = new_target (credentials, params, msg);
+      html = new_target (credentials, params, msg, response_data);
       g_free (msg);
       return html;
     }
@@ -9319,7 +9630,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
 
     if (status[0] != '2')
       {
-        html = edit_target (credentials, params, response);
+        html = edit_target (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
         return html;
@@ -9330,9 +9641,9 @@ save_target_omp (credentials_t * credentials, params_t *params)
 
   /* Pass response to handler of following page. */
 
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   if (html == NULL)
-    html = get_targets (credentials, params, response);
+    html = get_targets (credentials, params, response, response_data);
   g_free (response);
   return html;
 }
@@ -9345,6 +9656,7 @@ save_target_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Target XML on success.  HTML result of XSL transformation
  *         on error.
@@ -9352,10 +9664,10 @@ save_target_omp (credentials_t * credentials, params_t *params)
 char *
 export_target_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("target", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -9366,6 +9678,7 @@ export_target_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Targets XML on success.  HTML result of XSL transformation
  *         on error.
@@ -9373,10 +9686,10 @@ export_target_omp (credentials_t * credentials, params_t *params,
 char *
 export_targets_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                    gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("target", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -9385,12 +9698,13 @@ export_targets_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_config (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   int ret;
@@ -9444,13 +9758,15 @@ new_config (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_config_omp (credentials_t *credentials, params_t *params)
+new_config_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return new_config (credentials, params, NULL);
+  return new_config (credentials, params, NULL, response_data);
 }
 
 /**
@@ -9458,11 +9774,13 @@ new_config_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_config_omp (credentials_t * credentials, params_t *params)
+create_config_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   gchar *html, *response;
   const char *name, *comment, *base, *scanner = NULL;
@@ -9522,12 +9840,12 @@ create_config_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_configs (credentials, params, response);
+        html = get_configs (credentials, params, response, response_data);
     }
   else
-    html = new_config (credentials, params, response);
+    html = new_config (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -9538,11 +9856,13 @@ create_config_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_config_omp (credentials_t * credentials, params_t *params)
+import_config_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   gchar *command, *html, *response;
   entity_t entity;
@@ -9590,12 +9910,12 @@ import_config_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_configs (credentials, params, response);
+        html = get_configs (credentials, params, response, response_data);
     }
   else
-    html = new_config (credentials, params, response);
+    html = new_config (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -9607,14 +9927,16 @@ import_config_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_configs (credentials_t *credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("config", credentials, params, extra_xml, NULL);
+  return get_many ("config", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -9622,13 +9944,15 @@ get_configs (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_configs_omp (credentials_t * credentials, params_t *params)
+get_configs_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return get_configs (credentials, params, NULL);
+  return get_configs (credentials, params, NULL, response_data);
 }
 
 /**
@@ -9638,12 +9962,13 @@ get_configs_omp (credentials_t * credentials, params_t *params)
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[in]  edit         0 for config view page, else config edit page.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_config (credentials_t * credentials, params_t *params,
-            const char *extra_xml, int edit)
+            const char *extra_xml, int edit, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -9829,13 +10154,15 @@ get_config (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_config_omp (credentials_t * credentials, params_t *params)
+get_config_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_config (credentials, params, NULL, 0);
+  return get_config (credentials, params, NULL, 0, response_data);
 }
 
 /**
@@ -9843,14 +10170,15 @@ get_config_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 edit_config (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_config (credentials, params, extra_xml, 1);
+  return get_config (credentials, params, extra_xml, 1, response_data);
 }
 
 /**
@@ -9858,13 +10186,15 @@ edit_config (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_config_omp (credentials_t * credentials, params_t *params)
+edit_config_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return edit_config (credentials, params, NULL);
+  return edit_config (credentials, params, NULL, response_data);
 }
 
 
@@ -9873,12 +10203,13 @@ edit_config_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]   session     GNUTLS session.
  * @param[in]   params      Request parameters.
+ * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return NULL success.  HTML result of XSL transformation on error.
  */
 static char *
 save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
-                params_t *params)
+                params_t *params, cmd_response_data_t* response_data)
 {
   GHashTableIter iter;
   gpointer param_name, val;
@@ -9930,11 +10261,13 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Following page.
  */
 char *
-save_config_omp (credentials_t * credentials, params_t *params)
+save_config_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -10048,7 +10381,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
     }
 
   /* OSP config file preference. */
-  ret = save_osp_prefs (credentials, session, params);
+  ret = save_osp_prefs (credentials, session, params, response_data);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -10165,7 +10498,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
 
   /* Return the next page. */
 
-  return get_config (credentials, params, NULL, 1);
+  return get_config (credentials, params, NULL, 1, response_data);
 }
 
 /**
@@ -10174,11 +10507,13 @@ save_config_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_config_family (credentials_t * credentials, params_t *params, int edit)
+get_config_family (credentials_t * credentials, params_t *params, int edit,
+                   cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -10316,13 +10651,15 @@ get_config_family (credentials_t * credentials, params_t *params, int edit)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_config_family_omp (credentials_t * credentials, params_t *params)
+get_config_family_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return get_config_family (credentials, params, 0);
+  return get_config_family (credentials, params, 0, response_data);
 }
 
 /**
@@ -10330,13 +10667,15 @@ get_config_family_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_config_family_omp (credentials_t * credentials, params_t *params)
+edit_config_family_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return get_config_family (credentials, params, 1);
+  return get_config_family (credentials, params, 1, response_data);
 }
 
 /**
@@ -10344,11 +10683,13 @@ edit_config_family_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_config_family_omp (credentials_t * credentials, params_t *params)
+save_config_family_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -10454,7 +10795,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
 
   /* Return the Edit family page. */
 
-  return get_config_family (credentials, params, 1);
+  return get_config_family (credentials, params, 1, response_data);
 }
 
 /**
@@ -10463,11 +10804,13 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_config_nvt (credentials_t * credentials, params_t *params, int edit)
+get_config_nvt (credentials_t * credentials, params_t *params, int edit,
+                cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -10620,13 +10963,15 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_config_nvt_omp (credentials_t * credentials, params_t *params)
+get_config_nvt_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return get_config_nvt (credentials, params, 0);
+  return get_config_nvt (credentials, params, 0, response_data);
 }
 
 /**
@@ -10634,13 +10979,15 @@ get_config_nvt_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_config_nvt_omp (credentials_t * credentials, params_t *params)
+edit_config_nvt_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return get_config_nvt (credentials, params, 1);
+  return get_config_nvt (credentials, params, 1, response_data);
 }
 
 /**
@@ -10648,11 +10995,13 @@ edit_config_nvt_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_config_nvt_omp (credentials_t * credentials, params_t *params)
+save_config_nvt_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   params_t *preferences;
   const char *config_id;
@@ -10859,7 +11208,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
 
   /* Return the Edit NVT page. */
 
-  return get_config_nvt (credentials, params, 1);
+  return get_config_nvt (credentials, params, 1, response_data);
 }
 
 /**
@@ -10867,13 +11216,16 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (credentials_t * credentials, params_t *params)
+delete_config_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 0, get_configs);
+  return delete_resource ("config", credentials, params, 0, get_configs,
+                          response_data);
 }
 
 /**
@@ -10884,16 +11236,17 @@ delete_config_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_config_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("config", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -10904,6 +11257,7 @@ export_config_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scan configs XML on success.  HTML result of XSL transformation
  *         on error.
@@ -10911,10 +11265,10 @@ export_config_omp (credentials_t * credentials, params_t *params,
 char *
 export_configs_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                    gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("config", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -10925,16 +11279,17 @@ export_configs_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_note_omp (credentials_t * credentials, params_t *params,
                  enum content_type * content_type, char **content_disposition,
-                 gsize *content_length)
+                 gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("note", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -10945,17 +11300,18 @@ export_note_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Notes XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
 export_notes_omp (credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("note", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -10966,16 +11322,18 @@ export_notes_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Override XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_override_omp (credentials_t * credentials, params_t *params,
-                     enum content_type * content_type, char **content_disposition,
-                     gsize *content_length)
+                     enum content_type * content_type,
+                     char **content_disposition, gsize *content_length,
+                     cmd_response_data_t* response_data)
 {
   return export_resource ("override", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -10986,6 +11344,7 @@ export_override_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Overrides XML on success.  HTML result of XSL transformation
  *         on error.
@@ -10993,10 +11352,11 @@ export_override_omp (credentials_t * credentials, params_t *params,
 char *
 export_overrides_omp (credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
-                      char **content_disposition, gsize *content_length)
+                      char **content_disposition, gsize *content_length,
+                      cmd_response_data_t* response_data)
 {
   return export_many ("override", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -11007,6 +11367,7 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Port List XML on success.  HTML result of XSL transformation on
  *         error.
@@ -11014,10 +11375,12 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
 char *
 export_port_list_omp (credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
-                      char **content_disposition, gsize *content_length)
+                      char **content_disposition, gsize *content_length,
+                      cmd_response_data_t* response_data)
 {
   return export_resource ("port_list", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length,
+                          response_data);
 }
 
 /**
@@ -11028,17 +11391,19 @@ export_port_list_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Port Lists XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
 export_port_lists_omp (credentials_t * credentials, params_t *params,
-                       enum content_type * content_type, char **content_disposition,
-                       gsize *content_length)
+                       enum content_type * content_type,
+                       char **content_disposition, gsize *content_length,
+                       cmd_response_data_t* response_data)
 {
   return export_many ("port_list", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -11049,13 +11414,15 @@ export_port_lists_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_preference_file_omp (credentials_t * credentials, params_t *params,
-                            enum content_type * content_type, char **content_disposition,
-                            gsize *content_length)
+                            enum content_type * content_type,
+                            char **content_disposition, gsize *content_length,
+                            cmd_response_data_t* response_data)
 {
   GString *xml;
   entity_t entity, preference_entity, value_entity;
@@ -11166,17 +11533,19 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Report format XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
 export_report_format_omp (credentials_t * credentials, params_t *params,
-                          enum content_type * content_type, char **content_disposition,
-                          gsize *content_length)
+                          enum content_type * content_type,
+                          char **content_disposition, gsize *content_length,
+                          cmd_response_data_t* response_data)
 {
   return export_resource ("report_format", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -11187,6 +11556,7 @@ export_report_format_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Report Formats XML on success.  HTML result of XSL transformation
  *         on error.
@@ -11194,10 +11564,11 @@ export_report_format_omp (credentials_t * credentials, params_t *params,
 char *
 export_report_formats_omp (credentials_t * credentials, params_t *params,
                            enum content_type * content_type,
-                           char **content_disposition, gsize *content_length)
+                           char **content_disposition, gsize *content_length,
+                           cmd_response_data_t* response_data)
 {
   return export_many ("report_format", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -11205,13 +11576,16 @@ export_report_formats_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_report_omp (credentials_t * credentials, params_t *params)
+delete_report_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("report", credentials, params, 0, NULL);
+  return delete_resource ("report", credentials, params, 0, NULL,
+                          response_data);
 }
 
 /**
@@ -11225,13 +11599,15 @@ delete_report_omp (credentials_t * credentials, params_t *params)
  * @param[out] content_disposition  Content disposition, if content_type set.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] error        Set to 1 if error, else 0.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Report.
  */
 char *
 get_report (credentials_t * credentials, params_t *params, const char *commands,
             gsize *report_len, gchar **content_type, char **content_disposition,
-            const char *extra_xml, int *error)
+            const char *extra_xml, int *error,
+            cmd_response_data_t* response_data)
 {
   GString *xml, *commands_xml;
   entity_t entity;
@@ -12585,19 +12961,20 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
  * @param[out] report_len   Length of report.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Report.
  */
 char *
 get_report_omp (credentials_t * credentials, params_t *params,
                 gsize *report_len, gchar ** content_type,
-                char **content_disposition)
+                char **content_disposition, cmd_response_data_t* response_data)
 {
   char *result;
   int error = 0;
 
   result = get_report (credentials, params, NULL, report_len, content_type,
-                       content_disposition, NULL, &error);
+                       content_disposition, NULL, &error, response_data);
 
   return error ? result : xsl_transform_omp (credentials, result);
 }
@@ -12608,12 +12985,13 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_reports (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -12665,7 +13043,8 @@ get_reports (credentials_t * credentials, params_t *params,
     }
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = get_many ("report", credentials, params, extra->str, NULL);
+  html = get_many ("report", credentials, params, extra->str, NULL,
+                   response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -12675,13 +13054,15 @@ get_reports (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_reports_omp (credentials_t * credentials, params_t *params)
+get_reports_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return get_reports (credentials, params, NULL);
+  return get_reports (credentials, params, NULL, response_data);
 }
 
 /**
@@ -12689,12 +13070,13 @@ get_reports_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_report_section (credentials_t * credentials, params_t *params,
-                    const char *extra_xml)
+                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   const char *report_id, *report_section, *type;
@@ -12720,13 +13102,13 @@ get_report_section (credentials_t * credentials, params_t *params,
       char *result;
 
       result = get_report (credentials, params, NULL, NULL, NULL, NULL,
-                           extra_xml, &error);
+                           extra_xml, &error, response_data);
 
       return error ? result : xsl_transform_omp (credentials, result);
     }
 
   result = get_report (credentials, params, NULL, NULL, NULL,
-                       NULL, NULL, &error);
+                       NULL, NULL, &error, response_data);
   if (error)
     return result;
 
@@ -12791,13 +13173,15 @@ get_report_section (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_report_section_omp (credentials_t * credentials, params_t *params)
+get_report_section_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return get_report_section (credentials, params, NULL);
+  return get_report_section (credentials, params, NULL, response_data);
 }
 
 /**
@@ -12806,12 +13190,13 @@ get_report_section_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return SSL Certificate.
  */
 char *
 download_ssl_cert (credentials_t * credentials, params_t *params,
-                   gsize *response_size)
+                   gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *ssl_cert;
   gchar *cert;
@@ -12844,12 +13229,13 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return CA Certificate.
  */
 char *
 download_ca_pub (credentials_t * credentials, params_t *params,
-                 gsize *response_size)
+                 gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *ca_pub;
   char *unescaped;
@@ -12874,12 +13260,13 @@ download_ca_pub (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Certificate.
  */
 char *
 download_key_pub (credentials_t * credentials, params_t *params,
-                  gsize *response_size)
+                  gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *key_pub;
   char *unescaped;
@@ -12906,6 +13293,7 @@ download_key_pub (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Result XML on success.  HTML result of XSL transformation
  *         on error.
@@ -12913,10 +13301,10 @@ download_key_pub (credentials_t * credentials, params_t *params,
 char *
 export_result_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("result", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -12927,6 +13315,7 @@ export_result_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Results XML on success.  HTML result of XSL transformation
  *         on error.
@@ -12934,10 +13323,11 @@ export_result_omp (credentials_t * credentials, params_t *params,
 char *
 export_results_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type,
-                    char **content_disposition, gsize *content_length)
+                    char **content_disposition, gsize *content_length,
+                    cmd_response_data_t* response_data)
 {
   return export_many ("result", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -12946,12 +13336,13 @@ export_results_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_results (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
   const char *overrides;
   overrides = params_value (params, "overrides");
@@ -12960,7 +13351,8 @@ get_results (credentials_t * credentials, params_t *params,
     /* User toggled overrides.  Set the overrides value in the filter. */
     params_toggle_overrides (params, overrides);
 
-  return get_many ("result", credentials, params, extra_xml, NULL);
+  return get_many ("result", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -12968,15 +13360,18 @@ get_results (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_results_omp (credentials_t *credentials, params_t *params)
+get_results_omp (credentials_t *credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   return get_results (credentials,
                       params,
-                      NULL);
+                      NULL,
+                      response_data);
 }
 
 /**
@@ -12990,6 +13385,7 @@ get_results_omp (credentials_t *credentials, params_t *params)
  * @param[in]  report_id        ID of report.
  * @param[in]  autofp           Auto FP filter flag.
  * @param[in]  extra_xml        Extra XML to insert inside page element.
+ * @param[out] response_data    Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
@@ -12998,7 +13394,7 @@ get_result (credentials_t *credentials, const char *result_id,
             const char *task_id, const char *task_name,
             const char *apply_overrides, const char *commands,
             const char *report_id, const char *autofp,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -13130,11 +13526,13 @@ get_result (credentials_t *credentials, const char *result_id,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_result_omp (credentials_t *credentials, params_t *params)
+get_result_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   return get_result (credentials,
                      params_value (params, "result_id"),
@@ -13144,7 +13542,8 @@ get_result_omp (credentials_t *credentials, params_t *params)
                      NULL,
                      params_value (params, "report_id"),
                      params_value (params, "autofp"),
-                     NULL);
+                     NULL,
+                     response_data);
 }
 
 /**
@@ -13153,12 +13552,13 @@ get_result_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_result_page (credentials_t *credentials, params_t *params,
-                 const char *extra_xml)
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_result (credentials,
                      params_value (params, "result_id"),
@@ -13168,7 +13568,8 @@ get_result_page (credentials_t *credentials, params_t *params,
                      NULL,
                      params_value (params, "report_id"),
                      params_value (params, "autofp"),
-                     extra_xml);
+                     extra_xml,
+                     response_data);
 
 }
 
@@ -13178,13 +13579,15 @@ get_result_page (credentials_t *credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_notes (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
-  return get_many ("note", credentials, params, extra_xml, NULL);
+  return get_many ("note", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -13192,13 +13595,15 @@ get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_notes_omp (credentials_t *credentials, params_t *params)
+get_notes_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_notes (credentials, params, NULL);
+  return get_notes (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13207,13 +13612,15 @@ get_notes_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_note (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
-  return get_one ("note", credentials, params, extra_xml, NULL);
+  return get_one ("note", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -13221,13 +13628,15 @@ get_note (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_note_omp (credentials_t *credentials, params_t *params)
+get_note_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_note (credentials, params, NULL);
+  return get_note (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13236,11 +13645,13 @@ get_note_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -13433,13 +13844,15 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_note_omp (credentials_t *credentials, params_t *params)
+new_note_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return new_note (credentials, params, NULL);
+  return new_note (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13447,11 +13860,13 @@ new_note_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_note_omp (credentials_t *credentials, params_t *params)
+create_note_omp (credentials_t *credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -13585,12 +14000,12 @@ create_note_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_notes (credentials, params, response);
+        ret = get_notes (credentials, params, response, response_data);
     }
   else
-    ret = new_note (credentials, params, response);
+    ret = new_note (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -13601,13 +14016,15 @@ create_note_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_note_omp (credentials_t * credentials, params_t *params)
+delete_note_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("note", credentials, params, 0, NULL);
+  return delete_resource ("note", credentials, params, 0, NULL, response_data);
 }
 
 /**
@@ -13615,13 +14032,16 @@ delete_note_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_note_omp (credentials_t * credentials, params_t *params)
+delete_trash_note_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("note", credentials, params, 1, get_trash);
+  return delete_resource ("note", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -13630,11 +14050,13 @@ delete_trash_note_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_note (credentials_t *credentials, params_t *params, const char *extra_xml)
+edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -13709,13 +14131,15 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (credentials_t *credentials, params_t *params)
+edit_note_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return edit_note (credentials, params, NULL);
+  return edit_note (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13723,11 +14147,13 @@ edit_note_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (credentials_t * credentials, params_t *params)
+save_note_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   gchar *response;
   entity_t entity;
@@ -13842,12 +14268,12 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_notes (credentials, params, response);
+        ret = get_notes (credentials, params, response, response_data);
     }
   else
-    ret = edit_note (credentials, params, response);
+    ret = edit_note (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -13860,13 +14286,16 @@ save_note_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_overrides (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_overrides (credentials_t *credentials, params_t *params,
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("override", credentials, params, extra_xml, NULL);
+  return get_many ("override", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -13874,13 +14303,15 @@ get_overrides (credentials_t *credentials, params_t *params, const char *extra_x
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_overrides_omp (credentials_t *credentials, params_t *params)
+get_overrides_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return get_overrides (credentials, params, NULL);
+  return get_overrides (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13889,14 +14320,16 @@ get_overrides_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_override (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("override", credentials, params, extra_xml, NULL);
+  return get_one ("override", credentials, params, extra_xml, NULL,
+                  response_data);
 }
 
 /**
@@ -13904,13 +14337,15 @@ get_override (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_override_omp (credentials_t *credentials, params_t *params)
+get_override_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return get_override (credentials, params, NULL);
+  return get_override (credentials, params, NULL, response_data);
 }
 
 /**
@@ -13919,11 +14354,13 @@ get_override_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_override (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_override (credentials_t *credentials, params_t *params,
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -14118,13 +14555,15 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_override_omp (credentials_t *credentials, params_t *params)
+new_override_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return new_override (credentials, params, NULL);
+  return new_override (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14132,11 +14571,13 @@ new_override_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_override_omp (credentials_t *credentials, params_t *params)
+create_override_omp (credentials_t *credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -14297,12 +14738,12 @@ create_override_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_overrides (credentials, params, response);
+        ret = get_overrides (credentials, params, response, response_data);
     }
   else
-    ret = new_override (credentials, params, response);
+    ret = new_override (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -14313,13 +14754,16 @@ create_override_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_override_omp (credentials_t * credentials, params_t *params)
+delete_override_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return delete_resource ("override", credentials, params, 0, NULL);
+  return delete_resource ("override", credentials, params, 0, NULL,
+                          response_data);
 }
 
 /**
@@ -14327,13 +14771,16 @@ delete_override_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_override_omp (credentials_t * credentials, params_t *params)
+delete_trash_override_omp (credentials_t * credentials, params_t *params,
+                           cmd_response_data_t* response_data)
 {
-  return delete_resource ("override", credentials, params, 1, get_trash);
+  return delete_resource ("override", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -14342,12 +14789,13 @@ delete_trash_override_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_override (credentials_t *credentials, params_t *params,
-               const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -14422,13 +14870,15 @@ edit_override (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (credentials_t *credentials, params_t *params)
+edit_override_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return edit_override (credentials, params, NULL);
+  return edit_override (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14436,11 +14886,13 @@ edit_override_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_override_omp (credentials_t * credentials, params_t *params)
+save_override_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   gchar *response;
   entity_t entity;
@@ -14565,12 +15017,12 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_overrides (credentials, params, response);
+        ret = get_overrides (credentials, params, response, response_data);
     }
   else
-    ret = edit_override (credentials, params, response);
+    ret = edit_override (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -14585,12 +15037,13 @@ save_override_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_slave (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_slave>");
@@ -14605,13 +15058,15 @@ new_slave (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_slave_omp (credentials_t *credentials, params_t *params)
+new_slave_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return new_slave (credentials, params, NULL);
+  return new_slave (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14619,11 +15074,13 @@ new_slave_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_slave_omp (credentials_t *credentials, params_t *params)
+create_slave_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *command, *response;
@@ -14705,12 +15162,12 @@ create_slave_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_slaves (credentials, params, response);
+        html = get_slaves (credentials, params, response, response_data);
     }
   else
-    html = new_slave (credentials, params, response);
+    html = new_slave (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -14722,14 +15179,16 @@ create_slave_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_slave (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("slave", credentials, params, extra_xml, "tasks=\"1\"");
+  return get_one ("slave", credentials, params, extra_xml, "tasks=\"1\"",
+                  response_data);
 }
 
 /**
@@ -14738,14 +15197,16 @@ get_slave (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_slaves (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("slave", credentials, params, extra_xml, NULL);
+  return get_many ("slave", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -14753,13 +15214,16 @@ get_slaves (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_slave_omp (credentials_t * credentials, params_t *params)
+delete_slave_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("slave", credentials, params, 0, get_slaves);
+  return delete_resource ("slave", credentials, params, 0, get_slaves,
+                          response_data);
 }
 
 /**
@@ -14767,13 +15231,15 @@ delete_slave_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_slaves_omp (credentials_t * credentials, params_t *params)
+get_slaves_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_slaves (credentials, params, NULL);
+  return get_slaves (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14781,13 +15247,15 @@ get_slaves_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_slave_omp (credentials_t * credentials, params_t *params)
+get_slave_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_slave (credentials, params, NULL);
+  return get_slave (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14796,14 +15264,15 @@ get_slave_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_slave (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("slave", credentials, params, extra_xml);
+  return edit_resource ("slave", credentials, params, extra_xml, response_data);
 }
 
 /**
@@ -14811,13 +15280,15 @@ edit_slave (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_slave_omp (credentials_t * credentials, params_t *params)
+edit_slave_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return edit_slave (credentials, params, NULL);
+  return edit_slave (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14825,11 +15296,13 @@ edit_slave_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_slave_omp (credentials_t * credentials, params_t *params)
+save_slave_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -14905,12 +15378,12 @@ save_slave_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_slaves (credentials, params, response);
+        html = get_slaves (credentials, params, response, response_data);
     }
   else
-    html = edit_slave (credentials, params, response);
+    html = edit_slave (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -14924,16 +15397,17 @@ save_slave_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Slave XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_slave_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("slave", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -14944,6 +15418,7 @@ export_slave_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Slaves XML on success.  HTML result of XSL transformation
  *         on error.
@@ -14951,10 +15426,10 @@ export_slave_omp (credentials_t * credentials, params_t *params,
 char *
 export_slaves_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("slave", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -14963,14 +15438,16 @@ export_slaves_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_scanners (credentials_t *credentials, params_t *params,
-               const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("scanner", credentials, params, extra_xml, NULL);
+  return get_many ("scanner", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -14978,13 +15455,15 @@ get_scanners (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_scanners_omp (credentials_t * credentials, params_t *params)
+get_scanners_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return get_scanners (credentials, params, NULL);
+  return get_scanners (credentials, params, NULL, response_data);
 }
 
 /**
@@ -14993,14 +15472,16 @@ get_scanners_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_scanner (credentials_t * credentials, params_t *params,
-              const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("scanner", credentials, params, extra_xml, NULL);
+  return get_one ("scanner", credentials, params, extra_xml, NULL,
+                  response_data);
 }
 
 /**
@@ -15008,13 +15489,15 @@ get_scanner (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_scanner_omp (credentials_t * credentials, params_t *params)
+get_scanner_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return get_scanner (credentials, params, NULL);
+  return get_scanner (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15025,16 +15508,18 @@ get_scanner_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scanner XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_scanner_omp (credentials_t * credentials, params_t *params,
-                     enum content_type * content_type,
-                     char **content_disposition, gsize *content_length)
+                    enum content_type * content_type,
+                    char **content_disposition, gsize *content_length,
+                    cmd_response_data_t* response_data)
 {
   return export_resource ("scanner", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -15045,16 +15530,18 @@ export_scanner_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scanners XML on success. HTML result of XSL transformation on error.
  */
 char *
 export_scanners_omp (credentials_t * credentials, params_t *params,
-                      enum content_type * content_type,
-                      char **content_disposition, gsize *content_length)
+                     enum content_type * content_type,
+                     char **content_disposition, gsize *content_length,
+                     cmd_response_data_t* response_data)
 {
   return export_many ("scanner", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -15063,12 +15550,13 @@ export_scanners_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_scanner (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_scanner>");
@@ -15083,13 +15571,15 @@ new_scanner (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_scanner_omp (credentials_t *credentials, params_t *params)
+new_scanner_omp (credentials_t *credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return new_scanner (credentials, params, NULL);
+  return new_scanner (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15097,11 +15587,13 @@ new_scanner_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-verify_scanner_omp (credentials_t * credentials, params_t *params)
+verify_scanner_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -15157,9 +15649,9 @@ verify_scanner_omp (credentials_t * credentials, params_t *params)
 
   next = params_value (params, "next");
   if (next && !strcmp (next, "get_scanner"))
-    ret = get_scanner (credentials, params, xml->str);
+    ret = get_scanner (credentials, params, xml->str, response_data);
   else
-    ret = get_scanners (credentials, params, xml->str);
+    ret = get_scanners (credentials, params, xml->str, response_data);
   openvas_server_close (socket, session);
   g_string_free (xml, TRUE);
   return ret;
@@ -15170,11 +15662,13 @@ verify_scanner_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_scanner_omp (credentials_t * credentials, params_t *params)
+create_scanner_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response = NULL;
@@ -15233,12 +15727,12 @@ create_scanner_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_scanners (credentials, params, response);
+        ret = get_scanners (credentials, params, response, response_data);
     }
   else
-    ret = new_scanner (credentials, params, response);
+    ret = new_scanner (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -15249,13 +15743,16 @@ create_scanner_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_scanner_omp (credentials_t * credentials, params_t *params)
+delete_scanner_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 0, get_scanners);
+  return delete_resource ("scanner", credentials, params, 0, get_scanners,
+                          response_data);
 }
 
 /**
@@ -15263,13 +15760,16 @@ delete_scanner_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_scanner_omp (credentials_t * credentials, params_t *params)
+delete_trash_scanner_omp (credentials_t * credentials, params_t *params,
+                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 1, get_trash);
+  return delete_resource ("scanner", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -15278,14 +15778,16 @@ delete_trash_scanner_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_scanner (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("scanner", credentials, params, extra_xml);
+  return edit_resource ("scanner", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -15293,13 +15795,15 @@ edit_scanner (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner_omp (credentials_t * credentials, params_t *params)
+edit_scanner_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return edit_scanner (credentials, params, NULL);
+  return edit_scanner (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15307,11 +15811,13 @@ edit_scanner_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_scanner_omp (credentials_t * credentials, params_t *params)
+save_scanner_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   gchar *response = NULL;
   entity_t entity = NULL;
@@ -15372,12 +15878,12 @@ save_scanner_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_scanners_omp (credentials, params);
+        ret = get_scanners_omp (credentials, params, response_data);
     }
   else
-    ret = edit_scanner (credentials, params, response);
+    ret = edit_scanner (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -15390,14 +15896,16 @@ save_scanner_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_schedule (credentials_t * credentials, params_t *params,
-              const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("schedule", credentials, params, extra_xml, "tasks=\"1\"");
+  return get_one ("schedule", credentials, params, extra_xml, "tasks=\"1\"",
+                  response_data);
 }
 
 /**
@@ -15405,13 +15913,15 @@ get_schedule (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_schedule_omp (credentials_t * credentials, params_t *params)
+get_schedule_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return get_schedule (credentials, params, NULL);
+  return get_schedule (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15420,14 +15930,16 @@ get_schedule_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_schedules (credentials_t *credentials, params_t *params,
-               const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("schedule", credentials, params, extra_xml, NULL);
+  return get_many ("schedule", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -15435,13 +15947,15 @@ get_schedules (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_schedules_omp (credentials_t * credentials, params_t *params)
+get_schedules_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return get_schedules (credentials, params, NULL);
+  return get_schedules (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15450,12 +15964,13 @@ get_schedules_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_schedule (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+              const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   time_t now;
@@ -15492,13 +16007,15 @@ new_schedule (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_schedule_omp (credentials_t *credentials, params_t *params)
+new_schedule_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return new_schedule (credentials, params, NULL);
+  return new_schedule (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15506,11 +16023,13 @@ new_schedule_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_schedule_omp (credentials_t * credentials, params_t *params)
+create_schedule_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -15614,12 +16133,12 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_schedules (credentials, params, response);
+        ret = get_schedules (credentials, params, response, response_data);
     }
   else
-    ret = new_schedule (credentials, params, response);
+    ret = new_schedule (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -15630,13 +16149,16 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_schedule_omp (credentials_t * credentials, params_t *params)
+delete_schedule_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 0, get_schedules);
+  return delete_resource ("schedule", credentials, params, 0, get_schedules,
+                          response_data);
 }
 
 /**
@@ -15644,11 +16166,13 @@ delete_schedule_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (credentials_t * credentials, params_t *params)
+get_system_reports_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -15761,6 +16285,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params)
  * @param[in]   slave_id             ID of slave.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Image, or NULL.
  */
@@ -15768,7 +16293,8 @@ char *
 get_system_report_omp (credentials_t *credentials, const char *url,
                        const char *duration, const char *slave_id,
                        enum content_type *content_type,
-                       gsize *content_length)
+                       gsize *content_length,
+                       cmd_response_data_t* response_data)
 {
   entity_t entity;
   entity_t report_entity;
@@ -15857,15 +16383,16 @@ get_system_report_omp (credentials_t *credentials, const char *url,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_report_format (credentials_t * credentials, params_t *params,
-                   const char *extra_xml)
+                   const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("report_format", credentials, params, extra_xml,
-                  "alerts =\"1\" params=\"1\"");
+                  "alerts =\"1\" params=\"1\"", response_data);
 }
 
 /**
@@ -15873,13 +16400,15 @@ get_report_format (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_report_format_omp (credentials_t * credentials, params_t *params)
+get_report_format_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return get_report_format (credentials, params, NULL);
+  return get_report_format (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15888,14 +16417,16 @@ get_report_format_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_report_formats (credentials_t * credentials, params_t *params,
-                    const char *extra_xml)
+                    const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("report_format", credentials, params, extra_xml, NULL);
+  return get_many ("report_format", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -15903,13 +16434,15 @@ get_report_formats (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_report_formats_omp (credentials_t * credentials, params_t *params)
+get_report_formats_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return get_report_formats (credentials, params, NULL);
+  return get_report_formats (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15918,12 +16451,13 @@ get_report_formats_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_report_format (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+                   const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_report_format>");
@@ -15938,13 +16472,15 @@ new_report_format (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_report_format_omp (credentials_t *credentials, params_t *params)
+new_report_format_omp (credentials_t *credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return new_report_format (credentials, params, NULL);
+  return new_report_format (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15952,14 +16488,16 @@ new_report_format_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_report_format_omp (credentials_t * credentials, params_t *params)
+delete_report_format_omp (credentials_t * credentials, params_t *params,
+                          cmd_response_data_t* response_data)
 {
   return delete_resource ("report_format", credentials, params, 0,
-                          get_report_formats);
+                          get_report_formats, response_data);
 }
 
 /**
@@ -15968,14 +16506,16 @@ delete_report_format_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 edit_report_format (credentials_t * credentials, params_t *params,
-                    const char *extra_xml)
+                    const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("report_format", credentials, params, extra_xml);
+  return edit_resource ("report_format", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -15983,13 +16523,15 @@ edit_report_format (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_report_format_omp (credentials_t * credentials, params_t *params)
+edit_report_format_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return edit_report_format (credentials, params, NULL);
+  return edit_report_format (credentials, params, NULL, response_data);
 }
 
 /**
@@ -15997,11 +16539,13 @@ edit_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_report_format_omp (credentials_t * credentials, params_t *params)
+import_report_format_omp (credentials_t * credentials, params_t *params,
+                          cmd_response_data_t* response_data)
 {
   gchar *command, *html, *response;
   entity_t entity;
@@ -16049,12 +16593,13 @@ import_report_format_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_report_formats (credentials, params, response);
+        html = get_report_formats (credentials, params, response,
+                                   response_data);
     }
   else
-    html = new_report_format (credentials, params, response);
+    html = new_report_format (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -16066,11 +16611,13 @@ import_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
+ * @param[out] response_data     Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_report_format_omp (credentials_t * credentials, params_t *params)
+save_report_format_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -16212,12 +16759,13 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_report_formats (credentials, params, response);
+        html = get_report_formats (credentials, params, response,
+                                   response_data);
     }
   else
-    html = edit_report_format (credentials, params, response);
+    html = edit_report_format (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -16228,11 +16776,13 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-verify_report_format_omp (credentials_t * credentials, params_t *params)
+verify_report_format_omp (credentials_t * credentials, params_t *params,
+                          cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -16287,7 +16837,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
         {
           free_entity (entity);
@@ -16301,7 +16851,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
         }
     }
   else
-    html = get_report_formats (credentials, params, response);
+    html = get_report_formats (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -16312,11 +16862,13 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-run_wizard_omp (credentials_t *credentials, params_t *params)
+run_wizard_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   const char *name;
   int ret;
@@ -16396,12 +16948,12 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = wizard (credentials, params, response);
+        html = wizard (credentials, params, response, response_data);
     }
   else
-    html = wizard (credentials, params, response);
+    html = wizard (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -16449,11 +17001,13 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
+get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -16532,13 +17086,15 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_trash_omp (credentials_t * credentials, params_t *params)
+get_trash_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_trash (credentials, params, NULL);
+  return get_trash (credentials, params, NULL, response_data);
 }
 
 /**
@@ -16547,12 +17103,13 @@ get_trash_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_my_settings (credentials_t * credentials, params_t *params,
-                 const char *extra_xml)
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -16622,11 +17179,13 @@ get_my_settings (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_my_settings_omp (credentials_t * credentials, params_t *params)
+get_my_settings_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   GString *commands;
   int ret;
@@ -16689,7 +17248,7 @@ get_my_settings_omp (credentials_t * credentials, params_t *params)
     }
   free_entity (entity);
 
-  return get_my_settings (credentials, params, response);
+  return get_my_settings (credentials, params, response, response_data);
 }
 
 /**
@@ -16698,12 +17257,13 @@ get_my_settings_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 edit_my_settings (credentials_t * credentials, params_t *params,
-                  const char *extra_xml)
+                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *commands, *xml;
   gnutls_session_t session;
@@ -16832,13 +17392,15 @@ edit_my_settings (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_my_settings_omp (credentials_t * credentials, params_t *params)
+edit_my_settings_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
-  return edit_my_settings (credentials, params, NULL);
+  return edit_my_settings (credentials, params, NULL, response_data);
 }
 
 /**
@@ -16908,13 +17470,15 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
  * @param[out] password     Password.  Caller must free.
  * @param[out] severity     Severity.  Caller must free.
  * @param[out] language     Language.  Caller must free.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_my_settings_omp (credentials_t * credentials, params_t *params,
                       const char *accept_language, char **timezone,
-                      char **password, char **severity, char **language)
+                      char **password, char **severity, char **language,
+                      cmd_response_data_t* response_data)
 {
   int socket;
   gnutls_session_t session;
@@ -16950,7 +17514,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       || (report_fname == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
-                               ("Save My Settings"));
+                               ("Save My Settings"),
+                             response_data);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -17000,7 +17565,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                              " of your settings."
                              "</gsad_msg>");
             return edit_my_settings (credentials, params,
-                                     g_string_free (xml, FALSE));
+                                     g_string_free (xml, FALSE),
+                                     response_data);
           default:
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
@@ -17569,9 +18135,11 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   free_entity (entity);
   openvas_server_close (socket, session);
   if (modify_failed)
-    return edit_my_settings (credentials, params, g_string_free (xml, FALSE));
+    return edit_my_settings (credentials, params, g_string_free (xml, FALSE),
+                             response_data);
   else
-    return get_my_settings (credentials, params, g_string_free (xml, FALSE));
+    return get_my_settings (credentials, params, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -17579,11 +18147,13 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_protocol_doc_omp (credentials_t * credentials, params_t *params)
+get_protocol_doc_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -17654,13 +18224,15 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_omp_doc_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type,
-                    char **content_disposition, gsize *content_length)
+                    char **content_disposition, gsize *content_length,
+                    cmd_response_data_t* response_data)
 {
   entity_t entity, response;
   gnutls_session_t session;
@@ -17772,14 +18344,15 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_group (credentials_t * credentials, params_t *params,
-           const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("group", credentials, params, extra_xml, NULL);
+  return get_one ("group", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -17787,13 +18360,15 @@ get_group (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_group_omp (credentials_t * credentials, params_t *params)
+get_group_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_group (credentials, params, NULL);
+  return get_group (credentials, params, NULL, response_data);
 }
 
 /**
@@ -17802,14 +18377,16 @@ get_group_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_groups (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("group", credentials, params, extra_xml, NULL);
+  return get_many ("group", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -17817,13 +18394,15 @@ get_groups (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_groups_omp (credentials_t * credentials, params_t *params)
+get_groups_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_groups (credentials, params, NULL);
+  return get_groups (credentials, params, NULL, response_data);
 }
 
 /**
@@ -17832,11 +18411,13 @@ get_groups_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_group (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_group (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_group>");
@@ -17851,13 +18432,15 @@ new_group (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_group_omp (credentials_t *credentials, params_t *params)
+new_group_omp (credentials_t *credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return new_group (credentials, params, NULL);
+  return new_group (credentials, params, NULL, response_data);
 }
 
 /**
@@ -17865,13 +18448,16 @@ new_group_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_group_omp (credentials_t * credentials, params_t *params)
+delete_trash_group_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("group", credentials, params, 1, get_trash);
+  return delete_resource ("group", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -17879,14 +18465,16 @@ delete_trash_group_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_group_omp (credentials_t * credentials, params_t *params)
+delete_group_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   return delete_resource ("group", credentials, params, 0,
-                          get_groups);
+                          get_groups, response_data);
 }
 
 /**
@@ -17894,11 +18482,13 @@ delete_group_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_group_omp (credentials_t *credentials, params_t *params)
+create_group_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   gchar *html, *response;
   const char *name, *comment, *users;
@@ -17954,12 +18544,12 @@ create_group_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_groups (credentials, params, response);
+        html = get_groups (credentials, params, response, response_data);
     }
   else
-    html = new_group (credentials, params, response);
+    html = new_group (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -17971,14 +18561,15 @@ create_group_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_group (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("group", credentials, params, extra_xml);
+  return edit_resource ("group", credentials, params, extra_xml, response_data);
 }
 
 /**
@@ -17986,13 +18577,15 @@ edit_group (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_group_omp (credentials_t * credentials, params_t *params)
+edit_group_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return edit_group (credentials, params, NULL);
+  return edit_group (credentials, params, NULL, response_data);
 }
 
 /**
@@ -18003,16 +18596,17 @@ edit_group_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Group XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_group_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("group", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -18023,6 +18617,7 @@ export_group_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Groups XML on success.  HTML result of XSL transformation
  *         on error.
@@ -18030,10 +18625,10 @@ export_group_omp (credentials_t * credentials, params_t *params,
 char *
 export_groups_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("group", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -18041,11 +18636,13 @@ export_groups_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_group_omp (credentials_t * credentials, params_t *params)
+save_group_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -18109,12 +18706,12 @@ save_group_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_groups (credentials, params, response);
+        html = get_groups (credentials, params, response, response_data);
     }
   else
-    html = edit_group (credentials, params, response);
+    html = edit_group (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -18129,14 +18726,16 @@ save_group_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_permission (credentials_t * credentials, params_t *params,
-                const char *extra_xml)
+                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("permission", credentials, params, extra_xml, "alerts=\"1\"");
+  return get_one ("permission", credentials, params, extra_xml, "alerts=\"1\"",
+                  response_data);
 }
 
 /**
@@ -18144,13 +18743,15 @@ get_permission (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_permission_omp (credentials_t * credentials, params_t *params)
+get_permission_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return get_permission (credentials, params, NULL);
+  return get_permission (credentials, params, NULL, response_data);
 }
 
 /**
@@ -18159,14 +18760,16 @@ get_permission_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_permissions (credentials_t * credentials, params_t *params,
-                 const char *extra_xml)
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("permission", credentials, params, extra_xml, NULL);
+  return get_many ("permission", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -18174,13 +18777,15 @@ get_permissions (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_permissions_omp (credentials_t * credentials, params_t *params)
+get_permissions_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return get_permissions (credentials, params, NULL);
+  return get_permissions (credentials, params, NULL, response_data);
 }
 
 /**
@@ -18188,13 +18793,16 @@ get_permissions_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_permission_omp (credentials_t * credentials, params_t *params)
+delete_trash_permission_omp (credentials_t * credentials, params_t *params,
+                             cmd_response_data_t* response_data)
 {
-  return delete_resource ("permission", credentials, params, 1, get_trash);
+  return delete_resource ("permission", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -18202,13 +18810,16 @@ delete_trash_permission_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_permission_omp (credentials_t * credentials, params_t *params)
+delete_permission_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("permission", credentials, params, 0, NULL);
+  return delete_resource ("permission", credentials, params, 0, NULL,
+                          response_data);
 }
 
 /**
@@ -18217,12 +18828,13 @@ delete_permission_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 new_permission (credentials_t * credentials, params_t *params,
-                const char *extra_xml)
+                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
 
@@ -18367,13 +18979,15 @@ new_permission (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_permission_omp (credentials_t * credentials, params_t *params)
+new_permission_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return new_permission (credentials, params, NULL);
+  return new_permission (credentials, params, NULL, response_data);
 }
 
 /**
@@ -18381,11 +18995,13 @@ new_permission_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_permission_omp (credentials_t *credentials, params_t *params)
+create_permission_omp (credentials_t *credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -18471,7 +19087,7 @@ create_permission_omp (credentials_t *credentials, params_t *params)
                                  "</gsad_msg>",
                                  subject_type,
                                  subject_name ? subject_name : "");
-          return next_page (credentials, params, msg);
+          return next_page (credentials, params, msg, response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -18579,12 +19195,13 @@ create_permission_omp (credentials_t *credentials, params_t *params)
 
       if (omp_success (entity))
         {
-          html = next_page (credentials, params, response);
+          html = next_page (credentials, params, response, response_data);
           if (html == NULL)
-            html = get_permissions (credentials, params, response);
+            html = get_permissions (credentials, params, response,
+                                    response_data);
         }
       else
-        html = new_permission (credentials, params, response);
+        html = new_permission (credentials, params, response, response_data);
     }
   else
     {
@@ -18641,15 +19258,17 @@ create_permission_omp (credentials_t *credentials, params_t *params)
 
       if (omp_success (entity))
         {
-          html = next_page (credentials, params, response);
+          html = next_page (credentials, params, response, response_data);
           if (html == NULL)
-            html = get_permissions (credentials, params, response);
+            html = get_permissions (credentials, params, response,
+                                    response_data);
         }
       else
         {
-          html = next_page_error (credentials, params, response);
+          html = next_page_error (credentials, params, response, response_data);
           if (html == NULL)
-            html = new_permission (credentials, params, response);
+            html = new_permission (credentials, params, response,
+                                   response_data);
         }
     }
   free_entity (entity);
@@ -18694,9 +19313,9 @@ create_permission_omp (credentials_t *credentials, params_t *params)
   else                                                                        \
     {                                                                         \
       g_string_free (responses, TRUE);                                        \
-      html = next_page_error (credentials, params, response);                 \
+      html = next_page_error (credentials, params, response, response_data);  \
       if (html == NULL)                                                       \
-        html = new_permission (credentials, params, response);                \
+        html = new_permission (credentials, params, response, response_data); \
       free_entity (entity);                                                   \
       g_free (response);                                                      \
       return html;                                                            \
@@ -18707,11 +19326,13 @@ create_permission_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_permissions_omp (credentials_t *credentials, params_t *params)
+create_permissions_omp (credentials_t *credentials, params_t *params,
+                        cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -18803,7 +19424,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
                                  "</gsad_msg>",
                                  subject_type,
                                  subject_name ? subject_name : "");
-          return next_page (credentials, params, msg);
+          return next_page (credentials, params, msg, response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -19167,9 +19788,9 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
   if (get_subject_entity)
     free_entity (get_subject_entity);
 
-  html = next_page (credentials, params, responses->str);
+  html = next_page (credentials, params, responses->str, response_data);
   if (html == NULL)
-    html = get_permissions (credentials, params, responses->str);
+    html = get_permissions (credentials, params, responses->str, response_data);
 
   g_string_free (responses, FALSE);
   return html;
@@ -19183,12 +19804,13 @@ create_permissions_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_permission (credentials_t * credentials, params_t *params,
-                 const char *extra_xml)
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -19323,7 +19945,8 @@ edit_permission (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("permission", credentials, params, extra->str);
+  html = edit_resource ("permission", credentials, params, extra->str,
+                        response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -19333,13 +19956,15 @@ edit_permission (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_permission_omp (credentials_t * credentials, params_t *params)
+edit_permission_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return edit_permission (credentials, params, NULL);
+  return edit_permission (credentials, params, NULL, response_data);
 }
 
 /**
@@ -19350,16 +19975,18 @@ edit_permission_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Permission XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_permission_omp (credentials_t * credentials, params_t *params,
                        enum content_type * content_type,
-                       char **content_disposition, gsize *content_length)
+                       char **content_disposition, gsize *content_length,
+                       cmd_response_data_t* response_data)
 {
   return export_resource ("permission", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -19370,6 +19997,7 @@ export_permission_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Permissions XML on success.  HTML result of XSL transformation
  *         on error.
@@ -19377,10 +20005,11 @@ export_permission_omp (credentials_t * credentials, params_t *params,
 char *
 export_permissions_omp (credentials_t * credentials, params_t *params,
                         enum content_type * content_type,
-                        char **content_disposition, gsize *content_length)
+                        char **content_disposition, gsize *content_length,
+                        cmd_response_data_t* response_data)
 {
   return export_many ("permission", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -19388,11 +20017,13 @@ export_permissions_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_permission_omp (credentials_t * credentials, params_t *params)
+save_permission_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   gchar *html, *response;
   const char *permission_id, *name, *comment, *resource_id, *resource_type;
@@ -19479,12 +20110,12 @@ save_permission_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_permissions (credentials, params, response);
+        html = get_permissions (credentials, params, response, response_data);
     }
   else
-    html = edit_permission (credentials, params, response);
+    html = edit_permission (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19499,12 +20130,13 @@ save_permission_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_port_list (credentials_t *credentials, params_t *params,
-              const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_port_list>");
@@ -19519,11 +20151,13 @@ new_port_list (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_port_list_omp (credentials_t * credentials, params_t *params)
+create_port_list_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
   const char *name, *comment, *port_range, *from_file;
@@ -19583,12 +20217,12 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_port_lists (credentials, params, response);
+        html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = new_port_list (credentials, params, response);
+    html = new_port_list (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19599,11 +20233,13 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_port_range_omp (credentials_t * credentials, params_t *params)
+create_port_range_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -19668,12 +20304,12 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_port_lists (credentials, params, response);
+        html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = edit_port_list (credentials, params, response);
+    html = edit_port_list (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19685,15 +20321,16 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_port_list (credentials_t * credentials, params_t *params,
-               const char * extra_xml)
+               const char * extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("port_list", credentials, params, extra_xml,
-                  "targets=\"1\" details=\"1\"");
+                  "targets=\"1\" details=\"1\"", response_data);
 }
 
 /**
@@ -19701,13 +20338,15 @@ get_port_list (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_port_list_omp (credentials_t * credentials, params_t *params)
+get_port_list_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return get_port_list (credentials, params, NULL);
+  return get_port_list (credentials, params, NULL, response_data);
 }
 
 /**
@@ -19716,14 +20355,16 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_port_lists (credentials_t * credentials, params_t *params,
-                const char *extra_xml)
+                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("port_list", credentials, params, extra_xml, NULL);
+  return get_many ("port_list", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -19731,13 +20372,15 @@ get_port_lists (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_port_lists_omp (credentials_t * credentials, params_t *params)
+get_port_lists_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return get_port_lists (credentials, params, NULL);
+  return get_port_lists (credentials, params, NULL, response_data);
 }
 
 /**
@@ -19745,13 +20388,15 @@ get_port_lists_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_port_list_omp (credentials_t *credentials, params_t *params)
+new_port_list_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return new_port_list (credentials, params, NULL);
+  return new_port_list (credentials, params, NULL, response_data);
 }
 
 /**
@@ -19760,14 +20405,16 @@ new_port_list_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_port_list (credentials_t * credentials, params_t *params,
-                const char *extra_xml)
+                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("port_list", credentials, params, extra_xml);
+  return edit_resource ("port_list", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -19775,13 +20422,15 @@ edit_port_list (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list_omp (credentials_t * credentials, params_t *params)
+edit_port_list_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return edit_port_list (credentials, params, NULL);
+  return edit_port_list (credentials, params, NULL, response_data);
 }
 
 /**
@@ -19789,11 +20438,13 @@ edit_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_port_list_omp (credentials_t * credentials, params_t *params)
+save_port_list_omp (credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -19853,12 +20504,12 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_port_lists (credentials, params, response);
+        html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = edit_port_list (credentials, params, response);
+    html = edit_port_list (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19869,13 +20520,16 @@ save_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_port_list_omp (credentials_t * credentials, params_t *params)
+delete_port_list_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 0, get_port_lists);
+  return delete_resource ("port_list", credentials, params, 0, get_port_lists,
+                          response_data);
 }
 
 /**
@@ -19883,13 +20537,16 @@ delete_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
+delete_trash_port_list_omp (credentials_t * credentials, params_t *params,
+                            cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 1, get_trash);
+  return delete_resource ("port_list", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -19897,13 +20554,16 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_port_range_omp (credentials_t * credentials, params_t *params)
+delete_port_range_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_range", credentials, params, 1, edit_port_list);
+  return delete_resource ("port_range", credentials, params, 1, edit_port_list,
+                          response_data);
 }
 
 /**
@@ -19911,11 +20571,13 @@ delete_port_range_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_port_list_omp (credentials_t * credentials, params_t *params)
+import_port_list_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   GString *xml = NULL;
@@ -20018,11 +20680,13 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_role (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_role (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_role>");
@@ -20037,13 +20701,15 @@ new_role (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_role_omp (credentials_t *credentials, params_t *params)
+new_role_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return new_role (credentials, params, NULL);
+  return new_role (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20051,13 +20717,16 @@ new_role_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_role_omp (credentials_t * credentials, params_t *params)
+delete_trash_role_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 1, get_trash);
+  return delete_resource ("role", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -20065,13 +20734,16 @@ delete_trash_role_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_role_omp (credentials_t * credentials, params_t *params)
+delete_role_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 0, get_roles);
+  return delete_resource ("role", credentials, params, 0, get_roles,
+                          response_data);
 }
 
 /**
@@ -20079,11 +20751,13 @@ delete_role_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_role_omp (credentials_t *credentials, params_t *params)
+create_role_omp (credentials_t *credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -20140,12 +20814,12 @@ create_role_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_roles (credentials, params, response);
+        ret = get_roles (credentials, params, response, response_data);
     }
   else
-    ret = new_role (credentials, params, response);
+    ret = new_role (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -20157,12 +20831,13 @@ create_role_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_role (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -20253,7 +20928,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("role", credentials, params, extra->str);
+  html = edit_resource ("role", credentials, params, extra->str, response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -20263,13 +20938,15 @@ edit_role (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_role_omp (credentials_t * credentials, params_t *params)
+edit_role_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return edit_role (credentials, params, NULL);
+  return edit_role (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20278,14 +20955,15 @@ edit_role_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_role (credentials_t * credentials, params_t *params,
-          const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("role", credentials, params, extra_xml, NULL);
+  return get_one ("role", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -20293,13 +20971,15 @@ get_role (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_role_omp (credentials_t * credentials, params_t *params)
+get_role_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_role (credentials, params, NULL);
+  return get_role (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20308,14 +20988,15 @@ get_role_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_roles (credentials_t * credentials, params_t *params,
-           const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("role", credentials, params, extra_xml, NULL);
+  return get_many ("role", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
@@ -20323,13 +21004,15 @@ get_roles (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_roles_omp (credentials_t * credentials, params_t *params)
+get_roles_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_roles (credentials, params, NULL);
+  return get_roles (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20340,16 +21023,17 @@ get_roles_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Role XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_role_omp (credentials_t * credentials, params_t *params,
                  enum content_type * content_type, char **content_disposition,
-                 gsize *content_length)
+                 gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("role", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -20360,6 +21044,7 @@ export_role_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Roles XML on success.  HTML result of XSL transformation
  *         on error.
@@ -20367,10 +21052,10 @@ export_role_omp (credentials_t * credentials, params_t *params,
 char *
 export_roles_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("role", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -20378,11 +21063,13 @@ export_roles_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_role_omp (credentials_t * credentials, params_t *params)
+save_role_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -20446,12 +21133,12 @@ save_role_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_roles (credentials, params, response);
+        html = get_roles (credentials, params, response, response_data);
     }
   else
-    html = edit_role (credentials, params, response);
+    html = edit_role (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -20465,11 +21152,13 @@ save_role_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_feed_omp (credentials_t * credentials, params_t *params)
+get_feed_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20533,11 +21222,13 @@ get_feed_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_scap_omp (credentials_t * credentials, params_t *params)
+get_scap_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20601,11 +21292,13 @@ get_scap_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_cert_omp (credentials_t * credentials, params_t *params)
+get_cert_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20669,11 +21362,13 @@ get_cert_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-sync_feed_omp (credentials_t * credentials, params_t *params)
+sync_feed_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20738,11 +21433,13 @@ sync_feed_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-sync_scap_omp (credentials_t * credentials, params_t *params)
+sync_scap_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20807,11 +21504,13 @@ sync_scap_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-sync_cert_omp (credentials_t * credentials, params_t *params)
+sync_cert_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
@@ -20880,14 +21579,16 @@ sync_cert_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_filter (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("filter", credentials, params, extra_xml, "alerts=\"1\"");
+  return get_one ("filter", credentials, params, extra_xml, "alerts=\"1\"",
+                  response_data);
 }
 
 /**
@@ -20895,13 +21596,15 @@ get_filter (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_filter_omp (credentials_t * credentials, params_t *params)
+get_filter_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_filter (credentials, params, NULL);
+  return get_filter (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20910,14 +21613,16 @@ get_filter_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_filters (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("filter", credentials, params, extra_xml, NULL);
+  return get_many ("filter", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
@@ -20925,13 +21630,15 @@ get_filters (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_filters_omp (credentials_t * credentials, params_t *params)
+get_filters_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return get_filters (credentials, params, NULL);
+  return get_filters (credentials, params, NULL, response_data);
 }
 
 /**
@@ -20940,11 +21647,13 @@ get_filters_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_filter (credentials_t *credentials, params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_filter>");
@@ -20959,11 +21668,13 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_filter_omp (credentials_t *credentials, params_t *params)
+create_filter_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   gchar *html, *response;
   const char *name, *comment, *term, *type;
@@ -21032,12 +21743,12 @@ create_filter_omp (credentials_t *credentials, params_t *params)
           param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
         }
 
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_filters (credentials, params, response);
+        html = get_filters (credentials, params, response, response_data);
     }
   else
-    html = new_filter (credentials, params, response);
+    html = new_filter (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -21048,13 +21759,16 @@ create_filter_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_filter_omp (credentials_t * credentials, params_t *params)
+delete_trash_filter_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("filter", credentials, params, 1, get_trash);
+  return delete_resource ("filter", credentials, params, 1, get_trash,
+                          response_data);
 }
 
 /**
@@ -21062,11 +21776,13 @@ delete_trash_filter_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_filter_omp (credentials_t * credentials, params_t *params)
+delete_filter_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
 
@@ -21077,7 +21793,8 @@ delete_filter_omp (credentials_t * credentials, params_t *params)
     // TODO: Add params_remove.
     filt_id->value = NULL;
 
-  return delete_resource ("filter", credentials, params, 0, get_filters);
+  return delete_resource ("filter", credentials, params, 0, get_filters,
+                          response_data);
 }
 
 /**
@@ -21086,14 +21803,16 @@ delete_filter_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_filter (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("filter", credentials, params, extra_xml);
+  return edit_resource ("filter", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -21101,13 +21820,15 @@ edit_filter (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_filter_omp (credentials_t * credentials, params_t *params)
+edit_filter_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return edit_filter (credentials, params, NULL);
+  return edit_filter (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21118,16 +21839,17 @@ edit_filter_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_filter_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("filter", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -21138,6 +21860,7 @@ export_filter_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Filters XML on success.  HTML result of XSL transformation
  *         on error.
@@ -21145,10 +21868,10 @@ export_filter_omp (credentials_t * credentials, params_t *params,
 char *
 export_filters_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                    gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("filter", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -21156,13 +21879,15 @@ export_filters_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_filter_omp (credentials_t *credentials, params_t *params)
+new_filter_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return new_filter (credentials, params, NULL);
+  return new_filter (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21170,11 +21895,13 @@ new_filter_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_filter_omp (credentials_t * credentials, params_t *params)
+save_filter_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -21271,7 +21998,7 @@ save_filter_omp (credentials_t * credentials, params_t *params)
     if (status[0] != '2')
       {
         openvas_server_close (socket, session);
-        html = edit_filter (credentials, params, response);
+        html = edit_filter (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
         return html;
@@ -21284,9 +22011,9 @@ save_filter_omp (credentials_t * credentials, params_t *params)
 
   /* Pass response to handler of following page. */
 
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   if (html == NULL)
-    html = get_filters (credentials, params, response);
+    html = get_filters (credentials, params, response, response_data);
   g_free (response);
   return html;
 }
@@ -21300,14 +22027,16 @@ save_filter_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_schedule (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("schedule", credentials, params, extra_xml);
+  return edit_resource ("schedule", credentials, params, extra_xml,
+                        response_data);
 }
 
 /**
@@ -21315,13 +22044,15 @@ edit_schedule (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule_omp (credentials_t * credentials, params_t *params)
+edit_schedule_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return edit_schedule (credentials, params, NULL);
+  return edit_schedule (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21332,16 +22063,18 @@ edit_schedule_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Schedule XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_schedule_omp (credentials_t * credentials, params_t *params,
                      enum content_type * content_type,
-                     char **content_disposition, gsize *content_length)
+                     char **content_disposition, gsize *content_length,
+                     cmd_response_data_t* response_data)
 {
   return export_resource ("schedule", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -21352,16 +22085,18 @@ export_schedule_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Schedules XML on success. HTML result of XSL transformation on error.
  */
 char *
 export_schedules_omp (credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
-                      char **content_disposition, gsize *content_length)
+                      char **content_disposition, gsize *content_length,
+                      cmd_response_data_t* response_data)
 {
   return export_many ("schedule", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 /**
@@ -21369,11 +22104,13 @@ export_schedules_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_schedule_omp (credentials_t * credentials, params_t *params)
+save_schedule_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   gchar *response;
   entity_t entity;
@@ -21401,7 +22138,8 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
       || month == NULL || period == NULL || period_unit == NULL || year == NULL
       || timezone == NULL)
     return edit_schedule (credentials, params,
-                          GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
+                          GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"),
+                          response_data);
 
   if (schedule_id == NULL)
     return gsad_message (credentials,
@@ -21482,12 +22220,12 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_schedules_omp (credentials, params);
+        ret = get_schedules_omp (credentials, params, response_data);
     }
   else
-    ret = edit_schedule (credentials, params, response);
+    ret = edit_schedule (credentials, params, response, response_data);
 
   free_entity (entity);
   g_free (response);
@@ -21503,11 +22241,13 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
+new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
 
@@ -21647,13 +22387,15 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_user_omp (credentials_t *credentials, params_t *params)
+new_user_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return new_user (credentials, params, NULL);
+  return new_user (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21661,13 +22403,16 @@ new_user_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_user_omp (credentials_t * credentials, params_t *params)
+delete_user_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("user", credentials, params, 0, get_users);
+  return delete_resource ("user", credentials, params, 0, get_users,
+                          response_data);
 }
 
 /**
@@ -21676,11 +22421,13 @@ delete_user_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
+get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -21725,7 +22472,7 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
       free_entity (entity);
       g_free (response);
     }
-  html = get_one ("user", credentials, params, extra->str, NULL);
+  html = get_one ("user", credentials, params, extra->str, NULL, response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -21735,13 +22482,15 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_user_omp (credentials_t * credentials, params_t *params)
+get_user_omp (credentials_t * credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return get_user (credentials, params, NULL);
+  return get_user (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21750,12 +22499,13 @@ get_user_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_users (credentials_t * credentials, params_t *params,
-           const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -21800,7 +22550,8 @@ get_users (credentials_t * credentials, params_t *params,
     }
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = get_many ("user", credentials, params, extra->str, NULL);
+  html = get_many ("user", credentials, params, extra->str, NULL,
+                   response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -21810,13 +22561,15 @@ get_users (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_users_omp (credentials_t * credentials, params_t *params)
+get_users_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_users (credentials, params, NULL);
+  return get_users (credentials, params, NULL, response_data);
 }
 
 /**
@@ -21824,11 +22577,13 @@ get_users_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_user_omp (credentials_t * credentials, params_t *params)
+create_user_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   const char *enable_ldap_connect, *submit;
@@ -21864,9 +22619,10 @@ create_user_omp (credentials_t * credentials, params_t *params)
       if (name == NULL || password == NULL || hosts == NULL
           || hosts_allow == NULL)
         return new_user (credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("New User"));
+                         GSAD_MESSAGE_INVALID_PARAM ("New User"),
+                         response_data);
 
-      return new_user_omp (credentials, params);
+      return new_user_omp (credentials, params, response_data);
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -21887,9 +22643,10 @@ create_user_omp (credentials_t * credentials, params_t *params)
       if (name == NULL || password == NULL || hosts == NULL
           || hosts_allow == NULL)
         return new_user (credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("New User"));
+                         GSAD_MESSAGE_INVALID_PARAM ("New User"),
+                         response_data);
 
-      return new_user_omp (credentials, params);
+      return new_user_omp (credentials, params, response_data);
     }
 
   CHECK_PARAM (name, "Create User", new_user);
@@ -21995,12 +22752,12 @@ create_user_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_users (credentials, params, response);
+        html = get_users (credentials, params, response, response_data);
     }
   else
-    html = new_user (credentials, params, response);
+    html = new_user (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -22012,12 +22769,13 @@ create_user_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 edit_user (credentials_t * credentials, params_t *params,
-           const char *extra_xml)
+           const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -22142,7 +22900,7 @@ edit_user (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("user", credentials, params, extra->str);
+  html = edit_resource ("user", credentials, params, extra->str, response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -22152,13 +22910,15 @@ edit_user (credentials_t * credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_user_omp (credentials_t * credentials, params_t *params)
+edit_user_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return edit_user (credentials, params, NULL);
+  return edit_user (credentials, params, NULL, response_data);
 }
 
 /**
@@ -22166,6 +22926,7 @@ edit_user_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  message      Login screen message.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
@@ -22208,12 +22969,13 @@ logout (credentials_t *credentials, const gchar *message)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] password_return  Password.  Caller must free.
+ * @param[out] response_data    Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_user_omp (credentials_t * credentials, params_t *params,
-               char **password_return)
+               char **password_return, cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response, *buf;
@@ -22259,7 +23021,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM (hosts, "Edit User", edit_user);
       CHECK_PARAM (hosts_allow, "Edit User", edit_user);
 
-      return edit_user_omp (credentials, params);
+      return edit_user_omp (credentials, params, response_data);
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -22284,7 +23046,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM (hosts, "Edit User", edit_user);
       CHECK_PARAM (hosts_allow, "Edit User", edit_user);
 
-      return edit_user_omp (credentials, params);
+      return edit_user_omp (credentials, params, response_data);
     }
 
   CHECK_PARAM (user_id, "Save User", edit_user);
@@ -22432,13 +23194,13 @@ save_user_omp (credentials_t * credentials, params_t *params,
                        "  Please login with LDAP password.");
       else
         {
-          html = next_page (credentials, params, response);
+          html = next_page (credentials, params, response, response_data);
           if (html == NULL)
-            html = get_users (credentials, params, response);
+            html = get_users (credentials, params, response, response_data);
         }
     }
   else
-    html = edit_user (credentials, params, response);
+    html = edit_user (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -22452,16 +23214,17 @@ save_user_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_user_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("user", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -22472,6 +23235,7 @@ export_user_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Users XML on success.  HTML result of XSL transformation
  *         on error.
@@ -22479,14 +23243,15 @@ export_user_omp (credentials_t * credentials, params_t *params,
 char *
 export_users_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("user", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 char *
-cvss_calculator (credentials_t * credentials, params_t *params)
+cvss_calculator (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   GString *xml;
   const char *cvss_av, *cvss_au, *cvss_ac, *cvss_c, *cvss_i, *cvss_a;
@@ -22573,11 +23338,13 @@ cvss_calculator (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params        Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed dashboard.
  */
 char *
-dashboard (credentials_t * credentials, params_t *params)
+dashboard (credentials_t * credentials, params_t *params,
+           cmd_response_data_t* response_data)
 {
   GString *xml;
   const char *name;
@@ -22650,11 +23417,13 @@ dashboard (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params        Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformated list of users and configuration.
  */
 char*
-save_auth_omp (credentials_t* credentials, params_t *params)
+save_auth_omp (credentials_t* credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
   int ret;
   entity_t entity;
@@ -22676,7 +23445,8 @@ save_auth_omp (credentials_t* credentials, params_t *params)
       || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
     return get_users (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM
-                       ("Save Authentication Configuration"));
+                       ("Save Authentication Configuration"),
+                      response_data);
 
   /* Input is valid. Save settings. */
 
@@ -22727,12 +23497,12 @@ save_auth_omp (credentials_t* credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_users (credentials, params, response);
+        html = get_users (credentials, params, response, response_data);
     }
   else
-    html = get_users (credentials, params, response);
+    html = get_users (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -22743,12 +23513,14 @@ save_auth_omp (credentials_t* credentials, params_t *params)
  *
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params        Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return .
  */
 char*
 save_chart_preference_omp (credentials_t* credentials, params_t *params,
-                           gchar **pref_id, gchar **pref_value)
+                           gchar **pref_id, gchar **pref_value,
+                           cmd_response_data_t* response_data)
 {
   *pref_id = g_strdup (params_value (params, "chart_preference_id"));
   *pref_value = g_strdup (params_value (params, "chart_preference_value"));
@@ -22832,11 +23604,13 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
+wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
+        cmd_response_data_t* response_data)
 {
   GString *xml;
   gnutls_session_t session;
@@ -22935,13 +23709,15 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_omp (credentials_t *credentials, params_t *params)
+wizard_omp (credentials_t *credentials, params_t *params,
+            cmd_response_data_t* response_data)
 {
-  return wizard (credentials, params, NULL);
+  return wizard (credentials, params, NULL, response_data);
 }
 
 /**
@@ -22950,11 +23726,13 @@ wizard_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
+wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   const char *name;
   int ret;
@@ -23046,13 +23824,15 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_get_omp (credentials_t *credentials, params_t *params)
+wizard_get_omp (credentials_t *credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return wizard_get (credentials, params, NULL);
+  return wizard_get (credentials, params, NULL, response_data);
 }
 
 /**
@@ -23060,13 +23840,15 @@ wizard_get_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 process_bulk_omp (credentials_t *credentials, params_t *params,
                   enum content_type * content_type,
-                  char **content_disposition, gsize *content_length)
+                  char **content_disposition, gsize *content_length,
+                  cmd_response_data_t* response_data)
 {
   GString *bulk_string;
   const char *type, *subtype, *action;
@@ -23141,7 +23923,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       params_add (params, "filter", g_string_free (bulk_string, FALSE));
 
       return export_many (type, credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
     }
 
   bulk_string = g_string_new ("<process_bulk>");
@@ -23244,11 +24026,13 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-bulk_delete_omp (credentials_t * credentials, params_t *params)
+bulk_delete_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -23344,7 +24128,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params)
       params_add (params, "next", next);
       g_free (next);
     }
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   g_free (response);
 
   if (html == NULL)
@@ -23365,12 +24149,13 @@ bulk_delete_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
 new_host (credentials_t *credentials, params_t *params,
-           const char *extra_xml)
+          const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_host>");
@@ -23385,13 +24170,15 @@ new_host (credentials_t *credentials, params_t *params,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_host_omp (credentials_t *credentials, params_t *params)
+new_host_omp (credentials_t *credentials, params_t *params,
+              cmd_response_data_t* response_data)
 {
-  return new_host (credentials, params, NULL);
+  return new_host (credentials, params, NULL, response_data);
 }
 
 /**
@@ -23399,11 +24186,13 @@ new_host_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_host_omp (credentials_t * credentials, params_t *params)
+create_host_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -23462,12 +24251,12 @@ create_host_omp (credentials_t * credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response);
+      html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_assets (credentials, params, response);
+        html = get_assets (credentials, params, response, response_data);
     }
   else
-    html = new_host (credentials, params, response);
+    html = new_host (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23479,11 +24268,13 @@ create_host_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed asset response or error message.
  */
 char *
-get_asset (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   char *ret;
   GString *extra_attribs, *extra_response;
@@ -23534,7 +24325,7 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml)
                             params_value (params, "details"));
 
   ret = get_one ("asset", credentials, params, extra_response->str,
-                 extra_attribs->str);
+                 extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
   g_string_free (extra_attribs, TRUE);
@@ -23547,13 +24338,15 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_asset_omp (credentials_t * credentials, params_t *params)
+get_asset_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
 {
-  return get_asset (credentials, params, NULL);
+  return get_asset (credentials, params, NULL, response_data);
 }
 
 /**
@@ -23562,11 +24355,13 @@ get_asset_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed assets response or error message.
  */
 char *
-get_assets (credentials_t *credentials, params_t *params, const char *extra_xml)
+get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   char *ret;
   GString *extra_attribs, *extra_response;
@@ -23600,7 +24395,7 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml)
                             " details=\"%s\"",
                             params_value (params, "details"));
   ret = get_many ("asset", credentials, params, extra_response->str,
-                  extra_attribs->str);
+                  extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
   g_string_free (extra_attribs, TRUE);
@@ -23613,13 +24408,15 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_assets_omp (credentials_t * credentials, params_t *params)
+get_assets_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
 {
-  return get_assets (credentials, params, NULL);
+  return get_assets (credentials, params, NULL, response_data);
 }
 
 /**
@@ -23627,11 +24424,13 @@ get_assets_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_asset_omp (credentials_t *credentials, params_t *params)
+create_asset_omp (credentials_t *credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -23680,12 +24479,12 @@ create_asset_omp (credentials_t *credentials, params_t *params)
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response);
+      ret = next_page (credentials, params, response, response_data);
       if (ret == NULL)
-        ret = get_report_section (credentials, params, response);
+        ret = get_report_section (credentials, params, response, response_data);
     }
   else
-    ret = get_report_section (credentials, params, response);
+    ret = get_report_section (credentials, params, response, response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -23696,11 +24495,13 @@ create_asset_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_asset_omp (credentials_t * credentials, params_t *params)
+delete_asset_omp (credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -23794,7 +24595,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params)
 
   if (params_given (params, "next") == 0)
     params_add (params, "next", "get_asset");
-  html = next_page (credentials, params, response);
+  html = next_page (credentials, params, response, response_data);
   g_free (response);
   if (html == NULL)
     return gsad_message (credentials,
@@ -23813,16 +24614,17 @@ delete_asset_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Asset XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_asset_omp (credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
-                  gsize *content_length)
+                  gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_resource ("asset", credentials, params, content_type,
-                          content_disposition, content_length);
+                          content_disposition, content_length, response_data);
 }
 
 /**
@@ -23833,6 +24635,7 @@ export_asset_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Assets XML on success.  HTML result of XSL transformation
  *         on error.
@@ -23840,10 +24643,10 @@ export_asset_omp (credentials_t * credentials, params_t *params,
 char *
 export_assets_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                   gsize *content_length, cmd_response_data_t* response_data)
 {
   return export_many ("asset", credentials, params, content_type,
-                      content_disposition, content_length);
+                      content_disposition, content_length, response_data);
 }
 
 
@@ -23862,6 +24665,7 @@ export_assets_omp (credentials_t * credentials, params_t *params,
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  * @param[out] chart_prefs   Chart preferences.
  * @param[out] autorefresh   Autorefresh preference.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
