@@ -25,6 +25,11 @@
 
 2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: When a
+	  new resource is created, automatically fill it in the sub-dialog. 
+
+2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Rewrite
 	  the js code to use OOP.
 

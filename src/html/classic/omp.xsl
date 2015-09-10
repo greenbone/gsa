@@ -5290,7 +5290,7 @@ var toggleFilter = function(){
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <a href="#" class="newTarget" title="{ gsa:i18n('Create a new target') }" onClick="javascript:new OMPDialog('new_target').show(); return false;">
+            <a href="#" class="newTarget" title="{ gsa:i18n('Create a new target') }" onClick="javascript:new OMPDialog('new_target', 'select[name=target_id]').show(); return false;">
               <img src="/img/new.png"/>
             </a>
           </td>
@@ -11425,7 +11425,7 @@ should not have received it.
                     <xsl:with-param name="select_id" select="port_list_id"/>
                   </xsl:apply-templates>
                 </select>
-                <a href="#" class="newportlist" title="{ gsa:i18n('Create a new port list') }" onClick="javascript:new OMPDialog('new_port_list').show(); return false;">
+                <a href="#" class="newportlist" title="{ gsa:i18n('Create a new port list') }" onClick="javascript:new OMPDialog('new_port_list', 'select[name=port_list_id]').show(); return false;">
                   <img src="/img/new.png"/>
                 </a>
               </td>
