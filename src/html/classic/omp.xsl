@@ -2534,7 +2534,7 @@ var toggleFilter = function(){
       <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
       <xsl:with-param name="message">
         SCAP database missing on OMP server.  Prognostic reporting disabled.
-        <a href="/help/hosts.html?token={/envelope/token}#scap_missing"
+        <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
            title="Help: SCAP database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
@@ -2547,7 +2547,7 @@ var toggleFilter = function(){
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('Host Filtering', 'Host')"/>
-      <a href="/help/hosts.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
+      <a href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
         <img src="/img/help.png" border="0"/>
       </a>
       <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
@@ -2725,7 +2725,7 @@ var toggleFilter = function(){
         <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
-      <a style="margin-left: 7px" href="/help/hosts.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
+      <a style="margin-left: 7px" href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
         <img src="/img/help.png" border="0"/>
       </a>
       <xsl:choose>
@@ -24855,7 +24855,7 @@ $(document).ready(function() {
       <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
       <xsl:with-param name="message">
         SCAP database missing on OMP server.  Prognostic reporting disabled.
-        <a href="/help/hosts.html?token={/envelope/token}#scap_missing"
+        <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
            title="Help: SCAP database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
@@ -24867,8 +24867,8 @@ $(document).ready(function() {
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       <xsl:value-of select="gsa:i18n ('Host Details', 'Host')"/>
-       <a href="/help/hosts.html?token={/envelope/token}#host_details"
+       <xsl:value-of select="gsa:i18n ('Host Details (Classic)', 'Host')"/>
+       <a href="/help/hosts_classic.html?token={/envelope/token}#host_details"
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
          <img src="/img/help.png"/>
        </a>
@@ -34586,7 +34586,7 @@ var toggleFilter = function(){
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Host', 'Host'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_hosts&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_assets&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Hosts', 'Host')}"/>
       </a>
@@ -35046,6 +35046,7 @@ var toggleFilter = function(){
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="1"/>
+    <xsl:with-param name="new-icon" select="false ()"/>
   </xsl:call-template>
 </xsl:template>
 

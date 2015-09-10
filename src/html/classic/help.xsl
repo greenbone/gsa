@@ -70,21 +70,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"/>
   <xsl:param name="name"/>
   <xsl:param name="ultimate"/>
+  <xsl:param name="clone" select="true ()"/>
+  <xsl:param name="new" select="true ()"/>
+  <xsl:param name="edit" select="true ()"/>
 
-  <h4>New <xsl:value-of select="$name"/></h4>
-  <p>
-    To create a new <xsl:value-of select="$name"/> click the new icon
-    <img src="/img/new.png" alt="New {$name}" title="New {$name}"/>
-    which goes to the <a href="new_{$type}.html?token={/envelope/token}">
-    New <xsl:value-of select="$name"/></a> page.
-  </p>
+  <xsl:if test="$new">
+    <h4>New <xsl:value-of select="$name"/></h4>
+    <p>
+      To create a new <xsl:value-of select="$name"/> click the new icon
+      <img src="/img/new.png" alt="New {$name}" title="New {$name}"/>
+      which goes to the <a href="new_{$type}.html?token={/envelope/token}">
+      New <xsl:value-of select="$name"/></a> page.
+    </p>
+  </xsl:if>
 
-  <h4>Clone <xsl:value-of select="$name"/></h4>
-  <p>
-    To clone a <xsl:value-of select="$name"/> click the clone icon
-    <img src="/img/clone.png" alt="Clone" title="Clone"/>
-    which goes to the details page of the clone.
-  </p>
+  <xsl:if test="$clone">
+    <h4>Clone <xsl:value-of select="$name"/></h4>
+    <p>
+      To clone a <xsl:value-of select="$name"/> click the clone icon
+      <img src="/img/clone.png" alt="Clone" title="Clone"/>
+      which goes to the details page of the clone.
+    </p>
+  </xsl:if>
 
   <h4><xsl:value-of select="$name"/>s</h4>
   <p>
@@ -110,13 +117,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </p>
-  <h4>Edit <xsl:value-of select="$name"/></h4>
-  <p>
-    Pressing the "Edit <xsl:value-of select="$name"/>" icon
-    <img src="/img/edit.png" alt="Edit {$name}" title="Edit {$name}"/>
-    will switch to an overview of the configuration for this
-    <xsl:value-of select="$type"/> and allows editing the its properties.
-  </p>
+
+  <xsl:if test="$new">
+    <h4>Edit <xsl:value-of select="$name"/></h4>
+    <p>
+      Pressing the "Edit <xsl:value-of select="$name"/>" icon
+      <img src="/img/edit.png" alt="Edit {$name}" title="Edit {$name}"/>
+      will switch to an overview of the configuration for this
+      <xsl:value-of select="$type"/> and allows editing its properties.
+    </p>
+  </xsl:if>
 
   <h4>Exporting</h4>
   <p>
@@ -436,15 +446,149 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="host_details.html">
+  <div class="gb_window_part_center">Help: Host Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ASSETS'"/>
+      </xsl:call-template>
+
+      <h1>Host Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#host">host</a>.
+        This includes the name, OS, severity and the last update time of
+        the host.
+      </p>
+
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'host'"/>
+        <xsl:with-param name="name" select="'Host'"/>
+        <xsl:with-param name="close" select="false ()"/>
+        <xsl:with-param name="ultimate" select="true ()"/>
+      </xsl:call-template>
+
+      <h3>Identifiers</h3>
+      <p>
+        This table provides an overview of the characteristics that were used to
+        identify the host.  Identifiers include "ip", "OS", "hostname", "MAC" and
+        "DNS-via-TargetDefinition".
+      </p>
+      <p>
+        Information in the table includes the identifier value and creation time,
+        and the source of the identifier.
+      </p>
+      <p>
+        An identifier can be deleted by clicking the delete icon
+        <img src="/img/delete.png" alt="Delete" title="Delete"/>.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="hosts.html">
-  <div class="gb_window_part_center">Help: Hosts</div>
+  <div class="gb_window_part_center">Help: Hosts
+    <a href="/omp?cmd=get_assets&amp;type=host&amp;token={/envelope/token}"
+       title="Hosts" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Hosts"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ASSETS'"/>
+      </xsl:call-template>
+
+      <h1>Hosts</h1>
+      <p>
+        This table provides an overview of all the
+        <a href="glossary.html?token={/envelope/token}#host">host</a>s
+        found in the
+        <a href="glossary.html?token={/envelope/token}#asset">asset</a>
+        database.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'host'"/>
+        </xsl:call-template>
+        <tr class="even">
+          <td>OS</td>
+          <td>
+            Icon for most recently identified operating system on the host.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Severity</td>
+          <td>
+            The highest result severity on the host from the most recently
+            recorded report.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Updated</td>
+          <td>
+            The time the asset was last updated.
+          </td>
+        </tr>
+      </table>
+
+      <h3>New Host</h3>
+      <p>
+        To create a new host click the
+        new icon <img src="/img/new.png" alt="New Host" title="New Host"/> which
+        goes to the <a href="new_host.html?token={/envelope/token}">New Host</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of hosts as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Host'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="notrashcan" select="1"/>
+      </xsl:call-template>
+
+      <h4>Delete Report</h4>
+      <p>
+        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+        remove the host immediately, including all host identifiers.  The list of assets will
+        be updated.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="hosts_classic.html">
+  <div class="gb_window_part_center">Help: Hosts (Classic)</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Hosts</h1>
+      <h1>Hosts (Classic)</h1>
       <p>
        This page provides an overview of all the hosts found in all tasks.
       </p>
@@ -3552,6 +3696,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Assets </li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
+              <ul>
+                <li> <a href="new_host.html?token={/envelope/token}">New Host</a></li>
+                <li> <a href="host_details.html?token={/envelope/token}">Host Details</a></li>
+              </ul>
+            <li> <a href="oss.html?token={/envelope/token}">Operating Systems</a></li>
+              <ul>
+                <li> <a href="os_details.html?token={/envelope/token}">Operating System Details</a></li>
+              </ul>
+            <li> <a href="hosts_classic.html?token={/envelope/token}">Hosts (Classic)</a></li>
           </ul>
           <li> SecInfo </li>
           <ul>
@@ -4308,6 +4461,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        new found vulnerabilities.
       </p>
 
+      <a name="asset"></a>
+      <h2>Asset</h2>
+      <p>
+        Assets are discovered on the network during a vulnerability scan, or
+        entered manually by the user.
+        Currently Assets include Hosts and Operating Systems.
+      </p>
+
       <a name="filter"></a>
       <h2>Filter</h2>
       <p>
@@ -4319,6 +4480,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Group</h2>
       <p>
        A group is a collection of users.
+      </p>
+
+      <a name="host"></a>
+      <h2>Host</h2>
+      <p>
+       A host is a single system that may be scanned.  A
+       <a href="#target">target</a> consists of one or more hosts.  Hosts may
+       be recorded in the <a href="#asset">asset</a> database.
       </p>
 
       <a name="note"></a>
@@ -5452,6 +5621,58 @@ Public License instead of this License.
        <img src="/img/list.png" alt="Groups" title="Groups"/>
        will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
        page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_host.html">
+  <div class="gb_window_part_center">Help: New Host
+    <a href="/omp?cmd=new_host&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_ASSET'"/>
+      </xsl:call-template>
+
+      <h1>New Host</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#host">Host</a>
+        the dialog offers these entries.
+        Hit the button "Create Host" to submit the new host.
+        The Hosts page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td width="150"></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>127.0.0.9</td>
+        </tr>
+      </table>
+
+      <h4>Hosts</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Hosts" title="Hosts"/>
+       will switch to the hosts page.
       </p>
     </div>
   </div>
@@ -7020,6 +7241,135 @@ Public License instead of this License.
         Insert the Base Vector (eg: <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>)
         in the input box, and hit the "Calculate" button to calculate the CVSS
         Base Score directly from a Base Vector.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="os_details.html">
+  <div class="gb_window_part_center">Help: Operating System Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ASSETS'"/>
+      </xsl:call-template>
+
+      <h1>Operating System Details</h1>
+      <p>
+        Provides detailed information about an Operating System.
+        This includes the name, title, severity, hosts and the last update time of
+        the Operating System.
+      </p>
+
+      <xsl:call-template name="details-window-line-actions">
+        <xsl:with-param name="type" select="'operating system'"/>
+        <xsl:with-param name="name" select="'Operating System'"/>
+        <xsl:with-param name="new" select="false ()"/>
+        <xsl:with-param name="clone" select="false ()"/>
+        <xsl:with-param name="edit" select="false ()"/>
+        <xsl:with-param name="ultimate" select="true ()"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="object-used-by">
+        <xsl:with-param name="name" select="'Operating System'"/>
+        <xsl:with-param name="used_by" select="'Host'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="oss.html">
+  <div class="gb_window_part_center">Help: Operating Systems
+    <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"
+       title="Operating Systems" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Operating Systems"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ASSETS'"/>
+      </xsl:call-template>
+
+      <h1>Operating Systems</h1>
+      <p>
+        This table provides an overview of all the Operating Systems
+        found in the
+        <a href="glossary.html?token={/envelope/token}#asset">asset</a>
+        database.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <xsl:call-template name="name-column">
+          <xsl:with-param name="type" select="'OS'"/>
+        </xsl:call-template>
+        <tr class="even">
+          <td>Title</td>
+          <td>
+            The title of the operating system
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Severity: Latest</td>
+          <td>
+            The severity of the host that was scanned most recently, where the host is
+            running this operating system.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Severity: Average</td>
+          <td>
+            The average of the most recent severities of the all the hosts in the
+            asset database that are running this operating system.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Hosts</td>
+          <td>
+            The number of hosts running this Operating System.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Updated</td>
+          <td>
+            The time the asset was last updated.
+          </td>
+        </tr>
+      </table>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of operating systems as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+      <xsl:call-template name="sorting"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Operating System'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="notrashcan" select="1"/>
+      </xsl:call-template>
+
+      <h4>Delete Operating System</h4>
+      <p>
+        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+        remove the operating system immediately.
+        The list of operating systems will be updated.
       </p>
     </div>
   </div>

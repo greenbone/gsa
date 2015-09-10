@@ -1,3 +1,19 @@
+2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Update help for Assets.
+
+	* src/html/classic/help.xsl (details-window-line-actions): Add clone,
+	new and edit params.
+	(host_details.html): New template.
+	(hosts.html): Convert to Asset version of Hosts page.
+	(hosts_classic.html): New template.  Body from old hosts.html.
+	(glossary.html): Add asset and host.
+	(new_host.html, os_details.html, oss.html): New template.
+
+	* src/html/classic/omp.xsl (assets, host [classic])
+	(html-create-host-form): Switch classic asset links to new page.
+	(html-oss-table): Hide new icon.
+
 2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Rewrite
