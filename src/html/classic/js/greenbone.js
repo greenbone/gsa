@@ -36,10 +36,14 @@
         width: 800,
         buttons:{
           Create: function(){
-            $.post(
-              '/omp',
-              dialog.find('form').serialize(),
-              function(data){
+            $.ajax({
+              url: '/omp',
+              data: new FormData(dialog.find('form')[0]),
+              processData: false,
+              contentType: false, 
+              type: 'POST',
+
+              success: function(data){
                 var error = $(data).find('.gb_window_part_center_error');
                 if (error.length > 0){
                   dialog.prepend(error.first().closest('.gb_window').find('.gb_window_part_content_no_pad').html());
@@ -47,8 +51,8 @@
                   alert("The new target might have been created, I just don't know it's UUID");
                   dialog.dialog("close");
                 }
-              }
-            );
+              },
+            });
           },
         },
       });

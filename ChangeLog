@@ -1,3 +1,8 @@
+2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Fix the
+	  ajax requests.
+
 2015-09-09  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Add a pop-up dialog when creating a new target from the new task menu.

@@ -11425,6 +11425,9 @@ should not have received it.
                     <xsl:with-param name="select_id" select="port_list_id"/>
                   </xsl:apply-templates>
                 </select>
+                <a href="#" class="newportlist" title="{ gsa:i18n('Create a new port list') }" onClick="javascript:newDialog('new_port_list'); return false;">
+                  <img src="/img/new.png"/>
+                </a>
               </td>
             </tr>
           </xsl:if>
