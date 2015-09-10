@@ -10,18 +10,42 @@
       .text();
   };
 
-  var newDialog = function(command){
+  var OMPDialog = function(omp_command, element){
+    this.command = omp_command;
+  };
+
+  OMPDialog.prototype.postForm = function(){
+    var dialog = $(this);
+    $.ajax({
+      url: '/omp',
+      data: new FormData(dialog.find('form')[0]),
+      processData: false,
+      contentType: false, 
+      type: 'POST',
+    }).done(function(data){
+      var error = $(data).find('.gb_window_part_center_error');
+      if (error.length > 0){
+        dialog.prepend(error.first().closest('.gb_window').find('.gb_window_part_content_no_pad').html());
+      } else {
+        alert("The new Resource might have been created, I just don't know it's UUID");
+        dialog.dialog("close");
+      }
+    });
+  };
+
+  OMPDialog.prototype.show = function(){
+    var self = this;
     $.get(
-      '/omp?cmd=' + command + '&token='+$('#gsa-token').html()
+      '/omp?cmd=' + this.command + '&token='+$('#gsa-token').text()
     ).done(function(html){
 
       // get the content of the (first) window
-      var gb_window = $(html).find('.gb_window').first();
+      var gb_window = $(html).find('.gb_window').first(),
 
       // create a new div
-      var dialog = $("<div/>", {
+          dialog = $("<div/>", {
         id: "dialog-form",
-        title: $(gb_window).find('.gb_window_part_center').justtext(),
+        title:  $(gb_window).find('.gb_window_part_center').justtext(),
         html: $(gb_window).find('.gb_window_part_content').html(),
       });
       // fancy-up the selects
@@ -35,28 +59,10 @@
         modal: true,
         width: 800,
         buttons:{
-          Create: function(){
-            $.ajax({
-              url: '/omp',
-              data: new FormData(dialog.find('form')[0]),
-              processData: false,
-              contentType: false, 
-              type: 'POST',
-
-              success: function(data){
-                var error = $(data).find('.gb_window_part_center_error');
-                if (error.length > 0){
-                  dialog.prepend(error.first().closest('.gb_window').find('.gb_window_part_content_no_pad').html());
-                } else {
-                  alert("The new target might have been created, I just don't know it's UUID");
-                  dialog.dialog("close");
-                }
-              },
-            });
-          },
+          Create: self.postForm,
         },
       });
     });
   };
-  this.newDialog = newDialog;
+  this.OMPDialog = OMPDialog;
 }();
