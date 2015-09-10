@@ -388,7 +388,7 @@ function GanttChartGenerator ()
                       var r_periods = Number (d.schedule_periods);
                       var r_length = r_duration ? r_duration * 1000
                                                 : r_period ? Math.min (r_period * 1000, 3600000 * 24)
-                                                           : end_date - r_start;
+                                                           : 3600000 * 24;
                       var offset = +(time_scale.domain ()[0])
 
                       var bar_starts = [];
