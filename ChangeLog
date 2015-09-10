@@ -1,3 +1,8 @@
+2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset/host, asset/os): Add export to
+	actions.
+
 2015-09-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_gantt_chart.js (generate): Set the size of
@@ -26,7 +31,7 @@
 2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: When a
-	  new resource is created, automatically fill it in the sub-dialog. 
+	  new resource is created, automatically fill it in the sub-dialog.
 
 2015-09-10  Benoît Allard  <benoit.allard@greenbone.net>
 

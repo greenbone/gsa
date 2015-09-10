@@ -35130,6 +35130,11 @@ var toggleFilter = function(){
                    style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
+          <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Export Host', 'Assets')}"
+             style="margin-left:3px;">
+            <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+          </a>
         </td>
       </xsl:otherwise>
     </xsl:choose>
@@ -35207,6 +35212,11 @@ var toggleFilter = function(){
                    style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
+          <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Export Operating System', 'Assets')}"
+             style="margin-left:3px;">
+            <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+          </a>
         </td>
       </xsl:otherwise>
     </xsl:choose>
