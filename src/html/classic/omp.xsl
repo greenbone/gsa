@@ -25913,6 +25913,14 @@ $(document).ready(function() {
 
 <!--     RESULT -->
 
+<xsl:template name="host-link">
+  <xsl:param name="host"/>
+  <xsl:param name="token" select="/envelope/token"/>
+  <a href="?cmd=get_assets&amp;type=host&amp;filter=name={$host}&amp;token={$token}">
+    <xsl:value-of select="$host"/>
+  </a>
+</xsl:template>
+
 <xsl:template match="result" mode="details" name="result-details">
   <xsl:param name="delta" select="0"/>
   <xsl:param name="task_id">
@@ -26433,9 +26441,9 @@ $(document).ready(function() {
       <xsl:variable name="ip" select="host"/>
       <xsl:variable name="hostname"
                     select="../../host[ip = $ip]/detail[name = 'hostname']/value"/>
-      <a href="?cmd=get_report&amp;type=assets&amp;host={$ip}&amp;token={/envelope/token}">
-        <xsl:value-of select="$ip"/>
-      </a>
+      <xsl:call-template name="host-link">
+        <xsl:with-param name="host" select="$ip"/>
+      </xsl:call-template>
       <xsl:if test="$hostname != ''">
         (<xsl:value-of select="$hostname"/>)
       </xsl:if>
@@ -27413,9 +27421,9 @@ $(document).ready(function() {
       </xsl:choose>
     </td>
     <td>
-      <a href="?cmd=get_report&amp;type=assets&amp;host={host}&amp;token={/envelope/token}">
-        <xsl:value-of select="host"/>
-      </a>
+      <xsl:call-template name="host-link">
+        <xsl:with-param name="host" select="host"/>
+      </xsl:call-template>
     </td>
     <td>
       <xsl:value-of select="port"/>
@@ -28316,9 +28324,9 @@ var toggleFilter = function(){
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-              <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
-                <xsl:value-of select="$current_host"/>
-              </a>
+              <xsl:call-template name="host-link">
+                <xsl:with-param name="host" select="$current_host"/>
+              </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
@@ -29390,9 +29398,10 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
                 <td>
-                  <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
-                    <xsl:value-of select="$current_host"/>
-                  </a>
+                  <xsl:call-template name="host-link">
+                    <xsl:with-param name="host" select="$current_host"/>
+                    <xsl:with-param name="token" select="$token"/>
+                  </xsl:call-template>
                   <xsl:if test="$hostname">
                     <xsl:value-of select="concat(' (', $hostname, ')')"/>
                   </xsl:if>
@@ -29650,9 +29659,9 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
             <td>
-              <a href="?cmd=get_report&amp;type=assets&amp;host={$host/ip}&amp;token={/envelope/token}">
-                <xsl:value-of select="$host/ip"/>
-              </a>
+              <xsl:call-template name="host-link">
+                <xsl:with-param name="host" select="$host/ip"/>
+              </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>
@@ -29782,9 +29791,9 @@ var toggleFilter = function(){
               </a>
             </td>
             <td>
-              <a href="?cmd=get_report&amp;type=assets&amp;host={$host}&amp;token={/envelope/token}">
-                <xsl:value-of select="$host"/>
-              </a>
+              <xsl:call-template name="host-link">
+                <xsl:with-param name="host" select="$host"/>
+              </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
               </xsl:if>

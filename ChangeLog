@@ -1,3 +1,10 @@
+2015-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (host-link): New template.
+	(result [result-row], result, report [hosts], report [closed_cves])
+	(report [ssl_certs], report [errors]): Link to new asset Hosts instead
+	of classic Host Details.
+
 2015-09-11  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Switch to XML for the answer of
