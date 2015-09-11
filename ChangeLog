@@ -1,3 +1,8 @@
+2015-09-11  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Switch to XML for the answer of
+	  the POST request
+
 2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (object-used-by, cpe_details.html)

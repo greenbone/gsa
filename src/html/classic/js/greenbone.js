@@ -1,8 +1,8 @@
-!function(){
-//  'use strict';
+!function(window){
+  'use strict';
 
   /* A utility function that returns only the text in the current selection */
-  this.jQuery.fn.justtext = function(){
+  window.jQuery.fn.justtext = function(){
     return $(this)
       .clone()
         .children()
@@ -11,14 +11,18 @@
       .text();
   };
 
-  var UUID_SELECTORS = {
-    new_target:    function(doc){ return doc.find('input[name=target_id]').first().val();},
-    new_port_list: function(doc){ return doc.find('input[name=port_list_id]').first().val();},
+  var RESPONSE_SELECTORS = {
+    new_target: 'create_target_response',
+    new_port_list: 'create_port_list_response',
   };
 
   var NAME_SELECTORS = {
-    new_target:    function(doc){ return doc.find('td:contains(Name:)').closest('tr').find('td').last().text();},
-    new_port_list: function(doc){ return doc.find('td:contains(Name:)').closest('tr').find('td').last().text();},
+    new_target: function(doc, uuid){ return doc.find('get_targets_response > target[id=' + uuid +'] > name').text();},
+    new_port_list: function(doc, uuid){ return doc.find('get_port_lists_response > port_list[id=' + uuid +'] > name').text();},
+  }
+
+  var isStatusOk = function(status_code){
+    return (status_code == 200) || (status_code == 201);
   }
 
   /**
@@ -26,43 +30,56 @@
   **/
   var OMPDialog = function(omp_command, element){
     this.command = omp_command;
-    this.element = $(element);
+    this.reload = false;
+    if (element === true){
+      this.reload = true;
+    } else {
+      this.element = $(element);
+    }
   };
 
   OMPDialog.prototype.postForm = function(dialog){
-    var self = this;
+    var self = this,
+        data = new FormData(dialog.find('form')[0]);
+    data.append('xml', 1);
     $.ajax({
       url: '/omp',
-      data: new FormData(dialog.find('form')[0]),
+      data: data,
       processData: false,
       contentType: false,
       type: 'POST',
-    }).done(function(data){
-      var jDoc = $(data),
-          error = jDoc.find('.gb_window_part_center_error');
-      if (error.length > 0){
-        dialog.prepend(error.first().closest('.gb_window').find('.gb_window_part_content_no_pad').html());
+      dataType: 'xml',
+    }).done(function(xml){
+      xml = $(xml);
+      var response = xml.find(RESPONSE_SELECTORS[self.command]);
+      if (! isStatusOk(response.attr('status'))){
+        //Remove previous errors
+        dialog.find('div.ui-state-error').remove();
+        // Insert our error message
+        dialog.prepend($("<div/>", {
+          "class": "ui-state-error ui-corner-all",
+          html: $("<p><strong>Error :</strong> " + response.attr("status_text") + "</p>"),
+        }));
         return;
+      }
+      if (self.reload === true){
+        window.document.location.reload()
       }
       if (self.element === undefined){
         // No element to update, exit early.
         return;
       }
       // get the uuid of the created resource
-      if (UUID_SELECTORS[self.command] === undefined){
-        console.log(self.command);
-        console.log(UUID_SELECTORS);
-        alert("Don't know how to get the UUID of the newly created resource.");
-        return;
-      }
-      var uuid = UUID_SELECTORS[self.command](jDoc);
+      var uuid = response.attr("id");
       // get its name
-      var name = NAME_SELECTORS[self.command](jDoc);
+      var name = NAME_SELECTORS[self.command](xml, uuid);
       // fill in the new information in the $element and make it selected
       self.element.append($("<option/>", {value: uuid, html: name, selected: true}));
       /// make it the selected option.
       self.element.select2("destroy");
       self.element.select2();
+
+      // And finally, close our dialog.
       dialog.dialog("close");
     });
   };
@@ -101,5 +118,5 @@
       });
     });
   };
-  this.OMPDialog = OMPDialog;
-}();
+  window.document.OMPDialog = OMPDialog;
+}(window);
