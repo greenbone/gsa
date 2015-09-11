@@ -1,3 +1,26 @@
+2015-09-11  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Simplify project version setting. Use SVN version at build time in
+	binary instead of SVN version at configuration time. Make SVN revision
+	retrieval work with SVN >= 1.7.
+
+	* CMakeLists.txt: Set project version independently of CPack
+	configuration. Make switching between beta and stable version schemes
+	easier. Use version string with possible SVN revision suffix for the
+	CPack package version, but skip SVN revision suffix for GSAD_VERSION
+	since we do not care about the revision at configuration time. Improve
+	SVN checkout detection to work with SVN >= 1.7 as well. Change non
+	release version style to be consistent with other modules.
+
+	* src/CMakeLists.txt: Determine build time SVN revision if the build
+	type is not "Release" and SVN information is available.
+
+	* src/gsad.c: Include SVN revision in version information if it is
+	available.
+
+	* getsvn.cmake: New. CMake script to write SVN revision to a header
+	file if SVN information is available.
+
 2015-09-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (host-link): New template.

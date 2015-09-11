@@ -93,6 +93,10 @@
 #include "validator.h"
 #include "xslt_i18n.h"
 
+#ifdef SVN_REV_AVAILABLE
+#include "svnrevision.h"
+#endif
+
 /**
  * @brief Name of the cookie used to store the SID.
  */
@@ -5078,6 +5082,9 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
+#ifdef GSAD_SVN_REVISION
+      printf ("SVN revision %i\n", GSAD_SVN_REVISION);
+#endif
       if (debug_tls)
         {
           printf ("gnutls %s\n", gnutls_check_version (NULL));
