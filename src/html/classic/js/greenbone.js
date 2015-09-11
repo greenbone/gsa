@@ -12,12 +12,14 @@
   };
 
   var RESPONSE_SELECTORS = {
-    new_target: 'create_target_response',
+    new_target:    'create_target_response',
     new_port_list: 'create_port_list_response',
+    // ------
+    edit_task:     'modify_task_response',
   };
 
   var NAME_SELECTORS = {
-    new_target: function(doc, uuid){ return doc.find('get_targets_response > target[id=' + uuid +'] > name').text();},
+    new_target:    function(doc, uuid){ return doc.find('get_targets_response > target[id=' + uuid +'] > name').text();},
     new_port_list: function(doc, uuid){ return doc.find('get_port_lists_response > port_list[id=' + uuid +'] > name').text();},
   }
 
@@ -26,15 +28,22 @@
   }
 
   /**
-   * element is the select that will get the value of the newly created resource.
+   * command is the name of the gsa command that has to be send initialy
+   * element is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
+   * params are extra parameters to send to the initial GET request.
   **/
-  var OMPDialog = function(omp_command, element){
-    this.command = omp_command;
+  var OMPDialog = function(command, element, params){
+    this.command = command;
     this.reload = false;
     if (element === true){
       this.reload = true;
     } else {
       this.element = $(element);
+    }
+    if (params === undefined) {
+      this.params = {};
+    } else {
+      this.params = params
     }
   };
 
@@ -92,8 +101,10 @@
   OMPDialog.prototype.show = function(button){
     var self = this;
     if (button === undefined){ button = 'Create';}
+    this.params.cmd = this.command
+    this.params.token = $('#gsa-token').text();
     $.get(
-      '/omp?cmd=' + this.command + '&token='+$('#gsa-token').text()
+      '/omp?' + $.param(this.params)
     ).done(function(html){
 
       // get the content of the (first) window

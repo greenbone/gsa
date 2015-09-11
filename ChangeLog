@@ -1,3 +1,7 @@
+2015-09-11  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Add support for edit_task.
+
 2015-09-11  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Simplify project version setting. Use SVN version at build time in
