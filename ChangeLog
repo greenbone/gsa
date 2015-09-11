@@ -30,6 +30,10 @@
 
 2015-09-11  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Also recognize gsad error as such.
+
+2015-09-11  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Switch to XML for the answer of
 	  the POST request
 

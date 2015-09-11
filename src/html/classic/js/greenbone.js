@@ -51,14 +51,19 @@
       dataType: 'xml',
     }).done(function(xml){
       xml = $(xml);
-      var response = xml.find(RESPONSE_SELECTORS[self.command]);
-      if (! isStatusOk(response.attr('status'))){
+      var response = xml.find(RESPONSE_SELECTORS[self.command]),
+          gsad_msg = xml.find('gsad_msg');
+      if ((gsad_msg.length > 0) || (! isStatusOk(response.attr('status')))){
+        var error = gsad_msg.attr("status_text");
+        if (gsad_msg.length == 0){
+          error = response.attr('status_text');
+        }
         //Remove previous errors
         dialog.find('div.ui-state-error').remove();
         // Insert our error message
         dialog.prepend($("<div/>", {
           "class": "ui-state-error ui-corner-all",
-          html: $("<p><strong>Error :</strong> " + response.attr("status_text") + "</p>"),
+          html: $("<p><strong>Error :</strong> " + error + "</p>"),
         }));
         return;
       }
@@ -84,8 +89,9 @@
     });
   };
 
-  OMPDialog.prototype.show = function(){
+  OMPDialog.prototype.show = function(button){
     var self = this;
+    if (button === undefined){ button = 'Create';}
     $.get(
       '/omp?cmd=' + this.command + '&token='+$('#gsa-token').text()
     ).done(function(html){
@@ -109,12 +115,15 @@
       dialog.dialog({
         modal: true,
         width: 800,
-        buttons:{
-          Create: function(){
-            // small trick to have `this` set right inside the method.
-            self.postForm($(this));
+        buttons:[
+          {
+            text: button,
+            click: function(){
+              // small trick to have `this` set right inside the method.
+              self.postForm($(this));
+            },
           },
-        },
+        ],
       });
     });
   };
