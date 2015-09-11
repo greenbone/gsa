@@ -11334,8 +11334,16 @@ should not have received it.
                     </label>
                   </td>
                   <td>
-                    <input type="text" name="hosts" value="{/envelope/client_address}" size="30"
-                            maxlength="2000"/>
+                    <xsl:choose>
+                      <xsl:when test="string-length (/envelope/params/hosts)">
+                        <input type="text" name="hosts" value="{/envelope/params/hosts}" size="30"
+                                maxlength="2000"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="text" name="hosts" value="{/envelope/client_address}" size="30"
+                                maxlength="2000"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </td>
                 </tr>
                 <tr>
@@ -34839,7 +34847,7 @@ var toggleFilter = function(){
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="1"/>
+    <xsl:with-param name="icon-count" select="3"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -34972,6 +34980,11 @@ var toggleFilter = function(){
                    style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
+          <a href="/omp?cmd=new_target&amp;hosts={../name}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('New Target with this Host', 'Assets')}"
+             style="margin-left:3px;">
+            <img src="/img/new.png" border="0" alt="{gsa:i18n ('New Target with this Host', 'Action Verb')}"/>
+          </a>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('Export Host', 'Assets')}"
              style="margin-left:3px;">
