@@ -144,8 +144,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     This table provides an overview of the <xsl:value-of select="$used_by"/>s
     that are associated with this <xsl:value-of select="$name"/>.
     Details of these <xsl:value-of select="$used_by"/>s can be seen after a
-    click on the Details
-    <img src="/img/details.png" alt="Details" title="Details"/> icon.
+    click on the <xsl:value-of select="$used_by"/>'s name.
   </p>
 </xsl:template>
 
@@ -724,35 +723,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <img src="/img/prognosis.png" alt="Prognostic Report" title="Prognostic Report"/>
        will switch to a prognostic report on this host.
       </p>
-
-      <!--
-      <a name="overrides"></a>
-      <h3>Overrides</h3>
-      <p>
-       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
-       The selection allows to switch to a view without applying overrides.
-       In the table view, severity classes, severity numbers and trend might change
-       when switching this selection.
-       By pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon a change is confirmed.
-      </p>
-      <p>
-       The selection that is active for the present page is marked with a hook (&#8730;).
-      </p>
-      <p>
-       Note that leaving this page will reset the overrides selection to apply overrides.
-      </p>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Details</h4>
-      <p>
-       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details"/> will
-       switch to an overview on all reports for this task.
-       It is the same action as clicking on the number of reports in the column "Reports: Total".
-      </p>
-      -->
 
       <a name="host_details"></a>
       <h2>Host Details</h2>
@@ -3053,11 +3023,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="user_details.html">
   <div class="gb_window_part_center">Help: User Details
-<!--
-    <a href="/omp?cmd=get_user&amp;user_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
-      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
-    </a>
--->
   </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -3871,9 +3836,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         This table provides an overview of the
         <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
-        that are associated to the CPE (if any).
-        Details of these CVEs can be seen after a click on the Details
-        <img src="/img/details.png" alt="Details" title="Details"/> icon.
+        that are associated with the CPE (if any).
+        Details of these CVEs can be seen after a click on the CVE name.
       </p>
     </div>
   </div>
@@ -4213,11 +4177,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="filter_details.html">
   <div class="gb_window_part_center">Help: Filter Details
-<!--
-    <a href="/omp?cmd=get_filter&amp;filter_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
-      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
-    </a>
--->
   </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5067,11 +5026,6 @@ Public License instead of this License.
 
 <xsl:template mode="help" match="group_details.html">
   <div class="gb_window_part_center">Help: Group Details
-<!--
-    <a href="/omp?cmd=get_group&amp;group_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
-      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
-    </a>
--->
   </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -7992,7 +7946,7 @@ Public License instead of this License.
 
       <h4>Scan Config Family Details</h4>
       <p>
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details"/>
+       A click on the Family name
        will show an intermediate detailed <a href="config_family_details.html?token={/envelope/token}">list of NVTs</a> and its preferences.
       </p>
 
@@ -8046,8 +8000,7 @@ Public License instead of this License.
 
       <h4>Scan Config NVT Details</h4>
       <p>
-       A click on the details icon
-       <img src="/img/details.png" alt="Details" title="Details"/> will open the
+       A click on the NVT name will open the
        <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
        and all its preferences.
       </p>
@@ -8202,10 +8155,9 @@ Public License instead of this License.
 
      <h4>Scan Config NVT Details</h4>
       <p>
-       A click on the details icon
-       <img src="/img/details.png" alt="Details" title="Details"/> will open the
+       A click on the NVT name will open the
        <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog
-       with detailed information about a certain NVT and all its preferences.
+       with detailed information about the NVT and all its preferences.
       </p>
 
       <h4>Edit Scan Config NVT Details</h4>
@@ -8221,7 +8173,7 @@ Public License instead of this License.
       <h2>Tasks using this Config</h2>
       <p>
        The tasks that use the shown config are listed.
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details"/> will open
+       A click on the task name will open
        the <a href="task_details.html?token={/envelope/token}">Task Details</a> page.
       </p>
     </div>
@@ -8293,7 +8245,7 @@ Public License instead of this License.
 
       <h4>NVT Details</h4>
       <p>
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details"/>
+       A click on the NVT name
        will lead to the page listing <a href="config_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
 
@@ -8433,7 +8385,7 @@ Public License instead of this License.
 
       <h4>NVT Details</h4>
       <p>
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details"/>
+       A click on the NVT name
        will lead to the page listing <a href="config_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
     </div>
@@ -8500,7 +8452,6 @@ Public License instead of this License.
 
 <xsl:template mode="help" match="tag_details.html">
   <div class="gb_window_part_center">Help: Tag Details
-    <img src="/img/details.png" border="0" style="margin-left:3px;"/>
   </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>

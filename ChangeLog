@@ -1,5 +1,16 @@
 2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (object-used-by, cpe_details.html)
+	(config_details.html, config_editor.html)
+	(config_editor_nvt_families.html, config_family_details.html): Remove
+	reference to details icon.
+	(hosts_classic.html, user_details.html, filter_details.html)
+	(group_details.html): Remove commented section.
+	(tag_details.html): Remove details icon, which is only for going to an
+	example page.
+
+2015-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (user-tags-window-checked)
 	(tag [for_resource], lsc_credential [details], alert [details])
 	(filter [details], target [details], html-config-family-table)
