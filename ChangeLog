@@ -1,3 +1,8 @@
+2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Wire the
+	  edit-task button to the corresponding code.
+
 2015-09-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Add comments.

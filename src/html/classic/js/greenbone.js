@@ -138,5 +138,5 @@
       });
     });
   };
-  window.document.OMPDialog = OMPDialog;
+  window.OMPDialog = OMPDialog;
 }(window);

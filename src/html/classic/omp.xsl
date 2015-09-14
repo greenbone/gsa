@@ -1586,7 +1586,9 @@ var toggleFilter = function(){
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
+             class="edit-action-icon"
              style="margin-left:3px;">
+             <xsl:attribute name="data-{$type}-id"><xsl:value-of select="@id"/></xsl:attribute>
             <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
@@ -7097,6 +7099,17 @@ var toggleFilter = function(){
   <xsl:apply-templates select="modify_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
+  <script type="text/javascript">
+$(document).ready(function(){
+  $(".edit-action-icon").each(function(){
+    var task_id = $(this).data('task-id');
+    $(this).on('click', function(event){
+      event.preventDefault();
+      new OMPDialog('edit_task', true, {'task_id': task_id}).show('Save');
+    })
+  });
+});
+  </script>
 </xsl:template>
 
 <xsl:template name="html-tasks-table">
