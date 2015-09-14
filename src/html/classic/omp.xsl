@@ -4413,6 +4413,7 @@ var toggleFilter = function(){
   </xsl:param>
   <xsl:param name="no_bulk" select="0"/>
   <xsl:param name="top-visualization" select="''"/>
+
   <xsl:variable name="apply-overrides"
                 select="filters/keywords/keyword[column='apply_overrides']/value"/>
   <xsl:variable name="subtype_param">
@@ -4420,10 +4421,13 @@ var toggleFilter = function(){
       <xsl:value-of select="concat ('&amp;', $type, '_type=', $subtype)"/>
     </xsl:if>
   </xsl:variable>
+
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="concat(gsa:i18n ($cap-type-plural, $cap-type), ' ')"/>
+
+      <!-- Top pager. -->
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="list" select="$resources-summary"/>
@@ -4432,6 +4436,8 @@ var toggleFilter = function(){
         <xsl:with-param name="full_count" select="$full-count"/>
         <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
       </xsl:call-template>
+
+      <!-- Header icons. -->
       <xsl:choose>
         <xsl:when test="$subtype != ''">
           <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
@@ -4495,6 +4501,8 @@ var toggleFilter = function(){
           </div>
         </xsl:otherwise>
       </xsl:choose>
+
+      <!-- Header refresh control. -->
       <xsl:choose>
         <xsl:when test="$type = 'info'"/>
         <xsl:otherwise>
@@ -4518,6 +4526,8 @@ var toggleFilter = function(){
         </xsl:otherwise>
       </xsl:choose>
     </div>
+
+    <!-- The filtering controls. -->
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="$type"/>
       <xsl:with-param name="subtype" select="$subtype"/>
@@ -4533,8 +4543,11 @@ var toggleFilter = function(){
         </xsl:if>
       </xsl:with-param>
     </xsl:call-template>
+
     <div class="gb_window_part_content_no_pad">
       <xsl:variable name="caller_escaped" select="gsa:escape-js (/envelope/current_page)"/>
+
+      <!-- Charts. -->
       <xsl:choose>
         <xsl:when test="$top-visualization = ''"/>
         <xsl:when test="/envelope/charts = '1'">
@@ -4565,15 +4578,23 @@ var toggleFilter = function(){
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
+
+      <!-- Everything below the filtering and charts. -->
       <div>
+
+        <!-- The entire table of resources, in a variable. -->
         <xsl:variable name="table">
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0" style="margin-bottom:0px;">
+
+            <!-- Column headings, top row. -->
             <tr class="gbntablehead2">
               <xsl:variable name="current" select="."/>
               <xsl:variable name="token" select="/envelope/token"/>
+              <!-- Generate given column headings. -->
               <xsl:for-each select="exslt:node-set ($columns)/column">
                 <xsl:choose>
                   <xsl:when test="count (column) = 0">
+                    <!-- Single column. -->
                     <td rowspan="2">
                       <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
@@ -4591,24 +4612,30 @@ var toggleFilter = function(){
                     </td>
                   </xsl:when>
                   <xsl:otherwise>
+                    <!-- Column with subcolumns. -->
                     <td colspan="{count (column)}">
                       <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
                     </td>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:for-each>
+              <!-- Action column. -->
               <xsl:if test="$icon-count &gt; 0">
                 <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
               </xsl:if>
             </tr>
+
+            <!-- Column headings, second row. -->
             <tr class="gbntablehead2">
               <xsl:variable name="current" select="."/>
               <xsl:variable name="token" select="/envelope/token"/>
               <xsl:for-each select="exslt:node-set ($columns)/column">
                 <xsl:choose>
                   <xsl:when test="count (column) = 0">
+                    <!-- Single column.  Done in top row. -->
                   </xsl:when>
                   <xsl:otherwise>
+                    <!-- Column with subcolumns.  Output the subcolumns. -->
                     <xsl:for-each select="column">
                       <td style="font-size:10px;">
                         <xsl:copy-of select="html/before/*"/>
@@ -4631,6 +4658,7 @@ var toggleFilter = function(){
               </xsl:for-each>
             </tr>
 
+            <!-- A nested variable: Form inputs for the bulk icons. -->
             <xsl:variable name="bulk-elements">
               <xsl:variable name="selection_type">
                 <xsl:choose>
@@ -4668,11 +4696,14 @@ var toggleFilter = function(){
               </xsl:if>
             </xsl:variable>
 
+            <!-- Resource rows, with extra row if bulk is enabled. -->
             <xsl:choose>
               <xsl:when test="$no_bulk">
+                <!-- No bulk, just generate the rows. -->
                 <xsl:apply-templates select="$resources"/>
               </xsl:when>
               <xsl:when test="not (/envelope/params/bulk_select = 1)">
+                <!-- Bulk "Apply to page contents" or "Apply to all filtered". -->
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
@@ -4695,6 +4726,7 @@ var toggleFilter = function(){
                 </tr>
               </xsl:when>
               <xsl:otherwise>
+                <!-- Bulk "Apply to selection" (the page with checkboxes). -->
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
@@ -4705,6 +4737,8 @@ var toggleFilter = function(){
             </xsl:choose>
           </table>
         </xsl:variable>
+
+        <!-- Output the table from the variable (wrapped in a form if bulk). -->
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select = 1">
             <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
@@ -4715,6 +4749,8 @@ var toggleFilter = function(){
             <xsl:copy-of select="$table"/>
           </xsl:otherwise>
         </xsl:choose>
+
+        <!-- The bulk dropdown and refresh icon, during bulk selection. -->
         <xsl:if test="not ($no_bulk)">
           <form name="bulk_select_type_form" class="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
                 enctype="multipart/form-data">
@@ -4759,6 +4795,8 @@ var toggleFilter = function(){
             <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Update', 'Action Verb')}" title="{gsa:i18n ('Update', 'Action Verb')}"/>
           </form>
         </xsl:if>
+
+        <!-- Bottom line with applied filter and pager. -->
         <xsl:if test="string-length (filters/term) &gt; 0">
           <table style="width:100%; margin-bottom:10px">
             <tr>
@@ -4781,6 +4819,8 @@ var toggleFilter = function(){
             </tr>
           </table>
         </xsl:if>
+
+        <!-- Wizard. -->
         <xsl:call-template name="wizard"/>
       </div>
     </div>
