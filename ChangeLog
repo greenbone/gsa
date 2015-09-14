@@ -1,5 +1,10 @@
 2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Make the edit dialog code more generic
+	  (type independant)
+
+2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Wire the
 	  edit-task button to the corresponding code.
 

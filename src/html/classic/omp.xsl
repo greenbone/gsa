@@ -1586,9 +1586,8 @@ var toggleFilter = function(){
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
-             class="edit-action-icon"
+             class="edit-action-icon" data-type="{$type}" data-id="{@id}"
              style="margin-left:3px;">
-             <xsl:attribute name="data-{$type}-id"><xsl:value-of select="@id"/></xsl:attribute>
             <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
@@ -7102,10 +7101,14 @@ var toggleFilter = function(){
   <script type="text/javascript">
 $(document).ready(function(){
   $(".edit-action-icon").each(function(){
-    var task_id = $(this).data('task-id');
-    $(this).on('click', function(event){
+    var elem = $(this),
+        type_id = elem.data('id'),
+        type_name = elem.data('type'),
+        params = {};
+    params[type_name + '_id'] = type_id
+    elem.on('click', function(event){
       event.preventDefault();
-      new OMPDialog('edit_task', true, {'task_id': task_id}).show('Save');
+      new OMPDialog('edit_' + type_name, true, params).show('Save');
     })
   });
 });
