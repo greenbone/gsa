@@ -1,5 +1,10 @@
 2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add a waiting cursor before the
+	  dialog show up.
+
+2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Add support for most of the edit
 	  buttons.
 

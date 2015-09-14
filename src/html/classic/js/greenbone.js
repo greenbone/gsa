@@ -142,6 +142,7 @@
     if (button === undefined){ button = 'Create';}
     this.params.cmd = this.command
     this.params.token = $('#gsa-token').text();
+    $('body').css('cursor', 'wait');
     $.get(
       '/omp?' + $.param(this.params)
     ).done(function(html){
@@ -161,6 +162,8 @@
       // remove the 'submit' button
       dialog.find('input[type=submit]').closest('tr').remove();
 
+      $('body').css('cursor', "");
+ 
       // show the dialog !
       dialog.dialog({
         modal: true,
