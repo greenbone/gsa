@@ -165,4 +165,19 @@
     });
   };
   window.OMPDialog = OMPDialog;
+
+  $(document).ready(function(){
+    $(".edit-action-icon").each(function(){
+      var elem = $(this),
+          type_id = elem.data('id'),
+          type_name = elem.data('type'),
+          params = {};
+      params[type_name + '_id'] = type_id;
+      elem.on('click', function(event){
+        event.preventDefault();
+        new OMPDialog('edit_' + type_name, true, params).show('Save');
+      })
+    });
+  });
+
 }(window);

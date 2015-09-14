@@ -1,5 +1,10 @@
 2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Enable
+	  the edit dialog on all tables. (not functionnal yet)
+
+2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* CMakeLists.txt, src/html/classic/css/gsa-style.css,
 	  src/html/classic/js/greenbone.js: Implement a waiting state.
 	* src/html/classic/img/loading.gif: Add

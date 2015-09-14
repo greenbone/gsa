@@ -7098,21 +7098,6 @@ var toggleFilter = function(){
   <xsl:apply-templates select="modify_task_response"/>
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
-  <script type="text/javascript">
-$(document).ready(function(){
-  $(".edit-action-icon").each(function(){
-    var elem = $(this),
-        type_id = elem.data('id'),
-        type_name = elem.data('type'),
-        params = {};
-    params[type_name + '_id'] = type_id
-    elem.on('click', function(event){
-      event.preventDefault();
-      new OMPDialog('edit_' + type_name, true, params).show('Save');
-    })
-  });
-});
-  </script>
 </xsl:template>
 
 <xsl:template name="html-tasks-table">
