@@ -1,5 +1,10 @@
 2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add support for most of the edit
+	  buttons.
+
+2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Enable
 	  the edit dialog on all tables. (not functionnal yet)
 

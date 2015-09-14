@@ -12,10 +12,25 @@
   };
 
   var RESPONSE_SELECTORS = {
-    new_target:    'create_target_response',
-    new_port_list: 'create_port_list_response',
+    new_target:          'create_target_response',
+    new_port_list:       'create_port_list_response',
     // ------
-    edit_task:     'modify_task_response',
+    edit_agent:          'modify_agent_response',
+    edit_alert:          'modify_alert_response',
+    edit_filter:         'modify_filter_response',
+    edit_group:          'modify_group_response',
+    edit_lsc_credential: 'modify_lsc_credential_response',
+    edit_note:           'modify_note_response',
+    edit_override:       'modify_override_response',
+    edit_permission:     'modify_permission_response',
+    edit_port_list:      'modify_port_list_response',
+    edit_report_format:  'modify_report_format_response',
+    edit_role:           'modify_role_response',
+    edit_slave:          'modify_slave_response',
+    edit_tag:            'modify_tag_response',
+    edit_target:         'modify_target_response',
+    edit_task:           'modify_task_response',
+    edit_user:           'modify_user_response',
   };
 
   var NAME_SELECTORS = {
@@ -24,7 +39,7 @@
   }
 
   var isStatusOk = function(status_code){
-    return (status_code == 200) || (status_code == 201);
+    return (status_code == 200) || (status_code == 201) || (status_code == 202);
   }
 
   /**
