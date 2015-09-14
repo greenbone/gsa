@@ -458,6 +458,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/st_nonavailable.png
                src/html/classic/img/st_mitigate.png
                src/html/classic/img/p_bar_gray.png
+               src/html/classic/img/loading.gif
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png

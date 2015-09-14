@@ -47,6 +47,23 @@
     }
   };
 
+  OMPDialog.prototype.waiting = function(dialog){
+    // I believe there have to be a better way to find this.
+    var button = dialog.closest('.ui-dialog').find('button').last();
+    this.label = button.button('option', 'label');
+    button.button('disable');
+    button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
+    button.button('option', 'icons', {primary: 'ui-icon-waiting'});
+  }
+
+  OMPDialog.prototype.done = function(dialog){
+    // I believe there have to be a better way to find this.
+    var button = dialog.closest('.ui-dialog').find('button').last();
+    button.button('enable');
+    button.button('option', 'label', this.label);
+    button.button('option', 'icons', {primary: null});
+  }
+
   OMPDialog.prototype.postForm = function(dialog){
     var self = this,
         data = new FormData(dialog.find('form')[0]);
@@ -74,13 +91,20 @@
           "class": "ui-state-error ui-corner-all",
           html: $("<p><strong>Error :</strong> " + error + "</p>"),
         }));
+
+        // restore the original button.
+        self.done(dialog);
+
         return;
       }
       if (self.reload === true){
-        window.document.location.reload()
+        window.document.location.reload();
+        // a bit overkill, but better-safe-than-sorry.
+        return;
       }
       if (self.element === undefined){
         // No element to update, exit early.
+        dialog.dialog("close");
         return;
       }
       // get the uuid of the created resource
@@ -130,8 +154,10 @@
           {
             text: button,
             click: function(){
-              // small trick to have `this` set right inside the method.
-              self.postForm($(this));
+              var dialog = $(this);
+              self.waiting(dialog);
+
+              self.postForm(dialog);
             },
           },
         ],
