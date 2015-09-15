@@ -12,9 +12,24 @@
   };
 
   var RESPONSE_SELECTORS = {
+    new_agent:           'create_agent_response',
+    new_alert:           'create_alert_response',
+    new_config:          'create_config_response',
+    new_filter:          'create_filter_response',
+    new_group:           'create_group_response',
+    new_lsc_credential:  'create_lsc_credential_response',
+    new_note:            'create_note_response',
+    new_override:        'create_override_response',
+    new_permission:      'create_permission_response',
     new_port_list:       'create_port_list_response',
+    new_report_format:   'create_report_format_response',
+    new_role:            'create_role_response',
+    new_scanner:         'create_scanner_response',
+    new_slave:           'create_slave_response',
+    new_tag:             'create_tag_response',
     new_target:          'create_target_response',
     new_task:            'create_task_response',
+    new_user:            'create_user_response',
     // ------
     edit_agent:          'modify_agent_response',
     edit_alert:          'modify_alert_response',

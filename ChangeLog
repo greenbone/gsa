@@ -1,5 +1,9 @@
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add support for more new dialogs.
+
+2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Set the cursor on the html
 	  element, it's even bigger.
 
