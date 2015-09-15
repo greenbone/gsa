@@ -95,6 +95,16 @@
     button.button('option', 'icons', {primary: null});
   }
 
+  OMPDialog.prototype.error = function(message){
+    //Remove previous errors
+    this.dialog.find('div.ui-state-error').remove();
+    // Insert our error message
+    this.dialog.prepend($("<div/>", {
+      "class": "ui-state-error ui-corner-all",
+      html: $("<p><strong>Error :</strong> " + message + "</p>"),
+    }));
+  };
+
   OMPDialog.prototype.postForm = function(){
     var self = this,
         data = new FormData(this.dialog.find('form')[0]);
@@ -115,13 +125,7 @@
         if (gsad_msg.length == 0){
           error = response.attr('status_text');
         }
-        //Remove previous errors
-        self.dialog.find('div.ui-state-error').remove();
-        // Insert our error message
-        self.dialog.prepend($("<div/>", {
-          "class": "ui-state-error ui-corner-all",
-          html: $("<p><strong>Error :</strong> " + error + "</p>"),
-        }));
+        self.error(error);
 
         // restore the original button.
         self.done();
@@ -150,6 +154,7 @@
 
       // And finally, close our dialog.
       self.dialog.dialog("close");
+      self.dialog = undefined;
     });
   };
 
@@ -164,14 +169,17 @@
     ).done(function(html){
 
       // get the content of the (first) window
-      var gb_window = $(html).find('.gb_window').first();
-
+      var gb_windows = $(html).find('.gb_window'),
+          gb_window = gb_windows.first();
           // create a new div
       self.dialog = $("<div/>", {
-            id: "dialog-form",
-            title:  $(gb_window).find('.gb_window_part_center').justtext(),
-            html: $(gb_window).find('div:nth-child(4)').html(),
-          });
+        id: "dialog-form",
+        title:  gb_window.find('.gb_window_part_center').justtext(),
+        html: gb_window.find('div:nth-child(4)').html(),
+      });
+      if (gb_windows.length > 1){
+        self.error( (gb_windows.length - 1) + " forms not displayed !");
+      }
       // fancy-up the selects
       onReady(self.dialog);
 

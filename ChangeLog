@@ -1,5 +1,10 @@
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Display an error when part of the
+	  page was ignored.
+
+2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Add support for more new dialogs.
 
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
