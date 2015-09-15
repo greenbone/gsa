@@ -1,3 +1,8 @@
+2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js:
+	  Implement the dialog for all remaining edit buttons (almost).
+
 2015-09-14  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Add a waiting cursor before the

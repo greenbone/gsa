@@ -154,7 +154,7 @@
           dialog = $("<div/>", {
             id: "dialog-form",
             title:  $(gb_window).find('.gb_window_part_center').justtext(),
-            html: $(gb_window).find('.gb_window_part_content').html(),
+            html: $(gb_window).find('div:nth-child(4)').html(),
           });
       // fancy-up the selects
       dialog.find('select').select2();
