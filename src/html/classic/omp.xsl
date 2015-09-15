@@ -4862,7 +4862,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
       </tr>
       <tr>
-        <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+        <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
         <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
       </tr>
       <tr>
@@ -14307,7 +14307,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:long-time ($config/creation_time)"/></td>
             </tr>
             <tr>
-              <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+              <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
               <td><xsl:value-of select="gsa:long-time ($config/modification_time)"/></td>
             </tr>
           </table>
@@ -18480,7 +18480,7 @@ $(document).ready(function() {
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
           </tr>
           <tr>
@@ -18766,7 +18766,7 @@ $(document).ready(function() {
           </xsl:if>
           <xsl:if test="info/modification_time != ''">
             <tr>
-              <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+              <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
               <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
             </tr>
           </xsl:if>
@@ -18922,7 +18922,7 @@ $(document).ready(function() {
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
           </tr>
         </table>
@@ -19178,7 +19178,7 @@ $(document).ready(function() {
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
           </tr>
         </table>
@@ -19361,7 +19361,7 @@ $(document).ready(function() {
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
           </tr>
         </table>
@@ -19484,7 +19484,7 @@ $(document).ready(function() {
       </xsl:if>
       <xsl:if test="modification_time != ''">
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
           <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
       </xsl:if>
@@ -25779,7 +25779,7 @@ $(document).ready(function() {
       <xsl:call-template name="user_tag_list"/>
       <br/>
     </xsl:if>
-    <xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>: <xsl:value-of select="gsa:long-time (modification_time)"/>.
+    <xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>: <xsl:value-of select="gsa:long-time (modification_time)"/>.
   </div>
 </xsl:template>
 
@@ -26027,7 +26027,7 @@ $(document).ready(function() {
         <br/>
       </xsl:if>
     </div>
-    <div><xsl:value-of select="gsa:i18n ('Last modified', 'Date')"/>: <xsl:value-of select="gsa:long-time (modification_time)"/>.</div>
+    <div><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>: <xsl:value-of select="gsa:long-time (modification_time)"/>.</div>
   </div>
 </xsl:template>
 

@@ -1,5 +1,13 @@
 2015-09-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl: Change any "Last modified" into just "Modified"
+	in the user interface. The shorter term is used for columns already and in
+	fact no other value than the latest modification date makes sense and
+	users would never expect some other than this. The shorter term
+	looks more consistent and is, well, shorter.
+
+2015-09-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/help.xsl (mode="help" match="nvts.html"): Fix minor typo.
 
 2015-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
