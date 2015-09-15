@@ -1307,7 +1307,7 @@ init_validator ()
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "submit_plus",    "^\\+$");
-  openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
+  openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
@@ -1344,6 +1344,7 @@ init_validator ()
   openvas_validator_alias (validator, "build_filter",    "boolean");
   /* the "bulk_[...].x" parameters are used to identify the image type
    *  form element used to submit the form for process_bulk */
+  openvas_validator_alias (validator, "bulk_create.x", "number");
   openvas_validator_alias (validator, "bulk_delete.x", "number");
   openvas_validator_alias (validator, "bulk_export.x", "number");
   openvas_validator_alias (validator, "bulk_trash.x",  "number");
@@ -1391,7 +1392,9 @@ init_validator ()
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");
   openvas_validator_alias (validator, "host_levels",        "levels");
+  openvas_validator_alias (validator, "host_count",         "number");
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
+  openvas_validator_alias (validator, "hosts_filter",       "filter");
   openvas_validator_alias (validator, "lsc_esxi_credential_id",
                            "lsc_credential_id");
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");

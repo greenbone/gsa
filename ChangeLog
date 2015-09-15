@@ -1,3 +1,20 @@
+2015-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add creation of targets from bulk selection to Hosts page.
+
+	* src/gsad.c (init_validator): Add asset_hosts to target_source.
+	Add new params.
+
+	* src/gsad_omp.c (create_target_omp): Add ASSET_HOSTS to OMP if "From
+	host assets" radio was selected.
+	(process_bulk_omp): Add create action.
+	(create_host_omp): Correct fallback page.
+
+	* src/html/classic/omp.xsl (list-window): Add inputs for creating target
+	to Hosts page bulk inputs.
+	(html-create-target-form): Add "From host assets" radio.
+	(asset/host): Replace New Target row icon with form icon.
+
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js,

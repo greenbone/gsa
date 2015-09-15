@@ -7865,9 +7865,9 @@ create_target_omp (credentials_t * credentials, params_t *params,
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *target_esxi_credential;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
-  const char *alive_tests;
+  const char *alive_tests, *hosts_filter;
   gchar *credentials_element, *smb_credentials_element;
-  gchar *esxi_credentials_element;
+  gchar *esxi_credentials_element, *asset_hosts_element;
   gchar* comment_element = NULL;
   entity_t entity;
   GString *xml;
@@ -7885,6 +7885,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
   target_esxi_credential = params_value (params, "lsc_esxi_credential_id");
   alive_tests = params_value (params, "alive_tests");
+  hosts_filter = params_value (params, "hosts_filter");
 
   CHECK_PARAM (name, "Create Target", new_target);
   CHECK_PARAM (target_source, "Create Target", new_target)
@@ -7902,6 +7903,11 @@ create_target_omp (credentials_t * credentials, params_t *params,
       g_free (msg);
       return html;
     }
+  CHECK_PARAM (hosts_filter, "Create Target", new_target);
+  if (hosts_filter == NULL && strcmp (target_source, "asset_hosts") == 0)
+    return new_target (credentials, params,
+                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
+                       response_data);
   CHECK_PARAM (comment, "Create Target", new_target);
   CHECK_PARAM (port_list_id, "Create Target", new_target);
   CHECK_PARAM (target_credential, "Create Target", new_target);
@@ -7940,6 +7946,12 @@ create_target_omp (credentials_t * credentials, params_t *params,
       g_strdup_printf ("<esxi_lsc_credential id=\"%s\"/>",
                        target_esxi_credential);
 
+  if (strcmp (target_source, "asset_hosts") == 0)
+    asset_hosts_element = g_strdup_printf ("<asset_hosts filter=\"%s\"/>",
+                                           hosts_filter);
+  else
+    asset_hosts_element = g_strdup ("");
+
   /* Create the target. */
 
   xml = g_string_new ("");
@@ -7954,8 +7966,8 @@ create_target_omp (credentials_t * credentials, params_t *params,
                      "<alive_tests>%s</alive_tests>",
                      name,
                      strcmp (target_source, "file") == 0
-                            ? params_value (params, "file")
-                            : hosts,
+                      ? params_value (params, "file")
+                      : hosts,
                      exclude_hosts ? exclude_hosts : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",
@@ -7963,13 +7975,14 @@ create_target_omp (credentials_t * credentials, params_t *params,
                      alive_tests);
 
   command = g_strdup_printf ("<create_target>"
-                             "%s%s%s%s%s"
+                             "%s%s%s%s%s%s"
                              "</create_target>",
                              xml->str,
                              comment_element,
                              credentials_element,
                              smb_credentials_element,
-                             esxi_credentials_element);
+                             esxi_credentials_element,
+                             asset_hosts_element);
 
   g_string_free (xml, TRUE);
   g_free (comment_element);
@@ -23877,7 +23890,9 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
   else
     subtype = NULL;
 
-  if (params_valid (params, "bulk_delete.x"))
+  if (params_valid (params, "bulk_create.x"))
+    action = "create";
+  else if (params_valid (params, "bulk_delete.x"))
     action = "delete";
   else if (params_valid (params, "bulk_export.x"))
     action = "export";
@@ -23889,6 +23904,41 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                          "An internal error occurred while performing a bulk action. "
                          "Diagnostics: Could not determine the action.",
                          "/omp?cmd=get_tasks");
+
+  if (strcmp (action, "create") == 0)
+    {
+      if (params_value (params, "bulk_select")
+          && strcmp (params_value (params, "bulk_select"), "1") == 0)
+        {
+          bulk_string = g_string_new ("first=1 rows=-1 uuid=");
+
+          selected_ids = params_values (params, "bulk_selected:");
+          if (selected_ids)
+            {
+              params_iterator_init (&iter, selected_ids);
+              while (params_iterator_next (&iter, &param_name, &param))
+                xml_string_append (bulk_string,
+                                   " uuid=%s",
+                                   param_name);
+            }
+        }
+      else if (params_value (params, "bulk_select")
+               && strcmp (params_value (params, "bulk_select"), "2") == 0)
+        {
+          bulk_string = g_string_new ("first=1 rows=-1 ");
+          g_string_append (bulk_string, params_value (params, "filter") ? : "");
+        }
+      else
+        {
+          bulk_string = g_string_new (params_value (params, "filter") ? : "");
+        }
+      param = params_add (params, "hosts_filter", bulk_string->str);
+      param->valid = 1;
+      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+      g_string_free (bulk_string, TRUE);
+
+      return new_target (credentials, params, NULL, response_data);
+    }
 
   if (strcmp (action, "export") == 0)
     {
@@ -23937,7 +23987,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
   g_string_append (bulk_string, "<selections>");
 
   if (params_value (params, "bulk_select")
-          && strcmp (params_value (params, "bulk_select"), "2") == 0)
+      && strcmp (params_value (params, "bulk_select"), "2") == 0)
     {
       int ret;
       entity_t entity;
@@ -24232,21 +24282,21 @@ create_host_omp (credentials_t * credentials, params_t *params,
                             "An internal error occurred while creating a new host. "
                             "No new host was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_hosts");
+                            "/omp?cmd=get_assets");
       case 2:
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_hosts");
+                            "/omp?cmd=get_assets");
       default:
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_hosts");
+                            "/omp?cmd=get_assets");
     }
 
   if (omp_success (entity))

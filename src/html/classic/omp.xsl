@@ -4691,6 +4691,9 @@ var toggleFilter = function(){
               <input type="hidden" name="resource_type" value="{$type}"/>
 
               <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
+              <xsl:if test="$type = 'asset' and $subtype = 'host' and gsa:may-op ('create_target')">
+                <input style="margin-right:3px" type="image" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
+              </xsl:if>
               <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
                 <input style="margin-right:3px" type="image" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
               </xsl:if>
@@ -4715,6 +4718,19 @@ var toggleFilter = function(){
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
                     <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
                       <xsl:choose>
+                        <xsl:when test="$type = 'asset' and $subtype = 'host'">
+                          <xsl:choose>
+                            <xsl:when test="/envelope/params/bulk_select = 2">
+                              <input type="hidden" name="host_count" value="{$filtered-count}"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <input type="hidden" name="host_count" value="{$count}"/>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                          <xsl:for-each select="$resources">
+                            <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
+                          </xsl:for-each>
+                        </xsl:when>
                         <xsl:when test="$type = 'info'">
                           <xsl:for-each select="$resources">
                             <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
@@ -4744,9 +4760,10 @@ var toggleFilter = function(){
           </table>
         </xsl:variable>
 
-        <!-- Output the table from the variable (wrapped in a form if bulk). -->
+        <!-- Output the table from the variable. -->
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select = 1">
+            <!-- Bulk "Apply to selection" (the page with checkboxes). -->
             <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
               <xsl:copy-of select="$table"/>
             </form>
@@ -11406,6 +11423,37 @@ should not have received it.
                     <input type="file" name="file" size="30"/>
                   </td>
                 </tr>
+                <xsl:variable name="host_count" select="/envelope/params/host_count"/>
+                <xsl:choose>
+                  <xsl:when test="$host_count &gt; 0">
+                    <tr>
+                      <td colspan="2">
+                        <label>
+                          <xsl:choose>
+                            <xsl:when test="$host_count > 0">
+                              <input type="radio" name="target_source" value="asset_hosts"
+                                     checked="1"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <input type="radio" name="target_source" value="asset_hosts"/>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                          <xsl:value-of select="gsa:i18n ('From host assets', 'Target')"/>
+                          <xsl:text> (</xsl:text>
+                          <input type="hidden" name="hosts_filter" value="{/envelope/params/hosts_filter}"/>
+                          <a href="?cmd=get_assets&amp;type=host&amp;filter={/envelope/params/hosts_filter}&amp;token={/envelope/token}">
+                            <xsl:value-of select="$host_count"/>
+                            <xsl:text> hosts</xsl:text>
+                          </a>
+                          <xsl:text>)</xsl:text>
+                        </label>
+                      </td>
+                    </tr>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="hosts_filter" value=""/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </table>
             </td>
           </tr>
@@ -35046,14 +35094,19 @@ var toggleFilter = function(){
                    style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
-          <a href="/omp?cmd=new_target&amp;hosts={../name}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('New Target with this Host', 'Assets')}"
-             style="margin-left:3px;">
-            <img src="/img/new.png" border="0" alt="{gsa:i18n ('New Target with this Host', 'Action Verb')}"/>
-          </a>
+          <form style="display:inline; margin-left:3px;" action="/omp" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="process_bulk"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+            <input type="hidden" name="filter" value="uuid={../@id}"/>
+            <input type="hidden" name="filt_id" value=""/>
+            <input type="hidden" name="bulk_select" value="3"/>
+            <input type="hidden" name="resource_type" value="asset"/>
+            <input type="hidden" name="host_count" value="1"/>
+            <input type="image" name="bulk_create" title="{gsa:i18n ('Create Target from host', 'Bulk Action')}" src="/img/new.png"/>
+          </form>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export Host', 'Assets')}"
-             style="margin-left:3px;">
+             title="{gsa:i18n ('Export Host', 'Assets')}">
             <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
           </a>
         </td>
