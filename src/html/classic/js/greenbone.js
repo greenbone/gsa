@@ -63,26 +63,26 @@
     }
   };
 
-  OMPDialog.prototype.waiting = function(dialog){
+  OMPDialog.prototype.waiting = function(){
     // I believe there have to be a better way to find this.
-    var button = dialog.closest('.ui-dialog').find('button').last();
+    var button = this.dialog.closest('.ui-dialog').find('button').last();
     this.label = button.button('option', 'label');
     button.button('disable');
     button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
     button.button('option', 'icons', {primary: 'ui-icon-waiting'});
   }
 
-  OMPDialog.prototype.done = function(dialog){
+  OMPDialog.prototype.done = function(){
     // I believe there have to be a better way to find this.
-    var button = dialog.closest('.ui-dialog').find('button').last();
+    var button = this.dialog.closest('.ui-dialog').find('button').last();
     button.button('enable');
     button.button('option', 'label', this.label);
     button.button('option', 'icons', {primary: null});
   }
 
-  OMPDialog.prototype.postForm = function(dialog){
+  OMPDialog.prototype.postForm = function(){
     var self = this,
-        data = new FormData(dialog.find('form')[0]);
+        data = new FormData(this.dialog.find('form')[0]);
     data.append('xml', 1);
     $.ajax({
       url: '/omp',
@@ -101,15 +101,15 @@
           error = response.attr('status_text');
         }
         //Remove previous errors
-        dialog.find('div.ui-state-error').remove();
+        self.dialog.find('div.ui-state-error').remove();
         // Insert our error message
-        dialog.prepend($("<div/>", {
+        self.dialog.prepend($("<div/>", {
           "class": "ui-state-error ui-corner-all",
           html: $("<p><strong>Error :</strong> " + error + "</p>"),
         }));
 
         // restore the original button.
-        self.done(dialog);
+        self.done();
 
         return;
       }
@@ -120,7 +120,7 @@
       }
       if (self.element === undefined){
         // No element to update, exit early.
-        dialog.dialog("close");
+        self.dialog.dialog("close");
         return;
       }
       // get the uuid of the created resource
@@ -134,7 +134,7 @@
       self.element.select2();
 
       // And finally, close our dialog.
-      dialog.dialog("close");
+      self.dialog.dialog("close");
     });
   };
 
@@ -149,34 +149,33 @@
     ).done(function(html){
 
       // get the content of the (first) window
-      var gb_window = $(html).find('.gb_window').first(),
+      var gb_window = $(html).find('.gb_window').first();
 
           // create a new div
-          dialog = $("<div/>", {
+      self.dialog = $("<div/>", {
             id: "dialog-form",
             title:  $(gb_window).find('.gb_window_part_center').justtext(),
             html: $(gb_window).find('div:nth-child(4)').html(),
           });
       // fancy-up the selects
-      onReady(dialog);
+      onReady(self.dialog);
 
       // remove the 'submit' button
-      dialog.find('input[type=submit]').closest('tr').remove();
+      self.dialog.find('input[type=submit]').closest('tr').remove();
 
       $('body').css('cursor', "");
  
       // show the dialog !
-      dialog.dialog({
+      self.dialog.dialog({
         modal: true,
         width: 800,
         buttons:[
           {
             text: button,
             click: function(){
-              var dialog = $(this);
-              self.waiting(dialog);
+              self.waiting();
 
-              self.postForm(dialog);
+              self.postForm();
             },
           },
         ],
