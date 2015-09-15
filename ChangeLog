@@ -1,3 +1,13 @@
+2015-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (process_bulk_omp): Remove "uuid=" from string, it's
+	added for each ID.
+
+	* src/html/classic/omp.xsl (list-window): Add host_count for "Apply to
+	selection" case too.
+	(html-create-target-form): If the host count is 0 then use the count of
+	bulk_selected params.  This is for the "Apply to selection" case.
+
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Display an error when part of the

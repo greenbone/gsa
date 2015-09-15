@@ -4752,6 +4752,11 @@ var toggleFilter = function(){
                 <xsl:apply-templates select="$resources"/>
                 <tr style="background:#DDDDDD">
                   <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
+                    <xsl:choose>
+                      <xsl:when test="$type = 'asset' and $subtype = 'host'">
+                        <input type="hidden" name="host_count" value="0"/>
+                      </xsl:when>
+                    </xsl:choose>
                     <xsl:copy-of select="$bulk-elements"/>
                   </td>
                 </tr>
@@ -11423,7 +11428,16 @@ should not have received it.
                     <input type="file" name="file" size="30"/>
                   </td>
                 </tr>
-                <xsl:variable name="host_count" select="/envelope/params/host_count"/>
+                <xsl:variable name="host_count">
+                  <xsl:choose>
+                    <xsl:when test="/envelope/params/host_count = 0">
+                      <xsl:value-of select="count (/envelope/params/_param[substring (name, 1, 13) = 'bulk_selected'])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="/envelope/params/host_count"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="$host_count &gt; 0">
                     <tr>

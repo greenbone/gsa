@@ -23910,7 +23910,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       if (params_value (params, "bulk_select")
           && strcmp (params_value (params, "bulk_select"), "1") == 0)
         {
-          bulk_string = g_string_new ("first=1 rows=-1 uuid=");
+          bulk_string = g_string_new ("first=1 rows=-1");
 
           selected_ids = params_values (params, "bulk_selected:");
           if (selected_ids)
