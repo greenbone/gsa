@@ -12,8 +12,9 @@
   };
 
   var RESPONSE_SELECTORS = {
-    new_target:          'create_target_response',
     new_port_list:       'create_port_list_response',
+    new_target:          'create_target_response',
+    new_task:            'create_task_response',
     // ------
     edit_agent:          'modify_agent_response',
     edit_alert:          'modify_alert_response',
@@ -157,7 +158,7 @@
             html: $(gb_window).find('div:nth-child(4)').html(),
           });
       // fancy-up the selects
-      dialog.find('select').select2();
+      onReady(dialog);
 
       // remove the 'submit' button
       dialog.find('input[type=submit]').closest('tr').remove();
@@ -184,8 +185,10 @@
   };
   window.OMPDialog = OMPDialog;
 
-  $(document).ready(function(){
-    $(".edit-action-icon").each(function(){
+  var onReady = function(doc){
+    doc = $(doc);
+
+    doc.find(".edit-action-icon").each(function(){
       var elem = $(this),
           type_id = elem.data('id'),
           type_name = elem.data('type'),
@@ -194,8 +197,27 @@
       elem.on('click', function(event){
         event.preventDefault();
         new OMPDialog('edit_' + type_name, true, params).show('Save');
-      })
+      });
     });
+
+    doc.find(".new-action-icon").each(function(){
+      var elem = $(this),
+          type_name = elem.data('type'),
+          done = elem.data('done');
+      if (done === undefined){
+        done = true;
+      }
+      elem.on('click', function(event){
+        event.preventDefault();
+        new OMPDialog('new_' + type_name, done).show();
+      });
+    });
+
+    doc.find('select').select2();
+  };
+
+  $(window.document).ready(function(){
+    onReady(window.document);
   });
 
 }(window);

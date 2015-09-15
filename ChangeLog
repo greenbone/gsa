@@ -1,5 +1,11 @@
 2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js,
+	  src/html/classic/gsad.xsl: Enable the new dialog on most of the
+	  'new' buttons (not functionnal everywhere yet).
+
+2015-09-15  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js:
 	  Implement the dialog for all remaining edit buttons (almost).
 

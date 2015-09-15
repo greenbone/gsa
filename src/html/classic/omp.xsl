@@ -4465,6 +4465,7 @@ var toggleFilter = function(){
         <xsl:when test="$new-icon and $subtype != ''">
           <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
           <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             class="new-action-icon" data-type="{$subtype}"
              title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -4472,6 +4473,7 @@ var toggleFilter = function(){
         <xsl:when test="$new-icon">
           <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             class="new-action-icon" data-type="{$type}"
              title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -4876,6 +4878,7 @@ var toggleFilter = function(){
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+         class="new-action-icon" data-type="{$type}"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -5335,7 +5338,8 @@ var toggleFilter = function(){
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <a href="#" class="newTarget" title="{ gsa:i18n('Create a new target') }" onClick="javascript:new OMPDialog('new_target', 'select[name=target_id]').show(); return false;">
+            <a href="#" title="{ gsa:i18n('Create a new target') }"
+               class="new-action-icon" data-type="target" data-done="select[name=target_id]">
               <img src="/img/new.png"/>
             </a>
           </td>
@@ -11445,7 +11449,8 @@ should not have received it.
                     <xsl:with-param name="select_id" select="port_list_id"/>
                   </xsl:apply-templates>
                 </select>
-                <a href="#" class="newportlist" title="{ gsa:i18n('Create a new port list') }" onClick="javascript:new OMPDialog('new_port_list', 'select[name=port_list_id]').show(); return false;">
+                <a href="#" title="{ gsa:i18n('Create a new port list') }"
+                   class="new-action-icon" data-type="port_list" data-done="select[name=port_list_id]">
                   <img src="/img/new.png"/>
                 </a>
               </td>
@@ -14090,7 +14095,8 @@ should not have received it.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('New Scan Config', 'Scan Config')}">
+         title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
+         class="new-action-icon" data-type="config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <xsl:choose>
@@ -34700,7 +34706,8 @@ var toggleFilter = function(){
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=new_host&amp;next=get_asset&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;asset_id={@id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('New Host')}">
+         title="{gsa:i18n ('New Host')}"
+         class="new-action-icon" data-type="host">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
