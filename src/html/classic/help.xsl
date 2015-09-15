@@ -9717,7 +9717,7 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Modified</td>
-          <td>This date the NVT was last modified.</td>
+          <td>The date the NVT was last modified.</td>
         </tr>
         <tr class="even">
           <td>Version</td>
