@@ -1114,6 +1114,7 @@ init_validator ()
                          "|(sync_scap)"
                          "|(sync_cert)"
                          "|(toggle_tag)"
+                         "|(upload_config)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(verify_scanner)"
@@ -3087,6 +3088,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_scanner)
   ELSE (new_schedule)
   ELSE (new_slave)
+  ELSE (upload_config)
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (verify_scanner)

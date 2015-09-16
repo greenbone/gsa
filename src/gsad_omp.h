@@ -216,6 +216,7 @@ char * edit_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * get_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * get_configs_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * new_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * upload_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * save_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * edit_config_family_omp (credentials_t *, params_t *,
                                cmd_response_data_t*);

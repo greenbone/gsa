@@ -1,5 +1,21 @@
 2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Move Import Scan Config form from New Config page to dedicated page.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add upload_config.
+
+	* src/gsad_omp.c (upload_config, upload_config_omp): New functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/classic/omp.xsl (list-window): Add upload icon.
+	(new_config): Remove html-import-config-form call.
+	(upload_config): New template.
+	(html-config-table): Add upload icon.
+	(html-configs-table): Enable upload icon.
+
+2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_my_settings_omp): Use the filters instead of
 	defaults when sending resource filters.
 

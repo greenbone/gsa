@@ -4405,6 +4405,7 @@ var toggleFilter = function(){
   <xsl:param name="columns"/>
   <xsl:param name="icon-count" select="8"/>
   <xsl:param name="new-icon" select="gsa:may-op (concat ('create_', $type))"/>
+  <xsl:param name="upload-icon" select="false ()"/>
   <xsl:param name="default-filter"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="extra_params_string">
@@ -4476,6 +4477,16 @@ var toggleFilter = function(){
              class="new-action-icon" data-type="{$type}"
              title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="$upload-icon">
+          <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
+          <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             class="new-upload-icon" data-type="{$type}"
+             title="{gsa:i18n (concat ('Upload ', $cap-type), $cap-type)}">
+            <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:when>
       </xsl:choose>
@@ -13001,6 +13012,12 @@ should not have received it.
   <xsl:apply-templates select="create_config_response"/>
   <xsl:apply-templates select="commands_response/delete_config_response"/>
   <xsl:call-template name="html-create-config-form"/>
+</xsl:template>
+
+<xsl:template match="upload_config">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_config_response"/>
+  <xsl:apply-templates select="commands_response/delete_config_response"/>
   <xsl:call-template name="html-import-config-form"/>
 </xsl:template>
 
@@ -14136,6 +14153,7 @@ should not have received it.
 
 <xsl:template name="html-config-table">
  <xsl:variable name="config" select="get_configs_response/config"/>
+
  <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
@@ -14160,6 +14178,11 @@ should not have received it.
          title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
          class="new-action-icon" data-type="config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         class="upload-icon" data-type="config"
+         title="{gsa:i18n ('Upload Config', 'Config')}">
+        <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
       </a>
       <xsl:choose>
         <xsl:when test="gsa:may-clone ('config')">
@@ -14460,6 +14483,7 @@ should not have received it.
       </column>
     </xsl:with-param>
     <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
+    <xsl:with-param name="upload-icon" select="true ()"/>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
