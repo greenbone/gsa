@@ -25,6 +25,7 @@
     new_report_format:   'create_report_format_response',
     new_role:            'create_role_response',
     new_scanner:         'create_scanner_response',
+    new_schedule:        'create_schedule_response',
     new_slave:           'create_slave_response',
     new_tag:             'create_tag_response',
     new_target:          'create_target_response',
@@ -251,6 +252,28 @@
     });
 
     doc.find('select').select2();
+
+
+    var datepicker = doc.find("#datepicker");
+    if (datepicker.length) {
+      var curDate = doc.find('input[name=month]').val() + '/' + doc.find('input[name=day_of_month]').val() + '/' + doc.find('input[name=year]').val();
+      datepicker.datepicker({
+        showOn: "button",
+        buttonImage: "img/calendar.png",
+        buttonText: "Select date",
+        altField: doc.find("#datevalue"),
+        altFormat: "DD, d MM, yy",
+        minDate: curDate,
+        maxDate: "+3Y",
+        onClose: function(){
+          var date = $(this).datepicker("getDate");
+          doc.find('input[name=day_of_month]').val(date.getDate())
+          doc.find('input[name=month]').val(date.getMonth() + 1)
+          doc.find('input[name=year]').val(date.getFullYear())
+        },
+      });
+      datepicker.datepicker("setDate", curDate);
+    }
   };
 
   $(window.document).ready(function(){

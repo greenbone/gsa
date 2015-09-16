@@ -14798,27 +14798,6 @@ should not have received it.
             <td>
               <input id="datevalue" size="30"/>
               <input id="datepicker" type="hidden"/>,
-              <script>
-$(document).ready(function() {
-  var updateForm = function(dateText, inst){
-    var date = $(this).datepicker("getDate");
-    $('input[name=day_of_month]').val(date.getDate())
-    $('input[name=month]').val(date.getMonth() + 1)
-    $('input[name=year]').val(date.getFullYear())
-  };
-  $( "#datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "img/calendar.png",
-    buttonText: "Select date",
-    altField: "#datevalue",
-    altFormat: "DD, d MM, yy",
-    minDate: "0",
-    maxDate: "+3Y",
-    onClose: updateForm,
-  });
-  $("#datepicker").datepicker("setDate", "0");
-});
-  </script>
               <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
               <input name="month" type="hidden" value="{time/month}"/>
               <input name="year" type="hidden" value="{time/year}"/>
@@ -15185,31 +15164,9 @@ $(document).ready(function() {
             <td>
               <input id="datevalue" size="30"/>
               <input id="datepicker" type="hidden"/>,
-              <script>
-$(document).ready(function() {
-  var updateForm = function(dateText, inst){
-    var date = $(this).datepicker("getDate");
-    $('input[name=day_of_month]').val(date.getDate())
-    $('input[name=month]').val(date.getMonth() + 1)
-    $('input[name=year]').val(date.getFullYear())
-  };
-  var curDate = "<xsl:value-of select="format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')"/>/<xsl:value-of select="format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')"/>/<xsl:value-of select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>";
-  $( "#datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "img/calendar.png",
-    buttonText: "Select date",
-    altField: "#datevalue",
-    altFormat: "DD, d MM, yy",
-    minDate: curDate,
-    maxDate: "+3Y",
-    onClose: updateForm,
-  });
-  $("#datepicker").datepicker("setDate", curDate);
-});
-  </script>
-              <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
-              <input name="month" type="hidden" value="{time/month}"/>
-              <input name="year" type="hidden" value="{time/year}"/>
+              <input name="day_of_month" type="hidden" value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+              <input name="month" type="hidden" value="{format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+              <input name="year" type="hidden" value="{date:year (commands_response/get_schedules_response/schedule/first_time)}"/>
               <xsl:variable name="hour"
                             select="format-number (date:hour-in-day (commands_response/get_schedules_response/schedule/first_time), '00')"/>
               <select name="hour">

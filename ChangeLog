@@ -1,3 +1,8 @@
+2015-09-16  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Make the
+	  schedule dialog work again as popup dialog.
+
 2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Enable pop-up dialog for config upload.
