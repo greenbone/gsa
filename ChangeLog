@@ -1,3 +1,8 @@
+2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [os-details]): Add second column in
+	Unavailable case, for completeness.
+
 2015-09-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c: Set HTTP status codes for messages generated with

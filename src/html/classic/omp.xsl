@@ -34703,6 +34703,7 @@ var toggleFilter = function(){
                 <xsl:choose>
                   <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
                     <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+                    <td></td>
                   </xsl:when>
                   <xsl:otherwise>
                     <td>
