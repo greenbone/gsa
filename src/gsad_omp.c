@@ -97,10 +97,12 @@ int manager_port = 9390;
 /* Headers. */
 
 static int
-omp (credentials_t *, gchar **, entity_t *, const char *);
+omp (credentials_t *, gchar **, entity_t *, cmd_response_data_t*,
+     const char *);
 
 static int
-ompf (credentials_t *, gchar **, entity_t *, const char *, ...);
+ompf (credentials_t *, gchar **, entity_t *, cmd_response_data_t*,
+      const char *, ...);
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
@@ -345,11 +347,13 @@ print_chart_pref (gchar *id, gchar *value, GString* buffer)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  xml          XML string.  Freed before exit.
+ * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
  * @return Result of XSL transformation.
  */
 static char *
-xsl_transform_omp (credentials_t * credentials, gchar * xml)
+xsl_transform_omp (credentials_t * credentials, gchar * xml,
+                   cmd_response_data_t *response_data)
 {
   time_t now;
   gchar *res, *name;
@@ -439,7 +443,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                      ? g_base64_encode ((guchar*) refresh_interval,
                                         strlen (refresh_interval))
                      : g_strdup (""));
-      ret = ompf (credentials, &response, &entity,
+      ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_setting"
                   " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
                   "<value>%s</value>"
@@ -452,6 +456,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while modifying the"
@@ -460,6 +465,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                 " manager daemon.",
                                 "/omp?cmd=get_my_settings");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while modifying the"
@@ -468,6 +474,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                 " manager daemon.",
                                 "/omp?cmd=get_my_settings");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while modifying the"
@@ -536,6 +543,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   g_string_free (string, TRUE);
   if (html == NULL)
     {
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       res = g_strdup_printf ("<gsad_response>"
                              "<title>Internal Error</title>"
                              "<message>"
@@ -608,11 +616,13 @@ member1 (params_t *params, const char *string)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  session      Session with manager.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
-check_modify_config (credentials_t *credentials, gnutls_session_t *session)
+check_modify_config (credentials_t *credentials, gnutls_session_t *session,
+                     cmd_response_data_t *response_data)
 {
   entity_t entity;
   const char *status_text;
@@ -623,6 +633,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session)
 
   if (read_entity (session, &entity))
     {
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -637,6 +648,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session)
   if (status_text == NULL)
     {
       free_entity (entity);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -654,7 +666,8 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session)
                          " operation=\"Save Config\">"
                          "The config is now in use by a task,"
                          " so modification of the config is forbidden."
-                         "</gsad_msg>"));
+                         "</gsad_msg>"),
+               response_data);
     }
   else if (strcmp (status_text, "MODIFY_CONFIG name must be unique") == 0)
     {
@@ -664,12 +677,14 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session)
                g_strdup ("<gsad_msg status_text=\"Config name must be unique\""
                          " operation=\"Save Config\">"
                          "A config with the given name exists already."
-                         "</gsad_msg>"));
+                         "</gsad_msg>"),
+               response_data);
     }
   else if (strcmp (status_text, "OK"))
     {
       free_entity (entity);
       /** @todo Put in XML for "result of previous..." window. */
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -710,13 +725,14 @@ omp_success (entity_t entity)
  * @param[in]  credentials    Username and password for authentication.
  * @param[out] response       Response.
  * @param[out] entity_return  Response entity.
+ * @param[out] response_data  Extra data return for the HTTP response.
  * @param[in]  command        Command.
  *
  * @return -1 failed to connect (response set), 1 send error, 2 read error.
  */
 static int
 omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
-     const char *command)
+      cmd_response_data_t *response_data, const char *command)
 {
   gnutls_session_t session;
   int socket, ret;
@@ -738,6 +754,8 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
                                     "An internal error occurred. "
                                     "Diagnostics: Failure to connect to manager daemon.",
                                     "/omp?cmd=get_tasks");
+        if (response_data)
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return -1;
     }
 
@@ -768,6 +786,7 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
  * @param[out] message_operation  Operation for error message
  * @param[in]  credentials        Username and password for authentication.
  * @param[out] response           Response.
+ * @param[out] response_data      Extra data return for the HTTP response.
  * @param[in]  format             Command.
  * @param[in]  ...                Arguments for format string.
  *
@@ -776,7 +795,8 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
  */
 static int
 simple_ompf (const gchar *message_operation, credentials_t *credentials,
-             gchar **response, const char *format, ...)
+             gchar **response, cmd_response_data_t *response_data,
+             const char *format, ...)
 {
   int ret;
   gchar *command;
@@ -787,7 +807,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (credentials, response, &entity, command);
+  ret = omp (credentials, response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -797,6 +817,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
         /* 'omp' set response. */
         return 4;
       case 1:
+        if (response_data)
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (response)
           {
             gchar *message;
@@ -815,6 +837,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
           }
         return 1;
       case 2:
+        if (response_data)
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (response)
           {
             gchar *message;
@@ -833,6 +857,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
           }
         return 2;
       default:
+        if (response_data)
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (response)
           {
             gchar *message;
@@ -873,6 +899,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
  * @param[in]  credentials    Username and password for authentication.
  * @param[out] response       Response.
  * @param[out] entity_return  Response entity.
+ * @param[out] response_data  Extra data return for the HTTP response.
  * @param[in]  format         Command.
  * @param[in]  ...            Arguments for format string.
  *
@@ -880,7 +907,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
  */
 static int
 ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
-      const char *format, ...)
+      cmd_response_data_t *response_data, const char *format, ...)
 {
   int ret;
   gchar *command;
@@ -890,7 +917,7 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (credentials, response, entity_return, command);
+  ret = omp (credentials, response, entity_return, response_data, command);
   g_free (command);
   return ret;
 }
@@ -982,8 +1009,25 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
                              op_name);                                         \
       ret_html = ret_func (credentials, params, msg, response_data);           \
       g_free (msg);                                                            \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
       return ret_html;                                                         \
     }
+
+/**
+ * @brief Set the HTTP status according to OMP response entity.
+ *
+ * @param[in]  entity  The OMP response entity.
+ */
+#define SET_HTTP_STATUS_FROM_ENTITY(entity)                                   \
+  do {                                                                        \
+    if (strcmp (entity_attribute (entity, "status_text"),                     \
+                "Permission denied") == 0)                                    \
+      response_data->http_status_code = MHD_HTTP_FORBIDDEN;                   \
+    else if (strcmp (entity_attribute (entity, "status"), "404") == 0)        \
+      response_data->http_status_code = MHD_HTTP_NOT_FOUND;                   \
+    else                                                                      \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                 \
+  } while (0)
 
 /**
  * @brief Get an URL for the current page.
@@ -1201,7 +1245,8 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
       result = get_report (credentials, params, NULL, NULL, NULL,
                            NULL, response, &error, response_data);
 
-      return error ? result : xsl_transform_omp (credentials, result);
+      return error ? result : xsl_transform_omp (credentials, result,
+                                                 response_data);
     }
 
   if (strcmp (next, "get_report_format") == 0)
@@ -1346,11 +1391,14 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
       /* Check for an ID in a CREATE response in extra_xml. */
 
       if (extra_xml == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a resource. "
-                             "Diagnostics: extra_xml is NULL.",
-                             "/omp?cmd=get_tasks");
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a resource. "
+                              "Diagnostics: extra_xml is NULL.",
+                              "/omp?cmd=get_tasks");
+        }
 
       if (parse_entity (extra_xml, &entity) == 0)
         {
@@ -1376,6 +1424,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
             {
               g_free (name);
               free_entity (entity);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a resource. "
@@ -1384,11 +1433,15 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
             }
         }
       else
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a resource. "
-                             "Diagnostics: Required ID parameter was NULL.",
-                             "/omp?cmd=get_tasks");
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting"
+                               " a resource. "
+                               "Diagnostics: Required ID parameter was NULL.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -1400,6 +1453,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a resource. "
@@ -1420,7 +1474,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity,
+      switch (ompf (credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -1429,18 +1483,21 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_roles");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_roles");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissins. "
@@ -1449,6 +1506,9 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
         }
 
       g_string_append (xml, response);
+
+      if (!omp_success (entity))
+        SET_HTTP_STATUS_FROM_ENTITY (entity);
 
       free_entity (entity);
       g_free (response);
@@ -1489,6 +1549,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -1501,6 +1562,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -1523,6 +1585,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -1535,6 +1598,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -1558,6 +1622,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -1570,6 +1635,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -1584,7 +1650,8 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   g_string_append_printf (xml, "</get_%s>", type);
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -1655,6 +1722,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a resource list. "
@@ -1840,6 +1908,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource list. "
@@ -1853,6 +1922,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -1860,6 +1930,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  // TODO: Test response
 
   if (command_enabled (credentials, "GET_FILTERS"))
     {
@@ -1876,6 +1948,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -1889,6 +1962,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -1914,6 +1988,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -1927,6 +2002,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -1955,6 +2031,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -1967,6 +2044,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -1980,7 +2058,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   openvas_server_close (socket, session);
   g_string_free (type_many, TRUE);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -2009,12 +2088,15 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   g_free (id_name);
 
   if (resource_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a resource. "
-                         "The resource remains as it was. "
-                         "Diagnostics: Required ID parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a resource. "
+                           "The resource remains as it was. "
+                           "Diagnostics: Required ID parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2025,6 +2107,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing a resource. "
@@ -2046,6 +2129,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2064,6 +2148,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2075,7 +2160,8 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
 
   g_string_append_printf (xml, "</edit_%s>", type);
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -2206,6 +2292,7 @@ export_resource (const char *type, credentials_t * credentials,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a resource. "
@@ -2224,7 +2311,8 @@ export_resource (const char *type, credentials_t * credentials,
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                                response_data);
     }
 
   subtype = params_value (params, "subtype");
@@ -2246,6 +2334,7 @@ export_resource (const char *type, credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2259,6 +2348,7 @@ export_resource (const char *type, credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2266,6 +2356,9 @@ export_resource (const char *type, credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  if (!omp_success (entity))
+    SET_HTTP_STATUS_FROM_ENTITY (entity);
 
   resource_entity = entity_child (entity, type);
 
@@ -2275,6 +2368,7 @@ export_resource (const char *type, credentials_t * credentials,
       free_entity (entity);
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2295,6 +2389,7 @@ export_resource (const char *type, credentials_t * credentials,
       switch (ret)
         {
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2302,6 +2397,7 @@ export_resource (const char *type, credentials_t * credentials,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_tasks");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2309,6 +2405,7 @@ export_resource (const char *type, credentials_t * credentials,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_tasks");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2379,6 +2476,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a list. "
@@ -2405,6 +2503,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
         {
           openvas_server_close (socket, session);
           g_free (filter_escaped);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2427,6 +2526,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
         {
           openvas_server_close (socket, session);
           g_free (filter_escaped);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2448,6 +2548,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
         {
           openvas_server_close (socket, session);
           g_free (filter_escaped);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2462,6 +2563,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &content))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a list. "
@@ -2469,6 +2571,9 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  if (!omp_success (entity))
+    SET_HTTP_STATUS_FROM_ENTITY (entity);
 
   ret = setting_get_value (&session,
                            "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
@@ -2481,6 +2586,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
       switch (ret)
         {
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2488,6 +2594,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_tasks");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2495,6 +2602,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_tasks");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2563,6 +2671,7 @@ delete_resource (const char *type, credentials_t * credentials,
   else
     {
       g_free (id_name);
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2592,12 +2701,14 @@ delete_resource (const char *type, credentials_t * credentials,
       case -1:
         if (html)
           {
+            response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
             g_free (resource_id);
             return html;
           }
         /* Fall through. */
       default:
         g_free (resource_id);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting a resource. "
@@ -2618,6 +2729,7 @@ delete_resource (const char *type, credentials_t * credentials,
     {
       openvas_server_close (socket, session);
       g_free (resource_id);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2632,6 +2744,7 @@ delete_resource (const char *type, credentials_t * credentials,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2639,6 +2752,9 @@ delete_resource (const char *type, credentials_t * credentials,
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+  if (!omp_success (entity))
+    SET_HTTP_STATUS_FROM_ENTITY (entity);
+
   free_entity (entity);
 
   openvas_server_close (socket, session);
@@ -2660,11 +2776,14 @@ delete_resource (const char *type, credentials_t * credentials,
     }
   g_free (response);
   if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a resource. "
-                         "Diagnostics: Error in parameter next.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_tasks");
+    }
   return html;
 }
 
@@ -2706,6 +2825,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                            "Internal error", __FUNCTION__, __LINE__,
                            message,
                            "/omp?cmd=get_tasks");
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       g_free (message);
       return html;
     }
@@ -2713,7 +2833,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity,
+  ret = ompf (credentials, &response, &entity, response_data,
               "<%s_%s %s_id=\"%s\"/>",
               action,
               type,
@@ -2725,6 +2845,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -2732,6 +2853,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -2739,6 +2861,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -2754,6 +2877,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
       success = omp_success (entity);
       free_entity (entity);
       g_free (response);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            success
@@ -2830,6 +2954,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
           switch (ret)                                                        \
             {                                                                 \
               case 1:                                                         \
+                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
                 return gsad_message (credentials,                             \
                                     "Internal error", __FUNCTION__, __LINE__, \
                                     "An internal error occurred while getting a setting. " \
@@ -2837,6 +2962,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                                     "Diagnostics: Failure to send command to manager daemon.", \
                                     "/omp?cmd=get_tasks");                    \
               case 2:                                                         \
+                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
                 return gsad_message (credentials,                             \
                                     "Internal error", __FUNCTION__, __LINE__, \
                                     "An internal error occurred while getting a setting. " \
@@ -2844,6 +2970,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                                     "Diagnostics: Failure to receive response from manager daemon.", \
                                     "/omp?cmd=get_tasks"); \
               default:                                                        \
+                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
                 return gsad_message (credentials,                             \
                                     "Internal error", __FUNCTION__, __LINE__, \
                                     "An internal error occurred while getting a setting. " \
@@ -2893,6 +3020,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting targets list. "
@@ -2910,6 +3038,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       switch (ret)
         {
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2917,6 +3046,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_tasks");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2924,6 +3054,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_tasks");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -3025,6 +3156,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
@@ -3037,6 +3169,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
@@ -3053,6 +3186,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
@@ -3065,6 +3199,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
@@ -3083,6 +3218,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
@@ -3095,6 +3231,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
@@ -3115,6 +3252,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
@@ -3127,6 +3265,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
@@ -3146,6 +3285,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the slave list. "
@@ -3158,6 +3298,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the slave list. "
@@ -3177,6 +3318,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the"
@@ -3190,6 +3332,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting"
@@ -3210,6 +3353,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
@@ -3222,6 +3366,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
@@ -3242,6 +3387,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
@@ -3254,6 +3400,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
@@ -3277,7 +3424,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           alerts ? alerts : "1");
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -3323,8 +3471,11 @@ create_report_omp (credentials_t * credentials, params_t *params,
   if (((task_id == NULL) && (name == NULL))
       || ((task_id == NULL) && (comment == NULL))
       || (xml_file == NULL))
-    return new_task (credentials, "Invalid parameter", params, NULL,
-                     response_data);
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return new_task (credentials, "Invalid parameter", params, NULL,
+                      response_data);
+    }
 
   xml_file_array = g_strsplit (xml_file, "%", -1);
   if (xml_file_array != NULL && xml_file_array[0] != NULL)
@@ -3356,6 +3507,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              command);
   g_free (command);
 
@@ -3365,6 +3517,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3372,6 +3525,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3379,6 +3533,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3394,7 +3549,10 @@ create_report_omp (credentials_t * credentials, params_t *params,
         html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = new_task (credentials, NULL, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_task (credentials, NULL, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -3403,6 +3561,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
 #define CHECK(name)                                                        \
   do {                                                                     \
     if (name == NULL)                                                      \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;              \
       return new_task (credentials,                                        \
                        "Given " G_STRINGIFY (name) " was invalid",         \
                        params,                                             \
@@ -3605,6 +3764,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              command);
   g_free (command);
 
@@ -3618,6 +3778,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -3625,6 +3786,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -3632,6 +3794,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -3674,6 +3837,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
           ret = omp (credentials,
                      &tag_response,
                      &tag_entity,
+                     response_data,
                      tag_command);
 
           switch (ret)
@@ -3684,6 +3848,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
               case 1:
                 free_entity (entity);
                 g_free (response);
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
@@ -3693,6 +3859,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
               case 2:
                 free_entity (entity);
                 g_free (response);
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
@@ -3702,6 +3870,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
               default:
                 free_entity (entity);
                 g_free (response);
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new task. "
@@ -3711,6 +3881,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
             }
 
           combined_response = g_strconcat (response, tag_response, NULL);
+          SET_HTTP_STATUS_FROM_ENTITY (tag_entity);
           free_entity (tag_entity);
           g_free (tag_response);
 
@@ -3729,7 +3900,10 @@ create_task_omp (credentials_t * credentials, params_t *params,
         }
     }
   else
-    html = new_task (credentials, NULL, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_task (credentials, NULL, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -3785,12 +3959,15 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
   apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
   if (task_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a task. "
-                         "The task remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a task. "
+                           "The task remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   if (next == NULL)
     next = "get_task";
@@ -3804,6 +3981,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing a task. "
@@ -3847,6 +4025,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
@@ -3884,6 +4063,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
@@ -3895,7 +4075,8 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</edit_task>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -4084,6 +4265,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               format,
               task_id,
               name,
@@ -4108,6 +4290,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4115,6 +4298,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4122,6 +4306,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4137,7 +4322,10 @@ save_task_omp (credentials_t * credentials, params_t *params,
         html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = edit_task (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_task (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -4186,7 +4374,8 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity, format, task_id, name, comment,
+  ret = ompf (credentials, &response, &entity, response_data,
+              format, task_id, name, comment,
               strcmp (in_assets, "0") ? "yes" : "no");
   g_free (format);
   switch (ret)
@@ -4195,6 +4384,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4202,6 +4392,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4209,6 +4400,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4224,7 +4416,10 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
         html = get_tasks (credentials, params, response, response_data);
     }
   else
-    html = edit_task (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_task (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -4348,7 +4543,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, command);
+  ret = omp (credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -4356,6 +4551,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -4363,6 +4559,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -4370,6 +4567,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -4377,6 +4575,10 @@ move_task_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_tasks");
     }
+
+  if (!omp_success (entity))
+    SET_HTTP_STATUS_FROM_ENTITY (entity);
+  free_entity (entity);
 
   html = next_page (credentials, params, response, response_data);
   if (html == NULL)
@@ -4407,12 +4609,14 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   oid = params_value (params, "oid");
   if (oid == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an NVT. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting an NVT. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4422,6 +4626,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting nvt details. "
@@ -4450,6 +4655,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
         == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
@@ -4462,6 +4668,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     {
       openvas_server_close (socket, session);
       g_string_free (xml, TRUE);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
@@ -4486,6 +4693,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -4498,6 +4706,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -4509,7 +4718,8 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
   g_string_append (xml, "</get_nvts>");
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -4554,20 +4764,25 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
       && strcmp (info_type, "CERT_BUND_ADV")
       && strcmp (info_type, "DFN_CERT_ADV")
       && strcmp (info_type, "ALLINFO"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting SecInfo. "
-                         "Diagnostics: Invalid info_type parameter value",
-                         "/omp?cmd=get_info");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting SecInfo. "
+                           "Diagnostics: Invalid info_type parameter value",
+                           "/omp?cmd=get_info");
+    }
 
   if (params_value (params, "info_name")
       && params_value (params, "info_id"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting SecInfo. "
-                         "Diagnostics: Both ID and Name set.",
-                         "/omp?cmd=get_info");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting SecInfo. "
+                           "Diagnostics: Both ID and Name set.",
+                           "/omp?cmd=get_info");
+    }
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
   if (command_enabled (credentials, "GET_NOTES")
@@ -4576,7 +4791,7 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       gchar *response;
 
-      if (simple_ompf ("getting SecInfo", credentials, &response,
+      if (simple_ompf ("getting SecInfo", credentials, &response, response_data,
                        "<get_notes"
                        " nvt_oid=\"%s\""
                        " sort_field=\"notes.text\"/>",
@@ -4595,7 +4810,7 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       gchar *response;
 
-      if (simple_ompf ("getting SecInfo", credentials, &response,
+      if (simple_ompf ("getting SecInfo", credentials, &response, response_data,
                        "<get_overrides"
                        " nvt_oid=\"%s\""
                        " sort_field=\"overrides.text\"/>",
@@ -4788,7 +5003,8 @@ static char *
 get_tasks_chart (credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return xsl_transform_omp (credentials, g_strdup ("<get_tasks_chart/>"));
+  return xsl_transform_omp (credentials, g_strdup ("<get_tasks_chart/>"),
+                            response_data);
 }
 
 /**
@@ -4840,11 +5056,14 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       /* Check for an ID in a CREATE_TASK response in extra_xml. */
 
       if (extra_xml == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a task. "
-                             "Diagnostics: extra_xml is NULL.",
-                             "/omp?cmd=get_tasks");
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a task. "
+                              "Diagnostics: extra_xml is NULL.",
+                              "/omp?cmd=get_tasks");
+        }
 
       if (parse_entity (extra_xml, &entity) == 0)
         {
@@ -4863,6 +5082,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
           else
             {
               free_entity (entity);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a task. "
@@ -4871,11 +5091,14 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
             }
         }
       else
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a task. "
-                             "Diagnostics: Error parsing extra_xml.",
-                             "/omp?cmd=get_tasks");
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a task. "
+                              "Diagnostics: Error parsing extra_xml.",
+                              "/omp?cmd=get_tasks");
+        }
     }
 
   overrides = params_value (params, "overrides");
@@ -4890,6 +5113,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the status. "
@@ -4929,6 +5153,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -4955,6 +5180,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       openvas_server_close (socket, session);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -4969,6 +5195,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       openvas_server_close (socket, session);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -5015,6 +5242,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
+                          response_data->http_status_code
+                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5028,6 +5257,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
+                          response_data->http_status_code
+                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5055,6 +5286,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
+                          response_data->http_status_code
+                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5068,6 +5301,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
+                          response_data->http_status_code
+                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5098,6 +5333,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
@@ -5110,6 +5346,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
@@ -5132,6 +5369,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5144,6 +5382,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5166,6 +5405,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -5178,6 +5418,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -5191,7 +5432,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append (xml, "</get_task>");
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -5229,7 +5471,8 @@ new_lsc_credential (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_lsc_credential>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -5278,6 +5521,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_lsc_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5287,7 +5531,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 comment ? comment : "",
                login);
   else if (type && strcmp (type, "key") == 0)
-    ret = ompf (credentials, &response, &entity,
+    ret = ompf (credentials, &response, &entity, response_data,
                 "<create_lsc_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5303,6 +5547,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_lsc_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5320,6 +5565,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -5327,6 +5573,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_lsc_credentials");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -5334,6 +5581,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_lsc_credentials");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -5350,7 +5598,10 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                                     response_data);
     }
   else
-    html = new_lsc_credential (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_lsc_credential (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -5433,6 +5684,7 @@ download_lsc_credential_omp (credentials_t * credentials,
           }
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         *html = gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a credential. "
@@ -5449,6 +5701,7 @@ download_lsc_credential_omp (credentials_t * credentials,
   if ((lsc_credential_id == NULL) || (format == NULL))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -5466,6 +5719,7 @@ download_lsc_credential_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -5489,6 +5743,7 @@ download_lsc_credential_omp (credentials_t * credentials,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -5539,6 +5794,7 @@ download_lsc_credential_omp (credentials_t * credentials,
         {
           free_entity (entity);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -5558,6 +5814,7 @@ download_lsc_credential_omp (credentials_t * credentials,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -5585,6 +5842,7 @@ download_lsc_credential_omp (credentials_t * credentials,
           free_entity (entity);
           return 0;
         }
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -5782,6 +6040,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_lsc_credential lsc_credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5798,6 +6057,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_lsc_credential lsc_credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5812,6 +6072,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_lsc_credential lsc_credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5826,6 +6087,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_lsc_credential lsc_credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -5840,6 +6102,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -5847,6 +6110,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_lsc_credentials");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -5854,6 +6118,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_lsc_credentials");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -5869,7 +6134,10 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
         html = get_lsc_credentials (credentials, params, response, response_data);
     }
   else
-    html = edit_lsc_credential (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_lsc_credential (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -5894,7 +6162,8 @@ new_agent (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -5999,6 +6268,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
       ret = omp (credentials,
                  &response,
                  &entity,
+                 response_data,
                  command);
       g_free (command);
 
@@ -6012,6 +6282,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a new agent. "
@@ -6019,6 +6290,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_agents");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a new agent. "
@@ -6026,6 +6298,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_agents");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a new agent. "
@@ -6042,7 +6315,10 @@ create_agent_omp (credentials_t * credentials, params_t *params,
         html = get_agents (credentials, params, response, response_data);
     }
   else
-    html = new_agent (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_agent (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -6097,6 +6373,7 @@ download_agent_omp (credentials_t * credentials,
 
   if ((agent_id == NULL) || (format == NULL))
     {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while downloading "
@@ -6121,6 +6398,7 @@ download_agent_omp (credentials_t * credentials,
         /* Fall through. */
       default:
         {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the agent list. "
@@ -6140,6 +6418,7 @@ download_agent_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting agent list. "
@@ -6164,6 +6443,7 @@ download_agent_omp (credentials_t * credentials,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -6218,6 +6498,7 @@ download_agent_omp (credentials_t * credentials,
         {
           free_entity (entity);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -6235,6 +6516,7 @@ download_agent_omp (credentials_t * credentials,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -6246,6 +6528,7 @@ download_agent_omp (credentials_t * credentials,
       openvas_server_close (socket, session);
 
       free_entity (entity);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a agent. "
@@ -6322,6 +6605,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_agent agent_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -6336,6 +6620,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -6343,6 +6628,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_agents");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -6350,6 +6636,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_agents");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -6365,7 +6652,10 @@ save_agent_omp (credentials_t * credentials, params_t *params,
         html = get_agents (credentials, params, response, response_data);
     }
   else
-    html = edit_agent (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_agent (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -6460,12 +6750,14 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
 
   agent_id = params_value (params, "agent_id");
   if (agent_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while verifying an agent. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_agents");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying an agent. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_agents");
+    }
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -6475,6 +6767,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying an agent. "
@@ -6489,6 +6782,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
@@ -6503,6 +6797,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
@@ -6604,7 +6899,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
 
   if (xml_param == NULL || atoi (xml_param) == 0)
     {
-      return xsl_transform_omp (credentials, g_strdup ("<get_aggregate/>"));
+      return xsl_transform_omp (credentials, g_strdup ("<get_aggregate/>"),
+                                response_data);
     }
   xml = g_string_new ("<get_aggregate>");
 
@@ -6668,7 +6964,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
-  ret = omp (credentials, &response, &entity, command->str);
+  ret = omp (credentials, &response, &entity, response_data, command->str);
   g_string_free (command, TRUE);
   switch (ret)
     {
@@ -6676,18 +6972,21 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
@@ -6699,7 +6998,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));;
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -6728,7 +7028,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Get Report Formats. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity,
+  ret = omp (credentials, &response, &entity, response_data,
              "<get_report_formats filter=\"rows=-1\"/>");
   switch (ret)
     {
@@ -6736,6 +7036,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6743,6 +7044,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_alerts");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6750,6 +7052,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6763,7 +7066,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   free_entity (entity);
 
   /* Get Report Filters. */
-  ret = omp (credentials, &response, &entity,
+  ret = omp (credentials, &response, &entity, response_data,
              "<get_filters filter=\"type=result rows=-1\"/>");
 
   switch (ret)
@@ -6772,6 +7075,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6780,6 +7084,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_alerts");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6787,6 +7092,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -6799,7 +7105,8 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -7052,6 +7359,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              xml->str);
   g_string_free (xml, TRUE);
   switch (ret)
@@ -7060,6 +7368,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -7067,6 +7376,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_alerts");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -7074,6 +7384,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -7089,7 +7400,10 @@ create_alert_omp (credentials_t * credentials, params_t *params,
         html = get_alerts (credentials, params, response, response_data);
     }
   else
-    html = new_alert (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_alert (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -7139,7 +7453,7 @@ get_alert (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_report_formats"
                    " filter=\"rows=-1\"/>"))
         {
@@ -7147,6 +7461,7 @@ get_alert (credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -7154,6 +7469,7 @@ get_alert (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_alerts");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -7161,6 +7477,7 @@ get_alert (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_alerts");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -7256,12 +7573,15 @@ edit_alert (credentials_t * credentials, params_t *params,
   filter = params_value (params, "filter");
 
   if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing an alert. "
-                         "The alert remains as it was. "
-                         "Diagnostics: Required parameter alert_id was NULL.",
-                         "/omp?cmd=get_alerts");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an alert. "
+                           "The alert remains as it was. "
+                           "Diagnostics: Required parameter alert_id was NULL.",
+                           "/omp?cmd=get_alerts");
+    }
 
   if (next == NULL)
     next = "get_alerts";
@@ -7275,6 +7595,7 @@ edit_alert (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing an alert. "
@@ -7291,6 +7612,7 @@ edit_alert (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
@@ -7318,6 +7640,7 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
@@ -7336,6 +7659,7 @@ edit_alert (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
@@ -7348,6 +7672,7 @@ edit_alert (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
@@ -7368,6 +7693,7 @@ edit_alert (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -7381,6 +7707,7 @@ edit_alert (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -7395,7 +7722,8 @@ edit_alert (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</edit_alert>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -7495,6 +7823,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              xml->str);
   g_string_free (xml, TRUE);
   switch (ret)
@@ -7503,6 +7832,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -7510,6 +7840,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_alerts");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -7517,6 +7848,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -7532,7 +7864,10 @@ save_alert_omp (credentials_t * credentials, params_t *params,
         html = get_alerts (credentials, params, response, response_data);
     }
   else
-    html = edit_alert (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_alert (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -7560,12 +7895,14 @@ test_alert_omp (credentials_t * credentials, params_t *params,
   alert_id = params_value (params, "alert_id");
 
   if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while testing an alert. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_alerts");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while testing an alert. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_alerts");
+    }
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -7575,6 +7912,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while testing an alert. "
@@ -7590,6 +7928,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
@@ -7601,6 +7940,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
@@ -7703,6 +8043,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting targets list. "
@@ -7764,6 +8105,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -7776,6 +8118,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -7796,6 +8139,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -7808,6 +8152,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -7827,7 +8172,8 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_free (end);
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -7901,6 +8247,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "Create Target");
       html = new_target (credentials, params, msg, response_data);
       g_free (msg);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return html;
     }
   CHECK_PARAM (hosts_filter, "Create Target", new_target);
@@ -7993,6 +8340,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              command);
   g_free (command);
   switch (ret)
@@ -8001,6 +8349,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -8008,6 +8357,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_targets");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -8015,6 +8365,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_targets");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -8030,7 +8381,10 @@ create_target_omp (credentials_t * credentials, params_t *params,
         html = get_targets (credentials, params, response, response_data);
     }
   else
-    html = new_target (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_target (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -8043,6 +8397,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
  */
 #define CHECK(name)                                                               \
   if (name == NULL)                                                               \
+    response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                       \
     return gsad_message (credentials,                                             \
                          "Internal error", __FUNCTION__, __LINE__,                \
                          "An internal error occurred while cloning a resource. "  \
@@ -8086,6 +8441,7 @@ clone_omp (credentials_t *credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while cloning a resource. "
@@ -8109,6 +8465,7 @@ clone_omp (credentials_t *credentials, params_t *params,
           == -1)
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while cloning a resource. "
@@ -8127,6 +8484,7 @@ clone_omp (credentials_t *credentials, params_t *params,
            == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
@@ -8139,6 +8497,7 @@ clone_omp (credentials_t *credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
@@ -8151,6 +8510,9 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   /* Cleanup, and return next page. */
 
+  if (omp_success (entity) == 0)
+    SET_HTTP_STATUS_FROM_ENTITY (entity);
+
   if (omp_success (entity) == 0 || params_given (params, "next") == 0)
     {
       gchar *next;
@@ -8162,12 +8524,15 @@ clone_omp (credentials_t *credentials, params_t *params,
   html = next_page (credentials, params, response, response_data);
   g_free (response);
   if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while cloning a resource. "
-                         "The resource remains the same. "
-                         "Diagnostics: Error in parameter next.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while cloning a resource. "
+                           "The resource remains the same. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_tasks");
+    }
   return html;
 }
 
@@ -8366,12 +8731,15 @@ restore_omp (credentials_t * credentials, params_t *params,
   target_id = params_value (params, "target_id");
 
   if (target_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while restoring a resource. "
-                         "The resource was not restored. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while restoring a resource. "
+                           "The resource was not restored. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -8382,6 +8750,7 @@ restore_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while restoring a resource. "
@@ -8402,6 +8771,7 @@ restore_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
@@ -8414,6 +8784,7 @@ restore_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
@@ -8458,6 +8829,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while emptying the trashcan. "
@@ -8475,6 +8847,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
@@ -8486,6 +8859,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
@@ -8548,7 +8922,8 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -8604,6 +8979,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_tag>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -8624,6 +9000,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -8631,6 +9008,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_targets");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -8638,6 +9016,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tags");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -8653,7 +9032,10 @@ create_tag_omp (credentials_t *credentials, params_t *params,
         ret = get_tags (credentials, params, response, response_data);
     }
   else
-    ret = new_tag (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_tag (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -8714,12 +9096,15 @@ edit_tag (credentials_t * credentials, params_t *params,
 
   tag_id = params_value (params, "tag_id");
   if (tag_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a tag. "
-                         "The tag remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tags");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a tag. "
+                           "The tag remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tags");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -8730,6 +9115,7 @@ edit_tag (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing a tag. "
@@ -8746,6 +9132,7 @@ edit_tag (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag info. "
@@ -8769,6 +9156,7 @@ edit_tag (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -8780,7 +9168,8 @@ edit_tag (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</edit_tag>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -8839,6 +9228,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_tag tag_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -8860,6 +9250,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -8868,6 +9259,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
                              "manager daemon.",
                              "/omp?cmd=get_targets");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -8877,6 +9269,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
                              "manager daemon.",
                              "/omp?cmd=get_tags");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -8893,7 +9286,10 @@ save_tag_omp (credentials_t * credentials, params_t *params,
         ret = get_tags (credentials, params, response, response_data);
     }
   else
-    ret = edit_tag (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = edit_tag (credentials, params, response, response_data);
+    }
 
   free_entity (entity);
   g_free (response);
@@ -9034,20 +9430,25 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
   enable = params_value (params, "enable");
 
   if (tag_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while modifying a tag. "
-                         "The tag was not modified. "
-                         "Diagnostics: Required parameter tag_id was NULL.",
-                         "/omp?cmd=get_tasks");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while modifying a tag. "
+                           "The tag was not modified. "
+                           "Diagnostics: Required parameter tag_id was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
   if (enable == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while modifying a tag. "
-                         "The tag was not modified. "
-                         "Diagnostics: Required parameter enable was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while modifying a tag. "
+                           "The tag was not modified. "
+                           "Diagnostics: Required parameter enable was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -9058,6 +9459,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a tag."
@@ -9079,6 +9481,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -9092,6 +9495,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -9141,12 +9545,15 @@ edit_target (credentials_t * credentials, params_t *params,
   next = params_value (params, "next");
 
   if (target_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a target. "
-                         "The target remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_targets");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a target. "
+                           "The target remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_targets");
+    }
 
   if (next == NULL)
     next = "get_target";
@@ -9160,6 +9567,7 @@ edit_target (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing a target. "
@@ -9176,6 +9584,7 @@ edit_target (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -9208,6 +9617,7 @@ edit_target (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -9226,6 +9636,7 @@ edit_target (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9238,6 +9649,7 @@ edit_target (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9258,6 +9670,7 @@ edit_target (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9270,6 +9683,7 @@ edit_target (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9283,7 +9697,8 @@ edit_target (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</edit_target>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -9426,7 +9841,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      ret = omp (credentials, &response, &entity, command->str);
+      ret = omp (credentials, &response, &entity, response_data, command->str);
       g_string_free (command, TRUE);
       switch (ret)
         {
@@ -9434,6 +9849,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -9441,6 +9857,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_targets");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -9448,6 +9865,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_targets");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -9463,7 +9881,10 @@ save_target_omp (credentials_t * credentials, params_t *params,
             html = get_targets_omp (credentials, params, response_data);
         }
       else
-        html = edit_target (credentials, params, response, response_data);
+        {
+          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          html = edit_target (credentials, params, response, response_data);
+        }
 
       free_entity (entity);
       g_free (response);
@@ -9500,6 +9921,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a target. "
@@ -9524,6 +9946,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                             "Modify Target");
       html = new_target (credentials, params, msg, response_data);
       g_free (msg);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return html;
     }
 
@@ -9606,6 +10029,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
     if (ret == -1)
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying target. "
@@ -9618,6 +10042,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
     if (read_entity_and_text (&session, &entity, &response))
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a target. "
@@ -9633,6 +10058,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
         || (strlen (status) == 0))
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a target. "
@@ -9729,13 +10155,14 @@ new_config (credentials_t *credentials, params_t *params,
     g_string_append (xml, extra_xml);
 
   /* Get Scanners. */
-  ret = omp (credentials, &response, &entity, "<get_scanners/>");
+  ret = omp (credentials, &response, &entity, response_data, "<get_scanners/>");
   switch (ret)
     {
       case 0:
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -9743,6 +10170,7 @@ new_config (credentials_t *credentials, params_t *params,
                              " command to manager daemon.",
                              "/omp?cmd=get_configs");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -9750,6 +10178,7 @@ new_config (credentials_t *credentials, params_t *params,
                              " receive response from manager daemon.",
                              "/omp?cmd=get_configs");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -9763,7 +10192,8 @@ new_config (credentials_t *credentials, params_t *params,
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -9816,6 +10246,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_config>"
                 "<name>%s</name>"
                 "<copy>%s</copy>"
@@ -9829,6 +10260,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -9836,6 +10268,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_configs");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -9843,6 +10276,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_configs");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -9858,7 +10292,10 @@ create_config_omp (credentials_t * credentials, params_t *params,
         html = get_configs (credentials, params, response, response_data);
     }
   else
-    html = new_config (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_config (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -9889,7 +10326,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
                              "%s"
                              "</create_config>",
                              params_value (params, "xml_file"));
-  ret = omp (credentials, &response, &entity, command);
+  ret = omp (credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -9897,6 +10334,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -9904,6 +10342,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_configs");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -9911,6 +10350,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_configs");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -9928,7 +10368,10 @@ import_config_omp (credentials_t * credentials, params_t *params,
         html = get_configs (credentials, params, response, response_data);
     }
   else
-    html = new_config (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_config (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -9998,11 +10441,14 @@ get_config (credentials_t * credentials, params_t *params,
       /* Check for an ID in a CREATE_CONFIG response in extra_xml. */
 
       if (extra_xml == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a config. "
-                             "Diagnostics: extra_xml is NULL.",
-                             "/omp?cmd=get_configs");
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a config. "
+                              "Diagnostics: extra_xml is NULL.",
+                              "/omp?cmd=get_configs");
+        }
 
       if (parse_entity (extra_xml, &entity) == 0)
         {
@@ -10021,6 +10467,7 @@ get_config (credentials_t * credentials, params_t *params,
           else
             {
               free_entity (entity);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a config. "
@@ -10029,13 +10476,14 @@ get_config (credentials_t * credentials, params_t *params,
             }
         }
       else
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a task. "
-                             "Diagnostics: Error parsing extra_xml.",
-                             "/omp?cmd=get_configs");
-
-
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a task. "
+                              "Diagnostics: Error parsing extra_xml.",
+                              "/omp?cmd=get_configs");
+        }
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -10047,6 +10495,7 @@ get_config (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting list of configs. "
@@ -10073,6 +10522,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -10085,6 +10535,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -10099,6 +10550,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -10111,6 +10563,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -10133,6 +10586,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -10145,6 +10599,7 @@ get_config (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -10159,7 +10614,8 @@ get_config (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_config_response>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -10253,6 +10709,7 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
           == -1)
         {
           g_free (value);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while saving a config. It is"
@@ -10262,7 +10719,7 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
         }
       g_free (value);
 
-      ret = check_modify_config (credentials, &session);
+      ret = check_modify_config (credentials, &session, response_data);
       if (ret)
         return ret;
     }
@@ -10306,6 +10763,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a config. "
@@ -10327,6 +10785,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -10335,7 +10794,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session);
+  ret = check_modify_config (credentials, &session, response_data);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -10375,6 +10834,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
             {
               g_free (value);
               openvas_server_close (socket, session);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
@@ -10384,7 +10844,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          ret = check_modify_config (credentials, &session);
+          ret = check_modify_config (credentials, &session, response_data);
           if (ret)
             {
               openvas_server_close (socket, session);
@@ -10416,6 +10876,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -10445,6 +10906,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
             == -1)
           {
             openvas_server_close (socket, session);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a config. "
@@ -10476,6 +10938,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
               == -1)
             {
               openvas_server_close (socket, session);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
@@ -10492,6 +10955,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -10500,7 +10964,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session);
+  ret = check_modify_config (credentials, &session, response_data);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -10539,11 +11003,14 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
   family = params_value (params, "family");
 
   if ((config_id == NULL) || (name == NULL) || (family == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting config family. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting config family. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_configs");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10554,6 +11021,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting config family. "
@@ -10591,6 +11059,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -10603,6 +11072,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -10631,6 +11101,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
@@ -10643,6 +11114,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
@@ -10656,7 +11128,8 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
 
   g_string_append (xml, "</get_config_family_response>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -10715,12 +11188,15 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
   family = params_value (params, "family");
 
   if ((config_id == NULL) || (family == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving getting config family. "
-                         "The config has not been saved. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving getting config family. "
+                           "The config has not been saved. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_configs");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10731,6 +11207,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a config. "
@@ -10751,6 +11228,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -10774,6 +11252,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
             == -1)
           {
             openvas_server_close (socket, session);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a config. "
@@ -10789,6 +11268,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -10797,7 +11277,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs");
     }
 
-  ret = check_modify_config (credentials, &session);
+  ret = check_modify_config (credentials, &session, response_data);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -10837,11 +11317,14 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
   nvt = params_value (params, "oid");
 
   if ((config_id == NULL) || (name == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting config family. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting config family. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_configs");
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10852,6 +11335,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting list of configs. "
@@ -10887,6 +11371,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -10899,6 +11384,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -10918,6 +11404,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
@@ -10930,6 +11417,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
@@ -10947,6 +11435,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
@@ -10959,6 +11448,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
@@ -10968,7 +11458,8 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -11042,6 +11533,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
               return html;
             /* Fall through. */
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting list of configs. "
@@ -11151,6 +11643,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
                 {
                   g_free (value);
                   openvas_server_close (socket, session);
+                  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while saving a config. "
@@ -11199,6 +11692,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
             {
               g_free (value);
               openvas_server_close (socket, session);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
@@ -11208,7 +11702,8 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          modify_config_ret = check_modify_config (credentials, &session);
+          modify_config_ret = check_modify_config (credentials, &session,
+                                                   response_data);
           if (modify_config_ret)
             {
               openvas_server_close (socket, session);
@@ -11455,6 +11950,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a preference file. "
@@ -11485,6 +11981,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -11498,6 +11995,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -11524,6 +12022,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
           free_entity (entity);
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -11535,7 +12034,8 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_preferences_response>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -11776,6 +12276,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       default:
         {
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -11796,6 +12297,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           openvas_server_close (socket, session);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -11809,6 +12311,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           openvas_server_close (socket, session);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12028,6 +12531,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12043,6 +12547,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12059,6 +12564,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12111,6 +12617,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -12169,6 +12676,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                   "Given host search_phrase was invalid",
                                   "Get Report");
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
           return g_string_free (xml, FALSE);
         }
 
@@ -12187,6 +12695,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12310,6 +12819,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -12334,6 +12844,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12347,6 +12858,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               free_entity (entity);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12369,6 +12881,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   switch (ret)
                     {
                       case 1:
+                        response_data->http_status_code
+                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -12376,6 +12890,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                             "Diagnostics: Failure to send command to manager daemon.",
                                             "/omp?cmd=get_tasks");
                       case 2:
+                        response_data->http_status_code
+                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -12383,6 +12899,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                             "Diagnostics: Failure to receive response from manager daemon.",
                                             "/omp?cmd=get_tasks");
                       default:
+                        response_data->http_status_code
+                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -12441,6 +12959,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report_len == NULL)
             {
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12454,6 +12973,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12503,6 +13023,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                       switch (ret)
                         {
                           case 1:
+                            response_data->http_status_code
+                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -12510,6 +13032,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                                 "Diagnostics: Failure to send command to manager daemon.",
                                                 "/omp?cmd=get_tasks");
                           case 2:
+                            response_data->http_status_code
+                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -12517,6 +13041,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                                 "Diagnostics: Failure to receive response from manager daemon.",
                                                 "/omp?cmd=get_tasks");
                           default:
+                            response_data->http_status_code
+                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -12557,6 +13083,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               free_entity (entity);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12635,6 +13162,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           openvas_server_close (socket, session);
           if (error) *error = 1;
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -12675,6 +13203,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12688,6 +13217,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12713,6 +13243,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   g_string_free (xml, TRUE);
                   openvas_server_close (socket, session);
                   if (error) *error = 1;
+                  response_data->http_status_code
+                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -12726,6 +13258,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   g_string_free (xml, TRUE);
                   openvas_server_close (socket, session);
                   if (error) *error = 1;
+                  response_data->http_status_code
+                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -12791,6 +13325,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12805,6 +13340,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12834,6 +13370,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12847,6 +13384,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12867,6 +13405,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12880,6 +13419,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -12903,6 +13443,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -12916,6 +13457,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               if (error) *error = 1;
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -12940,6 +13482,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -12952,6 +13495,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -12989,7 +13533,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
   result = get_report (credentials, params, NULL, report_len, content_type,
                        content_disposition, NULL, &error, response_data);
 
-  return error ? result : xsl_transform_omp (credentials, result);
+  return error ? result : xsl_transform_omp (credentials, result,
+                                             response_data);
 }
 
 /**
@@ -13023,25 +13568,28 @@ get_reports (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_tasks details=\"0\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_tasks");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_tasks");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
@@ -13104,11 +13652,14 @@ get_report_section (credentials_t * credentials, params_t *params,
     report_section = "results";
 
   if (report_id == NULL && (type == NULL || strcmp (type, "prognostic")))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred."
-                         " Diagnostics: report_id was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred."
+                           " Diagnostics: report_id was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   if (!strcmp (report_section, "results"))
     {
@@ -13117,7 +13668,8 @@ get_report_section (credentials_t * credentials, params_t *params,
       result = get_report (credentials, params, NULL, NULL, NULL, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_omp (credentials, result);
+      return error ? result : xsl_transform_omp (credentials, result,
+                                                 response_data);
     }
 
   result = get_report (credentials, params, NULL, NULL, NULL,
@@ -13138,6 +13690,7 @@ get_report_section (credentials_t * credentials, params_t *params,
       ret = omp (credentials,
                  &response,
                  NULL,
+                 response_data,
                  "<get_report_formats"
                  " filter=\"rows=-1\"/>");
 
@@ -13148,6 +13701,7 @@ get_report_section (credentials_t * credentials, params_t *params,
             break;
           case 1:
             g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -13156,6 +13710,7 @@ get_report_section (credentials_t * credentials, params_t *params,
                                 "/omp?cmd=get_tasks");
           case 2:
             g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -13164,6 +13719,7 @@ get_report_section (credentials_t * credentials, params_t *params,
                                 "/omp?cmd=get_tasks");
           default:
             g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -13178,7 +13734,8 @@ get_report_section (credentials_t * credentials, params_t *params,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -13217,12 +13774,14 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 
   ssl_cert = params_value (params, "ssl_cert");
   if (ssl_cert == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred."
-                         " Diagnostics: ssl_cert was NULL.",
-                         "/omp?cmd=get_reports");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred."
+                           " Diagnostics: ssl_cert was NULL.",
+                           "/omp?cmd=get_reports");
+    }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ssl_cert, NULL);
 
@@ -13255,12 +13814,14 @@ download_ca_pub (credentials_t * credentials, params_t *params,
 
   ca_pub = params_value (params, "ca_pub");
   if (ca_pub == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred."
-                         " Diagnostics: ca_pub was NULL.",
-                         "/omp?cmd=get_reports");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred."
+                           " Diagnostics: ca_pub was NULL.",
+                           "/omp?cmd=get_reports");
+    }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ca_pub, NULL);
   *response_size = strlen (unescaped);
@@ -13286,11 +13847,14 @@ download_key_pub (credentials_t * credentials, params_t *params,
 
   key_pub = params_value (params, "key_pub");
   if (key_pub == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred."
-                         " Diagnostics: key_pub was NULL.",
-                         "/omp?cmd=get_reports");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred."
+                           " Diagnostics: key_pub was NULL.",
+                           "/omp?cmd=get_reports");
+    }
 
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (key_pub, NULL);
@@ -13429,6 +13993,7 @@ get_result (credentials_t *credentials, const char *result_id,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a result. "
@@ -13476,6 +14041,7 @@ get_result (credentials_t *credentials, const char *result_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
@@ -13487,6 +14053,7 @@ get_result (credentials_t *credentials, const char *result_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
@@ -13507,6 +14074,7 @@ get_result (credentials_t *credentials, const char *result_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -13519,6 +14087,7 @@ get_result (credentials_t *credentials, const char *result_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -13531,7 +14100,8 @@ get_result (credentials_t *credentials, const char *result_id,
 
   g_string_append (xml, "</get_result>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -13709,6 +14279,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -13737,6 +14308,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
           == -1)
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
@@ -13749,6 +14321,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
@@ -13759,7 +14332,8 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       g_string_append (xml, "</new_note>");
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                                response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -13774,6 +14348,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
@@ -13837,6 +14412,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
@@ -13849,7 +14425,8 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</new_note>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -13964,6 +14541,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_note>"
                 "<active>%s</active>"
                 "<nvt oid=\"%s\"/>"
@@ -13989,6 +14567,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -13996,6 +14575,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_notes");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -14003,6 +14583,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_notes");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -14018,7 +14599,10 @@ create_note_omp (credentials_t *credentials, params_t *params,
         ret = get_notes (credentials, params, response, response_data);
     }
   else
-    ret = new_note (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_note (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -14088,6 +14672,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing a note. "
@@ -14105,6 +14690,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
@@ -14124,6 +14710,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
@@ -14136,7 +14723,8 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</edit_note>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -14208,12 +14796,15 @@ save_note_omp (credentials_t * credentials, params_t *params,
   days = params_value (params, "days");
 
   if (note_task_id == NULL || note_result_id == NULL || active == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a note. "
-                         "The note remains the same. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_notes");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a note. "
+                           "The note remains the same. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_notes");
+    }
 
   if (note_id == NULL
       || text == NULL
@@ -14221,18 +14812,22 @@ save_note_omp (credentials_t * credentials, params_t *params,
       || port == NULL
       || severity == NULL
       || days == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a note. "
-                         "The note remains the same. "
-                         "Diagnostics: Syntax error in required parameter.",
-                         "/omp?cmd=get_notes");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a note. "
+                           "The note remains the same. "
+                           "Diagnostics: Syntax error in required parameter.",
+                           "/omp?cmd=get_notes");
+    }
 
   response = NULL;
   entity = NULL;
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_note note_id=\"%s\">"
                 "<active>%s</active>"
                 "<hosts>%s</hosts>"
@@ -14257,6 +14852,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -14264,6 +14860,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_notes");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -14271,6 +14868,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_notes");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -14286,7 +14884,10 @@ save_note_omp (credentials_t * credentials, params_t *params,
         ret = get_notes (credentials, params, response, response_data);
     }
   else
-    ret = edit_note (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = edit_note (credentials, params, response, response_data);
+    }
 
   free_entity (entity);
   g_free (response);
@@ -14418,6 +15019,7 @@ new_override (credentials_t *credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -14446,6 +15048,7 @@ new_override (credentials_t *credentials, params_t *params,
           == -1)
         {
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
@@ -14458,6 +15061,7 @@ new_override (credentials_t *credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
@@ -14468,7 +15072,8 @@ new_override (credentials_t *credentials, params_t *params,
 
       g_string_append (xml, "</new_override>");
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                                response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -14485,6 +15090,7 @@ new_override (credentials_t *credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
@@ -14548,6 +15154,7 @@ new_override (credentials_t *credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
@@ -14560,7 +15167,8 @@ new_override (credentials_t *credentials, params_t *params,
 
   g_string_append (xml, "</new_override>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -14700,6 +15308,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_override>"
                 "<active>%s</active>"
                 "<nvt oid=\"%s\"/>"
@@ -14727,6 +15336,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -14734,6 +15344,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_overrides");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -14741,6 +15352,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_overrides");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -14756,7 +15368,10 @@ create_override_omp (credentials_t *credentials, params_t *params,
         ret = get_overrides (credentials, params, response, response_data);
     }
   else
-    ret = new_override (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_override (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -14827,6 +15442,7 @@ edit_override (credentials_t *credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while editing an override. "
@@ -14844,6 +15460,7 @@ edit_override (credentials_t *credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
@@ -14863,6 +15480,7 @@ edit_override (credentials_t *credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
@@ -14875,7 +15493,8 @@ edit_override (credentials_t *credentials, params_t *params,
 
   g_string_append (xml, "</edit_override>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -14954,12 +15573,15 @@ save_override_omp (credentials_t * credentials, params_t *params,
   days = params_value (params, "days");
 
   if (override_task_id == NULL || override_result_id == NULL || active == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a override. "
-                         "The override remains the same. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_overrides");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a override. "
+                           "The override remains the same. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_overrides");
+    }
 
   if (override_id == NULL
       || text == NULL
@@ -14968,18 +15590,21 @@ save_override_omp (credentials_t * credentials, params_t *params,
       || severity == NULL
       || new_severity == NULL
       || days == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a override. "
-                         "The override remains the same. "
-                         "Diagnostics: Syntax error in required parameter.",
-                         "/omp?cmd=get_overrides");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a override. "
+                           "The override remains the same. "
+                           "Diagnostics: Syntax error in required parameter.",
+                           "/omp?cmd=get_overrides");
+    }
   response = NULL;
   entity = NULL;
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_override override_id=\"%s\">"
                 "<active>%s</active>"
                 "<hosts>%s</hosts>"
@@ -15006,6 +15631,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -15013,6 +15639,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_overrides");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -15020,6 +15647,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_overrides");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -15035,7 +15663,10 @@ save_override_omp (credentials_t * credentials, params_t *params,
         ret = get_overrides (credentials, params, response, response_data);
     }
   else
-    ret = edit_override (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = edit_override (credentials, params, response, response_data);
+    }
 
   free_entity (entity);
   g_free (response);
@@ -15063,7 +15694,8 @@ new_slave (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_slave>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -15143,7 +15775,7 @@ create_slave_omp (credentials_t *credentials, params_t *params,
                                login,
                                password);
 
-  ret = omp (credentials, &response, &entity, command);
+  ret = omp (credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -15151,6 +15783,7 @@ create_slave_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new slave. "
@@ -15158,6 +15791,7 @@ create_slave_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_slaves");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new slave. "
@@ -15165,6 +15799,7 @@ create_slave_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_slaves");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new slave. "
@@ -15180,7 +15815,10 @@ create_slave_omp (credentials_t *credentials, params_t *params,
         html = get_slaves (credentials, params, response, response_data);
     }
   else
-    html = new_slave (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_slave (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -15345,6 +15983,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_slave slave_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -15367,6 +16006,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a slave. "
@@ -15374,6 +16014,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_slaves");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a slave. "
@@ -15381,6 +16022,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_slaves");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a slave. "
@@ -15396,7 +16038,10 @@ save_slave_omp (credentials_t * credentials, params_t *params,
         html = get_slaves (credentials, params, response, response_data);
     }
   else
-    html = edit_slave (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_slave (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -15576,7 +16221,8 @@ new_scanner (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -15626,6 +16272,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while verifying an scanner. "
@@ -15638,6 +16285,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
                             scanner_id) == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while verifying an scanner. "
@@ -15652,6 +16300,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while verifying an scanner. "
@@ -15705,7 +16354,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (key_pub, "Create Scanner", new_scanner);
   CHECK_PARAM (key_priv, "Create Scanner", new_scanner);
 
-  switch (ompf (credentials, &response, &entity,
+  switch (ompf (credentials, &response, &entity, response_data,
                 "<create_scanner><name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
                 "<ca_pub>%s</ca_pub><key_pub>%s</key_pub>"
@@ -15717,6 +16366,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -15724,6 +16374,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
                  "Diagnostics: Failure to send command to manager daemon.",
                  "/omp?cmd=get_scanners");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -15731,6 +16382,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
                  "Diagnostics: Failure to receive response from manager daemon.",
                  "/omp?cmd=get_scanners");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -15745,7 +16397,10 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
         ret = get_scanners (credentials, params, response, response_data);
     }
   else
-    ret = new_scanner (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_scanner (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -15856,7 +16511,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (key_pub, "Edit Scanner", edit_scanner);
   CHECK_PARAM (key_priv, "Edit Scanner", edit_scanner);
 
-  switch (ompf (credentials, &response, &entity,
+  switch (ompf (credentials, &response, &entity, response_data,
                 "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
                 "<comment>%s</comment><host>%s</host>"
                 "<port>%s</port><type>%s</type><ca_pub>%s</ca_pub>"
@@ -15868,6 +16523,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -15875,6 +16531,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                  "Diagnostics: Failure to send command to manager daemon.",
                  "/omp?cmd=get_scanners");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -15882,6 +16539,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                  "Diagnostics: Failure to receive response from manager daemon.",
                  "/omp?cmd=get_scanners");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -15896,7 +16554,10 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
         ret = get_scanners_omp (credentials, params, response_data);
     }
   else
-    ret = edit_scanner (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = edit_scanner (credentials, params, response, response_data);
+    }
 
   free_entity (entity);
   g_free (response);
@@ -16012,7 +16673,8 @@ new_schedule (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -16081,6 +16743,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_schedule>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -16122,6 +16785,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -16129,6 +16793,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_schedules");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -16136,6 +16801,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_schedules");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -16151,7 +16817,10 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
         ret = get_schedules (credentials, params, response, response_data);
     }
   else
-    ret = new_schedule (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_schedule (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -16205,6 +16874,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the system reports. "
@@ -16229,6 +16899,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
@@ -16241,6 +16912,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
@@ -16261,6 +16933,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
@@ -16273,6 +16946,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
@@ -16286,7 +16960,8 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_system_reports>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -16477,7 +17152,8 @@ new_report_format (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -16572,7 +17248,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
                              "%s"
                              "</create_report_format>",
                              params_value (params, "xml_file"));
-  ret = omp (credentials, &response, &entity, command);
+  ret = omp (credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -16580,6 +17256,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -16587,6 +17264,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_report_formats");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -16594,6 +17272,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_report_formats");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -16612,7 +17291,10 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
                                    response_data);
     }
   else
-    html = new_report_format (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_report_format (credentials, params, response, response_data);
+    }
 
   free_entity (entity);
   g_free (response);
@@ -16684,6 +17366,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<modify_report_format"
                           " report_format_id=\"%s\">"
                           "<param>"
@@ -16701,6 +17384,8 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                   case -1:
                     break;
                   case 1:
+                    response_data->http_status_code
+                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -16708,6 +17393,8 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                                          "Diagnostics: Failure to send command to manager daemon.",
                                          "/omp?cmd=get_report_formats");
                   case 2:
+                    response_data->http_status_code
+                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -16715,6 +17402,8 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                                          "Diagnostics: Failure to receive response from manager daemon.",
                                          "/omp?cmd=get_report_formats");
                   default:
+                    response_data->http_status_code
+                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -16731,6 +17420,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_report_format"
               " report_format_id=\"%s\">"
               "<name>%s</name>"
@@ -16748,6 +17438,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -16755,6 +17446,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_report_formats");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -16762,6 +17454,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_report_formats");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -16778,7 +17471,10 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                                    response_data);
     }
   else
-    html = edit_report_format (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_report_format (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -16804,11 +17500,14 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
 
   report_format_id = params_value (params, "report_format_id");
   if (report_format_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while verifying a report format. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_report_formats");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying a report format. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_report_formats");
+    }
 
   /* Verify the report format. */
 
@@ -16817,6 +17516,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<verify_report_format report_format_id=\"%s\"/>",
               report_format_id);
 
@@ -16826,6 +17526,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -16833,6 +17534,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_report_formats");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -16840,6 +17542,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_report_formats");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -16855,6 +17558,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
         {
           free_entity (entity);
           g_free (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a report format. "
@@ -16864,7 +17568,10 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
         }
     }
   else
-    html = get_report_formats (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = get_report_formats (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -16898,12 +17605,14 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
 
   name = params_value (params, "name");
   if (name == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while trying to start a wizard. "
-                         "Diagnostics: Required parameter 'name' was NULL.",
-                         "/omp?cmd=get_tasks");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while trying to start a wizard. "
+                           "Diagnostics: Required parameter 'name' was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
   run = g_string_new ("<run_wizard>");
 
   g_string_append_printf (run,
@@ -16929,7 +17638,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, run->str);
+  ret = omp (credentials, &response, &entity, response_data, run->str);
   g_string_free (run, TRUE);
   switch (ret)
     {
@@ -16937,6 +17646,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -16944,6 +17654,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -16951,6 +17662,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -16966,7 +17678,10 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
         html = wizard (credentials, params, response, response_data);
     }
   else
-    html = wizard (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = wizard (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -16984,6 +17699,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
             openvas_server_close (socket, session);                           \
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
@@ -16998,6 +17714,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
             openvas_server_close (socket, session);                           \
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
@@ -17036,6 +17753,7 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the trash. "
@@ -17090,7 +17808,8 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</get_trash>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 #undef GET_TRASH_RESOURCE
 
@@ -17138,6 +17857,7 @@ get_my_settings (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the settings. "
@@ -17160,6 +17880,7 @@ get_my_settings (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -17172,6 +17893,7 @@ get_my_settings (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -17184,7 +17906,8 @@ get_my_settings (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_my_settings>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -17229,7 +17952,7 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Get Filters and other resource lists. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, commands->str);
+  ret = omp (credentials, &response, &entity, response_data, commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
     {
@@ -17237,6 +17960,7 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17244,6 +17968,7 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_my_settings");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17251,6 +17976,7 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17308,7 +18034,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   filters_xml = NULL;
   entity = NULL;
-  ret = omp (credentials, &filters_xml, &entity, commands->str);
+  ret = omp (credentials, &filters_xml, &entity, response_data, commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
     {
@@ -17316,6 +18042,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17323,6 +18050,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_my_settings");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17330,6 +18058,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_my_settings");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -17348,6 +18077,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the settings. "
@@ -17373,6 +18103,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -17385,6 +18116,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -17397,7 +18129,8 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</edit_my_settings>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -17428,7 +18161,8 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params,
  */
 static int
 send_settings_filters (gnutls_session_t *session, params_t *data,
-                       GString *xml, int *modify_failed_flag)
+                       GString *xml, int *modify_failed_flag,
+                       cmd_response_data_t* response_data)
 {
   if (data)
     {
@@ -17465,8 +18199,12 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
               free_entity (entity);
               return -1;
             }
-          if (! omp_success (entity) && modify_failed_flag)
-            *modify_failed_flag = 1;
+          if (! omp_success (entity))
+            {
+              SET_HTTP_STATUS_FROM_ENTITY (entity);
+              if (modify_failed_flag)
+                *modify_failed_flag = 1;
+            }
           free_entity(entity);
         }
     }
@@ -17539,6 +18277,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
@@ -17560,6 +18299,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           case 0:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
@@ -17567,6 +18307,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Manager closed connection during authenticate.",
                                  "/omp?cmd=get_my_settings");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             g_string_append (xml,
                              "<gsad_msg"
                              " status_text=\"Password error\""
@@ -17581,6 +18322,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                      g_string_free (xml, FALSE),
                                      response_data);
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
@@ -17601,6 +18343,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         {
           g_free (passwd_64);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -17615,6 +18358,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -17646,6 +18390,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (text_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17660,6 +18405,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17701,6 +18447,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (max_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17715,6 +18462,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17723,7 +18471,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send resource details export file name format. */
   fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
@@ -17739,6 +18490,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (fname_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17753,6 +18505,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17761,7 +18514,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (omp_success (entity) != 1)
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send resource list export file name format. */
   fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
@@ -17777,6 +18533,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (fname_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17791,6 +18548,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17799,7 +18557,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (omp_success (entity) != 1)
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send report export file name format. */
   fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
@@ -17815,6 +18576,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (fname_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17829,6 +18591,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17837,7 +18600,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (omp_success (entity) != 1)
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send User Interface Language. */
   lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
@@ -17853,6 +18619,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (lang_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17867,6 +18634,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17892,13 +18660,18 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
     }
   else
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send default resources */
   defaults = params_values (params, "settings_default:");
-  if (send_settings_filters (&session, defaults, xml, &modify_failed))
+  if (send_settings_filters (&session, defaults, xml, &modify_failed,
+                             response_data))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17909,9 +18682,11 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   /* Send resources filters */
   filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&session, filters, xml, &modify_failed))
+  if (send_settings_filters (&session, defaults, xml, &modify_failed,
+                             response_data))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17937,6 +18712,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (max_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17951,6 +18727,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17959,7 +18736,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send Severity Class. */
   text = params_value (params, "severity_class");
@@ -17978,6 +18758,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (text_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -17992,6 +18773,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18030,6 +18812,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (text_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18044,6 +18827,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18052,7 +18836,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send Default Severity setting. */
   text = params_value (params, "default_severity");
@@ -18071,6 +18858,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_free (text_64);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18085,6 +18873,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18093,7 +18882,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   if (! omp_success (entity))
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Get the Filters and other resources. */
   commands = g_string_new ("<commands>");
@@ -18123,6 +18915,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (commands, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18137,6 +18930,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -18183,6 +18977,7 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the OMP doc. "
@@ -18201,6 +18996,7 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the OMP doc. "
@@ -18213,6 +19009,7 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the OMP doc. "
@@ -18226,7 +19023,8 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -18267,6 +19065,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the OMP doc. "
@@ -18284,6 +19083,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a list. "
@@ -18296,6 +19096,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &response, &content))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting OMP doc. "
@@ -18313,6 +19114,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
       if (entity == NULL)
         {
           free_entity (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting OMP doc. "
@@ -18324,6 +19126,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
       if (strlen (content_64) == 0)
         {
           free_entity (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting OMP doc. "
@@ -18437,7 +19240,8 @@ new_group (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -18520,6 +19324,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_group>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -18533,6 +19338,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -18540,6 +19346,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_groups");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -18547,6 +19354,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_groups");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -18562,7 +19370,10 @@ create_group_omp (credentials_t *credentials, params_t *params,
         html = get_groups (credentials, params, response, response_data);
     }
   else
-    html = new_group (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_group (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -18679,6 +19490,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_group group_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -18695,6 +19507,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -18702,6 +19515,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_groups");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -18709,6 +19523,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_groups");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -18724,7 +19539,10 @@ save_group_omp (credentials_t * credentials, params_t *params,
         html = get_groups (credentials, params, response, response_data);
     }
   else
-    html = edit_group (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_group (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -18860,13 +19678,14 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -18874,6 +19693,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -18881,6 +19701,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -18902,13 +19723,14 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -18916,6 +19738,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -18923,6 +19746,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -18944,13 +19768,14 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -18958,6 +19783,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -18965,6 +19791,7 @@ new_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -18984,7 +19811,8 @@ new_permission (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -19047,6 +19875,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
       ret = ompf (credentials,
                   &subject_response,
                   &get_subject_entity,
+                  response_data,
                   "<get_%ss filter=\"rows=1 name=%s\">"
                   "</get_%ss>",
                   subject_type,
@@ -19059,6 +19888,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19068,6 +19898,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 " to manager daemon.",
                                 "/omp?cmd=get_permissions");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19077,6 +19908,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 " from manager daemon.",
                                 "/omp?cmd=get_permissions");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19122,6 +19954,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
       ret = ompf (credentials,
                   &response,
                   &entity,
+                  response_data,
                   "<commands>"
                   "<create_permission>"
                   "<name>get_tasks</name>"
@@ -19184,6 +20017,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19191,6 +20025,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_permissions");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19198,6 +20033,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_permissions");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19214,7 +20050,10 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                     response_data);
         }
       else
-        html = new_permission (credentials, params, response, response_data);
+        {
+          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          html = new_permission (credentials, params, response, response_data);
+        }
     }
   else
     {
@@ -19223,6 +20062,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
       ret = ompf (credentials,
                   &response,
                   &entity,
+                  response_data,
                   "<create_permission>"
                   "<name>%s</name>"
                   "<comment>%s</comment>"
@@ -19247,6 +20087,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19254,6 +20095,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_permissions");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19261,6 +20103,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_permissions");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -19278,6 +20121,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
         }
       else
         {
+          SET_HTTP_STATUS_FROM_ENTITY (entity);
           html = next_page_error (credentials, params, response, response_data);
           if (html == NULL)
             html = new_permission (credentials, params, response,
@@ -19296,6 +20140,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
       case -1:                                                                \
         break;                                                                \
       case 1:                                                                 \
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;     \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -19303,6 +20148,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",       \
                             "/omp?cmd=get_permissions");                                     \
       case 2:                                                                                \
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -19310,6 +20156,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.", \
                             "/omp?cmd=get_permissions");                                     \
       default:                                                                               \
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -19325,6 +20172,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     }                                                                         \
   else                                                                        \
     {                                                                         \
+      SET_HTTP_STATUS_FROM_ENTITY (entity);                                   \
       g_string_free (responses, TRUE);                                        \
       html = next_page_error (credentials, params, response, response_data);  \
       if (html == NULL)                                                       \
@@ -19384,6 +20232,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
       ret = ompf (credentials,
                   &subject_response,
                   &get_subject_entity,
+                  response_data,
                   "<get_%ss filter=\"rows=1 name=%s\">"
                   "</get_%ss>",
                   subject_type,
@@ -19396,6 +20245,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19405,6 +20255,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                                 " to manager daemon.",
                                 "/omp?cmd=get_permissions");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19414,6 +20265,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                                 " from manager daemon.",
                                 "/omp?cmd=get_permissions");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -19465,6 +20317,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
           ret = ompf (credentials,
                       &response,
                       &entity,
+                      response_data,
                       "<create_permission>"
                       "<name>get_%ss</name>"
                       "<comment>%s</comment>"
@@ -19490,6 +20343,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
           ret = ompf (credentials,
                       &response,
                       &entity,
+                      response_data,
                       "<create_permission>"
                       "<name>modify_%s</name>"
                       "<comment>%s</comment>"
@@ -19512,6 +20366,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<create_permission>"
                           "<name>start_%s</name>"
                           "<comment>%s</comment>"
@@ -19532,6 +20387,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<create_permission>"
                           "<name>stop_%s</name>"
                           "<comment>%s</comment>"
@@ -19552,6 +20408,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<create_permission>"
                           "<name>resume_%s</name>"
                           "<comment>%s</comment>"
@@ -19575,6 +20432,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<create_permission>"
                           "<name>test_%s</name>"
                           "<comment>%s</comment>"
@@ -19600,6 +20458,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
               ret = ompf (credentials,
                           &response,
                           &entity,
+                          response_data,
                           "<create_permission>"
                           "<name>verify_%s</name>"
                           "<comment>%s</comment>"
@@ -19643,6 +20502,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                   ret = ompf (credentials,
                               &response,
                               &entity,
+                              response_data,
                               "<create_permission>"
                               "<name>get_%ss</name>"
                               "<comment>%s</comment>"
@@ -19668,6 +20528,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                   ret = ompf (credentials,
                               &response,
                               &entity,
+                              response_data,
                               "<create_permission>"
                               "<name>modify_%s</name>"
                               "<comment>%s</comment>"
@@ -19690,6 +20551,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                       ret = ompf (credentials,
                                   &response,
                                   &entity,
+                                  response_data,
                                   "<create_permission>"
                                   "<name>start_%s</name>"
                                   "<comment>%s</comment>"
@@ -19710,6 +20572,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                       ret = ompf (credentials,
                                   &response,
                                   &entity,
+                                  response_data,
                                   "<create_permission>"
                                   "<name>stop_%s</name>"
                                   "<comment>%s</comment>"
@@ -19730,6 +20593,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                       ret = ompf (credentials,
                                   &response,
                                   &entity,
+                                  response_data,
                                   "<create_permission>"
                                   "<name>resume_%s</name>"
                                   "<comment>%s</comment>"
@@ -19753,6 +20617,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                       ret = ompf (credentials,
                                   &response,
                                   &entity,
+                                  response_data,
                                   "<create_permission>"
                                   "<name>test_%s</name>"
                                   "<comment>%s</comment>"
@@ -19778,6 +20643,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                       ret = ompf (credentials,
                                   &response,
                                   &entity,
+                                  response_data,
                                   "<create_permission>"
                                   "<name>verify_%s</name>"
                                   "<comment>%s</comment>"
@@ -19837,13 +20703,14 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -19851,6 +20718,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -19858,6 +20726,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -19879,13 +20748,14 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -19893,6 +20763,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -19900,6 +20771,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -19921,13 +20793,14 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity,
+      switch (omp (credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1\"/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -19935,6 +20808,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -19942,6 +20816,7 @@ edit_permission (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -20076,6 +20951,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_permission permission_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -20099,6 +20975,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -20106,6 +20983,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_permissions");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -20113,6 +20991,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_permissions");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -20128,7 +21007,10 @@ save_permission_omp (credentials_t * credentials, params_t *params,
         html = get_permissions (credentials, params, response, response_data);
     }
   else
-    html = edit_permission (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_permission (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -20156,7 +21038,8 @@ new_port_list (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -20191,6 +21074,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_port_list>"
                 "<name>%s</name>"
                 "<port_range>%s</port_range>"
@@ -20206,6 +21090,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -20213,6 +21098,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_port_lists");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -20220,6 +21106,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_port_lists");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -20235,7 +21122,10 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
         html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = new_port_list (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_port_list (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -20276,6 +21166,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<create_port_range>"
               "<port_list id=\"%s\"/>"
               "<start>%s</start>"
@@ -20293,6 +21184,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -20300,6 +21192,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_port_lists");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -20307,6 +21200,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_port_lists");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -20322,7 +21216,10 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
         html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = edit_port_list (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_port_list (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -20479,6 +21376,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_port_list port_list_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -20493,6 +21391,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -20500,6 +21399,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_port_lists");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -20507,6 +21407,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_port_lists");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -20522,7 +21423,10 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
         html = get_port_lists (credentials, params, response, response_data);
     }
   else
-    html = edit_port_list (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_port_list (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -20606,6 +21510,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port list. "
@@ -20627,6 +21532,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a port list. "
@@ -20639,6 +21545,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a port list. "
@@ -20657,6 +21564,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a port list. "
@@ -20669,6 +21577,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a port list. "
@@ -20681,7 +21590,8 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_port_lists>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 
@@ -20706,7 +21616,8 @@ new_role (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -20790,6 +21701,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_role>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -20803,6 +21715,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -20810,6 +21723,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_targets");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -20817,6 +21731,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_roles");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -20832,7 +21747,10 @@ create_role_omp (credentials_t *credentials, params_t *params,
         ret = get_roles (credentials, params, response, response_data);
     }
   else
-    ret = new_role (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = new_role (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -20864,7 +21782,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity,
+      switch (ompf (credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -20873,18 +21791,21 @@ edit_role (credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_roles");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_roles");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
@@ -20905,7 +21826,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity,
+      switch (ompf (credentials, &response, &entity, response_data,
                     "<get_groups"
                     " filter=\"rows=-1 owner=%s\"/>",
                     credentials->username))
@@ -20914,18 +21835,21 @@ edit_role (credentials_t * credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_roles");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_roles");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -21106,6 +22030,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_role role_id=\"%s\">"
               "<name>%s</name>"
               "<comment>%s</comment>"
@@ -21122,6 +22047,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -21129,6 +22055,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_roles");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -21136,6 +22063,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_roles");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -21151,7 +22079,10 @@ save_role_omp (credentials_t * credentials, params_t *params,
         html = get_roles (credentials, params, response, response_data);
     }
   else
-    html = edit_role (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_role (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -21182,6 +22113,7 @@ get_feed_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21191,13 +22123,15 @@ get_feed_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"List Feeds\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21207,6 +22141,7 @@ get_feed_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed list. "
@@ -21218,6 +22153,7 @@ get_feed_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed. "
@@ -21227,7 +22163,7 @@ get_feed_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 /**
@@ -21252,6 +22188,7 @@ get_scap_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21261,13 +22198,15 @@ get_scap_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"List SCAP Feeds\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21277,6 +22216,7 @@ get_scap_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the SCAP feed list. "
@@ -21288,6 +22228,7 @@ get_scap_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SCAP the feed. "
@@ -21297,7 +22238,7 @@ get_scap_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 /**
@@ -21322,6 +22263,7 @@ get_cert_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21331,13 +22273,15 @@ get_cert_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"List CERT Feeds\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21347,6 +22291,7 @@ get_cert_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the CERT feed list. "
@@ -21358,6 +22303,7 @@ get_cert_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the CERT feed. "
@@ -21367,7 +22313,7 @@ get_cert_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 /**
@@ -21392,6 +22338,7 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21401,13 +22348,15 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"Synchronize Feed\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21418,6 +22367,7 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the NVT feed. "
@@ -21429,6 +22379,7 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the NVT feed. "
@@ -21438,7 +22389,7 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 /**
@@ -21463,6 +22414,7 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21472,13 +22424,15 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"Synchronize SCAP Feed\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21489,6 +22443,7 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the SCAP feed. "
@@ -21500,6 +22455,7 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the SCAP feed. "
@@ -21509,7 +22465,7 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 /**
@@ -21534,6 +22490,7 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         if (html)
           return html;
         return gsad_message (credentials,
@@ -21543,13 +22500,15 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
       case -2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return xsl_transform_omp (credentials,
                                   g_strdup
                                    ("<gsad_msg status_text=\"Access refused.\""
                                     " operation=\"Synchronize CERT Feed\">"
                                     "Only users given the Administrator role"
                                     " may access Feed Administration."
-                                    "</gsad_msg>"));
+                                    "</gsad_msg>"),
+                                  response_data);
     }
 
   if (openvas_server_sendf (&session,
@@ -21560,6 +22519,7 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
       == -1)
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the CERT feed. "
@@ -21571,6 +22531,7 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the CERT feed. "
@@ -21580,7 +22541,7 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
     }
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, text, response_data);
 }
 
 
@@ -21673,7 +22634,8 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -21706,6 +22668,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_filter>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -21721,6 +22684,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -21728,6 +22692,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_alerts");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -21735,6 +22700,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_alerts");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -21761,7 +22727,10 @@ create_filter_omp (credentials_t *credentials, params_t *params,
         html = get_filters (credentials, params, response, response_data);
     }
   else
-    html = new_filter (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_filter (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -21942,6 +22911,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a filter. "
@@ -21973,6 +22943,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
     if (ret == -1)
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
@@ -21985,6 +22956,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
     if (read_entity_and_text (&session, &entity, &response))
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
@@ -22000,6 +22972,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
         || (strlen (status) == 0))
       {
         openvas_server_close (socket, session);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
@@ -22155,18 +23128,22 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
                           response_data);
 
   if (schedule_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a schedule. "
-                         "The schedule remains the same. "
-                         "Diagnostics: Required parameter missing.",
-                         "/omp?cmd=get_schedules");
+    {
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a schedule. "
+                           "The schedule remains the same. "
+                           "Diagnostics: Required parameter missing.",
+                           "/omp?cmd=get_schedules");
+    }
 
   response = NULL;
   entity = NULL;
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<modify_schedule schedule_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
@@ -22209,6 +23186,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -22216,6 +23194,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_schedules");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -22223,6 +23202,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_schedules");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -22238,8 +23218,10 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
         ret = get_schedules_omp (credentials, params, response_data);
     }
   else
-    ret = edit_schedule (credentials, params, response, response_data);
-
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = edit_schedule (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -22275,12 +23257,14 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<describe_auth/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22288,6 +23272,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22295,6 +23280,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22316,12 +23302,14 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<get_groups/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_groups/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -22329,6 +23317,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -22336,6 +23325,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -22357,12 +23347,14 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<get_roles/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_roles/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -22370,6 +23362,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -22377,6 +23370,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -22392,7 +23386,8 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -22455,24 +23450,28 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<describe_auth/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22531,24 +23530,28 @@ get_users (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<describe_auth/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22733,7 +23736,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, buf);
+  ret = omp (credentials, &response, &entity, response_data, buf);
   g_free (buf);
   switch (ret)
     {
@@ -22741,6 +23744,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -22748,6 +23752,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_users");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -22755,6 +23760,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_users");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -22770,7 +23776,10 @@ create_user_omp (credentials_t * credentials, params_t *params,
         html = get_users (credentials, params, response, response_data);
     }
   else
-    html = new_user (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_user (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -22801,24 +23810,28 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<describe_auth/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -22839,24 +23852,28 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<get_groups/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_groups/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -22877,12 +23894,14 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, "<get_roles/>"))
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_roles/>"))
         {
           case 0:
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -22890,6 +23909,7 @@ edit_user (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  "/omp?cmd=get_users");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -22897,6 +23917,7 @@ edit_user (credentials_t * credentials, params_t *params,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_users");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -23154,6 +24175,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              command->str);
   g_string_free (command, TRUE);
   switch (ret)
@@ -23176,6 +24198,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -23183,6 +24206,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_users");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -23190,6 +24214,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_users");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -23213,7 +24238,10 @@ save_user_omp (credentials_t * credentials, params_t *params,
         }
     }
   else
-    html = edit_user (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = edit_user (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -23343,7 +24371,8 @@ cvss_calculator (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -23378,11 +24407,13 @@ dashboard (credentials_t * credentials, params_t *params,
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<get_filters filter=\"type=info first=1 rows=-1\"/>");
   else
     ret = ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<get_filters filter=\"first=1 rows=-1\"/>");
 
   switch (ret)
@@ -23392,6 +24423,7 @@ dashboard (credentials_t * credentials, params_t *params,
         break;
       case 1:
         g_string_free (xml, TRUE);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -23401,6 +24433,7 @@ dashboard (credentials_t * credentials, params_t *params,
                             "/omp?cmd=dashboard");
       case 2:
         g_string_free (xml, TRUE);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -23410,6 +24443,7 @@ dashboard (credentials_t * credentials, params_t *params,
                             "/omp?cmd=dashboard");
       default:
         g_string_free (xml, TRUE);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -23422,7 +24456,8 @@ dashboard (credentials_t * credentials, params_t *params,
   g_free (response);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -23469,6 +24504,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
   ret = ompf (credentials,
               &response,
               &entity,
+              response_data,
               "<modify_auth>"
               "<group name=\"%s\">"
               "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
@@ -23486,6 +24522,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -23493,6 +24530,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_users");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -23500,6 +24538,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_users");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -23515,7 +24554,10 @@ save_auth_omp (credentials_t* credentials, params_t *params,
         html = get_users (credentials, params, response, response_data);
     }
   else
-    html = get_users (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = get_users (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -23545,16 +24587,21 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
   int ret;
 
   if (*pref_id == NULL)
-    return ("<save_chart_preference_response"
-            " status=\"400\" status_text=\"Invalid or missing name\"/>");
-
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return ("<save_chart_preference_response"
+              " status=\"400\" status_text=\"Invalid or missing name\"/>");
+    }
   if (*pref_value == NULL)
-    return ("<save_chart_preference_response"
-            " status=\"400\" status_text=\"Invalid or missing value\"/>");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return ("<save_chart_preference_response"
+              " status=\"400\" status_text=\"Invalid or missing value\"/>");
+    }
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity,
+  ret = ompf (credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
@@ -23566,6 +24613,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
@@ -23573,6 +24621,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_my_settings");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
@@ -23580,6 +24629,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_my_settings");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
@@ -23597,6 +24647,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
     }
   else
     {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
       gchar* ret_response
         = g_strdup_printf("<save_chart_preference_response"
                           " status=\"%s\" status_text=\"%s\"/>",
@@ -23639,6 +24690,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the wizard. "
@@ -23663,6 +24715,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
@@ -23674,6 +24727,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the"
@@ -23692,6 +24746,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
@@ -23703,6 +24758,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while the wizard. "
@@ -23714,7 +24770,8 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append_printf (xml, "</wizard>");
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -23763,11 +24820,14 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   name = params_value (params, "get_name");
   if (name == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while trying to start a wizard. "
-                         "Diagnostics: Required parameter 'get_name' was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while trying to start a wizard. "
+                           "Diagnostics: Required parameter 'get_name' was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   run = g_string_new ("<run_wizard read_only=\"1\">");
 
@@ -23794,7 +24854,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, run->str);
+  ret = omp (credentials, &response, &entity, response_data, run->str);
   g_string_free (run, TRUE);
   switch (ret)
     {
@@ -23802,6 +24862,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -23809,6 +24870,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -23816,6 +24878,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -23829,7 +24892,7 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_omp (credentials, wizard_xml);
+  return xsl_transform_omp (credentials, wizard_xml, response_data);
 }
 
 /**
@@ -23872,20 +24935,26 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
 
   type = params_value (params, "resource_type");
   if (type == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while performing a bulk action. "
-                         "Diagnostics: Required parameter 'resource_type' was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while performing a bulk action. "
+                           "Diagnostics: Required parameter 'resource_type' was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
   if (strcmp (type, "info") == 0)
     {
       subtype = params_value (params, "info_type");
       if (subtype == NULL)
-        return gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while performing a bulk action. "
-                            "Diagnostics: Required parameter 'info_type' was NULL.",
-                            "/omp?cmd=get_tasks");
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while performing a bulk action. "
+                               "Diagnostics: Required parameter 'info_type' was NULL.",
+                               "/omp?cmd=get_tasks");
+        }
     }
   else
     subtype = NULL;
@@ -23899,11 +24968,14 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
   else if (params_value (params, "bulk_trash.x"))
     action = "trash";
   else
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while performing a bulk action. "
-                         "Diagnostics: Could not determine the action.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while performing a bulk action. "
+                           "Diagnostics: Could not determine the action.",
+                           "/omp?cmd=get_tasks");
+    }
 
   if (strcmp (action, "create") == 0)
     {
@@ -23993,7 +25065,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (credentials, &response, &entity,
+      ret = ompf (credentials, &response, &entity, response_data,
                   "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
                   type,
                   params_value (params, "filter") ? : "");
@@ -24010,6 +25082,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
           case -1:
             break;
           case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -24018,6 +25091,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                                 " manager daemon.",
                                 "/omp?cmd=get_my_settings");
           case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -24026,6 +25100,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
                                 " manager daemon.",
                                 "/omp?cmd=get_my_settings");
           default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -24068,7 +25143,8 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_omp (credentials, g_string_free (bulk_string, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (bulk_string, FALSE),
+                            response_data);
 }
 
 /**
@@ -24097,12 +25173,15 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 
   type = params_value (params, "resource_type");
   if (type == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting resources. "
-                         "The resources were not deleted. "
-                         "Diagnostics: Required parameter 'resource_type' was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting resources. "
+                           "The resources were not deleted. "
+                           "Diagnostics: Required parameter 'resource_type' was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   commands_xml = g_string_new ("<commands>");
 
@@ -24129,6 +25208,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
           return html;
         /* Fall through. */
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting resources. "
@@ -24145,6 +25225,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
     {
       g_string_free (commands_xml, TRUE);
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
@@ -24158,6 +25239,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
@@ -24182,11 +25264,14 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   g_free (response);
 
   if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting resources. "
-                         "Diagnostics: Error in parameter next.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting resources. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_tasks");
+    }
   return html;
 }
 
@@ -24212,7 +25297,8 @@ new_host (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -24269,6 +25355,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
   ret = omp (credentials,
              &response,
              &entity,
+             response_data,
              xml->str);
   g_string_free (xml, TRUE);
   switch (ret)
@@ -24277,6 +25364,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -24284,6 +25372,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_assets");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -24291,6 +25380,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             "/omp?cmd=get_assets");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -24306,7 +25396,10 @@ create_host_omp (credentials_t * credentials, params_t *params,
         html = get_assets (credentials, params, response, response_data);
     }
   else
-    html = new_host (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      html = new_host (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -24342,19 +25435,25 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an asset. "
-                         "Diagnostics: Invalid asset_type parameter value",
-                         "/omp?cmd=get_asset");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting an asset. "
+                           "Diagnostics: Invalid asset_type parameter value",
+                           "/omp?cmd=get_asset");
+    }
 
   if (params_value (params, "asset_name")
       && params_value (params, "asset_id"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an asset. "
-                         "Diagnostics: Both ID and Name set.",
-                         "/omp?cmd=get_asset");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting an asset. "
+                           "Diagnostics: Both ID and Name set.",
+                           "/omp?cmd=get_asset");
+    }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
@@ -24429,11 +25528,14 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting Assets. "
-                         "Diagnostics: Invalid asset_type parameter value",
-                         "/omp?cmd=get_assets");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting Assets. "
+                           "Diagnostics: Invalid asset_type parameter value",
+                           "/omp?cmd=get_assets");
+    }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
@@ -24496,6 +25598,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
   switch (ompf (credentials,
                 &response,
                 &entity,
+                response_data,
                 "<create_asset>"
                 "<report id=\"%s\"/>"
                 "</create_asset>",
@@ -24505,6 +25608,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
       case -1:
         break;
       case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -24512,6 +25616,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_tasks");
       case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -24519,6 +25624,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              "/omp?cmd=get_tasks");
       default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -24534,7 +25640,10 @@ create_asset_omp (credentials_t *credentials, params_t *params,
         ret = get_report_section (credentials, params, response, response_data);
     }
   else
-    ret = get_report_section (credentials, params, response, response_data);
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      ret = get_report_section (credentials, params, response, response_data);
+    }
   free_entity (entity);
   g_free (response);
   return ret;
@@ -24564,12 +25673,15 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   else if (params_value (params, "report_id"))
     resource_id = g_strdup (params_value (params, "report_id"));
   else
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an asset. "
-                         "The asset was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an asset. "
+                           "The asset was not deleted. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
 
   /* This is a hack, needed because asset_id is the param name used for
    * both the asset being deleted and the asset on the next page. */
@@ -24597,6 +25709,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
         /* Fall through. */
       default:
         g_free (resource_id);
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting an asset. "
@@ -24616,6 +25729,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
     {
       openvas_server_close (socket, session);
       g_free (resource_id);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
@@ -24630,6 +25744,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
@@ -24648,11 +25763,14 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   html = next_page (credentials, params, response, response_data);
   g_free (response);
   if (html == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an asset. "
-                         "Diagnostics: Error in parameter next.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an asset. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_tasks");
+    }
   return html;
 }
 
