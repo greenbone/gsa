@@ -304,25 +304,26 @@ install (FILES src/html/classic/favicon.gif
 
 install (FILES src/html/classic/css/gsa-login.css
                src/html/classic/css/gsa-style.css
-               src/html/classic/css/jquery-ui.min.css
+               src/html/classic/css/jquery-ui.structure.min.css
+               src/html/classic/css/jquery-ui.theme.min.css
                src/html/classic/css/select2.min.css
          DESTINATION ${GSA_DATA_DIR}/classic/css)
 
-install (FILES src/html/classic/css/images/ui-bg_glass_65_ffffff_1x400.png
-               src/html/classic/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png
-               src/html/classic/css/images/ui-bg_glass_100_f6f6f6_1x400.png
-               src/html/classic/css/images/ui-bg_diagonals-thick_18_b81900_40x40.png
-               src/html/classic/css/images/ui-bg_gloss-wave_35_f6a828_500x100.png
-               src/html/classic/css/images/ui-bg_highlight-soft_75_ffe45c_1x100.png
-               src/html/classic/css/images/ui-bg_glass_100_fdf5ce_1x400.png
-               src/html/classic/css/images/ui-bg_diagonals-thick_20_666666_40x40.png
+install (FILES src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png
+               src/html/classic/css/images/ui-bg_diagonals-thick_30_666666_40x40.png
                src/html/classic/css/images/ui-bg_flat_10_000000_40x100.png
-               src/html/classic/css/images/ui-icons_ef8c08_256x240.png
+               src/html/classic/css/images/ui-bg_glass_65_ffffff_1x400.png
+               src/html/classic/css/images/ui-bg_highlight-hard_35_66c430_1x100.png
+               src/html/classic/css/images/ui-bg_highlight-soft_100_519032_1x100.png
+               src/html/classic/css/images/ui-bg_highlight-soft_100_87d050_1x100.png
+               src/html/classic/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png
+               src/html/classic/css/images/ui-bg_highlight-soft_75_fdc300_1x100.png
                src/html/classic/css/images/ui-icons_222222_256x240.png
-               src/html/classic/css/images/ui-icons_ffd27a_256x240.png
+               src/html/classic/css/images/ui-icons_519032_256x240.png
+               src/html/classic/css/images/ui-icons_87d050_256x240.png
+               src/html/classic/css/images/ui-icons_aa0000_256x240.png
+               src/html/classic/css/images/ui-icons_fdc300_256x240.png
                src/html/classic/css/images/ui-icons_ffffff_256x240.png
-               src/html/classic/css/images/ui-icons_228ef1_256x240.png
-
          DESTINATION ${GSA_DATA_DIR}/classic/css/images)
 
 install (FILES src/html/classic/js/d3.tip.js
