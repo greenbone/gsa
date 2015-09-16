@@ -18682,7 +18682,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   /* Send resources filters */
   filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&session, defaults, xml, &modify_failed,
+  if (send_settings_filters (&session, filters, xml, &modify_failed,
                              response_data))
     {
       openvas_server_close (socket, session);
