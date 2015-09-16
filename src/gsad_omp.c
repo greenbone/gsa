@@ -720,6 +720,22 @@ omp_success (entity_t entity)
 }
 
 /**
+ * @brief Set the HTTP status according to OMP response entity.
+ *
+ * @param[in]  entity  The OMP response entity.
+ */
+#define SET_HTTP_STATUS_FROM_ENTITY(entity)                                   \
+  do {                                                                        \
+    if (strcmp (entity_attribute (entity, "status_text"),                     \
+                "Permission denied") == 0)                                    \
+      response_data->http_status_code = MHD_HTTP_FORBIDDEN;                   \
+    else if (strcmp (entity_attribute (entity, "status"), "404") == 0)        \
+      response_data->http_status_code = MHD_HTTP_NOT_FOUND;                   \
+    else                                                                      \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                 \
+  } while (0)
+
+/**
  * @brief Run a single OMP command.
  *
  * @param[in]  credentials    Username and password for authentication.
@@ -880,6 +896,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
   switch (omp_success (entity))
     {
       case 0:
+        SET_HTTP_STATUS_FROM_ENTITY (entity);
         ret = 3;
         break;
       case 1:
@@ -928,12 +945,13 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
  * @param[in]  session     Username and password for authentication.
  * @param[in]  setting_id  UUID of the setting to get.
  * @param[out] value       Value of the setting.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return     -1 internal error, 0 success, 1 send error, 2 read error.
  */
 static int
 setting_get_value (gnutls_session_t *session, const char *setting_id,
-                   gchar **value)
+                   gchar **value, cmd_response_data_t *response_data)
 {
   int ret;
   entity_t entity;
@@ -985,6 +1003,8 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
     }
   else
     {
+      if (response_data)
+        SET_HTTP_STATUS_FROM_ENTITY (entity);
       free_entity (entity);
       g_free (response);
       return -1;
@@ -1012,22 +1032,6 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
       return ret_html;                                                         \
     }
-
-/**
- * @brief Set the HTTP status according to OMP response entity.
- *
- * @param[in]  entity  The OMP response entity.
- */
-#define SET_HTTP_STATUS_FROM_ENTITY(entity)                                   \
-  do {                                                                        \
-    if (strcmp (entity_attribute (entity, "status_text"),                     \
-                "Permission denied") == 0)                                    \
-      response_data->http_status_code = MHD_HTTP_FORBIDDEN;                   \
-    else if (strcmp (entity_attribute (entity, "status"), "404") == 0)        \
-      response_data->http_status_code = MHD_HTTP_NOT_FOUND;                   \
-    else                                                                      \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                 \
-  } while (0)
 
 /**
  * @brief Get an URL for the current page.
@@ -2379,7 +2383,8 @@ export_resource (const char *type, credentials_t * credentials,
 
   ret = setting_get_value (&session,
                            "a6ac88c5-729c-41ba-ac0a-deea4a3441f2",
-                           &fname_format);
+                           &fname_format,
+                           response_data);
   if (ret)
     {
       g_free (content);
@@ -2577,7 +2582,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   ret = setting_get_value (&session,
                            "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
-                           &fname_format);
+                           &fname_format,
+                           response_data);
   if (ret)
     {
       g_free (content);
@@ -2947,7 +2953,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
   else                                                                        \
     {                                                                         \
       int ret;                                                                \
-      ret = setting_get_value (&session, setting_id, &value);                 \
+      ret = setting_get_value (&session, setting_id, &value, response_data);  \
       if (ret)                                                                \
         {                                                                     \
           cleanup                                                             \
@@ -3031,7 +3037,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   ret = setting_get_value (&session,
                            "f9f5a546-8018-48d0-bef5-5ad4926ea899",
-                           &alert);
+                           &alert,
+                           response_data);
   if (ret)
     {
       openvas_server_close (socket, session);
@@ -10069,6 +10076,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
     if (status[0] != '2')
       {
+        SET_HTTP_STATUS_FROM_ENTITY (entity);
         html = edit_target (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
@@ -12915,7 +12923,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               gchar *file_name;
               ret = setting_get_value (&session,
                                        "e1a2ae0b-736e-4484-b029-330c9e15b900",
-                                       &fname_format);
+                                       &fname_format,
+                                       response_data);
               if (ret)
                 {
                   openvas_server_close (socket, session);
@@ -13057,7 +13066,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   ret = setting_get_value
                           (&session,
                            "e1a2ae0b-736e-4484-b029-330c9e15b900",
-                           &fname_format);
+                           &fname_format,
+                           response_data);
                   if (ret)
                     {
                       openvas_server_close (socket, session);
@@ -18415,7 +18425,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           *password = g_strdup (passwd);
         }
       else
-        modify_failed = 1;
+        {
+          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          modify_failed = 1;
+        }
     }
 
   /* Send Timezone */
@@ -18472,7 +18485,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       tzset ();
     }
   else
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send Rows Per Page */
   max_64 = g_base64_encode ((guchar*) max, strlen (max));
@@ -18834,7 +18850,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
     }
   else
-    modify_failed = 1;
+    {
+      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      modify_failed = 1;
+    }
 
   /* Send Dynamic Severity setting. */
   text = params_value (params, "dynamic_severity");
@@ -23025,6 +23044,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
     if (status[0] != '2')
       {
         openvas_server_close (socket, session);
+        SET_HTTP_STATUS_FROM_ENTITY (entity);
         html = edit_filter (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
@@ -25874,7 +25894,6 @@ export_assets_omp (credentials_t * credentials, params_t *params,
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  * @param[out] chart_prefs   Chart preferences.
  * @param[out] autorefresh   Autorefresh preference.
- * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
@@ -25932,7 +25951,8 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       ret = setting_get_value (&session,
                                "6765549a-934e-11e3-b358-406186ea4fc5",
-                               language);
+                               language,
+                               NULL);
 
       switch (ret)
         {
@@ -26054,8 +26074,9 @@ authenticate_omp (const gchar * username, const gchar * password,
       /* Get autorefresh setting. */
 
       ret = setting_get_value (&session,
-                           "578a1c14-e2dc-45ef-a591-89d31391d007",
-                           autorefresh);
+                               "578a1c14-e2dc-45ef-a591-89d31391d007",
+                               autorefresh,
+                               NULL);
 
       switch (ret)
         {

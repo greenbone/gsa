@@ -1,3 +1,14 @@
+2015-09-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (SET_HTTP_STATUS_FROM_ENTITY): Move up so it can be
+	used in simple_ompf.
+	(simple_ompf, setting_get_value, export_resource, PARAM_OR_SETTING)
+	(new_task, save_target_omp, get_report, save_my_settings_omp)
+	(save_filter_omp): Set HTTP status code on OMP errors.
+	(authenticate_omp): Remove response_data param from doc which is not
+	part of the actual function signature. Add NULL response_data param to
+	setting_get_value calls.
+
 2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move Import Scan Config form from New Config page to dedicated page.
