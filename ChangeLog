@@ -1,3 +1,9 @@
+2015-09-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r23366.
+
+	* src/gsad.c (redirect_handler): Fix check for IPv6.
+
 2015-09-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23285.
