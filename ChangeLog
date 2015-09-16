@@ -1,3 +1,7 @@
+2015-09-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (redirect_handler): Fix check for IPv6.
+
 2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [os-details]): Add second column in
