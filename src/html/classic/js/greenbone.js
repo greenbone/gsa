@@ -183,8 +183,8 @@
       // fancy-up the selects
       onReady(self.dialog);
 
-      // remove the 'submit' button
-      self.dialog.find('input[type=submit]').closest('tr').remove();
+      // remove the last 'submit' button
+      self.dialog.find('input[type=submit]').last().closest('tr').remove();
 
       $('html').css('cursor', "");
  

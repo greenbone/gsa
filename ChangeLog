@@ -13,6 +13,11 @@
 
 2015-09-16  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Only remove the last submit button
+	  row.
+
+2015-09-16  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Separate jquery-ui theme and structure, switch to greenbone-ish theme.
 
 	* CMakeLists.txt, src/html/classic/gsad.xsl: Update
