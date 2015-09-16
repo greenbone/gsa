@@ -1,3 +1,8 @@
+2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window, html-config-table): Use
+	"Import" instead of "Upload" in the tooltip.
+
 2015-09-16  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Make the
@@ -7,7 +12,8 @@
 
 	Enable pop-up dialog for config upload.
 
-	* src/html/classic/omp.xsl (list-window): Add upload icon.
+	* src/html/classic/omp.xsl (list-window, html-config-table): Correct
+	upload icon class.
 
 	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
 	upload_config.
