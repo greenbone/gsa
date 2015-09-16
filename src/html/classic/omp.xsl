@@ -4484,7 +4484,7 @@ var toggleFilter = function(){
         <xsl:when test="$upload-icon">
           <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
           <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-upload-icon" data-type="{$type}"
+             class="upload-action-icon" data-type="{$type}"
              title="{gsa:i18n (concat ('Upload ', $cap-type), $cap-type)}">
             <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -14180,7 +14180,7 @@ should not have received it.
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-icon" data-type="config"
+         class="upload-action-icon" data-type="config"
          title="{gsa:i18n ('Upload Config', 'Config')}">
         <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
       </a>

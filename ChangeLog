@@ -1,3 +1,13 @@
+2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Enable pop-up dialog for config upload.
+
+	* src/html/classic/omp.xsl (list-window): Add upload icon.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
+	upload_config.
+	(onReady): Add upload-action-icon case.
+
 2015-09-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (SET_HTTP_STATUS_FROM_ENTITY): Move up so it can be

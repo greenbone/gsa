@@ -31,6 +31,8 @@
     new_task:            'create_task_response',
     new_user:            'create_user_response',
     // ------
+    upload_config:       'create_config_response',
+    // ------
     edit_agent:          'modify_agent_response',
     edit_alert:          'modify_alert_response',
     edit_filter:         'modify_filter_response',
@@ -187,7 +189,7 @@
       self.dialog.find('input[type=submit]').last().closest('tr').remove();
 
       $('html').css('cursor', "");
- 
+
       // show the dialog !
       self.dialog.dialog({
         modal: true,
@@ -232,6 +234,19 @@
       elem.on('click', function(event){
         event.preventDefault();
         new OMPDialog('new_' + type_name, done).show();
+      });
+    });
+
+    doc.find(".upload-action-icon").each(function(){
+      var elem = $(this),
+          type_name = elem.data('type'),
+          done = elem.data('done');
+      if (done === undefined){
+        done = true;
+      }
+      elem.on('click', function(event){
+        event.preventDefault();
+        new OMPDialog('upload_' + type_name, done).show();
       });
     });
 
