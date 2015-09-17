@@ -1,3 +1,8 @@
+2015-09-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (solution-icon): Correct file name for
+	"Mitigation" icon.
+
 2015-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window, html-config-table): Use
