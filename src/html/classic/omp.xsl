@@ -26032,9 +26032,16 @@ should not have received it.
   <xsl:param name="host"/>
   <xsl:param name="name" select="$host"/>
   <xsl:param name="token" select="/envelope/token"/>
-  <a href="?cmd=get_asset&amp;type=host&amp;asset_id={$host}&amp;token={$token}">
-    <xsl:value-of select="$name"/>
-  </a>
+  <xsl:choose>
+    <xsl:when test="string-length ($host) = 0">
+      <xsl:value-of select="$name"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="?cmd=get_asset&amp;type=host&amp;asset_id={$host}&amp;token={$token}">
+        <xsl:value-of select="$name"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="result" mode="details" name="result-details">
