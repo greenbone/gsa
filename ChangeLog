@@ -1,13 +1,25 @@
+2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (tag_resource_types, html-configs-table): Use
+	Scan Config instead of Scan Configuration, like everywhere else.
+
+	* src/html/classic/help.xsl (new_config.html, glossary.html)
+	(my_settings.html, config_details.html, config_editor.html)
+	(config_editor_nvt_families.html, config_editor_nvt.html)
+	(config_family_details.html, config_nvt_details.html): Refer to configs
+	as "Scan Configs" everywhere, instead of mixing in the term "Scan
+	Configuration", because "Scan Config" is what is used in the interface.
+
 2015-09-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Simplify/consolidate online help by introducing some generic
 	pages. As an example, the resource type "Target" is converted
 	to use the new scheme.
 	This covers the following changes in genereal:
-        - drop the list/details/etc icons in the help title bar.
-        - drop the description of actions, filter, sorting from the bottom of the pages
-        - link resource group at the top: table, details, new/edit
-        - link general description at the top: Standard Actions, Filtering
+	    - drop the list/details/etc icons in the help title bar.
+	    - drop the description of actions, filter, sorting from the bottom of the pages
+	    - link resource group at the top: table, details, new/edit
+	    - link general description at the top: Standard Actions, Filtering
 	Also, changes the phrases slightly, because new/edit is a modal dialog now.
 
 	* src/html/classic/help.xsl (sorting): Drop the title h3.

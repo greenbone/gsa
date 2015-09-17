@@ -10958,7 +10958,7 @@ should not have received it.
   <xsl:if test="$select_type = 'config' or gsa:may-op ('get_configs')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'config'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Scan Configuration', 'Scan Config')"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Scan Config', 'Scan Config')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -14445,7 +14445,7 @@ should not have received it.
 <xsl:template name="html-configs-table">
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'config'"/>
-    <xsl:with-param name="cap-type" select="'Scan Configuration'"/>
+    <xsl:with-param name="cap-type" select="'Scan Config'"/>
     <xsl:with-param name="resources-summary" select="configs"/>
     <xsl:with-param name="resources" select="config"/>
     <xsl:with-param name="count" select="count (config)"/>

@@ -2224,11 +2224,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="import_config"></a>
       <h1>Import Scan Config</h1>
       <p>
-        To import a scan configuration, select the configuration file and hit the
-        "Import Scan Config" to submit the scan configuration.
-        The list of scan configurations will be updated.
-        Note that if the name of the scan configuration already exists in your system,
-        a numeric suffix will be added to the name of the imported scan configuration.
+        To import a scan config, select the configuration file and hit the
+        "Import Scan Config" to submit the scan config.
+        The list of scan configs will be updated.
+        Note that if the name of the scan config already exists in your system,
+        a numeric suffix will be added to the name of the imported scan config.
       </p>
       <p>
         To create a file that can be imported (e.g. if you have multiple GSA running
@@ -4459,7 +4459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        NVTs are grouped into families of similar
        tests. The selection of families and/or
        single NVTs is part of a
-       <a href="#config">Scan Configuration</a>.
+       <a href="#config">Scan Config</a>.
       </p>
 
       <a name="ovaldef"></a>
@@ -4539,7 +4539,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        A report is always associated with a
        <a href="#task">task</a>. The
-       <a href="#config">Scan Configuration</a> that
+       <a href="#config">Scan Config</a> that
        determines the extend of the report is part of the
        associated task and can not be modified. Therefore,
        for any report it is ensured that its execution
@@ -4592,7 +4592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        total number of tests to be executed. The
        duration of a scan is determined by the number
        <a href="#target">targets</a> and the complexity
-       of the <a href="#config">Scan Configuration</a>
+       of the <a href="#config">Scan Config</a>
        and ranges from 1 minute to many hours or even days.
       </p>
       <p>
@@ -4608,15 +4608,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <a name="config"></a>
-      <h2>Scan Configuration</h2>
+      <h2>Scan Config</h2>
       <p>
-       A scan configuration covers the selection
+       A scan config covers the selection
        of <a href="#nvt">NVTs</a> as well as general
        and very specific (expert) parameters for the scan server
        and for some of the NVTs.
       </p>
       <p>
-       Not covered by a Scan Configuration is the selection
+       Not covered by a Scan Config is the selection
        of targets. These are separately specified as a
        <a href="#target">target</a>.
       </p>
@@ -4650,17 +4650,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Task</h2>
       <p>
        A task is initially formed by a <a href="#target">target</a>
-       and a <a href="#config">scan configuration</a>.
+       and a <a href="#config">scan config</a>.
        Executing a task initiates a <a href="#scan">scan</a>.  Each scan
        produces a <a href="#report">report</a>.
        As a result, a task collects a series of reports.
       </p>
       <p>
-       A task's target and scan configuration are static.
+       A task's target and scan config are static.
        Thus, the resulting sequence of reports describes the
        change of security status over time.
        However, a task may be marked as <b>alterable</b> when there are
-       no reports present.  For such a task the target and scan configuration
+       no reports present.  For such a task the target and scan config
        may be changed at any time, which may be convenient in certain
        situations.
       </p>
@@ -5298,11 +5298,11 @@ Public License instead of this License.
       </p>
       <h4>Default OpenVAS Scan Config</h4>
       <p>
-        Default <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> for new Tasks using OpenVAS scanners.
+        Default <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> for new Tasks using OpenVAS scanners.
       </p>
       <h4>Default OSP Scan Config</h4>
       <p>
-        Default <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> for new Tasks using OSP scanners.
+        Default <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> for new Tasks using OSP scanners.
       </p>
       <h4>Default SSH Credential</h4>
       <p>
@@ -7968,7 +7968,7 @@ Public License instead of this License.
       <h1>Scan Config Details</h1>
       <p>
         Provides detailed information about a
-        <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> together with the
+        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> together with the
         associated configuration parameters.
       </p>
 
@@ -8096,22 +8096,22 @@ Public License instead of this License.
       <h1>Scan Config Editor</h1>
       <p>
        The Scan Config Editor allows modification of all parameters of a
-       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
+       <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
        These include a selection of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s and the
        specifications how the selection should automatically updated, NVT Preferences
        and Timeouts and advanced Scanner Preferences.
       </p>
       <p>
-       Note that only Scan Configurations that are not currently in use by a
+       Note that only Scan Configs that are not currently in use by a
        <a href="glossary.html?token={/envelope/token}#task">Task</a> allow modifications.
       </p>
 
       <h1>Edit Scan Config Details</h1>
       <p>
        This dialog shows the name and comment of a given
-       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> together with the
+       <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> together with the
        associated configuration parameters itself.
-       It allows to adjust all parameters of the Scan Configuration.
+       It allows to adjust all parameters of the Scan Config.
       </p>
       <p>
        Note: In order to save modifications, the button labelled "Save Config" must
@@ -8264,12 +8264,12 @@ Public License instead of this License.
       <h1>Edit Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
-       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
+       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
       </p>
 
       <h2>Edit Network Vulnerability Tests</h2>
       <p>
-       This table provides an overview of NVTs of one family in a Scan Configuration
+       This table provides an overview of NVTs of one family in a Scan Config
        and allows to include or exclude a NVT and to modify its preferences or timeout.
       </p>
 
@@ -8343,7 +8343,7 @@ Public License instead of this License.
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-        <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
+        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
       </p>
 
       <h2>Edit Network Vulnerability Test</h2>
@@ -8383,7 +8383,7 @@ Public License instead of this License.
         <tr class="even">
           <td>Value</td>
           <td>
-            The value for the NVT Preference in the given Scan Configuration.
+            The value for the NVT Preference in the given Scan Config.
             For different Preference Types, different input methods are shown.
             <br/><br/>
             Note that file preferences must be UTF-8 encoded.
@@ -8410,12 +8410,12 @@ Public License instead of this License.
       <h1>Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
-       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
+       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
       </p>
 
       <h2>Network Vulnerability Tests</h2>
       <p>
-       This table provides an overview of NVTs of one family in a Scan Configuration.
+       This table provides an overview of NVTs of one family in a Scan Config.
       </p>
 
       <table class="gbntable">
@@ -8473,7 +8473,7 @@ Public License instead of this License.
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
+       <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
       </p>
 
       <h2>Network Vulnerability Test</h2>
@@ -8508,7 +8508,7 @@ Public License instead of this License.
         </tr>
         <tr class="even">
           <td>Value</td>
-          <td>The value for the NVT Preference in the given Scan Configuration.</td>
+          <td>The value for the NVT Preference in the given Scan Config.</td>
         </tr>
       </table>
     </div>
