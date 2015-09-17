@@ -12326,7 +12326,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         break;
       case -1:
         if (html)
-          return html;
+          {
+            if (error) *error = 1;
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return html;
+          }
         /* Fall through. */
       default:
         {
