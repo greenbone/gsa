@@ -2115,7 +2115,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img src="/img/st_workaround.png" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'Mitigation'">
-      <img src="/img/st_mitigation.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img src="/img/st_mitigate.png" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'VendorFix'">
       <img src="/img/st_vendorfix.png" title="{$solution_type}" alt="{$solution_type}"/>
