@@ -26030,9 +26030,10 @@ should not have received it.
 
 <xsl:template name="host-link">
   <xsl:param name="host"/>
+  <xsl:param name="name" select="$host"/>
   <xsl:param name="token" select="/envelope/token"/>
-  <a href="?cmd=get_assets&amp;type=host&amp;filter=name={$host}&amp;token={$token}">
-    <xsl:value-of select="$host"/>
+  <a href="?cmd=get_asset&amp;type=host&amp;asset_id={$host}&amp;token={$token}">
+    <xsl:value-of select="$name"/>
   </a>
 </xsl:template>
 
@@ -26557,7 +26558,8 @@ should not have received it.
       <xsl:variable name="hostname"
                     select="../../host[ip = $ip]/detail[name = 'hostname']/value"/>
       <xsl:call-template name="host-link">
-        <xsl:with-param name="host" select="$ip"/>
+        <xsl:with-param name="host" select="../../host[ip = $ip]/asset/@asset_id"/>
+        <xsl:with-param name="name" select="$ip"/>
       </xsl:call-template>
       <xsl:if test="$hostname != ''">
         (<xsl:value-of select="$hostname"/>)
@@ -27537,7 +27539,8 @@ should not have received it.
     </td>
     <td>
       <xsl:call-template name="host-link">
-        <xsl:with-param name="host" select="host"/>
+        <xsl:with-param name="host" select="../../host[ip = $ip]/asset/@asset_id"/>
+        <xsl:with-param name="name" select="host"/>
       </xsl:call-template>
     </td>
     <td>
@@ -28440,7 +28443,8 @@ var toggleFilter = function(){
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
               <xsl:call-template name="host-link">
-                <xsl:with-param name="host" select="$current_host"/>
+                <xsl:with-param name="host" select="asset/@asset_id"/>
+                <xsl:with-param name="name" select="$current_host"/>
               </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
@@ -29496,6 +29500,7 @@ var toggleFilter = function(){
         <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>
           <xsl:variable name="host" select="."/>
+          <xsl:variable name="asset_id" select="asset/@asset_id"/>
           <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
           <xsl:variable name="token" select="/envelope/token"/>
           <xsl:for-each select="detail[name = 'Closed CVE']">
@@ -29514,7 +29519,8 @@ var toggleFilter = function(){
                 </td>
                 <td>
                   <xsl:call-template name="host-link">
-                    <xsl:with-param name="host" select="$current_host"/>
+                    <xsl:with-param name="host" select="$asset_id"/>
+                    <xsl:with-param name="name" select="$current_host"/>
                     <xsl:with-param name="token" select="$token"/>
                   </xsl:call-template>
                   <xsl:if test="$hostname">
@@ -29775,7 +29781,8 @@ var toggleFilter = function(){
             </td>
             <td>
               <xsl:call-template name="host-link">
-                <xsl:with-param name="host" select="$host/ip"/>
+                <xsl:with-param name="host" select="$host/asset/@asset_id"/>
+                <xsl:with-param name="name" select="$host/ip"/>
               </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>
@@ -29907,7 +29914,8 @@ var toggleFilter = function(){
             </td>
             <td>
               <xsl:call-template name="host-link">
-                <xsl:with-param name="host" select="$host"/>
+                <xsl:with-param name="host" select="../../host[ip = $host]/asset/@asset_id"/>
+                <xsl:with-param name="name" select="$host"/>
               </xsl:call-template>
               <xsl:if test="$hostname">
                 <xsl:value-of select="concat(' (', $hostname, ')')"/>

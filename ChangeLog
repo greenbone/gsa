@@ -1,5 +1,12 @@
 2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (host-link): Link to asset Host Details
+	instead of Assets.
+	(result [result-row], result, report [hosts], report [closed_cves])
+	(report [ssl_certs], report [errors]): Update host-link call.
+
+2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Move bulk new icon to the
 	right of the delete icon, to match the row icons.
 
