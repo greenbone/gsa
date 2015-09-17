@@ -306,8 +306,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="sorting">
-  <a name="sorting"></a>
-  <h3>Sorting</h3>
   <p>
     The sorting of the table can be changed by clicking on a column heading.
     The current sort column appears as a keyword in the powerfilter, like
@@ -3713,7 +3711,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </ul>
             <li> <a href="targets.html?token={/envelope/token}">Targets</a></li>
               <ul>
-                <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
+                <li> <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
             <li> <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a></li>
@@ -3790,10 +3788,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
           <li> Miscellaneous</li>
           <ul>
+            <li> <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a></li>
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
             <li> <a href="cvss_calculator.html?token={/envelope/token}">CVSS Calculator</a></li>
+            <li> <a href="filtering.html?token={/envelope/token}">Filtering</a></li>
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
             <li> <a href="user-tags.html?token={/envelope/token}">User Tags list</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
@@ -5280,7 +5280,7 @@ Public License instead of this License.
       <p>
         Default selections for various resource creation pages like
         <a href="new_task.html?token={/envelope/token}">New Task</a> or
-        <a href="new_target.html?token={/envelope/token}">New Target</a>
+        <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target</a>
         and wizards.
       </p>
       <p>
@@ -6096,14 +6096,13 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="new_target.html">
-  <div class="gb_window_part_center">Help: New Target
-    <a href="/omp?cmd=new_target&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
+<xsl:template mode="help" match="new_edit_target.html">
+  <div class="gb_window_part_center">Help: New/Edit Target Dialog</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="/help/targets.html?token={/envelope/token}">Targets Table</a>
+    | <a href="target_details.html?token={/envelope/token}">Target Details</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -6112,13 +6111,12 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_TARGET'"/>
       </xsl:call-template>
 
-      <h1>New Target</h1>
+      <h1>New/Edit Target Dialog</h1>
       <p>
-        For creating a new
+        For creating a new or editing a existing
         <a href="glossary.html?token={/envelope/token}#target">Target</a>
         the dialog offers these entries.
-        Hit the button "Create Target" to submit the new target.
-        The Targets page will be shown.
+        Hit the button "Create"/"New" to submit your changes.
       </p>
 
       <table class="gbntable">
@@ -6238,12 +6236,6 @@ Public License instead of this License.
 
       <xsl:call-template name="hosts_note"/>
 
-      <h4>Targets</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.png" alt="Targets" title="Targets"/>
-       will switch to the targets page.
-      </p>
     </div>
   </div>
 </xsl:template>
@@ -7104,6 +7096,65 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="standard_actions.html">
+  <div class="gb_window_part_center">Help: Standard Actions</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Standard Actions</h1>
+      <p>
+        This table summarizes various standard actions that are applicable to most resources.
+        Examples for resource types are Target, Task and Schedule.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Icon</td>
+          <td>Description</td>
+        </tr>
+        <tr class="even">
+          <td><img src="/img/download.png" alt="Export" title="Export XML"/></td>
+          <td>Export (download) the resource in XML format.</td>
+        </tr>
+        <tr class="odd">
+          <td><img src="/img/delete.png" alt="Delete" title="Delete"/></td>
+          <td>Remove the resource entirely from the system, immediately.<br/>
+              The icon will be greyed out <img src="/img/delete_inactive.png" alt="Delete" title="Delete"/>
+              when some other resource depends on the resource.
+          </td>
+        </tr>
+        <tr class="even">
+          <td><img src="/img/new.png" alt="New Resource" title="New Resource"/></td>
+          <td>Open a dialog for creating a new resource.</td>
+        </tr>
+        <tr class="odd">
+          <td><img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan"/></td>
+          <td>
+            The resource will be moved to the <a href="trashcan.html?token={/envelope/token}">trashcan</a>.<br/>
+            Note that if this resource is associated with at least one other
+            resource, it is not possible to move it. In this case the button is greyed out
+            <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan"/>.
+          </td>
+        </tr>
+        <tr class="even">
+          <td><img src="/img/edit.png" alt="Edit Resource" title="Edit Resource"/></td>
+          <td>Open a dialog for editing the properties of the resource.</td>
+        </tr>
+        <tr class="odd">
+          <td><img src="/img/clone.png" alt="Clone Resource" title="Clone Resource"/></td>
+          <td>Create a duplicate of the resource.</td>
+        </tr>
+        <tr class="even">
+          <td><img src="/img/list.png" alt="Resource Table View" title="Resource Table View"/></td>
+          <td>Switch to the table view for this resource type.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="trashcan.html">
   <div class="gb_window_part_center">Help: Trashcan</div>
   <div class="gb_window_part_content">
@@ -7469,6 +7520,20 @@ Public License instead of this License.
       <p>
        Hit the button "Save Override" to submit the modification.
       </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="filtering.html">
+  <div class="gb_window_part_center">Help: Filtering Actions</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="filtering"/>
+
     </div>
   </div>
 </xsl:template>
@@ -8481,13 +8546,13 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="target_details.html">
-  <div class="gb_window_part_center">Help: Target Details
-    <a href="/omp?cmd=get_target&amp;target_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
-      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
+  <div class="gb_window_part_center">Help: Target Details</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
+    | <a href="targets.html?token={/envelope/token}">Targets Table</a>
+    | <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -8507,10 +8572,6 @@ Public License instead of this License.
         associated credential.
       </p>
 
-      <xsl:call-template name="details-window-line-actions">
-        <xsl:with-param name="type" select="'target'"/>
-        <xsl:with-param name="name" select="'Target'"/>
-      </xsl:call-template>
       <xsl:call-template name="object-used-by">
         <xsl:with-param name="name" select="'Target'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
@@ -8667,14 +8728,14 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="targets.html">
-  <div class="gb_window_part_center">Help: Targets
-    <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-       title="Targets" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Targets"/>
-    </a>
-  </div>
+  <div class="gb_window_part_center">Help: Targets</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
+    | <a href="filtering.html?token={/envelope/token}">Filtering</a>
+    | <a href="target_details.html?token={/envelope/token}">Target Details</a>
+    | <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -8683,7 +8744,7 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TARGETS'"/>
       </xsl:call-template>
 
-      <h1>Targets</h1>
+      <h1>Targets Table</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#target">Targets</a>.
@@ -8691,6 +8752,8 @@ Public License instead of this License.
        are shown (name, comment and hosts).
        If credentials are linked to the target, they are listed as well.
       </p>
+
+      <xsl:call-template name="sorting"/>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -8732,28 +8795,6 @@ Public License instead of this License.
       </table>
 
       <xsl:call-template name="hosts_note"/>
-
-      <h3>New Target</h3>
-      <p>
-        To create a new target click the
-        new icon <img src="/img/new.png" alt="New Target" title="New Target"/> which
-        goes to the <a href="new_target.html?token={/envelope/token}">New Target</a>
-        page.
-      </p>
-
-      <h3>Exporting</h3>
-      <p>
-        Export the current list of targets as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
-
-      <xsl:call-template name="filtering"/>
-      <xsl:call-template name="sorting"/>
-
-      <xsl:call-template name="list-window-line-actions">
-        <xsl:with-param name="type" select="'Target'"/>
-        <xsl:with-param name="used_by" select="'Task'"/>
-      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
