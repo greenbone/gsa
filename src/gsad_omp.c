@@ -730,10 +730,10 @@ set_http_status_from_entity (entity_t entity,
                              cmd_response_data_t *response_data)
 {
   if (entity == NULL)
-    return;
-  if (strcmp (entity_attribute (entity, "status_text"),
+    response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+  else if (strcmp (entity_attribute (entity, "status_text"),
               "Permission denied")
-      == 0)
+           == 0)
     response_data->http_status_code = MHD_HTTP_FORBIDDEN;
   else if (strcmp (entity_attribute (entity, "status"), "404") == 0)
     response_data->http_status_code = MHD_HTTP_NOT_FOUND;
