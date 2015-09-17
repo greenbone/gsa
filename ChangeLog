@@ -1,7 +1,9 @@
 2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad_omp.c (get_report): Set error in the -1 case from
-	manager_connect, otherwise will XSL transform the return again.
+	* src/gsad_omp.c (create_host_omp): Handle host comment.
+
+	 * src/html/classic/omp.xsl (html-create-host-form): Add comment field.
+	(asset/host): Display comment.
 
 2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 

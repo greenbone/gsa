@@ -25403,12 +25403,15 @@ create_host_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *name;
+  const char *name, *comment;
   entity_t entity;
   GString *xml;
 
   name = params_value (params, "name");
   CHECK_PARAM (name, "Create Host", new_host);
+
+  comment = params_value (params, "comment");
+  CHECK_PARAM (comment, "Create Host", new_host);
 
   /* Create the host. */
 
@@ -25419,9 +25422,11 @@ create_host_omp (credentials_t * credentials, params_t *params,
                      "<asset>"
                      "<type>host</type>"
                      "<name>%s</name>"
+                     "<comment>%s</comment>"
                      "</asset>"
                      "</create_asset>",
-                     name);
+                     name,
+                     comment);
 
   ret = omp (credentials,
              &response,

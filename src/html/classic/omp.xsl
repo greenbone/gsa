@@ -34593,6 +34593,12 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create Host', 'Host')}"/>
             </td>
@@ -35054,6 +35060,12 @@ var toggleFilter = function(){
           <xsl:value-of select="../name"/>
         </a>
       </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:call-template name="asset-os-icon">
