@@ -1,5 +1,11 @@
 2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (SET_HTTP_STATUS_FROM_ENTITY): Remove.  Now a function.
+	(set_http_status_from_entity): New function.  Was macro.  Also add
+	entity check.  Update all callers.
+
+2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (host-link): Skip the link if an asset ID
 	is not available.
 

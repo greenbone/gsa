@@ -722,18 +722,24 @@ omp_success (entity_t entity)
 /**
  * @brief Set the HTTP status according to OMP response entity.
  *
- * @param[in]  entity  The OMP response entity.
+ * @param[in]  entity         The OMP response entity.
+ * @param[in]  response_data  Response data.
  */
-#define SET_HTTP_STATUS_FROM_ENTITY(entity)                                   \
-  do {                                                                        \
-    if (strcmp (entity_attribute (entity, "status_text"),                     \
-                "Permission denied") == 0)                                    \
-      response_data->http_status_code = MHD_HTTP_FORBIDDEN;                   \
-    else if (strcmp (entity_attribute (entity, "status"), "404") == 0)        \
-      response_data->http_status_code = MHD_HTTP_NOT_FOUND;                   \
-    else                                                                      \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                 \
-  } while (0)
+void
+set_http_status_from_entity (entity_t entity,
+                             cmd_response_data_t *response_data)
+{
+  if (entity == NULL)
+    return;
+  if (strcmp (entity_attribute (entity, "status_text"),
+              "Permission denied")
+      == 0)
+    response_data->http_status_code = MHD_HTTP_FORBIDDEN;
+  else if (strcmp (entity_attribute (entity, "status"), "404") == 0)
+    response_data->http_status_code = MHD_HTTP_NOT_FOUND;
+  else
+    response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+}
 
 /**
  * @brief Run a single OMP command.
@@ -748,7 +754,7 @@ omp_success (entity_t entity)
  */
 static int
 omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
-      cmd_response_data_t *response_data, const char *command)
+     cmd_response_data_t *response_data, const char *command)
 {
   gnutls_session_t session;
   int socket, ret;
@@ -896,7 +902,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
   switch (omp_success (entity))
     {
       case 0:
-        SET_HTTP_STATUS_FROM_ENTITY (entity);
+        set_http_status_from_entity (entity, response_data);
         ret = 3;
         break;
       case 1:
@@ -1004,7 +1010,7 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
   else
     {
       if (response_data)
-        SET_HTTP_STATUS_FROM_ENTITY (entity);
+        set_http_status_from_entity (entity, response_data);
       free_entity (entity);
       g_free (response);
       return -1;
@@ -1512,7 +1518,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
       g_string_append (xml, response);
 
       if (!omp_success (entity))
-        SET_HTTP_STATUS_FROM_ENTITY (entity);
+        set_http_status_from_entity (entity, response_data);
 
       free_entity (entity);
       g_free (response);
@@ -2362,7 +2368,7 @@ export_resource (const char *type, credentials_t * credentials,
     }
 
   if (!omp_success (entity))
-    SET_HTTP_STATUS_FROM_ENTITY (entity);
+    set_http_status_from_entity (entity, response_data);
 
   resource_entity = entity_child (entity, type);
 
@@ -2578,7 +2584,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     }
 
   if (!omp_success (entity))
-    SET_HTTP_STATUS_FROM_ENTITY (entity);
+    set_http_status_from_entity (entity, response_data);
 
   ret = setting_get_value (&session,
                            "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
@@ -2759,7 +2765,7 @@ delete_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks");
     }
   if (!omp_success (entity))
-    SET_HTTP_STATUS_FROM_ENTITY (entity);
+    set_http_status_from_entity (entity, response_data);
 
   free_entity (entity);
 
@@ -3557,7 +3563,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_task (credentials, NULL, params, response, response_data);
     }
   free_entity (entity);
@@ -3888,7 +3894,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
             }
 
           combined_response = g_strconcat (response, tag_response, NULL);
-          SET_HTTP_STATUS_FROM_ENTITY (tag_entity);
+          set_http_status_from_entity (tag_entity, response_data);
           free_entity (tag_entity);
           g_free (tag_response);
 
@@ -3908,7 +3914,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_task (credentials, NULL, params, response, response_data);
     }
   free_entity (entity);
@@ -4330,7 +4336,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_task (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -4424,7 +4430,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_task (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -4584,7 +4590,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
     }
 
   if (!omp_success (entity))
-    SET_HTTP_STATUS_FROM_ENTITY (entity);
+    set_http_status_from_entity (entity, response_data);
   free_entity (entity);
 
   html = next_page (credentials, params, response, response_data);
@@ -5606,7 +5612,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_lsc_credential (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -6142,7 +6148,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_lsc_credential (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -6323,7 +6329,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_agent (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -6660,7 +6666,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_agent (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -7408,7 +7414,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_alert (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -7872,7 +7878,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_alert (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -8389,7 +8395,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_target (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -8518,7 +8524,7 @@ clone_omp (credentials_t *credentials, params_t *params,
   /* Cleanup, and return next page. */
 
   if (omp_success (entity) == 0)
-    SET_HTTP_STATUS_FROM_ENTITY (entity);
+    set_http_status_from_entity (entity, response_data);
 
   if (omp_success (entity) == 0 || params_given (params, "next") == 0)
     {
@@ -9040,7 +9046,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_tag (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -9294,7 +9300,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = edit_tag (credentials, params, response, response_data);
     }
 
@@ -9889,7 +9895,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
         }
       else
         {
-          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          set_http_status_from_entity (entity, response_data);
           html = edit_target (credentials, params, response, response_data);
         }
 
@@ -10076,7 +10082,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
     if (status[0] != '2')
       {
-        SET_HTTP_STATUS_FROM_ENTITY (entity);
+        set_http_status_from_entity (entity, response_data);
         html = edit_target (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
@@ -10342,7 +10348,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_config (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -10418,7 +10424,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_config (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -14651,7 +14657,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_note (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -14936,7 +14942,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = edit_note (credentials, params, response, response_data);
     }
 
@@ -15420,7 +15426,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_override (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -15715,7 +15721,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = edit_override (credentials, params, response, response_data);
     }
 
@@ -15867,7 +15873,7 @@ create_slave_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_slave (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -16090,7 +16096,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_slave (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -16449,7 +16455,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_scanner (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -16606,7 +16612,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = edit_scanner (credentials, params, response, response_data);
     }
 
@@ -16869,7 +16875,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_schedule (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -17343,7 +17349,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_report_format (credentials, params, response, response_data);
     }
 
@@ -17523,7 +17529,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_report_format (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -17620,7 +17626,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = get_report_formats (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -17730,7 +17736,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = wizard (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -18252,7 +18258,7 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
             }
           if (! omp_success (entity))
             {
-              SET_HTTP_STATUS_FROM_ENTITY (entity);
+              set_http_status_from_entity (entity, response_data);
               if (modify_failed_flag)
                 *modify_failed_flag = 1;
             }
@@ -18426,7 +18432,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
       else
         {
-          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
         }
     }
@@ -18486,7 +18492,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18529,7 +18535,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (! omp_success (entity))
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18572,7 +18578,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (omp_success (entity) != 1)
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18615,7 +18621,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (omp_success (entity) != 1)
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18658,7 +18664,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (omp_success (entity) != 1)
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18718,7 +18724,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18794,7 +18800,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (! omp_success (entity))
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18851,7 +18857,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18897,7 +18903,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (! omp_success (entity))
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -18943,7 +18949,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   if (! omp_success (entity))
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
@@ -19431,7 +19437,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_group (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -19600,7 +19606,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_group (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -20111,7 +20117,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
         }
       else
         {
-          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          set_http_status_from_entity (entity, response_data);
           html = new_permission (credentials, params, response, response_data);
         }
     }
@@ -20181,7 +20187,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
         }
       else
         {
-          SET_HTTP_STATUS_FROM_ENTITY (entity);
+          set_http_status_from_entity (entity, response_data);
           html = next_page_error (credentials, params, response, response_data);
           if (html == NULL)
             html = new_permission (credentials, params, response,
@@ -20232,7 +20238,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      SET_HTTP_STATUS_FROM_ENTITY (entity);                                   \
+      set_http_status_from_entity (entity, response_data);                                   \
       g_string_free (responses, TRUE);                                        \
       html = next_page_error (credentials, params, response, response_data);  \
       if (html == NULL)                                                       \
@@ -21068,7 +21074,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_permission (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -21183,7 +21189,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_port_list (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -21277,7 +21283,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_port_list (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -21484,7 +21490,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_port_list (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -21808,7 +21814,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = new_role (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -22140,7 +22146,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_role (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -22788,7 +22794,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_filter (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -23044,7 +23050,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
     if (status[0] != '2')
       {
         openvas_server_close (socket, session);
-        SET_HTTP_STATUS_FROM_ENTITY (entity);
+        set_http_status_from_entity (entity, response_data);
         html = edit_filter (credentials, params, response, response_data);
         g_free (response);
         free_entity (entity);
@@ -23280,7 +23286,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = edit_schedule (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -23838,7 +23844,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_user (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -24300,7 +24306,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = edit_user (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -24616,7 +24622,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = get_users (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -24708,7 +24714,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       gchar* ret_response
         = g_strdup_printf("<save_chart_preference_response"
                           " status=\"%s\" status_text=\"%s\"/>",
@@ -25458,7 +25464,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       html = new_host (credentials, params, response, response_data);
     }
   free_entity (entity);
@@ -25702,7 +25708,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
     }
   else
     {
-      SET_HTTP_STATUS_FROM_ENTITY (entity);
+      set_http_status_from_entity (entity, response_data);
       ret = get_report_section (credentials, params, response, response_data);
     }
   free_entity (entity);
