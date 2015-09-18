@@ -1,3 +1,8 @@
+2015-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Add a resource
+	arg so that asset/host can use this in the future.
+
 2015-09-18  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Don't show the UserTags and permission
@@ -7,7 +12,7 @@
 
 	* src/gsad_omp.c (create_host_omp): Handle host comment.
 
-	 * src/html/classic/omp.xsl (html-create-host-form): Add comment field.
+	* src/html/classic/omp.xsl (html-create-host-form): Add comment field.
 	(asset/host): Display comment.
 
 2015-09-17  Matthew Mundell <matthew.mundell@greenbone.net>

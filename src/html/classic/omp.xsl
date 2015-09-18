@@ -1510,6 +1510,7 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template name="list-window-line-icons">
+  <xsl:param name="resource" select="."/>
   <xsl:param name="type"/>
   <xsl:param name="cap-type"/>
 
@@ -1536,10 +1537,10 @@ var toggleFilter = function(){
   <xsl:choose>
     <xsl:when test="$notrash">
     </xsl:when>
-    <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
+    <xsl:when test="gsa:may (concat ('delete_', $type)) and $resource/writable!='0' and $resource/in_use='0'">
       <xsl:call-template name="trashcan-icon">
         <xsl:with-param name="type" select="$type"/>
-        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="id" select="$resource/@id"/>
         <xsl:with-param name="params">
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -1556,10 +1557,10 @@ var toggleFilter = function(){
       <xsl:variable name="inactive_text">
         <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
         <xsl:choose>
-          <xsl:when test="in_use != '0'">
+          <xsl:when test="$resource/in_use != '0'">
             <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is still in use'), $cap-type)"/>
           </xsl:when>
-          <xsl:when test="writable = '0'">
+          <xsl:when test="$resource/writable = '0'">
             <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
           </xsl:when>
           <xsl:when test="not(gsa:may (concat ('delete_', $type)))">
@@ -1582,11 +1583,11 @@ var toggleFilter = function(){
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
-        <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
+        <xsl:when test="gsa:may (concat ('modify_', $type)) and $resource/writable!='0'">
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
-             class="edit-action-icon" data-type="{$type}" data-id="{@id}"
+             class="edit-action-icon" data-type="{$type}" data-id="{$resource/@id}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
@@ -1595,7 +1596,7 @@ var toggleFilter = function(){
           <xsl:variable name="inactive_text">
             <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
             <xsl:choose>
-              <xsl:when test="writable = '0'">
+              <xsl:when test="$resource/writable = '0'">
                 <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
               </xsl:when>
               <xsl:when test="not(gsa:may (concat ('delete_', $type)))">
@@ -1632,7 +1633,7 @@ var toggleFilter = function(){
           <input type="hidden" name="cmd" value="clone"/>
           <input type="hidden" name="resource_type" value="{$type}"/>
           <input type="hidden" name="next" value="get_{$type}"/>
-          <input type="hidden" name="id" value="{@id}"/>
+          <input type="hidden" name="id" value="{$resource/@id}"/>
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
@@ -1640,7 +1641,7 @@ var toggleFilter = function(){
         </form>
       </div>
     </xsl:when>
-    <xsl:when test="owner/name = /envelope/login/text() or string-length (owner/name) = 0">
+    <xsl:when test="$resource/owner/name = /envelope/login/text() or string-length ($resource/owner/name) = 0">
       <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
       <img src="/img/clone_inactive.png"
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
@@ -1661,7 +1662,7 @@ var toggleFilter = function(){
     </xsl:when>
     <xsl:otherwise>
       <!-- i18n with concat : see dynamic_strings.xsl - type-export -->
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n (concat ('Export ', $cap-type), $cap-type)}"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
