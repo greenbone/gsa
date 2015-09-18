@@ -328,7 +328,6 @@ install (FILES src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40
 
 install (FILES src/html/classic/js/d3.tip.js
                src/html/classic/js/d3.layout.cloud.js
-               src/html/classic/js/d3.v3.min.js
                src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_cloud_chart.js
@@ -337,11 +336,22 @@ install (FILES src/html/classic/js/d3.tip.js
                src/html/classic/js/gsa_graphics_base.js
                src/html/classic/js/gsa_h_bar_chart.js
                src/html/classic/js/gsa_line_chart.js
-               src/html/classic/js/jquery-2.1.4.min.js
-               src/html/classic/js/jquery-ui.min.js
-               src/html/classic/js/select2.min.js
                src/html/classic/js/greenbone.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
+
+if (CMAKE_BUILD_TYPE MATCHES "Release")
+  install (FILES src/html/classic/js/min/d3.v3.js
+                 src/html/classic/js/min/jquery-2.1.4.js
+                 src/html/classic/js/min/jquery-ui.js
+                 src/html/classic/js/min/select2.js
+           DESTINATION ${GSA_DATA_DIR}/classic/js)
+else (CMAKE_BUILD_TYPE MATCHES "Release")
+  install (FILES src/html/classic/js/d3.v3.js
+                 src/html/classic/js/jquery-2.1.4.js
+                 src/html/classic/js/jquery-ui.js
+                 src/html/classic/js/select2.js
+           DESTINATION ${GSA_DATA_DIR}/classic/js)
+endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
 install (FILES src/html/classic/login/login.html
                src/html/classic/css/gsa-login.css
