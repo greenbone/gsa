@@ -9,6 +9,11 @@
 
 2015-09-18  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Make the select2 get keyboard
+	  interaction also when inside dialogs.
+
+2015-09-18  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Don't show the UserTags and permission
 	  when editing a config.
 

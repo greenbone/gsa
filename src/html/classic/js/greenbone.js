@@ -1,6 +1,12 @@
 !function(window){
   'use strict';
 
+  // work-around select2 not working inside dialogs from here:
+  // https://github.com/select2/select2/issues/1246#issuecomment-17428249
+  $.ui.dialog.prototype._allowInteraction = function(e) {
+    return !!$(e.target).closest('.ui-dialog, .ui-datepicker, .select2-dropdown').length;
+  };
+
   /* A utility function that returns only the text in the current selection */
   window.jQuery.fn.justtext = function(){
     return $(this)
