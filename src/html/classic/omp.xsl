@@ -30885,7 +30885,7 @@ var toggleFilter = function(){
         <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
           <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role')"/>)</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
-            <xsl:variable name="id" select="../../get_permissions_response/permission/@id"/>
+            <xsl:variable name="id" select="../../get_permissions_response/permission[name='Everything']/@id"/>
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>

@@ -1,3 +1,8 @@
+2015-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (role [details]): Specify permission name for
+	"id" variable too, as there may be multiple permissions.
+
 2015-09-18  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Use minified version of the javascript in Release mode only.
