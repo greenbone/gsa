@@ -14424,6 +14424,7 @@ should not have received it.
     </xsl:choose>
   </div>
  </div>
+ <xsl:choose><xsl:when test="edit"/><xsl:otherwise>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="user_tags" select="$config/user_tags"/>
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), $config/name)"/>
@@ -14440,6 +14441,7 @@ should not have received it.
     <xsl:with-param name="related">
     </xsl:with-param>
   </xsl:call-template>
+ </xsl:otherwise></xsl:choose>
 </xsl:template>
 
 <xsl:template name="html-configs-table">
