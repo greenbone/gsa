@@ -1,5 +1,9 @@
 2015-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (CHECK): Add missing brackets.
+
+2015-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window-line-icons): Add a resource
 	arg so that asset/host can use this in the future.
 

@@ -3574,12 +3574,14 @@ create_report_omp (credentials_t * credentials, params_t *params,
 #define CHECK(name)                                                        \
   do {                                                                     \
     if (name == NULL)                                                      \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;              \
-      return new_task (credentials,                                        \
-                       "Given " G_STRINGIFY (name) " was invalid",         \
-                       params,                                             \
-                       NULL,                                               \
-                       response_data);                                     \
+      {                                                                    \
+        response_data->http_status_code = MHD_HTTP_BAD_REQUEST;            \
+        return new_task (credentials,                                      \
+                         "Given " G_STRINGIFY (name) " was invalid",       \
+                         params,                                           \
+                         NULL,                                             \
+                         response_data);                                   \
+      }                                                                    \
   } while (0)
 
 /**
@@ -8408,16 +8410,18 @@ create_target_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]  name  Param name.
  */
-#define CHECK(name)                                                               \
-  if (name == NULL)                                                               \
-    response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                       \
-    return gsad_message (credentials,                                             \
-                         "Internal error", __FUNCTION__, __LINE__,                \
-                         "An internal error occurred while cloning a resource. "  \
-                         "The resource was not cloned. "                          \
-                         "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
-                         "' was NULL.",                                           \
-                         "/omp?cmd=get_tasks");
+#define CHECK(name)                                                                 \
+  if (name == NULL)                                                                 \
+    {                                                                               \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                       \
+      return gsad_message (credentials,                                             \
+                           "Internal error", __FUNCTION__, __LINE__,                \
+                           "An internal error occurred while cloning a resource. "  \
+                           "The resource was not cloned. "                          \
+                           "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
+                           "' was NULL.",                                           \
+                           "/omp?cmd=get_tasks");                                   \
+    }
 
 /**
  * @brief Clone a resource, XSL transform the result.
