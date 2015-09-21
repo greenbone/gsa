@@ -3,7 +3,7 @@
 
   // work-around select2 not working inside dialogs from here:
   // https://github.com/select2/select2/issues/1246#issuecomment-17428249
-  $.ui.dialog.prototype._allowInteraction = function(e) {
+  window.jQuery.ui.dialog.prototype._allowInteraction = function(e) {
     return !!$(e.target).closest('.ui-dialog, .ui-datepicker, .select2-dropdown').length;
   };
 
@@ -189,13 +189,9 @@
       if (gb_windows.length > 1){
         self.error( (gb_windows.length - 1) + " forms not displayed !");
       }
-      // fancy-up the selects
-      onReady(self.dialog);
 
       // remove the last 'submit' button
       self.dialog.find('input[type=submit]').last().closest('tr').remove();
-
-      $('html').css('cursor', "");
 
       // show the dialog !
       self.dialog.dialog({
@@ -212,6 +208,9 @@
           },
         ],
       });
+      // fancy-up the selects
+      onReady(self.dialog);
+      $('html').css('cursor', "");
     });
   };
   window.OMPDialog = OMPDialog;
