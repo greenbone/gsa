@@ -1,3 +1,19 @@
+2015-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Asset Host editing.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
+	edit_asset and save_asset.
+
+	* src/gsad_omp.c (edit_asset, edit_asset_omp, save_asset_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/classic/omp.xsl (role [details]): Specify permission name for
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add edit_asset.
+
 2015-09-21  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Move onReady later, to benefit

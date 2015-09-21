@@ -25897,6 +25897,195 @@ export_assets_omp (credentials_t * credentials, params_t *params,
                       content_disposition, content_length, response_data);
 }
 
+/**
+ * @brief Setup edit XML, XSL transform the result.
+ *
+ * @param[in]  type         Type or asset to edit.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
+{
+  GString *xml;
+  const char *asset_id;
+  gchar *response;
+  entity_t entity;
+
+  asset_id = params_value (params, "asset_id");
+  if (asset_id == NULL)
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a asset. "
+                           "The asset remains as it was. "
+                           "Diagnostics: Required ID parameter was NULL.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml, "<edit_asset>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  response = NULL;
+  entity = NULL;
+  switch (ompf (credentials,
+                &response,
+                &entity,
+                response_data,
+                "<get_assets"
+                " type=\"host\""
+                " asset_id=\"%s\""
+                " details=\"1\"/>",
+                asset_id))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the asset. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_assets");
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the asset. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_assets");
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        g_string_free (xml, TRUE);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the asset. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_assets");
+    }
+
+  g_string_append (xml, response);
+  g_string_append_printf (xml, "</edit_asset>");
+  free_entity (entity);
+  g_free (response);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Setup edit_asset XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_asset_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
+{
+  return edit_asset (credentials, params, NULL, response_data);
+}
+
+/**
+ * @brief Modify an asset, get all assets, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_asset_omp (credentials_t * credentials, params_t *params,
+                cmd_response_data_t* response_data)
+{
+  int ret;
+  gchar *html, *response;
+  const char *asset_id, *comment;
+  entity_t entity;
+
+  asset_id = params_value (params, "asset_id");
+  comment = params_value (params, "comment");
+
+  CHECK_PARAM (asset_id, "Save Asset", edit_asset);
+  CHECK_PARAM (comment, "Save Asset", edit_asset);
+
+  /* Modify the asset. */
+
+  response = NULL;
+  entity = NULL;
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              response_data,
+              "<modify_asset asset_id=\"%s\">"
+              "<comment>%s</comment>"
+              "</modify_asset>",
+              asset_id,
+              comment);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an asset. "
+                             "The asset was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_assets");
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an asset. "
+                             "It is unclear whether the asset has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_assets");
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an asset. "
+                             "It is unclear whether the asset has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_assets");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        html = get_assets (credentials, params, response, response_data);
+    }
+  else
+    {
+      set_http_status_from_entity (entity, response_data);
+      html = edit_asset (credentials, params, response, response_data);
+    }
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
 
 /* Manager communication. */
 

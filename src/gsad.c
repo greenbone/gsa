@@ -929,6 +929,7 @@ init_validator ()
                          "|(download_key_pub)"
                          "|(edit_agent)"
                          "|(edit_alert)"
+                         "|(edit_asset)"
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
@@ -1085,6 +1086,7 @@ init_validator ()
                          "|(test_alert)"
                          "|(save_agent)"
                          "|(save_alert)"
+                         "|(save_asset)"
                          "|(save_auth)"
                          "|(save_chart_preference)"
                          "|(save_config)"
@@ -2367,6 +2369,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (run_wizard)
   ELSE (save_agent)
   ELSE (save_alert)
+  ELSE (save_asset)
   ELSE (save_auth)
   else if (!strcmp (cmd, "save_chart_preference"))
     {
@@ -2674,6 +2677,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_tasks_chart)
   ELSE (edit_agent)
   ELSE (edit_alert)
+  ELSE (edit_asset)
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)

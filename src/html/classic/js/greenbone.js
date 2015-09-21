@@ -42,6 +42,7 @@
     // ------
     edit_agent:          'modify_agent_response',
     edit_alert:          'modify_alert_response',
+    edit_asset:          'modify_asset_response',
     edit_filter:         'modify_filter_response',
     edit_group:          'modify_group_response',
     edit_lsc_credential: 'modify_lsc_credential_response',

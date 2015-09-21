@@ -34762,6 +34762,99 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="html-edit-asset-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Asset', 'Asset')"/>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Asset'"/>
+        <xsl:with-param name="type" select="'asset'"/>
+        <xsl:with-param name="id"
+                        select="get_assets_response/asset/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_asset"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden"
+               name="asset_id"
+               value="{get_assets_response/asset/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="filter" value="{filters/term}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="first" value="{assets/@start}"/>
+        <input type="hidden" name="max" value="{assets/@max}"/>
+        <input type="hidden" name="in_use" value="{get_assets_response/asset/in_use}"/>
+        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+          <input type="hidden" name="lsc_credential_id" value="--"/>
+          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
+          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
+        </xsl:if>
+        <xsl:if test="not (gsa:may-op ('get_port_lists'))">
+          <!-- Use port list "OpenVAS Default". -->
+          <input type="hidden"
+                 name="port_list_id"
+                 value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
+        </xsl:if>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td>
+              <input type="text"
+                     disabled="disabled"
+                     name="name"
+                     value="{get_assets_response/asset/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{get_assets_response/asset/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="{gsa:i18n ('Save Asset', 'Asset')}"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_asset">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_asset_response"/>
+  <xsl:choose>
+    <xsl:when test="get_assets_response/@status = '400'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Asset
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="400"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="get_assets_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-edit-asset-form"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="asset" mode="host-details">
   <xsl:variable name="host_id" select="@id"/>
   <div class="gb_window">
@@ -34798,6 +34891,36 @@ var toggleFilter = function(){
             <img src="/img/delete_inactive.png"
                  border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                  title="{gsa:i18n ('Host is in use', 'Assets')}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="gsa:may ('modify_asset') and writable!='0'">
+            <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
+            <a href="/omp?cmd=edit_asset&amp;asset_id={@id}&amp;next=get_asset&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="{gsa:i18n ('Edit Host')}"
+               class="edit-action-icon" data-type="asset" data-id="{@id}"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="inactive_text">
+              <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
+              <xsl:choose>
+                <xsl:when test="writable = '0'">
+                  <xsl:value-of select="gsa:i18n ('Host is not writable', 'Host')"/>
+                </xsl:when>
+                <xsl:when test="not(gsa:may ('delete_asset'))">
+                  <xsl:value-of select="gsa:i18n ('Permission to edit Host denied', 'Host')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="gsa:i18n ('Cannot modify Host', 'Host')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                 title="{$inactive_text}"
+                 style="margin-left:3px;"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=host&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -34981,7 +35104,7 @@ var toggleFilter = function(){
         <sort-reverse/>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="3"/>
+    <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -35120,7 +35243,37 @@ var toggleFilter = function(){
                    style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
-          <form style="display:inline; margin-left:3px;" action="/omp" method="post" enctype="multipart/form-data">
+          <xsl:choose>
+            <xsl:when test="gsa:may ('modify_asset', ../permissions) and ../writable!='0'">
+              <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
+              <a href="/omp?cmd=edit_asset&amp;asset_id={../@id}&amp;next=get_assets&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 title="{gsa:i18n ('Edit Host')}"
+                 class="edit-action-icon" data-type="asset" data-id="{../@id}"
+                 style="margin-left:3px;">
+                <img src="/img/edit.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="inactive_text">
+                <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
+                <xsl:choose>
+                  <xsl:when test="../writable = '0'">
+                    <xsl:value-of select="gsa:i18n ('Host is not writable', 'Host')"/>
+                  </xsl:when>
+                  <xsl:when test="not(gsa:may ('delete_asset', ../permissions))">
+                    <xsl:value-of select="gsa:i18n ('Permission to edit Host denied', 'Host')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n ('Cannot modify Host', 'Host')"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                   title="{$inactive_text}"
+                   style="margin-left:3px;"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <form style="display:inline;" action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="process_bulk"/>
             <input type="hidden" name="caller" value="{/envelope/current_page}"/>
