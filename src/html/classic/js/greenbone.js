@@ -19,6 +19,7 @@
 
   var RESPONSE_SELECTORS = {
     new_agent:           'create_agent_response',
+    new_host:            'create_asset_response',
     new_alert:           'create_alert_response',
     new_config:          'create_config_response',
     new_filter:          'create_filter_response',
