@@ -11467,10 +11467,21 @@ should not have received it.
                           <xsl:value-of select="gsa:i18n ('From host assets', 'Target')"/>
                           <xsl:text> (</xsl:text>
                           <input type="hidden" name="hosts_filter" value="{/envelope/params/hosts_filter}"/>
+                          <xsl:value-of select="$host_count"/>
+<!--
                           <a href="?cmd=get_assets&amp;type=host&amp;filter={/envelope/params/hosts_filter}&amp;token={/envelope/token}">
                             <xsl:value-of select="$host_count"/>
                             <xsl:text> hosts</xsl:text>
                           </a>
+-->
+                          <xsl:choose>
+                            <xsl:when test="$host_count = 1">
+                              <xsl:text> host</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                            <xsl:text> hosts</xsl:text>
+                            </xsl:otherwise>
+                          </xsl:choose>
                           <xsl:text>)</xsl:text>
                         </label>
                       </td>
@@ -11478,6 +11489,15 @@ should not have received it.
                   </xsl:when>
                   <xsl:otherwise>
                     <input type="hidden" name="hosts_filter" value=""/>
+                    <tr>
+                      <td colspan="2">
+                        <label style="color:#ccc;">
+                          <input type="radio" name="target_source" value="asset_hosts" disabled="1"/>
+                          <xsl:value-of select="gsa:i18n ('From host assets', 'Target')"/>
+                          <xsl:text> (0 hosts)</xsl:text>
+                        </label>
+                      </td>
+                    </tr>
                   </xsl:otherwise>
                 </xsl:choose>
               </table>
