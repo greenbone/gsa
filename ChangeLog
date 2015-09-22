@@ -1,3 +1,9 @@
+2015-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-row], result)
+	(report [errors]): Get the asset ID from the parent HOST instead of
+	the detailed HOST.
+
 2015-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_gantt_chart.js (generate): Move and scale

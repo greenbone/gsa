@@ -26595,7 +26595,7 @@ should not have received it.
       <xsl:variable name="hostname"
                     select="../../host[ip = $ip]/detail[name = 'hostname']/value"/>
       <xsl:call-template name="host-link">
-        <xsl:with-param name="host" select="../../host[ip = $ip]/asset/@asset_id"/>
+        <xsl:with-param name="host" select="host/asset/@asset_id"/>
         <xsl:with-param name="name" select="$ip"/>
       </xsl:call-template>
       <xsl:if test="$hostname != ''">
@@ -27576,7 +27576,7 @@ should not have received it.
     </td>
     <td>
       <xsl:call-template name="host-link">
-        <xsl:with-param name="host" select="../../host[ip = $ip]/asset/@asset_id"/>
+        <xsl:with-param name="host" select="host/asset/@asset_id"/>
         <xsl:with-param name="name" select="host"/>
       </xsl:call-template>
     </td>
@@ -29951,7 +29951,7 @@ var toggleFilter = function(){
             </td>
             <td>
               <xsl:call-template name="host-link">
-                <xsl:with-param name="host" select="../../host[ip = $host]/asset/@asset_id"/>
+                <xsl:with-param name="host" select="$host/asset/@asset_id"/>
                 <xsl:with-param name="name" select="$host"/>
               </xsl:call-template>
               <xsl:if test="$hostname">
