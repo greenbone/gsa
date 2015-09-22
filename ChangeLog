@@ -1,5 +1,10 @@
 2015-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [results]): Added some notes for
+	the user on what could be the reason for 0 results.
+
+2015-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [results]): Add the number of hosts
 	if there are no results.
 
