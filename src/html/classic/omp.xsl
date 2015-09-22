@@ -3522,6 +3522,16 @@ var toggleFilter = function(){
         <xsl:otherwise>
           <div style="padding: 1px">
             <p><xsl:value-of select="gsa:i18n ('0 results', 'Result')"/></p>
+            <xsl:choose>
+              <xsl:when test="report/hosts/count = 0">
+                <p><xsl:value-of select="gsa:i18n ('This report also contains no hosts.', 'Report')"/></p>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=hosts&amp;result_hosts_only=0&amp;token={/envelope/token}">
+                  <p><xsl:value-of select="gsa-i18n:strformat (gsa:n-i18n ('However, this report contains %1 host.', 'However, this report contains %1 hosts.', report/hosts/count), report/hosts/count)"/></p>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
             <xsl:if test="report/errors/count &gt; 0">
               <xsl:apply-templates select="report" mode="section-link">
                 <xsl:with-param name="count" select="result_count/full"/>
