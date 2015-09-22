@@ -473,6 +473,16 @@ function GanttChartGenerator ()
                                          + " " + (width+20) + "," + (x_scale.rangeBand() / 2)
                                          + " " + (width+5) + "," + (7 * x_scale.rangeBand() / 8))
                                   .attr ("title", future_runs_text)
+
+                      sel.selectAll (".future-marker")
+                            .data (future_runs ? [1] : [])
+                              .attr ("points",
+                                     function ()
+                                      {
+                                        return (width+5) + "," + (x_scale.rangeBand() / 8)
+                                                + " " + (width+20) + "," + (x_scale.rangeBand() / 2)
+                                                + " " + (width+5) + "," + (7 * x_scale.rangeBand() / 8)
+                                      })
                     })
 
       svg.selectAll (".bar-label-shadow")
