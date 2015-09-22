@@ -1,5 +1,11 @@
 2015-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (host-link): Add a tooltip on the link to
+	make it clearer what it is.  Add a list icon that is always present and
+	links to all asset hosts having the IP.
+
+2015-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-target-form): Disable the link
 	on the asset host count.  If there's only 1 host use singular instead
 	of plural for "hosts".  When there are 0 hosts still display the "From
