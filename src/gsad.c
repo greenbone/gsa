@@ -1056,6 +1056,7 @@ init_validator ()
                          "|(get_users)"
                          "|(import_config)"
                          "|(import_port_list)"
+                         "|(import_report)"
                          "|(import_report_format)"
                          "|(login)"
                          "|(move_task)"
@@ -1117,6 +1118,7 @@ init_validator ()
                          "|(sync_cert)"
                          "|(toggle_tag)"
                          "|(upload_config)"
+                         "|(upload_report)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(verify_scanner)"
@@ -2353,6 +2355,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   ELSE (import_config)
   ELSE (import_port_list)
+  ELSE (import_report)
   ELSE (import_report_format)
   else if (!strcmp (cmd, "process_bulk"))
     {
@@ -3093,6 +3096,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_schedule)
   ELSE (new_slave)
   ELSE (upload_config)
+  ELSE (upload_report)
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (verify_scanner)

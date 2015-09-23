@@ -2517,6 +2517,74 @@ var toggleFilter = function(){
 <xsl:template match="all">
 </xsl:template>
 
+<xsl:template name="html-import-report-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('Import Report', 'Report')"/>
+      <a href="/help/new_report.html?token={/envelope/token}#importreport"
+         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Report', 'Report'))}">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_reports&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Reports', 'Report')}" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Reports', 'Report')}"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="import_report"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="next" value="get_report"/>
+        <xsl:if test="string-length (/envelope/params/filt_id) = 0">
+          <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+        </xsl:if>
+        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Task', 'Task')"/></td>
+            <td>
+              <xsl:variable name="task_id" select="/envelope/params/task_id"/>
+              <select name="task_id">
+                <xsl:for-each select="get_tasks_response/task[target/@id='']">
+                  <xsl:choose>
+                    <xsl:when test="@id = $task_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
+            <td><input type="file" name="xml_file" size="30"/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="{gsa:i18n ('Upload Report', 'Report')}"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="upload_report">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_report_response"/>
+  <xsl:apply-templates select="commands_response/delete_report_response"/>
+  <xsl:call-template name="html-import-report-form"/>
+</xsl:template>
+
 <xsl:template match="get_reports_response" mode="alert">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Run Alert</xsl:with-param>
@@ -25353,6 +25421,7 @@ should not have received it.
         <xsl:with-param name="type" select="'report'"/>
       </xsl:call-template>
     </xsl:with-param>
+    <xsl:with-param name="upload-icon" select="true ()"/>
     <xsl:with-param name="columns">
       <column>
         <name><xsl:value-of select="gsa:i18n('Date', 'Date')"/></name>

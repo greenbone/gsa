@@ -40,6 +40,7 @@
     new_user:            'create_user_response',
     // ------
     upload_config:       'create_config_response',
+    upload_report:       'create_report_response',
     // ------
     edit_agent:          'modify_agent_response',
     edit_alert:          'modify_alert_response',

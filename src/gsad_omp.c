@@ -3571,6 +3571,78 @@ create_report_omp (credentials_t * credentials, params_t *params,
   return html;
 }
 
+/**
+ * @brief Returns page to upload a new report.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+upload_report (credentials_t *credentials, params_t *params,
+               const char *extra_xml, cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<upload_report>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  if (command_enabled (credentials, "GET_TASKS"))
+    {
+      gchar *response;
+
+      if (simple_ompf ("getting Tasks", credentials, &response, response_data,
+                       "<get_tasks/>"))
+        {
+          g_string_free (xml, TRUE);
+          return response;
+        }
+
+      g_string_append (xml, response);
+    }
+
+  g_string_append (xml, "</upload_report>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Return the upload report page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+upload_report_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  return upload_report (credentials, params, NULL, response_data);
+}
+
+/**
+ * @brief Import report, get all reports, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+import_report_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  return create_report_omp (credentials, params, response_data);
+}
+
 #define CHECK(name)                                                        \
   do {                                                                     \
     if (name == NULL)                                                      \
@@ -12440,6 +12512,60 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
+
+  if (report_id == NULL)
+    {
+      entity_t entity;
+
+      /* Check for an ID in a CREATE response in extra_xml. */
+
+      if (extra_xml == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting a report. "
+                              "Diagnostics: extra_xml is NULL.",
+                              "/omp?cmd=get_tasks");
+        }
+
+      if (parse_entity (extra_xml, &entity) == 0)
+        {
+          if (strcmp (entity_name (entity), "create_report_response") == 0)
+            {
+              param_t *param;
+
+              param = params_add (params, "report_id",
+                                  entity_attribute (entity, "id"));
+              param->valid = 1;
+              param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+              report_id = params_value (params, "report_id");
+              assert (report_id);
+              page_url_append_param (credentials, "report_id", report_id);
+              free_entity (entity);
+            }
+          else
+            {
+              free_entity (entity);
+              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "Diagnostics: Error parsing extra_xml.",
+                                   "/omp?cmd=get_tasks");
+            }
+        }
+      else
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting"
+                               " a report. "
+                               "Diagnostics: Required ID parameter was NULL.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
 
   if (strcmp (alert_id, "0"))
     {

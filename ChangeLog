@@ -1,3 +1,24 @@
+2015-09-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add an upload icon to the Reports page header, and a new page Upload
+	Report.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
+	import_report and upload_report.
+
+	* src/gsad_omp.c (upload_report, upload_report_omp)
+	(import_report_omp): New functions.
+	(get_report): Look for an ID in a create response if the is no ID.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
+	upload_report.
+
+	* src/html/classic/omp.xsl (html-import-config-form, upload_report): New
+	templates.
+	(html-reports-table): Enable upload icon.
+
 2015-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [results]): Added some notes for
