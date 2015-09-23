@@ -1063,6 +1063,7 @@ init_validator ()
                          "|(new_agent)"
                          "|(new_alert)"
                          "|(new_config)"
+                         "|(new_container_task)"
                          "|(new_filter)"
                          "|(new_group)"
                          "|(new_host)"
@@ -2668,6 +2669,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "new_filter"))
     return new_filter_omp (credentials, params, response_data);
 
+  ELSE (new_container_task)
   ELSE (new_target)
   ELSE (new_tag)
   ELSE (new_task)

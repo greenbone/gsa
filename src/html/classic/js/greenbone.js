@@ -37,6 +37,7 @@
     new_tag:             'create_tag_response',
     new_target:          'create_target_response',
     new_task:            'create_task_response',
+    new_container_task:  'create_task_response',
     new_user:            'create_user_response',
     // ------
     upload_config:       'create_config_response',

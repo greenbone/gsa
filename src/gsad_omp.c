@@ -3458,6 +3458,54 @@ new_task_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Returns page to create a new container task.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  message      If not NULL, display message.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_container_task (credentials_t * credentials, const char *message,
+                    params_t *params, const char *extra_xml,
+                    cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<new_container_task>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  if (message)
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID, message, "Create Task");
+
+  g_string_append_printf (xml, "</new_container_task>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Returns page to create a new task.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_container_task_omp (credentials_t * credentials, params_t *params,
+                        cmd_response_data_t* response_data)
+{
+  return new_container_task (credentials, NULL, params, NULL, response_data);
+}
+
+/**
  * @brief Create a report, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.

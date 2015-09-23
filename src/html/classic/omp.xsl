@@ -4560,6 +4560,31 @@ var toggleFilter = function(){
             <img src="/img/new.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:when>
+        <xsl:when test="$new-icon and $type = 'task'">
+          <span class="menu_icon" id="#wizard_list">
+            <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="new-action-icon" data-type="task"
+               title="{gsa:i18n ('New Task', 'Task')}">
+              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+            </a>
+            <ul>
+              <li>
+                <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                   class="new-action-icon" data-type="task"
+                   title="{gsa:i18n ('New Task', 'Task')}">
+                  <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+                </a>
+              </li>
+              <li class="last">
+                <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                   class="last new-action-icon" data-type="container_task"
+                   title="{gsa:i18n ('New Container Task', 'Task')}">
+                  <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+                </a>
+              </li>
+            </ul>
+          </span>
+        </xsl:when>
         <xsl:when test="$new-icon">
           <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -5382,6 +5407,63 @@ var toggleFilter = function(){
 <xsl:template match="task_count">
 </xsl:template>
 
+<xsl:template match="new_container_task">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_task_response"/>
+  <xsl:apply-templates select="create_report_response"/>
+  <div class="gb_window">
+   <div class="gb_window_part_left"></div>
+   <div class="gb_window_part_right"></div>
+   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
+    </a>
+   </div>
+   <div class="gb_window_part_content">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="create_report"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="next" value="get_tasks"/>
+      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+      </xsl:if>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+         <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+         <td>
+           <input type="text" name="name" value="unnamed" size="30"
+                  maxlength="80"/>
+         </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td>
+            <input type="text" name="comment" size="30" maxlength="400"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
+          <td><input type="file" name="xml_file" size="30"/></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
+          </td>
+        </tr>
+      </table>
+      <br/>
+    </form>
+   </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="new_task">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_task_response"/>
@@ -5851,58 +5933,6 @@ var toggleFilter = function(){
         </table>
       </xsl:if>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-          <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
-          </td>
-        </tr>
-      </table>
-      <br/>
-    </form>
-   </div>
-  </div>
-
-  <div class="gb_window">
-   <div class="gb_window_part_left"></div>
-   <div class="gb_window_part_right"></div>
-   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
-    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/help.png"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
-    </a>
-   </div>
-   <div class="gb_window_part_content">
-    <form action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="cmd" value="create_report"/>
-      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="next" value="get_tasks"/>
-      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
-        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-      </xsl:if>
-      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-         <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-         <td>
-           <input type="text" name="name" value="unnamed" size="30"
-                  maxlength="80"/>
-         </td>
-        </tr>
-        <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-          <td>
-            <input type="text" name="comment" size="30" maxlength="400"/>
-          </td>
-        </tr>
-        <tr>
-          <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
-          <td><input type="file" name="xml_file" size="30"/></td>
-        </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
             <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>

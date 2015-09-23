@@ -59,6 +59,8 @@ char * delete_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_trash_task_omp (credentials_t *, params_t *,
                               cmd_response_data_t*);
 char * edit_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * new_container_task_omp (credentials_t *, params_t *,
+                               cmd_response_data_t*);
 char * new_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * save_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * save_container_task_omp (credentials_t *, params_t *,

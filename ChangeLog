@@ -1,5 +1,26 @@
 2015-09-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Move the New Container Task window from the New Task page to a new
+	separate page.  Give the New icon for tasks a dropdown for regular
+	and container tasks.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add new_container_task.
+
+	* src/gsad_omp.c (new_container_task, new_container_task_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
+	new_container_task.
+
+	* src/html/classic/omp.xsl (list-window): Add special case for task new
+	icon with menu.
+	(new_container_task): New template.  From new_task.
+	(new_task): Remove "New Container Task" window.
+
+2015-09-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add an upload icon to the Reports page header, and a new page Upload
 	Report.
 
