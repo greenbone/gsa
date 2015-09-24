@@ -2560,6 +2560,10 @@ var toggleFilter = function(){
                   </xsl:choose>
                 </xsl:for-each>
               </select>
+              <a href="#" title="{ gsa:i18n('Create a new container task') }"
+                 class="new-action-icon" data-type="container_task" data-done="select[name=task_id]">
+                <img src="/img/new.png"/>
+              </a>
             </td>
           </tr>
           <tr>
@@ -2568,7 +2572,7 @@ var toggleFilter = function(){
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Upload Report', 'Report')}"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Import Report', 'Report')}"/>
             </td>
           </tr>
         </table>
@@ -2580,7 +2584,7 @@ var toggleFilter = function(){
 
 <xsl:template match="upload_report">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="create_report_response"/>
+  <xsl:apply-templates select="create_report_response" mode="upload"/>
   <xsl:apply-templates select="commands_response/delete_report_response"/>
   <xsl:call-template name="html-import-report-form"/>
 </xsl:template>
@@ -5252,6 +5256,18 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
+<xsl:template match="create_report_response" mode="upload">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Import Report</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_report_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Create Container Task</xsl:with-param>
@@ -5426,9 +5442,9 @@ var toggleFilter = function(){
    <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="cmd" value="create_report"/>
+      <input type="hidden" name="cmd" value="create_container_task"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="next" value="get_tasks"/>
+      <input type="hidden" name="next" value="get_task"/>
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
         <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
       </xsl:if>
@@ -5447,10 +5463,6 @@ var toggleFilter = function(){
           <td>
             <input type="text" name="comment" size="30" maxlength="400"/>
           </td>
-        </tr>
-        <tr>
-          <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
-          <td><input type="file" name="xml_file" size="30"/></td>
         </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
@@ -25422,6 +25434,7 @@ should not have received it.
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_asset_response"/>
+  <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="delete_asset_response"/>
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_alert_response/get_reports_response"

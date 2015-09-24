@@ -860,6 +860,7 @@ init_validator ()
                          "|(create_agent)"
                          "|(create_asset)"
                          "|(create_config)"
+                         "|(create_container_task)"
                          "|(create_alert)"
                          "|(create_filter)"
                          "|(create_group)"
@@ -2288,6 +2289,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_asset)
+  ELSE (create_container_task)
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_host)

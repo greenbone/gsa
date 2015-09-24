@@ -3506,120 +3506,6 @@ new_container_task_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Create a report, get all tasks, XSL transform the result.
- *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-create_report_omp (credentials_t * credentials, params_t *params,
-                   cmd_response_data_t* response_data)
-{
-  entity_t entity;
-  int ret;
-  gchar *xml_file_escaped, *command, *html, *response;
-  gchar **xml_file_array;
-  const char *task_id, *name, *comment, *xml_file;
-
-  task_id = params_value (params, "task_id");
-  xml_file = params_value (params, "xml_file");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-
-  if (((task_id == NULL) && (name == NULL))
-      || ((task_id == NULL) && (comment == NULL))
-      || (xml_file == NULL))
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return new_task (credentials, "Invalid parameter", params, NULL,
-                      response_data);
-    }
-
-  xml_file_array = g_strsplit (xml_file, "%", -1);
-  if (xml_file_array != NULL && xml_file_array[0] != NULL)
-    xml_file_escaped = g_strjoinv ("%%", xml_file_array);
-  else
-    xml_file_escaped = g_strdup (xml_file);
-  g_strfreev (xml_file_array);
-
-  if (task_id)
-    command = g_strdup_printf ("<create_report>"
-                               "<task id=\"%s\"/>"
-                               "%s"
-                               "</create_report>",
-                               task_id ? task_id : "0",
-                               xml_file_escaped ? xml_file_escaped : "");
-  else
-    command = g_strdup_printf ("<create_report>"
-                               "<task>"
-                               "<name>%s</name>"
-                                "<comment>%s</comment>"
-                               "</task>"
-                               "%s"
-                               "</create_report>",
-                               name,
-                               comment,
-                               xml_file_escaped);
-  g_free (xml_file_escaped);
-
-  ret = omp (credentials,
-             &response,
-             &entity,
-             response_data,
-             command);
-  g_free (command);
-
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new report. "
-                             "No new report was created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks");
-      case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new report. "
-                             "It is unclear whether the report has been created or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks");
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new report. "
-                             "It is unclear whether the report has been created or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_task (credentials, NULL, params, response, response_data);
-    }
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
  * @brief Returns page to upload a new report.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
@@ -3676,6 +3562,143 @@ upload_report_omp (credentials_t *credentials, params_t *params,
 }
 
 /**
+ * @brief Create a report, get all tasks, XSL transform the result.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_report_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  entity_t entity;
+  int ret;
+  gchar *command, *html, *response;
+  const char *task_id, *name, *comment, *xml_file;
+
+  task_id = params_value (params, "task_id");
+  xml_file = params_value (params, "xml_file");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+
+  if (((task_id == NULL) && (name == NULL))
+      || ((task_id == NULL) && (comment == NULL))
+      || (xml_file == NULL))
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return new_task (credentials, "Invalid parameter", params, NULL,
+                      response_data);
+    }
+
+  if (strlen (xml_file) == 0)
+    {
+      /* Create only the container task. */
+
+      command = g_strdup_printf ("<create_task>"
+                                 "<target id=\"0\"/>"
+                                 "<name>%s</name>"
+                                  "<comment>%s</comment>"
+                                 "</create_task>",
+                                 name,
+                                 comment);
+    }
+  else
+    {
+      gchar **xml_file_array, *xml_file_escaped;
+
+      xml_file_array = g_strsplit (xml_file, "%", -1);
+      if (xml_file_array != NULL && xml_file_array[0] != NULL)
+        xml_file_escaped = g_strjoinv ("%%", xml_file_array);
+      else
+        xml_file_escaped = g_strdup (xml_file);
+      g_strfreev (xml_file_array);
+
+      if (task_id)
+        command = g_strdup_printf ("<create_report>"
+                                   "<task id=\"%s\"/>"
+                                   "%s"
+                                   "</create_report>",
+                                   task_id ? task_id : "0",
+                                   xml_file_escaped ? xml_file_escaped : "");
+      else
+        command = g_strdup_printf ("<create_report>"
+                                   "<task>"
+                                   "<name>%s</name>"
+                                    "<comment>%s</comment>"
+                                   "</task>"
+                                   "%s"
+                                   "</create_report>",
+                                   name,
+                                   comment,
+                                   xml_file_escaped);
+      g_free (xml_file_escaped);
+    }
+
+  ret = omp (credentials,
+             &response,
+             &entity,
+             response_data,
+             command);
+  g_free (command);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new report. "
+                             "No new report was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new report. "
+                             "It is unclear whether the report has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new report. "
+                             "It is unclear whether the report has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response, response_data);
+    }
+  else
+    {
+      const char *cmd;
+
+      set_http_status_from_entity (entity, response_data);
+      cmd = params_value (params, "cmd");
+      if (cmd && strcmp (cmd, "import_report"))
+        html = new_container_task (credentials, NULL, params, response,
+                                   response_data);
+      else
+        html = upload_report (credentials, params, response, response_data);
+    }
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+/**
  * @brief Import report, get all reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -3703,6 +3726,89 @@ import_report_omp (credentials_t * credentials, params_t *params,
                          response_data);                                   \
       }                                                                    \
   } while (0)
+
+/**
+ * @brief Create a container task, serve next page.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_container_task_omp (credentials_t * credentials, params_t *params,
+                           cmd_response_data_t* response_data)
+{
+  entity_t entity;
+  int ret;
+  gchar *command, *html, *response;
+  const char *name, *comment;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+
+  command = g_strdup_printf ("<create_task>"
+                             "<target id=\"0\"/>"
+                             "<name>%s</name>"
+                              "<comment>%s</comment>"
+                             "</create_task>",
+                             name,
+                             comment);
+  ret = omp (credentials,
+             &response,
+             &entity,
+             response_data,
+             command);
+  g_free (command);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a container task. "
+                             "No task was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a container task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a container task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response, response_data);
+    }
+  else
+    {
+      set_http_status_from_entity (entity, response_data);
+      html = new_container_task (credentials, NULL, params, response,
+                                 response_data);
+    }
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
 
 /**
  * @brief Create a task, get all tasks, XSL transform the result.

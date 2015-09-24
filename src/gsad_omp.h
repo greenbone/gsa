@@ -54,6 +54,8 @@ char * clone_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * create_report_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * upload_report_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * import_report_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * create_container_task_omp (credentials_t *, params_t *,
+                                  cmd_response_data_t *);
 char * create_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_task_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_trash_task_omp (credentials_t *, params_t *,

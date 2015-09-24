@@ -65,6 +65,7 @@
   var NAME_SELECTORS = {
     new_target:    function(doc, uuid){ return doc.find('get_targets_response > target[id=' + uuid +'] > name').text();},
     new_port_list: function(doc, uuid){ return doc.find('get_port_lists_response > port_list[id=' + uuid +'] > name').text();},
+    new_container_task: function(doc, uuid){ return doc.find('get_tasks_response > task[id=' + uuid +'] > name').text();},
   }
 
   var isStatusOk = function(status_code){

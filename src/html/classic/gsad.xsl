@@ -308,7 +308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Create Container Task'"/>
+    <xsl:with-param name="command" select="'Create Report'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -1278,6 +1278,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/create_override_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_report/create_report_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_report/delete_asset_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/delete_note_response"
@@ -1560,6 +1562,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_config/create_config_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="new_container_task/create_report_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="new_filter/create_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_group/create_group_response"
@@ -1579,6 +1583,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="new_tag/create_tag_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_tag/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="upload_report/create_report_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_task/create_report_response"
                              mode="response-indicator"/>
