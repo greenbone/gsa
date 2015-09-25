@@ -26219,7 +26219,10 @@ should not have received it.
   <xsl:param name="token" select="/envelope/token"/>
   <xsl:choose>
     <xsl:when test="string-length ($host) = 0">
-      <xsl:value-of select="$name"/>
+      <a href="?cmd=get_assets&amp;type=host&amp;filter=name={$name}&amp;token={$token}"
+         title="{gsa:i18n ('All Assets with this IP', 'Assets')}">
+        <xsl:value-of select="$name"/>
+      </a>
     </xsl:when>
     <xsl:otherwise>
       <a href="?cmd=get_asset&amp;type=host&amp;asset_id={$host}&amp;token={$token}"
@@ -26228,12 +26231,6 @@ should not have received it.
       </a>
     </xsl:otherwise>
   </xsl:choose>
-  <div class="small_inline_form float_right">
-    <a href="?cmd=get_assets&amp;type=host&amp;filter=name={$name}&amp;token={$token}"
-       title="{gsa:i18n ('All Assets with this IP', 'Assets')}">
-      <img src="/img/list.png" border="0" alt="{gsa:i18n ('All Assets with this IP', 'Assets')}"/>
-    </a>
-  </div>
 </xsl:template>
 
 <xsl:template match="result" mode="details" name="result-details">

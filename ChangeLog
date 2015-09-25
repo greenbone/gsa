@@ -1,5 +1,11 @@
 2015-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (host-link): If the host is not in the asset
+	db, then link to the list of hosts that have the same IP.  Remove the
+	list icon that was always linking to the list of hosts.
+
+2015-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (details-header-icons): Add New Task menu.
 
 2015-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
