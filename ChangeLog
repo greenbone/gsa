@@ -1,5 +1,12 @@
 2015-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r23424 by Jan-Oliver Wagner.
+
+	* src/html/classic/omp.xsl (report [results]): Added some notes for
+	the user on what could be the reason for 0 results.
+
+2015-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r23420.
 
 	* src/html/classic/omp.xsl (report [results]): Add the number of hosts

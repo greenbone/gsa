@@ -3651,6 +3651,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <div style="padding: 1px">
             <p><xsl:value-of select="gsa:i18n ('0 results', 'Result')"/></p>
+            <p>
+            <xsl:value-of select="gsa:i18n ('Empty reports can happen for the following reasons:', 'Result')"/>
+            </p>
+            <p>
+            <ul>
+            <li><xsl:value-of select="gsa:i18n ('The target hosts where regarded dead.', 'Result')"/></li>
+            <li><xsl:value-of select="gsa:i18n ('The filter does not match any result.', 'Result')"/></li>
+            <li><xsl:value-of select="gsa:i18n ('A very small or non-verbose scan configuration was applied.', 'Result')"/></li>
+            </ul>
+            </p>
             <xsl:choose>
               <xsl:when test="report/hosts/count = 0">
                 <p><xsl:value-of select="gsa:i18n ('This report also contains no hosts.', 'Report')"/></p>
