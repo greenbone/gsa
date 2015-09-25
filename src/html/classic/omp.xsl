@@ -5031,6 +5031,31 @@ var toggleFilter = function(){
   </a>
   <xsl:choose>
     <xsl:when test="$nonew"/>
+    <xsl:when test="gsa:may-op (concat ('create_', $type)) and $type = 'task'">
+      <span class="menu_icon" id="#wizard_list">
+        <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           class="new-action-icon" data-type="task"
+           title="{gsa:i18n ('New Task', 'Task')}">
+          <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+        </a>
+        <ul>
+          <li>
+            <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="new-action-icon" data-type="task"
+               title="{gsa:i18n ('New Task', 'Task')}">
+              <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+            </a>
+          </li>
+          <li class="last">
+            <a href="/omp?cmd=new_container_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="last new-action-icon" data-type="container_task"
+               title="{gsa:i18n ('New Container Task', 'Task')}">
+              <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+            </a>
+          </li>
+        </ul>
+      </span>
+    </xsl:when>
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"

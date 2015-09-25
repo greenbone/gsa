@@ -1,3 +1,7 @@
+2015-09-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (details-header-icons): Add New Task menu.
+
 2015-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	For container tasks replace the start icon with an Import Report icon.
