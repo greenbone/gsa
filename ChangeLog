@@ -1,5 +1,16 @@
 2015-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	For container tasks replace the start icon with an Import Report icon.
+
+	* src/html/classic/omp.xsl (task-icons): Replace start with import.
+	(html-gsa-logo): Add indicator icons.
+
+	* src/html/classic/js/greenbone.js (onReady): Pass the task_id into the
+	OMPDialog in the upload case, so that the right task is selected in the
+	dropdown.
+
+2015-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add an icon for creating a container task on the Import Report dialog.
 	To support this remove the report field from New Container Task, and add
 	a dedicated cmd "new_container_task" for the page (instead of using

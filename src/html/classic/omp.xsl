@@ -3640,7 +3640,12 @@ var toggleFilter = function(){
   <xsl:param name="show-start-when-scheduled" select="false ()"/>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"/>
+      <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         class="upload-action-icon" data-type="report"
+         data-task_id="{@id}"
+         title="{gsa:i18n ('Import Report', 'Task')}">
+        <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
+      </a>
     </xsl:when>
     <xsl:when test="gsa:may ('start_task') = 0">
       <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Permission to start task denied', 'Task')}"/>

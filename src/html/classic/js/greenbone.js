@@ -251,13 +251,16 @@
     doc.find(".upload-action-icon").each(function(){
       var elem = $(this),
           type_name = elem.data('type'),
-          done = elem.data('done');
+          done = elem.data('done'),
+          task_id = elem.data('task_id'),
+          params = {};
+      params['task_id'] = task_id;
       if (done === undefined){
         done = true;
       }
       elem.on('click', function(event){
         event.preventDefault();
-        new OMPDialog('upload_' + type_name, done).show();
+        new OMPDialog('upload_' + type_name, done, params).show();
       });
     });
 
