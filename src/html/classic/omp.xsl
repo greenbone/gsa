@@ -2545,7 +2545,11 @@ var toggleFilter = function(){
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Task', 'Task')"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
+            <td><input type="file" name="xml_file" size="30"/></td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Container Task', 'Task')"/></td>
             <td>
               <xsl:variable name="task_id" select="/envelope/params/task_id"/>
               <select name="task_id">
@@ -2565,10 +2569,6 @@ var toggleFilter = function(){
                 <img src="/img/new.png"/>
               </a>
             </td>
-          </tr>
-          <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
-            <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
