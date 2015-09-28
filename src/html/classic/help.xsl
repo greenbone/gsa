@@ -378,7 +378,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table><tr><td valign="top">
 
       <h1>Greenbone Security Assistant</h1>
-      <h3>Version 6.0.6</h3>
+      <h3>Version 6.0.7</h3>
 
       <p>
       The Greenbone Security Assistant (GSA) is the web-based graphical
