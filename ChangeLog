@@ -1,3 +1,8 @@
+2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Make sure the dialog is cleaned up
+	  when it's closed.
+
 2015-09-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Skip the ID check for "asset" and

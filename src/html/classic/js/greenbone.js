@@ -119,6 +119,11 @@
     }));
   };
 
+  OMPDialog.prototype.close = function(){
+    this.dialog.dialog("close");
+    // the rest happens in the ``close`` handler of the dialog.
+  };
+
   OMPDialog.prototype.postForm = function(){
     var self = this,
         data = new FormData(this.dialog.find('form')[0]);
@@ -146,8 +151,7 @@
       })
       .done(function(xml){
         xml = $(xml);
-        var response = xml.find(RESPONSE_SELECTORS[self.command]),
-            gsad_msg = xml.find('gsad_msg');
+        var response = xml.find(RESPONSE_SELECTORS[self.command]);
         if (self.reload === true){
           window.document.location.reload();
           // a bit overkill, but better-safe-than-sorry.
@@ -155,7 +159,7 @@
         }
         if (self.element === undefined){
           // No element to update, exit early.
-          self.dialog.dialog("close");
+          self.close();
           return;
         }
         // get the uuid of the created resource
@@ -164,13 +168,12 @@
         var name = NAME_SELECTORS[self.command](xml, uuid);
         // fill in the new information in the $element and make it selected
         self.element.append($("<option/>", {value: uuid, html: name, selected: true}));
-        /// make it the selected option.
+        // refresh the select widget.
         self.element.select2("destroy");
         self.element.select2();
 
         // And finally, close our dialog.
-        self.dialog.dialog("close");
-        self.dialog = undefined;
+        self.close();
       });
   };
 
@@ -214,12 +217,17 @@
             },
           },
         ],
+        close: function(event, ui){
+          self.dialog.remove();
+          self.dialog = undefined;
+        },
       });
       // fancy-up the selects
       onReady(self.dialog);
       $('html').css('cursor', "");
     });
   };
+
   window.OMPDialog = OMPDialog;
 
   var onReady = function(doc){
