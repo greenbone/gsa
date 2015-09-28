@@ -1,3 +1,9 @@
+2015-09-28  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0.6 release.
+
+	* CHANGES: Updated.
+
 2015-09-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23424 by Jan-Oliver Wagner.

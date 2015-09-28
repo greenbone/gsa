@@ -1,4 +1,4 @@
-gsa 6.0.6 (2015-XX-XX)
+gsa 6.0.6 (2015-09-28)
 
 This is the sixth maintenance release of the Greenbone Security Assistant (GSA)
 6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
@@ -22,6 +22,12 @@ Main changes compared to 6.0.5:
   added.
 * The requesting IP is now available through the XML envelope.
 * Unsuccessful login attempts are now logged.
+* Handling of timed-out guest sessions has been improved.
+* An issue which caused an internal error when exporting a filtered selection of
+  CPE objects has been fixed.
+* Session IP checking is now done more strictly.
+* IPv6 support for redirects has been improved.
+* Handling of reports with no results has been improved.
 
 
 gsa 6.0.5 (2015-08-03)
