@@ -1,5 +1,10 @@
 2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Make the alert selection for new task a
+	  multiple select widget (gsad also needs a fix)
+
+2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove unused 'new-task-group-select'
 	  template.
 
