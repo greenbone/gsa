@@ -5431,25 +5431,6 @@ var toggleFilter = function(){
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="new-task-group-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="groups" select="get_groups_response"/>
-  <select name="group_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$groups/group"
-                         mode="newtask"/>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-task-group-select">
-      <xsl:with-param name="groups" select="$groups"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
 <xsl:template match="task_count">
 </xsl:template>
 

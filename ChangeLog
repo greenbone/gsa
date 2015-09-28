@@ -1,5 +1,10 @@
 2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove unused 'new-task-group-select'
+	  template.
+
+2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Get rid of the JavaScript indicator and its help page.
 
 	* src/html/classic/help.xsl, src/html/classic/help_ru.xsl,
