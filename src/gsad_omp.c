@@ -12667,7 +12667,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
 
-  if (report_id == NULL)
+  if (report_id == NULL
+      && (type == NULL
+          || (strcmp (type, "prognostic")
+              && strcmp (type, "assets"))))
     {
       entity_t entity;
 
