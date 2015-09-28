@@ -301,33 +301,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 
-<xsl:template mode="help" match="javascript.html">
-  <div class="gb_window_part_center">帮助：JavaScript</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div style="text-align:left">
-      <br/>
-      <h1>JavaScript</h1>
-      <p>
-        JavaScript 指示图标
-        <img src="/img/indicator_js.png" alt="JavaScript 已启用" title="JavaScript 已启用"/>
-       在浏览器激活 JavaScript 时会显示在页面顶部。
-      </p>
-      <p>        
-       GSA 自己仅将 JavaScript 用于一些次要的便利特性上，
-       而所有其他功能运作都不需要任何 JavaScript 活跃内容。
-       因此，禁用 JavaScript 对于使用 GSA 完全可行的，如果您不希望使用这些特性的话。
-       您将不会失去任何必要的功能。
-      </p>
-      <p>        
-        如果 JavaScript 是启用的，强烈建议您不要访问不受信任的网页，
-        因为这些网页可能包含 尝试执行渗透或攻击您浏览器当前打开的其他网页服务 的 JavaScript 代码。
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
-
 <xsl:template mode="help" match="hosts.html">
   <div class="gb_window_part_center">帮助：主机</div>
   <div class="gb_window_part_content">
@@ -3167,7 +3140,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (OpenVAS 管理协议)</a></li>
               </ul>
-            <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">错误消息</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">术语</a></li>
           </ul>

@@ -1,5 +1,13 @@
 2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Get rid of the JavaScript indicator and its help page.
+
+	* src/html/classic/help.xsl, src/html/classic/help_ru.xsl,
+	  src/html/classic/help_de.xsl, src/html/classic/help_zh_CN.xsl,
+	  src/html/classic/gsad.xsl: Updated
+
+2015-09-28  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Make sure the dialog is cleaned up
 	  when it's closed.
 

@@ -402,31 +402,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="javascript.html">
-  <div class="gb_window_part_center">Помощь: JavaScript</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div style="text-align:left">
-      <br/>
-      <h1>JavaScript</h1>
-      <p>
-        Индикатор JavaScript 
-        <img src="/img/indicator_js.png" alt="JavaScript is enabled" title="JavaScript включен"/>
-        отображается в заголовке страницы в случае, если JavaScript включен в браузере.
-      </p>
-      <p>
-        GSA использует JavaScript только для незначительных функций, повышающих удобство, все основные функции работоспособны без использования активного содержимого.
-        Поэтому можете спокойно отключить JavaScript при использовании GSA, если не желаете использовать эти функции. Вы не потеряете какой-либо существенной функциональности.
-      </p>
-      <p>
-        В случае, если у вас включен JavaScript, мы рекомендуем не посещать недоверенные веб узлы, 
-        так как они могу содержать скрипты JavaScript, которые могут попытаться запусть эксплоиты или атаки против
-        других веб ресурсов, к которым вы обращались в тот момент посредством вашего браузера.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template mode="help" match="hosts.html">
   <div class="gb_window_part_center">Помощь: Узлы</div>
   <div class="gb_window_part_content">
@@ -3420,7 +3395,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (Протокол Управления OpenVAS)</a></li>
               </ul>
-            <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Сообщения об Ошибках</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Глоссарий</a></li>
           </ul>

@@ -418,31 +418,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="javascript.html">
-  <div class="gb_window_part_center">Help: JavaScript</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div style="text-align:left">
-      <br/>
-      <h1>JavaScript</h1>
-      <p>
-        The JavaScript indicator icon
-        <img src="/img/indicator_js.png" alt="JavaScript is enabled" title="JavaScript is enabled"/>
-        is displayed in the page heading when JavaScript is activated in the browser.
-      </p>
-      <p>
-        GSA itself uses JavaScript only for some minor convenience features while all other functions work without any kind of active content.
-        So, it is safe to disable JavaScript when using GSA if you do not wish to use these features. You will not lose any essential functionality.
-      </p>
-      <p>
-        If JavaScript is enabled it is highly recommended to not visit untrusted web pages
-        as these could contain JavaScript code trying to run exploits or attacks against
-        other web services you have currently opened in your browser.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template mode="help" match="host_details.html">
   <div class="gb_window_part_center">Help: Host Details</div>
   <div class="gb_window_part_content">
@@ -3802,7 +3777,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (OpenVAS Management Protocol)</a></li>
               </ul>
-            <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
           </ul>

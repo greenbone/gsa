@@ -750,7 +750,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (OpenVAS Management Protocol)</a></li>
               </ul>
-            <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
           </ul>
