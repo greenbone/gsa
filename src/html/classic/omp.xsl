@@ -35008,17 +35008,25 @@ var toggleFilter = function(){
           </td>
         </tr>
       </table>
-      <h1><xsl:value-of select="gsa:i18n ('Identifiers', 'Assets')"/></h1>
+      <h1>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/show_all = '1'">
+            <xsl:value-of select="gsa:i18n ('All Identifiers', 'Assets')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa:i18n ('Latest Identifiers', 'Assets')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
+        <xsl:variable name="id" select="identifiers/identifier[1]/source/@id"/>
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Source Type', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
         </tr>
-        <xsl:for-each select="identifiers/identifier">
+        <xsl:for-each select="identifiers/identifier[(/envelope/params/show_all = '1') or (source/@id = $id)]">
           <tr class="{gsa:table-row-class(position())}">
             <td><xsl:value-of select="name"/></td>
             <td>
@@ -35033,8 +35041,6 @@ var toggleFilter = function(){
                 </xsl:otherwise>
               </xsl:choose>
             </td>
-            <td><xsl:value-of select="gsa:date (creation_time)"/></td>
-            <td><xsl:value-of select="source/type"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="source/type = 'Report Host Detail'">
@@ -35049,10 +35055,11 @@ var toggleFilter = function(){
                       <xsl:value-of select="source/@id"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:text> via NVT </xsl:text>
+                  <xsl:text> (NVT </xsl:text>
                   <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={source/data}&amp;min_qod=&amp;token={/envelope/token}">
                     <xsl:value-of select="source/data"/>
                   </a>
+                  <xsl:text>)</xsl:text>
                 </xsl:when>
                 <xsl:when test="substring (source/type, 1, 6) = 'Report'">
                   <xsl:text>Report </xsl:text>
@@ -35066,6 +35073,7 @@ var toggleFilter = function(){
                       <xsl:value-of select="source/@id"/>
                     </xsl:otherwise>
                   </xsl:choose>
+                  <xsl:text> (Target host)</xsl:text>
                 </xsl:when>
                 <xsl:when test="substring (source/type, 1, 4) = 'User'">
                   <xsl:text>User </xsl:text>
@@ -35081,6 +35089,8 @@ var toggleFilter = function(){
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
+                  <xsl:value-of select="source/type"/>
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="source/@id"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -35097,6 +35107,33 @@ var toggleFilter = function(){
             </td>
           </tr>
         </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/show_all = '1'">
+            <tr>
+              <td colspan="4" style="text-align:center;">
+                <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+                  Show only latest Identifiers
+                </a>
+              </td>
+            </tr>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td colspan="4" style="text-align:center;">
+                ...
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="text-align:center;">
+                <a href="/omp?cmd=get_asset&amp;show_all=1&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+                  Show all Identifiers
+                </a>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
       </table>
     </div>
   </div>

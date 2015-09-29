@@ -1474,6 +1474,7 @@ init_validator ()
   openvas_validator_alias (validator, "schedules_only", "boolean");
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "show_all",     "boolean");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "subject_name",   "name");

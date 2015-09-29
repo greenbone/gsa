@@ -1,5 +1,15 @@
 2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Simplify the Host Details page a little.
+
+	* src/gsad.c (init_validator): Add show_all.
+
+	* src/html/classic/omp.xsl (asset [host-details]): Show only the latest
+	identifiers initially, with a link to show them all.  Remove the Created
+	column and merge the Source Type column into the Source column.
+
+2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (os-details): Add Latest Severity and Highest
 	Severity fields.
 	(html-oss-table): Add Highest Severity column.
