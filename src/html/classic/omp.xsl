@@ -35023,6 +35023,11 @@ var toggleFilter = function(){
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+          <xsl:choose>
+            <xsl:when test="/envelope/params/show_all = '1'">
+              <td><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></td>
+            </xsl:when>
+          </xsl:choose>
           <td><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
         </tr>
@@ -35041,6 +35046,11 @@ var toggleFilter = function(){
                 </xsl:otherwise>
               </xsl:choose>
             </td>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/show_all = '1'">
+                <td><xsl:value-of select="gsa:date (creation_time)"/></td>
+              </xsl:when>
+            </xsl:choose>
             <td>
               <xsl:choose>
                 <xsl:when test="source/type = 'Report Host Detail'">
@@ -35110,7 +35120,7 @@ var toggleFilter = function(){
         <xsl:choose>
           <xsl:when test="/envelope/params/show_all = '1'">
             <tr>
-              <td colspan="4" style="text-align:center;">
+              <td colspan="5" style="text-align:center;">
                 <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                   title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
                   Show only latest Identifiers
