@@ -1,5 +1,12 @@
 2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (os-details): Add Latest Severity and Highest
+	Severity fields.
+	(html-oss-table): Add Highest Severity column.
+	(asset [os-details], asset/os): Remove Severity column.
+
+2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (asset [os-details], asset/os): Make the host
 	count a link to the Operating Systems page.
 

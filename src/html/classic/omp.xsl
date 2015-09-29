@@ -34709,6 +34709,26 @@ var toggleFilter = function(){
           <td><xsl:value-of select="os/title"/></td>
         </tr>
         <tr>
+          <td><xsl:value-of select="gsa:i18n ('Latest Severity', 'Property')"/>:</td>
+          <td>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="os/latest_severity/value"/>
+              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (os/latest_severity/value), 'Severity'), ')')"/>
+              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (os/latest_severity/value), 'Severity')"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Highest Severity', 'Property')"/>:</td>
+          <td>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="os/highest_severity/value"/>
+              <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (os/highest_severity/value), 'Severity'), ')')"/>
+              <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (os/highest_severity/value), 'Severity')"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Average Severity', 'Property')"/>:</td>
           <td>
             <xsl:call-template name="severity-bar">
@@ -34738,27 +34758,18 @@ var toggleFilter = function(){
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/></td>
             </tr>
             <xsl:for-each select="os/hosts/asset">
               <tr class="{gsa:table-row-class(position())}">
                 <xsl:choose>
                   <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
                     <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                    <td></td>
                   </xsl:when>
                   <xsl:otherwise>
                     <td>
                       <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
                         <xsl:value-of select="name"/>
                       </a>
-                    </td>
-                    <td>
-                      <xsl:call-template name="severity-bar">
-                        <xsl:with-param name="cvss" select="severity/value"/>
-                        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity'), ')')"/>
-                        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (severity/value), 'Severity')"/>
-                      </xsl:call-template>
                     </td>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -35173,6 +35184,11 @@ var toggleFilter = function(){
           <sort-reverse/>
         </column>
         <column>
+          <name><xsl:value-of select="gsa:i18n('Highest', 'Property')"/></name>
+          <field>highest_severity</field>
+          <sort-reverse/>
+        </column>
+        <column>
           <name><xsl:value-of select="gsa:i18n('Average', 'Property')"/></name>
           <field>average_severity</field>
           <sort-reverse/>
@@ -35353,6 +35369,13 @@ var toggleFilter = function(){
         <xsl:with-param name="cvss" select="latest_severity/value"/>
         <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (latest_severity/value), 'Severity'), ')')"/>
         <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (latest_severity/value), 'Severity')"/>
+      </xsl:call-template>
+    </td>
+    <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="highest_severity/value"/>
+        <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (highest_severity/value), 'Severity'), ')')"/>
+        <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (highest_severity/value), 'Severity')"/>
       </xsl:call-template>
     </td>
     <td>
