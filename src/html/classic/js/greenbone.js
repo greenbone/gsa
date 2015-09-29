@@ -225,6 +225,8 @@
       // fancy-up the selects
       onReady(self.dialog);
       $('html').css('cursor', "");
+    }).fail(function(){
+      $('html').css('cursor', "");
     });
   };
 
