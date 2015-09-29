@@ -34720,7 +34720,12 @@ var toggleFilter = function(){
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Hosts', 'Property')"/>:</td>
-          <td><xsl:value-of select="os/installs"/></td>
+          <td>
+            <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter=oss~&quot;{name}&quot;&amp;filt_id=&amp;token={/envelope/token}"
+               title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+              <xsl:value-of select="os/installs"/>
+            </a>
+          </td>
         </tr>
       </table>
 
@@ -35358,7 +35363,10 @@ var toggleFilter = function(){
       </xsl:call-template>
     </td>
     <td>
-      <xsl:value-of select="installs"/>
+      <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter=oss~&quot;{../name}&quot;&amp;filt_id=&amp;token={/envelope/token}"
+        title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+        <xsl:value-of select="installs"/>
+      </a>
     </td>
     <td>
       <xsl:choose>

@@ -1,3 +1,8 @@
+2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [os-details], asset/os): Make the host
+	count a link to the Operating Systems page.
+
 2015-09-29  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/graphics.xsl: Stop using a non-existing version of
