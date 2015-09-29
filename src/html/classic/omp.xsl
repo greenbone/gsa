@@ -5408,29 +5408,6 @@ var toggleFilter = function(){
 
 <!-- NEW_TASK -->
 
-<xsl:template name="new-task-alert-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="alerts" select="get_alerts_response"/>
-  <xsl:param name="select_id" select="alert_id"/>
-  <select name="alert_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$alerts/alert"
-                         mode="newtask">
-      <xsl:with-param name="select_id" select="$select_id"/>
-    </xsl:apply-templates>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-task-alert-select">
-      <xsl:with-param name="alerts" select="$alerts"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-      <xsl:with-param name="select_id" select="$select_id"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
 <xsl:template match="task_count">
 </xsl:template>
 
@@ -6257,92 +6234,20 @@ var toggleFilter = function(){
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
       <td>
-        <xsl:variable name="alerts" select="commands_response/get_alerts_response/alert"/>
-        <xsl:choose>
-          <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']) &gt; 0">
-            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--']/value">
-              <select name="alert_id_optional:{position ()}">
-                <xsl:variable name="alert_id" select="text ()"/>
-                <xsl:choose>
-                  <xsl:when test="string-length ($alert_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="$alerts">
-                  <xsl:choose>
-                    <xsl:when test="@id = $alert_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-            </xsl:for-each>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:for-each select="commands_response/get_tasks_response/task/alert">
-              <select name="alert_id_optional:{position ()}">
-                <xsl:variable name="alert_id" select="@id"/>
-                <xsl:choose>
-                  <xsl:when test="string-length ($alert_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="$alerts">
-                  <xsl:choose>
-                    <xsl:when test="@id = $alert_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-            </xsl:for-each>
-          </xsl:otherwise>
-        </xsl:choose>
-
-        <xsl:variable name="count">
-          <xsl:variable name="params" select="count (/envelope/params/_param[substring-before (name, ':') = 'alert_id_optional'][value != '--'])"/>
-          <xsl:choose>
-            <xsl:when test="$params &gt; 0">
-              <xsl:value-of select="$params"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:call-template name="new-task-alert-select">
-          <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
-          <xsl:with-param name="count" select="alerts - $count"/>
-          <xsl:with-param name="position" select="$count + 1"/>
-        </xsl:call-template>
-
-        <!-- Force the Create Task button to be the default. -->
-        <input style="position: absolute; left: -100%"
-               type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
-        <input type="submit" name="submit_plus" value="+"/>
-
-        <xsl:choose>
-          <xsl:when test="string-length (/envelope/params/alerts)">
-            <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <input type="hidden" name="alerts" value="{$count + 1}"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <select name="alerts" multiple="multiple">
+          <xsl:for-each select="commands_response/get_alerts_response/alert">
+            <xsl:variable name="alert_id" select="@id"/>
+            <xsl:choose>
+              <xsl:when test="commands_response/get_tasks_response/task/alert[@id = $alert_id]">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+        <br/>
       </td>
     </tr>
   </xsl:if>

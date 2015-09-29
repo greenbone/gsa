@@ -1,5 +1,10 @@
 2015-09-29  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Make the alert selection for edit task
+	  dialog a multiple select (gsad still needs fixing).
+
+2015-09-29  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Remove the waiting cursor in case
 	  of errors.
 
