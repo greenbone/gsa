@@ -303,7 +303,17 @@
   };
 
   $(window.document).ready(function(){
+
+    // generic widget pimping
     onReady(window.document);
+
+    // autorefresh
+    if ((window.autorefresh !== undefined) && (window.autorefresh.interval != 0)) {
+      window.autorefresh.timeout_id = window.setTimeout(function() {
+        window.location.href=window.autorefresh.url;
+      }
+      , window.autorefresh.interval*1000);
+    }
   });
 
 }(window);

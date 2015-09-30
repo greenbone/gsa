@@ -150,7 +150,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <head>
     <link rel="icon" href="/favicon.gif" type="image/x-icon"/>
     <title>Greenbone Security Assistant</title>
-    <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
     <xsl:choose>
       <xsl:when test="/login_page != ''">
         <link rel="stylesheet" type="text/css" href="/css/gsa-login.css"/>
@@ -164,6 +163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <script src="/js/jquery-ui.js" type="text/javascript"></script>
         <script src="/js/select2.js" type="text/javascript"></script>
         <script src="/js/greenbone.js" type="text/javascript"></script>
+        <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
       </xsl:otherwise>
     </xsl:choose>
   </head>
@@ -173,7 +173,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="autorefresh" mode="html-header-meta">
   <xsl:variable name="cmd" select="name(/envelope/*[starts-with (name(), 'get_')])"/>
   <xsl:if test="(@interval &gt; 0) and starts-with ($cmd, 'get_') and substring ($cmd, 1) and ($cmd = 'get_task' or substring ($cmd, string-length ($cmd), 1) = 's') and ($cmd != 'get_my_settings') and ($cmd != 'get_system_reports') and (count (//gsad_msg) = 0) and (count (//gsad_response) = 0)">
-    <meta http-equiv="refresh" content="{@interval};{/envelope/current_page}&amp;token={/envelope/token}" />
+    <script type="text/javascript">
+    window.autorefresh = {
+      interval: <xsl:value-of select="@interval"/>,
+      url: '<xsl:value-of select="/envelope/current_page"/>&amp;token=<xsl:value-of select="/envelope/token"/>',
+    }
+    </script>
   </xsl:if>
 </xsl:template>
 

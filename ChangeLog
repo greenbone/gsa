@@ -1,3 +1,8 @@
+2015-09-30  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js, src/html/classic/gsad.xsl: Move the
+	  autorefresh to JavaScript.
+
 2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (import_port_list): Update to new style that calls
