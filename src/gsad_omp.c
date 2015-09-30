@@ -21948,7 +21948,7 @@ delete_port_range_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Import port list, get all port lists, XSL transform the result.
+ * @brief Import port list, get all port_lists, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -21960,103 +21960,70 @@ char *
 import_port_list_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  GString *xml = NULL;
-  int socket;
-  gchar *html;
+  gchar *command, *html, *response;
+  entity_t entity;
+  int ret;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
-                           response_data))
+  /* Create the port list. */
+
+  response = NULL;
+  entity = NULL;
+  command = g_strdup_printf ("<create_port_list>"
+                             "%s"
+                             "</create_port_list>",
+                             params_value (params, "xml_file"));
+  ret = omp (credentials, &response, &entity, response_data, command);
+  g_free (command);
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a port_list. "
+                             "The schedule remains the same. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_port_lists",
+                             response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a port_list. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_port_lists",
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while importing a port list. "
-                             "No new port list was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
-    }
-
-  xml = g_string_new ("<get_port_lists>");
-
-  /* Create the port_list. */
-
-  if (openvas_server_sendf (&session,
-                            "<create_port_list>"
-                            "%s"
-                            "</create_port_list>",
-                            params_value (params, "xml_file"))
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a port list. "
-                           "No new port list was created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists", response_data);
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a port list. "
-                           "It is unclear whether the port list has been created or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists", response_data);
-    }
-
-  /* Get all the port_lists. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a port list. "
-                           "The new port list was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists", response_data);
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while importing a port list. "
-                           "The new port list was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists", response_data);
+                             "An internal error occurred while importing a port_list. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_port_lists",
+                             response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_port_lists>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        html = get_port_lists (credentials, params, response, response_data);
+    }
+  else
+    {
+      set_http_status_from_entity (entity, response_data);
+      html = new_port_list (credentials, params, response, response_data);
+    }
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 

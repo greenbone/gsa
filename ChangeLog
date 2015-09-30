@@ -1,7 +1,12 @@
 2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (import_port_list): Update to new style that calls
+	"omp" function, so that HTTP status is set on error.
+
+2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Move the port list upload out of "New Port List" and onto new page
-	"Upload Port List".
+	"Import Port List".
 
 	* src/gsad.c (init_validator, exec_omp_get): Add upload_port_list.
 
