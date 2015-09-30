@@ -1,5 +1,10 @@
 2015-09-30  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Stop the autorefresh when a dialog
+	  is up.
+
+2015-09-30  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/gsad.xsl: Move the
 	  autorefresh to JavaScript.
 

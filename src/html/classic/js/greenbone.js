@@ -184,6 +184,7 @@
     this.params.cmd = this.command
     this.params.token = $('#gsa-token').text();
     $('html').css('cursor', 'wait');
+    stopAutoRefresh();
     $.get(
       '/omp?' + $.param(this.params)
     ).done(function(html){
@@ -193,7 +194,7 @@
           gb_window = gb_windows.first();
           // create a new div
       self.dialog = $("<div/>", {
-        id: "dialog-form",
+        'class': "dialog-form",
         title:  gb_window.find('.gb_window_part_center').justtext(),
         html: gb_window.find('div:nth-child(4)').html(),
       });
@@ -221,6 +222,7 @@
         close: function(event, ui){
           self.dialog.remove();
           self.dialog = undefined;
+          startAutoRefresh();
         },
       });
       // fancy-up the selects
@@ -302,18 +304,32 @@
     }
   };
 
-  $(window.document).ready(function(){
-
-    // generic widget pimping
-    onReady(window.document);
-
-    // autorefresh
+  var startAutoRefresh = function(){
+    if ($('.dialog-form').length > 0){
+      // Still open dialogs.
+      return;
+    }
     if ((window.autorefresh !== undefined) && (window.autorefresh.interval != 0)) {
       window.autorefresh.timeout_id = window.setTimeout(function() {
         window.location.href=window.autorefresh.url;
       }
       , window.autorefresh.interval*1000);
     }
+  },
+     stopAutoRefresh = function(){
+    if ((window.autorefresh !== undefined) && (window.autorefresh.timeout_id != undefined)){
+      clearTimeout(window.autorefresh.timeout_id);
+      window.autorefresh.timeout_id = undefined;
+    }
+  };
+
+  $(window.document).ready(function(){
+
+    // generic widget pimping
+    onReady(window.document);
+
+    // autorefresh
+    startAutoRefresh();
   });
 
 }(window);
