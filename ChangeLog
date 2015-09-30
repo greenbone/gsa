@@ -1,5 +1,10 @@
 2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css (gb_menu): Make the text of the top
+	buttons dark grey, to match the text of the selected item in the menu.
+
+2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css (gb_header): Change gradient so
 	that the bottom flows into the green of the top menu items.
 

@@ -534,6 +534,7 @@ div.empty_top_button {
 
 #gb_menu ul > li:hover > a {
  background-color: #99ce48;
+ color: #393637;
 }
 
 #gb_menu ul.first_button_overlay,
