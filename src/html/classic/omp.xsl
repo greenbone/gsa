@@ -5018,6 +5018,7 @@ var toggleFilter = function(){
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
   <xsl:param name="nonew"/>
+  <xsl:param name="noupload" select="true ()"/>
   <xsl:param name="noclone" select="$nonew"/>
   <xsl:param name="grey-clone" select="0"/>
   <xsl:param name="noexport"/>
@@ -5062,6 +5063,16 @@ var toggleFilter = function(){
          class="new-action-icon" data-type="{$type}"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </xsl:when>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noupload"/>
+    <xsl:when test="gsa:may-op (concat ('create_', $type))">
+      <a href="/omp?cmd=upload_{$type}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         class="upload-action-icon" data-type="port_list"
+         title="{gsa:i18n ('Import Port List', 'Port List')}">
+        <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
       </a>
     </xsl:when>
   </xsl:choose>
@@ -23617,6 +23628,7 @@ should not have received it.
       </column>
     </xsl:with-param>
     <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
+    <xsl:with-param name="upload-icon" select="true ()"/>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
 </xsl:template>
@@ -23764,6 +23776,7 @@ should not have received it.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Port List'"/>
         <xsl:with-param name="type" select="'port_list'"/>
+        <xsl:with-param name="noupload" select="false ()"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -24146,6 +24159,12 @@ should not have received it.
   <xsl:apply-templates select="create_port_list_response"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:call-template name="html-create-port-list-form"/>
+</xsl:template>
+
+<xsl:template match="upload_port_list">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_port_list_response"/>
+  <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:call-template name="html-import-port-list-form"/>
 </xsl:template>
 

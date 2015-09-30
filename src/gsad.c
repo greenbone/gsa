@@ -1120,6 +1120,7 @@ init_validator ()
                          "|(sync_cert)"
                          "|(toggle_tag)"
                          "|(upload_config)"
+                         "|(upload_port_list)"
                          "|(upload_report)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
@@ -3123,6 +3124,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_schedule)
   ELSE (new_slave)
   ELSE (upload_config)
+  ELSE (upload_port_list)
   ELSE (upload_report)
   ELSE (verify_agent)
   ELSE (verify_report_format)

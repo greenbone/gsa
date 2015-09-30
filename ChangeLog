@@ -1,5 +1,24 @@
 2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Move the port list upload out of "New Port List" and onto new page
+	"Upload Port List".
+
+	* src/gsad.c (init_validator, exec_omp_get): Add upload_port_list.
+
+	* src/gsad_omp.c (upload_port_list, upload_port_list_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/classic/omp.xsl (details-header-icons): Add upload icon.
+	(html-port-lists-table, port_list [details]): Enable upload icon.
+	(upload_port_list): New template.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
+	upload_port_list.
+
+2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (asset [os-details]): Remove "Hosts using
 	this Operating System" table.
 

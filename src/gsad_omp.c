@@ -21466,6 +21466,47 @@ new_port_list (credentials_t *credentials, params_t *params,
 }
 
 /**
+ * @brief Returns page to upload a new port list.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+upload_port_list (credentials_t *credentials, params_t *params,
+                  const char *extra_xml, cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<upload_port_list>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</upload_port_list>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Return the upload port list page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+upload_port_list_omp (credentials_t *credentials, params_t *params,
+                      cmd_response_data_t* response_data)
+{
+  return upload_port_list (credentials, params, NULL, response_data);
+}
+
+/**
  * @brief Create a port list, get all port lists, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
