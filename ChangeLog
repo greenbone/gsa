@@ -1,3 +1,29 @@
+2015-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add HTTP error codes for messages generated with gsad_message in
+	src/gsad.c and in case the XSL transformation fails.
+
+	* src/gsad_omp.c: Add response_data parameter for the functions
+	manager_connect, logout and gsad_message to return an HTTP error code
+	if XSL transformation fails.
+
+	* src/gsad_omp.h (cmd_response_data_t): Remove. Moved to
+	src/gsad_base.h.
+	(xsl_transform_with_stylesheet, xsl_transform, gsad_message): Add new
+	response_data parameter.
+
+	* src/gsad_base.c: Add #include <microhttpd.h>.
+	(xsl_transform_with_stylesheet, xsl_transform, gsad_message): Add new
+	response_data parameter.
+
+	* src/gsad_base.h (cmd_response_data_t): New. Moved from
+	src/gsad_omp.h.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get, file_content_response)
+	(request_handler): Set HTTP error codes for various error messages
+	using gsad_message and add new response_data parameter for calls of
+	xsl_transform and gsad_message.
+
 2015-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [host-details]): Show Created column

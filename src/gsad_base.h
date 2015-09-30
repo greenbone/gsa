@@ -85,14 +85,22 @@ typedef struct
   int charts;         ///< Whether to show charts for this user.
 } credentials_t;
 
+/**
+ * @brief Response information for commands.
+ */
+typedef struct {
+  int http_status_code;  ///> HTTP status code.
+} cmd_response_data_t;
+
 int gsad_base_init ();
 int gsad_base_cleanup ();
 void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);
-char * xsl_transform_with_stylesheet (const char *, const char *);
-char * xsl_transform (const char *);
+char * xsl_transform_with_stylesheet (const char *, const char *,
+                                      cmd_response_data_t *);
+char * xsl_transform (const char *, cmd_response_data_t *);
 char * gsad_message (credentials_t *, const char *, const char *, int,
-                     const char *, const char *);
+                     const char *, const char *, cmd_response_data_t *);
 
 /**
  * @brief Content types.

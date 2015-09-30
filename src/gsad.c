@@ -1959,6 +1959,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   user_t *user;
   credentials_t *credentials;
   const char *cmd, *caller, *language;
+  cmd_response_data_t response_data;
+  cmd_response_data_init (&response_data);
 
   /* Handle the login command specially. */
 
@@ -1999,6 +2001,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               char *res;
               char ctime_now[200];
 
+              if (ret == -1 || ret == 2)
+                response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+              else
+                response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
@@ -2022,13 +2029,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
-              res = xsl_transform (xml);
+              res = xsl_transform (xml, &response_data);
               g_free (xml);
               con_info->response = res;
-              if (ret == -1 || ret == 2)
-                con_info->answercode = MHD_HTTP_SERVICE_UNAVAILABLE;
-              else
-                con_info->answercode = MHD_HTTP_UNAUTHORIZED;
+              con_info->answercode = response_data.http_status_code;
 
               g_warning ("Authentication failure for '%s' from %s",
                          params_value (con_info->params, "login") ?: "",
@@ -2050,6 +2054,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (role);
               g_free (pw_warning);
               g_free (autorefresh);
+              cmd_response_data_reset (&response_data);
               return 1;
             }
         }
@@ -2063,6 +2068,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           gchar *xml;
           char *res;
           char ctime_now[200];
+
+          response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
@@ -2080,25 +2087,28 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                  con_info->language ? con_info->language
                                                     : DEFAULT_GSAD_LANGUAGE,
                                  guest_username ? guest_username : "");
-          res = xsl_transform (xml);
+          res = xsl_transform (xml, &response_data);
           g_free (xml);
           con_info->response = res;
-          con_info->answercode = MHD_HTTP_UNAUTHORIZED;
+          con_info->answercode = response_data.http_status_code;
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
         }
       else
         {
+          response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
           con_info->response = gsad_message (NULL,
                                              "Internal error",
                                              __FUNCTION__,
                                              __LINE__,
                                              "An internal error occurred inside GSA daemon. "
                                              "Diagnostics: Error in login or password.",
-                                             "/omp?cmd=get_tasks");
-          con_info->answercode = MHD_HTTP_BAD_REQUEST;
+                                             "/omp?cmd=get_tasks",
+                                             &response_data);
+          con_info->answercode = response_data.http_status_code;
         }
+      cmd_response_data_reset (&response_data);
       return 3;
     }
 
@@ -2106,21 +2116,23 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (params_value (con_info->params, "token") == NULL)
     {
+      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       if (params_given (con_info->params, "token") == 0)
         con_info->response
          = gsad_message (NULL,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token missing.",
-                         "/omp?cmd=get_tasks");
+                         "/omp?cmd=get_tasks", &response_data);
       else
         con_info->response
          = gsad_message (NULL,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred inside GSA daemon. "
                          "Diagnostics: Token bad.",
-                         "/omp?cmd=get_tasks");
-      con_info->answercode = MHD_HTTP_OK;
+                         "/omp?cmd=get_tasks", &response_data);
+      con_info->answercode = response_data.http_status_code;
+      cmd_response_data_reset (&response_data);
       return 3;
     }
 
@@ -2128,13 +2140,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                    client_address, &user);
   if (ret == 1)
     {
+      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       con_info->response
        = gsad_message (NULL,
                        "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred inside GSA daemon. "
                        "Diagnostics: Bad token.",
-                       "/omp?cmd=get_tasks");
-      con_info->answercode = MHD_HTTP_OK;
+                       "/omp?cmd=get_tasks", &response_data);
+      con_info->answercode = response_data.http_status_code;
+      cmd_response_data_reset (&response_data);
       return 3;
     }
 
@@ -2169,9 +2183,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
-      con_info->response = xsl_transform (xml);
+      response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+      con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_UNAUTHORIZED;
+      con_info->answercode = response_data.http_status_code;
+      cmd_response_data_reset (&response_data);
       return 2;
     }
 
@@ -2198,9 +2214,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                               ? con_info->language
                               : DEFAULT_GSAD_LANGUAGE,
                              guest_username ? guest_username : "");
-      con_info->response = xsl_transform (xml);
+      response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+      con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_UNAUTHORIZED;
+      con_info->answercode = response_data.http_status_code;
+      cmd_response_data_reset (&response_data);
       return 2;
     }
 
@@ -2213,6 +2231,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
+      response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
       xml = g_markup_printf_escaped ("<login_page>"
                                      "<message>"
                                      "Login failed.%s"
@@ -2232,9 +2251,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                       ? con_info->language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
-      con_info->response = xsl_transform (xml);
+      con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
-      con_info->answercode = MHD_HTTP_SERVICE_UNAVAILABLE;
+      con_info->answercode = response_data.http_status_code;
+      cmd_response_data_reset (&response_data);
       return 2;
     }
 
@@ -2272,18 +2292,16 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* Handle the usual commands. */
 
-  cmd_response_data_t response_data;
-  cmd_response_data_init (&response_data);
-
   if (!cmd)
     {
+      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       con_info->response = gsad_message (credentials,
                                          "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
                                          "An internal error occurred inside GSA daemon. "
                                          "Diagnostics: Empty command.",
-                                         "/omp?cmd=get_tasks");
+                                         "/omp?cmd=get_tasks", &response_data);
     }
   ELSE (bulk_delete)
   ELSE (clone)
@@ -2453,13 +2471,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (toggle_tag)
   else
     {
+      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       con_info->response = gsad_message (credentials,
                                          "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
                                          "An internal error occurred inside GSA daemon. "
                                          "Diagnostics: Unknown command.",
-                                         "/omp?cmd=get_tasks");
+                                         "/omp?cmd=get_tasks", &response_data);
     }
 
   con_info->answercode = response_data.http_status_code;
@@ -2627,11 +2646,14 @@ exec_omp_get (struct MHD_Connection *connection,
       credentials->params = params;
     }
   else
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred inside GSA daemon. "
-                         "Diagnostics: No valid command for omp.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: No valid command for omp.",
+                          "/omp?cmd=get_tasks", response_data);
+    }
 
 
   /* Set the timezone. */
@@ -3109,11 +3131,14 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (wizard_get)
 
   else
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred inside GSA daemon. "
-                         "Diagnostics: Unknown command.",
-                         "/omp?cmd=get_tasks");
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred inside GSA daemon. "
+                           "Diagnostics: Unknown command.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
 }
 
 /**
@@ -3584,6 +3609,9 @@ file_content_response (credentials_t *credentials,
   char date_2822[DATE_2822_LEN];
   struct tm *mtime;
   time_t next_week;
+  cmd_response_data_t response_data;
+
+  cmd_response_data_init (&response_data);
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -3627,7 +3655,7 @@ file_content_response (credentials_t *credentials,
                               : DEFAULT_GSAD_LANGUAGE,
                              guest_username ? guest_username : "");
       g_free (language);
-      res = xsl_transform (xml);
+      res = xsl_transform (xml, &response_data);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
       g_free (path);
@@ -3644,6 +3672,8 @@ file_content_response (credentials_t *credentials,
       tracef ("File %s failed, ", path);
       g_free (path);
 
+      *http_response_code = MHD_HTTP_NOT_FOUND;
+      cmd_response_data_reset (&response_data);
       return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
                                             (void *) FILE_NOT_FOUND,
                                             MHD_NO,
@@ -3678,12 +3708,15 @@ file_content_response (credentials_t *credentials,
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
       struct MHD_Response *ret;
+      response_data.http_status_code = MHD_HTTP_NOT_FOUND;
       char *res = gsad_message (credentials,
                                 "Invalid request", __FUNCTION__, __LINE__,
                                 "The requested page does not exist.",
-                                NULL);
+                                NULL, &response_data);
+      *http_response_code = response_data.http_status_code;
       g_free (path);
       fclose (file);
+      cmd_response_data_reset (&response_data);
       ret = MHD_create_response_from_data (strlen (res), (void *) res,
                                            MHD_NO, MHD_YES);
       g_free (res);
@@ -3712,7 +3745,8 @@ file_content_response (credentials_t *credentials,
     }
 
   g_free (path);
-  *http_response_code = MHD_HTTP_OK;
+  *http_response_code = response_data.http_status_code;
+  cmd_response_data_reset (&response_data);
   return response;
 }
 
@@ -3998,12 +4032,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
       ret = user_find (cookie, token, client_address, &user);
       if (ret == 1 || ret == 5 || ret == 6 || ret == -1)
         {
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
           if (ret == 1)
-            res = gsad_message (NULL,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred inside GSA daemon. "
-                                "Diagnostics: Bad token.",
-                                "/omp?cmd=get_tasks");
+            {
+              response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+              res = gsad_message (NULL,
+                                  "Internal error", __FUNCTION__, __LINE__,
+                                  "An internal error occurred inside GSA daemon. "
+                                  "Diagnostics: Bad token.",
+                                  "/omp?cmd=get_tasks", &response_data);
+            }
           else
             {
               time_t now;
@@ -4036,15 +4075,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                       ? language
                                       : DEFAULT_GSAD_LANGUAGE,
                                      guest_username ? guest_username : "");
-              http_response_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+              response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
               g_free (language);
-              res = xsl_transform (xml);
+              res = xsl_transform (xml, &response_data);
               g_free (xml);
             }
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           g_free (res);
+          http_response_code = response_data.http_status_code;
           ADD_CONTENT_SECURITY_HEADERS (response);
+          cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4062,6 +4103,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           char ctime_now[200];
           const char *cmd, *report_format_id;
           int export;
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
@@ -4086,12 +4129,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (ret == 2)
             {
               if (strncmp (url, "/logout", strlen ("/logout")))
-                http_response_code = MHD_HTTP_UNAUTHORIZED;
+                response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
               else
-                http_response_code = MHD_HTTP_BAD_REQUEST;
+                response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
             }
           else
-            http_response_code = MHD_HTTP_UNAUTHORIZED;
+            response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
 
           xml = g_markup_printf_escaped
                  ("<login_page>"
@@ -4118,24 +4161,18 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     : ""),
                   language ? language : DEFAULT_GSAD_LANGUAGE,
                   guest_username ? guest_username : "");
-          if (ret == 2)
-            {
-              if (strncmp (url, "/logout", strlen ("/logout")))
-                http_response_code = MHD_HTTP_UNAUTHORIZED;
-              else
-                http_response_code = MHD_HTTP_BAD_REQUEST;
-            }
-          else
-            http_response_code = MHD_HTTP_UNAUTHORIZED;
 
           g_free (language);
           g_free (full_url);
-          res = xsl_transform (xml);
+          res = xsl_transform (xml, &response_data);
           g_free (xml);
+
+          http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
+          cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4155,6 +4192,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           time_t now;
           gchar *xml;
           char ctime_now[200];
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
@@ -4178,10 +4217,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  language ? language : DEFAULT_GSAD_LANGUAGE,
                                  guest_username ? guest_username : "");
           g_free (language);
-          res = xsl_transform (xml);
+          res = xsl_transform (xml, &response_data);
+          http_response_code = response_data.http_status_code;
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          cmd_response_data_reset (&response_data);
           g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
@@ -4308,12 +4349,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
                          strlen ("/help/"))) /* flawfinder: ignore,
                                                 it is a const str */
         {
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
+
           if (! g_ascii_isalpha (url[6]))
             {
+              response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
               res = gsad_message (credentials,
                                   "Invalid request", __FUNCTION__, __LINE__,
                                   "The requested help page does not exist.",
-                                  "/help/contents.html");
+                                  "/help/contents.html", &response_data);
             }
           else
             {
@@ -4388,20 +4433,27 @@ request_handler (void *cls, struct MHD_Connection *connection,
                 }
 
               if (xsl_filename)
-                res = xsl_transform_with_stylesheet (xml, xsl_filename);
+                res = xsl_transform_with_stylesheet (xml, xsl_filename,
+                                                     &response_data);
               else
-                res = xsl_transform_with_stylesheet (xml, "help.xsl");
+                res = xsl_transform_with_stylesheet (xml, "help.xsl",
+                                                     &response_data);
 
               g_strfreev (preferred_languages);
               g_free (xsl_filename);
             }
           if (res == NULL)
-            res = gsad_message (credentials,
-                                "Invalid request", __FUNCTION__, __LINE__,
-                                "Error generating help page.",
-                                "/help/contents.html");
+            {
+              response_data.http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              res = gsad_message (credentials,
+                                  "Invalid request", __FUNCTION__, __LINE__,
+                                  "Error generating help page.",
+                                  "/help/contents.html", &response_data);
+            }
+          http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          cmd_response_data_reset (&response_data);
           g_free (res);
         }
       else

@@ -39,13 +39,6 @@
 
 void omp_init (const gchar *, int);
 
-/**
- * @brief Response information for commands.
- */
-typedef struct {
-  int http_status_code;  ///> HTTP status code.
-} cmd_response_data_t;
-
 void cmd_response_data_init (cmd_response_data_t*);
 void cmd_response_data_reset (cmd_response_data_t*);
 

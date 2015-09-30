@@ -38,6 +38,7 @@
 #include "tracef.h"
 
 #include <glib.h>
+#include <microhttpd.h> /* for HTTP status codes */
 #ifdef USE_LIBXSLT
 #include "xslt_i18n.h"
 #include <libxml/parser.h>
@@ -157,12 +158,14 @@ ctime_r_strip_newline (time_t *time, char *string)
  *
  * @param[in]  xml_text        The XML text to transform.
  * @param[in]  xsl_stylesheet  The file name of the XSL stylesheet to use.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return HTML output from XSL transformation.
  */
 char *
 xsl_transform_with_stylesheet (const char *xml_text,
-                               const char *xsl_stylesheet)
+                               const char *xsl_stylesheet,
+                               cmd_response_data_t *response_data)
 {
 #ifdef USE_LIBXSLT
   xsltStylesheetPtr cur = NULL;
@@ -182,6 +185,8 @@ xsl_transform_with_stylesheet (const char *xml_text,
   if (cur == NULL)
     {
       g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
+      if (response_data)
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
     }
 
@@ -190,6 +195,8 @@ xsl_transform_with_stylesheet (const char *xml_text,
     {
       g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
       xsltFreeStylesheet (cur);
+      if (response_data)
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
     }
 
@@ -198,6 +205,8 @@ xsl_transform_with_stylesheet (const char *xml_text,
     {
       g_warning ("Failed to apply stylesheet %s", xsl_stylesheet);
       xsltFreeStylesheet (cur);
+      if (response_data)
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
     }
 
@@ -207,6 +216,8 @@ xsl_transform_with_stylesheet (const char *xml_text,
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
       xmlFreeDoc (doc);
+      if (response_data)
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
     }
 
@@ -297,6 +308,9 @@ xsl_transform_with_stylesheet (const char *xml_text,
     return standard_out;
 
   g_free (standard_out);
+
+  if (response_data)
+    response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
   return g_strdup (FAIL_HTML);
 #endif
 }
@@ -307,13 +321,14 @@ xsl_transform_with_stylesheet (const char *xml_text,
  * Does the transformation from XML to HTML applying omp.xsl.
  *
  * @param[in]  xml_text  The XML text to transform.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return HTML output from XSL transformation.
  */
 char *
-xsl_transform (const char *xml_text)
+xsl_transform (const char *xml_text, cmd_response_data_t *response_data)
 {
-  return xsl_transform_with_stylesheet (xml_text, XSL_PATH);
+  return xsl_transform_with_stylesheet (xml_text, XSL_PATH, response_data);
 }
 
 /**
@@ -328,13 +343,14 @@ xsl_transform (const char *xml_text)
  * @param[in]  msg       The response message.
  * @param[in]  backurl   The URL offered to get back to a sane situation.
  *                       If NULL, the tasks page is used.
+ * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return An HTML document as a newly allocated string.
  */
 char *
 gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
-              const char *backurl)
+              const char *backurl, cmd_response_data_t* response_data)
 {
   gchar *xml, *resp;
 
@@ -351,14 +367,17 @@ gsad_message (credentials_t *credentials, const char *title,
                          msg,
                          backurl ? backurl : "/omp?cmd=get_tasks",
                          credentials ? credentials->token : "");
-  resp = xsl_transform (xml);
+  resp = xsl_transform (xml, response_data);
   if (resp == NULL)
-    resp = g_strdup ("<html>"
-                     "<body>"
-                     "An internal server error has occurred during XSL"
-                     " transformation."
-                     "</body>"
-                     "</html>");
+    {
+      resp = g_strdup ("<html>"
+                       "<body>"
+                       "An internal server error has occurred during XSL"
+                       " transformation."
+                       "</body>"
+                       "</html>");
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+    }
   g_free (xml);
   return resp;
 }
