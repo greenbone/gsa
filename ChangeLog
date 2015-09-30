@@ -1,3 +1,8 @@
+2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (gb_header): Change gradient so
+	that the bottom flows into the green of the top menu items.
+
 2015-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_base.c (params_add): Init new "array_len" field.
