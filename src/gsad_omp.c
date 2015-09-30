@@ -3950,7 +3950,11 @@ create_task_omp (credentials_t * credentials, params_t *params,
     schedule_element = g_strdup_printf ("<schedule id=\"%s\"/>", schedule_id);
 
   alert_element = g_string_new ("");
-  alerts = params_values (params, "alert_id_optional:");
+  if (params_given (params, "alert_id_optional:"))
+    alerts = params_values (params, "alert_id_optional:");
+  else
+    alerts = params_values (params, "alert_ids:");
+
   if (alerts)
     {
       params_iterator_t iter;
@@ -4464,7 +4468,11 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (in_assets, "Save Task", edit_task);
 
   alert_element = g_string_new ("");
-  alerts = params_values (params, "alert_id_optional:");
+  if (params_given (params, "alert_id_optional:"))
+    alerts = params_values (params, "alert_id_optional:");
+  else
+    alerts = params_values (params, "alert_ids:");
+
   if (alerts)
     {
       params_iterator_t iter;
@@ -4473,11 +4481,17 @@ save_task_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, alerts);
       while (params_iterator_next (&iter, &name, &param))
+      {
         if (param->value && strcmp (param->value, "--"))
           g_string_append_printf (alert_element,
                                   "<alert id=\"%s\"/>",
                                   param->value ? param->value : "");
+      }
     }
+
+  // Remove Alerts from Task if none are given.
+  if (strcmp (alert_element->str, "") == 0)
+    g_string_append_printf (alert_element, "<alert id=\"0\"/>");
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"

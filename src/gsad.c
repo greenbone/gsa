@@ -1344,6 +1344,8 @@ init_validator ()
   openvas_validator_alias (validator, "alert_id_optional:name",  "number");
   openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
   openvas_validator_alias (validator, "alerts",     "optional_number");
+  openvas_validator_alias (validator, "alert_ids:name",  "number");
+  openvas_validator_alias (validator, "alert_ids:value", "alert_id_optional");
   openvas_validator_alias (validator, "alterable", "boolean");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_min_qod", "boolean");
@@ -1696,6 +1698,45 @@ params_append_mhd (params_t *params,
 
       params_append_bin (param->values, colon + 1, chunk_data, chunk_size,
                          chunk_offset);
+      if (filename)
+        param->filename = g_strdup (filename);
+
+      return MHD_YES;
+    }
+
+  /*
+   * Array param
+   * Can be accessed like a hashtable param,with ascending numbers as the
+   *  key, which are automatically generated instead of being part of the
+   *  full name.
+   * For example multiple instances of "x:" in the request
+   *  become "x:1", "x:2", "x:3", etc.
+   */
+  if (strcmp (name, "alert_ids:") == 0)
+    {
+      param_t *param;
+      gchar *index_str;
+
+      param = params_get (params, name);
+
+      if (param == NULL)
+        {
+          param = params_add (params, name, "");
+          param->values = params_new ();
+        }
+      else if (param->values == NULL)
+        param->values = params_new ();
+
+      if (chunk_offset == 0)
+        param->array_len += 1;
+
+      index_str = g_strdup_printf ("%d", param->array_len);
+
+      params_append_bin (param->values, index_str, chunk_data, chunk_size,
+                         chunk_offset);
+
+      g_free (index_str);
+
       if (filename)
         param->filename = g_strdup (filename);
 
@@ -2558,6 +2599,35 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       g_free (prefix);
 
       params_append_bin (param->values, colon + 1, value, strlen (value), 0);
+
+      return MHD_YES;
+    }
+
+  /*
+   * Array param (See params_append_mhd for a description)
+   */
+  if (strcmp (name, "alert_ids:") == 0)
+    {
+      param_t *param;
+      gchar *index_str;
+
+      param = params_get (params, name);
+
+      if (param == NULL)
+        {
+          param = params_add (params, name, "");
+          param->values = params_new ();
+        }
+      else if (param->values == NULL)
+        param->values = params_new ();
+
+      param->array_len += 1;
+
+      index_str = g_strdup_printf ("%d", param->array_len);
+
+      params_append_bin (param->values, index_str, value, strlen (value), 0);
+
+      g_free (index_str);
 
       return MHD_YES;
     }

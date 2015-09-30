@@ -1,3 +1,22 @@
+2015-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_base.c (params_add): Init new "array_len" field.
+
+	* src/gsad_base.h (struct param): Add new field "array_len".
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Get Alerts from
+	"alert_ids:" parameter if no "alert_id_optional" hashtable param is
+	given and handle case without any Alert parameters.
+
+	* src/gsad.c (init_validator): Add "alert_ids:" param.
+	(params_append_mhd, params_mhd_add): Add "alert_ids:" as new param type
+	which is accessed like a hashtable but is given as multiple params
+	with the same name.
+
+	* src/html/classic/omp.xsl (new_task, html-edit-task-alert): Change
+	the name of the Alert selection field to "alert_ids:" and in the edit
+	form use a variable for the Alerts already assigned to the task.
+
 2015-09-30  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Stop the autorefresh when a dialog

@@ -139,6 +139,7 @@ struct param
   int valid;             /* Validation flag. */
   int valid_utf8;        /* UTF8 validation flag. */
   int value_size;        /* Size of value, excluding trailing NULL. */
+  int array_len;         /* The number of items of "array" params */
 };
 
 /**

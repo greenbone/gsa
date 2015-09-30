@@ -5565,7 +5565,7 @@ var toggleFilter = function(){
             <td>
               <xsl:variable name="alerts"
                             select="get_alerts_response/alert"/>
-              <select name="alerts" multiple="multiple">
+              <select name="alert_ids:" multiple="multiple">
                 <xsl:for-each select="$alerts">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
@@ -6245,11 +6245,12 @@ var toggleFilter = function(){
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
       <td>
-        <select name="alerts" multiple="multiple">
+        <xsl:variable name="task_alerts" select="commands_response/get_tasks_response/task/alert"/>
+        <select name="alert_ids:" multiple="multiple">
           <xsl:for-each select="commands_response/get_alerts_response/alert">
             <xsl:variable name="alert_id" select="@id"/>
             <xsl:choose>
-              <xsl:when test="commands_response/get_tasks_response/task/alert[@id = $alert_id]">
+              <xsl:when test="$task_alerts[@id = $alert_id]">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
               </xsl:when>
               <xsl:otherwise>
