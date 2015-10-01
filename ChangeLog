@@ -1,3 +1,16 @@
+2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (.visualization)
+	(.visualization-row, .visualization-box, .visualization-spacer): New
+	classes to arrange charts in a table-like layout.
+
+	* src/html/classic/omp.xsl (list-window): Add spacing that adapts to
+	window width between charts.
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-secinfo-top-visualization): Set chart parents to use new layout.
+	(dashboard [secinfo]): Add adaptive width spacing between charts.
+
 2015-10-01  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js, src/html/classic/gsad.xsl: Make

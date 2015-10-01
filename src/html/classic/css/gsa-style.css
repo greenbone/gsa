@@ -1144,6 +1144,26 @@ text-align:right;
  * Dashboard / charts styles
  */
 
+/* Chart table layout */
+.visualization {
+  display: table;
+  width: 100%;
+}
+
+.visualization-row {
+  display: table-row;
+}
+
+.visualization-box {
+  display: table-cell;
+  text-align: center;
+}
+
+.visualization-spacer {
+  display: table-cell;
+  width:33.33333%;
+}
+
 /* Chart menu. */
 #chart_list {
   position: absolute;

@@ -4691,7 +4691,14 @@ var toggleFilter = function(){
       <xsl:choose>
         <xsl:when test="$top-visualization = ''"/>
         <xsl:when test="/envelope/charts = '1'">
-          <div id="top-visualization">
+          <div class="visualization">
+            <div class="visualization-spacer"/>
+            <div class="visualization-box" id="top-visualization-box-left">
+            </div>
+            <div class="visualization-spacer"/>
+            <div class="visualization-box" id="top-visualization-box-right">
+            </div>
+            <div class="visualization-spacer"/>
             <xsl:copy-of select="$top-visualization"/>
           </div>
           <xsl:choose>

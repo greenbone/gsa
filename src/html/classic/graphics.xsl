@@ -567,10 +567,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'top-visualization-box-left'"/>
       <xsl:with-param name="container_id" select="'top-visualization-left'"/>
       <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
     </xsl:call-template>
     <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'top-visualization-box-right'"/>
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
       <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
     </xsl:call-template>
@@ -1041,10 +1043,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <script type="text/javascript">
     <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'top-visualization-box-left'"/>
       <xsl:with-param name="container_id" select="'top-visualization-left'"/>
       <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
     </xsl:call-template>
     <xsl:call-template name="js-create-chart-box">
+      <xsl:with-param name="parent_id" select="'top-visualization-box-right'"/>
       <xsl:with-param name="container_id" select="'top-visualization-right'"/>
       <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
     </xsl:call-template>
@@ -1354,9 +1358,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="'SecInfo Dashboard'"/>
     </div>
     <div class="gb_window_part_content">
-      <center id="dashboard">
+      <div class="visualization" id="dashboard">
+        <div class="visualization-row">
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="dashboard-box-1"/>
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="dashboard-box-2"/>
+          <div class="visualization-spacer"/>
+        </div>
+        <div class="visualization-row">
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="dashboard-box-3"/>
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="dashboard-box-4"/>
+          <div class="visualization-spacer"/>
+        </div>
+
         <xsl:call-template name="init-d3charts"/>
-        <div id="nvt_severity_chart"></div>
 
         <xsl:variable name="envelope" select="/envelope"/>
         <xsl:variable name="chart_defaults">
@@ -1410,7 +1428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
             <xsl:call-template name="js-create-chart-box">
               <xsl:with-param name="container_id" select="$display_name"/>
-              <xsl:with-param name="parent_id" select="'dashboard'"/>
+              <xsl:with-param name="parent_id" select="concat ('dashboard-box-', position())"/>
               <xsl:with-param name="select_pref_id" select="$auto_load_pref_id"/>
               <xsl:with-param name="filter_pref_id" select="$auto_filter_pref_id"/>
             </xsl:call-template>
@@ -1719,7 +1737,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             gsa.displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
           </xsl:for-each>
         </script>
-      </center>
+      </div>
     </div>
   </div>
 </xsl:template>
