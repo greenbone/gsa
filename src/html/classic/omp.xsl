@@ -21592,6 +21592,7 @@ should not have received it.
                   </div>
                   <div>
                     <label>
+                      <input type="radio" name="active" value="1"/>
                       <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('for the next', 'Time'), ' ')"/>
                     </label>
                     <input type="text" name="days" size="3" maxlength="7" value="30"/>
