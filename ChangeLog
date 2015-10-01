@@ -1,5 +1,11 @@
 2015-10-01  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js, src/html/classic/gsad.xsl: Make
+	  the autorefresh perform a genuine 'reload'. Browser support is
+	  better: position in the page is kept as well as forms content.
+
+2015-10-01  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Remove the gradient in the
 	  header altogether, set font color dark gray. The logo still needs
 	  fixing.

@@ -176,7 +176,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <script type="text/javascript">
     window.autorefresh = {
       interval: <xsl:value-of select="@interval"/>,
-      url: '<xsl:value-of select="/envelope/current_page"/>&amp;token=<xsl:value-of select="/envelope/token"/>',
     }
     </script>
   </xsl:if>

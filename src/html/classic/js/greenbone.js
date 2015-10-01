@@ -154,7 +154,7 @@
         xml = $(xml);
         var response = xml.find(RESPONSE_SELECTORS[self.command]);
         if (self.reload === true){
-          window.document.location.reload();
+          window.location.reload();
           // a bit overkill, but better-safe-than-sorry.
           return;
         }
@@ -311,7 +311,7 @@
     }
     if ((window.autorefresh !== undefined) && (window.autorefresh.interval != 0)) {
       window.autorefresh.timeout_id = window.setTimeout(function() {
-        window.location.href=window.autorefresh.url;
+        window.location.reload();
       }
       , window.autorefresh.interval*1000);
     }
