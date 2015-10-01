@@ -120,7 +120,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$new_msg != '### N/A ###'">
             <xsl:value-of select="$new_msg"/>
           </xsl:when>
-          <xsl:when test="$new_msg = '### N/A ###' and $count &gt; 1">
+          <xsl:when test="$new_msg = '### N/A ###' and $count != 1">
             <xsl:value-of select="$default_plural"/>
           </xsl:when>
           <xsl:otherwise>

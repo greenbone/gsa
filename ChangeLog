@@ -1,5 +1,10 @@
 2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsad.xsl (gsa:n-i18n): Correct condition for using
+	the default plural.
+
+2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-override-form): Add radio button
 	for "yes, for the next ... days" option that was missing when override
 	was always active.
