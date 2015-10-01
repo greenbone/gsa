@@ -1,5 +1,17 @@
 2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window, asset/host): Add class and
+	data-type attributes to bulk icons for actions that are not downloads:
+	deleting, moving to trashcan and creating a new Target.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add
+	process_bulk case.
+	(OMPDialog): Add a "Cancel" button and allow specifying a request
+	method (GET or POST).
+	(onReady): Show dialog for non-download bulk actions.
+
+2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsad.xsl (gsa:n-i18n): Correct condition for using
 	the default plural.
 

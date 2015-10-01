@@ -61,6 +61,8 @@
     edit_target:         'modify_target_response',
     edit_task:           'modify_task_response',
     edit_user:           'modify_user_response',
+    // ------
+    process_bulk:        'commands_response'
   };
 
   var NAME_SELECTORS = {
@@ -77,8 +79,9 @@
    * command is the name of the gsa command that has to be send initialy
    * element is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
    * params are extra parameters to send to the initial GET request.
+   * show_method specifies the method to send the initial request instead of GET.
   **/
-  var OMPDialog = function(command, element, params){
+  var OMPDialog = function(command, element, params, show_method){
     this.command = command;
     this.reload = false;
     if (element === true){
@@ -91,15 +94,31 @@
     } else {
       this.params = params
     }
+    if (show_method === undefined) {
+      this.show_method = "GET";
+    } else {
+      this.show_method = show_method;
+    }
   };
 
   OMPDialog.prototype.waiting = function(){
     // I believe there have to be a better way to find this.
-    var button = this.dialog.closest('.ui-dialog').find('button').last();
-    this.label = button.button('option', 'label');
-    button.button('disable');
-    button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
-    button.button('option', 'icons', {primary: 'ui-icon-waiting'});
+    var buttons = this.dialog.closest('.ui-dialog').find('button');
+    buttons.each (function () {
+      var button = $(this)
+      if (button.button('option', 'label') != "Close"
+          && button.button('option', 'label') != "Cancel")
+        {
+          this.label = button.button('option', 'label');
+          if (this.label != "OK")
+            button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
+          button.button('option', 'icons', {primary: 'ui-icon-waiting'});
+        }
+      if (button.button('option', 'label') != "Close")
+        {
+          button.button('disable');
+        }
+    });
   }
 
   OMPDialog.prototype.done = function(){
@@ -180,15 +199,16 @@
 
   OMPDialog.prototype.show = function(button){
     var self = this;
+    var done_func, fail_func;
+    var request;
+    var submit;
     if (button === undefined){ button = 'Create';}
     this.params.cmd = this.command
     this.params.token = $('#gsa-token').text();
     $('html').css('cursor', 'wait');
     stopAutoRefresh();
-    $.get(
-      '/omp?' + $.param(this.params)
-    ).done(function(html){
 
+    done_func = function(html){
       // get the content of the (first) window
       var gb_windows = $(html).find('.gb_window'),
           gb_window = gb_windows.first();
@@ -203,7 +223,12 @@
       }
 
       // remove the last 'submit' button
-      self.dialog.find('input[type=submit]').last().closest('tr').remove();
+      submit = self.dialog.find('input[type=submit]').last().closest('tr');
+      if (submit.length == 0)
+        submit = self.dialog.find('input[type=submit]').last();
+
+      if (submit.length)
+        submit.remove ();
 
       // show the dialog !
       self.dialog.dialog({
@@ -218,6 +243,12 @@
               self.postForm();
             },
           },
+          {
+            text: "Cancel",
+            click: function(){
+              self.dialog.dialog ("close");
+            },
+          },
         ],
         close: function(event, ui){
           self.dialog.remove();
@@ -228,9 +259,38 @@
       // fancy-up the selects
       onReady(self.dialog);
       $('html').css('cursor', "");
-    }).fail(function(){
+    };
+
+    fail_func = function(){
       $('html').css('cursor', "");
-    });
+    };
+
+    if (this.show_method == 'GET')
+      {
+        request = $.get(
+          '/omp?' + $.param(this.params)
+        )
+      }
+    else if (this.show_method == 'POST')
+      {
+        var data = new FormData();
+        for (var param in this.params)
+          data.append (param, this.params[param]);
+
+        request = $.ajax({
+          url: '/omp',
+          data: data,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          dataType: 'html',
+        })
+      }
+    else
+      throw new Error ('Unknown show_method "' + this.show_method + '"');
+
+    request.done (done_func)
+           .fail (fail_func);
   };
 
   window.OMPDialog = OMPDialog;
@@ -276,6 +336,32 @@
       elem.on('click', function(event){
         event.preventDefault();
         new OMPDialog('upload_' + type_name, done, params).show();
+      });
+    });
+
+    doc.find(".bulk-dialog-icon").each(function(){
+      var elem = $(this),
+          type_name = elem.data('type'),
+          done = elem.data('done');
+      if (done === undefined){
+        done = true;
+      }
+      var params =
+       {
+         "resource_type" : type_name
+       }
+      params [this.name + ".x"] = "0";
+
+      elem.on('click', function(event){
+        event.preventDefault();
+        var form = elem.closest ("form");
+        form.find (":input").each(function(){
+          if (this.getAttribute ("type") != "image"
+              && (this.getAttribute ("type") != "checkbox" || this.checked))
+            params [this.name] = this.value;
+        });
+        new OMPDialog('process_bulk', done, params, "POST")
+                      .show("OK", "confirmation");
       });
     });
 

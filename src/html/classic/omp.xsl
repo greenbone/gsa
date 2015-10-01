@@ -4833,13 +4833,13 @@ var toggleFilter = function(){
 
               <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
               <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
-                <input style="margin-right:3px" type="image" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
+                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
               </xsl:if>
               <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report' or $type = 'asset')">
-                <input style="margin-right:3px" type="image" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
+                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
               </xsl:if>
               <xsl:if test="$type = 'asset' and $subtype = 'host' and gsa:may-op ('create_target')">
-                <input style="margin-right:3px" type="image" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
+                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
               </xsl:if>
               <xsl:if test="$type != 'report'">
                 <input style="margin-right:3px" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.png"/>
@@ -35380,7 +35380,7 @@ var toggleFilter = function(){
             <input type="hidden" name="bulk_select" value="3"/>
             <input type="hidden" name="resource_type" value="asset"/>
             <input type="hidden" name="host_count" value="1"/>
-            <input type="image" name="bulk_create" title="{gsa:i18n ('Create Target from host', 'Bulk Action')}" src="/img/new.png"/>
+            <input type="image" name="bulk_create" class="bulk-dialog-icon" data-type="asset" title="{gsa:i18n ('Create Target from host', 'Bulk Action')}" src="/img/new.png"/>
           </form>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('Export Host', 'Assets')}">
