@@ -1,3 +1,9 @@
+2015-10-01  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Remove the gradient in the
+	  header altogether, set font color dark gray. The logo still needs
+	  fixing.
+
 2015-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css (gb_menu): Make the text of the top

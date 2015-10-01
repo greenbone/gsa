@@ -484,7 +484,7 @@ td p {
 #gb_header {
  text-align: left;
  height: 40px;
- background: linear-gradient(to bottom, #498001 0%,#99CE48 100%);
+ background-color: #99CE48;
  padding: 0px 5px 0px 5px;
 }
 
@@ -679,14 +679,14 @@ a.top_button:hover div.first_button_overlay {
 
 /* Logout panel */
 .logout_panel {
- color:#FFFFFF;
+ color:#393637;
  float:right;
  margin: 3px;
  vertical-align:top;
 }
 
 .logout_panel a {
- color: #FFFFFF;
+ color: #393637;
 }
 
 /* Status panel */
