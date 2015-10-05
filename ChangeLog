@@ -1,3 +1,32 @@
+2015-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Adapt to lsc_credentials now being named credentials. Use new
+	credential types and show them in the credentials table and details.
+
+	* src/gsad_omp.c: Change "lsc_credential" in commands for the
+	credentials type and corresponding functions to "credential".
+
+	* src/gsad_omp.h: Change function names as above.
+
+	* src/gsad.c (init_validator): Change "lsc_credential" in commands
+	and params for the credentials type to "credential". Update regular
+	expressions for types to use "credential" instead of "lsc_credential".
+	(exec_omp_post, exec_omp_get): Change "lsc_credential" to "credential".
+
+	* src/html/classic/gsad.xsl: Match response elements for "credential"
+	instead of "lsc_credential" for indicator. Change GET_LSC_CREDENTIALS
+	to GET_CREDENTIALS.
+
+	* src/html/classic/help.xsl: Rename "lsc_credential" pages to
+	"credential".
+
+	* src/html/classic/omp.xsl: Rename "lsc_credential" commands and help
+	page URLs to "credential" and add new credential type fields / columns.
+	Use new type abbreviations.
+
+	* src/html/classic/wizard.xsl: Rename "lsc_credential" commands to
+	"credential".
+
 2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window, asset/host): Add class and

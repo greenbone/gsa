@@ -164,11 +164,11 @@ static char *get_group (credentials_t *, params_t *, const char *,
 static char *get_groups (credentials_t *, params_t *, const char *,
                          cmd_response_data_t*);
 
-static char *get_lsc_credential (credentials_t *, params_t *, const char *,
-                                 cmd_response_data_t*);
+static char *get_credential (credentials_t *, params_t *, const char *,
+                             cmd_response_data_t*);
 
-static char *get_lsc_credentials (credentials_t *, params_t *, const char *,
-                                  cmd_response_data_t*);
+static char *get_credentials (credentials_t *, params_t *, const char *,
+                              cmd_response_data_t*);
 
 static char *get_notes (credentials_t *, params_t *, const char *,
                         cmd_response_data_t*);
@@ -1198,11 +1198,11 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
   if (strcmp (next, "get_groups") == 0)
     return get_groups (credentials, params, response, response_data);
 
-  if (strcmp (next, "get_lsc_credential") == 0)
-    return get_lsc_credential (credentials, params, response, response_data);
+  if (strcmp (next, "get_credential") == 0)
+    return get_credential (credentials, params, response, response_data);
 
-  if (strcmp (next, "get_lsc_credentials") == 0)
-    return get_lsc_credentials (credentials, params, response, response_data);
+  if (strcmp (next, "get_credentials") == 0)
+    return get_credentials (credentials, params, response, response_data);
 
   if (strcmp (next, "get_note") == 0)
     return get_note (credentials, params, response, response_data);
@@ -2946,7 +2946,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * There are variations in the style of the page handlers that run
  * multiple OMP commands.
  *
- * Some, like delete_lsc_credential_omp, simply run the OMP commands inside
+ * Some, like delete_credential_omp, simply run the OMP commands inside
  * one OMP COMMANDS and leave it to the XSL to figure out the context.
  *
  * Others, like create_target_omp, run each command separately and wrap the
@@ -5728,7 +5728,7 @@ get_task_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Returns page to create a new LSC Credential.
+ * @brief Returns page to create a new Credential.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
@@ -5738,20 +5738,20 @@ get_task_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_lsc_credential (credentials_t *credentials, params_t *params,
+new_credential (credentials_t *credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  xml = g_string_new ("<new_lsc_credential>");
+  xml = g_string_new ("<new_credential>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
-  g_string_append (xml, "</new_lsc_credential>");
+  g_string_append (xml, "</new_credential>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
- * @brief Create an LSC credential, get all credentials, XSL transform result.
+ * @brief Create a credential, get all credentials, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -5760,8 +5760,8 @@ new_lsc_credential (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                           cmd_response_data_t* response_data)
+create_credential_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -5777,37 +5777,37 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
 
-  CHECK_PARAM (name, "Create LSC Credential", new_lsc_credential);
-  CHECK_PARAM (comment, "Create LSC Credential", new_lsc_credential);
-  CHECK_PARAM (login, "Create LSC Credential", new_lsc_credential);
-  CHECK_PARAM (type, "Create LSC Credential", new_lsc_credential);
+  CHECK_PARAM (name, "Create Credential", new_credential);
+  CHECK_PARAM (comment, "Create Credential", new_credential);
+  CHECK_PARAM (login, "Create Credential", new_credential);
+  CHECK_PARAM (type, "Create Credential", new_credential);
 
   if (type && (strcmp (type, "pass") == 0))
-    CHECK_PARAM (password, "Create LSC Credential", new_lsc_credential);
+    CHECK_PARAM (password, "Create Credential", new_credential);
   if (type && (strcmp (type, "key") == 0))
     {
-      CHECK_PARAM (passphrase, "Create LSC Credential", new_lsc_credential);
-      CHECK_PARAM (private_key, "Create LSC Credential", new_lsc_credential);
+      CHECK_PARAM (passphrase, "Create Credential", new_credential);
+      CHECK_PARAM (private_key, "Create Credential", new_credential);
     }
 
-  /* Create the LSC credential. */
+  /* Create the credential. */
 
   if (type && strcmp (type, "gen") == 0)
     ret = ompf (credentials,
                 &response,
                 &entity,
                 response_data,
-                "<create_lsc_credential>"
+                "<create_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
-                "</create_lsc_credential>",
+                "</create_credential>",
                 name,
                 comment ? comment : "",
                login);
-  else if (type && strcmp (type, "key") == 0)
+  else if (type && strcmp (type, "usk") == 0)
     ret = ompf (credentials, &response, &entity, response_data,
-                "<create_lsc_credential>"
+                "<create_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
@@ -5815,7 +5815,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 "<private>%s</private>"
                 "<phrase>%s</phrase>"
                 "</key>"
-                "</create_lsc_credential>",
+                "</create_credential>",
                 name, comment ?: "", login, private_key ?: "",
                 passphrase ?: "");
   else
@@ -5823,12 +5823,12 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<create_lsc_credential>"
+                "<create_credential>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
                 "<password>%s</password>"
-                "</create_lsc_credential>",
+                "</create_credential>",
                 name,
                 comment ? comment : "",
                 login,
@@ -5846,7 +5846,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -5854,7 +5854,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -5862,20 +5862,20 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
     }
 
   if (omp_success (entity))
     {
       html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_lsc_credentials (credentials, params, response,
+        html = get_credentials (credentials, params, response,
                                     response_data);
     }
   else
     {
       set_http_status_from_entity (entity, response_data);
-      html = new_lsc_credential (credentials, params, response, response_data);
+      html = new_credential (credentials, params, response, response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -5883,7 +5883,7 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Get one LSC credential, XSL transform the result.
+ * @brief Get one credential, XSL transform the result.
  *
  * @param[in]   credentials        Username and password for authentication.
  * @param[in]   params             Request parameters.
@@ -5893,15 +5893,15 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_lsc_credential (credentials_t * credentials, params_t *params,
-                    const char *extra_xml, cmd_response_data_t* response_data)
+get_credential (credentials_t * credentials, params_t *params,
+                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("lsc_credential", credentials, params, extra_xml,
+  return get_one ("credential", credentials, params, extra_xml,
                   "targets=\"1\"", response_data);
 }
 
 /**
- * @brief Get one LSC credential, XSL transform the result.
+ * @brief Get one credential, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
@@ -5910,38 +5910,38 @@ get_lsc_credential (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_lsc_credential_omp (credentials_t * credentials, params_t *params,
+get_credential_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return get_lsc_credential (credentials, params, NULL, response_data);
+  return get_credential (credentials, params, NULL, response_data);
 }
 
 /**
- * @brief Export a LSC Credential in a defined format.
+ * @brief Export a Credential in a defined format.
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
  * @param[out]  result_len   Length of result.
  * @param[out]  html         Result of XSL transformation.  Required.
  * @param[out]  login        Login name return.  NULL to skip.  Only set on
- *                           success with lsc_credential_id.
+ *                           success with credential_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 int
-download_lsc_credential_omp (credentials_t * credentials,
-                             params_t *params,
-                             gsize *result_len,
-                             char ** html,
-                             char ** login,
-                             cmd_response_data_t* response_data)
+download_credential_omp (credentials_t * credentials,
+                         params_t *params,
+                         gsize *result_len,
+                         char ** html,
+                         char ** login,
+                         cmd_response_data_t* response_data)
 {
   entity_t entity;
   gnutls_session_t session;
   int socket;
   gchar *connect_html;
-  const char *lsc_credential_id, *format;
+  const char *credential_id, *format;
 
   assert (html);
 
@@ -5965,16 +5965,16 @@ download_lsc_credential_omp (credentials_t * credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a credential. "
                               "Diagnostics: Failure to connect to manager daemon.",
-                              "/omp?cmd=get_lsc_credentials", response_data);
+                              "/omp?cmd=get_credentials", response_data);
         return 1;
     }
 
   /* Send the request. */
 
-  lsc_credential_id = params_value (params, "lsc_credential_id");
+  credential_id = params_value (params, "credential_id");
   format = params_value (params, "package_format");
 
-  if ((lsc_credential_id == NULL) || (format == NULL))
+  if ((credential_id == NULL) || (format == NULL))
     {
       openvas_server_close (socket, session);
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
@@ -5982,15 +5982,15 @@ download_lsc_credential_omp (credentials_t * credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Required parameter was NULL.",
-                            "/omp?cmd=get_lsc_credentials", response_data);
+                            "/omp?cmd=get_credentials", response_data);
       return 1;
     }
 
   if (openvas_server_sendf (&session,
-                            "<get_lsc_credentials"
-                            " lsc_credential_id=\"%s\""
+                            "<get_credentials"
+                            " credential_id=\"%s\""
                             " format=\"%s\"/>",
-                            lsc_credential_id,
+                            credential_id,
                             format)
       == -1)
     {
@@ -6000,7 +6000,7 @@ download_lsc_credential_omp (credentials_t * credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_lsc_credentials", response_data);
+                            "/omp?cmd=get_credentials", response_data);
       return 1;
     }
 
@@ -6025,11 +6025,11 @@ download_lsc_credential_omp (credentials_t * credentials,
                                 "An internal error occurred while getting a credential. "
                                 "The credential is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_lsc_credentials", response_data);
+                                "/omp?cmd=get_credentials", response_data);
           return 1;
         }
 
-      credential_entity = entity_child (entity, "lsc_credential");
+      credential_entity = entity_child (entity, "credential");
       if (credential_entity)
         package_entity = entity_child (credential_entity, "package");
       if (package_entity != NULL)
@@ -6076,7 +6076,7 @@ download_lsc_credential_omp (credentials_t * credentials,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_lsc_credentials", response_data);
+                                "/omp?cmd=get_credentials", response_data);
           return 1;
         }
     }
@@ -6096,12 +6096,12 @@ download_lsc_credential_omp (credentials_t * credentials,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_lsc_credentials", response_data);
+                                "/omp?cmd=get_credentials", response_data);
           return 1;
         }
       openvas_server_close (socket, session);
 
-      credential_entity = entity_child (entity, "lsc_credential");
+      credential_entity = entity_child (entity, "credential");
       if (credential_entity)
         key_entity = entity_child (credential_entity, "public_key");
       if (key_entity != NULL)
@@ -6124,14 +6124,14 @@ download_lsc_credential_omp (credentials_t * credentials,
                             "An internal error occurred while getting a credential. "
                             "The credential could not be delivered. "
                             "Diagnostics: Failure to parse credential from manager daemon.",
-                            "/omp?cmd=get_lsc_credentials", response_data);
+                            "/omp?cmd=get_credentials", response_data);
       free_entity (entity);
       return 1;
     }
 }
 
 /**
- * @brief Export a LSC Credential.
+ * @brief Export a Credential.
  *
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
@@ -6140,21 +6140,21 @@ download_lsc_credential_omp (credentials_t * credentials,
  * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return LSC Credential XML on success.  HTML result of XSL transformation
+ * @return Credential XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                           enum content_type * content_type,
-                           char **content_disposition, gsize *content_length,
-                           cmd_response_data_t* response_data)
+export_credential_omp (credentials_t * credentials, params_t *params,
+                       enum content_type * content_type,
+                       char **content_disposition, gsize *content_length,
+                       cmd_response_data_t* response_data)
 {
-  return export_resource ("lsc_credential", credentials, params, content_type,
+  return export_resource ("credential", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
- * @brief Export a list of LSC Credentials.
+ * @brief Export a list of Credentials.
  *
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
@@ -6163,40 +6163,40 @@ export_lsc_credential_omp (credentials_t * credentials, params_t *params,
  * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return LSC Credentials XML on success.  HTML result of XSL transformation
+ * @return Credentials XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_lsc_credentials_omp (credentials_t * credentials, params_t *params,
-                            enum content_type * content_type,
-                            char **content_disposition, gsize *content_length,
-                            cmd_response_data_t* response_data)
+export_credentials_omp (credentials_t * credentials, params_t *params,
+                        enum content_type * content_type,
+                        char **content_disposition, gsize *content_length,
+                        cmd_response_data_t* response_data)
 {
-  return export_many ("lsc_credential", credentials, params, content_type,
+  return export_many ("credential", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
- * @brief Get an LSC credentials, XSL transform the result.
+ * @brief Get one or all credentials, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others when
- *                          lsc_credential_id is NULL.
+ *                          credential_id is NULL.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 static char *
-get_lsc_credentials (credentials_t * credentials, params_t *params,
-                     const char *extra_xml, cmd_response_data_t* response_data)
+get_credentials (credentials_t * credentials, params_t *params,
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("lsc_credential", credentials, params, extra_xml, NULL,
+  return get_many ("credential", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
- * @brief Get one or all LSC credentials, XSL transform the result.
+ * @brief Get one or all credentials, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -6205,14 +6205,14 @@ get_lsc_credentials (credentials_t * credentials, params_t *params,
  * @return 0 success, 1 failure.
  */
 char *
-get_lsc_credentials_omp (credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
+get_credentials_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return get_lsc_credentials (credentials, params, NULL, response_data);
+  return get_credentials (credentials, params, NULL, response_data);
 }
 
 /**
- * @brief Delete LSC credential, get all credentials, XSL transform result.
+ * @brief Delete credential, get all credentials, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -6221,15 +6221,15 @@ get_lsc_credentials_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                           cmd_response_data_t* response_data)
+delete_credential_omp (credentials_t * credentials, params_t *params,
+                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("lsc_credential", credentials, params, 0,
-                          get_lsc_credentials, response_data);
+  return delete_resource ("credential", credentials, params, 0,
+                          get_credentials, response_data);
 }
 
 /**
- * @brief Returns page to create a new LSC Credential.
+ * @brief Returns page to create a new Credential.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
@@ -6238,14 +6238,14 @@ delete_lsc_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_lsc_credential_omp (credentials_t *credentials, params_t *params,
-                        cmd_response_data_t* response_data)
+new_credential_omp (credentials_t *credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return new_lsc_credential (credentials, params, NULL, response_data);
+  return new_credential (credentials, params, NULL, response_data);
 }
 
 /**
- * @brief Setup edit_lsc_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
@@ -6255,15 +6255,15 @@ new_lsc_credential_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-edit_lsc_credential (credentials_t * credentials, params_t *params,
-                     const char *extra_xml, cmd_response_data_t* response_data)
+edit_credential (credentials_t * credentials, params_t *params,
+                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("lsc_credential", credentials, params, extra_xml,
+  return edit_resource ("credential", credentials, params, extra_xml,
                         response_data);
 }
 
 /**
- * @brief Setup edit_lsc_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
@@ -6272,14 +6272,14 @@ edit_lsc_credential (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
+edit_credential_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
-  return edit_lsc_credential (credentials, params, NULL, response_data);
+  return edit_credential (credentials, params, NULL, response_data);
 }
 
 /**
- * @brief Save lsc_credential, get next page, XSL transform the result.
+ * @brief Save credential, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
@@ -6288,26 +6288,26 @@ edit_lsc_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
+save_credential_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
 {
   int ret, change_password;
   gchar *html, *response;
-  const char *lsc_credential_id, *name, *comment, *login, *password;
+  const char *credential_id, *name, *comment, *login, *password;
   entity_t entity;
 
-  lsc_credential_id = params_value (params, "lsc_credential_id");
+  credential_id = params_value (params, "credential_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
   password = params_value (params, "password");
 
-  CHECK_PARAM (lsc_credential_id, "Save LSC Credential", edit_lsc_credential);
-  CHECK_PARAM (name, "Save LSC Credential", edit_lsc_credential);
-  CHECK_PARAM (comment, "Save LSC Credential", edit_lsc_credential);
+  CHECK_PARAM (credential_id, "Save Credential", edit_credential);
+  CHECK_PARAM (name, "Save Credential", edit_credential);
+  CHECK_PARAM (comment, "Save Credential", edit_credential);
   change_password = (params_value (params, "enable") ? 1 : 0);
   if (change_password)
-    CHECK_PARAM (password, "Save LSC Credential", edit_lsc_credential);
+    CHECK_PARAM (password, "Save Credential", edit_credential);
 
   /* Modify the credential. */
   response = NULL;
@@ -6317,13 +6317,13 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<modify_credential credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
                 "<password>%s</password>"
-                "</modify_lsc_credential>",
-                lsc_credential_id,
+                "</modify_credential>",
+                credential_id,
                 name,
                 comment,
                 login,
@@ -6334,12 +6334,12 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<modify_credential credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
-                "</modify_lsc_credential>",
-                lsc_credential_id,
+                "</modify_credential>",
+                credential_id,
                 name,
                 comment,
                 login);
@@ -6349,12 +6349,12 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<modify_credential credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<password>%s</password>"
-                "</modify_lsc_credential>",
-                lsc_credential_id,
+                "</modify_credential>",
+                credential_id,
                 name,
                 comment,
                 password);
@@ -6364,11 +6364,11 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<modify_lsc_credential lsc_credential_id=\"%s\">"
+                "<modify_credential credential_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
-                "</modify_lsc_credential>",
-                lsc_credential_id,
+                "</modify_credential>",
+                credential_id,
                 name,
                 comment);
 
@@ -6384,7 +6384,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while saving a Credential. "
                              "The Credential was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6392,7 +6392,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6400,19 +6400,19 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_lsc_credentials", response_data);
+                             "/omp?cmd=get_credentials", response_data);
     }
 
   if (omp_success (entity))
     {
       html = next_page (credentials, params, response, response_data);
       if (html == NULL)
-        html = get_lsc_credentials (credentials, params, response, response_data);
+        html = get_credentials (credentials, params, response, response_data);
     }
   else
     {
       set_http_status_from_entity (entity, response_data);
-      html = edit_lsc_credential (credentials, params, response, response_data);
+      html = edit_credential (credentials, params, response, response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -8375,12 +8375,12 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
     {
       /* Get the credentials. */
 
       if (openvas_server_sendf (&session,
-                                "<get_lsc_credentials"
+                                "<get_credentials"
                                 " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
@@ -8891,7 +8891,7 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Delete a trash LSC credential, get all trash, XSL transform the result.
+ * @brief Delete a trash credential, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -8900,10 +8900,10 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params,
-                                 cmd_response_data_t* response_data)
+delete_trash_credential_omp (credentials_t * credentials, params_t *params,
+                             cmd_response_data_t* response_data)
 {
-  return delete_resource ("lsc_credential", credentials, params, 1, get_trash,
+  return delete_resource ("credential", credentials, params, 1, get_trash,
                           response_data);
 }
 
@@ -9914,12 +9914,12 @@ edit_target (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_targets", response_data);
     }
 
-  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
     {
       /* Get the credentials. */
 
       if (openvas_server_sendf (&session,
-                                "<get_lsc_credentials"
+                                "<get_credentials"
                                 " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
@@ -18193,8 +18193,7 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
 
   GET_TRASH_RESOURCE ("GET_CONFIGS", "get_configs", "configs");
 
-  GET_TRASH_RESOURCE ("GET_LSC_CREDENTIALS", "get_lsc_credentials",
-                      "credentials");
+  GET_TRASH_RESOURCE ("GET_CREDENTIALS", "get_credentials", "credentials");
 
   GET_TRASH_RESOURCE ("GET_ALERTS", "get_alerts", "alerts");
 
@@ -18359,8 +18358,8 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_configs/>");
   if (command_enabled (credentials, "GET_FILTERS"))
     g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
-    g_string_append (commands, "<get_lsc_credentials/>");
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
+    g_string_append (commands, "<get_credentials/>");
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     g_string_append (commands, "<get_port_lists/>");
   if (command_enabled (credentials, "GET_SCANNERS"))
@@ -18440,10 +18439,10 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_alerts/>");
   if (command_enabled (credentials, "GET_CONFIGS"))
     g_string_append (commands, "<get_configs/>");
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
+    g_string_append (commands, "<get_credentials/>");
   if (command_enabled (credentials, "GET_FILTERS"))
     g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
-    g_string_append (commands, "<get_lsc_credentials/>");
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     g_string_append (commands, "<get_port_lists/>");
   if (command_enabled (credentials, "GET_SCANNERS"))
@@ -19328,10 +19327,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_alerts/>");
   if (command_enabled (credentials, "GET_CONFIGS"))
     g_string_append (commands, "<get_configs/>");
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
+    g_string_append (commands, "<get_credentials/>");
   if (command_enabled (credentials, "GET_FILTERS"))
     g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_LSC_CREDENTIALS"))
-    g_string_append (commands, "<get_lsc_credentials/>");
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     g_string_append (commands, "<get_port_lists/>");
   if (command_enabled (credentials, "GET_SCANNERS"))

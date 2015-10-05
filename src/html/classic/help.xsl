@@ -926,9 +926,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="lsc_credentials.html">
+<xsl:template mode="help" match="credentials.html">
   <div class="gb_window_part_center">Help: Credentials
-    <a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_credentials&amp;token={/envelope/token}"
        title="Credentials" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Credentials"/>
     </a>
@@ -940,13 +940,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
 
       <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
+        <xsl:with-param name="command" select="'GET_CREDENTIALS'"/>
       </xsl:call-template>
 
       <h1>Credentials</h1>
       <p>
         This table provides an overview of all configured
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credentials</a>.
+        <a href="glossary.html?token={/envelope/token}#credential">Credentials</a>.
         and summarizes the essential aspects of it.
       </p>
 
@@ -966,17 +966,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h3>New Credential</h3>
       <p>
-        To create a new lsc_credential click the
+        To create a new credential click the
         new icon <img src="/img/new.png"
                       alt="New Credential" title="New Credential"/>
         which goes to the
-        <a href="new_lsc_credential.html?token={/envelope/token}">New Credential</a>
+        <a href="new_credential.html?token={/envelope/token}">New Credential</a>
         page.
       </p>
 
       <h3>Exporting</h3>
       <p>
-        Export the current list of lsc_credentials as XML by clicking on the
+        Export the current list of credentials as XML by clicking on the
         export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
       </p>
       <xsl:call-template name="filtering"/>
@@ -1049,9 +1049,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="new_lsc_credential.html">
+<xsl:template mode="help" match="new_credential.html">
   <div class="gb_window_part_center">Help: New Credential
-    <a href="/omp?cmd=new_lsc_credential&amp;max=-2&amp;token={/envelope/token}">
+    <a href="/omp?cmd=new_credential&amp;max=-2&amp;token={/envelope/token}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
   </div>
@@ -1062,7 +1062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
 
       <xsl:call-template name="availability">
-          <xsl:with-param name="command" select="'CREATE_LSC_CREDENTIAL'"/>
+          <xsl:with-param name="command" select="'CREATE_CREDENTIAL'"/>
       </xsl:call-template>
 
       <p>
@@ -1074,9 +1074,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h1>New Credential</h1>
       <p>
         For creating a new
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credential</a>
+        <a href="glossary.html?token={/envelope/token}#credential">Credential</a>
         the dialog offers these entries.
-        Hit the button "Create Credential" to submit the new lsc_credential.
+        Hit the button "Create Credential" to submit the new credential.
         The Credentials page will be shown.
       </p>
 
@@ -1148,14 +1148,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Pressing the list icon
        <img src="/img/list.png" alt="Credentials" title="Credentials"/>
        will switch to the
-       <a href="lsc_credentials.html?token={/envelope/token}"> Credentials
+       <a href="credentials.html?token={/envelope/token}"> Credentials
        </a> page.
       </p>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="lsc_credential_details.html">
+<xsl:template mode="help" match="credential_details.html">
   <div class="gb_window_part_center">Help: Credential Details
   </div>
   <div class="gb_window_part_content">
@@ -1165,19 +1165,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
 
       <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
+        <xsl:with-param name="command" select="'GET_CREDENTIALS'"/>
       </xsl:call-template>
 
       <h1>Credentials Details</h1>
       <p>
         Provides detailed information about an
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credential</a>.
+        <a href="glossary.html?token={/envelope/token}#credential">Credential</a>.
         This includes name, comment, login, ID, creation time and modification
         time.
       </p>
 
       <xsl:call-template name="details-window-line-actions">
-        <xsl:with-param name="type" select="'lsc_credential'"/>
+        <xsl:with-param name="type" select="'credential'"/>
         <xsl:with-param name="name" select="'Credential'"/>
       </xsl:call-template>
       <xsl:call-template name="object-used-by">
@@ -3689,10 +3689,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
-            <li> <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a></li>
+            <li> <a href="credentials.html?token={/envelope/token}">Credentials</a></li>
               <ul>
-                <li> <a href="new_lsc_credential.html?token={/envelope/token}">New Credential</a></li>
-                <li> <a href="lsc_credential_details.html?token={/envelope/token}">Credential Details</a></li>
+                <li> <a href="new_credential.html?token={/envelope/token}">New Credential</a></li>
+                <li> <a href="credential_details.html?token={/envelope/token}">Credential Details</a></li>
               </ul>
             <li> <a href="agents.html?token={/envelope/token}">Agents</a></li>
               <ul>
@@ -5338,7 +5338,7 @@ Public License instead of this License.
       </p>
       <h4>Credentials filter</h4>
       <p>
-        Default filter to use when getting the <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a> page.
+        Default filter to use when getting the <a href="credentials.html?token={/envelope/token}">Credentials</a> page.
       </p>
       <h4>Filters filter</h4>
       <p>
@@ -6166,17 +6166,17 @@ Public License instead of this License.
         <tr class="odd">
           <td>
             SSH Credential
-            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+            <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
           </td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Any of the <a href="credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SSH</td>
         </tr>
         <tr class="even">
           <td>
             SSH Port
-            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+            <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
           </td>
           <td>no</td>
           <td>400</td>
@@ -6186,25 +6186,25 @@ Public License instead of this License.
         <tr class="odd">
           <td>
             SMB Credential
-            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+            <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
           </td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Any of the <a href="credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
         <tr class="even">
           <td>
             ESXi Credential
-            <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">*</xsl:if>
+            <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
           </td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Any of the <a href="credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for ESXi</td>
         </tr>
       </table>
-      <xsl:if test="not (gsa:may-op ('get_port_lists')) or not (gsa:may-op ('get_lsc_credentials'))">
+      <xsl:if test="not (gsa:may-op ('get_port_lists')) or not (gsa:may-op ('get_credentials'))">
         <b>*</b> not available with the current OMP Server connection.
       </xsl:if>
 

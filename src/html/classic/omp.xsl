@@ -516,9 +516,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = 'allinfo'">
       <func:result select="'All SecInfo'"/>
     </xsl:when>
-    <xsl:when test="$type = 'lsc_credential'">
-      <func:result select="'Credential'"/>
-    </xsl:when>
     <xsl:otherwise>
       <func:result select="gsa:join-capital (str:split ($type, '_'))"/>
     </xsl:otherwise>
@@ -4268,13 +4265,13 @@ var toggleFilter = function(){
       <xsl:if test="target/@id != ''">
         <target id="{target/@id}"/>
         <xsl:if test="$detailed_target/ssh_lsc_credential/@id != ''">
-          <lsc_credential id="{$detailed_target/ssh_lsc_credential/@id}"/>
+          <credential id="{$detailed_target/ssh_lsc_credential/@id}"/>
         </xsl:if>
         <xsl:if test="$detailed_target/smb_lsc_credential/@id != '' and $detailed_target/smb_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id">
-          <lsc_credential id="{$detailed_target/smb_lsc_credential/@id}"/>
+          <credential id="{$detailed_target/smb_lsc_credential/@id}"/>
         </xsl:if>
         <xsl:if test="$detailed_target/esxi_lsc_credential/@id != '' and $detailed_target/esxi_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id and $detailed_target/esxi_lsc_credential/@id != $detailed_target/smb_lsc_credential/@id">
-          <lsc_credential id="{$detailed_target/esxi_lsc_credential/@id}"/>
+          <credential id="{$detailed_target/esxi_lsc_credential/@id}"/>
         </xsl:if>
         <xsl:if test="$detailed_target/port_list/@id != ''">
           <port_list id="{$detailed_target/port_list/@id}"/>
@@ -7348,26 +7345,26 @@ var toggleFilter = function(){
 </xsl:template>
 
 
-<!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
+<!-- BEGIN CREDENTIALS MANAGEMENT -->
 
-<xsl:template match="new_lsc_credential">
+<xsl:template match="new_credential">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="create_lsc_credential_response"/>
-  <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
-  <xsl:call-template name="html-create-lsc-credential-form"/>
+  <xsl:apply-templates select="create_credential_response"/>
+  <xsl:apply-templates select="commands_response/delete_credential_response"/>
+  <xsl:call-template name="html-create-credential-form"/>
 </xsl:template>
 
-<xsl:template name="html-create-lsc-credential-form">
+<xsl:template name="html-create-credential-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Credential', 'Credential')"/>
-      <a href="/help/new_lsc_credential.html?token={/envelope/token}"
+      <a href="/help/new_credential.html?token={/envelope/token}"
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Credential', 'Credential'))}">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_lsc_credentials&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_credentials&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Credentials', 'Credential')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Credentials', 'Credential')}"/>
       </a>
@@ -7375,9 +7372,9 @@ var toggleFilter = function(){
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="create_lsc_credential"/>
+        <input type="hidden" name="cmd" value="create_credential"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="next" value="get_lsc_credential"/>
+        <input type="hidden" name="next" value="get_credential"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -7417,7 +7414,7 @@ var toggleFilter = function(){
                 <tr>
                   <td colspan="2">
                     <label>
-                      <input type="radio" name="base" value="pass" checked="1"/>
+                      <input type="radio" name="base" value="up" checked="1"/>
                       <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
                     </label>
                   </td>
@@ -7430,7 +7427,7 @@ var toggleFilter = function(){
                 <tr>
                   <td colspan="3">
                     <label>
-                      <input type="radio" name="base" value="key"/>
+                      <input type="radio" name="base" value="usk"/>
                       <xsl:value-of select="gsa:i18n ('Key pair', 'Auth Data')"/>
                     </label>
                   </td>
@@ -7468,19 +7465,23 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<xsl:template name="html-lsc-credentials-table">
+<xsl:template name="html-credentials-table">
   <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'lsc_credential'"/>
+    <xsl:with-param name="type" select="'credential'"/>
     <xsl:with-param name="cap-type" select="'Credential'"/>
-    <xsl:with-param name="resources-summary" select="lsc_credentials"/>
-    <xsl:with-param name="resources" select="lsc_credential"/>
-    <xsl:with-param name="count" select="count (lsc_credential)"/>
-    <xsl:with-param name="filtered-count" select="lsc_credential_count/filtered"/>
-    <xsl:with-param name="full-count" select="lsc_credential_count/text ()"/>
+    <xsl:with-param name="resources-summary" select="credentials"/>
+    <xsl:with-param name="resources" select="credential"/>
+    <xsl:with-param name="count" select="count (credential)"/>
+    <xsl:with-param name="filtered-count" select="credential_count/filtered"/>
+    <xsl:with-param name="full-count" select="credential_count/text ()"/>
     <xsl:with-param name="columns">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Type', 'Property')"/></name>
+        <field>type</field>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Login', 'Auth Data')"/></name>
@@ -7491,9 +7492,9 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
-<!--     CREATE_LSC_CREDENTIAL_RESPONSE -->
+<!--     CREATE_CREDENTIAL_RESPONSE -->
 
-<xsl:template match="create_lsc_credential_response">
+<xsl:template match="create_credential_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Create Credential</xsl:with-param>
     <xsl:with-param name="status">
@@ -7505,9 +7506,9 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
-<!--     DELETE_LSC_CREDENTIAL_RESPONSE -->
+<!--     DELETE_CREDENTIAL_RESPONSE -->
 
-<xsl:template match="delete_lsc_credential_response">
+<xsl:template match="delete_credential_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
       Delete Credential
@@ -7521,28 +7522,28 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
-<!--     EDITING LSC CREDENTIALS -->
+<!--     EDITING CREDENTIALS -->
 
-<xsl:template name="html-edit-lsc-credential-form">
+<xsl:template name="html-edit-credential-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Credential', 'Credential')"/>
       <xsl:call-template name="edit-header-icons">
         <xsl:with-param name="cap-type" select="'Credential'"/>
-        <xsl:with-param name="type" select="'lsc_credential'"/>
+        <xsl:with-param name="type" select="'credential'"/>
         <xsl:with-param name="id"
-                        select="commands_response/get_lsc_credentials_response/lsc_credential/@id"/>
+                        select="commands_response/get_credentials_response/credential/@id"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="save_lsc_credential"/>
+        <input type="hidden" name="cmd" value="save_credential"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
-               name="lsc_credential_id"
-               value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
+               name="credential_id"
+               value="{commands_response/get_credentials_response/credential/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -7550,7 +7551,7 @@ var toggleFilter = function(){
             <td>
               <input type="text"
                      name="name"
-                     value="{commands_response/get_lsc_credentials_response/lsc_credential/name}"
+                     value="{commands_response/get_credentials_response/credential/name}"
                      size="30"
                      maxlength="80"/>
             </td>
@@ -7559,21 +7560,21 @@ var toggleFilter = function(){
             <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_lsc_credentials_response/lsc_credential/comment}"/>
+                     value="{commands_response/get_credentials_response/credential/comment}"/>
             </td>
           </tr>
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
             <td>
               <xsl:choose>
-                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                <xsl:when test="commands_response/get_credentials_response/credential/type = 'usk'">
                   <input type="text" name="credential_login_off" size="30" maxlength="400"
                          disabled="1"
-                         value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
+                         value="{commands_response/get_credentials_response/credential/login}"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="text" name="credential_login" size="30" maxlength="400"
-                         value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
+                         value="{commands_response/get_credentials_response/credential/login}"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -7582,7 +7583,7 @@ var toggleFilter = function(){
             <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
             <td>
               <xsl:choose>
-                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                <xsl:when test="commands_response/get_credentials_response/credential/type = 'usk'">
                   <label>
                     <input type="checkbox" name="enable_off" value="1"
                            disabled="1"/>
@@ -7616,13 +7617,13 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<xsl:template match="edit_lsc_credential">
+<xsl:template match="edit_credential">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="modify_lsc_credential_response"/>
-  <xsl:call-template name="html-edit-lsc-credential-form"/>
+  <xsl:apply-templates select="modify_credential_response"/>
+  <xsl:call-template name="html-edit-credential-form"/>
 </xsl:template>
 
-<xsl:template match="modify_lsc_credential_response">
+<xsl:template match="modify_credential_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Credential</xsl:with-param>
     <xsl:with-param name="status">
@@ -7634,35 +7635,35 @@ var toggleFilter = function(){
   </xsl:call-template>
 </xsl:template>
 
-<!--     LSC_CREDENTIAL -->
+<!--     CREDENTIAL -->
 
-<xsl:template name="lsc-credential-download-icons">
-  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
+<xsl:template name="credential-download-icons">
+  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
      title="{gsa:i18n ('Download RPM package', 'Credential')}" style="margin-left:3px;">
     <img src="/img/rpm.png" border="0" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
   </a>
-  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
      title="{gsa:i18n ('Download Debian package', 'Credential')}" style="margin-left:3px;">
     <img src="/img/deb.png" border="0" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
   </a>
-  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
      title="{gsa:i18n ('Download Exe package', 'Credential')}" style="margin-left:3px;">
     <img src="/img/exe.png" border="0" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
   </a>
-  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
      title="{gsa:i18n ('Download Public Key', 'Credential')}" style="margin-left:3px;">
     <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
   </a>
 </xsl:template>
 
-<xsl:template match="lsc_credential">
+<xsl:template match="credential">
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:call-template name="observers-icon">
         <xsl:with-param name="type" select="'Credential'"/>
       </xsl:call-template>
       <b>
-        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_credential&amp;credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Credential', name)}">
           <xsl:value-of select="name"/>
         </a>
@@ -7673,6 +7674,10 @@ var toggleFilter = function(){
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="type"/>
+      <span class="footnote"> (<xsl:value-of select="full_type"/>)</span>
     </td>
     <td>
       <xsl:value-of select="login"/>
@@ -7689,11 +7694,11 @@ var toggleFilter = function(){
         <td>
           <xsl:call-template name="list-window-line-icons">
             <xsl:with-param name="cap-type" select="'Credential'"/>
-            <xsl:with-param name="type" select="'lsc_credential'"/>
+            <xsl:with-param name="type" select="'credential'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <xsl:if test="type='gen'">
-            <xsl:call-template name="lsc-credential-download-icons"/>
+          <xsl:if test="type='usk'">
+            <xsl:call-template name="credential-download-icons"/>
           </xsl:if>
         </td>
       </xsl:otherwise>
@@ -7701,7 +7706,7 @@ var toggleFilter = function(){
   </tr>
 </xsl:template>
 
-<xsl:template match="lsc_credential" mode="trash">
+<xsl:template match="credential" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
@@ -7719,7 +7724,7 @@ var toggleFilter = function(){
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
-            <xsl:with-param name="type">lsc_credential</xsl:with-param>
+            <xsl:with-param name="type">credential</xsl:with-param>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
         </xsl:when>
@@ -7733,7 +7738,7 @@ var toggleFilter = function(){
   </tr>
 </xsl:template>
 
-<xsl:template match="lsc_credential" mode="details">
+<xsl:template match="credential" mode="details">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -7741,10 +7746,10 @@ var toggleFilter = function(){
       <xsl:value-of select="gsa:i18n ('Credential Details', 'Credential')"/>
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Credential'"/>
-        <xsl:with-param name="type" select="'lsc_credential'"/>
+        <xsl:with-param name="type" select="'credential'"/>
       </xsl:call-template>
-      <xsl:if test="type='gen'">
-        <xsl:call-template name="lsc-credential-download-icons"/>
+      <xsl:if test="type='usk'">
+        <xsl:call-template name="credential-download-icons"/>
       </xsl:if>
     </div>
     <div class="gb_window_part_content">
@@ -7757,6 +7762,13 @@ var toggleFilter = function(){
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
           <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td style="vertical-align:top;"><xsl:value-of select="gsa:i18n ('Type', 'Auth Data')"/>:</td>
+          <td>
+            <xsl:value-of select="type"/><br/>
+            <span class="footnote">(<xsl:value-of select="full_type"/>)</span>
+          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
@@ -7797,39 +7809,39 @@ var toggleFilter = function(){
     </div>
   </div>
   <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="resource_type" select="'lsc_credential'"/>
+    <xsl:with-param name="resource_type" select="'credential'"/>
   </xsl:call-template>
   <xsl:call-template name="resource-permissions-window">
-    <xsl:with-param name="resource_type" select="'lsc_credential'"/>
+    <xsl:with-param name="resource_type" select="'credential'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
     <xsl:with-param name="related">
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
-<!--     GET_LSC_CREDENTIAL -->
+<!--     GET_CREDENTIAL -->
 
-<xsl:template match="get_lsc_credential">
+<xsl:template match="get_credential">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="create_lsc_credential_response"/>
+  <xsl:apply-templates select="create_credential_response"/>
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
-  <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
-  <xsl:apply-templates select="commands_response/modify_lsc_credential_response"/>
-  <xsl:apply-templates select="get_lsc_credentials_response/lsc_credential"
+  <xsl:apply-templates select="commands_response/delete_credential_response"/>
+  <xsl:apply-templates select="commands_response/modify_credential_response"/>
+  <xsl:apply-templates select="get_credentials_response/credential"
                        mode="details"/>
 </xsl:template>
 
-<!--     GET_LSC_CREDENTIALS_RESPONSE -->
+<!--     GET_CREDENTIALS_RESPONSE -->
 
-<xsl:template match="get_lsc_credentials_response">
+<xsl:template match="get_credentials_response">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_lsc_credential_response"/>
-  <xsl:call-template name="html-lsc-credentials-table"/>
+  <xsl:apply-templates select="delete_credential_response"/>
+  <xsl:call-template name="html-credentials-table"/>
 </xsl:template>
 
-<xsl:template match="lsc_credential" mode="select">
+<xsl:template match="credential" mode="select">
   <xsl:param name="select_id" select="''"/>
   <xsl:choose>
     <xsl:when test="@id = $select_id">
@@ -7841,8 +7853,8 @@ var toggleFilter = function(){
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="lsc_credentials_response" mode="select">
-  <xsl:apply-templates select="lsc_credential" mode="select"/>
+<xsl:template match="credentials_response" mode="select">
+  <xsl:apply-templates select="credential" mode="select"/>
 </xsl:template>
 
 
@@ -10869,9 +10881,9 @@ should not have received it.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
-  <xsl:if test="$select_type = 'lsc_credential' or gsa:may-op ('get_lsc_credentials')">
+  <xsl:if test="$select_type = 'credential' or gsa:may-op ('get_credentials')">
     <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'lsc_credential'"/>
+      <xsl:with-param name="value" select="'credential'"/>
       <xsl:with-param name="content" select="gsa:i18n ('Credential', 'Credential')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
@@ -11377,7 +11389,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-create-target-form">
-  <xsl:param name="lsc-credentials"></xsl:param>
+  <xsl:param name="credentials"></xsl:param>
   <xsl:param name="port-lists"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -11401,10 +11413,10 @@ should not have received it.
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
-        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+        <xsl:if test="not (gsa:may-op ('get_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
         </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+        <xsl:if test="not (gsa:may-op ('get_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
         </xsl:if>
@@ -11592,7 +11604,7 @@ should not have received it.
               </select>
             </td>
           </tr>
-          <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+          <xsl:if test="gsa:may-op ('get_credentials')">
             <tr>
               <td valign="top" width="175" colspan="2">
                 <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
@@ -11604,7 +11616,7 @@ should not have received it.
               <td>
                 <select name="lsc_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials" mode="select">
+                  <xsl:apply-templates select="$credentials" mode="select">
                     <xsl:with-param name="select_id" select="lsc_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11620,7 +11632,7 @@ should not have received it.
               <td>
                 <select name="lsc_smb_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials/lsc_credential [type = 'pass']" mode="select">
+                  <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
                     <xsl:with-param name="select_id" select="lsc_smb_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11631,7 +11643,7 @@ should not have received it.
               <td>
                 <select name="lsc_esxi_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials/lsc_credential [type = 'pass']" mode="select">
+                  <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
                     <xsl:with-param name="select_id" select="lsc_esxi_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11677,7 +11689,7 @@ should not have received it.
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
         <input type="hidden" name="in_use" value="{get_targets_response/target/in_use}"/>
-        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+        <xsl:if test="not (gsa:may-op ('get_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
           <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
@@ -11870,7 +11882,7 @@ should not have received it.
                   </select>
                 </td>
               </tr>
-              <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+              <xsl:if test="gsa:may-op ('get_credentials')">
                 <tr>
                   <td valign="top" width="175" colspan="2">
                     <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
@@ -11892,7 +11904,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                      <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -11937,7 +11949,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential [type = 'pass']">
+                      <xsl:for-each select="get_credentials_response/credential [type = 'up']">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -11965,7 +11977,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential [type = 'pass']">
+                      <xsl:for-each select="get_credentials_response/credential [type = 'up']">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -12147,7 +12159,7 @@ should not have received it.
                   </select>
                 </td>
               </tr>
-              <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+              <xsl:if test="gsa:may-op ('get_credentials')">
                 <tr>
                   <td valign="top" width="175" colspan="2">
                     <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
@@ -12171,7 +12183,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                      <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -12219,7 +12231,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                      <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -12247,7 +12259,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
+                      <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -12388,8 +12400,8 @@ should not have received it.
   <xsl:apply-templates select="create_target_response"/>
   <xsl:call-template name="html-create-target-form">
     <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+      name="credentials"
+      select="get_credentials_response | commands_response/get_credentials_response"/>
     <xsl:with-param
       name="port-lists"
       select="get_port_lists_response | commands_response/get_port_lists_response"/>
@@ -12476,8 +12488,8 @@ should not have received it.
         <xsl:when test="boolean (ssh_lsc_credential/permissions) and count (ssh_lsc_credential/permissions/permission) = 0">
           <xsl:value-of select="ssh_lsc_credential/name"/>
         </xsl:when>
-        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+        <xsl:when test="gsa:may-op ('get_credentials')">
+          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="ssh_lsc_credential/name"/>
           </a>
         </xsl:when>
@@ -12491,8 +12503,8 @@ should not have received it.
         <xsl:when test="boolean (smb_lsc_credential/permissions) and count (smb_lsc_credential/permissions/permission) = 0">
           <xsl:value-of select="smb_lsc_credential/name"/>
         </xsl:when>
-        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+        <xsl:when test="gsa:may-op ('get_credentials')">
+          <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="smb_lsc_credential/name"/>
           </a>
         </xsl:when>
@@ -12506,8 +12518,8 @@ should not have received it.
         <xsl:when test="boolean (esxi_lsc_credential/permissions) and count (esxi_lsc_credential/permissions/permission) = 0">
           <xsl:value-of select="esxi_lsc_credential/name"/>
         </xsl:when>
-        <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+        <xsl:when test="gsa:may-op ('get_credentials')">
+          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="esxi_lsc_credential/name"/>
           </a>
         </xsl:when>
@@ -12573,7 +12585,7 @@ should not have received it.
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="ssh_lsc_credential/name"/>
           </a>
         </xsl:otherwise>
@@ -12586,7 +12598,7 @@ should not have received it.
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+          <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="smb_lsc_credential/name"/>
           </a>
         </xsl:otherwise>
@@ -12599,7 +12611,7 @@ should not have received it.
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="esxi_lsc_credential/name"/>
           </a>
         </xsl:otherwise>
@@ -12732,7 +12744,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target')"/>
           </td>
         </tr>
-        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (ssh_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (ssh_lsc_credential/@id) &gt; 0">
           <tr>
             <td valign="top" width="175" colspan="2">
               <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>:
@@ -12753,8 +12765,8 @@ should not have received it.
                     <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="ssh_lsc_credential/@id"/>
                     <xsl:text>)</xsl:text>
                   </xsl:when>
-                  <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-                    <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+                  <xsl:when test="gsa:may-op ('get_credentials')">
+                    <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
                       <xsl:value-of select="ssh_lsc_credential/name"/>
                     </a>
                   </xsl:when>
@@ -12770,7 +12782,7 @@ should not have received it.
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (smb_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (smb_lsc_credential/@id) &gt; 0">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/>:</td>
             <td>
@@ -12785,8 +12797,8 @@ should not have received it.
                   <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="smb_lsc_credential/@id"/>
                   <xsl:text>)</xsl:text>
                 </xsl:when>
-                <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-                  <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
                     <xsl:value-of select="smb_lsc_credential/name"/>
                   </a>
                 </xsl:when>
@@ -12797,7 +12809,7 @@ should not have received it.
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="gsa:may-op ('get_lsc_credentials') or string-length (esxi_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (esxi_lsc_credential/@id) &gt; 0">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/>:</td>
             <td>
@@ -12812,8 +12824,8 @@ should not have received it.
                   <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="esxi_lsc_credential/@id"/>
                   <xsl:text>)</xsl:text>
                 </xsl:when>
-                <xsl:when test="gsa:may-op ('get_lsc_credentials')">
-                  <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
                     <xsl:value-of select="esxi_lsc_credential/name"/>
                   </a>
                 </xsl:when>
@@ -12868,13 +12880,13 @@ should not have received it.
         <port_list id="{port_list/@id}"/>
       </xsl:if>
       <xsl:if test="ssh_lsc_credential/@id != ''">
-        <lsc_credential id="{ssh_lsc_credential/@id}"/>
+        <credential id="{ssh_lsc_credential/@id}"/>
       </xsl:if>
       <xsl:if test="smb_lsc_credential/@id != '' and smb_lsc_credential/@id != ssh_lsc_credential/@id">
-        <lsc_credential id="{smb_lsc_credential/@id}"/>
+        <credential id="{smb_lsc_credential/@id}"/>
       </xsl:if>
       <xsl:if test="esxi_lsc_credential/@id != '' and esxi_lsc_credential/@id != ssh_lsc_credential/@id and esxi_lsc_credential/@id != smb_lsc_credential/@id">
-        <lsc_credential id="{esxi_lsc_credential/@id}"/>
+        <credential id="{esxi_lsc_credential/@id}"/>
       </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
@@ -22791,7 +22803,7 @@ should not have received it.
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
                     <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'lsc_credential'"/>
+                      <xsl:with-param name="value" select="'credential'"/>
                       <xsl:with-param name="content" select="gsa:i18n ('Credential', 'Credential')"/>
                       <xsl:with-param name="select-value" select="$resource_type"/>
                     </xsl:call-template>
@@ -31345,7 +31357,7 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<xsl:template name="html-lsc-credentials-trash-table">
+<xsl:template name="html-credentials-trash-table">
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
@@ -31354,7 +31366,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
         <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
-      <xsl:apply-templates select="lsc_credential" mode="trash"/>
+      <xsl:apply-templates select="credential" mode="trash"/>
     </table>
   </div>
 </xsl:template>
@@ -31495,9 +31507,9 @@ var toggleFilter = function(){
   <xsl:apply-templates select="delete_agent_response"/>
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:apply-templates select="delete_alert_response"/>
+  <xsl:apply-templates select="delete_credential_response"/>
   <xsl:apply-templates select="delete_filter_response"/>
   <xsl:apply-templates select="delete_group_response"/>
-  <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:apply-templates select="delete_note_response"/>
   <xsl:apply-templates select="delete_override_response"/>
   <xsl:apply-templates select="delete_permission_response"/>
@@ -31562,10 +31574,10 @@ var toggleFilter = function(){
               <count><xsl:value-of select="count(get_configs_response/config)"/></count>
             </item>
           </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
             <item>
               <type>credential</type>
-              <count><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></count>
+              <count><xsl:value-of select="count(get_credentials_response/credential)"/></count>
             </item>
           </xsl:if>
           <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
@@ -31689,12 +31701,12 @@ var toggleFilter = function(){
         </xsl:for-each>
       </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
         <a name="credentials"></a>
         <h1><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></h1>
-        <!-- The for-each makes the get_lsc_credentials_response the current node. -->
-        <xsl:for-each select="get_lsc_credentials_response">
-          <xsl:call-template name="html-lsc-credentials-trash-table"/>
+        <!-- The for-each makes the get_credentials_response the current node. -->
+        <xsl:for-each select="get_credentials_response">
+          <xsl:call-template name="html-credentials-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 
@@ -33589,15 +33601,15 @@ var toggleFilter = function(){
               </tr>
             </xsl:if>
 
-            <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+            <xsl:if test="gsa:may-op ('get_credentials')">
               <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
                     <xsl:with-param name="id"
                                     select="get_settings_response/setting[name='Default SSH Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -33608,8 +33620,8 @@ var toggleFilter = function(){
                   <xsl:call-template name="get-settings-resource">
                     <xsl:with-param name="id"
                                     select="get_settings_response/setting[name='Default SMB Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -33620,8 +33632,8 @@ var toggleFilter = function(){
                   <xsl:call-template name="get-settings-resource">
                     <xsl:with-param name="id"
                                     select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -34199,7 +34211,7 @@ var toggleFilter = function(){
               </tr>
             </xsl:if>
 
-            <xsl:if test="gsa:may-op ('get_lsc_credentials')">
+            <xsl:if test="gsa:may-op ('get_credentials')">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
                 <td>
@@ -34207,8 +34219,8 @@ var toggleFilter = function(){
                     <xsl:with-param name="setting" select="'settings_default:6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SSH Credential']/value"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -34220,8 +34232,8 @@ var toggleFilter = function(){
                     <xsl:with-param name="setting" select="'settings_default:a25c0cfe-f977-417b-b1da-47da370c03e8'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SMB Credential']/value"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -34233,8 +34245,8 @@ var toggleFilter = function(){
                     <xsl:with-param name="setting" select="'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
-                    <xsl:with-param name="type" select="'lsc_credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_lsc_credentials_response/lsc_credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -34836,7 +34848,7 @@ var toggleFilter = function(){
         <input type="hidden" name="first" value="{assets/@start}"/>
         <input type="hidden" name="max" value="{assets/@max}"/>
         <input type="hidden" name="in_use" value="{get_assets_response/asset/in_use}"/>
-        <xsl:if test="not (gsa:may-op ('get_lsc_credentials'))">
+        <xsl:if test="not (gsa:may-op ('get_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
           <input type="hidden" name="lsc_esxi_credential_id" value="--"/>

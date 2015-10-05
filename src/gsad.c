@@ -861,11 +861,11 @@ init_validator ()
                          "|(create_asset)"
                          "|(create_config)"
                          "|(create_container_task)"
+                         "|(create_credential)"
                          "|(create_alert)"
                          "|(create_filter)"
                          "|(create_group)"
                          "|(create_host)"
-                         "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
                          "|(create_permission)"
@@ -886,10 +886,10 @@ init_validator ()
                          "|(delete_agent)"
                          "|(delete_asset)"
                          "|(delete_config)"
+                         "|(delete_credential)"
                          "|(delete_alert)"
                          "|(delete_filter)"
                          "|(delete_group)"
-                         "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
                          "|(delete_permission)"
@@ -907,9 +907,9 @@ init_validator ()
                          "|(delete_trash_agent)"
                          "|(delete_trash_config)"
                          "|(delete_trash_alert)"
+                         "|(delete_trash_credential)"
                          "|(delete_trash_filter)"
                          "|(delete_trash_group)"
-                         "|(delete_trash_lsc_credential)"
                          "|(delete_trash_note)"
                          "|(delete_trash_override)"
                          "|(delete_trash_permission)"
@@ -924,7 +924,7 @@ init_validator ()
                          "|(delete_trash_task)"
                          "|(delete_user)"
                          "|(download_agent)"
-                         "|(download_lsc_credential)"
+                         "|(download_credential)"
                          "|(download_ssl_cert)"
                          "|(download_ca_pub)"
                          "|(download_key_pub)"
@@ -934,9 +934,9 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(edit_credential)"
                          "|(edit_filter)"
                          "|(edit_group)"
-                         "|(edit_lsc_credential)"
                          "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
@@ -961,8 +961,8 @@ init_validator ()
                          "|(export_assets)"
                          "|(export_config)"
                          "|(export_configs)"
-                         "|(export_lsc_credential)"
-                         "|(export_lsc_credentials)"
+                         "|(export_credential)"
+                         "|(export_credentials)"
                          "|(export_filter)"
                          "|(export_filters)"
                          "|(export_group)"
@@ -1009,6 +1009,8 @@ init_validator ()
                          "|(get_feed)"
                          "|(get_scap)"
                          "|(get_cert)"
+                         "|(get_credential)"
+                         "|(get_credentials)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -1016,8 +1018,6 @@ init_validator ()
                          "|(get_group)"
                          "|(get_groups)"
                          "|(get_info)"
-                         "|(get_lsc_credential)"
-                         "|(get_lsc_credentials)"
                          "|(get_my_settings)"
                          "|(get_note)"
                          "|(get_notes)"
@@ -1065,10 +1065,10 @@ init_validator ()
                          "|(new_alert)"
                          "|(new_config)"
                          "|(new_container_task)"
+                         "|(new_credential)"
                          "|(new_filter)"
                          "|(new_group)"
                          "|(new_host)"
-                         "|(new_lsc_credential)"
                          "|(new_note)"
                          "|(new_override)"
                          "|(new_permission)"
@@ -1096,9 +1096,9 @@ init_validator ()
                          "|(save_config_family)"
                          "|(save_config_nvt)"
                          "|(save_container_task)"
+                         "|(save_credential)"
                          "|(save_filter)"
                          "|(save_group)"
-                         "|(save_lsc_credential)"
                          "|(save_my_settings)"
                          "|(save_note)"
                          "|(save_override)"
@@ -1133,7 +1133,7 @@ init_validator ()
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
-  openvas_validator_add (validator, "aggregate_type", "agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
+  openvas_validator_add (validator, "aggregate_type", "agent|alert|config|credential|filter|group|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
   openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
@@ -1157,6 +1157,7 @@ init_validator ()
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
+  openvas_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
@@ -1225,7 +1226,7 @@ init_validator ()
                          "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  /* Used for Administrator users, LSC credentials, and slave login name. */
+  /* Used for Administrator users, credentials, and slave login name. */
   openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
@@ -1281,11 +1282,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|asset|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+                         "^(agent|alert|asset|config|credential|filter|group|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|asset|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
+                         "^(agent|alert|asset|config|credential|filter|group|note|nvt|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|info|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
@@ -1406,7 +1407,7 @@ init_validator ()
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
   openvas_validator_alias (validator, "hosts_filter",       "filter");
   openvas_validator_alias (validator, "lsc_esxi_credential_id",
-                           "lsc_credential_id");
+                           "credential_id");
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
@@ -1427,7 +1428,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
   openvas_validator_alias (validator, "lsc_smb_credential_id",
-                           "lsc_credential_id");
+                           "credential_id");
   openvas_validator_alias (validator, "method_data:to_address:", "email_list");
   openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_severity", "severity_optional");
@@ -2351,10 +2352,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_alert)
   ELSE (create_asset)
   ELSE (create_container_task)
+  ELSE (create_credential)
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_host)
-  ELSE (create_lsc_credential)
   ELSE (create_permission)
   ELSE (create_permissions)
   ELSE (create_port_list)
@@ -2375,9 +2376,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_asset)
   ELSE (delete_task)
   ELSE (delete_alert)
+  ELSE (delete_credential)
   ELSE (delete_filter)
   ELSE (delete_group)
-  ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
   ELSE (delete_permission)
@@ -2395,9 +2396,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_agent)
   ELSE (delete_trash_config)
   ELSE (delete_trash_alert)
+  ELSE (delete_trash_credential)
   ELSE (delete_trash_filter)
   ELSE (delete_trash_group)
-  ELSE (delete_trash_lsc_credential)
   ELSE (delete_trash_note)
   ELSE (delete_trash_override)
   ELSE (delete_trash_permission)
@@ -2452,9 +2453,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
+  ELSE (save_credential)
   ELSE (save_filter)
   ELSE (save_group)
-  ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
       char *timezone, *password, *severity, *language;
@@ -2782,9 +2783,9 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
+  ELSE (edit_credential)
   ELSE (edit_filter)
   ELSE (edit_group)
-  ELSE (edit_lsc_credential)
   ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
@@ -2840,6 +2841,46 @@ exec_omp_get (struct MHD_Connection *connection,
                                content_disposition, response_size,
                                response_data);
 
+  else if (!strcmp (cmd, "download_credential"))
+    {
+      char *html;
+      gchar *credential_login;
+      const char *package_format;
+
+      package_format = params_value (params, "package_format");
+
+      if (download_credential_omp (credentials,
+                                   params,
+                                   response_size,
+                                   &html,
+                                   &credential_login,
+                                   response_data))
+        return html;
+
+      /* Returned above if package_format was NULL. */
+      content_type_from_format_string (content_type, package_format);
+      g_free (*content_disposition);
+      *content_disposition = g_strdup_printf
+                              ("attachment; filename=openvas-lsc-target-%s.%s",
+                               credential_login,
+                               (strcmp (package_format, "key") == 0
+                                 ? "pub"
+                                 : package_format));
+      g_free (credential_login);
+
+      return html;
+    }
+
+  else if (!strcmp (cmd, "export_credential"))
+    return export_credential_omp (credentials, params, content_type,
+                                  content_disposition, response_size,
+                                  response_data);
+
+  else if (!strcmp (cmd, "export_credentials"))
+    return export_credentials_omp (credentials, params, content_type,
+                                   content_disposition, response_size,
+                                   response_data);
+
   else if (!strcmp (cmd, "export_filter"))
     return export_filter_omp (credentials, params, content_type,
                               content_disposition, response_size,
@@ -2859,46 +2900,6 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_groups_omp (credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
-
-  else if (!strcmp (cmd, "download_lsc_credential"))
-    {
-      char *html;
-      gchar *lsc_credential_login;
-      const char *package_format;
-
-      package_format = params_value (params, "package_format");
-
-      if (download_lsc_credential_omp (credentials,
-                                       params,
-                                       response_size,
-                                       &html,
-                                       &lsc_credential_login,
-                                       response_data))
-        return html;
-
-      /* Returned above if package_format was NULL. */
-      content_type_from_format_string (content_type, package_format);
-      g_free (*content_disposition);
-      *content_disposition = g_strdup_printf
-                              ("attachment; filename=openvas-lsc-target-%s.%s",
-                               lsc_credential_login,
-                               (strcmp (package_format, "key") == 0
-                                 ? "pub"
-                                 : package_format));
-      g_free (lsc_credential_login);
-
-      return html;
-    }
-
-  else if (!strcmp (cmd, "export_lsc_credential"))
-    return export_lsc_credential_omp (credentials, params, content_type,
-                                      content_disposition, response_size,
-                                      response_data);
-
-  else if (!strcmp (cmd, "export_lsc_credentials"))
-    return export_lsc_credentials_omp (credentials, params, content_type,
-                                       content_disposition, response_size,
-                                       response_data);
 
   else if (!strcmp (cmd, "export_note"))
     return export_note_omp (credentials, params, content_type,
@@ -3113,13 +3114,13 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_aggregate)
   ELSE (get_alert)
   ELSE (get_alerts)
+  ELSE (get_credential)
+  ELSE (get_credentials)
   ELSE (get_filter)
   ELSE (get_filters)
   ELSE (get_group)
   ELSE (get_groups)
   ELSE (get_info)
-  ELSE (get_lsc_credential)
-  ELSE (get_lsc_credentials)
   ELSE (get_my_settings)
   ELSE (get_note)
   ELSE (get_notes)
@@ -3184,7 +3185,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_agent)
   ELSE (new_host)
   ELSE (new_config)
-  ELSE (new_lsc_credential)
+  ELSE (new_credential)
   ELSE (new_note)
   ELSE (new_override)
   ELSE (new_permission)

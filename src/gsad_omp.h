@@ -109,31 +109,31 @@ char * export_alert_omp (credentials_t *, params_t *, enum content_type *,
 char * export_alerts_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *, cmd_response_data_t*);
 
-int download_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
-                                 char **, cmd_response_data_t*);
+int download_credential_omp (credentials_t *, params_t *, gsize *, char **,
+                             char **, cmd_response_data_t*);
 
-char * export_lsc_credential_omp (credentials_t *, params_t *,
-                                  enum content_type *, char **, gsize *,
-                                  cmd_response_data_t*);
-char * export_lsc_credentials_omp (credentials_t *, params_t *,
-                                   enum content_type *, char **, gsize *,
-                                   cmd_response_data_t*);
-char * get_lsc_credential_omp (credentials_t *, params_t *,
+char * export_credential_omp (credentials_t *, params_t *,
+                              enum content_type *, char **, gsize *,
+                              cmd_response_data_t*);
+char * export_credentials_omp (credentials_t *, params_t *,
+                               enum content_type *, char **, gsize *,
                                cmd_response_data_t*);
-char * get_lsc_credentials_omp (credentials_t *, params_t *,
-                                cmd_response_data_t*);
-char * new_lsc_credential_omp (credentials_t *, params_t *,
-                               cmd_response_data_t*);
-char * create_lsc_credential_omp (credentials_t *, params_t *,
-                                  cmd_response_data_t*);
-char * delete_lsc_credential_omp (credentials_t *, params_t *,
-                                  cmd_response_data_t*);
-char * delete_trash_lsc_credential_omp (credentials_t *, params_t *,
-                                        cmd_response_data_t*);
-char * edit_lsc_credential_omp (credentials_t *, params_t *,
-                                cmd_response_data_t*);
-char * save_lsc_credential_omp (credentials_t *, params_t *,
-                                cmd_response_data_t*);
+char * get_credential_omp (credentials_t *, params_t *,
+                           cmd_response_data_t*);
+char * get_credentials_omp (credentials_t *, params_t *,
+                            cmd_response_data_t*);
+char * new_credential_omp (credentials_t *, params_t *,
+                           cmd_response_data_t*);
+char * create_credential_omp (credentials_t *, params_t *,
+                              cmd_response_data_t*);
+char * delete_credential_omp (credentials_t *, params_t *,
+                              cmd_response_data_t*);
+char * delete_trash_credential_omp (credentials_t *, params_t *,
+                                    cmd_response_data_t*);
+char * edit_credential_omp (credentials_t *, params_t *,
+                            cmd_response_data_t*);
+char * save_credential_omp (credentials_t *, params_t *,
+                            cmd_response_data_t*);
 
 char * new_agent_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * get_agent_omp (credentials_t *, params_t *, cmd_response_data_t*);
