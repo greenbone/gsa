@@ -5051,7 +5051,10 @@ gsad_address_init (const char *address_str, int port)
     {
       gsad_address->sin_addr.s_addr = INADDR_ANY;
       gsad_address6->sin6_addr = in6addr_any;
-      address.ss_family = AF_INET6;
+      if (ipv6_is_enabled ())
+        address.ss_family = AF_INET6;
+      else
+        address.ss_family = AF_INET;
     }
   return 0;
 }
