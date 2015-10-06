@@ -28929,6 +28929,28 @@ var toggleFilter = function(){
                 <xsl:with-param name="nvt" select="nvt/name"/>
                 <xsl:with-param name="oid" select="$oid"/>
               </xsl:call-template>
+              <div class="float_right">
+                <xsl:choose>
+                  <xsl:when test="count (../result[nvt/@oid = $oid]/notes/note)">
+                    <div class="float_left">
+                      <a href="/omp?cmd=get_notes&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
+                         title="{gsa:i18n ('Notes', 'Note')}" style="margin-left:3px;">
+                        <img src="/img/note.png" border="0" alt="{gsa:i18n ('Notes', 'Note')}"/>
+                      </a>
+                    </div>
+                  </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="count (../result[nvt/@oid = $oid]/overrides/override)">
+                    <div class="float_left">
+                      <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
+                         title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
+                        <img src="/img/override.png" border="0" alt="{gsa:i18n ('Overrides', 'Override')}"/>
+                      </a>
+                    </div>
+                  </xsl:when>
+                </xsl:choose>
+              </div>
             </td>
             <td>
               <xsl:variable name="filter" select="../../../report/filters/term"/>
