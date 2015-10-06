@@ -20372,11 +20372,11 @@ create_permission_omp (credentials_t *credentials, params_t *params,
         }
     }
   else if (strcmp (subject_type, "user") == 0)
-    subject_id = params_value (params, "user_id");
+    subject_id = params_value (params, "permission_user_id");
   else if (strcmp (subject_type, "group") == 0)
-    subject_id = params_value (params, "group_id");
+    subject_id = params_value (params, "permission_group_id");
   else if (strcmp (subject_type, "role") == 0)
-    subject_id = params_value (params, "role_id");
+    subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
   CHECK_PARAM (subject_id, "Create Permission", new_permission);
@@ -20729,11 +20729,11 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
         }
     }
   else if (strcmp (subject_type, "user") == 0)
-    subject_id = params_value (params, "user_id");
+    subject_id = params_value (params, "permission_user_id");
   else if (strcmp (subject_type, "group") == 0)
-    subject_id = params_value (params, "group_id");
+    subject_id = params_value (params, "permission_group_id");
   else if (strcmp (subject_type, "role") == 0)
-    subject_id = params_value (params, "role_id");
+    subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
   CHECK_PARAM (subject_id, "Create Permission", new_permission);

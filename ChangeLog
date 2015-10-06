@@ -1,5 +1,16 @@
 2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (permission-subject-selection): Rename ID
+	params, otherwise they can clash with the ID param given for the next
+	page (for example role_id when creating a permission from Role Details).
+
+	* src/gsad.c (init_validator): Add permission ID aliases.
+
+	* src/gsad_omp.c (create_permission_omp, create_permissions_omp): Use
+	new param names.
+
+2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (group [details], role [details])
 	(user [details]): Add permissions window.
 

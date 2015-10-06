@@ -22566,7 +22566,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('User', 'User')"/>
       <xsl:text> </xsl:text>
     </label>
-    <select name="user_id">
+    <select name="permission_user_id">
       <xsl:for-each select="get_users_response/user">
         <option value="{@id}"><xsl:value-of select="name"/></option>
       </xsl:for-each>
@@ -22587,7 +22587,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
       <xsl:text> </xsl:text>
     </label>
-    <select name="role_id">
+    <select name="permission_role_id">
       <xsl:for-each select="get_roles_response/role">
         <option value="{@id}"><xsl:value-of select="name"/></option>
       </xsl:for-each>
@@ -22608,7 +22608,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
       <xsl:text> </xsl:text>
     </label>
-    <select name="group_id">
+    <select name="permission_group_id">
       <xsl:for-each select="get_groups_response/group">
         <option value="{@id}"><xsl:value-of select="name"/></option>
       </xsl:for-each>

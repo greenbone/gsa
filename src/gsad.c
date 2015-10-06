@@ -1456,6 +1456,9 @@ init_validator ()
   openvas_validator_alias (validator, "password:name", "preference_name");
   openvas_validator_alias (validator, "permission", "name");
   openvas_validator_alias (validator, "permission_id", "id");
+  openvas_validator_alias (validator, "permission_group_id", "id");
+  openvas_validator_alias (validator, "permission_role_id",  "id");
+  openvas_validator_alias (validator, "permission_user_id",  "id");
   openvas_validator_alias (validator, "port_manual",       "port");
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
