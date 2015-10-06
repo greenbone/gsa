@@ -22328,6 +22328,10 @@ should not have received it.
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'group'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'group'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-groups-trash-table">
@@ -31039,6 +31043,10 @@ var toggleFilter = function(){
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'role'"/>
   </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'role'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="html-roles-trash-table">
@@ -32518,6 +32526,10 @@ var toggleFilter = function(){
   </div>
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'user'"/>
+  </xsl:call-template>
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'user'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
   </xsl:call-template>
 </xsl:template>
 

@@ -1,5 +1,13 @@
 2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (group [details], role [details])
+	(user [details]): Add permissions window.
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Apply indicator icons for
+	new permissions windows.
+
+2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [results]): Correct typo.
 
 2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>

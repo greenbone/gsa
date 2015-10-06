@@ -1138,6 +1138,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_group/create_group_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_group/create_permission_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_group/delete_group_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_group/modify_group_response"
@@ -1368,6 +1370,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/modify_tag_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_role/create_permission_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_role/delete_role_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_roles/create_filter_response"
@@ -1545,6 +1549,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_trash/restore_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/run_wizard_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_user/create_permission_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_user/create_user_response"
                              mode="response-indicator"/>
