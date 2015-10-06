@@ -3596,7 +3596,7 @@ var toggleFilter = function(){
             </p>
             <p>
             <ul>
-            <li><xsl:value-of select="gsa:i18n ('The target hosts where regarded dead.', 'Result')"/></li>
+            <li><xsl:value-of select="gsa:i18n ('The target hosts were regarded dead.', 'Result')"/></li>
             <li><xsl:value-of select="gsa:i18n ('The filter does not match any result.', 'Result')"/></li>
             <li><xsl:value-of select="gsa:i18n ('A very small or non-verbose scan configuration was applied.', 'Result')"/></li>
             </ul>

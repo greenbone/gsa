@@ -1,5 +1,9 @@
 2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [results]): Correct typo.
+
+2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [vulns]): When there are notes and
 	overrides add icons that link to the notes and overrides pages.
 
