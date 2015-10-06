@@ -2541,7 +2541,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                 " export=\"1\""
                                 " details=\"1\""
                                 " filter=\"%s\"/>",
-                                params_value (params, "subtype"),
+                                params_value (params, "asset_type"),
                                 filter_escaped ? filter_escaped : "")
           == -1)
         {

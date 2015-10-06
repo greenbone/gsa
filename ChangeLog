@@ -1,3 +1,8 @@
+2015-10-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (export_many): Use correct subtype parameter name
+	"asset_type" for assets.
+
 2015-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Adapt to lsc_credentials now being named credentials. Use new
