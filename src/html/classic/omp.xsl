@@ -22414,6 +22414,19 @@ should not have received it.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="175" colspan="2">
+              <xsl:value-of select="gsa:i18n ('Special Groups', 'Group')"/>:
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175" colspan="2">
+              <label>
+                <input type="checkbox" name="grant_full" value="1"/>
+                <xsl:value-of select="gsa:i18n ('Create permission to grant full read and write access among all group members and across any resources', 'Group')"/>
+              </label>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create Group', 'Group')}"/>
             </td>

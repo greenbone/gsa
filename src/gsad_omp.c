@@ -19741,12 +19741,15 @@ char *
 create_group_omp (credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  gchar *html, *response;
-  const char *name, *comment, *users;
+  gchar *html, *response, *command, *specials_element;
+  const char *name, *comment, *users, *grant_full;
   entity_t entity;
+  GString *xml;
+  int ret;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  grant_full = params_value (params, "grant_full");
   users = params_value (params, "users");
 
   CHECK_PARAM (name, "Create Group", new_group);
@@ -19755,18 +19758,36 @@ create_group_omp (credentials_t *credentials, params_t *params,
 
   /* Create the group. */
 
-  switch (ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<create_group>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<users>%s</users>"
-                "</create_group>",
-                name,
-                comment,
-                users))
+  xml = g_string_new ("");
+
+  xml_string_append (xml,
+                     "<name>%s</name>"
+                     "<comment>%s</comment>"
+                     "<users>%s</users>",
+                     name,
+                     comment,
+                     users);
+
+  if (grant_full)
+    specials_element = g_strdup_printf ("<full/>");
+  else
+    specials_element = NULL;
+
+  command = g_strdup_printf ("<create_group>"
+                             "%s"
+                             "<specials>"
+                             "%s"
+                             "</specials>"
+                             "</create_group>",
+                             xml->str,
+                             specials_element);
+
+  g_string_free (xml, TRUE);
+  g_free (specials_element);
+
+  ret = omp (credentials, &response, &entity, response_data, command);
+  g_free (command);
+  switch (ret)
     {
       case 0:
       case -1:

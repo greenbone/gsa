@@ -1,5 +1,18 @@
 2015-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add option to Create Group to create permissions to share all resources
+	between group members.
+
+	* src/gsad.c (init_validator): Add grant_full.
+
+	* src/gsad_omp.c (create_group_omp): Add SPECIALS to CREATE_GROUP,
+	according to grant_full arg.
+
+	* src/html/classic/omp.xsl (html-create-group-form): Add Special Groups
+	field.
+
+2015-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_one): Get permissions of any name, so that Super
 	is included.  The resource ID is enough alone to limit the permissions.
 
