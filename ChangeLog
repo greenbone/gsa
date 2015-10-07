@@ -1,3 +1,14 @@
+2015-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* ChangeLog: Add missed entry.
+
+2015-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r23519.
+
+	* src/html/classic/omp.xsl (report [vulns]): When there are notes and
+	overrides add icons that link to the notes and overrides pages.
+
 2015-10-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23494.
