@@ -1,3 +1,8 @@
+2015-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_one): Get permissions of any name, so that Super
+	is included.  The resource ID is enough alone to limit the permissions.
+
 2015-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (permission-subject-selection): Rename ID

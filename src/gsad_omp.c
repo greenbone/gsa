@@ -1629,10 +1629,8 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_permissions"
-                            " filter=\"name:^.*(%s)s?$"
-                            "          and resource_uuid=%s"
+                            " filter=\"resource_uuid=%s"
                             "          first=1 rows=-1\"/>",
-                            type,
                             id)
       == -1)
     {
