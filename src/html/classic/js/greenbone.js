@@ -106,8 +106,7 @@
     var buttons = this.dialog.closest('.ui-dialog').find('button');
     buttons.each (function () {
       var button = $(this)
-      if (button.button('option', 'label') != "Close"
-          && button.button('option', 'label') != "Cancel")
+      if (button.button('option', 'label') != "Close")
         {
           this.label = button.button('option', 'label');
           if (this.label != "OK")
@@ -242,13 +241,7 @@
 
               self.postForm();
             },
-          },
-          {
-            text: "Cancel",
-            click: function(){
-              self.dialog.dialog ("close");
-            },
-          },
+          }
         ],
         close: function(event, ui){
           self.dialog.remove();
