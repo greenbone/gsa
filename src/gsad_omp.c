@@ -24650,6 +24650,9 @@ save_user_omp (credentials_t * credentials, params_t *params,
                                   param->value ? param->value : "");
       }
     }
+  else
+    g_string_append_printf (role_elements, "<role id=\"0\"/>");
+
   g_string_append (command, role_elements->str);
   g_string_free (role_elements, TRUE);
 
