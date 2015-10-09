@@ -131,13 +131,15 @@
     });
   }
 
-  OMPDialog.prototype.error = function(message){
+  OMPDialog.prototype.error = function(message, title){
+    if (! title)
+      title = "Error:";
     //Remove previous errors
     this.dialog.find('div.ui-state-error').remove();
     // Insert our error message
     this.dialog.prepend($("<div/>", {
       "class": "ui-state-error ui-corner-all",
-      html: $("<p><strong>Error :</strong> " + message + "</p>"),
+      html: $("<p><strong>" + title + "</strong> " + message + "</p>"),
     }));
   };
 
@@ -160,13 +162,37 @@
     })
       .fail(function(jqXHR){
         var xml = $(jqXHR.responseXML),
+            html = $(jqXHR.responseText),
             response = xml.find(RESPONSE_SELECTORS[self.command]),
             gsad_msg = xml.find('gsad_msg'),
-            error = gsad_msg.attr("status_text");
-        if (gsad_msg.length == 0){
-          error = response.attr('status_text');
-        }
-        self.error(error);
+            internal_error_html
+              = html.find (".gb_error_dialog .gb_window_part_content_error"),
+            login_form_html
+              = html.find (".gb_login_dialog .gb_window_part_content"),
+            error_title = "Error:",
+            error = "Unknown error";
+
+        if (gsad_msg.length)
+          {
+            error = gsad_msg.attr("status_text")
+          }
+        else if (response.length)
+          {
+            error = response.attr('status_text');
+          }
+        else if (internal_error_html.length)
+          {
+            error_title = internal_error_html.find ("span div").text ()
+            if (! (error_title))
+              error_title = "Internal Error";
+            error = "<br/>" + internal_error_html.find ("span")[0].lastChild.textContent;
+          }
+        else if (login_form_html.length)
+          {
+            error = login_form_html.find ("center div")[0].lastChild.textContent
+          }
+
+        self.error(error, error_title);
 
         // restore the original button.
         self.done();
@@ -257,7 +283,40 @@
       $('html').css('cursor', "");
     };
 
-    fail_func = function(){
+    fail_func = function(response){
+
+      self.dialog = $("<div/>", {
+        'class': "dialog-form",
+        title:  "Error"
+      });
+
+      var html = $(response.responseText),
+          internal_error_html
+            = html.find (".gb_error_dialog .gb_window_part_content_error"),
+          login_form_html
+            = html.find (".gb_login_dialog .gb_window_part_content"),
+          error_title = "Error:",
+          error = "Unknown error";
+
+      if (internal_error_html.length)
+        {
+          error_title = internal_error_html.find ("span div").text ()
+          if (! (error_title))
+            error_title = "Internal Error";
+          error = "<br/>" + internal_error_html.find ("span")[0].lastChild.textContent;
+        }
+      else if (login_form_html.length)
+        {
+          error = login_form_html.find ("center div")[0].lastChild.textContent
+        }
+
+      self.dialog.dialog({
+        modal: true,
+        width: 800
+      });
+
+      self.error (error, error_title);
+
       $('html').css('cursor', "");
     };
 

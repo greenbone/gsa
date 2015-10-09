@@ -1,3 +1,13 @@
+2015-10-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (error_dialog, login_page): Add CSS classes
+	to the dialog boxes to help selecting them.
+
+	* src/html/classic/js/greenbone.js (OMPDialog [error]): Add parameter
+	to set title of the error.
+	(OMPDialog [postForm, show]): Handle requests returning the internal
+	error dialog and the login form.
+
 2015-10-09  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Set the new/edit User -> group selection a multiple select box.

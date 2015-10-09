@@ -2166,7 +2166,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="token"></xsl:param>
   <center>
     <div style="width:500px;">
-      <div class="gb_window" style="margin-top:150px;">
+      <div class="gb_window gb_error_dialog" style="margin-top:150px;">
         <div class="gb_window_part_left_error"></div>
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">Error Message</div>
@@ -2314,7 +2314,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="login_page">
   <div style="width:315px;margin-top:5px;">
-    <div class="gb_window">
+    <div class="gb_window gb_login_dialog">
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
       <div class="gb_window_part_center">Greenbone Security Assistant</div>
