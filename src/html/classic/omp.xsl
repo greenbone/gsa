@@ -31885,51 +31885,6 @@ var toggleFilter = function(){
 
 <!-- BEGIN USERS MANAGEMENT -->
 
-<xsl:template match="group" mode="newuser">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
-</xsl:template>
-
-<xsl:template name="new-user-group-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="groups" select="get_groups_response"/>
-  <select name="group_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$groups/group"
-                         mode="newuser"/>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-user-group-select">
-      <xsl:with-param name="groups" select="$groups"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template match="role" mode="newuser">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
-</xsl:template>
-
-<xsl:template name="new-user-role-select">
-  <xsl:param name="position" select="1"/>
-  <xsl:param name="count" select="0"/>
-  <xsl:param name="roles" select="get_roles_response"/>
-  <select name="role_id_optional:{$position}">
-    <option value="--">--</option>
-    <xsl:apply-templates select="$roles" mode="newuser"/>
-  </select>
-  <xsl:if test="$count &gt; 1">
-    <br/>
-    <xsl:call-template name="new-user-role-select">
-      <xsl:with-param name="roles" select="$roles"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-      <xsl:with-param name="position" select="$position + 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
 <xsl:template name="html-create-user-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
