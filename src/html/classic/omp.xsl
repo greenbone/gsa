@@ -31958,15 +31958,15 @@ var toggleFilter = function(){
         <xsl:if test="not (gsa:may-op ('get_groups'))">
           <input type="hidden" name="group_id_optional:1" value="--"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
+        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
             <td>
               <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
                      size="30" maxlength="80"/>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <xsl:choose>
               <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
                 <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
@@ -31994,79 +31994,20 @@ var toggleFilter = function(){
             </xsl:choose>
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
-            <tr class="odd">
+            <tr>
               <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td>
-                <xsl:variable name="roles"
-                              select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
-                <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']">
-                  <select name="{name}">
-                    <xsl:variable name="role_id" select="value"/>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($role_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="$roles">
-                      <xsl:choose>
-                        <xsl:when test="@id = $role_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  <br/>
-                </xsl:for-each>
-                <xsl:variable name="count"
-                              select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
-                <xsl:choose>
-                  <xsl:when test="$count = 0">
-                    <select name="role_id_optional:1">
-                      <option value="--">--</option>
-                      <xsl:for-each select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
-                        <xsl:choose>
-                          <xsl:when test="name = 'User'">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="new-user-role-select">
-                      <xsl:with-param name="roles" select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
-                      <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
-                      <xsl:with-param name="position" select="$count + 1"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-
-                <xsl:choose>
-                  <xsl:when test="string-length (/envelope/params/roles)">
-                    <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="roles" value="{1}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <!-- Force the Create User button to be the default. -->
-                <input style="position: absolute; left: -100%"
-                       type="submit" name="submit" value="{gsa:i18n ('Create User', 'User')}"/>
-                <input type="submit" name="submit_plus_role" value="+"/>
+                <select name="role_ids:" multiple="multiple">
+                  <xsl:for-each select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:for-each>
+                </select>
+                <br/>
               </td>
             </tr>
           </xsl:if>
           <xsl:if test="gsa:may-op ('get_groups')">
-            <tr class="even">
+            <tr>
               <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td>
                 <xsl:variable name="groups"
@@ -32118,7 +32059,7 @@ var toggleFilter = function(){
               </td>
             </tr>
           </xsl:if>
-          <tr class="odd">
+          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
             <td>
               <label>
@@ -32134,7 +32075,7 @@ var toggleFilter = function(){
                      size="30" maxlength="2000"/>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
             <td>
               <label>
@@ -32567,8 +32508,8 @@ var toggleFilter = function(){
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
+        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
             <td>
               <input type="hidden" name="user_id" value="{@id}"/>
@@ -32631,103 +32572,29 @@ var toggleFilter = function(){
               </xsl:otherwise>
             </xsl:choose>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
-              <xsl:variable name="roles" select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
               <xsl:if test="$super">
                 <select disabled="disabled" name="dummy">
                   <option value="" selected="1"><xsl:value-of select="role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']/name"/></option>
                 </select>
                 <br/>
               </xsl:if>
-              <xsl:choose>
-                <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']) &gt; 0">
-                  <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--']/value">
-                    <select name="role_id_optional:{position ()}">
-                      <xsl:variable name="role_id" select="text ()"/>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($role_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="$roles">
-                        <xsl:choose>
-                          <xsl:when test="@id = $role_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <br/>
-                  </xsl:for-each>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:for-each select="role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
-                    <select name="role_id_optional:{position ()}">
-                      <xsl:variable name="role_id" select="@id"/>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($role_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="$roles">
-                        <xsl:choose>
-                          <xsl:when test="@id = $role_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
-                    <br/>
-                  </xsl:for-each>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:variable name="count">
-                <xsl:variable name="params"
-                              select="count (/envelope/params/_param[substring-before (name, ':') = 'role_id_optional'][value != '--'])"/>
-                <xsl:choose>
-                  <xsl:when test="$params &gt; 0">
-                    <xsl:value-of select="$params"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="count (role)"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:call-template name="new-user-role-select">
-                <xsl:with-param name="roles" select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']"/>
-                <xsl:with-param name="count" select="/envelope/params/roles - $count"/>
-                <xsl:with-param name="position" select="$count + 1"/>
-              </xsl:call-template>
-
-              <!-- Force the Save User button to be the default. -->
-              <input style="position: absolute; left: -100%"
-                     type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
-              <input type="submit" name="submit_plus_role" value="+"/>
-
-              <xsl:choose>
-                <xsl:when test="string-length (/envelope/params/roles)">
-                  <input type="hidden" name="roles" value="{/envelope/params/roles}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="roles" value="{$count + 1}"/>
-                </xsl:otherwise>
-              </xsl:choose>
+              <select name="role_ids:" multiple="multiple">
+                <xsl:for-each select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
+                  <xsl:variable name="role_id" select="@id"/>
+                  <xsl:choose>
+                    <xsl:when test="../../commands_response/get_users_response/user/role[@id = $role_id]">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
             </td>
           </tr>
           <tr>
@@ -32823,7 +32690,7 @@ var toggleFilter = function(){
               </xsl:choose>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
             <td>
               <label>
@@ -32853,7 +32720,7 @@ var toggleFilter = function(){
                      maxlength="2000"/>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
             <td>
               <label>

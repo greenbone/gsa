@@ -1475,6 +1475,8 @@ init_validator ()
   openvas_validator_alias (validator, "role_id_optional",  "id_optional");
   openvas_validator_alias (validator, "role_id_optional:name",  "number");
   openvas_validator_alias (validator, "role_id_optional:value", "id_optional");
+  openvas_validator_alias (validator, "role_ids:name",  "number");
+  openvas_validator_alias (validator, "role_ids:value", "id_optional");
   openvas_validator_alias (validator, "roles",             "optional_number");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
@@ -1717,7 +1719,8 @@ params_append_mhd (params_t *params,
    * For example multiple instances of "x:" in the request
    *  become "x:1", "x:2", "x:3", etc.
    */
-  if (strcmp (name, "alert_ids:") == 0)
+  if ((strcmp (name, "alert_ids:") == 0)
+      || (strcmp(name, "role_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -2611,7 +2614,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
   /*
    * Array param (See params_append_mhd for a description)
    */
-  if (strcmp (name, "alert_ids:") == 0)
+  if ((strcmp (name, "alert_ids:") == 0)
+      || (strcmp(name, "role_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;

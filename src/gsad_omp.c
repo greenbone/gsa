@@ -24175,7 +24175,11 @@ create_user_omp (credentials_t * credentials, params_t *params,
   g_string_append (string, "</groups>");
 
   role_elements = g_string_new ("");
-  roles = params_values (params, "role_id_optional:");
+  if (params_given (params, "role_id_optional:"))
+    roles = params_values (params, "role_id_optional:");
+  else
+    roles = params_values (params, "role_ids:");
+
   if (roles)
     {
       params_iterator_t iter;
@@ -24184,10 +24188,12 @@ create_user_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, roles);
       while (params_iterator_next (&iter, &name, &param))
+      {
         if (param->value && strcmp (param->value, "--"))
           g_string_append_printf (role_elements,
                                   "<role id=\"%s\"/>",
                                   param->value ? param->value : "");
+      }
     }
   g_string_append (string, role_elements->str);
   g_string_free (role_elements, TRUE);
@@ -24624,7 +24630,11 @@ save_user_omp (credentials_t * credentials, params_t *params,
   g_string_append (command, "</groups>");
 
   role_elements = g_string_new ("");
-  roles = params_values (params, "role_id_optional:");
+  if (params_given (params, "role_id_optional:"))
+    roles = params_values (params, "role_id_optional:");
+  else
+    roles = params_values (params, "role_ids:");
+
   if (roles)
     {
       params_iterator_t iter;
@@ -24633,10 +24643,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, roles);
       while (params_iterator_next (&iter, &name, &param))
+      {
         if (param->value && strcmp (param->value, "--"))
           g_string_append_printf (role_elements,
                                   "<role id=\"%s\"/>",
                                   param->value ? param->value : "");
+      }
     }
   g_string_append (command, role_elements->str);
   g_string_free (role_elements, TRUE);
