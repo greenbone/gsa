@@ -1396,9 +1396,8 @@ init_validator ()
   openvas_validator_alias (validator, "get_name",           "name");
   openvas_validator_alias (validator, "grant_full",         "boolean");
   openvas_validator_alias (validator, "group_id",           "id");
-  openvas_validator_alias (validator, "group_id_optional",  "id_optional");
-  openvas_validator_alias (validator, "group_id_optional:name",  "number");
-  openvas_validator_alias (validator, "group_id_optional:value", "id_optional");
+  openvas_validator_alias (validator, "group_ids:name",     "number");
+  openvas_validator_alias (validator, "group_ids:value",    "id_optional");
   openvas_validator_alias (validator, "groups",             "optional_number");
   openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "host_first_result",  "first_result");
@@ -1472,9 +1471,6 @@ init_validator ()
   openvas_validator_alias (validator, "reverse_lookup_only", "boolean");
   openvas_validator_alias (validator, "reverse_lookup_unify", "boolean");
   openvas_validator_alias (validator, "role_id",           "id");
-  openvas_validator_alias (validator, "role_id_optional",  "id_optional");
-  openvas_validator_alias (validator, "role_id_optional:name",  "number");
-  openvas_validator_alias (validator, "role_id_optional:value", "id_optional");
   openvas_validator_alias (validator, "role_ids:name",  "number");
   openvas_validator_alias (validator, "role_ids:value", "id_optional");
   openvas_validator_alias (validator, "roles",             "optional_number");
@@ -1720,7 +1716,8 @@ params_append_mhd (params_t *params,
    *  become "x:1", "x:2", "x:3", etc.
    */
   if ((strcmp (name, "alert_ids:") == 0)
-      || (strcmp(name, "role_ids:") == 0))
+      || (strcmp(name, "role_ids:") == 0)
+      || (strcmp(name, "group_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -2615,7 +2612,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
    * Array param (See params_append_mhd for a description)
    */
   if ((strcmp (name, "alert_ids:") == 0)
-      || (strcmp(name, "role_ids:") == 0))
+      || (strcmp(name, "role_ids:") == 0)
+      || (strcmp(name, "group_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;

@@ -1,5 +1,11 @@
 2015-10-09  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Set the new/edit User -> group selection a multiple select box.
+
+	* src/gsad.c, src/gsad_omp.c, src/html/classic/omp.xsl: Updated
+
+2015-10-09  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/gsad_omp.c: Handle the case where all roles have been removed.
 
 2015-10-09  Timo Pollmeier <timo.pollmeier@greenbone.net>

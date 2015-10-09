@@ -24156,7 +24156,11 @@ create_user_omp (credentials_t * credentials, params_t *params,
   g_free (buf);
 
   group_elements = g_string_new ("<groups>");
-  groups = params_values (params, "group_id_optional:");
+  if (params_given (params, "group_id_optional:"))
+    groups = params_values (params, "group_id_optional:");
+  else
+    groups = params_values (params, "group_ids:");
+
   if (groups)
     {
       params_iterator_t iter;
@@ -24165,10 +24169,12 @@ create_user_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, groups);
       while (params_iterator_next (&iter, &name, &param))
+      {
         if (param->value && strcmp (param->value, "--"))
           g_string_append_printf (group_elements,
                                   "<group id=\"%s\"/>",
                                   param->value ? param->value : "");
+      }
     }
   g_string_append (string, group_elements->str);
   g_string_free (group_elements, TRUE);
@@ -24611,7 +24617,11 @@ save_user_omp (credentials_t * credentials, params_t *params,
     }
 
   group_elements = g_string_new ("<groups>");
-  groups = params_values (params, "group_id_optional:");
+  if (params_given (params, "group_id_optional:"))
+    groups = params_values (params, "group_id_optional:");
+  else
+    groups = params_values (params, "group_ids:");
+
   if (groups)
     {
       params_iterator_t iter;
@@ -24620,10 +24630,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, groups);
       while (params_iterator_next (&iter, &name, &param))
+      {
         if (param->value && strcmp (param->value, "--"))
           g_string_append_printf (group_elements,
                                   "<group id=\"%s\"/>",
                                   param->value ? param->value : "");
+      }
     }
   g_string_append (command, group_elements->str);
   g_string_free (group_elements, TRUE);
