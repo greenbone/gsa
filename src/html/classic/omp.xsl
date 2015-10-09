@@ -5511,19 +5511,11 @@ var toggleFilter = function(){
       </xsl:if>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <xsl:if test="not (gsa:may-op ('get_alerts'))">
-        <input type="hidden" name="alerts" value="1"/>
-        <input type="hidden" name="alert_id_optional:1" value="--"/>
-      </xsl:if>
       <xsl:if test="not (gsa:may-op ('get_schedules'))">
         <input type="hidden" name="schedule_id_optional" value="--"/>
       </xsl:if>
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
         <input type="hidden" name="slave_id_optional" value="--"/>
-      </xsl:if>
-      <xsl:if test="not (gsa:may-op ('get_groups'))">
-        <input type="hidden" name="groups" value="1"/>
-        <input type="hidden" name="group_id_optional:1" value="--"/>
       </xsl:if>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
@@ -6622,19 +6614,11 @@ var toggleFilter = function(){
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <xsl:if test="not (gsa:may-op ('get_alerts'))">
-          <input type="hidden" name="alerts" value="1"/>
-          <input type="hidden" name="alert_id_optional:1" value="--"/>
-        </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_schedules'))">
           <input type="hidden" name="schedule_id" value="0"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_slaves'))">
           <input type="hidden" name="slave_id" value="0"/>
-        </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_groups'))">
-          <input type="hidden" name="groups" value="1"/>
-          <input type="hidden" name="group_id_optional:1" value="--"/>
         </xsl:if>
         <xsl:variable name="new_task">
           <xsl:choose>
@@ -31907,12 +31891,6 @@ var toggleFilter = function(){
         <input type="hidden" name="next" value="get_user"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <xsl:if test="not (gsa:may-op ('get_roles'))">
-          <input type="hidden" name="role_id_optional:1" value="--"/>
-        </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_groups'))">
-          <input type="hidden" name="group_id_optional:1" value="--"/>
-        </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
           <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>

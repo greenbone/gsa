@@ -10,6 +10,10 @@
 
 2015-10-09  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove usage of deprecated parameters.
+
+2015-10-09  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Set the new/edit User -> group selection a multiple select box.
 
 	* src/gsad.c, src/gsad_omp.c, src/html/classic/omp.xsl: Updated
