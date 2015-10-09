@@ -103,7 +103,7 @@
 
   OMPDialog.prototype.waiting = function(){
     // I believe there have to be a better way to find this.
-    var buttons = this.dialog.closest('.ui-dialog').find('button .ui-button');
+    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each (function () {
       var button = $(this);
       if (button.button('option', 'label') != "Close")
@@ -119,7 +119,7 @@
 
   OMPDialog.prototype.done = function(){
     // I believe there have to be a better way to find this.
-    var buttons = this.dialog.closest('.ui-dialog').find('button .ui-button');
+    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each (function () {
       var button = $(this);
       if (button.button('option', 'label') != "Close")
