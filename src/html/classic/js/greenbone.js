@@ -103,18 +103,15 @@
 
   OMPDialog.prototype.waiting = function(){
     // I believe there have to be a better way to find this.
-    var buttons = this.dialog.closest('.ui-dialog').find('button');
+    var buttons = this.dialog.closest('.ui-dialog').find('button .ui-button');
     buttons.each (function () {
-      var button = $(this)
+      var button = $(this);
       if (button.button('option', 'label') != "Close")
         {
           this.label = button.button('option', 'label');
           if (this.label != "OK")
             button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
           button.button('option', 'icons', {primary: 'ui-icon-waiting'});
-        }
-      if (button.button('option', 'label') != "Close")
-        {
           button.button('disable');
         }
     });
@@ -122,10 +119,16 @@
 
   OMPDialog.prototype.done = function(){
     // I believe there have to be a better way to find this.
-    var button = this.dialog.closest('.ui-dialog').find('button').last();
-    button.button('enable');
-    button.button('option', 'label', this.label);
-    button.button('option', 'icons', {primary: null});
+    var buttons = this.dialog.closest('.ui-dialog').find('button .ui-button');
+    buttons.each (function () {
+      var button = $(this);
+      if (button.button('option', 'label') != "Close")
+        {
+          button.button('enable');
+          button.button('option', 'label', this.label);
+          button.button('option', 'icons', {primary: null});
+        }
+    });
   }
 
   OMPDialog.prototype.error = function(message){
