@@ -4527,16 +4527,6 @@ var toggleFilter = function(){
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="concat(gsa:i18n ($cap-type-plural, $cap-type), ' ')"/>
 
-      <!-- Top pager. -->
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="$type"/>
-        <xsl:with-param name="list" select="$resources-summary"/>
-        <xsl:with-param name="count" select="$count"/>
-        <xsl:with-param name="filtered_count" select="$filtered-count"/>
-        <xsl:with-param name="full_count" select="$full-count"/>
-        <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-      </xsl:call-template>
-
       <!-- Header icons. -->
       <xsl:choose>
         <xsl:when test="$subtype != ''">
@@ -4725,6 +4715,27 @@ var toggleFilter = function(){
 
       <!-- Everything below the filtering and charts. -->
       <div>
+
+          <table style="width:100%">
+            <tr>
+              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
+                <div class="float_right">
+                  <xsl:call-template name="filter-window-pager">
+                    <xsl:with-param name="type" select="$type"/>
+                    <xsl:with-param name="list" select="$resources-summary"/>
+                    <xsl:with-param name="count" select="$count"/>
+                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                    <xsl:with-param name="full_count" select="$full-count"/>
+                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                  </xsl:call-template>
+                </div>
+                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter')"/>:
+                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </table>
 
         <!-- The entire table of resources, in a variable. -->
         <xsl:variable name="table">
