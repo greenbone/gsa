@@ -1,3 +1,8 @@
+2015-10-12  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Make sure the multiple select
+	  widget is not too narrow, even when empty.
+
 2015-10-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl (error_dialog, login_page): Add CSS classes
