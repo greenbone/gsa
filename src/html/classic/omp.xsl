@@ -32309,42 +32309,42 @@ should not have received it.
         </xsl:choose>
       </td>
     </xsl:if>
-    <td>
-      <xsl:choose>
-        <xsl:when test="name=/envelope/login/text()">
-          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Currently logged in as this user', 'User')}"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:when test="gsa:may ('delete_user') and writable != '0' and in_use = '0'">
-          <div style="display: inline">
-            <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-              <input type="hidden" name="cmd" value="delete_user"/>
-              <input type="hidden" name="user_id" value="{@id}"/>
-              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                     name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
-            </form>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('User cannot be deleted', 'User')}"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="/envelope/params/bulk_select = 1">
-          <td style="text-align:center">
-            <label style="width:100%">
-              <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
-            </label>
-          </td>
-        </xsl:when>
-        <xsl:otherwise>
+    <xsl:choose>
+      <xsl:when test="/envelope/params/bulk_select = 1">
+        <td style="text-align:center">
+          <label style="width:100%">
+            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action', 'Bulk Action')}"/>
+          </label>
+        </td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:choose>
+            <xsl:when test="name=/envelope/login/text()">
+              <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                  title="{gsa:i18n ('Currently logged in as this user', 'User')}"
+                  style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:when test="gsa:may ('delete_user') and writable != '0' and in_use = '0'">
+              <div style="display: inline">
+                <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                  <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                  <input type="hidden" name="cmd" value="delete_user"/>
+                  <input type="hidden" name="user_id" value="{@id}"/>
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                  <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                        name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
+                </form>
+              </div>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/delete_inactive.png" border="0" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                  title="{gsa:i18n ('User cannot be deleted', 'User')}"
+                  style="margin-left:3px;"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:call-template name="list-window-line-icons">
             <xsl:with-param name="cap-type" select="'User'"/>
             <xsl:with-param name="type" select="'user'"/>
@@ -32352,9 +32352,9 @@ should not have received it.
             <xsl:with-param name="notrash" select="1"/>
             <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
           </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </tr>
 </xsl:template>
 
