@@ -4731,10 +4731,6 @@ var toggleFilter = function(){
                     <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
                   </xsl:call-template>
                 </div>
-                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter')"/>:
-                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
               </td>
             </tr>
           </table>

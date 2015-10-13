@@ -1,5 +1,10 @@
 2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Remove the mention of the
+	  filter above the table.
+
+2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Re-add the count of objects
 	  in the title.
 
