@@ -1318,51 +1318,6 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<xsl:template name="auto-refresh">
-  <select style="margin-bottom: 0px;" name="refresh_interval" size="1" onchange="this.parentNode.submit()">
-    <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='0'">
-        <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No auto-refresh', 'Auto-Refresh')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="0"><xsl:value-of select="gsa:i18n ('No auto-refresh', 'Auto-Refresh')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='30'">
-        <option value="30" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 30 <xsl:value-of select="gsa:i18n ('Sec.', 'Auto-Refresh')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="30"><xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 30 <xsl:value-of select="gsa:i18n ('Sec.', 'Auto-Refresh')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='60'">
-        <option value="60" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 60 <xsl:value-of select="gsa:i18n ('Sec.', 'Auto-Refresh')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="60"><xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 60 <xsl:value-of select="gsa:i18n ('Sec.', 'Auto-Refresh')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='120'">
-        <option value="120" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 2 <xsl:value-of select="gsa:i18n ('Min.', 'Auto-Refresh')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="120"><xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 2 <xsl:value-of select="gsa:i18n ('Min.', 'Auto-Refresh')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="/envelope/autorefresh/@interval='300'">
-        <option value="300" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 5 <xsl:value-of select="gsa:i18n ('Min.', 'Auto-Refresh')"/></option>
-      </xsl:when>
-      <xsl:otherwise>
-        <option value="300"><xsl:value-of select="gsa:i18n ('Refresh every', 'Auto-Refresh')"/> 5 <xsl:value-of select="gsa:i18n ('Min.', 'Auto-Refresh')"/></option>
-      </xsl:otherwise>
-    </xsl:choose>
-  </select>
-</xsl:template>
-
 <xsl:template name="edit-header-icons">
   <xsl:param name="type"/>
   <xsl:param name="cap-type"/>
@@ -3686,7 +3641,6 @@ var toggleFilter = function(){
               <xsl:with-param name="params">
                 <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                 <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                 <input type="hidden" name="next" value="{$next}"/>
               </xsl:with-param>
             </xsl:call-template>
@@ -3704,7 +3658,6 @@ var toggleFilter = function(){
         <xsl:with-param name="params">
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
           <input type="hidden" name="next" value="{$next}"/>
         </xsl:with-param>
       </xsl:call-template>
@@ -3719,7 +3672,6 @@ var toggleFilter = function(){
         <xsl:with-param name="params">
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
           <input type="hidden" name="next" value="{$next}"/>
         </xsl:with-param>
       </xsl:call-template>
@@ -3732,7 +3684,6 @@ var toggleFilter = function(){
       <xsl:with-param name="params">
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
         <input type="hidden" name="next" value="{$next}"/>
       </xsl:with-param>
     </xsl:call-template>
@@ -3760,7 +3711,6 @@ var toggleFilter = function(){
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
               <input type="hidden" name="next" value="{$next}"/>
             </xsl:with-param>
           </xsl:call-template>
@@ -3855,27 +3805,6 @@ var toggleFilter = function(){
         </xsl:call-template>
       </div>
       <xsl:call-template name="move_task_icon"/>
-      <div class="small_inline_form" style="margin-left:40px; display: inline">
-        <form method="get" action="" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_task"/>
-          <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
-          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <xsl:call-template name="auto-refresh"/>
-          <input type="image" name="Update" src="/img/refresh.png"
-                 title="{gsa:i18n ('Update auto-refresh', 'Auto-Refresh')}"
-                 alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
-          <xsl:choose>
-            <xsl:when test="$apply-overrides = 0">
-              <input type="hidden" name="overrides" value="0"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="hidden" name="overrides" value="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </form>
-      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="minor-details"/>
@@ -4631,29 +4560,6 @@ var toggleFilter = function(){
         </xsl:otherwise>
       </xsl:choose>
 
-      <!-- Header refresh control. -->
-      <xsl:choose>
-        <xsl:when test="$type = 'info'"/>
-        <xsl:otherwise>
-          <div class="small_inline_form" style="margin-left:40px; display: inline">
-            <form method="get" action="" enctype="multipart/form-data">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <input type="hidden" name="filt_id" value="{filters/@id}"/>
-              <xsl:if test="$subtype != ''">
-                <input type="hidden" name="{$type}_type" value="{$subtype}"/>
-              </xsl:if>
-              <xsl:call-template name="auto-refresh"/>
-              <input type="image"
-                     name="Update"
-                     src="/img/refresh.png"
-                     title="{gsa:i18n ('Update auto-refresh', 'Auto-Refresh')}"
-                     alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
-            </form>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
     </div>
 
     <!-- The filtering controls. -->
@@ -5446,7 +5352,7 @@ var toggleFilter = function(){
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
@@ -5500,11 +5406,11 @@ var toggleFilter = function(){
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Wizard', 'Wizard')}">
       <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
@@ -6615,9 +6521,6 @@ var toggleFilter = function(){
         <input type="hidden"
                name="task_id"
                value="{commands_response/get_tasks_response/task/@id}"/>
-        <input type="hidden"
-               name="refresh_interval"
-               value="{refresh_interval}"/>
         <input type="hidden" name="next" value="{next}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
@@ -7219,9 +7122,6 @@ var toggleFilter = function(){
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_tasks"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
-                    <input type="hidden"
-                          name="refresh_interval"
-                          value="{/envelope/autorefresh/@interval}"/>
                     <xsl:choose>
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
@@ -25436,9 +25336,6 @@ should not have received it.
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_reports"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
-                    <input type="hidden"
-                          name="refresh_interval"
-                          value="{/envelope/autorefresh/@interval}"/>
                     <xsl:choose>
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
@@ -27488,9 +27385,6 @@ should not have received it.
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_results"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
-                    <input type="hidden"
-                          name="refresh_interval"
-                          value="{/envelope/autorefresh/@interval}"/>
                     <xsl:choose>
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
