@@ -2681,7 +2681,7 @@ delete_resource (const char *type, credentials_t * credentials,
 {
   gnutls_session_t session;
   int socket;
-  gchar *html, *response, *id_name, *resource_id;
+  gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   const char *next_id;
   entity_t entity;
 
@@ -2738,18 +2738,33 @@ delete_resource (const char *type, credentials_t * credentials,
                              "/omp?cmd=get_tasks", response_data);
     }
 
+  /* Extra attributes */
+  extra_attribs = NULL;
+
+  /* Inheritor of user's resource */
+  if (strcmp (type, "user") == 0)
+    {
+      const char* inheritor_id;
+      inheritor_id = params_value (params, "inheritor_id");
+      if (inheritor_id)
+        extra_attribs = g_strdup_printf ("inheritor_id=\"%s\"", inheritor_id);
+    }
+
   /* Delete the resource and get all resources. */
 
   if (openvas_server_sendf (&session,
-                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"/>",
+                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
                             type,
                             type,
                             resource_id,
-                            !!ultimate)
+                            !!ultimate,
+                            extra_attribs ? " " : "",
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
       openvas_server_close (socket, session);
       g_free (resource_id);
+      g_free (extra_attribs);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2760,6 +2775,7 @@ delete_resource (const char *type, credentials_t * credentials,
     }
 
   g_free (resource_id);
+  g_free (extra_attribs);
 
   entity = NULL;
   if (read_entity_and_text (&session, &entity, &response))
@@ -23896,6 +23912,88 @@ delete_user_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Returns page to create a new user.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+delete_user_confirm (credentials_t *credentials, params_t *params,
+                     const char *extra_xml, cmd_response_data_t* response_data)
+{
+  GString *xml;
+  gchar *response;
+  entity_t entity;
+
+  if (command_enabled (credentials, "GET_USERS"))
+    {
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_users filter=\"first=1 rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+    }
+
+  xml = g_string_new ("<delete_user>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append (xml, response);
+  free_entity (entity);
+  g_free (response);
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append (xml, "</delete_user>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Show confirmation deleting a user, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_user_confirm_omp (credentials_t * credentials, params_t *params,
+                         cmd_response_data_t* response_data)
+{
+  return delete_user_confirm (credentials, params, NULL, response_data);
+}
+
+/**
  * @brief Get one user, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -25643,6 +25741,61 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
     }
   g_string_append (bulk_string, "</selections>");
 
+  if (strcmp (action, "delete") == 0 && strcmp (type, "user") == 0)
+    {
+      int ret;
+      entity_t entity;
+      gchar *response;
+
+      ret = ompf (credentials, &response, &entity, response_data,
+                  "<get_users filter=\"first=1 rows=-1\"/>",
+                  type,
+                  params_value (params, "filter") ? : "");
+
+      if (ret)
+        {
+          free_entity (entity);
+          g_free (response);
+          g_string_free (bulk_string, TRUE);
+        }
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Failure to send command to"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Failure to receive response from"
+                                " manager daemon.",
+                                "/omp?cmd=get_my_settings", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a"
+                                " resources list. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=get_my_settings", response_data);
+        }
+
+      g_string_append (bulk_string, response);
+      free_entity (entity);
+      g_free (response);
+    }
+
   g_string_append (bulk_string, "</process_bulk>");
 
   return xsl_transform_omp (credentials, g_string_free (bulk_string, FALSE),
@@ -25672,6 +25825,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   gchar *param_name;
   gchar *html, *response;
   entity_t entity;
+  gchar *extra_attribs;
 
   type = params_value (params, "resource_type");
   if (type == NULL)
@@ -25685,6 +25839,18 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
+  /* Extra attributes */
+  extra_attribs = NULL;
+
+  /* Inheritor of user's resource */
+  if (strcmp (type, "user") == 0)
+    {
+      const char* inheritor_id;
+      inheritor_id = params_value (params, "inheritor_id");
+      if (inheritor_id)
+        extra_attribs = g_strdup_printf ("inheritor_id=\"%s\"", inheritor_id);
+    }
+
   commands_xml = g_string_new ("<commands>");
 
   selected_ids = params_values (params, "bulk_selected:");
@@ -25692,11 +25858,17 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
     {
       params_iterator_init (&iter, selected_ids);
       while (params_iterator_next (&iter, &param_name, &param))
-        xml_string_append (commands_xml,
-                           "<delete_%s %s_id=\"%s\" ultimate=\"0\"/>",
-                           type,
-                           type,
-                           param_name);
+        {
+          xml_string_append (commands_xml,
+                            "<delete_%s %s_id=\"%s\" ultimate=\"0\"",
+                            type,
+                            type,
+                            param_name);
+          if (extra_attribs)
+            g_string_append_printf (commands_xml, " %s/>", extra_attribs);
+          else
+            g_string_append (commands_xml, "/>");
+        }
     }
 
   g_string_append (commands_xml, "</commands>");

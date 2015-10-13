@@ -1,3 +1,28 @@
+2015-10-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add options to have a user inherit resources from a user being deleted.
+
+	* src/gsad.c (init_validator): Add command delete_user_confirm and
+	parameter inheritor_id.
+	(exec_omp_get): Add case for delete_user_confirm.
+
+	* src/gsad_omp.c (delete_resource): Add inheritor_id param for
+	delete_users if given.
+	(delete_user_confirm, delete_user_confirm_omp): New functions.
+	(process_bulk_omp): Get users for user delete dialog.
+	(bulk_delete_omp): Add inheritor_id to delete_user commands if given.
+
+	* src/gsad_omp.h (delete_user_confirm_omp): New function prototype.
+
+	* src/html/classic/omp.xsl (delete-icon, user): Show confirmation
+	dialog with inheritor selection instead of directly deleting a user.
+	(delete_user): New template.
+	(process_bulk): Add inheritor selection when about to delete users.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add entry for
+	delete_user.
+	(onReady): Add case for delete-action-icon class.
+
 2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/gsad.xsl, src/html/classic/omp.xsl: Remove any

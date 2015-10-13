@@ -402,6 +402,8 @@ char * save_filter_omp (credentials_t *, params_t *, cmd_response_data_t*);
 
 char * create_user_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_user_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * delete_user_confirm_omp (credentials_t *, params_t *,
+                                cmd_response_data_t*);
 char * edit_user_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * export_user_omp (credentials_t *, params_t *, enum content_type *,
                         char **, gsize *, cmd_response_data_t*);

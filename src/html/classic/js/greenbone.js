@@ -62,6 +62,8 @@
     edit_task:           'modify_task_response',
     edit_user:           'modify_user_response',
     // ------
+    delete_user:         'delete_user_response',
+    // ------
     process_bulk:        'commands_response'
   };
 
@@ -391,6 +393,22 @@
       elem.on('click', function(event){
         event.preventDefault();
         new OMPDialog('upload_' + type_name, done, params).show();
+      });
+    });
+
+    doc.find(".delete-action-icon").each(function(){
+      var elem = $(this),
+          type_name = elem.data('type'),
+          done = elem.data('done'),
+          type_id = elem.data('id'),
+          params = {};
+      params[type_name + '_id'] = type_id;
+      if (done === undefined){
+        done = true;
+      }
+      elem.on('click', function(event){
+        event.preventDefault();
+        new OMPDialog('delete_' + type_name + '_confirm', done, params).show('Delete');
       });
     });
 

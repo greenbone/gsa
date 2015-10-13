@@ -923,6 +923,7 @@ init_validator ()
                          "|(delete_trash_target)"
                          "|(delete_trash_task)"
                          "|(delete_user)"
+                         "|(delete_user_confirm)"
                          "|(download_agent)"
                          "|(download_credential)"
                          "|(download_ssl_cert)"
@@ -1412,6 +1413,7 @@ init_validator ()
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
   openvas_validator_alias (validator, "include_related",   "number");
+  openvas_validator_alias (validator, "inheritor_id",       "id");
   openvas_validator_alias (validator, "ignore_pagination",   "boolean");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
@@ -2783,6 +2785,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (get_tasks_chart)
+  ELSE (delete_user_confirm)
   ELSE (edit_agent)
   ELSE (edit_alert)
   ELSE (edit_asset)
