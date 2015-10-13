@@ -4553,31 +4553,6 @@ var toggleFilter = function(){
          title="{gsa:i18n ('Return to default filter view', 'Action Verb')}" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="{gsa:i18n ('Return', 'Action Verb')}"/>
       </a>
-      <xsl:choose>
-        <xsl:when test="$type = 'report'"/>
-        <xsl:when test="$type = 'info'"/>
-        <xsl:when test="$subtype != ''">
-          <!-- i18n with concat : see dynamic_strings.xsl - type-export-multiple-filtered-xml -->
-          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;subtype={$subtype}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-               title="{gsa-i18n:strformat (gsa:n-i18n (concat ('Export %1 filtered ', $cap-type, ' as XML'), concat ('Export %1 filtered ', $cap-type-plural, ' as XML'), $filtered-count, $cap-type), $filtered-count)}"
-               style="margin-left:3px;">
-              <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-            </a>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- i18n with concat : see dynamic_strings.xsl - type-export-multiple-filtered-xml -->
-          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=export_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
-               title="{gsa-i18n:strformat (gsa:n-i18n (concat ('Export %1 filtered ', $cap-type, ' as XML'), concat ('Export %1 filtered ', $cap-type-plural, ' as XML'), $filtered-count, $cap-type), $filtered-count)}"
-               style="margin-left:3px;">
-              <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-            </a>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-
     </div>
 
     <!-- The filtering controls. -->

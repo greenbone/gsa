@@ -1,3 +1,10 @@
+2015-10-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Removed the download icon from the
+	title bar. The download of all XML objects is also available via bulk action.
+	Also, offering a download button for all XML objects at such a prominent
+	location can cause trouble. For example, there could be millions of results.
+
 2015-10-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add options to have a user inherit resources from a user being deleted.
