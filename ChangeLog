@@ -1,5 +1,11 @@
 2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/gsad.xsl, src/html/classic/js/greenbone.js: Add a
+	  #autorefresh select to the header, and move the storage of the
+	  interval to the local browser storage.
+
+2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Remove the mention of the
 	  filter above the table.
 

@@ -420,9 +420,6 @@
       });
     });
 
-    doc.find('select').select2();
-
-
     var datepicker = doc.find("#datepicker");
     if (datepicker.length) {
       var curDate = doc.find('input[name=month]').val() + '/' + doc.find('input[name=day_of_month]').val() + '/' + doc.find('input[name=year]').val();
@@ -443,24 +440,42 @@
       });
       datepicker.datepicker("setDate", curDate);
     }
+
+    var autorefresh = doc.find('#autorefresh');
+    if (autorefresh.length){
+      if (window.localStorage.getItem('autorefresh-interval')){
+        autorefresh.val(window.localStorage.getItem('autorefresh-interval'));
+      }
+      autorefresh.change(function() {
+        stopAutoRefresh();
+        window.localStorage.setItem('autorefresh-interval', $(this).val());
+        startAutoRefresh();
+      });
+      if (!window.autorefresh_enabled){
+        autorefresh.prop('disabled', 'disabled');
+      }
+    }
+
+    doc.find('select').select2();
   };
 
-  var startAutoRefresh = function(){
+  var timeout_id = undefined,
+      startAutoRefresh = function(){
     if ($('.dialog-form').length > 0){
       // Still open dialogs.
       return;
     }
-    if ((window.autorefresh !== undefined) && (window.autorefresh.interval != 0)) {
-      window.autorefresh.timeout_id = window.setTimeout(function() {
+    if (!timeout_id && +window.localStorage.getItem('autorefresh-interval') && window.autorefresh_enabled) {
+      timeout_id = window.setTimeout(function() {
         window.location.reload();
       }
-      , window.autorefresh.interval*1000);
+      , window.localStorage.getItem('autorefresh-interval') * 1000);
     }
   },
      stopAutoRefresh = function(){
-    if ((window.autorefresh !== undefined) && (window.autorefresh.timeout_id != undefined)){
-      clearTimeout(window.autorefresh.timeout_id);
-      window.autorefresh.timeout_id = undefined;
+    if (timeout_id !== undefined){
+      clearTimeout(timeout_id);
+      timeout_id = undefined;
     }
   };
 

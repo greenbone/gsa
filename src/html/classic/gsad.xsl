@@ -174,9 +174,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="cmd" select="name(/envelope/*[starts-with (name(), 'get_')])"/>
   <xsl:if test="(@interval &gt; 0) and starts-with ($cmd, 'get_') and substring ($cmd, 1) and ($cmd = 'get_task' or substring ($cmd, string-length ($cmd), 1) = 's') and ($cmd != 'get_my_settings') and ($cmd != 'get_system_reports') and (count (//gsad_msg) = 0) and (count (//gsad_response) = 0)">
     <script type="text/javascript">
-    window.autorefresh = {
-      interval: <xsl:value-of select="@interval"/>,
-    }
+    window.autorefresh_enabled = true;
     </script>
   </xsl:if>
 </xsl:template>
@@ -889,6 +887,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div>
       <div class="logout_panel">
+        <select id="autorefresh">
+          <option value="0"><xsl:value-of select="gsa:i18n('No auto-refresh')"/></option>
+          <option value="30"><xsl:value-of select="gsa:i18n('Refresh every 30 Sec.')"/></option>
+          <option value="60"><xsl:value-of select="gsa:i18n('Refresh every 60 Sec.')"/></option>
+          <option value="120"><xsl:value-of select="gsa:i18n('Refresh every 2 Min.')"/></option>
+          <option value="300"><xsl:value-of select="gsa:i18n('Refresh every 5 Min.')"/></option>
+        </select>
         <xsl:choose>
           <xsl:when test="$username = ''">
           </xsl:when>
