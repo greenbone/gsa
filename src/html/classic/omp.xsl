@@ -4527,6 +4527,8 @@ var toggleFilter = function(){
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="concat(gsa:i18n ($cap-type-plural, $cap-type), ' ')"/>
 
+      <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('(filtered: %1 out of %2)'), $filtered-count, $full-count)"/>
+
       <!-- Header icons. -->
       <xsl:choose>
         <xsl:when test="$subtype != ''">
