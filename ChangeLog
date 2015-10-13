@@ -1,3 +1,8 @@
+2015-10-13  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: .logout_panel: Align the text on
+	  the right.
+
 2015-10-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (user): Fix hiding of action icons when
