@@ -19883,11 +19883,13 @@ should not have received it.
           </a>
           <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
             <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;">
+               title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
+               class="new-action-icon" data-type="note" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
               <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
             </a>
             <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;">
+               title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
+               class="new-action-icon" data-type="override" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
               <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
             </a>
           </div>

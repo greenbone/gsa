@@ -1,5 +1,10 @@
 2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl (nvt-details): New Note and New Overrides
+	  also open a popup dialog.
+
+2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl (user-tags-window-checked): Make the 'New
 	  Tag' button starts a popup.
 
