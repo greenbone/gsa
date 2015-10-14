@@ -887,13 +887,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div>
       <div class="logout_panel">
-        <select id="autorefresh">
-          <option value="0"><xsl:value-of select="gsa:i18n('No auto-refresh')"/></option>
-          <option value="30"><xsl:value-of select="gsa:i18n('Refresh every 30 Sec.')"/></option>
-          <option value="60"><xsl:value-of select="gsa:i18n('Refresh every 60 Sec.')"/></option>
-          <option value="120"><xsl:value-of select="gsa:i18n('Refresh every 2 Min.')"/></option>
-          <option value="300"><xsl:value-of select="gsa:i18n('Refresh every 5 Min.')"/></option>
-        </select>
         <xsl:choose>
           <xsl:when test="$username = ''">
           </xsl:when>
@@ -913,6 +906,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <br/>
         <xsl:value-of select="$time"/>
+      </div>
+      <div class="pull-right">
+        <select id="autorefresh">
+          <option value="0"><xsl:value-of select="gsa:i18n('No auto-refresh')"/></option>
+          <option value="30"><xsl:value-of select="gsa:i18n('Refresh every 30 Sec.')"/></option>
+          <option value="60"><xsl:value-of select="gsa:i18n('Refresh every 60 Sec.')"/></option>
+          <option value="120"><xsl:value-of select="gsa:i18n('Refresh every 2 Min.')"/></option>
+          <option value="300"><xsl:value-of select="gsa:i18n('Refresh every 5 Min.')"/></option>
+        </select>
       </div>
       <div class="status_panel">
         <xsl:apply-templates select="gsad_msg"

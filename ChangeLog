@@ -1,3 +1,8 @@
+2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css, src/html/classic/gsad.xsl: Add
+	  some place between the refresh and the logout_pane.
+
 2015-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add alert method "Start Task".
