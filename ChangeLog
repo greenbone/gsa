@@ -1,5 +1,10 @@
 2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl (user-tags-window-checked): Make the 'New
+	  Tag' button starts a popup.
+
+2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (onReady): Allow for extra
 	  parameters to be given for the new dialog.
 

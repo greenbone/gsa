@@ -2087,22 +2087,25 @@ var toggleFilter = function(){
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('New tag', 'Tag')}"
-            style="margin-left:3px;">
+               title="{gsa:i18n ('New tag', 'Tag')}"
+               style="margin-left:3px;"
+               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$resource_subtype != ''">
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('New Tag', 'Tag')}"
-            style="margin-left:3px;">
+               title="{gsa:i18n ('New Tag', 'Tag')}"
+               style="margin-left:3px;"
+               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('New Tag', 'Tag')}"
-            style="margin-left:3px;">
+               title="{gsa:i18n ('New Tag', 'Tag')}"
+               style="margin-left:3px;"
+               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:otherwise>
