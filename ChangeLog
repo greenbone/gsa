@@ -1,3 +1,17 @@
+2015-10-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add alert method "Start Task".
+
+	* src/gsad_omp.c (new_alert, get_alert, get_alerts, edit_alert): Get
+	tasks for "Start Task" option.
+	(append_alert_method_data): Add "Start Task".
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Add "Start Task"
+	field.
+	(new_alert, edit_alert): Add tasks param.
+	(html-edit-alert-form): Add "Start Task" field.
+	(alert, alert [details]): Add "Start Task" case.
+
 2015-10-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Removed the download icon from the

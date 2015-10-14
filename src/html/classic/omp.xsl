@@ -8296,8 +8296,9 @@ should not have received it.
 </xsl:variable>
 
 <xsl:template name="html-create-alert-form">
-  <xsl:param name="report-formats"></xsl:param>
+  <xsl:param name="report-formats"/>
   <xsl:param name="filters"/>
+  <xsl:param name="tasks"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -8665,6 +8666,29 @@ should not have received it.
               </table>
             </td>
           </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <label>
+                      <input type="radio" name="method" value="Start Task"/>
+                      <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+                      <xsl:text> </xsl:text>
+                      <select name="method_data:start_task_task">
+                        <xsl:for-each select="$tasks/task">
+                          <option value="{@id}">
+                            <xsl:value-of select="name"/>
+                          </option>
+                        </xsl:for-each>
+                      </select>
+                    </label>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr>
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
@@ -8700,6 +8724,9 @@ should not have received it.
     <xsl:with-param
       name="filters"
       select="get_filters_response | commands_response/get_filters_response"/>
+    <xsl:with-param
+      name="tasks"
+      select="get_tasks_response | commands_response/get_tasks_response"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -8767,6 +8794,7 @@ should not have received it.
 <xsl:template name="html-edit-alert-form">
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
+  <xsl:param name="tasks"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -8808,6 +8836,9 @@ should not have received it.
             </td>
           </tr>
           <tr class="odd">
+
+            <!-- Event. -->
+
             <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8868,6 +8899,9 @@ should not have received it.
           <tr class="even">
             <xsl:variable name="condition"
                           select="get_alerts_response/alert/condition"/>
+
+            <!-- Condition. -->
+
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8932,7 +8966,13 @@ should not have received it.
           </tr>
           <xsl:variable name="method"
                         select="get_alerts_response/alert/method"/>
+
+          <!-- Method. -->
+
           <tr class="odd">
+
+            <!-- Method: Email. -->
+
             <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -9081,6 +9121,9 @@ should not have received it.
             </td>
           </tr>
           <tr class="even">
+
+            <!-- Method: System Logger. -->
+
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -9109,6 +9152,9 @@ should not have received it.
             </td>
           </tr>
           <tr class="odd">
+
+            <!-- Method: HTTP Get. -->
+
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -9134,6 +9180,9 @@ should not have received it.
             </td>
           </tr>
           <tr class="even">
+
+            <!-- Method: Sourcefire Connector. -->
+
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -9182,6 +9231,9 @@ should not have received it.
             </td>
           </tr>
           <tr class="odd">
+
+            <!-- Method: verinice Connector. -->
+
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -9249,6 +9301,45 @@ should not have received it.
               </table>
             </td>
           </tr>
+          <tr class="odd">
+
+            <!-- Method: Start Task. -->
+
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'Start Task'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="gsa:i18n ('Start Task', 'Alert')"/>
+                    </xsl:call-template>
+                    <select name="method_data:start_task_task">
+                      <xsl:for-each select="$tasks/task">
+                        <xsl:choose>
+                          <xsl:when test="@id=$method/data[name='start_task_task']/text()">
+                            <option value="{@id}" selected="1">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Report Result Filter. -->
+
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
@@ -9271,6 +9362,9 @@ should not have received it.
               </td>
             </tr>
           </xsl:if>
+
+          <!-- Save button. -->
+
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save Alert', 'Alert')}"/>
@@ -9293,6 +9387,9 @@ should not have received it.
     <xsl:with-param
       name="filters"
       select="get_filters_response | commands_response/get_filters_response"/>
+    <xsl:with-param
+      name="tasks"
+      select="get_tasks_response | commands_response/get_tasks_response"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -9411,6 +9508,23 @@ should not have received it.
               <br/>(<xsl:value-of select="gsa:i18n ('To', 'Alert|Email')"/>
               <xsl:text> </xsl:text>
               <xsl:value-of select="method/data[name='to_address']/text()"/>)
+            </xsl:when>
+            <xsl:when test="method/text()='Start Task'">
+              <xsl:variable name="id" select="method/data[name='start_task_task']/text()"/>
+              <xsl:variable name="name" select="../../get_tasks_response/task[@id = $id]/name"/>
+              <xsl:text> </xsl:text>
+              <xsl:choose>
+                <xsl:when test="string-length ($name) = 0">
+                  <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                  <br/>
+                  (<xsl:value-of select="gsa:i18n('ID', 'Property')"/>: <xsl:value-of select="$id"/>)
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_task&amp;task_id={$id}{gsa:token ()}">
+                    <xsl:value-of select="$name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
           </xsl:choose>
         </xsl:otherwise>
@@ -9799,6 +9913,27 @@ should not have received it.
                         </xsl:when>
                         <xsl:otherwise>
                           Verinice ISM
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:when test="method/text()='Start Task'">
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Task', 'Alert')"/>:</td>
+                    <td>
+                      <xsl:variable name="id" select="method/data[name='start_task_task']/text()"/>
+                      <xsl:variable name="name" select="../../get_tasks_response/task[@id = $id]/name"/>
+                      <xsl:text> </xsl:text>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($name) = 0">
+                          <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/> (<xsl:value-of select="gsa:i18n('ID', 'Property')"/>: <xsl:value-of select="$id"/>)
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <a href="/omp?cmd=get_task&amp;task_id={$id}{gsa:token ()}">
+                            <xsl:value-of select="$name"/>
+                          </a>
                         </xsl:otherwise>
                       </xsl:choose>
                     </td>

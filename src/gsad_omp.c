@@ -7318,6 +7318,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
     g_string_append (xml, extra_xml);
 
   /* Get Report Formats. */
+
   response = NULL;
   entity = NULL;
   ret = omp (credentials, &response, &entity, response_data,
@@ -7358,6 +7359,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   free_entity (entity);
 
   /* Get Report Filters. */
+
   ret = omp (credentials, &response, &entity, response_data,
              "<get_filters filter=\"type=result rows=-1\"/>");
 
@@ -7391,6 +7393,49 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "Filters for new alert. "
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts", response_data);
+    }
+  g_string_append (xml, response);
+  g_free (response);
+  free_entity (entity);
+
+  /* Get Tasks. */
+
+  ret = omp (credentials, &response, &entity, response_data,
+             "<get_tasks filter=\"owner=any permission=start_task rows=-1\"/>");
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Tasks"
+                             " for new alert. "
+                             "The task was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Tasks"
+                             " for new alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Tasks"
+                             " for new alert. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -7527,7 +7572,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                         || (strcmp (name, "notice_attach_format") == 0
                             && notice == 2)))
                 || (strcmp (method, "syslog") == 0
-                    && strcmp (name, "submethod") == 0))
+                    && strcmp (name, "submethod") == 0)
+                || (strcmp (method, "Start Task") == 0
+                    && strcmp (name, "start_task_task") == 0))
               xml_string_append (xml,
                                  "<data><name>%s</name>%s</data>",
                                  name,
@@ -7784,6 +7831,52 @@ get_alert (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
+  if (command_enabled (credentials, "GET_TASKS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_tasks"
+                   " filter=\"owner=any permission=start_task rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Tasks "
+                                 "for the alert. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_alerts", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Tasks "
+                                 "for the alert. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_alerts", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting Tasks "
+                                 "for the alert. "
+                                 "It is unclear whether the task has been saved or not. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_alerts", response_data);
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
   html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"",
                   response_data);
   g_string_free (extra, TRUE);
@@ -7820,8 +7913,61 @@ char *
 get_alerts (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("alert", credentials, params, extra_xml, NULL,
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "GET_TASKS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_tasks filter=\"owner=any permission=start_task"
+                   "                    rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the tasks. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_tasks",
+                                 response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the tasks. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_tasks",
+                                 response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the reports. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_tasks",
+                                 response_data);
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = get_many ("alert", credentials, params, extra->str, NULL,
                    response_data);
+  g_string_free (extra, TRUE);
+  return html;
 }
 
 /**
@@ -8008,6 +8154,43 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_filters", response_data);
+        }
+    }
+
+  if (command_enabled (credentials, "GET_TASKS"))
+    {
+      /* Get tasks. */
+
+      if (openvas_server_sendf (&session,
+                                "<get_tasks"
+                                " filter=\"owner=any permission=start_task"
+                                " rows=-1\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of tasks. "
+                               "The current list of tasks is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_alerts", response_data);
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of tasks. "
+                               "The current list of tasks is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks", response_data);
         }
     }
 
