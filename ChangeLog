@@ -1,5 +1,10 @@
 2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (onReady): Allow for extra
+	  parameters to be given for the new dialog.
+
+2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css, src/html/classic/gsad.xsl: Add
 	  some place between the refresh and the logout_pane.
 

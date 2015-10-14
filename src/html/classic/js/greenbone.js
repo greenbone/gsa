@@ -370,13 +370,22 @@
     doc.find(".new-action-icon").each(function(){
       var elem = $(this),
           type_name = elem.data('type'),
-          done = elem.data('done');
+          done = elem.data('done'),
+          extra = elem.data('extra'),
+          params = {};
       if (done === undefined){
         done = true;
       }
+      if (extra !== undefined){
+        // process the extra string
+        $.each(extra.split('&'), function(i, v){
+          var pair = v.split('=');
+          return params[pair[0]] = pair[1];
+        });
+      }
       elem.on('click', function(event){
         event.preventDefault();
-        new OMPDialog('new_' + type_name, done).show();
+        new OMPDialog('new_' + type_name, done, params).show();
       });
     });
 
