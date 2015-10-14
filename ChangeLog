@@ -1,3 +1,27 @@
+2015-10-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Split "New Permission" and "Create Multiple Permissions" into two
+	separate pages.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add new_permissions
+	command.
+
+	* src/gsad_omp.c (new_permissions, new_permissions_omp): New functions.
+
+	* src/gsad_omp.h (new_permissions_omp): New function prototype.
+
+	* src/html/classic/omp.xsl (resource-permissions-window, list-window):
+	Add a menu to the "New Permission" with additional choice
+	"Create Multiple Permissions".
+	(html-create-permission-form): Remove "Create Multiple Permissions"
+	form, which is moved to a sepate new template.
+	(new_permissions, html-create-permissions-form): New templates
+	with the multiple permissions form.
+
+	* src/html/classic/help.xsl (new_permission.html): Remove section for
+	"Create Multiple Permissions", moved to new template.
+	(new_permissions.html): New template for "Create Multiple Permissions".
+
 2015-10-14  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl (result-row): Make the New Note and

@@ -3316,11 +3316,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/list.png" alt="Permissions" title="Permissions"/>
         will switch to the permissions page.
       </p>
+    </div>
+  </div>
+</xsl:template>
 
-      <a name="multiple"/>
-      <h2>Create Multiple Permissions</h2>
+<xsl:template mode="help" match="new_permissions.html">
+  <div class="gb_window_part_center">Help: Create Multiple Permissions
+    <a href="/omp?cmd=new_permissions&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+      <br/>
       <p>
-        This form on the New Permission page allows you to create a set of
+        This form allows you to create a set of
         predefined permissions for a specific resource. If you accessed the
         page from a resource details page it can also create permissions for
         related resources.
@@ -3722,6 +3733,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="permissions.html?token={/envelope/token}">Permissions</a></li>
               <ul>
                 <li> <a href="new_permission.html?token={/envelope/token}">New Permission</a></li>
+                <li> <a href="new_permissions.html?token={/envelope/token}">Create Multiple Permissions</a></li>
                 <li> <a href="permission_details.html?token={/envelope/token}">Permission Details</a></li>
               </ul>
             <li> <a href="port_lists.html?token={/envelope/token}">Port Lists</a></li>

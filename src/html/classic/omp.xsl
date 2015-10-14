@@ -2441,10 +2441,29 @@ var toggleFilter = function(){
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-op ('create_permission')">
-            <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+            <span class="menu_icon" id="#wizard_list">
+              <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+                class="new-action-icon" data-type="permission"
                 title="{gsa:i18n ('New Permission', 'Permission')}">
-              <img style="margin-left:5px" src="/img/new.png" alt="{gsa:i18n ('New Permission', 'Permission')}"/>
-            </a>
+                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+              </a>
+              <ul>
+                <li>
+                  <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+                    class="new-action-icon" data-type="permission"
+                    title="{gsa:i18n ('New Permission', 'Permission')}">
+                    <xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/>
+                  </a>
+                </li>
+                <li class="last">
+                  <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+                    class="last new-action-icon" data-type="permissions"
+                    title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
+                    <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
+                  </a>
+                </li>
+              </ul>
+            </span>
           </xsl:when>
           <xsl:otherwise/>
         </xsl:choose>
@@ -4528,6 +4547,31 @@ var toggleFilter = function(){
                    class="last new-action-icon" data-type="container_task"
                    title="{gsa:i18n ('New Container Task', 'Task')}">
                   <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+                </a>
+              </li>
+            </ul>
+          </span>
+        </xsl:when>
+        <xsl:when test="$new-icon and $type = 'permission'">
+          <span class="menu_icon" id="#wizard_list">
+            <a href="/omp?cmd=new_permission{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="new-action-icon" data-type="permission"
+               title="{gsa:i18n ('New Permission', 'Permission')}">
+              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+            </a>
+            <ul>
+              <li>
+                <a href="/omp?cmd=new_permission{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                   class="new-action-icon" data-type="permission"
+                   title="{gsa:i18n ('New Permission', 'Permission')}">
+                  <xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/>
+                </a>
+              </li>
+              <li class="last">
+                <a href="/omp?cmd=new_permissions{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                   class="last new-action-icon" data-type="permissions"
+                   title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
+                  <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
                 </a>
               </li>
             </ul>
@@ -22769,13 +22813,22 @@ should not have received it.
       </form>
     </div>
   </div>
+</xsl:template>
 
+<xsl:template match="new_permission">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_permission_response"/>
+  <xsl:apply-templates select="commands_response/delete_permission_response"/>
+  <xsl:call-template name="html-create-permission-form"/>
+</xsl:template>
+
+<xsl:template name="html-create-permissions-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
-      <a href="/help/new_permission.html?token={/envelope/token}#multiple"
+      <a href="/help/new_permissions.html?token={/envelope/token}"
         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Create Multiple Permissions', 'Permission'))}">
         <img src="/img/help.png"/>
       </a>
@@ -22971,11 +23024,11 @@ should not have received it.
   </div>
 </xsl:template>
 
-<xsl:template match="new_permission">
+<xsl:template match="new_permissions">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_permission_response"/>
   <xsl:apply-templates select="commands_response/delete_permission_response"/>
-  <xsl:call-template name="html-create-permission-form"/>
+  <xsl:call-template name="html-create-permissions-form"/>
 </xsl:template>
 
 <xsl:template match="delete_permission_response">

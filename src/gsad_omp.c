@@ -20837,6 +20837,184 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     }                                                                         \
 
 /**
+ * @brief Setup new_permissions XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_permissions (credentials_t * credentials, params_t *params,
+                 const char *extra_xml, cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<new_permissions>");
+
+  if (command_enabled (credentials, "GET_USERS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_users filter=\"rows=-1 permission=get_users\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the user list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (command_enabled (credentials, "GET_ROLES"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the role list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append (xml, "</new_permissions>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Setup new_permission XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_permissions_omp (credentials_t * credentials, params_t *params,
+                     cmd_response_data_t* response_data)
+{
+  return new_permissions (credentials, params, NULL, response_data);
+}
+
+/**
  * @brief Create multiple permission, get next page, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

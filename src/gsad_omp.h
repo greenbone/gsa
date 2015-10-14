@@ -290,6 +290,7 @@ char * export_permissions_omp (credentials_t *, params_t *, enum content_type *,
 char * get_permission_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * get_permissions_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * new_permission_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * new_permissions_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * save_permission_omp (credentials_t *, params_t *, cmd_response_data_t*);
 
 char * create_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);

@@ -1073,6 +1073,7 @@ init_validator ()
                          "|(new_note)"
                          "|(new_override)"
                          "|(new_permission)"
+                         "|(new_permissions)"
                          "|(new_port_list)"
                          "|(new_report_format)"
                          "|(new_role)"
@@ -3198,6 +3199,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_note)
   ELSE (new_override)
   ELSE (new_permission)
+  ELSE (new_permissions)
   ELSE (new_port_list)
   ELSE (new_report_format)
   ELSE (new_scanner)
