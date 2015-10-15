@@ -1,3 +1,8 @@
+2015-10-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Remove menu with extra
+	"Create Multiple Permissions" option here.
+
 2015-10-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Split "New Permission" and "Create Multiple Permissions" into two

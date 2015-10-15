@@ -4552,31 +4552,6 @@ var toggleFilter = function(){
             </ul>
           </span>
         </xsl:when>
-        <xsl:when test="$new-icon and $type = 'permission'">
-          <span class="menu_icon" id="#wizard_list">
-            <a href="/omp?cmd=new_permission{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="new-action-icon" data-type="permission"
-               title="{gsa:i18n ('New Permission', 'Permission')}">
-              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-            </a>
-            <ul>
-              <li>
-                <a href="/omp?cmd=new_permission{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                   class="new-action-icon" data-type="permission"
-                   title="{gsa:i18n ('New Permission', 'Permission')}">
-                  <xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/>
-                </a>
-              </li>
-              <li class="last">
-                <a href="/omp?cmd=new_permissions{$extra_params_string}&amp;next=get_permission&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                   class="last new-action-icon" data-type="permissions"
-                   title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
-                  <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
-                </a>
-              </li>
-            </ul>
-          </span>
-        </xsl:when>
         <xsl:when test="$new-icon">
           <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
           <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
