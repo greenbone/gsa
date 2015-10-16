@@ -2441,29 +2441,11 @@ var toggleFilter = function(){
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-op ('create_permission')">
-            <span class="menu_icon" id="#wizard_list">
-              <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-                class="new-action-icon" data-type="permission"
-                title="{gsa:i18n ('New Permission', 'Permission')}">
-                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-              </a>
-              <ul>
-                <li>
-                  <a href="/omp?cmd=new_permission&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-                    class="new-action-icon" data-type="permission"
-                    title="{gsa:i18n ('New Permission', 'Permission')}">
-                    <xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/>
-                  </a>
-                </li>
-                <li class="last">
-                  <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-                    class="last new-action-icon" data-type="permissions"
-                    title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
-                    <xsl:value-of select="gsa:i18n ('Create Multiple Permissions', 'Permission')"/>
-                  </a>
-                </li>
-              </ul>
-            </span>
+            <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+               class="last new-action-icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
+               title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
+              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+            </a>
           </xsl:when>
           <xsl:otherwise/>
         </xsl:choose>

@@ -1,3 +1,8 @@
+2015-10-16  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl (resource-permissions-window): remove menu
+	  with 'New permission' here, make the JS dialog do what's intended.
+
 2015-10-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Remove menu with extra
