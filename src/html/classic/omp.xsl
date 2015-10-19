@@ -11440,10 +11440,8 @@ should not have received it.
         <input type="hidden" name="max" value="{targets/@max}"/>
         <xsl:if test="not (gsa:may-op ('get_credentials'))">
           <input type="hidden" name="lsc_credential_id" value="--"/>
-        </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_credentials'))">
-          <input type="hidden" name="lsc_credential_id" value="--"/>
           <input type="hidden" name="lsc_smb_credential_id" value="--"/>
+          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -12645,10 +12643,10 @@ should not have received it.
     <td>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
-        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or port_list/trash = '1'">
+        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1' or port_list/trash = '1'">
           <xsl:variable name="resources_string">
-            <xsl:if test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
-            <xsl:if test="(ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1') and port_list/trash = '1'">
+            <xsl:if test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
+            <xsl:if test="(ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1') and port_list/trash = '1'">
               <xsl:text> </xsl:text><xsl:value-of select="gsa:i18n ('and', 'List Conjunction')"/><xsl:text> </xsl:text>
             </xsl:if>
             <xsl:if test="port_list/trash = '1'"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></xsl:if>
