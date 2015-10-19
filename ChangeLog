@@ -1,3 +1,14 @@
+2015-10-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/alert.svg, src/html/classic/img/filter.svg,
+	src/html/classic/img/note.svg, src/html/classic/img/override.svg,
+	src/html/classic/img/slave.svg:  New.
+
+	* src/html/classic/img/tag.svg, src/html/classic/img/target.svg,
+	src/html/classic/img/task.svg: Removed some meta data.
+
+	* CMakeLists.txt: Install the new svg icons.
+
 2015-10-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner [details]): Add parameter mandatory
