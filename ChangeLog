@@ -1,3 +1,9 @@
+2015-10-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/style/gsa-logo.png: Updated with dark
+	font color RGBA #393637ff in the [0-f] notation instead of (39,36,37)
+	in the [0-255] notation.
+
 2015-10-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/style/gsa-logo.png: Updated with dark
