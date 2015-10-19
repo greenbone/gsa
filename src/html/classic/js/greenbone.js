@@ -483,6 +483,37 @@
       }
     }
 
+    doc.find('.toggle-action-icon').each(function(){
+      var elem = $(this),
+          target = doc.find(elem.data('target')),
+          icon = elem.find('img'),
+          name = elem.data('name');
+      elem.on('click', function(){
+        // Update the form parameter
+        var input = target.closest('form').find('input[name=build_filter]');
+        if (input.length){
+          input.val(input.val() ^ 1);
+        }
+        // Show/hide the detailled form
+        target.slideToggle();
+        // manage the button itself
+        icon.toggleClass('expand');
+        if (icon.hasClass('expand')){
+          icon.attr({
+            src:   "/img/unfold.png",
+            title: "Unfold " + name,
+            alt:   "Unfold " + name
+          });
+        } else {
+          icon.attr({
+            src:   "/img/fold.png",
+            title: "Fold " + name,
+            alt:   "Fold " + name
+          });
+        }
+      });
+    });
+
     doc.find('select').select2();
   };
 

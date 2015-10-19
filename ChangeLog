@@ -7,6 +7,16 @@
 
 2015-10-19  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Update the layout of the main list pages.
+
+	* CMakeLists.txt, src/html/classic/css/gsa-style.css,
+	  src/html/classic/js/greenbone.js, src/html/classic/omp.xsl
+	  (list-window): Update
+	* src/html/classic/img/tag.svg, src/html/classic/img/target.svg,
+	  src/html/classic/img/task.svg: Add
+
+2015-10-19  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/gsad.c, src/gsad_base.h: Add support for the svg Content-Type.
 
 2015-10-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

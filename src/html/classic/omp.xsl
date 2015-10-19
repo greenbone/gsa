@@ -999,110 +999,107 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="list"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="columns"/>
-  <div class="gb_window_part_content">
-    <div style="background-color: #EEEEEE;">
-      <xsl:choose>
-        <xsl:when test="0"/>
-        <xsl:otherwise>
-          <div style="float: right">
-            <xsl:if test="gsa:may-op ('create_filter')">
-              <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
-                <div style="display: inline; padding: 2px; vertical-align:middle;">
-                  <input type="hidden" name="token" value="{/envelope/token}"/>
-                  <input type="hidden" name="cmd" value="create_filter"/>
-                  <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-                  <input type="hidden" name="comment" value=""/>
-                  <input type="hidden" name="term" value="{filters/term}"/>
-                  <input type="hidden" name="optional_resource_type" value="{$type}"/>
-                  <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
-                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-                  <xsl:for-each select="exslt:node-set($extra_params)/param">
-                    <input type="hidden" name="{name}" value="{value}"/>
-                  </xsl:for-each>
-                  <input type="text" name="name" value="" size="10"
-                         maxlength="80" style="vertical-align:middle"/>
-                  <!-- i18n with concat : see dynamic_strings.xsl - type-new-filter -->
-                  <input type="image"
-                         name="New Filter"
-                         src="/img/new.png"
-                         alt="{gsa:i18n ('New Filter', 'Filter')}"
-                         title="{gsa:i18n (concat ('New ', gsa:type-name ($type), ' Filter from current term'), gsa:type-name ($type))}"
-                         style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-                </div>
-              </form>
-            </xsl:if>
-            <xsl:if test="gsa:may-op ('get_filters')">
-              <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter" enctype="multipart/form-data">
-                <div style="display: inline; padding: 2px; vertical-align:middle;">
-                  <input type="hidden" name="token" value="{/envelope/token}"/>
-                  <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-                  <xsl:for-each select="exslt:node-set($extra_params)/param">
-                    <input type="hidden" name="{name}" value="{value}"/>
-                  </xsl:for-each>
-                  <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
-                    <option value="--">--</option>
-                    <xsl:variable name="id" select="filters/@id"/>
-                    <xsl:for-each select="../filters/get_filters_response/filter">
-                      <xsl:choose>
-                        <xsl:when test="@id = $id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  <input type="image"
-                         name="Switch Filter"
-                         title="{gsa:i18n ('Switch Filter', 'Filter')}"
-                         src="/img/refresh.png"
-                         alt="{gsa:i18n ('Switch', 'Filter')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-                  <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-                     title="{gsa:i18n ('Filters', 'Filter')}">
-                    <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                         src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter')}"/>
-                  </a>
-                </div>
-              </form>
-            </xsl:if>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-      <form action="" method="get" enctype="multipart/form-data" name="filterform">
-        <xsl:variable name="criteria">
-          <xsl:call-template name="filter-criteria"/>
-        </xsl:variable>
-        <xsl:variable name="extra">
-          <xsl:call-template name="filter-extra"/>
-        </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="0"/>
+    <xsl:otherwise>
+      <div style="float: right">
+        <xsl:if test="gsa:may-op ('create_filter')">
+          <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
+            <div style="display: inline; padding: 2px; vertical-align:middle;">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="create_filter"/>
+              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+              <input type="hidden" name="comment" value=""/>
+              <input type="hidden" name="term" value="{filters/term}"/>
+              <input type="hidden" name="optional_resource_type" value="{$type}"/>
+              <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+              <xsl:for-each select="exslt:node-set($extra_params)/param">
+                <input type="hidden" name="{name}" value="{value}"/>
+             </xsl:for-each>
+             <input type="text" name="name" value="" size="10"
+                    maxlength="80" style="vertical-align:middle"/>
+             <!-- i18n with concat : see dynamic_strings.xsl - type-new-filter -->
+             <input type="image"
+                    name="New Filter"
+                    src="/img/new.png"
+                    alt="{gsa:i18n ('New Filter', 'Filter')}"
+                    title="{gsa:i18n (concat ('New ', gsa:type-name ($type), ' Filter from current term'), gsa:type-name ($type))}"
+                    style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+           </div>
+         </form>
+       </xsl:if>
+       <xsl:if test="gsa:may-op ('get_filters')">
+         <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter" enctype="multipart/form-data">
+           <div style="display: inline; padding: 2px; vertical-align:middle;">
+             <input type="hidden" name="token" value="{/envelope/token}"/>
+             <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+             <xsl:for-each select="exslt:node-set($extra_params)/param">
+               <input type="hidden" name="{name}" value="{value}"/>
+             </xsl:for-each>
+             <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
+               <option value="--">--</option>
+               <xsl:variable name="id" select="filters/@id"/>
+               <xsl:for-each select="../filters/get_filters_response/filter">
+                 <xsl:choose>
+                   <xsl:when test="@id = $id">
+                     <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <option value="{@id}"><xsl:value-of select="name"/></option>
+                   </xsl:otherwise>
+                 </xsl:choose>
+               </xsl:for-each>
+             </select>
+             <input type="image"
+                    name="Switch Filter"
+                    title="{gsa:i18n ('Switch Filter', 'Filter')}"
+                    src="/img/refresh.png"
+                    alt="{gsa:i18n ('Switch', 'Filter')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+             <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Filters', 'Filter')}">
+               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                    src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter')}"/>
+             </a>
+           </div>
+         </form>
+       </xsl:if>
+     </div>
+   </xsl:otherwise>
+ </xsl:choose>
+ <form action="" method="get" enctype="multipart/form-data" name="filterform">
+   <xsl:variable name="criteria">
+     <xsl:call-template name="filter-criteria"/>
+   </xsl:variable>
+   <xsl:variable name="extra">
+     <xsl:call-template name="filter-extra"/>
+   </xsl:variable>
 
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-        <xsl:for-each select="exslt:node-set($extra_params)/param">
-          <input type="hidden" name="{name}" value="{value}"/>
-        </xsl:for-each>
-        <div style="padding: 2px;">
-          <xsl:value-of select="gsa:i18n ('Filter', 'Filter')"/>:
-          <input type="text" name="filter" size="53"
-                 value="{$criteria}"
-                 maxlength="1000"/>
-          <input type="image"
-                 name="Update Filter"
-                 title="{gsa:i18n ('Update Filter', 'Filter')}"
-                 src="/img/refresh.png"
-                 alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-          <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
-            <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                 src="/img/help.png" border="0"/>
-          </a>
-          <xsl:variable name="extras">
-            <xsl:for-each select="exslt:node-set($extra_params)/param">
-              <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
-            </xsl:for-each>
-          </xsl:variable>
-          <input type="hidden" name="filter_extra" value="{$extra}" />
-          <script>
+   <input type="hidden" name="token" value="{/envelope/token}"/>
+   <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+   <xsl:for-each select="exslt:node-set($extra_params)/param">
+     <input type="hidden" name="{name}" value="{value}"/>
+   </xsl:for-each>
+   <div style="padding: 2px;">
+     <input type="text" name="filter" size="53"
+            value="{$criteria}"
+            maxlength="1000"/>
+     <input type="image"
+            name="Update Filter"
+            title="{gsa:i18n ('Update Filter', 'Filter')}"
+            src="/img/refresh.png"
+            alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+     <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
+       <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+            src="/img/help.png" border="0"/>
+     </a>
+     <xsl:variable name="extras">
+       <xsl:for-each select="exslt:node-set($extra_params)/param">
+         <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
+       </xsl:for-each>
+     </xsl:variable>
+     <input type="hidden" name="filter_extra" value="{$extra}" />
+     <script>
 var toggleFilter = function(){
   // Update the form parameter
   document.filterform.build_filter.value ^= 1;
@@ -1125,197 +1122,195 @@ var toggleFilter = function(){
     });
   }
 };
-          </script>
-          <a href="javascript:void(0);"
-	     onclick="toggleFilter();">
-             <img id="togglefiltericon" class="expand"
-                  src="/img/unfold.png"
-                  style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-                  alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
-          </a>
-        </div>
-        <div class="footnote" style="margin-left:40px;">
-          <xsl:value-of select="$extra"/>
-        </div>
-        <div id="filterbox" style="display: none;">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-          <input type="hidden" name="build_filter" value="0"/>
-          <xsl:for-each select="exslt:node-set($extra_params)/param">
-            <input type="hidden" name="{name}" value="{value}"/>
-          </xsl:for-each>
-          <xsl:if test="filters/keywords/keyword[column='task_id']">
-            <div style="padding: 2px;">
-              <xsl:variable name="task_id"
-                            select="filters/keywords/keyword[column='task_id']/value"/>
-              <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:
-              <select style="margin-bottom: 0px;" name="task_id" size="1">
-                <xsl:for-each select="../get_tasks_response/task">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="content" select="name/text()"/>
-                    <xsl:with-param name="select-value" select="$task_id"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-            </div>
-          </xsl:if>
-          <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
-            <div style="padding: 2px;">
-              <xsl:variable name="apply_overrides"
-                            select="filters/keywords/keyword[column='apply_overrides']/value"/>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="$apply_overrides = 0">
-                    <input type="checkbox" name="overrides" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="overrides" value="1"
-                           checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>
-              </label>
-            </div>
-          </xsl:if>
-          <xsl:if test="filters/keywords/keyword[column='autofp_value']">
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:
-              <div style="margin-left: 30px">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
-                      <input type="checkbox" name="autofp" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="autofp" value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
-                </label>
-                <div style="margin-left: 30px">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                        <input type="radio" name="autofp_value" value="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="radio" name="autofp_value" value="1" checked="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
-                  </label>
-                  <br/>
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                        <input type="radio" name="autofp_value" value="2" checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="radio" name="autofp_value" value="2"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </xsl:if>
-          <xsl:if test="filters/keywords/keyword[column='first']">
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:
-              <input type="text" name="first" size="5"
-                     value="{filters/keywords/keyword[column='first']/value}"
-                     maxlength="400"/>
-            </div>
-          </xsl:if>
-          <xsl:if test="filters/keywords/keyword[column='rows']">
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
-              <input type="text" name="max" size="5"
-                     value="{filters/keywords/keyword[column='rows']/value}"
-                     maxlength="400"/>
-            </div>
-          </xsl:if>
-          <xsl:if test="exslt:node-set ($columns)">
-            <div style="padding: 2px;">
-              <xsl:value-of select="gsa:i18n ('Sort by', 'Filter')"/>:
-              <xsl:variable name="sort" select="sort/field/text ()"/>
-              <select style="margin-bottom: 0px;" name="sort_field" size="1">
-                <xsl:for-each select="exslt:node-set ($columns)/column">
-                  <xsl:variable name="single" select="count (column) = 0"/>
-                  <xsl:choose>
-                    <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
-                      <option value="{$sort}" selected="1">
-                        <xsl:value-of select="name"/>
-                      </option>
-                    </xsl:when>
-                    <xsl:when test="$single and boolean (field)">
-                      <option value="{field}">
-                        <xsl:value-of select="name"/>
-                      </option>
-                    </xsl:when>
-                    <xsl:when test="$single">
-                      <option value="{gsa:column-filter-name (name)}">
-                        <xsl:value-of select="name"/>
-                      </option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:for-each select="column">
-                        <xsl:choose>
-                          <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
-                            <option value="{$sort}" selected="1">
-                              <xsl:value-of select="concat(../name, ': ', name)"/>
-                            </option>
-                          </xsl:when>
-                          <xsl:when test="boolean (field)">
-                            <option value="{field}">
-                              <xsl:value-of select="concat(../name, ': ', name)"/>
-                            </option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{gsa:column-filter-name (name)}">
-                              <xsl:value-of select="concat(../name, ': ', name)"/>
-                            </option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <xsl:variable name="order" select="sort/field/order"/>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="$order = 'ascending'">
-                    <input type="radio" name="sort_order" value="ascending" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="sort_order" value="ascending"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Ascending', 'Filter')"/>
-              </label>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="$order = 'descending'">
-                    <input type="radio" name="sort_order" value="descending" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="sort_order" value="descending"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Descending', 'Filter')"/>
-              </label>
-            </div>
-          </xsl:if>
-          <div style="float: right; margin-right: 5px; margin-top: -25px">
-            <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
-          </div>
-        </div>
-      </form>
+     </script>
+     <a href="javascript:void(0);"
+        onclick="toggleFilter();">
+        <img id="togglefiltericon" class="expand"
+             src="/img/unfold.png"
+             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
+             alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
+     </a>
+   </div>
+   <div class="footnote" style="margin-left:40px;">
+     <xsl:value-of select="$extra"/>
+   </div>
+   <div id="filterbox" style="display: none;">
+     <input type="hidden" name="token" value="{/envelope/token}"/>
+     <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+     <input type="hidden" name="build_filter" value="0"/>
+     <xsl:for-each select="exslt:node-set($extra_params)/param">
+       <input type="hidden" name="{name}" value="{value}"/>
+     </xsl:for-each>
+     <xsl:if test="filters/keywords/keyword[column='task_id']">
+       <div style="padding: 2px;">
+         <xsl:variable name="task_id"
+                       select="filters/keywords/keyword[column='task_id']/value"/>
+         <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:
+         <select style="margin-bottom: 0px;" name="task_id" size="1">
+           <xsl:for-each select="../get_tasks_response/task">
+             <xsl:call-template name="opt">
+               <xsl:with-param name="value" select="@id"/>
+               <xsl:with-param name="content" select="name/text()"/>
+               <xsl:with-param name="select-value" select="$task_id"/>
+             </xsl:call-template>
+           </xsl:for-each>
+         </select>
+       </div>
+     </xsl:if>
+     <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
+       <div style="padding: 2px;">
+         <xsl:variable name="apply_overrides"
+                       select="filters/keywords/keyword[column='apply_overrides']/value"/>
+         <label>
+           <xsl:choose>
+             <xsl:when test="$apply_overrides = 0">
+               <input type="checkbox" name="overrides" value="1"/>
+             </xsl:when>
+             <xsl:otherwise>
+               <input type="checkbox" name="overrides" value="1"
+                      checked="1"/>
+             </xsl:otherwise>
+           </xsl:choose>
+           <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>
+         </label>
+       </div>
+     </xsl:if>
+     <xsl:if test="filters/keywords/keyword[column='autofp_value']">
+       <div style="padding: 2px;">
+         <xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:
+         <div style="margin-left: 30px">
+           <label>
+             <xsl:choose>
+               <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
+                 <input type="checkbox" name="autofp" value="1"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <input type="checkbox" name="autofp" value="1" checked="1"/>
+               </xsl:otherwise>
+             </xsl:choose>
+             <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
+           </label>
+           <div style="margin-left: 30px">
+             <label>
+               <xsl:choose>
+                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                   <input type="radio" name="autofp_value" value="1"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <input type="radio" name="autofp_value" value="1" checked="1"/>
+                 </xsl:otherwise>
+               </xsl:choose>
+               <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
+             </label>
+             <br/>
+             <label>
+               <xsl:choose>
+                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                   <input type="radio" name="autofp_value" value="2" checked="1"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <input type="radio" name="autofp_value" value="2"/>
+                 </xsl:otherwise>
+               </xsl:choose>
+               <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
+             </label>
+           </div>
+         </div>
+       </div>
+     </xsl:if>
+     <xsl:if test="filters/keywords/keyword[column='first']">
+       <div style="padding: 2px;">
+         <xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:
+         <input type="text" name="first" size="5"
+                value="{filters/keywords/keyword[column='first']/value}"
+                maxlength="400"/>
+       </div>
+     </xsl:if>
+     <xsl:if test="filters/keywords/keyword[column='rows']">
+       <div style="padding: 2px;">
+         <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
+         <input type="text" name="max" size="5"
+                value="{filters/keywords/keyword[column='rows']/value}"
+                maxlength="400"/>
+       </div>
+     </xsl:if>
+     <xsl:if test="exslt:node-set ($columns)">
+       <div style="padding: 2px;">
+         <xsl:value-of select="gsa:i18n ('Sort by', 'Filter')"/>:
+         <xsl:variable name="sort" select="sort/field/text ()"/>
+         <select style="margin-bottom: 0px;" name="sort_field" size="1">
+           <xsl:for-each select="exslt:node-set ($columns)/column">
+             <xsl:variable name="single" select="count (column) = 0"/>
+             <xsl:choose>
+               <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
+                 <option value="{$sort}" selected="1">
+                   <xsl:value-of select="name"/>
+                 </option>
+               </xsl:when>
+               <xsl:when test="$single and boolean (field)">
+                 <option value="{field}">
+                   <xsl:value-of select="name"/>
+                 </option>
+               </xsl:when>
+               <xsl:when test="$single">
+                 <option value="{gsa:column-filter-name (name)}">
+                   <xsl:value-of select="name"/>
+                 </option>
+               </xsl:when>
+               <xsl:otherwise>
+                 <xsl:for-each select="column">
+                   <xsl:choose>
+                     <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
+                       <option value="{$sort}" selected="1">
+                         <xsl:value-of select="concat(../name, ': ', name)"/>
+                       </option>
+                     </xsl:when>
+                     <xsl:when test="boolean (field)">
+                       <option value="{field}">
+                         <xsl:value-of select="concat(../name, ': ', name)"/>
+                       </option>
+                     </xsl:when>
+                     <xsl:otherwise>
+                       <option value="{gsa:column-filter-name (name)}">
+                         <xsl:value-of select="concat(../name, ': ', name)"/>
+                       </option>
+                     </xsl:otherwise>
+                   </xsl:choose>
+                 </xsl:for-each>
+               </xsl:otherwise>
+             </xsl:choose>
+           </xsl:for-each>
+         </select>
+         <xsl:variable name="order" select="sort/field/order"/>
+         <label>
+           <xsl:choose>
+             <xsl:when test="$order = 'ascending'">
+               <input type="radio" name="sort_order" value="ascending" checked="1"/>
+             </xsl:when>
+             <xsl:otherwise>
+               <input type="radio" name="sort_order" value="ascending"/>
+             </xsl:otherwise>
+           </xsl:choose>
+           <xsl:value-of select="gsa:i18n ('Ascending', 'Filter')"/>
+         </label>
+         <label>
+           <xsl:choose>
+             <xsl:when test="$order = 'descending'">
+               <input type="radio" name="sort_order" value="descending" checked="1"/>
+             </xsl:when>
+             <xsl:otherwise>
+               <input type="radio" name="sort_order" value="descending"/>
+             </xsl:otherwise>
+           </xsl:choose>
+           <xsl:value-of select="gsa:i18n ('Descending', 'Filter')"/>
+         </label>
+       </div>
+    </xsl:if>
+    <div style="float: right; margin-right: 5px; margin-top: -25px">
+      <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
     </div>
   </div>
+</form>
 </xsl:template>
 
 <xsl:template name="edit-header-icons">
@@ -4473,153 +4468,151 @@ var toggleFilter = function(){
     </xsl:if>
   </xsl:variable>
 
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="concat(gsa:i18n ($cap-type-plural, $cap-type), ' ')"/>
-
-      <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('(filtered: %1 out of %2)'), $filtered-count, $full-count)"/>
-
-      <!-- Header icons. -->
-      <xsl:choose>
-        <xsl:when test="$subtype != ''">
-          <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
-            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-            <img src="/img/help.png"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
-            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-            <img src="/img/help.png"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:if test="gsa:may-op ('run_wizard')">
-        <xsl:call-template name="wizard-icon"/>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="$type = 'report'"/>
-        <xsl:when test="$type = 'info'"/>
-        <xsl:when test="$new-icon and $subtype != ''">
-          <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
-          <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon" data-type="{$subtype}"
-             title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-        <xsl:when test="$new-icon and $type = 'task'">
-          <span class="menu_icon" id="#wizard_list">
-            <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="new-action-icon" data-type="task"
-               title="{gsa:i18n ('New Task', 'Task')}">
-              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-            </a>
-            <ul>
-              <li>
+  <div id="list-window-header" class="clearfix">
+    <div id="list-window-title">
+      <img id="list-window-img" src="/img/{$type}.svg"/>
+      <div>
+        <h2><xsl:value-of select="gsa:i18n ($cap-type-plural)"/></h2>
+        <p>Total: <xsl:value-of select="$full-count"/></p>
+        <p>Filtered: <xsl:value-of select="$filtered-count"/></p>
+      
+        <div>  
+          <xsl:choose>
+            <xsl:when test="$subtype != ''">
+              <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
+                 title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
+                <img src="/img/help.png"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
+                 title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
+                <img src="/img/help.png"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:if test="gsa:may-op ('run_wizard')">
+            <xsl:call-template name="wizard-icon"/>
+          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="$type = 'report'"/>
+            <xsl:when test="$type = 'info'"/>
+            <xsl:when test="$new-icon and $subtype != ''">
+              <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
+              <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 class="new-action-icon" data-type="{$subtype}"
+                 title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$new-icon and $type = 'task'">
+              <span class="menu_icon" id="#wizard_list">
                 <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                    class="new-action-icon" data-type="task"
                    title="{gsa:i18n ('New Task', 'Task')}">
-                  <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+                  <img src="/img/new.png" border="0" style="margin-left:3px;"/>
                 </a>
-              </li>
-              <li class="last">
-                <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                   class="last new-action-icon" data-type="container_task"
-                   title="{gsa:i18n ('New Container Task', 'Task')}">
-                  <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
-                </a>
-              </li>
-            </ul>
-          </span>
-        </xsl:when>
-        <xsl:when test="$new-icon">
-          <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
-          <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon" data-type="{$type}"
-             title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="$upload-icon">
-          <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
-          <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="upload-action-icon" data-type="{$type}"
-             title="{gsa:i18n (concat ('Import ', $cap-type), $cap-type)}">
-            <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-      </xsl:choose>
-      <a href="/omp?cmd=get_{gsa:type-many($type)}{$subtype_param}{$extra_params_string}&amp;filter={$default-filter}&amp;filt_id=&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Return to default filter view', 'Action Verb')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Return', 'Action Verb')}"/>
-      </a>
+                <ul>
+                  <li>
+                    <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                       class="new-action-icon" data-type="task"
+                       title="{gsa:i18n ('New Task', 'Task')}">
+                      <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+                    </a>
+                  </li>
+                  <li class="last">
+                    <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                       class="last new-action-icon" data-type="container_task"
+                       title="{gsa:i18n ('New Container Task', 'Task')}">
+                      <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+            </xsl:when>
+            <xsl:when test="$new-icon">
+              <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
+              <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 class="new-action-icon" data-type="{$type}"
+                 title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+              </a>
+            </xsl:when>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="$upload-icon">
+              <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
+              <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 class="upload-action-icon" data-type="{$type}"
+                 title="{gsa:i18n (concat ('Import ', $cap-type), $cap-type)}">
+                <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
+              </a>
+            </xsl:when>
+          </xsl:choose>
+        </div>
+      </div>
     </div>
+    <div id="list-window-filter">
+      <div class="section-header">
+        <a href='#'
+           class="toggle-action-icon" data-target="#filterbox" data-name="Filter">
+          <img src="/img/unfold.png" class="expand"/>
+        </a>
+        <h3><xsl:value-of select="gsa:i18n ('Filter')"/></h3>
+      </div>
+      <xsl:call-template name="filter-window-part">
+        <xsl:with-param name="type" select="$type"/>
+        <xsl:with-param name="subtype" select="$subtype"/>
+        <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="extra_params">
+          <xsl:copy-of select="$extra_params"/>
+          <xsl:if test="$subtype != ''">
+            <param>
+              <name><xsl:value-of select="$type"/>_type</name>
+              <value><xsl:value-of select="$subtype"/></value>
+            </param>
+          </xsl:if>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
+  </div>
 
-    <!-- The filtering controls. -->
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="subtype" select="$subtype"/>
-      <xsl:with-param name="list" select="$resources-summary"/>
-      <xsl:with-param name="columns" select="$columns"/>
-      <xsl:with-param name="extra_params">
-        <xsl:copy-of select="$extra_params"/>
-        <xsl:if test="$subtype != ''">
-          <param>
-            <name><xsl:value-of select="$type"/>_type</name>
-            <value><xsl:value-of select="$subtype"/></value>
-          </param>
-        </xsl:if>
-      </xsl:with-param>
-    </xsl:call-template>
+  <xsl:if test="$top-visualization != ''">
+    <div id="list-window-charts">
+      <div class="section-header">
+        <a href="#"
+           class="toggle-action-icon" data-target="#chart-box" data-name="Charts">
+            <img src="/img/fold.png"/>
+        </a>
+        <h3><xsl:value-of select="gsa:i18n ('Charts')"/></h3>
+      </div>
+    
+      <div id="chart-box">
+        <div class="visualization">
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="top-visualization-box-left"/>
+          <div class="visualization-spacer"/>
+          <div class="visualization-box" id="top-visualization-box-right"/>
+          <div class="visualization-spacer"/>
+          <xsl:copy-of select="$top-visualization"/>
+        </div>
+      </div>
+    </div>
+  </xsl:if>
 
-    <div class="gb_window_part_content_no_pad">
-      <xsl:variable name="caller_escaped" select="gsa:escape-js (/envelope/current_page)"/>
+  <div id="list-window-table">
+    <div class="section-header">
+      <a href="#"
+         class="toggle-action-icon" data-target="#table-box" data-name="Table">
+          <img src="/img/fold.png"/>
+      </a>
+      <h3><xsl:value-of select="gsa:i18n ('Table')"/></h3>
+    </div> <!-- /section-header -->
 
-      <!-- Charts. -->
-      <xsl:choose>
-        <xsl:when test="$top-visualization = ''"/>
-        <xsl:when test="/envelope/charts = '1'">
-          <div class="visualization">
-            <div class="visualization-spacer"/>
-            <div class="visualization-box" id="top-visualization-box-left">
-            </div>
-            <div class="visualization-spacer"/>
-            <div class="visualization-box" id="top-visualization-box-right">
-            </div>
-            <div class="visualization-spacer"/>
-            <xsl:copy-of select="$top-visualization"/>
-          </div>
-          <xsl:choose>
-            <xsl:when test="/envelope/params/charts = '1'">
-              <a class="charts-bar" href="{substring-before (/envelope/current_page, '&amp;charts=1')}{substring-after (/envelope/current_page, '&amp;charts=1')}&amp;charts=0&amp;token={/envelope/token}" title="{gsa:i18n ('Hide Charts', 'Dashboard')}">&#9650; &#9650; &#9650;</a>
-            </xsl:when>
-            <xsl:otherwise>
-              <a class="charts-bar" href="{/envelope/current_page}&amp;charts=0&amp;token={/envelope/token}" title="{gsa:i18n ('Hide Charts', 'Dashboard')}">&#9650; &#9650; &#9650;</a>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="/envelope/params/charts = '0'">
-              <script type="text/javascript">
-                document.write ("&lt;a class=\"charts-bar\" href=\"" + encodeURI ("<xsl:value-of select="substring-before ($caller_escaped, '&amp;charts=0')"/><xsl:value-of select="substring-after ($caller_escaped, '&amp;charts=0')"/>&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>") + "\" title=\"<xsl:value-of select="gsa:i18n('Show Charts', 'Dashboard')"/>\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
-              </script>
-            </xsl:when>
-            <xsl:otherwise>
-              <script type="text/javascript">
-                document.write ("&lt;a class=\"charts-bar\" href=\"" + encodeURI ("<xsl:value-of select="$caller_escaped"/>") + "&amp;charts=1&amp;token=<xsl:value-of select="/envelope/token"/>\" title=\"<xsl:value-of select="gsa:i18n('Show Charts', 'Dashboard')"/>\"&gt;&#9660; &#9660; &#9660;&lt;/a&gt;");
-              </script>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
+    <div id="table-box">
 
-      <!-- Everything below the filtering and charts. -->
-      <div>
+
 
           <table style="width:100%">
             <tr>
@@ -4898,11 +4891,12 @@ var toggleFilter = function(){
           </table>
         </xsl:if>
 
-        <!-- Wizard. -->
-        <xsl:call-template name="wizard"/>
-      </div>
-    </div>
-  </div>
+    </div> <!-- /table-box -->
+
+  </div> <!-- /list-window-table -->
+
+  <!-- Wizard. -->
+  <xsl:call-template name="wizard"/>
 </xsl:template>
 
 <xsl:template name="minor-details">

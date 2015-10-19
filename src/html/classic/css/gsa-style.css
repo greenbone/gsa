@@ -1360,3 +1360,44 @@ text-align:right;
   background-image: url('/img/loading.gif');
   background-position: 0 center;
 }
+
+/* The new reworked list view */
+
+#list-window-header,
+#list-window-charts,
+#list-window-table {
+  margin: 10px;
+}
+
+#list-window-title {
+  float: left;
+  width: 300px;
+}
+
+#list-window-img {
+  float: left;
+  width: 64px;
+  height: 64px;
+  margin-right: 10px;
+}
+
+#list-window-header h2,
+#list-window-header p {
+  margin: 0;
+}
+
+#list-window-filter {
+  margin-left: 300px;
+}
+
+.section-header {
+  border-bottom: 2px solid black;
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+.section-header .toggle-action-icon {
+  float: right;
+}
