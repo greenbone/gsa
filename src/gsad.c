@@ -3404,6 +3404,10 @@ gsad_add_content_type_header (struct MHD_Response *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "image/png");
         break;
+      case GSAD_CONTENT_TYPE_IMAGE_SVG:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "image/svg+xml");
+        break;
       case GSAD_CONTENT_TYPE_OCTET_STREAM:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "application/octet-stream");
@@ -3767,6 +3771,8 @@ file_content_response (credentials_t *credentials,
   /* Guess content type. */
   if (strstr (path, ".png"))
     *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
+  else if (strstr (path, ".svg"))
+    *content_type = GSAD_CONTENT_TYPE_IMAGE_SVG;
   else if (strstr (path, ".html"))
     *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   else if (strstr (path, ".css"))
