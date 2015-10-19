@@ -16332,6 +16332,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n('Description', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n('Type', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n('Default', 'Property')"/></td>
+              <td><xsl:value-of select="gsa:i18n('Mandatory', 'Property')"/></td>
             </tr>
             <xsl:for-each select="info/params/param">
               <tr class="{gsa:table-row-class(position())}">
@@ -16347,6 +16348,12 @@ should not have received it.
                     <xsl:otherwise>
                       <xsl:value-of select="default"/>
                     </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="mandatory = '0'">False</xsl:when>
+                    <xsl:otherwise>True</xsl:otherwise>
                   </xsl:choose>
                 </td>
               </tr>

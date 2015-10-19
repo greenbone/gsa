@@ -1,3 +1,8 @@
+2015-10-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner [details]): Add parameter mandatory
+	value column.
+
 2015-10-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-target-form): Correct hidden
