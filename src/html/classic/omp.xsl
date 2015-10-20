@@ -1100,7 +1100,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </xsl:variable>
      <input type="hidden" name="filter_extra" value="{$extra}" />
    </div>
-   <div class="footnote" style="margin-left:40px;">
+   <div class="footnote">
      <xsl:value-of select="$extra"/>
    </div>
    <div id="filterbox" style="display: none;">

@@ -1,5 +1,9 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove a margin in the filterbox.
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/gsad.xsl (error_window): Remove one more <center>
 
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
