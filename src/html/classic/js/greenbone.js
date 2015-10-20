@@ -487,15 +487,10 @@
       var elem = $(this),
           target = doc.find(elem.data('target')),
           icon = elem.find('img'),
-          name = elem.data('name');
-      elem.on('click', function(){
-        // Update the form parameter
-        var input = target.closest('form').find('input[name=build_filter]');
-        if (input.length){
-          input.val(input.val() ^ 1);
-        }
-        // Show/hide the detailled form
-        target.slideToggle();
+          name = elem.data('name'),
+          collapsed = elem.data('variable');
+
+      function toggleIcon (icon) {
         // manage the button itself
         icon.toggleClass('expand');
         if (icon.hasClass('expand')){
@@ -511,6 +506,30 @@
             alt:   "Fold " + name
           });
         }
+      }
+
+      if (collapsed && window.localStorage.getItem(collapsed)){
+        target.hide();
+        toggleIcon(icon);
+      }
+      elem.on('click', function(){
+        // Update the form parameter
+        var input = target.closest('form').find('input[name=build_filter]');
+        if (input.length){
+          input.val(input.val() ^ 1);
+        }
+        if (collapsed){
+          if (target.offsetWidth > 0 || target.offsetHeight > 0){
+            // visible
+            window.localStorage.removeItem(collapsed);
+          } else {
+            // hidden
+            window.localStorage.setItem(collapsed, true);
+          }
+        }
+        // Show/hide the detailled form
+        target.slideToggle();
+        toggleIcon(icon);
       });
     });
 

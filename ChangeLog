@@ -1,5 +1,10 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Remember
+	  the collapsed states.
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/css/gsa-login.css, src/html/classic/gsad.xsl:
 	  Center the login page without the <center> element.
 
