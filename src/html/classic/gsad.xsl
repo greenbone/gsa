@@ -2157,11 +2157,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:10px; margin-top:10px; text-align:left;"/>
       </span>
 -->
-      <center>
-        <div style="width:500px;">
-          <xsl:copy-of select="$message"/>
-        </div>
-      </center>
+      <div style="width: 500px; margin: 0 auto;">
+        <xsl:copy-of select="$message"/>
+      </div>
     </div>
   </div>
 </xsl:template>
