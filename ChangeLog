@@ -1,5 +1,9 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* CMakeLists.txt: Install the files added in r23635.
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Remember
 	  the collapsed states.
 

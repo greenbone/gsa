@@ -473,6 +473,11 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg
                src/html/classic/img/tag.svg
+               src/html/classic/img/alert.svg
+               src/html/classic/img/filter.svg
+               src/html/classic/img/note.svg
+               src/html/classic/img/override.svg
+               src/html/classic/img/slave.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png
