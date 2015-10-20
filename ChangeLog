@@ -1,5 +1,10 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix the vertical alignment of the inner
+	  filter forms.
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove a margin in the filterbox.
 
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>

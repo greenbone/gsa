@@ -1002,10 +1002,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="0"/>
     <xsl:otherwise>
-      <div style="float: right">
+      <div style="float: right; padding: 2px;">
         <xsl:if test="gsa:may-op ('create_filter')">
-          <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
-            <div style="display: inline; padding: 2px; vertical-align:middle;">
+          <form style="display: inline;" action="" method="post" enctype="multipart/form-data">
+            <div style="display: inline;">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="create_filter"/>
               <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -1030,8 +1030,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          </form>
        </xsl:if>
        <xsl:if test="gsa:may-op ('get_filters')">
-         <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get" name="switch_filter" enctype="multipart/form-data">
-           <div style="display: inline; padding: 2px; vertical-align:middle;">
+         <form style="display: inline;" action="" method="get" name="switch_filter" enctype="multipart/form-data">
+           <div style="display: inline;">
              <input type="hidden" name="token" value="{/envelope/token}"/>
              <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
              <xsl:for-each select="exslt:node-set($extra_params)/param">
