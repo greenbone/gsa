@@ -518,8 +518,9 @@
         if (input.length){
           input.val(input.val() ^ 1);
         }
+        // Update the localStorage
         if (collapsed){
-          if (target.offsetWidth > 0 || target.offsetHeight > 0){
+          if (window.localStorage.getItem(collapsed)){
             // visible
             window.localStorage.removeItem(collapsed);
           } else {
@@ -527,7 +528,6 @@
             window.localStorage.setItem(collapsed, true);
           }
         }
-        // Show/hide the detailled form
         target.slideToggle();
         toggleIcon(icon);
       });

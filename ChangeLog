@@ -1,5 +1,11 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Better not check the visibility of
+	  elements that are not (yet) visible, we have a storage we can rely
+	  on.
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Delete alert.svg as it is not the alert we are talking about.
 
 	* CMakeLists.txt: Update
