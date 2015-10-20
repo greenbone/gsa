@@ -4440,7 +4440,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="list-window-header" class="clearfix">
     <div id="list-window-title">
       <img id="list-window-img" src="/img/{$type}.svg"/>
-      <div>
+      <div id="list-window-details">
         <h2><xsl:value-of select="gsa:i18n ($cap-type-plural)"/></h2>
         <p>Total: <xsl:value-of select="$full-count"/></p>
         <p>Filtered: <xsl:value-of select="$filtered-count"/></p>

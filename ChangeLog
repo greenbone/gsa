@@ -1,5 +1,10 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Get
+	  rid of the fixed-with of #list-window-title
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix the vertical alignment of the inner
 	  filter forms.
 

@@ -1388,18 +1388,20 @@ text-align:right;
 
 #list-window-title {
   float: left;
-  width: 300px;
 }
 
 #list-window-img {
-  float: left;
   width: 64px;
   height: 64px;
   margin-right: 10px;
 }
 
-#list-window-header h2,
-#list-window-header p {
+#list-window-details {
+  display: inline-block;
+}
+
+#list-window-details h2,
+#list-window-details p {
   margin: 0;
 }
 
