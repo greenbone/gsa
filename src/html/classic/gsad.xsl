@@ -2318,17 +2318,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:include href="graphics.xsl"/>
 
 <!-- Login page -->
+<!-- Beware: This page has its own CSS -->
 
 <xsl:template match="login_page">
-  <div style="width:315px;margin-top:5px;">
+  <div class="gb_login_dialog_container">
+   <div>
     <div class="gb_window gb_login_dialog">
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
       <div class="gb_window_part_center">Greenbone Security Assistant</div>
       <div class="gb_window_part_content">
         <img src="/img/gsa_splash.png" alt="" />
-        <center>
-          <div style="color: red"><xsl:value-of select="gsa:i18n (message, 'Login Message')"/></div>
+        <div>
+          <div style="color: red;text-align: center;"><xsl:value-of select="gsa:i18n (message, 'Login Message')"/></div>
           <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="login" />
             <xsl:choose>
@@ -2341,18 +2343,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <table>
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></td>
-                <td><input type="text" autocomplete="off" name="login" value="" autofocus="autofocus"/></td>
+                <td><label for="login"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></label></td>
+                <td><input type="text" autocomplete="off" id="login" name="login" value="" autofocus="autofocus"/></td>
               </tr>
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-                <td><input type="password" autocomplete="off" name="password" value="" /></td>
+                <td><label for="password"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></label></td>
+                <td><input type="password" autocomplete="off" id="password" name="password" value="" /></td>
               </tr>
             </table>
-            <div style="text-align:center;float:center;"><input type="submit" value="{gsa:i18n ('Login', 'Action Verb')}" /></div>
+            <div style="text-align:center;"><input type="submit" value="{gsa:i18n ('Login', 'Action Verb')}" /></div>
             <br clear="all" />
           </form>
-        </center>
+        </div>
         <xsl:if test="string-length (guest/username) &gt; 0">
           <div style="text-align: right">
             <xsl:choose>
@@ -2366,8 +2368,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:if>
       </div>
-    </div>
-  </div>
+    </div> <!-- /.gb_login_dialog -->
+   </div>
+  </div> <!-- /.gb_login_dialog_container -->
 </xsl:template>
 
 <!-- ROOT, ENVELOPE -->
@@ -2458,9 +2461,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <html xmlns="http://www.w3.org/1999/xhtml" lang="{$html-lang}">
     <xsl:call-template name="html-head"/>
     <body>
-      <center>
+      <div> <!-- just to absorb the bloody xmlns attribute -->
         <xsl:apply-templates/>
-      </center>
+      </div>
     </body>
   </html>
 </xsl:template>

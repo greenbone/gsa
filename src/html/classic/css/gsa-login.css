@@ -80,4 +80,24 @@ img {
  font-size:12px;
 }
 
+.gb_login_dialog_container {
+  display: table;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Vertical centering */
+.gb_login_dialog_container > div {
+  display:table-cell;
+  vertical-align:middle;
+}
+
+/* Horizontal centering */
+.gb_login_dialog {
+  margin-left:auto;
+  margin-right:auto;
+  width:315px;
+}
+
+
 /* END Window decorations */
