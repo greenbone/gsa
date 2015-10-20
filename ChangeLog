@@ -1,5 +1,12 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Delete alert.svg as it is not the alert we are talking about.
+
+	* CMakeLists.txt: Update
+	* src/html/classic/img/alert.svg: Remove
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* CMakeLists.txt: Install the files added in r23635.
 
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
