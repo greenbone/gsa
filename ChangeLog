@@ -1,3 +1,8 @@
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl (filter-window-part): Remove the old filter
+	  collapse button.
+
 2015-10-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/alert.svg, src/html/classic/img/filter.svg,

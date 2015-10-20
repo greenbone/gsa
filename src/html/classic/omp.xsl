@@ -1099,37 +1099,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </xsl:for-each>
      </xsl:variable>
      <input type="hidden" name="filter_extra" value="{$extra}" />
-     <script>
-var toggleFilter = function(){
-  // Update the form parameter
-  document.filterform.build_filter.value ^= 1;
-  // Show/hide the detailled form
-  $('#filterbox').slideToggle();
-  // manage the button itself
-  var filtericon = $('#togglefiltericon');
-  filtericon.toggleClass('expand');
-  if (filtericon.hasClass('expand')){
-    filtericon.attr({
-      src:   "/img/unfold.png",
-      title: "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>",
-      alt:   "<xsl:value-of select="gsa:i18n ('Unfold filter')"/>"
-    });
-  } else {
-    filtericon.attr({
-      src:   "/img/fold.png",
-      title: "<xsl:value-of select="gsa:i18n ('Fold filter')"/>",
-      alt:   "<xsl:value-of select="gsa:i18n ('Fold filter')"/>"
-    });
-  }
-};
-     </script>
-     <a href="javascript:void(0);"
-        onclick="toggleFilter();">
-        <img id="togglefiltericon" class="expand"
-             src="/img/unfold.png"
-             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-             alt="{gsa:i18n ('Unfold filter', 'Filter')}" title="{gsa:i18n ('Unfold filter', 'Filter')}"/>
-     </a>
    </div>
    <div class="footnote" style="margin-left:40px;">
      <xsl:value-of select="$extra"/>
