@@ -1,5 +1,10 @@
 2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css, src/html/classic/gsad.xsl
+	  (error_dialog): Center the dialog without using <center>
+
+2015-10-20  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Better not check the visibility of
 	  elements that are not (yet) visible, we have a storage we can rely
 	  on.

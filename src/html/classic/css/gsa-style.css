@@ -483,6 +483,23 @@ td p {
  font-size:12px;
 }
 
+.gb_error_dialog_container {
+ display: table;
+ width: 100vw;
+ height: 100vh;
+}
+
+.gb_error_dialog_container > div {
+ display:table-cell;
+ vertical-align:middle;
+}
+
+.gb_error_dialog {
+ margin-left:auto;
+ margin-right:auto;
+ width:500px;
+}
+
 /* END Window decorations */
 
 #gb_header {

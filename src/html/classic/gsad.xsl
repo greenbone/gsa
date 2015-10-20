@@ -2171,9 +2171,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <xsl:param name="token"></xsl:param>
-  <center>
-    <div style="width:500px;">
-      <div class="gb_window gb_error_dialog" style="margin-top:150px;">
+  <div class="gb_error_dialog_container">
+    <div>
+      <div class="gb_window gb_error_dialog">
         <div class="gb_window_part_left_error"></div>
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">Error Message</div>
@@ -2217,7 +2217,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <xsl:call-template name="html-footer"/>
     </div>
-  </center>
+  </div>
 </xsl:template>
 
 <!-- GSAD_RESPONSE -->
