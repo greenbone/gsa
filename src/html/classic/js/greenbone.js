@@ -302,14 +302,14 @@
 
       if (internal_error_html.length)
         {
-          error_title = internal_error_html.find ("span div").text ()
+          error_title = internal_error_html.find ("span div").text()
           if (! (error_title))
             error_title = "Internal Error";
-          error = "<br/>" + internal_error_html.find ("span")[0].lastChild.textContent;
+          error = internal_error_html.find ("span").text();
         }
       else if (login_form_html.length)
         {
-          error = login_form_html.find ("center div")[0].lastChild.textContent
+          error = login_form_html.find (".error_message").text();
         }
 
       self.dialog.dialog({
