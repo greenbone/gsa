@@ -1056,11 +1056,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     title="{gsa:i18n ('Switch Filter', 'Filter')}"
                     src="/img/refresh.png"
                     alt="{gsa:i18n ('Switch', 'Filter')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-             <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-                title="{gsa:i18n ('Filters', 'Filter')}">
-               <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-                    src="/img/list.png" border="0" alt="{gsa:i18n ('Filters', 'Filter')}"/>
-             </a>
            </div>
          </form>
        </xsl:if>
