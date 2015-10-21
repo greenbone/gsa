@@ -14315,11 +14315,6 @@ should not have received it.
                        value="{$config/comment}"/>
               </td>
             </tr>
-            <tr>
-              <td colspan="2" style="text-align:right;">
-                <input type="submit" name="submit" value="{gsa:i18n ('Save Config', 'Scan Config')}"/>
-              </td>
-            </tr>
           </table>
 
           <xsl:if test="$config/type = 0">

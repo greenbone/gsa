@@ -1,3 +1,8 @@
+2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl: Remove the extra 'Save Config' button in
+	  the middle of the Edit Config dialog.
+
 2015-10-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
