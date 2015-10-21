@@ -1406,7 +1406,8 @@ text-align:right;
 }
 
 #list-window-filter {
-  margin-left: 300px;
+  float: right;
+  width: 900px;
 }
 
 .section-header {

@@ -4,6 +4,11 @@
 
 2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Make the filter more narrow,
+	  and stick to the right.
+
+2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-part): Remove the 'View
 	  filters' button.
 
