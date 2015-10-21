@@ -926,9 +926,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="$last"/>
       <xsl:value-of select="gsa:i18n (' of ', 'Pagination')"/>
       <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
-      <xsl:if test="$full_count">
-        (<xsl:value-of select="gsa:i18n ('total', 'Pagination')"/>: <xsl:value-of select="$full_count"/>)
-      </xsl:if>
       <!-- Right icons. -->
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
