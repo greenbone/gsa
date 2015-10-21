@@ -1,5 +1,10 @@
 2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove mention of the total unfiltered
+	  count if the filtered table is empty.
+
+2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove mention of the total in the pager.
 
 2015-10-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
