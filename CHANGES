@@ -1,14 +1,15 @@
-gsa 6.1+beta2 (2015-10-XX)
+gsa 6.1+beta2 (2015-10-21)
 
-This is the second beta release of the upcoming version 6.1 of the Greenbone
-Security Assistant (GSA). It is the web client that makes the full feature set
-of OpenVAS Manager available in a web browser.
+This is the second beta release of the upcoming version 6.1 of the
+Greenbone Security Assistant (GSA). It is the web client that makes the
+full feature set of OpenVAS Manager available in a web browser.
 
-This release comprehensively updates the user interface style and workflows,
-using JS technologies for dialogs, widgets and various other aspects.
-Also a explicit Asset Management was added for hosts and operating systems.
-Several new charts were introduced and a considerable number of other new
-features.
+This release comprehensively updates the user interface style and
+workflows, using JS technologies for dialogs, widgets and various other
+aspects.
+Also a explicit Asset Management was added for hosts and operating
+systems. Several new charts were introduced and a considerable number of
+other new features.
 
 Many thanks to everyone who has contributed to this release:
 Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
@@ -18,16 +19,16 @@ Main changes since 6.1+beta1:
 * New: Hosts and Operating Systems for Asset Management. The previous
   Hosts menu item is renamed to "Hosts (classic).
 * New style of the header.
-* Add new popup diaogs for any "new" and "edit" dialog.
+* Add new popup dialogs for any "new" and "edit" dialog.
 * Use of the full width of the browser window.
 * New layout and interaction scheme of resource list views.
 * Add jQuery on all pages except the login page.
-* Add subject and message input for email alerts and allow the use of various
-  variables in the message text.
+* Add subject and message input for email alerts and allow the use of
+  various variables in the message text.
 * Various extensions to support OSP 1.0 and first 1.1 features.
 * Add charts to reports section. 
-* Split any dual form pages into separate ones for using the popup dialogs (for
-  example new/upload combinations).
+* Split any dual form pages into separate ones for using the popup
+  dialogs (for example new/upload combinations).
 * Add an upload icon to the Reports page header.
 * New: Credentials type.
 * Add options to have a user inherit resources from a user being deleted.
@@ -38,9 +39,10 @@ Main changes since 6.1+beta1:
 * Add a datepicker to support the date entry for new schedules.
 * Support IPv6 redirection case.
 * Add content security headers.
-* Update of chinese translation.
-* Add sepearete style sheet for login dialog.
-* Changed handling of translation strings to allow for standard po file management.
+* Update of Chinese translation.
+* Add separate style sheet for login dialog.
+* Changed handling of translation strings to allow for standard po file
+  management.
 
 
 gsa 6.1+beta1 (2015-07-17)
