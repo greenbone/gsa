@@ -1,3 +1,21 @@
+2015-10-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use new element and parameter names without "lsc_" for credentials in
+	targets.
+
+	* src/gsad_omp.c (new_target, create_target_omp, save_target_omp): Use
+	the names "ssh_credentials_id", "smb_credential_id" and
+	"esxi_credential_id" to refer to the credentials.
+
+	* src/gsad.c (init_validator): Replace lsc_credential_id,
+	lsc_esxi_credential_id, lsc_smb_credential_id with ssh_credential_id,
+	esxi_credential_id and smb_credential_id.
+	
+	* src/html/classic/omp.xsl (task [details], html-create-target-form)
+	(html-edit-target-form, target, target [trash], targe [details])
+	(html-edit-asset-form): Use new element and parameter names for
+	credentials in targets.
+
 2015-10-22  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Remove mention of the empty task list when

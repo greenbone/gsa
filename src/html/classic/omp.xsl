@@ -4163,14 +4163,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="detailed_alerts" select="../../../get_alerts_response/alert"/>
       <xsl:if test="target/@id != ''">
         <target id="{target/@id}"/>
-        <xsl:if test="$detailed_target/ssh_lsc_credential/@id != ''">
-          <credential id="{$detailed_target/ssh_lsc_credential/@id}"/>
+        <xsl:if test="$detailed_target/ssh_credential/@id != ''">
+          <credential id="{$detailed_target/ssh_credential/@id}"/>
         </xsl:if>
-        <xsl:if test="$detailed_target/smb_lsc_credential/@id != '' and $detailed_target/smb_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id">
-          <credential id="{$detailed_target/smb_lsc_credential/@id}"/>
+        <xsl:if test="$detailed_target/smb_credential/@id != '' and $detailed_target/smb_credential/@id != $detailed_target/ssh_credential/@id">
+          <credential id="{$detailed_target/smb_credential/@id}"/>
         </xsl:if>
-        <xsl:if test="$detailed_target/esxi_lsc_credential/@id != '' and $detailed_target/esxi_lsc_credential/@id != $detailed_target/ssh_lsc_credential/@id and $detailed_target/esxi_lsc_credential/@id != $detailed_target/smb_lsc_credential/@id">
-          <credential id="{$detailed_target/esxi_lsc_credential/@id}"/>
+        <xsl:if test="$detailed_target/esxi_credential/@id != '' and $detailed_target/esxi_credential/@id != $detailed_target/ssh_credential/@id and $detailed_target/esxi_credential/@id != $detailed_target/smb_credential/@id">
+          <credential id="{$detailed_target/esxi_credential/@id}"/>
         </xsl:if>
         <xsl:if test="$detailed_target/port_list/@id != ''">
           <port_list id="{$detailed_target/port_list/@id}"/>
@@ -11386,9 +11386,9 @@ should not have received it.
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
         <xsl:if test="not (gsa:may-op ('get_credentials'))">
-          <input type="hidden" name="lsc_credential_id" value="--"/>
-          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
-          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
+          <input type="hidden" name="ssh_credential_id" value="--"/>
+          <input type="hidden" name="smb_credential_id" value="--"/>
+          <input type="hidden" name="esxi_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -11584,10 +11584,10 @@ should not have received it.
             <tr>
               <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
               <td>
-                <select name="lsc_credential_id">
+                <select name="ssh_credential_id">
                   <option value="--">--</option>
                   <xsl:apply-templates select="$credentials" mode="select">
-                    <xsl:with-param name="select_id" select="lsc_credential_id"/>
+                    <xsl:with-param name="select_id" select="ssh_credential_id"/>
                   </xsl:apply-templates>
                 </select>
                 <xsl:text> </xsl:text>
@@ -11600,10 +11600,10 @@ should not have received it.
             <tr>
               <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
               <td>
-                <select name="lsc_smb_credential_id">
+                <select name="smb_credential_id">
                   <option value="--">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
-                    <xsl:with-param name="select_id" select="lsc_smb_credential_id"/>
+                    <xsl:with-param name="select_id" select="smb_credential_id"/>
                   </xsl:apply-templates>
                 </select>
               </td>
@@ -11611,10 +11611,10 @@ should not have received it.
             <tr>
               <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
               <td>
-                <select name="lsc_esxi_credential_id">
+                <select name="esxi_credential_id">
                   <option value="--">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
-                    <xsl:with-param name="select_id" select="lsc_esxi_credential_id"/>
+                    <xsl:with-param name="select_id" select="esxi_credential_id"/>
                   </xsl:apply-templates>
                 </select>
               </td>
@@ -11660,9 +11660,9 @@ should not have received it.
         <input type="hidden" name="max" value="{targets/@max}"/>
         <input type="hidden" name="in_use" value="{get_targets_response/target/in_use}"/>
         <xsl:if test="not (gsa:may-op ('get_credentials'))">
-          <input type="hidden" name="lsc_credential_id" value="--"/>
-          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
-          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
+          <input type="hidden" name="ssh_credential_id" value="--"/>
+          <input type="hidden" name="smb_credential_id" value="--"/>
+          <input type="hidden" name="esxi_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -11862,12 +11862,12 @@ should not have received it.
                 <tr>
                   <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
                   <td>
-                    <select name="lsc_credential_id">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/ssh_lsc_credential/@id"/>
+                    <select name="ssh_credential_id">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/ssh_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -11876,7 +11876,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -11889,12 +11889,12 @@ should not have received it.
                     <xsl:value-of select="gsa:i18n ('on port', 'Target|Credential')"/>
                     <xsl:text> </xsl:text>
                     <xsl:variable name="credential"
-                                  select="get_targets_response/target/ssh_lsc_credential"/>
+                                  select="get_targets_response/target/ssh_credential"/>
                     <xsl:choose>
                       <xsl:when test="$credential and string-length ($credential/port)">
                         <input type="text"
                                name="port"
-                               value="{get_targets_response/target/ssh_lsc_credential/port}"
+                               value="{get_targets_response/target/ssh_credential/port}"
                                size="6"
                                maxlength="400"/>
                       </xsl:when>
@@ -11907,12 +11907,12 @@ should not have received it.
                 <tr>
                   <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
                   <td>
-                    <select name="lsc_smb_credential_id">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/smb_lsc_credential/@id"/>
+                    <select name="smb_credential_id">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/smb_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -11921,7 +11921,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential [type = 'up']">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -11935,12 +11935,12 @@ should not have received it.
                 <tr>
                   <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
                   <td>
-                    <select name="lsc_esxi_credential_id">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/esxi_lsc_credential/@id"/>
+                    <select name="esxi_credential_id">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/esxi_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -11949,7 +11949,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential [type = 'up']">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -12141,12 +12141,12 @@ should not have received it.
                     <xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/>
                   </td>
                   <td>
-                    <select name="lsc_credential_id" disabled="1">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/ssh_lsc_credential/@id"/>
+                    <select name="ssh_credential_id" disabled="1">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/ssh_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -12155,7 +12155,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -12168,12 +12168,12 @@ should not have received it.
                     <xsl:value-of select="gsa:i18n ('on port', 'Target|Credential')"/>
                     <xsl:text> </xsl:text>
                     <xsl:variable name="credential"
-                                  select="get_targets_response/target/ssh_lsc_credential"/>
+                                  select="get_targets_response/target/ssh_credential"/>
                     <xsl:choose>
                       <xsl:when test="$credential and string-length ($credential/port)">
                         <input type="text"
                                name="port"
-                               value="{get_targets_response/target/ssh_lsc_credential/port}"
+                               value="{get_targets_response/target/ssh_credential/port}"
                                size="6"
                                maxlength="400"
                                disabled="1"/>
@@ -12189,12 +12189,12 @@ should not have received it.
                     <xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/>
                   </td>
                   <td>
-                    <select name="lsc_smb_credential_id" disabled="1">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/smb_lsc_credential/@id"/>
+                    <select name="smb_credential_id" disabled="1">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/smb_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -12203,7 +12203,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -12217,12 +12217,12 @@ should not have received it.
                 <tr>
                   <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
                   <td>
-                    <select name="lsc_esxi_credential_id" disabled="1">
-                      <xsl:variable name="lsc_credential_id">
-                        <xsl:value-of select="get_targets_response/target/esxi_lsc_credential/@id"/>
+                    <select name="esxi_credential_id" disabled="1">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/esxi_credential/@id"/>
                       </xsl:variable>
                       <xsl:choose>
-                        <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
                           <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -12231,7 +12231,7 @@ should not have received it.
                       </xsl:choose>
                       <xsl:for-each select="get_credentials_response/credential">
                         <xsl:choose>
-                          <xsl:when test="@id = $lsc_credential_id">
+                          <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -12455,46 +12455,46 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="boolean (ssh_lsc_credential/permissions) and count (ssh_lsc_credential/permissions/permission) = 0">
-          <xsl:value-of select="ssh_lsc_credential/name"/>
+        <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
+          <xsl:value-of select="ssh_credential/name"/>
         </xsl:when>
         <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="ssh_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="ssh_credential/name"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="ssh_lsc_credential/name"/>
+          <xsl:value-of select="ssh_credential/name"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="boolean (smb_lsc_credential/permissions) and count (smb_lsc_credential/permissions/permission) = 0">
-          <xsl:value-of select="smb_lsc_credential/name"/>
+        <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
+          <xsl:value-of select="smb_credential/name"/>
         </xsl:when>
         <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="smb_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="smb_credential/name"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="smb_lsc_credential/name"/>
+          <xsl:value-of select="smb_credential/name"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="boolean (esxi_lsc_credential/permissions) and count (esxi_lsc_credential/permissions/permission) = 0">
-          <xsl:value-of select="esxi_lsc_credential/name"/>
+        <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
+          <xsl:value-of select="esxi_credential/name"/>
         </xsl:when>
         <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="esxi_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="esxi_credential/name"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="esxi_lsc_credential/name"/>
+          <xsl:value-of select="esxi_credential/name"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -12550,39 +12550,39 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="ssh_lsc_credential/trash = '1'">
-          <xsl:value-of select="ssh_lsc_credential/name"/>
+        <xsl:when test="ssh_credential/trash = '1'">
+          <xsl:value-of select="ssh_credential/name"/>
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="ssh_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="ssh_credential/name"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="smb_lsc_credential/trash = '1'">
-          <xsl:value-of select="smb_lsc_credential/name"/>
+        <xsl:when test="smb_credential/trash = '1'">
+          <xsl:value-of select="smb_credential/name"/>
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="smb_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="smb_credential/name"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="esxi_lsc_credential/trash = '1'">
-          <xsl:value-of select="esxi_lsc_credential/name"/>
+        <xsl:when test="esxi_credential/trash = '1'">
+          <xsl:value-of select="esxi_credential/name"/>
           <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="esxi_lsc_credential/name"/>
+          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="esxi_credential/name"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -12590,10 +12590,10 @@ should not have received it.
     <td>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
-        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1' or port_list/trash = '1'">
+        <xsl:when test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or port_list/trash = '1'">
           <xsl:variable name="resources_string">
-            <xsl:if test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
-            <xsl:if test="(ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or esxi_lsc_credential/trash = '1') and port_list/trash = '1'">
+            <xsl:if test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
+            <xsl:if test="(ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1') and port_list/trash = '1'">
               <xsl:text> </xsl:text><xsl:value-of select="gsa:i18n ('and', 'List Conjunction')"/><xsl:text> </xsl:text>
             </xsl:if>
             <xsl:if test="port_list/trash = '1'"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></xsl:if>
@@ -12714,7 +12714,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target')"/>
           </td>
         </tr>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (ssh_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (ssh_credential/@id) &gt; 0">
           <tr>
             <td valign="top" width="175" colspan="2">
               <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>:
@@ -12723,84 +12723,84 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/>:</td>
             <td>
-              <xsl:if test="string-length (ssh_lsc_credential/@id) &gt; 0">
+              <xsl:if test="string-length (ssh_credential/@id) &gt; 0">
                 <xsl:choose>
-                  <xsl:when test="boolean (ssh_lsc_credential/permissions) and count (ssh_lsc_credential/permissions/permission) = 0">
+                  <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
                     <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
                     <xsl:text> (</xsl:text>
                     <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
                     <xsl:text>: </xsl:text>
-                    <xsl:value-of select="ssh_lsc_credential/name"/>
+                    <xsl:value-of select="ssh_credential/name"/>
                     <xsl:text>, </xsl:text>
-                    <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="ssh_lsc_credential/@id"/>
+                    <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="ssh_credential/@id"/>
                     <xsl:text>)</xsl:text>
                   </xsl:when>
                   <xsl:when test="gsa:may-op ('get_credentials')">
-                    <a href="/omp?cmd=get_credential&amp;credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-                      <xsl:value-of select="ssh_lsc_credential/name"/>
+                    <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="ssh_credential/name"/>
                     </a>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="ssh_lsc_credential/name"/>
+                    <xsl:value-of select="ssh_credential/name"/>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="gsa:i18n ('on port', 'Target|Credential')"/>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="ssh_lsc_credential/port"/>
+                <xsl:value-of select="ssh_credential/port"/>
               </xsl:if>
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (smb_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (smb_credential/@id) &gt; 0">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/>:</td>
             <td>
               <xsl:choose>
-                <xsl:when test="boolean (smb_lsc_credential/permissions) and count (smb_lsc_credential/permissions/permission) = 0">
+                <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
                   <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
                   <xsl:text> (</xsl:text>
                   <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
                   <xsl:text>: </xsl:text>
-                  <xsl:value-of select="smb_lsc_credential/name"/>
+                  <xsl:value-of select="smb_credential/name"/>
                   <xsl:text>, </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="smb_lsc_credential/@id"/>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="smb_credential/@id"/>
                   <xsl:text>)</xsl:text>
                 </xsl:when>
                 <xsl:when test="gsa:may-op ('get_credentials')">
-                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="smb_lsc_credential/name"/>
+                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="smb_credential/name"/>
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="smb_lsc_credential/name"/>
+                  <xsl:value-of select="smb_credential/name"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (esxi_lsc_credential/@id) &gt; 0">
+        <xsl:if test="gsa:may-op ('get_credentials') or string-length (esxi_credential/@id) &gt; 0">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/>:</td>
             <td>
               <xsl:choose>
-                <xsl:when test="boolean (esxi_lsc_credential/permissions) and count (esxi_lsc_credential/permissions/permission) = 0">
+                <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
                   <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
                   <xsl:text> (</xsl:text>
                   <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
                   <xsl:text>: </xsl:text>
-                  <xsl:value-of select="esxi_lsc_credential/name"/>
+                  <xsl:value-of select="esxi_credential/name"/>
                   <xsl:text>, </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="esxi_lsc_credential/@id"/>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="esxi_credential/@id"/>
                   <xsl:text>)</xsl:text>
                 </xsl:when>
                 <xsl:when test="gsa:may-op ('get_credentials')">
-                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_lsc_credential/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="esxi_lsc_credential/name"/>
+                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="esxi_credential/name"/>
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="esxi_lsc_credential/name"/>
+                  <xsl:value-of select="esxi_credential/name"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -12849,14 +12849,14 @@ should not have received it.
       <xsl:if test="port_list/@id != ''">
         <port_list id="{port_list/@id}"/>
       </xsl:if>
-      <xsl:if test="ssh_lsc_credential/@id != ''">
-        <credential id="{ssh_lsc_credential/@id}"/>
+      <xsl:if test="ssh_credential/@id != ''">
+        <credential id="{ssh_credential/@id}"/>
       </xsl:if>
-      <xsl:if test="smb_lsc_credential/@id != '' and smb_lsc_credential/@id != ssh_lsc_credential/@id">
-        <credential id="{smb_lsc_credential/@id}"/>
+      <xsl:if test="smb_credential/@id != '' and smb_credential/@id != ssh_credential/@id">
+        <credential id="{smb_credential/@id}"/>
       </xsl:if>
-      <xsl:if test="esxi_lsc_credential/@id != '' and esxi_lsc_credential/@id != ssh_lsc_credential/@id and esxi_lsc_credential/@id != smb_lsc_credential/@id">
-        <credential id="{esxi_lsc_credential/@id}"/>
+      <xsl:if test="esxi_credential/@id != '' and esxi_credential/@id != ssh_credential/@id and esxi_credential/@id != smb_credential/@id">
+        <credential id="{esxi_credential/@id}"/>
       </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
@@ -34639,9 +34639,9 @@ var toggleFilter = function(){
         <input type="hidden" name="max" value="{assets/@max}"/>
         <input type="hidden" name="in_use" value="{get_assets_response/asset/in_use}"/>
         <xsl:if test="not (gsa:may-op ('get_credentials'))">
-          <input type="hidden" name="lsc_credential_id" value="--"/>
-          <input type="hidden" name="lsc_smb_credential_id" value="--"/>
-          <input type="hidden" name="lsc_esxi_credential_id" value="--"/>
+          <input type="hidden" name="ssh_credential_id" value="--"/>
+          <input type="hidden" name="smb_credential_id" value="--"/>
+          <input type="hidden" name="esxi_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->

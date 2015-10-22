@@ -1230,7 +1230,6 @@ init_validator ()
   openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for Administrator users, credentials, and slave login name. */
   openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
-  openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
@@ -1389,6 +1388,7 @@ init_validator ()
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
   openvas_validator_alias (validator, "esc_min_qod", "min_qod");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
+  openvas_validator_alias (validator, "esxi_credential_id", "credential_id");
   openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "filter_extra",       "filter");
   openvas_validator_alias (validator, "filter_id",          "id");
@@ -1408,8 +1408,6 @@ init_validator ()
   openvas_validator_alias (validator, "host_count",         "number");
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
   openvas_validator_alias (validator, "hosts_filter",       "filter");
-  openvas_validator_alias (validator, "lsc_esxi_credential_id",
-                           "credential_id");
   openvas_validator_alias (validator, "exclude_hosts",      "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
@@ -1430,8 +1428,6 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
-  openvas_validator_alias (validator, "lsc_smb_credential_id",
-                           "credential_id");
   openvas_validator_alias (validator, "method_data:to_address:", "email_list");
   openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_severity", "severity_optional");
@@ -1484,6 +1480,8 @@ init_validator ()
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "show_all",     "boolean");
+  openvas_validator_alias (validator, "smb_credential_id", "credential_id");
+  openvas_validator_alias (validator, "ssh_credential_id", "credential_id");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "subject_name",   "name");
