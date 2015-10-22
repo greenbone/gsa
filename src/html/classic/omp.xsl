@@ -14416,7 +14416,7 @@ should not have received it.
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:choose>
+    <xsl:if test="not(edit)"><xsl:choose>
       <xsl:when test="count($config/tasks/task) = 0">
         <h1><xsl:value-of select="gsa:i18n ('Tasks using this Config', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Tasks')"/></h1>
       </xsl:when>
@@ -14444,7 +14444,7 @@ should not have received it.
           </xsl:for-each>
         </table>
       </xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose></xsl:if>
   </div>
  </div>
  <xsl:choose><xsl:when test="edit"/><xsl:otherwise>

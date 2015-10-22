@@ -1,3 +1,8 @@
+2015-10-22  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/omp.xsl: Remove mention of the empty task list when
+	  editing a scan config.
+
 2015-10-21  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Remove the extra 'Save Config' button in
