@@ -1,5 +1,15 @@
 2015-10-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permissions-form): Replace
+	the resource type and uuid input with a link and show the names of
+	the resource and related resources.
+
+	* src/gsad_omp.c (new_permissions): Get the permissions' resource
+	and related resources to allow getting the names.  Make links open
+	in a new window.
+
+2015-10-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Use new element and parameter names without "lsc_" for credentials in
 	targets.
 

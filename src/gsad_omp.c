@@ -20851,6 +20851,11 @@ new_permissions (credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
+  const char *resource_id, *restrict_type;
+  params_t *related;
+  params_iterator_t related_iterator;
+  param_t *related_param;
+  char *related_id;
 
   xml = g_string_new ("<new_permissions>");
 
@@ -20983,6 +20988,119 @@ new_permissions (credentials_t * credentials, params_t *params,
                                  "/omp?cmd=get_users", response_data);
         }
 
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  resource_id = params_value (params, "resource_id");
+  restrict_type = params_value (params, "restrict_type");
+  if (resource_id && restrict_type)
+    {
+      gchar *get_command;
+      gchar *response;
+      entity_t entity;
+
+      get_command = g_strdup_printf ("get_%ss", restrict_type);
+      response = NULL;
+      entity = NULL;
+      switch (ompf (credentials, &response, &entity, response_data,
+                    "<%s %s_id=\"%s\" details=\"0\"/>",
+                    get_command, restrict_type, resource_id))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  related = params_values (params, "related:");
+  params_iterator_init (&related_iterator, related);
+  while (params_iterator_next (&related_iterator, &related_id, &related_param))
+    {
+      const char* related_type;
+      gchar *get_command;
+      gchar *response;
+      entity_t entity;
+
+      related_type = related_param->value;
+
+      get_command = g_strdup_printf ("get_%ss", related_type);
+      response = NULL;
+      entity = NULL;
+      switch (ompf (credentials, &response, &entity, response_data,
+                    "<%s %s_id=\"%s\" details=\"0\"/>",
+                    get_command, related_type, related_id))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            g_free (get_command);
+            response_data->http_status_code
+              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting a resource. "
+                                 "No new permission was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
       g_string_append (xml, response);
 
       free_entity (entity);
