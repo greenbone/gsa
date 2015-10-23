@@ -7243,8 +7243,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td colspan="3">
                     <label>
-                      <input type="radio" name="base" value="gen"/>
-                      <xsl:value-of select="gsa:i18n ('Autogenerate credential', 'Credential')"/>
+                      <input type="radio" name="base" value="gen_up"/>
+                      <xsl:value-of select="gsa:i18n ('Autogenerate password', 'Credential')"/>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    <label>
+                      <input type="radio" name="base" value="gen_usk"/>
+                      <xsl:value-of select="gsa:i18n ('Autogenerate SSH key pair', 'Credential')"/>
                     </label>
                   </td>
                 </tr>
@@ -7325,7 +7333,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>login</field>
       </column>
     </xsl:with-param>
-    <xsl:with-param name="icon-count" select="8"/>
+    <xsl:with-param name="icon-count" select="7"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -7475,22 +7483,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     CREDENTIAL -->
 
 <xsl:template name="credential-download-icons">
-  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download RPM package', 'Credential')}" style="margin-left:3px;">
-    <img src="/img/rpm.png" border="0" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
-  </a>
-  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download Debian package', 'Credential')}" style="margin-left:3px;">
-    <img src="/img/deb.png" border="0" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
-  </a>
-  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download Exe package', 'Credential')}" style="margin-left:3px;">
-    <img src="/img/exe.png" border="0" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
-  </a>
-  <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
-     title="{gsa:i18n ('Download Public Key', 'Credential')}" style="margin-left:3px;">
-    <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
-  </a>
+  <xsl:param name="type" select="''"/>
+
+  <xsl:if test="$type='usk'">
+    <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download RPM package', 'Credential')}" style="margin-left:3px;">
+      <img src="/img/rpm.png" border="0" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
+    </a>
+  </xsl:if>
+  <xsl:if test="$type='usk'">
+    <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download Debian package', 'Credential')}" style="margin-left:3px;">
+      <img src="/img/deb.png" border="0" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
+    </a>
+  </xsl:if>
+  <xsl:if test="$type='up'">
+    <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download Exe package', 'Credential')}" style="margin-left:3px;">
+      <img src="/img/exe.png" border="0" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
+    </a>
+  </xsl:if>
+  <xsl:if test="$type='usk'">
+    <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download Public Key', 'Credential')}" style="margin-left:3px;">
+      <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
+    </a>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="credential">
@@ -7534,9 +7552,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="type" select="'credential'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <xsl:if test="type='usk'">
-            <xsl:call-template name="credential-download-icons"/>
-          </xsl:if>
+          <xsl:call-template name="credential-download-icons">
+            <xsl:with-param name="type" select="type"/>
+          </xsl:call-template>
         </td>
       </xsl:otherwise>
     </xsl:choose>
@@ -7585,9 +7603,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Credential'"/>
         <xsl:with-param name="type" select="'credential'"/>
       </xsl:call-template>
-      <xsl:if test="type='usk'">
-        <xsl:call-template name="credential-download-icons"/>
-      </xsl:if>
+      <xsl:call-template name="credential-download-icons">
+        <xsl:with-param name="type" select="type"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="minor-details"/>

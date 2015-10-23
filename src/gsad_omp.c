@@ -5796,9 +5796,9 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (login, "Create Credential", new_credential);
   CHECK_PARAM (type, "Create Credential", new_credential);
 
-  if (type && (strcmp (type, "pass") == 0))
+  if (type && (strcmp (type, "up") == 0))
     CHECK_PARAM (password, "Create Credential", new_credential);
-  if (type && (strcmp (type, "key") == 0))
+  if (type && (strcmp (type, "usk") == 0))
     {
       CHECK_PARAM (passphrase, "Create Credential", new_credential);
       CHECK_PARAM (private_key, "Create Credential", new_credential);
@@ -5806,7 +5806,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
 
   /* Create the credential. */
 
-  if (type && strcmp (type, "gen") == 0)
+  if (type && strcmp (type, "gen_up") == 0)
     ret = ompf (credentials,
                 &response,
                 &entity,
@@ -5815,10 +5815,25 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                 "<name>%s</name>"
                 "<comment>%s</comment>"
                 "<login>%s</login>"
+                "<type>up</type>"
                 "</create_credential>",
                 name,
                 comment ? comment : "",
-               login);
+                login);
+  else if (type && strcmp (type, "gen_usk") == 0)
+    ret = ompf (credentials,
+                &response,
+                &entity,
+                response_data,
+                "<create_credential>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<login>%s</login>"
+                "<type>usk</type>"
+                "</create_credential>",
+                name,
+                comment ? comment : "",
+                login);
   else if (type && strcmp (type, "usk") == 0)
     ret = ompf (credentials, &response, &entity, response_data,
                 "<create_credential>"

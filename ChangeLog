@@ -1,5 +1,20 @@
 2015-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-credential-form): Split the
+	autogenerate option into "Autogenerate password" and
+	"Autogenerate SSH key pair".
+	(html-credentials-table): Reduce icon-count to 7.
+	(credential-download-icons): Add "type" param and choose which icons to
+	show based on it.
+	(credential, credential [details]): Always include template
+	credential-download-icons and pass credential type for icon selection.
+
+	* src/gsad_omp.c (create_credential_omp): Use correct type names to
+	determine which params to check. Split type "gen" into "gen_up" and
+	"gen_usk".
+
+2015-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Remove "lsc_"
 	from names of credential commands and response elements.
 
