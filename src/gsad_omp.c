@@ -1389,7 +1389,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 {
   GString *xml;
   gnutls_session_t session;
-  int socket;
+  int socket, ret;
   gchar *html, *end, *id_name;
   const char *id, *sort_field, *sort_order, *filter, *first, *max;
 
@@ -1627,12 +1627,24 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_server_sendf (&session,
-                            "<get_permissions"
-                            " filter=\"resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            id)
-      == -1)
+  if ((strcmp (type, "user") == 0)
+      || (strcmp (type, "group") == 0)
+      || (strcmp (type, "role") == 0))
+    ret = openvas_server_sendf (&session,
+                                "<get_permissions"
+                                " filter=\"subject_uuid=%s"
+                                "          and not resource_uuid=&quot;&quot;"
+                                "          or resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                id,
+                                id);
+  else
+    ret = openvas_server_sendf (&session,
+                                "<get_permissions"
+                                " filter=\"resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                id);
+  if (ret == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);

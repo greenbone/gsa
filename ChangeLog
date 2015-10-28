@@ -1,5 +1,19 @@
 2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_one): For roles, users and groups, also get
+	permissions where the subject is the role/user/group for the
+	"Permissions for ..." dialog.
+
+2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get tags working for Assets.
+
+	* src/gsad.c (init_validator): Add host and os to resource types.
+
+	* src/html/classic/omp.xsl (gsa:type-name): Add OS.
+
+2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get tags working for Assets.
 
 	* src/gsad.c (init_validator): Add host and os to resource types.
