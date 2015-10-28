@@ -1,3 +1,11 @@
+2015-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r23704.
+
+	* src/html/classic/omp.xsl (permission [trash]): Replace link to
+	resource with simple text and "in trashcan" message if the resource is
+	also in the trashcan.
+
 2015-10-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r23568.
