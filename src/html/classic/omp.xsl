@@ -504,6 +504,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = 'nvt' or $type = 'cve' or $type = 'cpe'">
       <func:result select="gsa:upper-case ($type)"/>
     </xsl:when>
+    <xsl:when test="$type = 'os'">
+      <func:result select="'Operating System'"/>
+    </xsl:when>
     <xsl:when test="$type = 'ovaldef'">
       <func:result select="'OVAL Definition'"/>
     </xsl:when>
@@ -10486,6 +10489,11 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
+    <xsl:when test="$resource_type='host' or $resource_type='os'">
+      <a href="/omp?cmd=get_asset&amp;asset_type={$resource_type}&amp;asset_id={$resource_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$resource_name"/>
+      </a>
+    </xsl:when>
     <xsl:when test="$resource_type='nvt' and $resource_location = '0'">
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
         <xsl:value-of select="$resource_name"/>
@@ -10861,6 +10869,20 @@ should not have received it.
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'alert'"/>
       <xsl:with-param name="content" select="gsa:i18n ('Alert', 'Alert')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'host' or gsa:may-op ('get_assets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'host'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Host', 'Host')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'os' or gsa:may-op ('get_assets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'os'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Operating System', 'OS')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -34644,6 +34666,11 @@ var toggleFilter = function(){
       </table>
     </div>
   </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="resource_type" select="'asset'"/>
+    <xsl:with-param name="resource_id"   select="@id"/>
+    <xsl:with-param name="resource_subtype" select="'os'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="create_asset_response">

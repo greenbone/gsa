@@ -1,3 +1,13 @@
+2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get tags working for Assets.
+
+	* src/gsad.c (init_validator): Add host and os to resource types.
+
+	* src/html/classic/omp.xsl (gsa:type-name): Add OS.
+	(tagged_resource_link, tag_resource_types): Add host and OS cases.
+	(asset [os-details]): Add the User Tags window.
+
 2015-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (permission [trash]): Replace link to
@@ -46,7 +56,7 @@
 	* src/gsad.c (init_validator): Replace lsc_credential_id,
 	lsc_esxi_credential_id, lsc_smb_credential_id with ssh_credential_id,
 	esxi_credential_id and smb_credential_id.
-	
+
 	* src/html/classic/omp.xsl (task [details], html-create-target-form)
 	(html-edit-target-form, target, target [trash], targe [details])
 	(html-edit-asset-form): Use new element and parameter names for
