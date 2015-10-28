@@ -5938,7 +5938,7 @@ get_credential (credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("credential", credentials, params, extra_xml,
-                  "targets=\"1\"", response_data);
+                  "targets=\"1\" slaves=\"1\"", response_data);
 }
 
 /**
@@ -16327,10 +16327,60 @@ static char *
 new_slave (credentials_t *credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
   GString *xml;
+
+  switch (manager_connect (credentials, &socket, &session, &html,
+                           response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the credentials list. "
+                             "The slave remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_credentials"
+                            " filter=\"first=1 rows=-1 type=up\" />")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the credentials list. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
   xml = g_string_new ("<new_slave>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the credentials list. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
   g_string_append (xml, "</new_slave>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
@@ -16367,22 +16417,20 @@ create_slave_omp (credentials_t *credentials, params_t *params,
 {
   int ret;
   gchar *html, *command, *response;
-  const char *name, *comment, *host, *port, *login, *password;
+  const char *name, *comment, *host, *port, *credential_id;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "host");
   port = params_value (params, "port");
-  login = params_value (params, "login");
-  password = params_value (params, "password");
+  credential_id = params_value (params, "credential_id");
 
   CHECK_PARAM (name, "Create Slave", new_slave);
   CHECK_PARAM (comment, "Create Slave", new_slave);
   CHECK_PARAM (host, "Create Slave", new_slave);
   CHECK_PARAM (port, "Create Slave", new_slave);
-  CHECK_PARAM (login, "Create Slave", new_slave);
-  CHECK_PARAM (password, "Create Slave", new_slave);
+  CHECK_PARAM (credential_id, "Create Slave", new_slave);
 
   if (comment)
     command = g_strdup_printf ("<create_slave>"
@@ -16390,28 +16438,24 @@ create_slave_omp (credentials_t *credentials, params_t *params,
                                "<comment>%s</comment>"
                                "<host>%s</host>"
                                "<port>%s</port>"
-                               "<login>%s</login>"
-                               "<password>%s</password>"
+                               "<credential id=\"%s\"/>"
                                "</create_slave>",
                                name,
                                comment,
                                host,
                                port,
-                               login,
-                               password);
+                               credential_id);
   else
     command = g_strdup_printf ("<create_slave>"
                                "<name>%s</name>"
                                "<host>%s</host>"
                                "<port>%s</port>"
-                               "<login>%s</login>"
-                               "<password>%s</password>"
+                               "<credential id=\"%s\"/>"
                                "</create_slave>",
                                name,
                                host,
                                port,
-                               login,
-                               password);
+                               credential_id);
 
   ret = omp (credentials, &response, &entity, response_data, command);
   g_free (command);
@@ -16561,7 +16605,96 @@ char *
 edit_slave (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("slave", credentials, params, extra_xml, response_data);
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *slave_id, *next;
+
+  slave_id = params_value (params, "slave_id");
+  next = params_value (params, "next");
+
+  if (slave_id == NULL)
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a slave. "
+                           "The slave remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (next == NULL)
+    next = "get_slave";
+
+  switch (manager_connect (credentials, &socket, &session, &html,
+                           response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a slave. "
+                             "The slave remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_slaves slave_id=\"%s\" details=\"1\" />"
+                            "<get_credentials filter=\"first=1 rows=-1 type=up\" />"
+                            "</commands>",
+                            slave_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slave info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<edit_slave>"
+                          "<slave id=\"%s\"/>"
+                          /* Page that follows. */
+                          "<next>%s</next>",
+                          slave_id,
+                          next);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slave info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_slave>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -16595,7 +16728,7 @@ save_slave_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *slave_id, *name, *comment, *host, *port, *login, *password;
+  const char *slave_id, *name, *comment, *host, *port, *credential_id;
   entity_t entity;
 
   slave_id = params_value (params, "slave_id");
@@ -16603,16 +16736,14 @@ save_slave_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   host = params_value (params, "host");
   port = params_value (params, "port");
-  login = params_value (params, "login");
-  password = params_value (params, "password");
+  credential_id = params_value (params, "credential_id");
 
   CHECK_PARAM (slave_id, "Save Slave", edit_slave);
   CHECK_PARAM (name, "Save Slave", edit_slave);
   CHECK_PARAM (comment, "Save Slave", edit_slave);
   CHECK_PARAM (host, "Save Slave", edit_slave);
   CHECK_PARAM (port, "Save Slave", edit_slave);
-  CHECK_PARAM (login, "Save Slave", edit_slave);
-  CHECK_PARAM (password, "Save Slave", edit_slave);
+  CHECK_PARAM (credential_id, "Save Slave", edit_slave);
 
   /* Modify the slave. */
 
@@ -16627,16 +16758,14 @@ save_slave_omp (credentials_t * credentials, params_t *params,
               "<comment>%s</comment>"
               "<host>%s</host>"
               "<port>%s</port>"
-              "<login>%s</login>"
-              "<password>%s</password>"
+              "<credential id=\"%s\"/>"
               "</modify_slave>",
               slave_id,
               name,
               comment,
               host,
               port,
-              login,
-              password);
+              credential_id);
 
   switch (ret)
     {

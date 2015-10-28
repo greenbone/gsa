@@ -2603,13 +2603,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SLAVES'"/>
       </xsl:call-template>
 
-      <h1>Slaves Details</h1>
+      <h1>Slave Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
         This includes the Name, creation time, modification time,
-        comment, date of the first run and next run, timezone, period
-        and duration.
+        comment, host, port, credential, login username and a list of
+        Tasks using this slave.
       </p>
 
       <xsl:call-template name="details-window-line-actions">
@@ -2670,9 +2670,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr class="even">
+          <td>Credential</td>
+          <td>
+            Name of the credential to login to the slave host.
+          </td>
+        </tr>
+        <tr class="odd">
           <td>Login</td>
           <td>
-              Username on the host of the slave
+            Username from credential to login to the slave host.
           </td>
         </tr>
       </table>
@@ -2764,18 +2770,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>9390</td>
         </tr>
         <tr class="odd">
-          <td>Login</td>
+          <td>Credential</td>
           <td>Yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>sally</td>
-        </tr>
-        <tr class="odd">
-          <td>Password</td>
-          <td>Yes</td>
-          <td>40</td>
-          <td>Alphanumeric</td>
-          <td>Free form text</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>User on Slave Manager</td>
         </tr>
       </table>
 

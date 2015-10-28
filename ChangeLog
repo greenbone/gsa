@@ -1,3 +1,31 @@
+2015-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Replace login and password in slaves with credential and show slaves
+	using a credential on the credential details page.
+
+	* src/gsad_omp.c (get_credential): Add slaves attribute.
+	(new_slave): Get list of credentials.
+	(create_slave_omp): Use credential_id instead of login and password.
+	(edit_slave): Get list of credentials in addition to slave.
+	(save_slave_omp): Use credential_id instead of login and password.
+
+	* src/html/classic/omp.xsl (credential [details]): Add table of slaves
+	using the credential.
+	(html-create-slave-form): Replace login and password fields with
+	credential selection and "New Slave" icon.
+	(html-slaves-table): Add column "Credential".
+	(html-edit-slave-form): Replace login and password fields with
+	credential selection.
+	(slave, slave [trash], slave, html-slaves-trash-table): Add credential.
+
+	* src/html/classic/js/greenbone.js (NAME_SELECTORS): Add case for
+	new_credential.
+
+	* src/html/classic/help.xsl (slave_details.html): Correct and Update
+	description.
+	(slaves.html, new_slave.html): Replace login and password with
+	credential.
+
 2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_one): For roles, users and groups, also get
