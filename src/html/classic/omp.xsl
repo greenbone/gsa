@@ -23236,10 +23236,18 @@ should not have received it.
       <xsl:value-of select="gsa:i18n (gsa:type-name (resource/type), gsa:type-name (resource/type))"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Details', 'Generic Resource')}">
-        <xsl:value-of select="resource/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="resource/trash != '0'">
+          <xsl:value-of select="resource/name"/>
+          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Details', 'Generic Resource')}">
+            <xsl:value-of select="resource/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="gsa:i18n (gsa:type-name (subject/type), gsa:type-name (subject/type))"/>

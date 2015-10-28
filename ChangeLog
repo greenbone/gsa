@@ -1,3 +1,9 @@
+2015-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (permission [trash]): Replace link to
+	resource with simple text and "in trashcan" message if the resource is
+	also in the trashcan.
+
 2015-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-credential-form): Split the
