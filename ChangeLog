@@ -1,3 +1,8 @@
+2015-10-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (asset [host-details]): Show Created column
+	in "Latest Identifiers" mode too.
+
 2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-role-form, role [details]): Rename
