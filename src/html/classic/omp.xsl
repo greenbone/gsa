@@ -7410,6 +7410,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         select="commands_response/get_credentials_response/credential/@id"/>
       </xsl:call-template>
     </div>
+    <xsl:variable name="credential_type" select="commands_response/get_credentials_response/credential/type"/>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -7420,6 +7421,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                value="{commands_response/get_credentials_response/credential/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+            <td>
+              <xsl:value-of select="commands_response/get_credentials_response/credential/type"/><br/>
+              <span class="footnote"> (<xsl:value-of select="commands_response/get_credentials_response/credential/full_type"/>)</span>
+            </td>
+          </tr>
           <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
@@ -7437,48 +7445,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_credentials_response/credential/comment}"/>
             </td>
           </tr>
-          <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_credentials_response/credential/type = 'usk'">
-                  <input type="text" name="credential_login_off" size="30" maxlength="400"
-                         disabled="1"
-                         value="{commands_response/get_credentials_response/credential/login}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="credential_login" size="30" maxlength="400"
-                         value="{commands_response/get_credentials_response/credential/login}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_credentials_response/credential/type = 'usk'">
-                  <label>
-                    <input type="checkbox" name="enable_off" value="1"
-                           disabled="1"/>
-                    <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                    <br/>
-                  </label>
-                  <input type="password" name="password" size="30" maxlength="400"
-                         disabled="1" value=""/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="checkbox" name="enable" value="1"/>
-                    <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                    <br/>
-                  </label>
-                  <input type="password" autocomplete="off" name="password"
-                         size="30" maxlength="400" value=""/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
+          <xsl:if test="$credential_type != 'cc'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="$credential_type = 'up'">
+                    <input type="text" name="credential_login" size="30" maxlength="400"
+                          value="{commands_response/get_credentials_response/credential/login}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="credential_login_off" size="30" maxlength="400"
+                          disabled="1"
+                          value="{commands_response/get_credentials_response/credential/login}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type != 'cc'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="$credential_type = 'up'">
+                    <label>
+                      <input type="checkbox" name="enable" value="1"/>
+                      <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                      <br/>
+                    </label>
+                    <input type="password" autocomplete="off" name="password"
+                          size="30" maxlength="400" value=""/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <label>
+                      <input type="checkbox" name="enable_off" value="1"
+                            disabled="1"/>
+                      <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                      <br/>
+                    </label>
+                    <input type="password" name="password" size="30" maxlength="400"
+                          disabled="1" value=""/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Save Credential', 'Credential')}"/>

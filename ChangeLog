@@ -1,5 +1,11 @@
 2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-credential-form): Show type
+	of credential and hide fields "login" and "password" for client
+	certificate credentials.  Rearrange conditions for other types.
+
+2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm):
 	Handle errors where Manager returns a generic omp_response element.
 
