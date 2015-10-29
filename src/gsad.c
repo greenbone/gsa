@@ -2855,9 +2855,12 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       char *html;
       gchar *credential_login;
+      const char *credential_id;
       const char *package_format;
 
       package_format = params_value (params, "package_format");
+      credential_login = NULL;
+      credential_id = params_value (params, "credential_id");
 
       if (download_credential_omp (credentials,
                                    params,
@@ -2871,8 +2874,11 @@ exec_omp_get (struct MHD_Connection *connection,
       content_type_from_format_string (content_type, package_format);
       g_free (*content_disposition);
       *content_disposition = g_strdup_printf
-                              ("attachment; filename=openvas-lsc-target-%s.%s",
-                               credential_login,
+                              ("attachment; filename=credential-%s.%s",
+                               (credential_login
+                                && strcmp (credential_login, ""))
+                                  ? credential_login
+                                  : credential_id,
                                (strcmp (package_format, "key") == 0
                                  ? "pub"
                                  : package_format));

@@ -1,5 +1,15 @@
 2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): In download_credential case, change
+	filename prefix to "credential-" and use UUID if the login name
+	is empty.
+
+	* src/html/classic/omp.xsl (credential [details]): Show Slaves section
+	only for username + password credentials and hide Targets section
+	for client certificate credentials.
+
+2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-credential-form): Show type
 	of credential and hide fields "login" and "password" for client
 	certificate credentials.  Rearrange conditions for other types.

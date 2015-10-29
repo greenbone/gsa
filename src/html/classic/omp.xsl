@@ -7681,6 +7681,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
 
       <xsl:choose>
+        <xsl:when test="type != 'up'"></xsl:when>
         <xsl:when test="count(slaves/slave) = 0">
           <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Targets')"/></h1>
         </xsl:when>
@@ -7712,6 +7713,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
 
       <xsl:choose>
+        <xsl:when test="type = 'cc'"></xsl:when>
         <xsl:when test="count(targets/target) = 0">
           <h1><xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Targets')"/></h1>
         </xsl:when>
