@@ -1,5 +1,10 @@
 2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-role-form, role [details]): Rename
+	"Permissions" table to "General Command Permissions".
+
+2015-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* ChangeLog: Remove extra entry from earlier.
 
 2015-10-28  Timo Pollmeier <timo.pollmeier@greenbone.net>

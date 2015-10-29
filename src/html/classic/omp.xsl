@@ -30940,7 +30940,7 @@ var toggleFilter = function(){
         </table>
       </form>
 
-      <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
+      <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/></h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -31154,10 +31154,10 @@ var toggleFilter = function(){
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('None', 'Permissions')"/></h1>
+          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('None', 'Permissions')"/></h1>
         </xsl:when>
         <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
-          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role')"/>)</h1>
+          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role')"/>)</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <xsl:variable name="id" select="../../get_permissions_response/permission[name='Everything']/@id"/>
             <tr class="gbntablehead2">
@@ -31193,7 +31193,7 @@ var toggleFilter = function(){
           </table>
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
+          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/></h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
