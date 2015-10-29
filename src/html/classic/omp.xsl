@@ -7299,6 +7299,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="" size="30" maxlength="40"/>
                   </td>
                 </tr>
+                <tr>
+                  <td colspan="3">
+                    <label>
+                      <input type="radio" name="base" value="cc"/>
+                      <xsl:value-of select="gsa:i18n ('Client Certificate', 'Auth Data')"/>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td>
+                    <xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/>
+                  </td>
+                  <td>
+                    <input type="file" name="cc_private_key" size="30"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td>
+                    <xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/>
+                  </td>
+                  <td>
+                    <input type="file" name="cc_certificate" size="30"/>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -7512,6 +7538,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
     </a>
   </xsl:if>
+  <xsl:if test="$type='cc'">
+    <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=pem&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download Certificate', 'Credential')}" style="margin-left:3px;">
+      <img src="/img/key.png" border="0" alt="{gsa:i18n ('Download Certificate', 'Credential')}"/>
+    </a>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="credential">
@@ -7628,10 +7660,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <span class="footnote">(<xsl:value-of select="full_type"/>)</span>
           </td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
-          <td><xsl:value-of select="login"/></td>
-        </tr>
+        <xsl:if test="type != 'cc'">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
+            <td><xsl:value-of select="login"/></td>
+          </tr>
+        </xsl:if>
       </table>
 
       <xsl:choose>
@@ -11657,7 +11691,7 @@ should not have received it.
               <td>
                 <select name="ssh_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$credentials" mode="select">
+                  <xsl:apply-templates select="$credentials/credential [type = 'up' or type = 'usk']" mode="select">
                     <xsl:with-param name="select_id" select="ssh_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11945,7 +11979,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_credentials_response/credential">
+                      <xsl:for-each select="get_credentials_response/credential [type = 'up' or type = 'usk']">
                         <xsl:choose>
                           <xsl:when test="@id = $credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>

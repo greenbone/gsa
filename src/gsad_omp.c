@@ -5792,7 +5792,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *login, *type, *password, *passphrase;
-  const char *private_key;
+  const char *private_key, *cc_certificate, *cc_private_key;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -5802,18 +5802,28 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
+  cc_certificate = params_value (params, "cc_certificate");
+  cc_private_key = params_value (params, "cc_private_key");
 
   CHECK_PARAM (name, "Create Credential", new_credential);
   CHECK_PARAM (comment, "Create Credential", new_credential);
-  CHECK_PARAM (login, "Create Credential", new_credential);
   CHECK_PARAM (type, "Create Credential", new_credential);
 
   if (type && (strcmp (type, "up") == 0))
-    CHECK_PARAM (password, "Create Credential", new_credential);
+    {
+      CHECK_PARAM (login, "Create Credential", new_credential);
+      CHECK_PARAM (password, "Create Credential", new_credential);
+    }
   if (type && (strcmp (type, "usk") == 0))
     {
+      CHECK_PARAM (login, "Create Credential", new_credential);
       CHECK_PARAM (passphrase, "Create Credential", new_credential);
       CHECK_PARAM (private_key, "Create Credential", new_credential);
+    }
+  if (type && (strcmp (type, "cc") == 0))
+    {
+      CHECK_PARAM (cc_certificate, "Create Credential", new_credential);
+      CHECK_PARAM (cc_private_key, "Create Credential", new_credential);
     }
 
   /* Create the credential. */
@@ -5859,6 +5869,19 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                 "</create_credential>",
                 name, comment ?: "", login, private_key ?: "",
                 passphrase ?: "");
+  else if (type && strcmp (type, "cc") == 0)
+    ret = ompf (credentials, &response, &entity, response_data,
+                "<create_credential>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<type>cc</type>"
+                "<certificate>%s</certificate>"
+                "<key>"
+                "<private>%s</private>"
+                "</key>"
+                "</create_credential>",
+                name, comment ?: "",
+                cc_certificate ?: "", cc_private_key ?: "");
   else
     ret = ompf (credentials,
                 &response,
@@ -6125,7 +6148,7 @@ download_credential_omp (credentials_t * credentials,
     {
       entity_t credential_entity, key_entity = NULL;
 
-      /* A key. */
+      /* A key or certificate. */
 
       entity = NULL;
       if (read_entity (&session, &entity))
@@ -6144,7 +6167,12 @@ download_credential_omp (credentials_t * credentials,
 
       credential_entity = entity_child (entity, "credential");
       if (credential_entity)
-        key_entity = entity_child (credential_entity, "public_key");
+        {
+          if (strcmp (format, "pem") == 0)
+            key_entity = entity_child (credential_entity, "certificate");
+          else
+            key_entity = entity_child (credential_entity, "public_key");
+        }
       if (key_entity != NULL)
         {
           *html = g_strdup (entity_text (key_entity));

@@ -1149,6 +1149,8 @@ init_validator ()
   openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   openvas_validator_add (validator, "caller",     "^.*$");
+  openvas_validator_add (validator, "cc_certificate",   "(?s)^.*$");
+  openvas_validator_add (validator, "cc_private_key",   "(?s)^.*$");
   openvas_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
@@ -1249,7 +1251,7 @@ init_validator ()
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
+  openvas_validator_add (validator, "package_format", "^(pem)|(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
   openvas_validator_add (validator, "password:value", "(?s)^.*$");
   openvas_validator_add (validator, "port",       "^.{1,60}$");

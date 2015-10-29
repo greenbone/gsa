@@ -1,3 +1,21 @@
+2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add new client certificate credential type.
+
+	* src/gsad_omp.c (create_credential_omp): Handle params cc_certificate,
+	cc_private_key and new credential type "cc".
+	(download_credential_omp): Handle new "pem" format for certificates.
+
+	* src/gsad.c (init_validator): Add cc_certificate and cc_private_key.
+	Add "pem" option to package_format.
+
+	* src/html/classic/omp.xsl (html-create-credential-form): Add input
+	fields for new "client certificate" type.
+	(credential-download-icons): Add download for client certificate.
+	(credential [details]): Hide login field for client certificate type.
+	(html-create-target-form, html-edit-target-form): Show only username
+	and password or username and key credentials for SSH.
+
 2015-10-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (asset [host-details]): Show Created column
