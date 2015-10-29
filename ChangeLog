@@ -1,5 +1,10 @@
 2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm):
+	Handle errors where Manager returns a generic omp_response element.
+
+2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add new client certificate credential type.
 
 	* src/gsad_omp.c (create_credential_omp): Handle params cc_certificate,

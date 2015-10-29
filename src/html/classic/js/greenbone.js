@@ -168,6 +168,7 @@
             html = $(jqXHR.responseText),
             response = xml.find(RESPONSE_SELECTORS[self.command]),
             gsad_msg = xml.find('gsad_msg'),
+            generic_omp_response = xml.find ('omp_response'),
             internal_error_html
               = html.find (".gb_error_dialog .gb_window_part_content_error"),
             login_form_html
@@ -182,6 +183,10 @@
         else if (response.length)
           {
             error = response.attr('status_text');
+          }
+        else if (generic_omp_response.length)
+          {
+            error = generic_omp_response.attr('status_text')
           }
         else if (internal_error_html.length)
           {
