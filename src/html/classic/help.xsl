@@ -498,6 +498,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="type" select="'host'"/>
         </xsl:call-template>
         <tr class="even">
+          <td>Hostname</td>
+          <td>
+            Most recently identified hostname of the asset.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>IP</td>
+          <td>
+            Most recently identified IP of the asset.
+          </td>
+        </tr>
+        <tr class="even">
           <td>OS</td>
           <td>
             Icon for most recently identified operating system on the host.

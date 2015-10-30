@@ -35030,6 +35030,18 @@ var toggleFilter = function(){
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
+          <td><xsl:value-of select="gsa:i18n ('Hostname', 'Host')"/>:</td>
+          <td>
+            <xsl:value-of select="identifiers/identifier[name = 'hostname' or name = 'DNS-via-TargetDefinition']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('IP', 'Host')"/>:</td>
+          <td>
+            <xsl:value-of select="identifiers/identifier[name = 'ip']/value"/>
+          </td>
+        </tr>
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/>:</td>
           <td>
             <xsl:call-template name="asset-os-icon">
@@ -35218,6 +35230,14 @@ var toggleFilter = function(){
         <field>name</field>
       </column>
       <column>
+        <name><xsl:value-of select="gsa:i18n('Hostname', 'Host')"/></name>
+        <field>hostname</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('IP', 'Host')"/></name>
+        <field>ip</field>
+      </column>
+      <column>
         <name><xsl:value-of select="gsa:i18n('OS', 'Host')"/></name>
         <field>os</field>
       </column>
@@ -35324,6 +35344,12 @@ var toggleFilter = function(){
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="../identifiers/identifier[name = 'hostname' or name = 'DNS-via-TargetDefinition']/value"/>
+    </td>
+    <td>
+      <xsl:value-of select="../identifiers/identifier[name = 'ip']/value"/>
     </td>
     <td>
       <xsl:call-template name="asset-os-icon">
