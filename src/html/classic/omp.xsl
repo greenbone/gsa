@@ -5706,19 +5706,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:variable name="cve_scanner_id" select="cve_scanner_id"/>
-              <select name="cve_scanner_id">
-                <xsl:for-each select="get_scanners_response/scanner[type = 3]">
-                  <xsl:choose>
-                    <xsl:when test="@id = $cve_scanner_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
+              <input type="hidden"
+                     name="cve_scanner_id"
+                     value="{get_scanners_response/scanner[type = 3]/@id}"/>
             </td>
           </tr>
         </xsl:if>
@@ -6141,28 +6131,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td><xsl:value-of select="gsa:i18n ($title, 'Scanner')"/></td>
       <td>
-        <select name="{$param_name}">
-          <xsl:variable name="scanner_id">
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
-                <xsl:value-of select="/envelope/params/scanner_id"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:for-each select="commands_response/get_scanners_response/scanner[type = $type]">
-            <xsl:choose>
-              <xsl:when test="@id = $scanner_id">
-                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="{@id}"><xsl:value-of select="name"/></option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each>
-        </select>
+        <xsl:choose>
+          <xsl:when test="$type = 3">
+            <!-- There is only ever one CVE scanner. -->
+            <input type="hidden"
+                   name="{$param_name}"
+                   value="{commands_response/get_scanners_response/scanner[type = $type]/@id}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <select name="{$param_name}">
+              <xsl:variable name="scanner_id">
+                <xsl:choose>
+                  <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+                    <xsl:value-of select="/envelope/params/scanner_id"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:for-each select="commands_response/get_scanners_response/scanner[type = $type]">
+                <xsl:choose>
+                  <xsl:when test="@id = $scanner_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </xsl:otherwise>
+        </xsl:choose>
       </td>
     </tr>
   </xsl:if>
@@ -6504,7 +6504,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
 
-              <!-- Regular task.  Alterable. -->
+              <!-- Regular task.  Immutable. -->
 
               <xsl:call-template name="html-edit-task-target"/>
               <xsl:call-template name="html-edit-task-alert"/>
@@ -6513,7 +6513,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:if test="$new_task = 0">
                 <input type="hidden" name="scanner_type" value="1"/>
                 <xsl:call-template name="html-edit-task-scanner-disabled"/>
-                <xsl:call-template name="html-edit-task-config-disabled"/>
+                <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
+                  <xsl:call-template name="html-edit-task-config-disabled"/>
+                </xsl:if>
                 <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
                   <xsl:call-template name="html-edit-task-slave"/>
                   <xsl:call-template name="html-edit-task-openvas-options"/>
@@ -6524,7 +6526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </table>
         <xsl:if test="$new_task != 0">
 
-          <!-- Regular task.  Immutable. -->
+          <!-- Regular task.  Alterable. -->
 
           <table>
             <tr>
@@ -6534,6 +6536,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </h3>
               </td>
             </tr>
+
+            <!-- Radio: OpenVAS Scanner. -->
             <xsl:call-template name="html-edit-task-scanner">
               <xsl:with-param name="title">
                 <xsl:call-template name="scanner-type-name">
@@ -6549,6 +6553,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
             <xsl:call-template name="html-edit-task-slave"/>
             <xsl:call-template name="html-edit-task-openvas-options"/>
+
+            <!-- Radio: OSP Scanner. -->
             <xsl:call-template name="html-edit-task-scanner">
               <xsl:with-param name="title">
                 <xsl:call-template name="scanner-type-name">
@@ -6562,6 +6568,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
               <xsl:with-param name="type">1</xsl:with-param>
             </xsl:call-template>
+
+            <!-- Radio: CVE Scanner. -->
             <xsl:call-template name="html-edit-task-scanner">
               <xsl:with-param name="title">
                 <xsl:call-template name="scanner-type-name">
@@ -13085,13 +13093,13 @@ should not have received it.
                     </label>
                   </td>
                 </tr>
-                <xsl:if test="get_scanners_response/scanner[type != '2']">
+                <xsl:if test="get_scanners_response/scanner[type != '2' and type != '3']">
                   <tr>
                     <td colspan="2">
                       <label>
                         <input type="radio" name="base" value="0"/>
                         <select name="scanner_id">
-                          <xsl:for-each select="get_scanners_response/scanner[type != '2']">
+                          <xsl:for-each select="get_scanners_response/scanner[type != '2' and type != '3']">
                             <option value="{@id}"><xsl:value-of select="name"/></option>
                           </xsl:for-each>
                         </select>

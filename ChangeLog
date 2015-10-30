@@ -1,3 +1,12 @@
+2015-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (new_task, html-edit-task-scanner): Remove
+	the scanner selection for CVE tasks, because there's only ever one CVE
+	scanner.
+	(html-edit-task-form): Skip the config for CVE tasks, as they don't have
+	configs.
+	(html-create-config-form): Skip the config for the CVE scanner too.
+
 2015-10-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): In download_credential case, change
