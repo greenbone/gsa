@@ -13679,13 +13679,10 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="type = 'osp_boolean' and value = '0'">False</xsl:when>
+        <xsl:when test="type = 'osp_boolean' and default = '0'">False</xsl:when>
         <xsl:when test="type = 'osp_boolean'">True</xsl:when>
         <xsl:when test="type = 'osp_file'">
-          <xsl:if test="string-length(value) &gt; 0">Uploaded file</xsl:if>
-        </xsl:when>
-        <xsl:when test="substring (type, 1, 4) ='osp_'">
-          <xsl:value-of select="value"/>
+          <xsl:if test="string-length(default) &gt; 0">Uploaded file</xsl:if>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="default"/>
@@ -13874,14 +13871,7 @@ should not have received it.
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('New Value', 'Scan Config')"/></td>
-        <xsl:choose>
-          <xsl:when test="../type != 1">
-            <td><xsl:value-of select="gsa:i18n ('Default', 'Value')"/></td>
-          </xsl:when>
-          <xsl:otherwise>
-            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-          </xsl:otherwise>
-        </xsl:choose>
+        <td><xsl:value-of select="gsa:i18n ('Default Value', 'Scan Config')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates
