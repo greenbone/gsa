@@ -1,9 +1,13 @@
 2015-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Flush trailing whitespace.
+
+2015-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (asset [host-details], html-hosts-table)
 	(asset/host): Add Hostname and IP.
 
-	* src/html/classic/help.xsl (hosts.html): Add Hostname and IP.
+	* src/html/classic/help.xsl (hosts.html): Add Hostname and IP
 
 2015-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 

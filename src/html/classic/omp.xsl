@@ -4431,8 +4431,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <h2><xsl:value-of select="gsa:i18n ($cap-type-plural)"/></h2>
         <p>Total: <xsl:value-of select="$full-count"/></p>
         <p>Filtered: <xsl:value-of select="$filtered-count"/></p>
-      
-        <div>  
+
+        <div>
           <xsl:choose>
             <xsl:when test="$subtype != ''">
               <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
@@ -4543,7 +4543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <h3><xsl:value-of select="gsa:i18n ('Charts')"/></h3>
       </div>
-    
+
       <div id="chart-box">
         <div class="visualization">
           <div class="visualization-spacer"/>
