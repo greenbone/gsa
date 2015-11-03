@@ -14403,6 +14403,12 @@ should not have received it.
           <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
         </a>
       </div>
+      <xsl:if test="$config/type = 1">
+        <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
+          <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+        </a>
+      </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
   </div>
@@ -14626,7 +14632,7 @@ should not have received it.
     </xsl:with-param>
     <xsl:with-param name="default-filter" select="'apply_overrides=1 sort-reverse=date'"/>
     <xsl:with-param name="upload-icon" select="true ()"/>
-    <xsl:with-param name="icon-count" select="4"/>
+    <xsl:with-param name="icon-count" select="5"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -14654,6 +14660,18 @@ should not have received it.
 <xsl:template match="delete_config_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Delete Config</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="sync_config_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Sync Config</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -14754,6 +14772,12 @@ should not have received it.
             <xsl:with-param name="type" select="'config'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
+          <xsl:if test="type = 1">
+            <a href="/omp?cmd=sync_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
+              <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+            </a>
+          </xsl:if>
         </td>
       </xsl:otherwise>
     </xsl:choose>

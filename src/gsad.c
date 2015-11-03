@@ -1120,6 +1120,7 @@ init_validator ()
                          "|(sync_feed)"
                          "|(sync_scap)"
                          "|(sync_cert)"
+                         "|(sync_config)"
                          "|(toggle_tag)"
                          "|(upload_config)"
                          "|(upload_port_list)"
@@ -3214,6 +3215,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (upload_config)
   ELSE (upload_port_list)
   ELSE (upload_report)
+  ELSE (sync_config)
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (verify_scanner)

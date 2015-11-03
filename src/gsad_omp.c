@@ -11251,6 +11251,85 @@ edit_config_omp (credentials_t * credentials, params_t *params,
   return edit_config (credentials, params, NULL, response_data);
 }
 
+/**
+ * @brief Sync config, get configs, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_config_omp (credentials_t * credentials, params_t *params,
+                 cmd_response_data_t* response_data)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *config_id, *next;
+  char *ret;
+
+  config_id = params_value (params, "config_id");
+  CHECK_PARAM (config_id, "Synchronize Config", get_configs);
+  switch (manager_connect (credentials, &socket, &session, &html,
+                           response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message
+                (credentials, "Internal error", __FUNCTION__, __LINE__,
+                 "An internal error occurred while synchronizing a config. "
+                 "The config is not synchronized. "
+                 "Diagnostics: Failure to connect to manager daemon.",
+                 "/omp?cmd=get_configs", response_data);
+    }
+
+  if (openvas_server_sendf (&session, "<sync_config config_id=\"%s\"/>",
+                            config_id) == -1)
+    {
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while synchronizing a config. "
+               "The config is not synchronized. "
+               "Diagnostics: Failure to send command to manager daemon.",
+               "/omp?cmd=get_configs", response_data);
+    }
+
+  xml = g_string_new ("");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while synchronizing a config. "
+               "It is unclear whether the config has been synchronized or not. "
+               "Diagnostics: Failure to receive response from manager daemon.",
+               "/omp?cmd=get_configs", response_data);
+    }
+
+  next = params_value (params, "next");
+  if (next && !strcmp (next, "get_config"))
+    ret = get_config (credentials, params, xml->str, 0, response_data);
+  else
+    ret = get_configs (credentials, params, xml->str, response_data);
+  openvas_server_close (socket, session);
+  g_string_free (xml, TRUE);
+  return ret;
+}
+
 
 /**
  * @brief Save OSP file preferences.

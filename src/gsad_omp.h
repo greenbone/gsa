@@ -231,6 +231,7 @@ char * import_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * delete_trash_config_omp (credentials_t *, params_t *,
                                 cmd_response_data_t*);
+char * sync_config_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * export_config_omp (credentials_t *, params_t *, enum content_type*,
                           char **, gsize *, cmd_response_data_t*);
 char * export_configs_omp (credentials_t *, params_t *, enum content_type *,
