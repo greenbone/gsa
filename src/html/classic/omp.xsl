@@ -2373,7 +2373,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="@id"/>
         <xsl:text>=</xsl:text>
         <xsl:value-of select="name(.)"/>
-        <xsl:text>&amp;</xsl:text>
+        <xsl:if test="position() != last()">
+          <xsl:text>&amp;</xsl:text>
+        </xsl:if>
       </xsl:for-each>
     </xsl:variable>
     <div class="gb_window">
@@ -7689,9 +7691,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
 
       <xsl:choose>
+        <xsl:when test="type != 'cc'"></xsl:when>
+        <xsl:when test="count(scanners/scanner) = 0">
+          <h1><xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanners')"/></h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/></h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            </tr>
+            <xsl:for-each select="scanners/scanner">
+              <tr class="{gsa:table-row-class(position())}">
+                <xsl:choose>
+                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <td>
+                      <a href="/omp?cmd=get_scanner&amp;scanner_id={@id}&amp;token={/envelope/token}"
+                         title="{gsa:i18n ('Scanner Details', 'Scanner')}">
+                        <xsl:value-of select="name"/>
+                      </a>
+                    </td>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
         <xsl:when test="type != 'up'"></xsl:when>
         <xsl:when test="count(slaves/slave) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Targets')"/></h1>
+          <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Slaves')"/></h1>
         </xsl:when>
         <xsl:otherwise>
           <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/></h1>
@@ -7708,7 +7742,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:otherwise>
                     <td>
                       <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Slave Details', 'Target')}">
+                         title="{gsa:i18n ('Slave Details', 'Slave')}">
                         <xsl:value-of select="name"/>
                       </a>
                     </td>
@@ -16118,12 +16152,23 @@ should not have received it.
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
-            <td><input type="file" name="key_pub"/></td>
-          </tr>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></td>
-            <td><input type="file" name="key_priv"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td>
+              <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
+              <select name="credential_id">
+                <xsl:for-each select="get_credentials_response/credential">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="content" select="name"/>
+                    <xsl:with-param name="value" select="@id"/>
+                    <xsl:with-param name="select-value" select="$credential_id"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]">
+                <img src="/img/new.png"/>
+              </a>
+            </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
@@ -16209,6 +16254,10 @@ should not have received it.
         <name><xsl:value-of select="gsa:i18n('Type', 'Property')"/></name>
         <field>type</field>
       </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Credential', 'Credential')"/></name>
+        <field>credential</field>
+      </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="7"/>
   </xsl:call-template>
@@ -16280,12 +16329,19 @@ should not have received it.
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
-            <td><input type="file" name="key_pub"/></td>
-          </tr>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></td>
-            <td><input type="file" name="key_priv"/></td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td>
+              <xsl:variable name="credential_id" select="commands_response/get_scanners_response/scanner/credential/@id"/>
+              <select name="credential_id">
+                <xsl:for-each select="commands_response/get_credentials_response/credential">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="content" select="name"/>
+                    <xsl:with-param name="value" select="@id"/>
+                    <xsl:with-param name="select-value" select="$credential_id"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+            </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
@@ -16366,6 +16422,21 @@ should not have received it.
             <xsl:call-template name="scanner-type-name">
               <xsl:with-param name="type" select="type"/>
             </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="gsa:may-op ('get_credentials')">
+                <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="credential/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="credential/name"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </table>
@@ -16494,6 +16565,9 @@ should not have received it.
     <xsl:with-param name="resource_type" select="'scanner'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
     <xsl:with-param name="related">
+      <xsl:if test="credential/@id != ''">
+        <credential id="{credential/@id}"/>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -16583,6 +16657,18 @@ should not have received it.
         <xsl:with-param name="type" select="type"/>
       </xsl:call-template>
     </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_credentials')">
+          <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="credential/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="credential/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
@@ -16636,9 +16722,33 @@ should not have received it.
       </xsl:call-template>
     </td>
     <td>
-      <xsl:call-template name="restore-icon">
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="credential/trash != '0'">
+          <xsl:value-of select="credential/name"/>
+          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Credential Details', 'Credential')}">
+            <xsl:value-of select="credential/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('restore'))"/>
+        <xsl:when test="credential/trash = '0'">
+          <xsl:call-template name="restore-icon">
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/restore_inactive.png" border="0" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+               title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -16712,7 +16822,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Credential', 'Auth Data')"/></td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
               <select name="credential_id">
@@ -16884,7 +16994,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Credential', 'Auth Data')"/></td>
+            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="commands_response/get_slaves_response/slave/credential/@id"/>
               <select name="credential_id">
@@ -17127,6 +17237,9 @@ should not have received it.
     <xsl:with-param name="resource_type" select="'slave'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
     <xsl:with-param name="related">
+      <xsl:if test="credential/@id != ''">
+        <credential id="{credential/@id}"/>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -31683,6 +31796,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Credential' ,'Credential')"/></td>
         <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="scanner" mode="trash"/>

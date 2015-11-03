@@ -498,7 +498,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
   params_iterator_init (&iter, credentials->params);
   while (params_iterator_next (&iter, &name, &param))
     {
-      if (name)
+      if (name && strcmp (name, ""))
         {
           if ((name[strlen (name) - 1] == ':') && param->values)
             {
@@ -523,6 +523,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
               && strcmp (name, "xml_file") && strcmp (name, "installer"))
             xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
         }
+      else
+        g_warning ("%s: Param without name found", __FUNCTION__);
     }
   g_string_append (string, "</params>");
 
@@ -5961,7 +5963,7 @@ get_credential (credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("credential", credentials, params, extra_xml,
-                  "targets=\"1\" slaves=\"1\"", response_data);
+                  "targets=\"1\" scanners=\"1\" slaves=\"1\"", response_data);
 }
 
 /**
@@ -17090,10 +17092,59 @@ static char *
 new_scanner (credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
   GString *xml;
+
+  switch (manager_connect (credentials, &socket, &session, &html,
+                           response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the credentials list. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_credentials"
+                            " filter=\"first=1 rows=-1 type=cc\" />")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the credentials list. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
   xml = g_string_new ("<new_scanner>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the credentials list. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
   g_string_append (xml, "</new_scanner>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
@@ -17209,7 +17260,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
 {
   char *ret;
   gchar *response = NULL;
-  const char *name, *comment, *host, *port, *type, *ca_pub, *key_pub, *key_priv;
+  const char *name, *comment, *host, *port, *type, *ca_pub, *credential_id;
   entity_t entity = NULL;
 
   name = params_value (params, "name");
@@ -17218,24 +17269,21 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
-  key_pub = params_value (params, "key_pub");
-  key_priv = params_value (params, "key_priv");
+  credential_id = params_value (params, "credential_id");
   CHECK_PARAM (name, "Create Scanner", new_scanner);
   CHECK_PARAM (comment, "Create Scanner", new_scanner);
   CHECK_PARAM (host, "Create Scanner", new_scanner);
   CHECK_PARAM (port, "Create Scanner", new_scanner);
   CHECK_PARAM (type, "Create Scanner", new_scanner);
   CHECK_PARAM (ca_pub, "Create Scanner", new_scanner);
-  CHECK_PARAM (key_pub, "Create Scanner", new_scanner);
-  CHECK_PARAM (key_priv, "Create Scanner", new_scanner);
+  CHECK_PARAM (credential_id, "Create Scanner", new_scanner);
 
   switch (ompf (credentials, &response, &entity, response_data,
                 "<create_scanner><name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
-                "<ca_pub>%s</ca_pub><key_pub>%s</key_pub>"
-                "<key_priv>%s</key_priv>"
+                "<ca_pub>%s</ca_pub><credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, ca_pub, key_pub, key_priv))
+                name, comment, host, port, type, ca_pub, credential_id))
     {
       case 0:
       case -1:
@@ -17330,8 +17378,96 @@ char *
 edit_scanner (credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("scanner", credentials, params, extra_xml,
-                        response_data);
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *scanner_id, *next;
+
+  scanner_id = params_value (params, "scanner_id");
+  next = params_value (params, "next");
+
+  if (scanner_id == NULL)
+    {
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a scanner. "
+                           "The scanner remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (next == NULL)
+    next = "get_scanner";
+
+  switch (manager_connect (credentials, &socket, &session, &html,
+                           response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a scanner. "
+                             "The scanner remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks", response_data);
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_scanners scanner_id=\"%s\" details=\"1\" />"
+                            "<get_credentials filter=\"first=1 rows=-1 type=cc\" />"
+                            "</commands>",
+                            scanner_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting scanner info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<edit_scanner>"
+                          "<scanner id=\"%s\"/>"
+                          /* Page that follows. */
+                          "<next>%s</next>",
+                          scanner_id,
+                          next);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting scanner info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks", response_data);
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_scanner>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
 }
 
 /**
@@ -17366,7 +17502,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   gchar *response = NULL;
   entity_t entity = NULL;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
-  const char *key_pub, *key_priv;
+  const char *credential_id;
   char *ret;
 
   scanner_id = params_value (params, "scanner_id");
@@ -17376,24 +17512,22 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
-  key_pub = params_value (params, "key_pub");
-  key_priv = params_value (params, "key_priv");
+  credential_id = params_value (params, "credential_id");
   CHECK_PARAM (scanner_id, "Edit Scanner", edit_scanner);
   CHECK_PARAM (name, "Edit Scanner", edit_scanner);
   CHECK_PARAM (host, "Edit Scanner", edit_scanner);
   CHECK_PARAM (port, "Edit Scanner", edit_scanner);
   CHECK_PARAM (type, "Edit Scanner", edit_scanner);
   CHECK_PARAM (ca_pub, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (key_pub, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (key_priv, "Edit Scanner", edit_scanner);
+  CHECK_PARAM (credential_id, "Edit Scanner", edit_scanner);
 
   switch (ompf (credentials, &response, &entity, response_data,
                 "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
                 "<comment>%s</comment><host>%s</host>"
                 "<port>%s</port><type>%s</type><ca_pub>%s</ca_pub>"
-                "<key_pub>%s</key_pub><key_priv>%s</key_priv></modify_scanner>",
+                "<credential id=\"%s\"/></modify_scanner>",
                 scanner_id, name, comment ?: "", host, port, type, ca_pub,
-                key_pub, key_priv))
+                credential_id))
     {
       case 0:
       case -1:

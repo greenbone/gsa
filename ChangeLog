@@ -1,3 +1,37 @@
+2015-11-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Replace the Certificate and Private Key in Scanners with a Credential.
+	Add credential as related resource of Scanners and Slaves for
+	permissions.  Also fix an issue with empty parameter names in the
+	permission window and correct i18n contexts for some credential
+	references.
+
+	* src/gsad_omp.c (xsl_transform_omp): Check if a parameter name is
+	empty and log a warning in this case or if it is NULL.
+	(get_credential): Add "credentials" parameter.
+	(new_scanner): Get list of client certificate credentials.
+	(create_scanner_omp): Replace key_pub and key_priv with credential_id.
+	(edit_scanner): Get list of client certificate credentials.
+	(save_scanner_omp): Replace key_pub and key_priv with credential_id.
+
+	* src/html/classic/omp.xsl (resource-permissions-window): Do not add
+	ampersand after last parameter.
+	(credential): Add list of scanners for client certificate type. Correct
+	i18n contexts.
+	(html-create-scanner-form): Replace the Certificate and Private Key
+	upload with Credential selection.
+	(html-scanners-table): Add Credential column.
+	(html-edit-scanner-form): Replace Certificate/Private Key.
+	(scanner [details]): Replace Certificate/Private Key. Add Credential
+	as related resource for permission creation.
+	(scanner): Add Credential column.
+	(scanner [trash]): Add Credential column and check if credential needs
+	to be restored first.
+	(html-create-slave-form, html-edit-slave-form): Correct i18n context
+	for Credential
+	(slave [details]): Add Credential as related resource for permissions.
+	(html-scanners-trash-table): Add Credential column.
+
 2015-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator, exec_omp_get): Handle sync_config command.
