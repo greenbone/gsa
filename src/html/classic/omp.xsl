@@ -14537,6 +14537,16 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td><td><xsl:value-of select="$config/comment"/></td>
           </tr>
+          <xsl:if test="$config/type = 1">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
+              <td>
+                <a href="/omp?cmd=get_scanner&amp;scanner_id={$config/scanner/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Scanner Details', 'Scanner')}">
+                  <xsl:value-of select="$config/scanner"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:if>
         </table>
 
         <br/>

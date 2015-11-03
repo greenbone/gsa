@@ -34,6 +34,11 @@
 
 2015-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-config-table): Add the config's scanner
+	to the details page.
+
+2015-11-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator, exec_omp_get): Handle sync_config command.
 
 	* src/gsad_omp.c (sync_config_omp): New function.
