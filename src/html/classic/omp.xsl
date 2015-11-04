@@ -14472,6 +14472,22 @@ should not have received it.
                        value="{$config/comment}"/>
               </td>
             </tr>
+            <xsl:if test="$config/type = 1">
+              <tr>
+                <td valign="top"><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
+                <td>
+                  <select name="scanner_id">
+                    <xsl:for-each select="get_scanners_response/scanner">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="content" select="name"/>
+                        <xsl:with-param name="value" select="@id"/>
+                        <xsl:with-param name="select-value" select="$config/scanner/@id"/>
+                      </xsl:call-template>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+            </xsl:if>
           </table>
 
           <xsl:if test="$config/type = 0">

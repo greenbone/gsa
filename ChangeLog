@@ -1,3 +1,11 @@
+2015-11-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_config): Handle scanner parameter of config
+	editing.
+
+	* src/html/clssic/omp.xsl (html-config-table): Add scanner parameter in
+	OSP configs edit mode.
+
 2015-11-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Consolidate help pages for topic Permissions: Reduce page about table

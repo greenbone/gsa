@@ -11159,6 +11159,37 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
+  if (edit)
+    {
+      /* Get OSP scanners */
+      if (openvas_server_sendf (&session, "<get_scanners filter=\"type=1\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message
+                  (credentials, "Internal error", __FUNCTION__, __LINE__,
+                   "An internal error occurred while getting the config. "
+                   "The config is not available. "
+                   "Diagnostics: Failure to send command to manager daemon.",
+                   "/omp?cmd=get_configs", response_data);
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message
+                  (credentials, "Internal error", __FUNCTION__, __LINE__,
+                   "An internal error occurred while getting the config. "
+                   "The config is not available. "
+                   "Diagnostics: Failure to receive response from manager daemon.",
+                   "/omp?cmd=get_configs", response_data);
+        }
+    }
+
   /* Get the permissions */
 
   g_string_append (xml, "<permissions>");
@@ -11410,11 +11441,12 @@ save_config_omp (credentials_t * credentials, params_t *params,
   char *ret;
   gchar *html;
   params_t *preferences, *selects, *trends;
-  const char *config_id, *name, *comment;
+  const char *config_id, *name, *comment, *scanner_id;
 
   config_id = params_value (params, "config_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  scanner_id = params_value (params, "scanner_id");
 
   CHECK_PARAM (config_id, "Save Config", edit_config);
   CHECK_PARAM (name, "Save Config", edit_config);
@@ -11445,10 +11477,12 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                 "<modify_config config_id=\"%s\">"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
+                                "%s%s%s"
                                 "</modify_config>",
-                                params_value (params, "config_id"),
-                                name,
-                                comment)
+                                params_value (params, "config_id"), name,
+                                comment, scanner_id ? "<scanner>" : "",
+                                scanner_id ?: "",
+                                scanner_id ? "</scanner>" : "")
       == -1)
     {
       openvas_server_close (socket, session);
