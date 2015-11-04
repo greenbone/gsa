@@ -3035,14 +3035,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="permissions.html">
-  <div class="gb_window_part_center">Help: Permissions
-    <a href="/omp?cmd=get_permissions&amp;token={/envelope/token}"
-       title="Permissions" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Permissions"/>
-    </a>
-  </div>
+  <div class="gb_window_part_center">Help: Permissions</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
+    | <a href="filtering.html?token={/envelope/token}">Filtering</a>
+    | <a href="permission_details.html?token={/envelope/token}">Permission Details</a>
+    | <a href="new_permission.html?token={/envelope/token}">New/Edit Permission Dialog</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -3097,39 +3097,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h3>New Permission</h3>
-      <p>
-        To create a new permission click the
-        new icon <img src="/img/new.png" alt="New Permission" title="New Permission"/> which
-        goes to the <a href="new_permission.html?token={/envelope/token}">New Permission</a>
-        page.
-      </p>
-
-      <h3>Exporting</h3>
-      <p>
-        Export the current list of permissions as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
-      </p>
-
-      <xsl:call-template name="filtering"/>
-      <xsl:call-template name="sorting"/>
-
-      <xsl:call-template name="list-window-line-actions">
-        <xsl:with-param name="type" select="'Permission'"/>
-        <xsl:with-param name="used_by" select="'Task'"/>
-      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
 
 <xsl:template mode="help" match="new_permission.html">
-  <div class="gb_window_part_center">Help: New Permission
-    <a href="/omp?cmd=new_permission&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
+  <div class="gb_window_part_center">Help: New/Edit Permission Dialog</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="/help/permissions.html?token={/envelope/token}">Permissions Table</a>
+    | <a href="permission_details.html?token={/envelope/token}">Permission Details</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -3321,12 +3299,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </p>
         </li>
       </ul>
-      <h4>Permissions</h4>
-      <p>
-        Pressing the list icon
-        <img src="/img/list.png" alt="Permissions" title="Permissions"/>
-        will switch to the permissions page.
-      </p>
     </div>
   </div>
 </xsl:template>
@@ -3404,7 +3376,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="permission_details.html">
   <div class="gb_window_part_center">Help: Permission Details</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
+    | <a href="permissions.html?token={/envelope/token}">Permissions Table</a>
+    | <a href="new_permission.html?token={/envelope/token}">New/Edit Permission Dialog</a>
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -3421,10 +3397,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and resource name and type.
       </p>
 
-      <xsl:call-template name="details-window-line-actions">
-        <xsl:with-param name="type" select="'permission'"/>
-        <xsl:with-param name="name" select="'Permission'"/>
-      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -3708,7 +3680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </ul>
             <li> <a href="targets.html?token={/envelope/token}">Targets</a></li>
               <ul>
-                <li> <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target</a></li>
+                <li> <a href="new_target.html?token={/envelope/token}">New/Edit Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
             <li> <a href="credentials.html?token={/envelope/token}">Credentials</a></li>
@@ -5277,7 +5249,7 @@ Public License instead of this License.
       <p>
         Default selections for various resource creation pages like
         <a href="new_task.html?token={/envelope/token}">New Task</a> or
-        <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target</a>
+        <a href="new_target.html?token={/envelope/token}">New/Edit Target</a>
         and wizards.
       </p>
       <p>
@@ -6093,7 +6065,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="new_edit_target.html">
+<xsl:template mode="help" match="new_target.html">
   <div class="gb_window_part_center">Help: New/Edit Target Dialog</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -8548,7 +8520,7 @@ Public License instead of this License.
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="targets.html?token={/envelope/token}">Targets Table</a>
-    | <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
+    | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
     </div>
     <div style="text-align:left">
 
@@ -8731,7 +8703,7 @@ Public License instead of this License.
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="filtering.html?token={/envelope/token}">Filtering</a>
     | <a href="target_details.html?token={/envelope/token}">Target Details</a>
-    | <a href="new_edit_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
+    | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
     </div>
     <div style="text-align:left">
 

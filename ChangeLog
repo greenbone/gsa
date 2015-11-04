@@ -1,3 +1,15 @@
+2015-11-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Consolidate help pages for topic Permissions: Reduce page about table
+	to main table contents description and drop description of standard
+	actions and filter in favour of respective links.
+
+	* src/html/classic/help.xsl (permissions.html): Add links, remove
+	standard actions and filters.
+	(new_permission.html): Add links to details and table help.
+	(permission_details.html): Drop permissions, add links to other permission
+	topics.
+
 2015-11-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Replace the Certificate and Private Key in Scanners with a Credential.
