@@ -1025,24 +1025,24 @@ text-align:right;
 
 /* Wizard menu. */
 
-#wizard_list ul {
+.wizard_list ul {
  list-style: none;
  margin: 0px;
  padding: 0px;
 }
 
-#wizard_list ul li {
+.wizard_list ul li {
  float:left;
 }
 
-#wizard_list ul li a {
+.wizard_list ul li a {
  display: block;
  height: 25px;
  color: #FFFFFF;
  text-decoration: none;
 }
 
-#wizard_list ul li a#section_list_first {
+.wizard_list ul li a#section_list_first {
  height: 20px;
  background: url('/img/style/dropdown_arrow.png') no-repeat left center;
  padding-right: 2px;
@@ -1051,11 +1051,11 @@ text-align:right;
  margin-top: 0px;
 }
 
-#wizard_list:hover ul li a#section_list_first {
+.wizard_list:hover ul li a#section_list_first {
   background: url('/img/style/dropdown_arrow_green.png') no-repeat left center;
 }
 
-#wizard_list ul li ul {
+.wizard_list ul li ul {
  width: 255px;
  z-index: 6;
  position: absolute;
@@ -1065,7 +1065,7 @@ text-align:right;
  border-radius: 0px 0px 8px 8px;
 }
 
-#wizard_list ul li ul a {
+.wizard_list ul li ul a {
  text-align: left;
  text-indent: 12px;
  line-height: 22px;
@@ -1075,18 +1075,18 @@ text-align:right;
  height: 22px;
 }
 
-#wizard_list ul li ul a:hover {
+.wizard_list ul li ul a:hover {
  background: #99CE48;
 }
 
-#wizard_list ul li ul .last a:hover {
+.wizard_list ul li ul .last a:hover {
  background: #99CE48;
  -webkit-border-radius: 0px 0px 8px 8px;
  -moz-border-radius: 0px 0px 8px 8px;
  border-radius: 0px 0px 8px 8px;
 }
 
-#wizard_list .pointy {
+.wizard_list .pointy {
  background: url('/img/style/menu_pointy.png');
  display: block;
  width: 17px;
@@ -1095,14 +1095,14 @@ text-align:right;
  margin-left: 25px;
 }
 
-#wizard_list li:hover ul ul,
-#wizard_list li:hover ul ul ul {
+.wizard_list li:hover ul ul,
+.wizard_list li:hover ul ul ul {
  display: none;
 }
 
-#wizard_list li:hover a,
-#wizard_list li:hover ul,
-#wizard_list li:hover ul li {
+.wizard_list li:hover a,
+.wizard_list li:hover ul,
+.wizard_list li:hover ul li {
  display: block;
 }
 

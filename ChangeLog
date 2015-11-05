@@ -1,5 +1,11 @@
 2015-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/gsa-style.css, src/html/classic/omp.xsl,
+	src/html/classic/wizard.xsl: Change small_inline_form from id to class.
+	Fixes libxml duplicate ID definition error.
+
+2015-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/classic/omp.xsl (configs.html [help], config_editor.html):
 	Update documentation.
 
