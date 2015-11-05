@@ -2145,6 +2145,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Scan Config'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
+      <h4>Sync Config</h4>
+      <p>
+        Pressing the sync config icon <img src="/img/refresh.png" alt="Sync Config" title="Sync Config"/> will
+        synchronize the OSP config with its scanner.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -8079,7 +8084,7 @@ Public License instead of this License.
       <p>
        This dialog shows the name and comment of a given
        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> together with the
-       associated configuration parameters itself.
+       associated configuration parameters itself. It also shows the scanner of a config, if it is of type OSP.
        It allows to adjust all parameters of the Scan Config.
       </p>
       <p>

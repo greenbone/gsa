@@ -1,3 +1,8 @@
+2015-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (configs.html [help], config_editor.html):
+	Update documentation.
+
 2015-11-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_config): Handle scanner parameter of config
