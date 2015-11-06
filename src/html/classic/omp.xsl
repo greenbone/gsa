@@ -12520,39 +12520,44 @@ should not have received it.
         <hide_in_filter>1</hide_in_filter>
         <html>
           <after>
-            <span style="font-size:80%; color:silver"><xsl:text> - sort by: </xsl:text></span>
-            <span>
-              <xsl:variable name="credential_sort_keyword" select="/envelope/get_targets/get_targets_response/filters/keywords/keyword[column='sort' or column='sort-reverse']/value"/>
-              <select name="sort_credential_type" onChange="select_credential_type ()">
+            <xsl:variable name="sort_keyword" select="/envelope/get_targets/get_targets_response/filters/keywords/keyword[column='sort' or column='sort-reverse']"/>
+            <span style="font-size:80%; color:silver"><xsl:text> - </xsl:text><xsl:value-of select="gsa:i18n('sort by', 'Target Credential')"/><xsl:text>: </xsl:text></span>
+            <span style="display:inline-block;">
+              <select name="sort_credential_type" onChange="select_credential_type (true)">
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'ssh_credential'"/>
                   <xsl:with-param name="content" select="'SSH'"/>
-                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                  <xsl:with-param name="select-value" select="$sort_keyword/value"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'smb_credential'"/>
                   <xsl:with-param name="content" select="'SMB'"/>
-                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                  <xsl:with-param name="select-value" select="$sort_keyword/value"/>
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'esxi_credential'"/>
                   <xsl:with-param name="content" select="'ESXi'"/>
-                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                  <xsl:with-param name="select-value" select="$sort_keyword/value"/>
                 </xsl:call-template>
               </select>
-              <a id="sort_by_credential_asc" href="#" title="{gsa:i18n ('Ascending', 'Filter')}"><img src="/img/upload.png"/></a>
-              <a id="sort_by_credential_desc" href="#" title="{gsa:i18n ('Descending', 'Filter')}"><img src="/img/download.png"/></a>
+              <xsl:text> </xsl:text>
+              <a id="sort_by_credential_asc" style="position:relative; top:3px;" href="#" title="{gsa:i18n ('Ascending', 'Filter')}"><img src="/img/ascending.png"/></a>
+              <a id="sort_by_credential_desc" style="position:relative; top:3px;" href="#" title="{gsa:i18n ('Descending', 'Filter')}"><img src="/img/descending.png"/></a>
             </span>
             <script type="text/javascript">
               var credential_url_prefix = '/omp?cmd=get_targets&amp;filter=';
               var credential_url_suffix = '%20<xsl:value-of select="gsa:escape-js (str:encode-uri (/envelope/get_targets/get_targets_response/filters/term, true()))"/>&amp;token=<xsl:value-of select="gsa:escape-js (/envelope/token)"/>';
-              function select_credential_type ()
+              function select_credential_type (reload)
                 {
                   var type = $('select[name=sort_credential_type]').val ();
                   $('#sort_by_credential_asc').attr ('href', credential_url_prefix + "sort=" + type + credential_url_suffix);
                   $('#sort_by_credential_desc').attr ('href', credential_url_prefix + "sort-reverse=" + type + credential_url_suffix);
+                  if (reload)
+                    {
+                      window.location = ('href', credential_url_prefix + "<xsl:value-of select="$sort_keyword/column"/>=" + type + credential_url_suffix);
+                    }
                 }
-              select_credential_type ();
+              select_credential_type (false);
             </script>
           </after>
         </html>

@@ -1,5 +1,12 @@
 2015-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-targets-table): Set position of
+	credential sort order buttons to align them with dropdown and use
+	"ascending" and "descending" icons for them. Reload page automatically
+	on credential type selection using current order.
+
+2015-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Merge columns for individual credential types in targets table
 	into a single one with JS-based sort field selection.
 
