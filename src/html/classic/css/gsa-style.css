@@ -1414,6 +1414,14 @@ text-align:right;
   border-bottom: 2px solid black;
 }
 
+.section-header h1 {
+  margin: 0;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
 .section-header h3 {
   margin: 0;
 }
@@ -1421,3 +1429,12 @@ text-align:right;
 .section-header .toggle-action-icon {
   float: right;
 }
+
+#section-box {
+}
+
+#small-icon {
+  width: 16px;
+  height: 16px;
+}
+

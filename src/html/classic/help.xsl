@@ -66,6 +66,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="help-header">
+  <xsl:param name="title"/>
+  <xsl:param name="type"/>
+  <xsl:param name="asset-type"/>
+  <xsl:param name="info-type"/>
+  <div class="section-header">
+    <h1>
+      <img id="list-window-img" src="/img/help.svg"/>
+      <xsl:if test="boolean ($type)">
+        <a href="/omp?cmd=get_{$type}s&amp;token={/envelope/token}"
+           title="Resource overview page" style="margin-right:3px;">
+          <img id="small-icon" src="/img/{$type}.svg" border="0" alt="{$type}"/>
+        </a>
+      </xsl:if>
+      <xsl:if test="boolean ($asset-type)">
+        <a href="/omp?cmd=get_assets&amp;type={$asset-type}&amp;token={/envelope/token}"
+           title="Resource overview page" style="margin-right:3px;">
+          <img id="small-icon" src="/img/{$info-type}.svg" border="0" alt="{$asset-type}"/>
+        </a>
+      </xsl:if>
+      <xsl:if test="boolean ($info-type)">
+        <a href="/omp?cmd=get_info&amp;type={$info-type}&amp;token={/envelope/token}"
+           title="Resource overview page" style="margin-right:3px;">
+          <img id="small-icon" src="/img/{$info-type}.svg" border="0" alt="{$info-type}"/>
+        </a>
+      </xsl:if>
+      <xsl:value-of select="$title"/>
+    </h1>
+  </div>
+</xsl:template>
+
 <xsl:template name="details-window-line-actions">
   <xsl:param name="type"/>
   <xsl:param name="name"/>
@@ -351,19 +382,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="help">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
+  <div id="list-window-table">
     <xsl:apply-templates mode="help"/>
   </div>
 </xsl:template>
 
 <xsl:template mode="help" match="*">
-  <div class="gb_window_part_center">Help: Page Not Found</div>
-  <div class="gb_window_part_content">
-    <div style="text-align:left">
-      <h1>Page Not Found</h1>
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Page Not Found'"/>
+  </xsl:call-template>
 
+  <div class="section-box">
+    <div style="text-align:left">
       <p>
         The help page you requested could not be found. If you have followed a
         link and got this page, the location of the help page may have changed.
@@ -379,8 +409,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="about.html">
-  <div class="gb_window_part_center">About GSA</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'About GSA'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="text-align:left">
       <table><tr><td valign="top">
 
@@ -419,8 +452,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="host_details.html">
-  <div class="gb_window_part_center">Help: Host Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Host Details'"/>
+    <xsl:with-param name="asset-type" select="'host'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -430,7 +467,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_ASSETS'"/>
       </xsl:call-template>
 
-      <h1>Host Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#host">host</a>.
@@ -464,13 +500,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="hosts.html">
-  <div class="gb_window_part_center">Help: Hosts
-    <a href="/omp?cmd=get_assets&amp;type=host&amp;token={/envelope/token}"
-       title="Hosts" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Hosts"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Hosts'"/>
+    <xsl:with-param name="asset-type" select="'host'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -480,7 +515,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_ASSETS'"/>
       </xsl:call-template>
 
-      <h1>Hosts</h1>
       <p>
         This table provides an overview of all the
         <a href="glossary.html?token={/envelope/token}#host">host</a>s
@@ -565,14 +599,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="hosts_classic.html">
-  <div class="gb_window_part_center">Help: Hosts (Classic)</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Hosts (Classic)'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Hosts (Classic)</h1>
       <p>
        This page provides an overview of all the hosts found in all tasks.
       </p>
@@ -741,9 +777,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="agent_details.html">
-  <div class="gb_window_part_center">Help: Agent Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Agent Details'"/>
+    <xsl:with-param name="type" select="'agent'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -753,7 +792,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_AGENTS'"/>
       </xsl:call-template>
 
-      <h1>Agents Details</h1>
       <p>
         Provides detailed information about an
         <a href="glossary.html?token={/envelope/token}#agent">Agent</a>.
@@ -770,13 +808,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="agents.html">
-  <div class="gb_window_part_center">Help: Agents
-    <a href="/omp?cmd=get_agents&amp;token={/envelope/token}"
-       title="Agents" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Agents"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Agents'"/>
+    <xsl:with-param name="type" select="'agent'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -786,7 +823,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_AGENTS'"/>
       </xsl:call-template>
 
-      <h1>Agents</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#agent">Agents</a>,
@@ -856,12 +892,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_agent.html">
-  <div class="gb_window_part_center">Help: New Agent
-    <a href="/omp?cmd=new_agent&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Agent'"/>
+    <xsl:with-param name="type" select="'agent'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -871,7 +907,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="command" select="'CREATE_AGENT'"/>
       </xsl:call-template>
 
-      <h1>New Agent</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#agent">Agent</a>
@@ -939,13 +974,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="credentials.html">
-  <div class="gb_window_part_center">Help: Credentials
-    <a href="/omp?cmd=get_credentials&amp;token={/envelope/token}"
-       title="Credentials" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Credentials"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Credentials'"/>
+    <xsl:with-param name="type" select="'credential'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -955,7 +989,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_CREDENTIALS'"/>
       </xsl:call-template>
 
-      <h1>Credentials</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#credential">Credentials</a>.
@@ -1062,12 +1095,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_credential.html">
-  <div class="gb_window_part_center">Help: New Credential
-    <a href="/omp?cmd=new_credential&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Credentials'"/>
+    <xsl:with-param name="type" select="'credential'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1083,7 +1116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         for the purpose of locally check there e.g. for the presence
         of all vendor security patches.
       </p>
-      <h1>New Credential</h1>
+
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#credential">Credential</a>
@@ -1168,9 +1201,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="credential_details.html">
-  <div class="gb_window_part_center">Help: Credential Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Credential Details'"/>
+    <xsl:with-param name="type" select="'credential'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1180,7 +1216,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_CREDENTIALS'"/>
       </xsl:call-template>
 
-      <h1>Credentials Details</h1>
       <p>
         Provides detailed information about an
         <a href="glossary.html?token={/envelope/token}#credential">Credential</a>.
@@ -1201,12 +1236,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_alert.html">
-  <div class="gb_window_part_center">Help: New Alert
-    <a href="/omp?cmd=new_alert&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Alert'"/>
+    <xsl:with-param name="type" select="'alert'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1217,7 +1252,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="newalert"></a>
-      <h1>New Alert</h1>
 
       <p>
        Alerts can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
@@ -1363,13 +1397,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="alerts.html">
-  <div class="gb_window_part_center">Help: Alerts
-    <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
-       title="Alerts" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Alerts"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Alerts'"/>
+    <xsl:with-param name="type" select="'alert'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1380,7 +1413,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="alerts"></a>
-      <h1>Alerts</h1>
+
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#alert">Alerts</a>.
@@ -1448,9 +1481,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="alert_details.html">
-  <div class="gb_window_part_center">Help: Alert Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Alert Details'"/>
+    <xsl:with-param name="type" select="'alert'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1460,7 +1496,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_ALERTS'"/>
       </xsl:call-template>
 
-      <h1>Alert Details</h1>
       <p>
         Provides detailed information about an
         <a href="glossary.html?token={/envelope/token}#alert">Alert</a>.
@@ -1481,14 +1516,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="port_lists.html">
-  <div class="gb_window_part_center">Help: Port Lists
-    <a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}"
-       title="Port Lists" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Port Lists"/>
-    </a>
-  </div>
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Port Lists'"/>
+    <xsl:with-param name="type" select="'port_list'"/>
+  </xsl:call-template>
 
-  <div class="gb_window_part_content">
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1498,7 +1531,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_PORT_LISTS'"/>
       </xsl:call-template>
 
-      <h1>Port Lists</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#port_list">
@@ -1629,12 +1661,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_port_list.html">
-  <div class="gb_window_part_center">Help: New Port List
-    <a href="/omp?cmd=new_port_list&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Port List'"/>
+    <xsl:with-param name="type" select="'port_list'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1644,7 +1676,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="command" select="'CREATE_PORT_LIST'"/>
       </xsl:call-template>
 
-      <h1>New Port List</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#port_list">Port List</a>
@@ -1756,9 +1787,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="port_list_details.html">
-  <div class="gb_window_part_center">Help: Port List Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Port List Details'"/>
+    <xsl:with-param name="type" select="'port_list'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1768,7 +1802,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_PORT_LISTS'"/>
       </xsl:call-template>
 
-      <h1>Port List Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#port_list">
@@ -1796,13 +1829,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="report_formats.html">
-  <div class="gb_window_part_center">Help: Report Formats
-    <a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}"
-       title="Report Formats" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Report Formats"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Report Formats Details'"/>
+    <xsl:with-param name="type" select="'report_format'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1812,7 +1844,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_REPORT_FORMATS'"/>
       </xsl:call-template>
 
-      <h1>Report Formats</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#report_format">
@@ -1961,12 +1992,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_report_format.html">
-  <div class="gb_window_part_center">Help: New Report Format
-    <a href="/omp?cmd=new_report_format&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Report Format'"/>
+    <xsl:with-param name="type" select="'report_format'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -1976,7 +2007,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="command" select="'CREATE_REPORT_FORMAT'"/>
       </xsl:call-template>
 
-      <h1>New Report Format</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#report_format">Report Format</a>
@@ -2018,9 +2048,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="report_format_details.html">
-  <div class="gb_window_part_center">Help: Report Format Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Report Format Details'"/>
+    <xsl:with-param name="type" select="'report_format'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2030,7 +2063,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_REPORT_FORMATS'"/>
       </xsl:call-template>
 
-      <h1>Report Format Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#report_format">
@@ -2058,13 +2090,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="configs.html">
-  <div class="gb_window_part_center">Help: Scan Configs
-    <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
-       title="Scan Configs" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Scan Configs"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Configs'"/>
+    <xsl:with-param name="type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2074,7 +2105,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_CONFIGS'"/>
       </xsl:call-template>
 
-      <h1>Scan Configs</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#config">Scan Configs</a>.
@@ -2155,12 +2185,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_config.html">
-  <div class="gb_window_part_center">Help: New Scan Config
-    <a href="/omp?cmd=new_config&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Scan Config'"/>
+    <xsl:with-param name="type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2171,7 +2201,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="new_config"></a>
-      <h1>New Scan Config</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>
@@ -2241,9 +2270,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="schedule_details.html">
-  <div class="gb_window_part_center">Help: Schedule Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Schedule Details'"/>
+    <xsl:with-param name="type" select="'schedule'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2253,7 +2285,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SCHEDULES'"/>
       </xsl:call-template>
 
-      <h1>Schedule Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>.
@@ -2275,13 +2306,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="schedules.html">
-  <div class="gb_window_part_center">Help: Schedules
-    <a href="/omp?cmd=get_schedules&amp;token={/envelope/token}"
-       title="Schedules" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Schedules"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Schedules'"/>
+    <xsl:with-param name="type" select="'schedule'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2291,7 +2321,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SCHEDULES'"/>
       </xsl:call-template>
 
-      <h1>Schedules</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#schedule">Schedules</a>.
@@ -2359,12 +2388,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_schedule.html">
-  <div class="gb_window_part_center">Help: New Schedule
-    <a href="/omp?cmd=new_schedule&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Schedules'"/>
+    <xsl:with-param name="type" select="'schedule'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2374,7 +2403,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'CREATE_SCHEDULE'"/>
       </xsl:call-template>
 
-      <h1>New Schedule</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>
@@ -2469,13 +2497,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="scanners.html">
-  <div class="gb_window_part_center">Help: Scanners
-    <a href="/omp?cmd=get_scanners&amp;token={/envelope/token}"
-       title="Scanners" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Scanners"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scanners'"/>
+    <xsl:with-param name="type" select="'scanner'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2485,7 +2512,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SCANNERS'"/>
       </xsl:call-template>
 
-      <h1>Scanners</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#scanner">Scanners</a>.
@@ -2541,9 +2567,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="scanner_details.html">
-  <div class="gb_window_part_center">Help: Scanner Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scanner Details'"/>
+    <xsl:with-param name="type" select="'scanner'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2553,7 +2582,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SCANNERS'"/>
       </xsl:call-template>
 
-      <h1>Scanner Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a>.
@@ -2608,9 +2636,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="slave_details.html">
-  <div class="gb_window_part_center">Help: Slave Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Slave Details'"/>
+    <xsl:with-param name="type" select="'slave'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2620,7 +2651,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SLAVES'"/>
       </xsl:call-template>
 
-      <h1>Slave Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
@@ -2642,13 +2672,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="slaves.html">
-  <div class="gb_window_part_center">Help: Slaves
-    <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
-       title="Slaves" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Slaves"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Slaves'"/>
+    <xsl:with-param name="type" select="'slave'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2658,7 +2687,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SLAVES'"/>
       </xsl:call-template>
 
-      <h1>Slaves</h1>
       <p>
         This table provides an overview of all configured
         <a href="glossary.html?token={/envelope/token}#slave">Slaves</a>.
@@ -2726,12 +2754,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_slave.html">
-  <div class="gb_window_part_center">Help: New Slave
-    <a href="/omp?cmd=new_slave&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Slave'"/>
+    <xsl:with-param name="type" select="'slave'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2741,7 +2769,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'CREATE_SLAVE'"/>
       </xsl:call-template>
 
-      <h1>New Slave</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#slave">Slave</a>
@@ -2807,13 +2834,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="users.html">
-  <div class="gb_window_part_center">Help: Users
-    <a href="/omp?cmd=get_users&amp;token={/envelope/token}"
-       title="Users" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Users"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Users'"/>
+    <xsl:with-param name="type" select="'user'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -2824,7 +2850,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="users"></a>
-      <h1>Users</h1>
 
       <p>
        The administration of users is only accessible for users who own
@@ -3011,9 +3036,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="user_details.html">
-  <div class="gb_window_part_center">Help: User Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'User Details'"/>
+    <xsl:with-param name="type" select="'user'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3023,7 +3051,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_USERS'"/>
       </xsl:call-template>
 
-      <h1>User Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#user">User</a>.
@@ -3040,8 +3067,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="permissions.html">
-  <div class="gb_window_part_center">Help: Permissions</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Permissions'"/>
+    <xsl:with-param name="type" select="'permission'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="filtering.html?token={/envelope/token}">Filtering</a>
@@ -3056,7 +3087,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_PERMISSIONS'"/>
       </xsl:call-template>
 
-      <h1>Permissions</h1>
       <p>
         The help for
         <a href="new_permission.html?token={/envelope/token}">New Permission</a>
@@ -3107,10 +3137,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_permission.html">
-  <div class="gb_window_part_center">Help: New/Edit Permission Dialog</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New/Edit Permission'"/>
+    <xsl:with-param name="type" select="'permission'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
-    | <a href="/help/permissions.html?token={/envelope/token}">Permissions Table</a>
+    | <a href="/help/permissions.html?token={/envelope/token}">Permissions</a>
     | <a href="permission_details.html?token={/envelope/token}">Permission Details</a>
     </div>
     <div style="text-align:left">
@@ -3121,7 +3155,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'CREATE_PERMISSION'"/>
       </xsl:call-template>
 
-      <h1>New Permission</h1>
       <p>
         The New Permission page provides a low level interface for creating
         <a href="glossary.html?token={/envelope/token}#permission">permission</a>s.
@@ -3309,12 +3342,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_permissions.html">
-  <div class="gb_window_part_center">Help: Create Multiple Permissions
-    <a href="/omp?cmd=new_permissions&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Create Multiple Permission'"/>
+    <xsl:with-param name="type" select="'permission'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
       <br/>
@@ -3379,11 +3412,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="permission_details.html">
-  <div class="gb_window_part_center">Help: Permission Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Permission Details'"/>
+    <xsl:with-param name="type" select="'permission'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
-    | <a href="permissions.html?token={/envelope/token}">Permissions Table</a>
+    | <a href="permissions.html?token={/envelope/token}">Permissions</a>
     | <a href="new_permission.html?token={/envelope/token}">New/Edit Permission Dialog</a>
     </div>
     <div style="text-align:left">
@@ -3394,7 +3431,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_PERMISSIONS'"/>
       </xsl:call-template>
 
-      <h1>Permission Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#permission">Permission</a>.
@@ -3407,12 +3443,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="resource_permissions.html">
-  <div class="gb_window_part_center">Help: Resource Permissions</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Resource Permissions'"/>
+    <xsl:with-param name="type" select="'permission'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
       <br/>
-      <h1>Resource Permissions</h1>
       <p>
         The Resource Permissions window shown on details pages contains a list
         of
@@ -3441,13 +3480,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="roles.html">
-  <div class="gb_window_part_center">Help: Roles
-    <a href="/omp?cmd=get_roles&amp;token={/envelope/token}"
-       title="Roles" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Roles"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Roles'"/>
+    <xsl:with-param name="type" select="'role'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3457,7 +3495,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_ROLES'"/>
       </xsl:call-template>
 
-      <h1>Roles</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#role">Roles</a>.
@@ -3564,9 +3601,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="role_details.html">
-  <div class="gb_window_part_center">Help: Role Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Role Details'"/>
+    <xsl:with-param name="type" select="'role'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3576,7 +3616,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_ROLES'"/>
       </xsl:call-template>
 
-      <h1>Roles Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#role">Role</a>.
@@ -3593,8 +3632,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="contents.html">
-  <div class="gb_window_part_center">Help: Contents</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Contents'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="text-align:left">
 
       <h1>Contents</h1>
@@ -3787,8 +3829,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cpe_details.html">
-  <div class="gb_window_part_center">Help: CPE Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CPE Details'"/>
+    <xsl:with-param name="info-type" select="'cpe'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3798,7 +3844,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>CPE Details</h1>
       <p>
         A page that provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#cpe">CPE</a>.
@@ -3818,8 +3863,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cve_details.html">
-  <div class="gb_window_part_center">Help: CVE Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CVE Details'"/>
+    <xsl:with-param name="info-type" select="'cve'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3829,7 +3878,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>CVE Details</h1>
       <p>
        A page that provides the original detailed information about a CVE.
        This includes the dates of publication and last modification, the
@@ -3841,8 +3889,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="ovaldef_details.html">
-  <div class="gb_window_part_center">Help: OVAL Definition Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'OVAL Definition Details'"/>
+    <xsl:with-param name="info-type" select="'ovaldef'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3852,7 +3904,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>OVAL Definition Details</h1>
       <p>
         A page that provides detailed information about an
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definition</a>.
@@ -3888,8 +3939,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cert_bund_adv_details.html">
-  <div class="gb_window_part_center">Help: CERT-Bund Advisory Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CERT-Bund Advisory Details'"/>
+    <xsl:with-param name="info-type" select="'certbund'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3899,7 +3954,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>CERT-Bund Advisory Details</h1>
       <p>
         A page that provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#cert_bund_adv">CERT-Bund Advisory</a>.
@@ -3929,8 +3983,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="dfn_cert_adv_details.html">
-  <div class="gb_window_part_center">Help: DFN-CERT Advisory Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'DFN-CERT Advisory Details'"/>
+    <xsl:with-param name="info-type" select="'dfncert'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -3940,7 +3998,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>DFN-CERT Advisory Details</h1>
       <p>
         A page that provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisory</a>.
@@ -3959,14 +4016,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="error_messages.html">
-  <div class="gb_window_part_center">Help: Error Messages</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Error Messages'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Error Messages</h1>
 
       <h2>Problems during a operation</h2>
       <p>
@@ -4024,14 +4083,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="feed_management.html">
-  <div class="gb_window_part_center">Help: NVT Feed Management</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'NVT Feed Management'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>NVT Feed Management</h1>
       <p>
        The management of NVT feeds is only accessible for users that own
        the "Administrator" role.
@@ -4066,14 +4127,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="scap_management.html">
-  <div class="gb_window_part_center">Help: SCAP Feed Management</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'SCAP Feed Management'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>SCAP Feed Management</h1>
       <p>
        The management of SCAP feeds is only accessible for users that own
        the "Administrator" role.
@@ -4108,14 +4171,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cert_management.html">
-  <div class="gb_window_part_center">Help: CERT Feed Management</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CERT Feed Management'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>CERT Feed Management</h1>
       <p>
        The management of CERT feeds is only accessible for users that own
        the "Administrator" role.
@@ -4150,9 +4215,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="filter_details.html">
-  <div class="gb_window_part_center">Help: Filter Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Filter Details'"/>
+    <xsl:with-param name="type" select="'filter'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -4162,7 +4230,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_FILTERS'"/>
       </xsl:call-template>
 
-      <h1>Filter Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#filter">Filter</a>.
@@ -4182,13 +4249,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="filters.html">
-  <div class="gb_window_part_center">Help: Filters
-    <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
-       title="Filters" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Filters"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Filters'"/>
+    <xsl:with-param name="type" select="'filter'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -4198,7 +4264,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_FILTERS'"/>
       </xsl:call-template>
 
-      <h1>Filters</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#filter">Filters</a>.
@@ -4253,14 +4318,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="glossary.html">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Glossary'"/>
+  </xsl:call-template>
 
-  <div class="gb_window_part_center">Help: Glossary</div>
-  <div class="gb_window_part_content">
+  <div class="section-box">,
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Glossary</h1>
       <p>
        For Greenbone Security Assistant (GSA) a number
        of terms are used consistently throughout the
@@ -4647,8 +4713,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="gplv2.html">
-  <div class="gb_window_part_center">GNU General Public License Version 2</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'GNU General Public License Version 2'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="text-align:left">
 
 <pre>
@@ -4999,9 +5068,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="group_details.html">
-  <div class="gb_window_part_center">Help: Group Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Group Details'"/>
+    <xsl:with-param name="type" select="'group'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5011,7 +5083,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_GROUPS'"/>
       </xsl:call-template>
 
-      <h1>Group Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#group">Group</a>.
@@ -5027,13 +5098,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="groups.html">
-  <div class="gb_window_part_center">Help: Groups
-    <a href="/omp?cmd=get_groups&amp;token={/envelope/token}"
-       title="Groups" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Groups"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Groups'"/>
+    <xsl:with-param name="type" select="'group'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5043,7 +5113,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_GROUPS'"/>
       </xsl:call-template>
 
-      <h1>Groups</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#group">Groups</a>.
@@ -5084,18 +5153,16 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="my_settings.html">
-  <div class="gb_window_part_center">Help: My Settings
-    <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
-       title="My Settings" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="My Settings"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'My Settings'"/>
+    <xsl:with-param name="type" select="'my_setting'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>My Settings</h1>
 
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_SETTINGS'"/>
@@ -5414,12 +5481,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_filter.html">
-  <div class="gb_window_part_center">Help: New Filter
-    <a href="/omp?cmd=new_filter&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Filter'"/>
+    <xsl:with-param name="type" select="'filter'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5429,7 +5496,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_FILTER'"/>
       </xsl:call-template>
 
-      <h1>New Filter</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#filter">Filter</a>
@@ -5488,12 +5554,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_group.html">
-  <div class="gb_window_part_center">Help: New Group
-    <a href="/omp?cmd=new_group&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Group'"/>
+    <xsl:with-param name="type" select="'group'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5503,7 +5569,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_GROUP'"/>
       </xsl:call-template>
 
-      <h1>New Group</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#group">Group</a>
@@ -5555,12 +5620,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_host.html">
-  <div class="gb_window_part_center">Help: New Host
-    <a href="/omp?cmd=new_host&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Host'"/>
+    <xsl:with-param name="asset-type" select="'host'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5570,7 +5635,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_ASSET'"/>
       </xsl:call-template>
 
-      <h1>New Host</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#host">Host</a>
@@ -5607,12 +5671,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_note.html">
-  <div class="gb_window_part_center">Help: New Note
-    <a href="/omp?cmd=new_note&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Note'"/>
+    <xsl:with-param name="type" select="'note'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5622,7 +5686,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_NOTE'"/>
       </xsl:call-template>
 
-      <h1>New Note</h1>
       <p>
        For creating a new note this dialog offers the following entries.
        Below the entries are details of the result that may be associated with
@@ -5694,12 +5757,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_override.html">
-  <div class="gb_window_part_center">Help: New Override
-    <a href="/omp?cmd=new_override&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Override'"/>
+    <xsl:with-param name="type" select="'override'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5709,7 +5772,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_OVERRIDE'"/>
       </xsl:call-template>
 
-      <h1>New Override</h1>
       <p>
        For creating a new override this dialog offers the following entries.
        Below the entries are details of the result that may be associated with
@@ -5802,12 +5864,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_role.html">
-  <div class="gb_window_part_center">Help: New Role
-    <a href="/omp?cmd=new_role&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Role'"/>
+    <xsl:with-param name="type" select="'role'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5817,7 +5879,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_ROLE'"/>
       </xsl:call-template>
 
-      <h1>New Role</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#role">Role</a>
@@ -5869,12 +5930,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_scanner.html">
-  <div class="gb_window_part_center">Help: New Scanner
-    <a href="/omp?cmd=new_scanner&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Scanner'"/>
+    <xsl:with-param name="type" select="'scanner'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5884,7 +5945,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_SCANNER'"/>
       </xsl:call-template>
 
-      <h1>New Scanner</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a>
@@ -5984,12 +6044,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_tag.html">
-  <div class="gb_window_part_center">Help: New Tag
-    <a href="/omp?cmd=new_tag&amp;max=-2&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Tag'"/>
+    <xsl:with-param name="type" select="'tag'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -5999,7 +6059,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_TAG'"/>
       </xsl:call-template>
 
-      <h1>New Tag</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#tag">Tag</a>
@@ -6071,10 +6130,13 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_target.html">
-  <div class="gb_window_part_center">Help: New/Edit Target Dialog</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New/Edit Target Dialog'"/>
+    <xsl:with-param name="type" select="'target'"/>
+  </xsl:call-template>
+
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
-    | <a href="/help/targets.html?token={/envelope/token}">Targets Table</a>
+    | <a href="/help/targets.html?token={/envelope/token}">Targets</a>
     | <a href="target_details.html?token={/envelope/token}">Target Details</a>
     </div>
     <div style="text-align:left">
@@ -6085,7 +6147,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_TARGET'"/>
       </xsl:call-template>
 
-      <h1>New/Edit Target Dialog</h1>
       <p>
         For creating a new or editing a existing
         <a href="glossary.html?token={/envelope/token}#target">Target</a>
@@ -6211,14 +6272,16 @@ Public License instead of this License.
       <xsl:call-template name="hosts_note"/>
 
     </div>
-  </div>
 </xsl:template>
 
 <xsl:template mode="help" match="new_task.html">
-  <div class="gb_window_part_center">Help: New Task</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New Task'"/>
+    <xsl:with-param name="type" select="'task'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6226,8 +6289,6 @@ Public License instead of this License.
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'CREATE_TASK'"/>
       </xsl:call-template>
-
-      <h1>New Task</h1>
 
       <p>
        To create a
@@ -6420,12 +6481,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="new_user.html">
-  <div class="gb_window_part_center">Help: New User
-    <a href="/omp?cmd=new_user&amp;token={/envelope/token}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'New User'"/>
+    <xsl:with-param name="type" select="'user'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -6435,7 +6496,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'CREATE_USER'"/>
       </xsl:call-template>
 
-      <h1>New User</h1>
       <p>
         For creating a new
         <a href="glossary.html?token={/envelope/token}#user">User</a>
@@ -6487,9 +6547,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="note_details.html">
-  <div class="gb_window_part_center">Help: Note Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Note Details'"/>
+    <xsl:with-param name="type" select="'note'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -6499,7 +6562,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_NOTES'"/>
       </xsl:call-template>
 
-      <h1>Note Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#note">Note</a>.
@@ -6519,13 +6581,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="notes.html">
-  <div class="gb_window_part_center">Help: Notes
-    <a href="/omp?cmd=get_notes&amp;token={/envelope/token}"
-       title="Notes" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Notes"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Notes'"/>
+    <xsl:with-param name="type" select="'note'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -6536,7 +6597,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="notes"></a>
-      <h1>Notes</h1>
       <p>
        This table provides an overview of all
        <a href="glossary.html?token={/envelope/token}#note">notes</a> and summarizes
@@ -6622,8 +6682,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="performance.html">
-  <div class="gb_window_part_center">Help: Performance</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Performance'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
@@ -6635,7 +6698,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="performance"></a>
-      <h1>Performance</h1>
       <p>
        This page provides a system performance overview.
       </p>
@@ -6650,13 +6712,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="reports.html">
-  <div class="gb_window_part_center">Help: Reports
-    <a href="/omp?cmd=get_reports&amp;overrides=1&amp;token={/envelope/token}"
-       title="Reports" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Reports"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Reports'"/>
+    <xsl:with-param name="type" select="'reports'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -6667,7 +6728,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="reports"></a>
-      <h1>Reports</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#report">reports</a> and summarizes
@@ -6965,13 +7025,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="results.html">
-  <div class="gb_window_part_center">Help: Results
-    <a href="/omp?cmd=get_results&amp;overrides=1&amp;token={/envelope/token}"
-       title="Results" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Results"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Results'"/>
+    <xsl:with-param name="type" select="'results'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -6982,7 +7041,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="results"></a>
-      <h1>Results</h1>
       <p>
        This table provides an overview of all
        <a href="glossary.html?token={/envelope/token}#result">result</a> and summarizes
@@ -7071,13 +7129,15 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="standard_actions.html">
-  <div class="gb_window_part_center">Help: Standard Actions</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Standard Actions'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Standard Actions</h1>
       <p>
         This table summarizes various standard actions that are applicable to most resources.
         Examples for resource types are Target, Task and Schedule.
@@ -7130,14 +7190,16 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="trashcan.html">
-  <div class="gb_window_part_center">Help: Trashcan</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Trashcan'"/>
+  </xsl:call-template>
+
+  <div class="selection-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Trashcan</h1>
       <p>
         This page lists all resources that are currently in the trashcan.
         The listing is grouped by resource type.
@@ -7173,19 +7235,17 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cvss_calculator.html">
-  <div class="gb_window_part_center">Help: CVSS Calculator
-      <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">
-        <img src="/img/new.png" title="CVSS Calculator" alt="CVSS Calculator"/>
-      </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CVSS Calculator'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
 
       <a name="cvss_calculator"></a>
-      <h1>CVSS Calculator</h1>
       <p>
         This page provides an easy to use
         <a href="glossary.html?token={/envelope/token}#cvss">CVSS</a>
@@ -7226,8 +7286,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="os_details.html">
-  <div class="gb_window_part_center">Help: Operating System Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Operating System Details'"/>
+    <xsl:with-param name="asset-type" select="'os'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7237,7 +7301,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_ASSETS'"/>
       </xsl:call-template>
 
-      <h1>Operating System Details</h1>
       <p>
         Provides detailed information about an Operating System.
         This includes the name, title, severity, hosts and the last update time of
@@ -7262,13 +7325,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="oss.html">
-  <div class="gb_window_part_center">Help: Operating Systems
-    <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"
-       title="Operating Systems" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Operating Systems"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Operating Systems'"/>
+    <xsl:with-param name="asset-type" select="'os'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7278,7 +7340,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_ASSETS'"/>
       </xsl:call-template>
 
-      <h1>Operating Systems</h1>
       <p>
         This table provides an overview of all the Operating Systems
         found in the
@@ -7355,9 +7416,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="override_details.html">
-  <div class="gb_window_part_center">Help: Override Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Override Details'"/>
+    <xsl:with-param name="asset-type" select="'override'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7367,7 +7431,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_OVERRIDES'"/>
       </xsl:call-template>
 
-      <h1>Override Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#override">Override</a>.
@@ -7387,13 +7450,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="overrides.html">
-  <div class="gb_window_part_center">Help: Overrides
-    <a href="/omp?cmd=get_overrides&amp;token={/envelope/token}"
-       title="Overrides" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Overrides"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Overrides'"/>
+    <xsl:with-param name="asset-type" select="'override'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7404,7 +7466,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="overrides"></a>
-      <h1>Overrides</h1>
       <p>
        This table provides an overview of all
        <a href="glossary.html?token={/envelope/token}#override">overrides</a> and summarizes
@@ -7499,8 +7560,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="filtering.html">
-  <div class="gb_window_part_center">Help: Filtering Actions</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Filtering Actions'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7513,14 +7577,15 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="powerfilter.html">
-  <div class="gb_window_part_center">Help: Powerfilter
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Powerfilter'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Powerfilter</h1>
       <p>
         A powerfilter describes how to reduce a list
         of items to a smaller list.  This filtering is
@@ -7872,8 +7937,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="task_details.html">
-  <div class="gb_window_part_center">Help: Task Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Task Details'"/>
+    <xsl:with-param name="asset-type" select="'task'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
@@ -7884,7 +7953,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TASKS'"/>
       </xsl:call-template>
 
-      <h1>Task Details</h1>
       <p>
        This information dialog lists the details of a task.
       </p>
@@ -7928,8 +7996,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_details.html">
-  <div class="gb_window_part_center">Help: Scan Config Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config Details'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -7939,7 +8011,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_CONFIGS'"/>
       </xsl:call-template>
 
-      <h1>Scan Config Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#config">Scan Config</a> together with the
@@ -8053,8 +8124,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_editor.html">
-  <div class="gb_window_part_center">Help: Scan Config Editor</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config Editor'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8067,7 +8142,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
       </xsl:call-template>
 
-      <h1>Scan Config Editor</h1>
       <p>
        The Scan Config Editor allows modification of all parameters of a
        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
@@ -8220,8 +8294,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_editor_nvt_families.html">
-  <div class="gb_window_part_center">Help: Scan Config Editor NVT Families</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config Editor NVT Families'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8235,7 +8313,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="editconfigfamilydetails"></a>
-      <h1>Edit Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
        family in a <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
@@ -8299,8 +8376,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_editor_nvt.html">
-  <div class="gb_window_part_center">Help: Scan Config editor NVT</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config Editor NVT'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8313,7 +8394,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
       </xsl:call-template>
 
-      <h1>Edit Scan Config NVT Details</h1>
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
@@ -8369,8 +8449,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_family_details.html">
-  <div class="gb_window_part_center">Help: Scan Config Family Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config Family Details'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8381,7 +8465,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="configfamilydetails"></a>
-      <h1>Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
        family in a <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>.
@@ -8432,8 +8515,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="config_nvt_details.html">
-  <div class="gb_window_part_center">Help: Scan Config NVT Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Scan Config NVT Details'"/>
+    <xsl:with-param name="asset-type" select="'scan_config'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8443,7 +8530,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_CONFIGS'"/>
       </xsl:call-template>
 
-      <h1>Scan Config NVT Details</h1>
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
@@ -8490,9 +8576,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="tag_details.html">
-  <div class="gb_window_part_center">Help: Tag Details
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Tag Details'"/>
+    <xsl:with-param name="asset-type" select="'tag'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8502,7 +8591,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TAGS'"/>
       </xsl:call-template>
 
-      <h1>Tag Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#tag">Tag</a>.
@@ -8520,11 +8608,14 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="target_details.html">
-  <div class="gb_window_part_center">Help: Target Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Target Details'"/>
+    <xsl:with-param name="type" select="'target'"/>
+  </xsl:call-template>
+
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
-    | <a href="targets.html?token={/envelope/token}">Targets Table</a>
+    | <a href="targets.html?token={/envelope/token}">Targets</a>
     | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
     </div>
     <div style="text-align:left">
@@ -8535,7 +8626,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TARGETS'"/>
       </xsl:call-template>
 
-      <h1>Target Details</h1>
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#target">Target</a>.
@@ -8551,17 +8641,15 @@ Public License instead of this License.
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
     </div>
-  </div>
 </xsl:template>
 
 <xsl:template mode="help" match="tags.html">
-  <div class="gb_window_part_center">Help: Tags
-    <a href="/omp?cmd=get_tags&amp;token={/envelope/token}"
-       title="Tags" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tags"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Tags'"/>
+    <xsl:with-param name="type" select="'tag'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8571,7 +8659,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TAGS'"/>
       </xsl:call-template>
 
-      <h1>Tags</h1>
       <p>
        This table provides an overview of all
        <a href="glossary.html?token={/envelope/token}#tag">tags</a> and summarizes
@@ -8634,8 +8721,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="user-tags.html">
-  <div class="gb_window_part_center">Help: User Tags list</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'User Tags List'"/>
+    <xsl:with-param name="asset-type" select="'tag'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8645,7 +8736,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_TAGS'"/>
       </xsl:call-template>
 
-      <h1>User Tags</h1>
       <p>
        This table provides an overview of all active
        <a href="glossary.html?token={/envelope/token}#tag">tags</a>
@@ -8702,8 +8792,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="targets.html">
-  <div class="gb_window_part_center">Help: Targets</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Targets'"/>
+    <xsl:with-param name="type" select="'target'"/>
+  </xsl:call-template>
+
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="filtering.html?token={/envelope/token}">Filtering</a>
@@ -8711,14 +8804,13 @@ Public License instead of this License.
     | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
     </div>
     <div style="text-align:left">
-
+ 
       <br/>
-
+ 
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_TARGETS'"/>
       </xsl:call-template>
-
-      <h1>Targets Table</h1>
+ 
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#target">Targets</a>.
@@ -8726,9 +8818,9 @@ Public License instead of this License.
        are shown (name, comment and hosts).
        If credentials are linked to the target, they are listed as well.
       </p>
-
+ 
       <xsl:call-template name="sorting"/>
-
+ 
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td>Column</td>
@@ -8767,20 +8859,18 @@ Public License instead of this License.
           <td>Associated ESXi credential, that can be clicked on to view details.</td>
         </tr>
       </table>
-
+ 
       <xsl:call-template name="hosts_note"/>
     </div>
-  </div>
 </xsl:template>
 
 <xsl:template mode="help" match="tasks.html">
-  <div class="gb_window_part_center">Help: Tasks
-    <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-       title="Tasks" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tasks"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Tasks'"/>
+    <xsl:with-param name="asset-type" select="'task'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -8791,7 +8881,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="tasks"></a>
-      <h1>Tasks</h1>
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#task">tasks</a> and summarizes
@@ -9234,8 +9323,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="trashcan.html">
-  <div class="gb_window_part_center">Help: Trashcan</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Trashcan'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
@@ -9244,7 +9336,6 @@ Public License instead of this License.
 
       <xsl:call-template name="trashcan-availability"/>
 
-      <h1>Trashcan</h1>
       <p>
         This page lists all resources that are currently in the trashcan.
         The listing is grouped by resource type.
@@ -9280,12 +9371,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="result_details.html">
-  <div class="gb_window_part_center">Help: Result Details
-    <a href="/omp?cmd=get_result&amp;result_id=cb291ec0-1b0d-11df-8aa1-002264764cea&amp;token={/envelope/token}">
-      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Result Details'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -9295,7 +9385,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_RESULTS'"/>
       </xsl:call-template>
 
-      <h1>Result Details</h1>
       <p>
         Provides detailed information about a Result.
         This includes the vulnerability, severity, host, location and any
@@ -9319,8 +9408,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="view_report.html">
-  <div class="gb_window_part_center">Help: View Report</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'View Reports'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
@@ -9332,7 +9424,6 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="viewreport"></a>
-      <h1>View Report</h1>
       <p>
        This "View Report" page summarizes all information the selected
        <a href="/help/glossary.html?token={/envelope/token}#report">report</a> contains.
@@ -9464,8 +9555,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cpes.html">
-  <div class="gb_window_part_center">Help: CPEs</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CPEs'"/>
+    <xsl:with-param name="info-type" select="'cpe'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
@@ -9480,7 +9575,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>CPEs</h1>
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#cpe">CPEs</a> and summarizes
@@ -9544,8 +9638,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cves.html">
-  <div class="gb_window_part_center">Help: CVEs</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CVEs'"/>
+    <xsl:with-param name="info-type" select="'cve'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
@@ -9559,8 +9657,6 @@ Public License instead of this License.
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
-
-      <h1>CVEs</h1>
 
       <p>
         This table provides an overview of all
@@ -9661,8 +9757,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="nvt_details.html">
-  <div class="gb_window_part_center">Help: NVT Details</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'NVT Details'"/>
+    <xsl:with-param name="info-type" select="'nvt'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
@@ -9672,7 +9772,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>NVT Details</h1>
       <p>
         A page that provides detailed information about a NVT.
         This includes creation and modification dates, summary, vulnerability
@@ -9689,8 +9788,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="nvts.html">
-  <div class="gb_window_part_center">Help: NVTs</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'NVTs'"/>
+    <xsl:with-param name="info-type" select="'nvt'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
@@ -9704,8 +9807,6 @@ Public License instead of this License.
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
-
-      <h1>NVTs</h1>
 
       <p>
         This table provides an overview of all
@@ -9778,8 +9879,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="ovaldefs.html">
-  <div class="gb_window_part_center">Help: OVAL Definitions</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'OVAL Definitions'"/>
+    <xsl:with-param name="info-type" select="'ovaldefs'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
@@ -9794,7 +9899,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>OVAL Definitions</h1>
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definitions</a> and summarizes
@@ -9874,8 +9978,12 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cert_bund_advs.html">
-  <div class="gb_window_part_center">Help: CERT-Bund Advisories</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'CERT-Bund Advisories'"/>
+    <xsl:with-param name="info-type" select="'certbund'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
@@ -9890,7 +9998,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>CERT-Bund Advisories</h1>
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#cert_bund_adv">CERT-Bund Advisories</a>
@@ -9988,6 +10095,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="dfn_cert_advs.html">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'DFN-CERT Advisories'"/>
+    <xsl:with-param name="info-type" select="'dfncert'"/>
+  </xsl:call-template>
+
   <div class="gb_window_part_center">Help: DFN-CERT Advisories</div>
   <div class="gb_window_part_content">
     <div style="float:left;">
@@ -10004,7 +10116,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>DFN-CERT Advisories</h1>
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisories</a>
@@ -10084,7 +10195,11 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="allinfo.html">
-  <div class="gb_window_part_center">Help: All SecInfo</div>
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'All SecInfo'"/>
+    <xsl:with-param name="info-type" select="'allinfo'"/>
+  </xsl:call-template>
+
   <div class="gb_window_part_content">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -10099,8 +10214,6 @@ Public License instead of this License.
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
-
-      <h1>All SecInfo</h1>
 
       <p>
         This table provides an overview of all SecInfo related entries (
@@ -10159,16 +10272,17 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="qod.html">
-  <div class="gb_window_part_center">Help: Quality of Detection (QoD)</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Quality of Detection (QoD)'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
     <div style="text-align:left">
 
       <br/>
-
-      <h1>Quality of Detection (QoD)</h1>
 
       <p>
       The QoD is a value between 0% and 100% describing the

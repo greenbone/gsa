@@ -477,6 +477,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/note.svg
                src/html/classic/img/override.svg
                src/html/classic/img/slave.svg
+               src/html/classic/img/help.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png

@@ -1,3 +1,21 @@
+2015-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Introduce new style for help pages, compatible with the new style
+	of the overview pages.
+ 
+	* src/html/classic/img/help.svg: New.
+
+	* CMakeLists.txt: Install the new help icon.
+
+	* src/html/classic/css/gsa-style.css: Add definitions for h1 and h2 of
+	section-header where so far only h3 was defined. Also add an (so far)
+	empty section-box to be used in a box below a section header.
+	Finally added small-icon for 16x16 version of SVG icons.
+
+	* src/html/classic/help.xsl (help-header): New macro for the head of help pages.
+	Changed all of the pages to use the new header. Some links like for "new" dialogs
+	were removed as they don't make sense with the new gui.
+
 2015-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-targets-table): Set position of
