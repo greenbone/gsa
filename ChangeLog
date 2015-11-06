@@ -1,3 +1,16 @@
+2015-11-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Merge columns for individual credential types in targets table
+	into a single one with JS-based sort field selection.
+
+	* src/html/classic/omp.xsl (filter-window-part): Allow to hide columns
+	with a hide_in_filter element.
+	(list-window): Allow to hide column with hide_in_table element. Add
+	column headers without link if no field is given for a column.
+	Allow HTML additions for all top level column headers.
+	(html-targets-table, target): Merge columns for individual credential
+	types into a single one with JS-based sort field selection.
+
 2015-11-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/gsa-style.css, src/html/classic/omp.xsl,

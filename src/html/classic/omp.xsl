@@ -1198,6 +1198,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            <xsl:for-each select="exslt:node-set ($columns)/column">
              <xsl:variable name="single" select="count (column) = 0"/>
              <xsl:choose>
+               <xsl:when test="boolean (hide_in_filter)"/>
                <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
                  <option value="{$sort}" selected="1">
                    <xsl:value-of select="name"/>
@@ -4600,7 +4601,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <!-- Generate given column headings. -->
               <xsl:for-each select="exslt:node-set ($columns)/column">
                 <xsl:choose>
-                  <xsl:when test="count (column) = 0">
+                  <xsl:when test="boolean (hide_in_table)"/>
+                  <xsl:when test="count (column) = 0 and field != ''">
                     <!-- Single column. -->
                     <td rowspan="2">
                       <xsl:copy-of select="html/before/*"/>
@@ -4618,10 +4620,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:copy-of select="html/after/*"/>
                     </td>
                   </xsl:when>
+                  <xsl:when test="count (column) = 0">
+                    <!-- Single column without a sort field. -->
+                    <td rowspan="2">
+                      <xsl:copy-of select="html/before/*"/>
+                      <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
+                      <xsl:copy-of select="html/after/*"/>
+                    </td>
+                  </xsl:when>
                   <xsl:otherwise>
                     <!-- Column with subcolumns. -->
                     <td colspan="{count (column)}">
+                      <xsl:copy-of select="html/before/*"/>
                       <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
+                      <xsl:copy-of select="html/after/*"/>
                     </td>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -12505,18 +12517,60 @@ should not have received it.
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Credentials', 'Credential')"/></name>
-        <column>
-          <name><xsl:value-of select="gsa:i18n('SSH', 'Target|Credential')"/></name>
-          <field>ssh_credential</field>
-        </column>
-        <column>
-          <name><xsl:value-of select="gsa:i18n('SMB', 'Target|Credential')"/></name>
-          <field>smb_credential</field>
-        </column>
-        <column>
-          <name><xsl:value-of select="gsa:i18n('ESXi', 'Target|Credential')"/></name>
-          <field>esxi_credential</field>
-        </column>
+        <hide_in_filter>1</hide_in_filter>
+        <html>
+          <after>
+            <span style="font-size:80%; color:silver"><xsl:text> - sort by: </xsl:text></span>
+            <span>
+              <xsl:variable name="credential_sort_keyword" select="/envelope/get_targets/get_targets_response/filters/keywords/keyword[column='sort' or column='sort-reverse']/value"/>
+              <select name="sort_credential_type" onChange="select_credential_type ()">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ssh_credential'"/>
+                  <xsl:with-param name="content" select="'SSH'"/>
+                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'smb_credential'"/>
+                  <xsl:with-param name="content" select="'SMB'"/>
+                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'esxi_credential'"/>
+                  <xsl:with-param name="content" select="'ESXi'"/>
+                  <xsl:with-param name="select-value" select="$credential_sort_keyword"/>
+                </xsl:call-template>
+              </select>
+              <a id="sort_by_credential_asc" href="#" title="{gsa:i18n ('Ascending', 'Filter')}"><img src="/img/upload.png"/></a>
+              <a id="sort_by_credential_desc" href="#" title="{gsa:i18n ('Descending', 'Filter')}"><img src="/img/download.png"/></a>
+            </span>
+            <script type="text/javascript">
+              var credential_url_prefix = '/omp?cmd=get_targets&amp;filter=';
+              var credential_url_suffix = '%20<xsl:value-of select="gsa:escape-js (str:encode-uri (/envelope/get_targets/get_targets_response/filters/term, true()))"/>&amp;token=<xsl:value-of select="gsa:escape-js (/envelope/token)"/>';
+              function select_credential_type ()
+                {
+                  var type = $('select[name=sort_credential_type]').val ();
+                  $('#sort_by_credential_asc').attr ('href', credential_url_prefix + "sort=" + type + credential_url_suffix);
+                  $('#sort_by_credential_desc').attr ('href', credential_url_prefix + "sort-reverse=" + type + credential_url_suffix);
+                }
+              select_credential_type ();
+            </script>
+          </after>
+        </html>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('SSH Credential', 'Target Credential')"/></name>
+        <hide_in_table>1</hide_in_table>
+        <field>ssh_credential</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('SMB Credential', 'Target Credential')"/></name>
+        <hide_in_table>1</hide_in_table>
+        <field>smb_credential</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('ESXi Credential', 'Target Credential')"/></name>
+        <hide_in_table>1</hide_in_table>
+        <field>esxi_credential</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -12615,49 +12669,68 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
-          <xsl:value-of select="ssh_credential/name"/>
-        </xsl:when>
-        <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="ssh_credential/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="ssh_credential/name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
-          <xsl:value-of select="smb_credential/name"/>
-        </xsl:when>
-        <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="smb_credential/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="smb_credential/name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
-          <xsl:value-of select="esxi_credential/name"/>
-        </xsl:when>
-        <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="esxi_credential/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="esxi_credential/name"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <table>
+        <xsl:if test="ssh_credential/@id != ''">
+          <tr>
+            <td width="35">SSH:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
+                  <xsl:value-of select="ssh_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="ssh_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="ssh_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="smb_credential/@id != ''">
+          <tr>
+            <td>SMB:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
+                  <xsl:value-of select="smb_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="smb_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="smb_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="esxi_credential/@id != ''">
+          <tr>
+            <td>ESXi:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
+                  <xsl:value-of select="esxi_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="esxi_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="esxi_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+      </table>
     </td>
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
