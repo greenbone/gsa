@@ -473,6 +473,9 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg
                src/html/classic/img/tag.svg
+               src/html/classic/img/user.svg
+               src/html/classic/img/group.svg
+               src/html/classic/img/role.svg
                src/html/classic/img/filter.svg
                src/html/classic/img/note.svg
                src/html/classic/img/override.svg
