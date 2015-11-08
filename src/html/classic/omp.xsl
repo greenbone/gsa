@@ -2380,39 +2380,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </xsl:variable>
     <div class="gb_window">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center">
-        <xsl:value-of select="$title_shortened"/>
-        <xsl:text> </xsl:text>
-        <xsl:choose>
-          <xsl:when test="$permissions/permission_count/filtered != 0">
-            <xsl:value-of select="$permissions/permission_count/filtered"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('none', 'Permissions')"/>
-          </xsl:otherwise>
-        </xsl:choose>
+      <div class="section-header">
+        <a href="#"
+           class="toggle-action-icon" data-target="#permission-box" data-name="Permissions" data-variable="permission-box--collapsed">
+            <img src="/img/fold.png"/>
+        </a>
+        <a href="/help/resource_permissions.html?token={/envelope/token}"
+           class="icon"
+           title="Help: Resource Permissions">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
         <xsl:choose>
           <xsl:when test="gsa:may-op ('create_permission')">
             <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-               class="last new-action-icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
+               class="last new-action-icon icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
                title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
               <img src="/img/new.png" border="0" style="margin-left:3px;"/>
             </a>
           </xsl:when>
           <xsl:otherwise/>
         </xsl:choose>
-        <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Permissions', 'Permission')}">
-          <img style="margin-left:3px" src="/img/list.png"/>
-        </a>
-        <a href="/help/resource_permissions.html?token={/envelope/token}"
-           title="Help: Resource Permissions">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
+        <h3>
+          <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Permissions', 'Permission')}">
+            <img id="small-icon" src="/img/permission.svg" border="0" style="margin-right:5px" alt="Permissions"/>
+          </a>
+          <xsl:value-of select="$title_shortened"/>
+          <xsl:text> </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$permissions/permission_count/filtered != 0">
+              (<xsl:value-of select="$permissions/permission_count/filtered"/>)
+            </xsl:when>
+            <xsl:otherwise>
+              (<xsl:value-of select="gsa:i18n ('none', 'Permissions')"/>)
+            </xsl:otherwise>
+          </xsl:choose>
+        </h3>
       </div>
-      <div class="gb_window_part_content">
+      <div class="section-box" id="permission-box">
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>

@@ -1430,6 +1430,11 @@ text-align:right;
   float: right;
 }
 
+.section-header .icon {
+  float: right;
+  margin-right: 5px;
+}
+
 #section-box {
 }
 
