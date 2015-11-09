@@ -2021,27 +2021,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <br/>
   <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="$title_shortened"/>
-      <xsl:text> </xsl:text>
-      <xsl:choose>
-        <xsl:when test="$user_tags/count != 0">
-          <xsl:value-of select="$user_tags/count"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('none', 'Tags')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+    <div class="section-header" style="margin-bottom=5px">
+      <a href="#"
+         class="toggle-action-icon" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
+        <img src="/img/fold.png"/>
+      </a>
+      <a href="/help/user-tags.html?token={/envelope/token}"
+         class="icon"
+         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
+        <img style="margin-left:5px" src="/img/help.png"/>
+      </a>
         <xsl:choose>
           <xsl:when test="not (gsa:may-op ('create_tag'))"/>
           <xsl:when test="$report_section != ''">
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
                title="{gsa:i18n ('New tag', 'Tag')}"
                style="margin-left:3px;"
-               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:when>
@@ -2049,7 +2045,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('New Tag', 'Tag')}"
                style="margin-left:3px;"
-               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
+               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:when>
@@ -2057,18 +2053,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="{gsa:i18n ('New Tag', 'Tag')}"
                style="margin-left:3px;"
-               class="new-action-icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
               <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
-      </div>
-      <a href="/help/user-tags.html?token={/envelope/token}"
-         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
-        <img src="/img/help.png"/>
-      </a>
+      <h3>
+        <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Tags', 'Tags')}">
+          <img id="small-icon" src="/img/tag.svg" border="0" style="margin-right:5px" alt="Tags"/>
+        </a>
+        <xsl:value-of select="$title_shortened"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$user_tags/count != 0">
+            (<xsl:value-of select="$user_tags/count"/>)
+          </xsl:when>
+          <xsl:otherwise>
+            (<xsl:value-of select="gsa:i18n ('none', 'Tags')"/>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
     </div>
-    <div class="gb_window_part_content">
+
+    <div class="section-box" id="usertags-box">
       <xsl:if test="count(//delete_tag_response[@status!=200]|//modify_tag_response[@status!=200]|//create_tag_response[@status!=201]) = 0">
         <a name="user_tags"/>
       </xsl:if>
@@ -2417,6 +2425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </h3>
       </div>
+
       <div class="section-box" id="permission-box">
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
