@@ -7570,14 +7570,40 @@ append_alert_condition_data (GString *xml, params_t *data,
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (condition, "Severity at least") == 0
-             && strcmp (name, "severity") == 0)
-            || (strcmp (condition, "Severity changed") == 0
-             && strcmp (name, "direction") == 0))
-          xml_string_append (xml,
-                             "<data><name>%s</name>%s</data>",
-                             name,
-                             param->value ? param->value : "");
+        {
+          if (strcmp (condition, "Filter count at least") == 0)
+            {
+              if (strcmp (name, "at_least_count") == 0)
+                xml_string_append (xml,
+                                   "<data><name>count</name>%s</data>",
+                                   param->value ? param->value : "");
+              if (strcmp (name, "at_least_filter_id") == 0)
+                xml_string_append (xml,
+                                   "<data><name>filter_id</name>%s</data>",
+                                   param->value ? param->value : "");
+            }
+          else if (strcmp (condition, "Filter count changed") == 0)
+            {
+              if (strcmp (name, "count") == 0
+                  || strcmp (name, "filter_id") == 0)
+                xml_string_append (xml,
+                                   "<data><name>%s</name>%s</data>",
+                                   name,
+                                   param->value ? param->value : "");
+              else if (strcmp (name, "filter_direction") == 0)
+                xml_string_append (xml,
+                                   "<data><name>direction</name>%s</data>",
+                                   param->value ? param->value : "");
+            }
+          else if ((strcmp (condition, "Severity at least") == 0
+                    && strcmp (name, "severity") == 0)
+                   || (strcmp (condition, "Severity changed") == 0
+                       && strcmp (name, "direction") == 0))
+            xml_string_append (xml,
+                               "<data><name>%s</name>%s</data>",
+                               name,
+                               param->value ? param->value : "");
+        }
     }
 }
 
@@ -7888,6 +7914,7 @@ get_alert (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
+
   if (command_enabled (credentials, "GET_TASKS"))
     {
       gchar *response;
@@ -7924,7 +7951,6 @@ get_alert (credentials_t * credentials, params_t *params,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
-                                 "It is unclear whether the task has been saved or not. "
                                  "Diagnostics: Internal Error.",
                                  "/omp?cmd=get_alerts", response_data);
         }
@@ -7934,6 +7960,55 @@ get_alert (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
+
+  if (command_enabled (credentials, "GET_FILTERS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      /* Get result filters for condition link. */
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_filters"
+                   " filter=\"type=result rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alert. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_alerts", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alert. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_alerts", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alert. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_alerts", response_data);
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"",
                   response_data);
   g_string_free (extra, TRUE);
@@ -8019,6 +8094,56 @@ get_alerts (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
+
+
+  if (command_enabled (credentials, "GET_FILTERS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      /* Get result filters for condition link. */
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<get_filters"
+                   " filter=\"type=result rows=-1\"/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alerts. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_tasks", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alerts. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_tasks", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting filters "
+                                 "for the alerts. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_tasks", response_data);
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   if (extra_xml)
     g_string_append (extra, extra_xml);
   html = get_many ("alert", credentials, params, extra->str, NULL,
