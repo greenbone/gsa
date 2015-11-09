@@ -1,5 +1,10 @@
 2015-11-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl (match="target" mode="details"): Turn "Tasks using this Target"
+	into a new section style.
+
+2015-11-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (user-tags-window-checked): Replace "gb_window"
 	style by the section style with a horizontal line. Moved the icons right
 	hand above the line. Made the section collapsable.

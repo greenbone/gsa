@@ -13190,41 +13190,62 @@ should not have received it.
           </tr>
         </xsl:if>
       </table>
-
-      <xsl:choose>
-        <xsl:when test="count(tasks/task) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>: <xsl:value-of select="gsa:i18n ('None', 'Tasks')"/></h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="tasks/task">
-              <tr class="{gsa:table-row-class(position())}">
-                <xsl:choose>
-                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <td>
-                      <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                        <xsl:value-of select="name"/>
-                      </a>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
     </div>
   </div>
+
+  <div class="gb_window">
+    <div class="section-header">
+      <a href="#"
+         class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Target" data-variable="using-box--collapsed">
+          <img src="/img/fold.png"/>
+      </a>
+      <h3>
+        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Tasks', 'Tasks')}">
+          <img id="small-icon" src="/img/task.svg" border="0" style="margin-right:5px" alt="Tasks"/>
+        </a>
+        <xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="count(tasks/task) != 0">
+            (<xsl:value-of select="count(tasks/task)"/>)
+          </xsl:when>
+          <xsl:otherwise>
+            (<xsl:value-of select="gsa:i18n ('none', 'Targets')"/>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
+    </div>
+
+    <div class="section-box" id="using-box">
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        </tr>
+        <xsl:for-each select="tasks/task">
+          <tr class="{gsa:table-row-class(position())}">
+            <xsl:choose>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td>
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'target'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'target'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
