@@ -5981,6 +5981,16 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       privacy_algorithm ? privacy_algorithm : "",
                       auth_algorithm ? auth_algorithm : "");
         }
+      else
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new credential. "
+                               "The credential could not be created. "
+                               "Diagnostics: Unrecognized credential type.",
+                               "/omp?cmd=get_credentials", response_data);
+        }
     }
 
   /* Create the credential. */

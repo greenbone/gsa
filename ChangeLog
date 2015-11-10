@@ -1,5 +1,10 @@
 2015-11-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (create_credential_omp): Add error message in case
+	type passes validation but is not handled by the function.
+
+2015-11-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add new SNMP credential type.  Simplify use of "New Credential" dialog
 	by removing duplicate fields and showing only those relevant to the
 	selected type.
