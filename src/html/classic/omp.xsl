@@ -7273,7 +7273,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Updates handled in greenbone.js:newCredentialUpdateForm()
               to avoid eval() of inline scripts by jQuery.
             -->
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
             <td>
               <select name="base" onChange="newCredentialUpdateForm()">
                 <xsl:call-template name="opt">
