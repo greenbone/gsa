@@ -7262,13 +7262,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
-            <td>
-              <input type="text" name="credential_login" value="" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" value="" size="30"
@@ -7276,92 +7269,122 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td></td>
+            <!--
+              Updates handled in greenbone.js:newCredentialUpdateForm()
+              to avoid eval() of inline scripts by jQuery.
+            -->
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
-              <table>
-                <tr>
-                  <td colspan="3">
-                    <label>
-                      <input type="radio" name="base" value="gen_up"/>
-                      <xsl:value-of select="gsa:i18n ('Autogenerate password', 'Credential')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <label>
-                      <input type="radio" name="base" value="gen_usk"/>
-                      <xsl:value-of select="gsa:i18n ('Autogenerate SSH key pair', 'Credential')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <label>
-                      <input type="radio" name="base" value="up" checked="1"/>
-                      <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-                    </label>
-                  </td>
-                  <td>
-                    <input type="password" autocomplete="off"
-                           name="lsc_password" value="" size="30"
-                           maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <label>
-                      <input type="radio" name="base" value="usk"/>
-                      <xsl:value-of select="gsa:i18n ('Key pair', 'Auth Data')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td>
-                    <xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/>
-                  </td>
-                  <td>
-                    <input type="file" name="private_key" size="30"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td>
-                    <xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/>
-                  </td>
-                  <td>
-                    <input type="password" autocomplete="off" name="passphrase"
-                           value="" size="30" maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <label>
-                      <input type="radio" name="base" value="cc"/>
-                      <xsl:value-of select="gsa:i18n ('Client Certificate', 'Auth Data')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td>
-                    <xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/>
-                  </td>
-                  <td>
-                    <input type="file" name="cc_private_key" size="30"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td>
-                    <xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/>
-                  </td>
-                  <td>
-                    <input type="file" name="cc_certificate" size="30"/>
-                  </td>
-                </tr>
-              </table>
+              <select name="base" onChange="newCredentialUpdateForm()">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'up'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'usk'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + SSH Key', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cc'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Client Certificate', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'snmp'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('SNMP', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <tr id="autogenerate_row">
+            <!--
+              Updates handled in greenbone.js:newCredentialUpdateForm()
+              to avoid eval() of inline scripts by jQuery.
+            -->
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></td>
+            <td>
+              <label>
+                <input name="autogenerate" value="1" type="radio" onChange="newCredentialUpdateForm()"/>
+                <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+              </label>
+              <label>
+                <input name="autogenerate" value="0" type="radio" onChange="newCredentialUpdateForm()" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" height="10"></td>
+          </tr>
+          <tr id="community_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
+            <td>
+              <input type="password" name="community" size="30"/>
+            </td>
+          </tr>
+          <tr id="login_row">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></td>
+            <td>
+              <input type="text" name="credential_login" size="30"/>
+            </td>
+          </tr>
+          <tr id="password_row">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
+            <td>
+              <input type="password" name="lsc_password" size="30"/>
+            </td>
+          </tr>
+          <tr id="priv_password_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
+            <td>
+              <input type="password" name="privacy_password" size="30"/>
+            </td>
+          </tr>
+          <tr id="certificate_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
+            <td>
+              <input type="file" name="certificate" size="30"/>
+            </td>
+          </tr>
+          <tr id="private_key_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></td>
+            <td>
+              <input type="file" name="private_key" size="30"/>
+            </td>
+          </tr>
+          <tr id="passphrase_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
+            <td>
+              <input type="password" name="passphrase" size="30"/>
+            </td>
+          </tr>
+          <tr id="auth_algo_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
+            <td>
+              <label>
+                <input name="auth_algorithm" value="md5" type="radio"/>
+                MD5
+              </label>
+              <label>
+                <input name="auth_algorithm" value="sha1" type="radio" checked="1"/>
+                SHA1
+              </label>
+            </td>
+          </tr>
+          <tr id="priv_algo_row" style="display:none;">
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
+            <td>
+              <label>
+                <input name="privacy_algorithm" value="aes" type="radio" checked="1"/>
+                AES
+              </label>
+              <label>
+                <input name="privacy_algorithm" value="des" type="radio"/>
+                DES
+              </label>
             </td>
           </tr>
           <tr>
@@ -7712,6 +7735,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
             <td><xsl:value-of select="login"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="type = 'snmp'">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Auth Data')"/>:</td>
+            <td><xsl:value-of select="auth_algorithm"/></td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/>:</td>
+            <td><xsl:value-of select="privacy/algorithm"/></td>
           </tr>
         </xsl:if>
       </table>

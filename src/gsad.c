@@ -1142,6 +1142,7 @@ init_validator ()
   openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
   openvas_validator_add (validator, "asset_type",   "host|os");
   openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
+  openvas_validator_add (validator, "auth_algorithm",   "^(md5)|(sha1)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
@@ -1150,8 +1151,7 @@ init_validator ()
   openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   openvas_validator_add (validator, "caller",     "^.*$");
-  openvas_validator_add (validator, "cc_certificate",   "(?s)^.*$");
-  openvas_validator_add (validator, "cc_private_key",   "(?s)^.*$");
+  openvas_validator_add (validator, "certificate",   "(?s)^.*$");
   openvas_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
@@ -1262,6 +1262,7 @@ init_validator ()
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
+  openvas_validator_add (validator, "privacy_algorithm",   "^(aes)|(des)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
@@ -1355,6 +1356,7 @@ init_validator ()
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_min_qod", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
+  openvas_validator_alias (validator, "autogenerate", "boolean");
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
   /* the "bulk_[...].x" parameters are used to identify the image type
@@ -1367,6 +1369,7 @@ init_validator ()
   openvas_validator_alias (validator, "charts", "boolean");
   openvas_validator_alias (validator, "chart_type", "name");
   openvas_validator_alias (validator, "chart_template", "name");
+  openvas_validator_alias (validator, "community", "lsc_password");
   openvas_validator_alias (validator, "custom_severity", "boolean");
   openvas_validator_alias (validator, "current_user", "boolean");
   openvas_validator_alias (validator, "dashboard_name", "name");
@@ -1465,6 +1468,7 @@ init_validator ()
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
   openvas_validator_alias (validator, "pos",               "number");
+  openvas_validator_alias (validator, "privacy_password", "lsc_password");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");

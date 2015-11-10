@@ -5794,7 +5794,9 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *login, *type, *password, *passphrase;
-  const char *private_key, *cc_certificate, *cc_private_key;
+  const char *private_key, *certificate, *community, *privacy_password;
+  const char *auth_algorithm, *privacy_algorithm;
+  int autogenerate;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -5804,102 +5806,184 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
-  cc_certificate = params_value (params, "cc_certificate");
-  cc_private_key = params_value (params, "cc_private_key");
+  certificate = params_value (params, "certificate");
+  community = params_value (params, "community");
+  privacy_password = params_value (params, "privacy_password");
+  auth_algorithm = params_value (params, "auth_algorithm");
+  privacy_algorithm = params_value (params, "privacy_algorithm");
+
+  if (params_value (params, "autogenerate"))
+    autogenerate = strcmp (params_value (params, "autogenerate"), "0");
+  else
+    {
+      gchar *msg;
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
+                            "Given autogenerate was invalid",
+                            "Create Credential");
+      html = new_credential (credentials, params, msg, response_data);
+      g_free (msg);
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      return html;
+    }
 
   CHECK_PARAM (name, "Create Credential", new_credential);
   CHECK_PARAM (comment, "Create Credential", new_credential);
   CHECK_PARAM (type, "Create Credential", new_credential);
 
-  if (type && (strcmp (type, "up") == 0))
+  if (autogenerate)
     {
-      CHECK_PARAM (login, "Create Credential", new_credential);
-      CHECK_PARAM (password, "Create Credential", new_credential);
+      if (type && (strcmp (type, "cc") == 0))
+        {
+          // Auto-generate types without username
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type);
+        }
+      else
+        {
+          // Auto-generate types with username
+          CHECK_PARAM (login, "Create Credential", new_credential);
+
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<login>%s</login>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      login);
+        }
     }
-  if (type && (strcmp (type, "usk") == 0))
+  else
     {
-      CHECK_PARAM (login, "Create Credential", new_credential);
-      CHECK_PARAM (passphrase, "Create Credential", new_credential);
-      CHECK_PARAM (private_key, "Create Credential", new_credential);
-    }
-  if (type && (strcmp (type, "cc") == 0))
-    {
-      CHECK_PARAM (cc_certificate, "Create Credential", new_credential);
-      CHECK_PARAM (cc_private_key, "Create Credential", new_credential);
+      if (type && (strcmp (type, "up") == 0))
+        {
+          CHECK_PARAM (login, "Create Credential", new_credential);
+          CHECK_PARAM (password, "Create Credential", new_credential);
+
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<login>%s</login>"
+                      "<password>%s</password>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      login ? login : "",
+                      password ? password : "");
+        }
+      else if (type && (strcmp (type, "usk") == 0))
+        {
+          CHECK_PARAM (login, "Create Credential", new_credential);
+          CHECK_PARAM (passphrase, "Create Credential", new_credential);
+          CHECK_PARAM (private_key, "Create Credential", new_credential);
+
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<login>%s</login>"
+                      "<key>"
+                      "<private>%s</private>"
+                      "<phrase>%s</phrase>"
+                      "</key>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      login ? login : "",
+                      private_key ? private_key : "",
+                      passphrase ? passphrase : "");
+        }
+      else if (type && (strcmp (type, "cc") == 0))
+        {
+          CHECK_PARAM (certificate, "Create Credential", new_credential);
+          CHECK_PARAM (private_key, "Create Credential", new_credential);
+
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<certificate>%s</certificate>"
+                      "<key>"
+                      "<private>%s</private>"
+                      "</key>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      certificate ? certificate : "",
+                      private_key ? private_key : "");
+
+        }
+      else if (type && (strcmp (type, "snmp") == 0))
+        {
+          CHECK_PARAM (community, "Create Credential", new_credential);
+          CHECK_PARAM (login, "Create Credential", new_credential);
+          CHECK_PARAM (password, "Create Credential", new_credential);
+          CHECK_PARAM (privacy_password, "Create Credential", new_credential);
+          CHECK_PARAM (auth_algorithm, "Create Credential", new_credential);
+          CHECK_PARAM (privacy_algorithm, "Create Credential", new_credential);
+
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<community>%s</community>"
+                      "<login>%s</login>"
+                      "<password>%s</password>"
+                      "<privacy>"
+                      "<password>%s</password>"
+                      "<algorithm>%s</algorithm>"
+                      "</privacy>"
+                      "<auth_algorithm>%s</auth_algorithm>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      community ? community : "",
+                      login ? login : "",
+                      password ? password : "",
+                      privacy_password ? privacy_password : "",
+                      privacy_algorithm ? privacy_algorithm : "",
+                      auth_algorithm ? auth_algorithm : "");
+        }
     }
 
   /* Create the credential. */
-
-  if (type && strcmp (type, "gen_up") == 0)
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<create_credential>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "<type>up</type>"
-                "</create_credential>",
-                name,
-                comment ? comment : "",
-                login);
-  else if (type && strcmp (type, "gen_usk") == 0)
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<create_credential>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "<type>usk</type>"
-                "</create_credential>",
-                name,
-                comment ? comment : "",
-                login);
-  else if (type && strcmp (type, "usk") == 0)
-    ret = ompf (credentials, &response, &entity, response_data,
-                "<create_credential>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "<key>"
-                "<private>%s</private>"
-                "<phrase>%s</phrase>"
-                "</key>"
-                "</create_credential>",
-                name, comment ?: "", login, private_key ?: "",
-                passphrase ?: "");
-  else if (type && strcmp (type, "cc") == 0)
-    ret = ompf (credentials, &response, &entity, response_data,
-                "<create_credential>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<type>cc</type>"
-                "<certificate>%s</certificate>"
-                "<key>"
-                "<private>%s</private>"
-                "</key>"
-                "</create_credential>",
-                name, comment ?: "",
-                cc_certificate ?: "", cc_private_key ?: "");
-  else
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<create_credential>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "<password>%s</password>"
-                "</create_credential>",
-                name,
-                comment ? comment : "",
-                login,
-                password ? password : "");
-
   switch (ret)
     {
       case 0:

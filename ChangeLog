@@ -1,3 +1,27 @@
+2015-11-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add new SNMP credential type.  Simplify use of "New Credential" dialog
+	by removing duplicate fields and showing only those relevant to the
+	selected type.
+
+	* src/gsad_omp.c (create_credential_omp): Add params for SNMP type and
+	separate autogenerate param.  Remove duplicate parameters for "cc"
+	type and restructure parameter checks and credential creation.
+
+	* src/gsad.c (init_validator): Add auth_algorithm, autogenerate,
+	certificate, community, privacy_algorithm, privacy_password.  Remove
+	cc_certificate and cc_private_key.
+
+	* src/html/classic/omp.xsl (html-create-credential-form): Add input
+	fields for SNMP and separate autogenerate selection.  Remove duplicate
+	fields for client certificate and show fields as appropriate for the
+	selected type and autogenerate setting using JS.
+	(credential [details]): Add "Auth Algorithm" and "Privacy Algorithm"
+	for SNMP credentials.
+
+	* src/html/classic/js/greenbone.js (newCredentialUpdateForm): New
+	function.
+
 2015-11-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (match="target" mode="details"): Turn "Tasks using this Target"

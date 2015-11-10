@@ -571,4 +571,49 @@
     startAutoRefresh();
   });
 
+  /*
+   * Page specific UI functions
+   */
+
+  /* Credentials */
+
+  /* Credential type selection */
+  window.newCredentialUpdateForm = function ()
+    {
+      var type, auto;
+      type = $('select[name="base"]').val();
+      auto = Boolean(Number($('input[name="autogenerate"]:checked').val()));
+
+      switch(type)
+        {
+          case "up":
+            $("#autogenerate_row, #login_row, #password_row").show();
+            $("#community_row, #certificate_row, #private_key_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+            break;
+          case "usk":
+            $("#autogenerate_row, #login_row, #private_key_row, #passphrase_row").show();
+            $("#community_row, #password_row, #certificate_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+            break;
+          case "cc":
+            $("#certificate_row, #private_key_row").show();
+            $("#community_row, #autogenerate_row, #login_row, #password_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+            auto = false;
+            break;
+          case "snmp":
+            $("#community_row, #login_row, #password_row, #priv_password_row, #auth_algo_row, #priv_algo_row").show();
+            $("#autogenerate_row, #certificate_row, #private_key_row, #passphrase_row").hide();
+            auto = false;
+            break;
+        }
+
+      if (auto)
+        {
+          $("#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input").attr("disabled", "1");
+        }
+      else
+        {
+          $("#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input").attr("disabled", null);
+        }
+    }
+
 }(window);
