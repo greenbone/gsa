@@ -1,3 +1,13 @@
+2015-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add alert method "Send", for sending the report to a TCP listener.
+
+	* src/gsad_omp.c (append_alert_method_data): Add Send cases.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add Send option.
+	(alert, alert [details]): Add Send cases.
+
 2015-11-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-credential-form): Drop

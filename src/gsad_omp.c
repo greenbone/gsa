@@ -7734,6 +7734,10 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
           while (params_iterator_next (&iter, &name, &param))
             if ((strcmp (method, "HTTP Get") == 0
                  && strcmp (name, "URL") == 0)
+                || (strcmp (method, "Send") == 0
+                    && (strcmp (name, "send_host") == 0
+                        || strcmp (name, "send_port") == 0
+                        || strcmp (name, "send_report_format") == 0))
                 || (strcmp (method, "verinice Connector") == 0
                     && (strcmp (name, "verinice_server_url") == 0
                         || strcmp (name, "verinice_server_username") == 0
