@@ -1,5 +1,15 @@
 2015-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Simplify the titles for permissions and user tags: The name of the
+	resource does not need to be mentioned again.
+
+	* src/html/classic/omp.xsl (user-tags-window-checked, user-tags-window):
+	Drop title and title_shortened.  Use static "User Tags" instead.
+	(resource-permissions-window): Drop title and title_shortened.  Use
+	static "Permissions" instead.
+
+2015-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (match="target" mode="details"): 
 	Turn "Target Details" into a new section style.
 

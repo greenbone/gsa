@@ -2005,19 +2005,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_id"/>
   <xsl:param name="next"/>
   <xsl:param name="report_section"/>
-  <xsl:param name="title"/>
   <xsl:param name="user_tags"/>
   <xsl:param name="tag_names"/>
-  <xsl:variable name="title_shortened">
-    <xsl:choose>
-      <xsl:when test="string-length($title) > 80">
-        <xsl:value-of select="substring($title, 0, 80)"/>[...]<xsl:if test="substring($title, string-length($title)-1, 1) = '&quot;'">&quot;</xsl:if>:
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$title"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
 
   <br/>
   <div class="gb_window">
@@ -2063,8 +2052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="{gsa:i18n ('Tags', 'Tags')}">
           <img id="small-icon" src="/img/tag.svg" border="0" style="margin-right:5px" alt="Tags"/>
         </a>
-        <xsl:value-of select="$title_shortened"/>
-        <xsl:text> </xsl:text>
+        <xsl:value-of select="gsa:i18n ('User Tags', 'Tags')"/>
         <xsl:choose>
           <xsl:when test="$user_tags/count != 0">
             (<xsl:value-of select="$user_tags/count"/>)
@@ -2183,7 +2171,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_id" select="@id"/>
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
   <xsl:param name="report_section" select="''"/>
-  <xsl:param name="title" select="gsa-i18n:strformat (gsa:i18n('User Tags for &quot;%1&quot;', 'Tag'), name)"/>
   <xsl:param name="user_tags" select="user_tags" />
   <xsl:param name="tag_names" select="../../get_tags_response"/>
   <xsl:if test="gsa:may-op ('get_tags')">
@@ -2193,7 +2180,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="resource_id" select="$resource_id"/>
       <xsl:with-param name="next" select="$next"/>
       <xsl:with-param name="report_section" select="$report_section"/>
-      <xsl:with-param name="title" select="$title"/>
       <xsl:with-param name="user_tags" select="$user_tags"/>
       <xsl:with-param name="tag_names" select="$tag_names"/>
     </xsl:call-template>
@@ -2361,20 +2347,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next" select="concat('get_',$resource_type)"/>
   <xsl:param name="report_section" select="''"/>
   <!-- i18n with concat : see dynamic_strings.xsl - type-permissions -->
-  <xsl:param name="title" select="gsa-i18n:strformat (gsa:i18n (concat ('Permissions for ', gsa:type-name ($resource_type), ' &quot;%1&quot;'), gsa:type-name ($resource_type)), name)"/>
   <xsl:param name="permissions" select="../../permissions/get_permissions_response"/>
   <xsl:param name="related" select="''"/>
   <xsl:variable name="token" select="/envelope/token"/>
-  <xsl:variable name="title_shortened">
-    <xsl:choose>
-      <xsl:when test="string-length($title) > 80">
-        <xsl:value-of select="substring($title, 0, 80)"/>[...]<xsl:if test="substring($title, string-length($title)-1, 1) = '&quot;'">&quot;</xsl:if>:
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$title"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
   <xsl:if test="gsa:may-op ('get_permissions')">
     <xsl:variable name="related_params">
       <xsl:for-each select="exslt:node-set ($related)/*">
@@ -2413,8 +2388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              title="{gsa:i18n ('Permissions', 'Permission')}">
             <img id="small-icon" src="/img/permission.svg" border="0" style="margin-right:5px" alt="Permissions"/>
           </a>
-          <xsl:value-of select="$title_shortened"/>
-          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n ('Permissions', 'Permissions')"/>
           <xsl:choose>
             <xsl:when test="$permissions/permission_count/filtered != 0">
               (<xsl:value-of select="$permissions/permission_count/filtered"/>)
