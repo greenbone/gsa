@@ -13176,22 +13176,25 @@ should not have received it.
 
 <xsl:template match="target" mode="details">
   <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Target Details', 'Target')"/>
-      <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="cap-type" select="'Target'"/>
-        <xsl:with-param name="type" select="'target'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
+    <div class="section-header">
       <xsl:call-template name="minor-details"/>
+      <h1>
+        <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Targets', 'Targets')}">
+          <img id="big-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
+        </a>
+        <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
+        <xsl:value-of select="name"/>
+        <xsl:text> </xsl:text>
+        <xsl:call-template name="details-header-icons">
+          <xsl:with-param name="cap-type" select="'Target'"/>
+          <xsl:with-param name="type" select="'target'"/>
+        </xsl:call-template>
+      </h1>
+    </div>
+
+    <div class="section-box">
       <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
           <td><xsl:value-of select="comment"/></td>

@@ -1,3 +1,10 @@
+2015-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (match="target" mode="details"): 
+	Turn "Target Details" into a new section style.
+
+	* src/html/classic/css/gsa-style.css: Add big-icon.
+
 2015-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add alert method "Send", for sending the report to a TCP listener.
