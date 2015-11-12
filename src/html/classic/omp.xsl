@@ -8534,6 +8534,42 @@ should not have received it.
               </table>
             </td>
           </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <label>
+                      <input type="radio" name="method" value="Send"/>
+                      <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                    </label>
+                    <input type="text" name="method_data:send_host"
+                           size="30" maxlength="256"/>
+                    <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+                    <input type="text" name="method_data:send_port"
+                           size="6" maxlength="6"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
+                  <td>
+                    <select name="method_data:send_report_format">
+                      <xsl:for-each select="$report-formats/report_format">
+                        <option value="{@id}">
+                          <xsl:value-of select="name"/>
+                        </option>
+                      </xsl:for-each>
+                      <xsl:if test="count ($report-formats/report_format) = 0">
+                        <option value="''">--</option>
+                      </xsl:if>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr>
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
@@ -9118,6 +9154,55 @@ should not have received it.
               </table>
             </td>
           </tr>
+          <tr class="even">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'Send'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="gsa:i18n ('Send to host ', 'Alert')"/>
+                    </xsl:call-template>
+                    <input type="text" name="method_data:send_host"
+                           size="30" maxlength="256"
+                           value="{$method/data[name='send_host']/text()}"/>
+                    <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+                    <input type="text" name="method_data:send_port"
+                           size="6" maxlength="6"
+                           value="{$method/data[name='send_port']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
+                  <td>
+                    <select name="method_data:send_report_format">
+                      <xsl:for-each select="$report-formats/report_format">
+                        <xsl:choose>
+                          <xsl:when test="@id=$method/data[name='send_report_format']/text()">
+                            <option value="{@id}" selected="1">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                      <xsl:if test="count ($report-formats/report_format) = 0">
+                        <option value="''">--</option>
+                      </xsl:if>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
@@ -9270,6 +9355,12 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="method/text()='Send'">
+          <xsl:value-of select="gsa:i18n ('Send to ', 'Alert')"/>
+          <xsl:value-of select="method/data[name='send_host']/text()"/>
+          <xsl:text>:</xsl:text>
+          <xsl:value-of select="method/data[name='send_port']/text()"/>
+        </xsl:when>
         <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
           SNMP
         </xsl:when>
@@ -9481,6 +9572,9 @@ should not have received it.
               <tr>
                 <td colspan="3">
                   <xsl:choose>
+                    <xsl:when test="method/text()='Send'">
+                      <xsl:value-of select="gsa:i18n ('Send report to host', 'Alert')"/>
+                    </xsl:when>
                     <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
                       SNMP
                     </xsl:when>
@@ -9668,6 +9762,40 @@ should not have received it.
                         </xsl:when>
                         <xsl:otherwise>
                           Verinice ISM
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:when test="method/text()='Send'">
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/>:</td>
+                    <td><xsl:value-of select="method/data[name='send_host']/text()"/></td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Port', 'Alert')"/>:</td>
+                    <td><xsl:value-of select="method/data[name='send_port']/text()"/></td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/>:</td>
+                    <td>
+                      <xsl:variable name="id"
+                                    select="method/data[name='send_report_format']/text()"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
+                          <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                             title="{gsa:view_details_title ('Report Format', name)}">
+                            <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          </a>
+                        </xsl:when>
+                        <xsl:when test="string-length($id) &gt; 0">
+                          <xsl:value-of select="$id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          XML
                         </xsl:otherwise>
                       </xsl:choose>
                     </td>
