@@ -17760,7 +17760,8 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   entity_t entity = NULL;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
   const char *credential_id;
-  char *ret;
+  char *html;
+  int ret, in_use;
 
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
@@ -17772,19 +17773,41 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   credential_id = params_value (params, "credential_id");
   CHECK_PARAM (scanner_id, "Edit Scanner", edit_scanner);
   CHECK_PARAM (name, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (host, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (port, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (type, "Edit Scanner", edit_scanner);
+  if (params_given (params, "host") == 0)
+    in_use = 1;
+  else
+   {
+     in_use = 0;
+     CHECK_PARAM (host, "Edit Scanner", edit_scanner);
+     CHECK_PARAM (port, "Edit Scanner", edit_scanner);
+     CHECK_PARAM (type, "Edit Scanner", edit_scanner);
+   }
   CHECK_PARAM (ca_pub, "Edit Scanner", edit_scanner);
   CHECK_PARAM (credential_id, "Edit Scanner", edit_scanner);
 
-  switch (ompf (credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\"><name>%s</name>"
-                "<comment>%s</comment><host>%s</host>"
-                "<port>%s</port><type>%s</type><ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/></modify_scanner>",
+  if (in_use)
+    ret = ompf (credentials, &response, &entity, response_data,
+                "<modify_scanner scanner_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<ca_pub>%s</ca_pub>"
+                "<credential id=\"%s\"/>"
+                "</modify_scanner>",
+                scanner_id, name, comment ?: "", ca_pub, credential_id);
+  else
+    ret = ompf (credentials, &response, &entity, response_data,
+                "<modify_scanner scanner_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<host>%s</host>"
+                "<port>%s</port>"
+                "<type>%s</type>"
+                "<ca_pub>%s</ca_pub>"
+                "<credential id=\"%s\"/>"
+                "</modify_scanner>",
                 scanner_id, name, comment ?: "", host, port, type, ca_pub,
-                credential_id))
+                credential_id);
+  switch (ret)
     {
       case 0:
       case -1:
@@ -17817,19 +17840,19 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_scanners_omp (credentials, params, response_data);
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        html = get_scanners_omp (credentials, params, response_data);
     }
   else
     {
       set_http_status_from_entity (entity, response_data);
-      ret = edit_scanner (credentials, params, response, response_data);
+      html = edit_scanner (credentials, params, response, response_data);
     }
 
   free_entity (entity);
   g_free (response);
-  return ret;
+  return html;
 }
 
 /**

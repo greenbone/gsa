@@ -1,3 +1,13 @@
+2015-11-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Allow modification of some scanner fields when the scanner is in use.
+
+	* src/gsad_omp.c (save_scanner_omp): Skip some elements if scanner is in
+	use.
+
+	* src/html/classic/omp.xsl (html-edit-scanner-form): Disable some
+	elements if scanner is in use.
+
 2015-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Simplify the titles for permissions and user tags: The name of the
@@ -10,7 +20,7 @@
 
 2015-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	* src/html/classic/omp.xsl (match="target" mode="details"): 
+	* src/html/classic/omp.xsl (match="target" mode="details"):
 	Turn "Target Details" into a new section style.
 
 	* src/html/classic/css/gsa-style.css: Add big-icon.
