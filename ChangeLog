@@ -1,3 +1,16 @@
+2015-11-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Introduce a icon toolbar for overview and details pages.
+	For details only for Targets as a reference.
+	Also add a bottom bar for the overview titles.
+
+	* src/html/classic/css/gsa-style.css (list-window-header):
+	Add a border-bottom.
+	(toolbar): New.
+
+	* src/html/classic/omp.xsl (list-window): Move icons into a toolbar.
+	(match="target" mode="details"): Move icons into a toolbar.
+
 2015-11-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Allow modification of some scanner fields when the scanner is in use.

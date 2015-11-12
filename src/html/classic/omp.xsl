@@ -4415,88 +4415,93 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
+  <div class="toolbar">
+    <xsl:choose>
+      <xsl:when test="$subtype != ''">
+        <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
+           title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
+          <img src="/img/help.png"/>
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
+           title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
+          <img src="/img/help.png"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="gsa:may-op ('run_wizard')">
+      <xsl:call-template name="wizard-icon"/>
+    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$type = 'report'"/>
+      <xsl:when test="$type = 'info'"/>
+      <xsl:when test="$new-icon and $subtype != ''">
+        <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
+        <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           class="new-action-icon" data-type="{$subtype}"
+           title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+          <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+        </a>
+      </xsl:when>
+      <xsl:when test="$new-icon and $type = 'task'">
+        <span class="menu_icon wizard_list">
+          <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             class="new-action-icon" data-type="task"
+             title="{gsa:i18n ('New Task', 'Task')}">
+            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+          <ul>
+            <li>
+              <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 class="new-action-icon" data-type="task"
+                 title="{gsa:i18n ('New Task', 'Task')}">
+                <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
+              </a>
+            </li>
+            <li class="last">
+              <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                 class="last new-action-icon" data-type="container_task"
+                 title="{gsa:i18n ('New Container Task', 'Task')}">
+                <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
+              </a>
+            </li>
+          </ul>
+        </span>
+      </xsl:when>
+      <xsl:when test="$new-icon">
+        <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
+        <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           class="new-action-icon" data-type="{$type}"
+           title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+          <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+        </a>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$upload-icon">
+        <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
+        <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           class="upload-action-icon" data-type="{$type}"
+           title="{gsa:i18n (concat ('Import ', $cap-type), $cap-type)}">
+          <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
+        </a>
+      </xsl:when>
+    </xsl:choose>
+  </div>
+
   <div id="list-window-header" class="clearfix">
     <div id="list-window-title">
       <img id="list-window-img" src="/img/{$type}.svg"/>
       <div id="list-window-details">
-        <h2><xsl:value-of select="gsa:i18n ($cap-type-plural)"/></h2>
-        <p>Total: <xsl:value-of select="$full-count"/></p>
-        <p>Filtered: <xsl:value-of select="$filtered-count"/></p>
-
-        <div>
-          <xsl:choose>
-            <xsl:when test="$subtype != ''">
-              <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
-                 title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-                <img src="/img/help.png"/>
-              </a>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
-                 title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-                <img src="/img/help.png"/>
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:if test="gsa:may-op ('run_wizard')">
-            <xsl:call-template name="wizard-icon"/>
-          </xsl:if>
-          <xsl:choose>
-            <xsl:when test="$type = 'report'"/>
-            <xsl:when test="$type = 'info'"/>
-            <xsl:when test="$new-icon and $subtype != ''">
-              <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
-              <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="new-action-icon" data-type="{$subtype}"
-                 title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-              </a>
-            </xsl:when>
-            <xsl:when test="$new-icon and $type = 'task'">
-              <span class="menu_icon wizard_list">
-                <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                   class="new-action-icon" data-type="task"
-                   title="{gsa:i18n ('New Task', 'Task')}">
-                  <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-                </a>
-                <ul>
-                  <li>
-                    <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                       class="new-action-icon" data-type="task"
-                       title="{gsa:i18n ('New Task', 'Task')}">
-                      <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
-                    </a>
-                  </li>
-                  <li class="last">
-                    <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                       class="last new-action-icon" data-type="container_task"
-                       title="{gsa:i18n ('New Container Task', 'Task')}">
-                      <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
-                    </a>
-                  </li>
-                </ul>
-              </span>
-            </xsl:when>
-            <xsl:when test="$new-icon">
-              <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
-              <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="new-action-icon" data-type="{$type}"
-                 title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-                <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-              </a>
-            </xsl:when>
-          </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="$upload-icon">
-              <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
-              <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="upload-action-icon" data-type="{$type}"
-                 title="{gsa:i18n (concat ('Import ', $cap-type), $cap-type)}">
-                <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
-              </a>
-            </xsl:when>
-          </xsl:choose>
-        </div>
+        <h2>
+          <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
+          (<xsl:value-of select="$filtered-count"/> 
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n ('of')"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="$full-count"/>)
+        </h2>
       </div>
     </div>
     <div id="list-window-filter">
@@ -13149,6 +13154,13 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="target" mode="details">
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'Target'"/>
+      <xsl:with-param name="type" select="'target'"/>
+    </xsl:call-template>
+  </div>
+
   <div class="gb_window">
     <div class="section-header">
       <xsl:call-template name="minor-details"/>
@@ -13160,10 +13172,6 @@ should not have received it.
         <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
         <xsl:value-of select="name"/>
         <xsl:text> </xsl:text>
-        <xsl:call-template name="details-header-icons">
-          <xsl:with-param name="cap-type" select="'Target'"/>
-          <xsl:with-param name="type" select="'target'"/>
-        </xsl:call-template>
       </h1>
     </div>
 

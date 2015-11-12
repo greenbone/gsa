@@ -1380,7 +1380,11 @@ text-align:right;
 
 /* The new reworked list view */
 
-#list-window-header,
+#list-window-header {
+  margin: 10px;
+  border-bottom: 2px solid black;
+}
+
 #list-window-charts,
 #list-window-table {
   margin: 10px;
@@ -1447,3 +1451,9 @@ text-align:right;
   width: 64px;
   height: 64px;
 }
+
+.toolbar {
+ margin: 10px;
+ margin-top:-10px;
+}
+
