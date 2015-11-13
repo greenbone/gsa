@@ -1,3 +1,8 @@
+2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Renamed Charts to Summary and
+	Table to Details.
+
 2015-11-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Introduce a icon toolbar for overview and details pages.

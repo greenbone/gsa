@@ -4534,10 +4534,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div id="list-window-charts">
       <div class="section-header">
         <a href="#"
-           class="toggle-action-icon" data-target="#chart-box" data-name="Charts" data-variable="chart-box--collapsed">
+           class="toggle-action-icon" data-target="#chart-box" data-name="Summary" data-variable="chart-box--collapsed">
             <img src="/img/fold.png"/>
         </a>
-        <h3><xsl:value-of select="gsa:i18n ('Charts')"/></h3>
+        <h3><xsl:value-of select="gsa:i18n ('Summary')"/></h3>
       </div>
 
       <div id="chart-box">
@@ -4556,10 +4556,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="list-window-table">
     <div class="section-header">
       <a href="#"
-         class="toggle-action-icon" data-target="#table-box" data-name="Table" data-variable="table-box--collapsed">
+         class="toggle-action-icon" data-target="#table-box" data-name="Details" data-variable="table-box--collapsed">
           <img src="/img/fold.png"/>
       </a>
-      <h3><xsl:value-of select="gsa:i18n ('Table')"/></h3>
+      <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
     </div> <!-- /section-header -->
 
     <div id="table-box">
