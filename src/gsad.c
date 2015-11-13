@@ -1954,7 +1954,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<guest><username>%s</username></guest>"
                                      "</login_page>",
                                      ret == 2
-                                      ? "  OMP service is down."
+                                      ? "  Waiting for OMP service to become available."
                                       : (ret == -1
                                           ? "  Error during authentication."
                                           : ""),
