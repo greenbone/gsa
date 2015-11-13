@@ -2008,160 +2008,157 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="user_tags"/>
   <xsl:param name="tag_names"/>
 
-  <br/>
-  <div class="gb_window">
-    <div class="section-header" style="margin-bottom=5px">
-      <a href="#"
-         class="toggle-action-icon" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
-        <img src="/img/fold.png"/>
-      </a>
-      <a href="/help/user-tags.html?token={/envelope/token}"
-         class="icon"
-         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
-        <img style="margin-left:5px" src="/img/help.png"/>
-      </a>
-        <xsl:choose>
-          <xsl:when test="not (gsa:may-op ('create_tag'))"/>
-          <xsl:when test="$report_section != ''">
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('New tag', 'Tag')}"
-               style="margin-left:3px;"
-               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
-              <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$resource_subtype != ''">
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('New Tag', 'Tag')}"
-               style="margin-left:3px;"
-               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
-              <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('New Tag', 'Tag')}"
-               style="margin-left:3px;"
-               class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
-              <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
-            </a>
-          </xsl:otherwise>
-        </xsl:choose>
-      <h3>
-        <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Tags', 'Tags')}">
-          <img id="small-icon" src="/img/tag.svg" border="0" style="margin-right:5px" alt="Tags"/>
-        </a>
-        <xsl:value-of select="gsa:i18n ('User Tags', 'Tags')"/>
-        <xsl:choose>
-          <xsl:when test="$user_tags/count != 0">
-            (<xsl:value-of select="$user_tags/count"/>)
-          </xsl:when>
-          <xsl:otherwise>
-            (<xsl:value-of select="gsa:i18n ('none', 'Tags')"/>)
-          </xsl:otherwise>
-        </xsl:choose>
-      </h3>
-    </div>
-
-    <div class="section-box" id="usertags-box">
-      <xsl:if test="count(//delete_tag_response[@status!=200]|//modify_tag_response[@status!=200]|//create_tag_response[@status!=201]) = 0">
-        <a name="user_tags"/>
-      </xsl:if>
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
+      <img src="/img/fold.png"/>
+    </a>
+    <a href="/help/user-tags.html?token={/envelope/token}"
+       class="icon"
+       title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
+      <img style="margin-left:5px" src="/img/help.png"/>
+    </a>
       <xsl:choose>
-        <xsl:when test="count($tag_names/tag) > 0">
-          <div style="margin-bottom: 10px">
-            <form style="display: inline; margin-left: 3px" action="/omp#user_tags" method="post" enctype="multipart/form-data">
-              <label>
-                <span style="margin-right: 5px">
-                  <b><xsl:value-of select="gsa:i18n ('Add Tag', 'Tag')"/>:</b>
-                </span>
-                <select style="margin-bottom: 0px;" name="tag_name" size="1">
-                  <xsl:for-each select="$tag_names/tag">
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="name/text()"/>
-                    </xsl:call-template>
-                  </xsl:for-each>
-                </select>
-              </label>
-              <label>
-                <span style="margin-left: 5px;">
-                  <xsl:value-of select="gsa:i18n ('with Value', 'Tag')"/>:
-                </span>
-                <input type="text" name="tag_value"/>
-              </label>
-              <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
-                    name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
-                    style="margin-left: 5px" />
-              <input type="hidden" name="comment"/>
-              <input type="hidden" name="active" value="1"/>
-              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="create_tag"/>
-              <input type="hidden" name="resource_id" value="{$resource_id}"/>
-              <xsl:choose>
-                <xsl:when test="$resource_subtype!=''">
-                  <input type="hidden" name="resource_type" value="{$resource_subtype}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="resource_type" value="{$resource_type}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <input type="hidden" name="resource_id" value="{$resource_id}"/>
-              <input type="hidden" name="next" value="{$next}"/>
-              <xsl:choose>
-                <xsl:when test="$resource_type='nvt'">
-                  <input type="hidden"
-                          name="oid"
-                          value="{$resource_id}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden"
-                          name="{$resource_type}_id"
-                          value="{$resource_id}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:if test="$resource_type='info'">
-                <input type="hidden"
-                      name="details"
-                      value="1"/>
-              </xsl:if>
-              <xsl:if test="$resource_subtype != ''">
-                <input type="hidden"
-                        name="{$resource_type}_type"
-                        value="{$resource_subtype}"/>
-              </xsl:if>
-              <xsl:if test="$report_section != ''">
-                <input type="hidden"
-                        name="report_section"
-                        value="{$report_section}"/>
-              </xsl:if>
-            </form>
-          </div>
+        <xsl:when test="not (gsa:may-op ('create_tag'))"/>
+        <xsl:when test="$report_section != ''">
+          <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('New tag', 'Tag')}"
+             style="margin-left:3px;"
+             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+            <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+          </a>
         </xsl:when>
-        <xsl:otherwise/>
+        <xsl:when test="$resource_subtype != ''">
+          <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('New Tag', 'Tag')}"
+             style="margin-left:3px;"
+             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
+            <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('New Tag', 'Tag')}"
+             style="margin-left:3px;"
+             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+            <img src="/img/new.png" border="0" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+          </a>
+        </xsl:otherwise>
       </xsl:choose>
+    <h3>
+      <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Tags', 'Tags')}">
+        <img id="small-icon" src="/img/tag.svg" border="0" style="margin-right:5px" alt="Tags"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('User Tags', 'Tags')"/>
       <xsl:choose>
         <xsl:when test="$user_tags/count != 0">
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-              <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-            </tr>
-            <xsl:apply-templates select="$user_tags/tag" mode="for_resource">
-              <xsl:with-param name="resource_type" select="$resource_type"/>
-              <xsl:with-param name="resource_subtype" select="$resource_subtype"/>
-              <xsl:with-param name="resource_id"   select="$resource_id"/>
-              <xsl:with-param name="next" select="$next"/>
-              <xsl:with-param name="report_section" select="$report_section"/>
-            </xsl:apply-templates>
-          </table>
+          (<xsl:value-of select="$user_tags/count"/>)
         </xsl:when>
-        <xsl:otherwise/>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none', 'Tags')"/>)
+        </xsl:otherwise>
       </xsl:choose>
-    </div>
+    </h3>
+  </div>
+
+  <div class="section-box" id="usertags-box">
+    <xsl:if test="count(//delete_tag_response[@status!=200]|//modify_tag_response[@status!=200]|//create_tag_response[@status!=201]) = 0">
+      <a name="user_tags"/>
+    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="count($tag_names/tag) > 0">
+        <div style="margin-bottom: 10px">
+          <form style="display: inline; margin-left: 3px" action="/omp#user_tags" method="post" enctype="multipart/form-data">
+            <label>
+              <span style="margin-right: 5px">
+                <b><xsl:value-of select="gsa:i18n ('Add Tag', 'Tag')"/>:</b>
+              </span>
+              <select style="margin-bottom: 0px;" name="tag_name" size="1">
+                <xsl:for-each select="$tag_names/tag">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="name/text()"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+            </label>
+            <label>
+              <span style="margin-left: 5px;">
+                <xsl:value-of select="gsa:i18n ('with Value', 'Tag')"/>:
+              </span>
+              <input type="text" name="tag_value"/>
+            </label>
+            <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
+                  name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
+                  style="margin-left: 5px" />
+            <input type="hidden" name="comment"/>
+            <input type="hidden" name="active" value="1"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="create_tag"/>
+            <input type="hidden" name="resource_id" value="{$resource_id}"/>
+            <xsl:choose>
+              <xsl:when test="$resource_subtype!=''">
+                <input type="hidden" name="resource_type" value="{$resource_subtype}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="resource_type" value="{$resource_type}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <input type="hidden" name="resource_id" value="{$resource_id}"/>
+            <input type="hidden" name="next" value="{$next}"/>
+            <xsl:choose>
+              <xsl:when test="$resource_type='nvt'">
+                <input type="hidden"
+                        name="oid"
+                        value="{$resource_id}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden"
+                        name="{$resource_type}_id"
+                        value="{$resource_id}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$resource_type='info'">
+              <input type="hidden"
+                    name="details"
+                    value="1"/>
+            </xsl:if>
+            <xsl:if test="$resource_subtype != ''">
+              <input type="hidden"
+                      name="{$resource_type}_type"
+                      value="{$resource_subtype}"/>
+            </xsl:if>
+            <xsl:if test="$report_section != ''">
+              <input type="hidden"
+                      name="report_section"
+                      value="{$report_section}"/>
+            </xsl:if>
+          </form>
+        </div>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$user_tags/count != 0">
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
+            <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+          </tr>
+          <xsl:apply-templates select="$user_tags/tag" mode="for_resource">
+            <xsl:with-param name="resource_type" select="$resource_type"/>
+            <xsl:with-param name="resource_subtype" select="$resource_subtype"/>
+            <xsl:with-param name="resource_id"   select="$resource_id"/>
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="report_section" select="$report_section"/>
+          </xsl:apply-templates>
+        </table>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </div>
 </xsl:template>
 
@@ -2362,62 +2359,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </xsl:for-each>
     </xsl:variable>
-    <div class="gb_window">
-      <div class="section-header">
-        <a href="#"
-           class="toggle-action-icon" data-target="#permission-box" data-name="Permissions" data-variable="permission-box--collapsed">
-            <img src="/img/fold.png"/>
-        </a>
-        <a href="/help/resource_permissions.html?token={/envelope/token}"
-           class="icon"
-           title="Help: Resource Permissions">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-        <xsl:choose>
-          <xsl:when test="gsa:may-op ('create_permission')">
-            <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-               class="last new-action-icon icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
-               title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
-              <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-        <h3>
-          <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Permissions', 'Permission')}">
-            <img id="small-icon" src="/img/permission.svg" border="0" style="margin-right:5px" alt="Permissions"/>
-          </a>
-          <xsl:value-of select="gsa:i18n ('Permissions', 'Permissions')"/>
-          <xsl:choose>
-            <xsl:when test="$permissions/permission_count/filtered != 0">
-              (<xsl:value-of select="$permissions/permission_count/filtered"/>)
-            </xsl:when>
-            <xsl:otherwise>
-              (<xsl:value-of select="gsa:i18n ('none', 'Permissions')"/>)
-            </xsl:otherwise>
-          </xsl:choose>
-        </h3>
-      </div>
 
-      <div class="section-box" id="permission-box">
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Resource', 'Property')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Subject Type', 'Permission')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
-            <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-          </tr>
-          <xsl:apply-templates select="$permissions/permission">
-            <xsl:with-param name="next" select="$next"/>
-            <xsl:with-param name="next_type" select="$resource_type"/>
-            <xsl:with-param name="next_id" select="$resource_id"/>
-          </xsl:apply-templates>
-        </table>
-      </div>
+    <div class="section-header">
+      <a href="#"
+         class="toggle-action-icon" data-target="#permission-box" data-name="Permissions" data-variable="permission-box--collapsed">
+          <img src="/img/fold.png"/>
+      </a>
+      <a href="/help/resource_permissions.html?token={/envelope/token}"
+         class="icon"
+         title="Help: Resource Permissions">
+        <img style="margin-left:5px" src="/img/help.png"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('create_permission')">
+          <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
+             class="last new-action-icon icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
+             title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
+            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+      <h3>
+        <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Permissions', 'Permission')}">
+          <img id="small-icon" src="/img/permission.svg" border="0" style="margin-right:5px" alt="Permissions"/>
+        </a>
+        <xsl:value-of select="gsa:i18n ('Permissions', 'Permissions')"/>
+        <xsl:choose>
+          <xsl:when test="$permissions/permission_count/filtered != 0">
+            (<xsl:value-of select="$permissions/permission_count/filtered"/>)
+          </xsl:when>
+          <xsl:otherwise>
+            (<xsl:value-of select="gsa:i18n ('none', 'Permissions')"/>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
+    </div>
+
+    <div class="section-box" id="permission-box">
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Resource', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Subject Type', 'Permission')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
+          <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        </tr>
+        <xsl:apply-templates select="$permissions/permission">
+          <xsl:with-param name="next" select="$next"/>
+          <xsl:with-param name="next_type" select="$resource_type"/>
+          <xsl:with-param name="next_id" select="$resource_id"/>
+        </xsl:apply-templates>
+      </table>
     </div>
   </xsl:if>
 </xsl:template>
@@ -4504,6 +4500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </h2>
       </div>
     </div>
+
     <div id="list-window-filter">
       <div class="section-header">
         <a href='#'
@@ -4531,73 +4528,122 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <xsl:if test="$top-visualization != ''">
-    <div id="list-window-charts">
-      <div class="section-header">
-        <a href="#"
-           class="toggle-action-icon" data-target="#chart-box" data-name="Summary" data-variable="chart-box--collapsed">
-            <img src="/img/fold.png"/>
-        </a>
-        <h3><xsl:value-of select="gsa:i18n ('Summary')"/></h3>
-      </div>
+    <div class="section-header">
+      <a href="#"
+         class="toggle-action-icon" data-target="#chart-box" data-name="Summary" data-variable="chart-box--collapsed">
+          <img src="/img/fold.png"/>
+      </a>
+      <h3><xsl:value-of select="gsa:i18n ('Summary')"/></h3>
+    </div>
 
-      <div id="chart-box">
-        <div class="visualization">
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="top-visualization-box-left"/>
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="top-visualization-box-right"/>
-          <div class="visualization-spacer"/>
-          <xsl:copy-of select="$top-visualization"/>
-        </div>
+    <div id="chart-box">
+      <div class="visualization">
+        <div class="visualization-spacer"/>
+        <div class="visualization-box" id="top-visualization-box-left"/>
+        <div class="visualization-spacer"/>
+        <div class="visualization-box" id="top-visualization-box-right"/>
+        <div class="visualization-spacer"/>
+        <xsl:copy-of select="$top-visualization"/>
       </div>
     </div>
   </xsl:if>
 
-  <div id="list-window-table">
-    <div class="section-header">
-      <a href="#"
-         class="toggle-action-icon" data-target="#table-box" data-name="Details" data-variable="table-box--collapsed">
-          <img src="/img/fold.png"/>
-      </a>
-      <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-    </div> <!-- /section-header -->
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#table-box" data-name="Details" data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
 
-    <div id="table-box">
-
+  <div class="section-box" id="table-box">
 
 
-          <table style="width:100%">
-            <tr>
-              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-                <div class="float_right">
-                  <xsl:call-template name="filter-window-pager">
-                    <xsl:with-param name="type" select="$type"/>
-                    <xsl:with-param name="list" select="$resources-summary"/>
-                    <xsl:with-param name="count" select="$count"/>
-                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
-                    <xsl:with-param name="full_count" select="$full-count"/>
-                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                  </xsl:call-template>
-                </div>
-              </td>
-            </tr>
-          </table>
 
-        <!-- The entire table of resources, in a variable. -->
-        <xsl:variable name="table">
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0" style="margin-bottom:0px;">
+        <table style="width:100%">
+          <tr>
+            <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
+              <div class="float_right">
+                <xsl:call-template name="filter-window-pager">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="list" select="$resources-summary"/>
+                  <xsl:with-param name="count" select="$count"/>
+                  <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                  <xsl:with-param name="full_count" select="$full-count"/>
+                  <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                </xsl:call-template>
+              </div>
+            </td>
+          </tr>
+        </table>
 
-            <!-- Column headings, top row. -->
-            <tr class="gbntablehead2">
-              <xsl:variable name="current" select="."/>
-              <xsl:variable name="token" select="/envelope/token"/>
-              <!-- Generate given column headings. -->
-              <xsl:for-each select="exslt:node-set ($columns)/column">
-                <xsl:choose>
-                  <xsl:when test="boolean (hide_in_table)"/>
-                  <xsl:when test="count (column) = 0 and field != ''">
-                    <!-- Single column. -->
-                    <td rowspan="2">
+      <!-- The entire table of resources, in a variable. -->
+      <xsl:variable name="table">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0" style="margin-bottom:0px;">
+
+          <!-- Column headings, top row. -->
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <!-- Generate given column headings. -->
+            <xsl:for-each select="exslt:node-set ($columns)/column">
+              <xsl:choose>
+                <xsl:when test="boolean (hide_in_table)"/>
+                <xsl:when test="count (column) = 0 and field != ''">
+                  <!-- Single column. -->
+                  <td rowspan="2">
+                    <xsl:copy-of select="html/before/*"/>
+                    <xsl:call-template name="column-name">
+                      <xsl:with-param name="head" select="name"/>
+                      <xsl:with-param name="image" select="image"/>
+                      <xsl:with-param name="name" select="field"/>
+                      <xsl:with-param name="type" select="$type"/>
+                      <xsl:with-param name="current" select="$current"/>
+                      <xsl:with-param name="token" select="$token"/>
+                      <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                      <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
+                      <xsl:with-param name="i18n-context" select="$cap-type"/>
+                    </xsl:call-template>
+                    <xsl:copy-of select="html/after/*"/>
+                  </td>
+                </xsl:when>
+                <xsl:when test="count (column) = 0">
+                  <!-- Single column without a sort field. -->
+                  <td rowspan="2">
+                    <xsl:copy-of select="html/before/*"/>
+                    <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
+                    <xsl:copy-of select="html/after/*"/>
+                  </td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- Column with subcolumns. -->
+                  <td colspan="{count (column)}">
+                    <xsl:copy-of select="html/before/*"/>
+                    <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
+                    <xsl:copy-of select="html/after/*"/>
+                  </td>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+            <!-- Action column. -->
+            <xsl:if test="$icon-count &gt; 0">
+              <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+            </xsl:if>
+          </tr>
+
+          <!-- Column headings, second row. -->
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="exslt:node-set ($columns)/column">
+              <xsl:choose>
+                <xsl:when test="count (column) = 0">
+                  <!-- Single column.  Done in top row. -->
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- Column with subcolumns.  Output the subcolumns. -->
+                  <xsl:for-each select="column">
+                    <td style="font-size:10px;">
                       <xsl:copy-of select="html/before/*"/>
                       <xsl:call-template name="column-name">
                         <xsl:with-param name="head" select="name"/>
@@ -4612,251 +4658,197 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:call-template>
                       <xsl:copy-of select="html/after/*"/>
                     </td>
-                  </xsl:when>
-                  <xsl:when test="count (column) = 0">
-                    <!-- Single column without a sort field. -->
-                    <td rowspan="2">
-                      <xsl:copy-of select="html/before/*"/>
-                      <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
-                      <xsl:copy-of select="html/after/*"/>
-                    </td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- Column with subcolumns. -->
-                    <td colspan="{count (column)}">
-                      <xsl:copy-of select="html/before/*"/>
-                      <xsl:value-of select="gsa:i18n (name, $cap-type)"/>
-                      <xsl:copy-of select="html/after/*"/>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-              <!-- Action column. -->
-              <xsl:if test="$icon-count &gt; 0">
-                <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-              </xsl:if>
-            </tr>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </tr>
 
-            <!-- Column headings, second row. -->
-            <tr class="gbntablehead2">
-              <xsl:variable name="current" select="."/>
-              <xsl:variable name="token" select="/envelope/token"/>
-              <xsl:for-each select="exslt:node-set ($columns)/column">
-                <xsl:choose>
-                  <xsl:when test="count (column) = 0">
-                    <!-- Single column.  Done in top row. -->
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- Column with subcolumns.  Output the subcolumns. -->
-                    <xsl:for-each select="column">
-                      <td style="font-size:10px;">
-                        <xsl:copy-of select="html/before/*"/>
-                        <xsl:call-template name="column-name">
-                          <xsl:with-param name="head" select="name"/>
-                          <xsl:with-param name="image" select="image"/>
-                          <xsl:with-param name="name" select="field"/>
-                          <xsl:with-param name="type" select="$type"/>
-                          <xsl:with-param name="current" select="$current"/>
-                          <xsl:with-param name="token" select="$token"/>
-                          <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                          <xsl:with-param name="sort-reverse" select="boolean (sort-reverse)"/>
-                          <xsl:with-param name="i18n-context" select="$cap-type"/>
-                        </xsl:call-template>
-                        <xsl:copy-of select="html/after/*"/>
-                      </td>
-                    </xsl:for-each>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </tr>
-
-            <!-- A nested variable: Form inputs for the bulk icons. -->
-            <xsl:variable name="bulk-elements">
-              <xsl:variable name="selection_type">
-                <xsl:choose>
-                  <xsl:when test="/envelope/params/bulk_select = 1">selection</xsl:when>
-                  <xsl:when test="/envelope/params/bulk_select = 2">all filtered</xsl:when>
-                  <xsl:otherwise>page contents</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <xsl:text> </xsl:text>
-              <input type="hidden" name="cmd" value="process_bulk"/>
-              <input type="hidden" name="next" value="get_{$type}s"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <input type="hidden" name="filt_id" value="{filters/@id}"/>
-              <input type="hidden" name="bulk_select" value="{/envelope/params/bulk_select}"/>
-              <xsl:if test="$subtype">
-                <input type="hidden" name="{$type}_type" value="{$subtype}"/>
-              </xsl:if>
-
-              <xsl:for-each select="exslt:node-set($extra_params)/param">
-                <input type="hidden" name="{name}" value="{value}"/>
-              </xsl:for-each>
-
-              <input type="hidden" name="resource_type" value="{$type}"/>
-
-              <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
-              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
-                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
-              </xsl:if>
-              <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report' or $type = 'asset')">
-                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
-              </xsl:if>
-              <xsl:if test="$type = 'asset' and $subtype = 'host' and gsa:may-op ('create_target')">
-                <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
-              </xsl:if>
-              <xsl:if test="$type != 'report'">
-                <input style="margin-right:3px" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.png"/>
-              </xsl:if>
+          <!-- A nested variable: Form inputs for the bulk icons. -->
+          <xsl:variable name="bulk-elements">
+            <xsl:variable name="selection_type">
+              <xsl:choose>
+                <xsl:when test="/envelope/params/bulk_select = 1">selection</xsl:when>
+                <xsl:when test="/envelope/params/bulk_select = 2">all filtered</xsl:when>
+                <xsl:otherwise>page contents</xsl:otherwise>
+              </xsl:choose>
             </xsl:variable>
-
-            <!-- Resource rows, with extra row if bulk is enabled. -->
-            <xsl:choose>
-              <xsl:when test="$no_bulk">
-                <!-- No bulk, just generate the rows. -->
-                <xsl:apply-templates select="$resources"/>
-              </xsl:when>
-              <xsl:when test="not (/envelope/params/bulk_select = 1)">
-                <!-- Bulk "Apply to page contents" or "Apply to all filtered". -->
-                <xsl:apply-templates select="$resources"/>
-                <tr style="background:#DDDDDD">
-                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
-                    <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
-                      <xsl:choose>
-                        <xsl:when test="$type = 'asset' and $subtype = 'host'">
-                          <xsl:choose>
-                            <xsl:when test="/envelope/params/bulk_select = 2">
-                              <input type="hidden" name="host_count" value="{$filtered-count}"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <input type="hidden" name="host_count" value="{$count}"/>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                          <xsl:for-each select="$resources">
-                            <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
-                          </xsl:for-each>
-                        </xsl:when>
-                        <xsl:when test="$type = 'info'">
-                          <xsl:for-each select="$resources">
-                            <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
-                          </xsl:for-each>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:for-each select="$resources">
-                            <input type="hidden" name="bulk_selected:{@id}" value="1"/>
-                          </xsl:for-each>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:copy-of select="$bulk-elements"/>
-                    </form>
-                  </td>
-                </tr>
-              </xsl:when>
-              <xsl:otherwise>
-                <!-- Bulk "Apply to selection" (the page with checkboxes). -->
-                <xsl:apply-templates select="$resources"/>
-                <tr style="background:#DDDDDD">
-                  <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
-                    <xsl:choose>
-                      <xsl:when test="$type = 'asset' and $subtype = 'host'">
-                        <input type="hidden" name="host_count" value="0"/>
-                      </xsl:when>
-                    </xsl:choose>
-                    <xsl:copy-of select="$bulk-elements"/>
-                  </td>
-                </tr>
-              </xsl:otherwise>
-            </xsl:choose>
-          </table>
-        </xsl:variable>
-
-        <!-- Output the table from the variable. -->
-        <xsl:choose>
-          <xsl:when test="/envelope/params/bulk_select = 1">
-            <!-- Bulk "Apply to selection" (the page with checkboxes). -->
-            <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
-              <xsl:copy-of select="$table"/>
-            </form>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:copy-of select="$table"/>
-          </xsl:otherwise>
-        </xsl:choose>
-
-        <!-- The bulk dropdown and refresh icon, during bulk selection. -->
-        <xsl:if test="not ($no_bulk)">
-          <form name="bulk_select_type_form" class="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
-                enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+            <xsl:text> </xsl:text>
+            <input type="hidden" name="cmd" value="process_bulk"/>
+            <input type="hidden" name="next" value="get_{$type}s"/>
+            <input type="hidden" name="filter" value="{filters/term}"/>
+            <input type="hidden" name="filt_id" value="{filters/@id}"/>
+            <input type="hidden" name="bulk_select" value="{/envelope/params/bulk_select}"/>
             <xsl:if test="$subtype">
               <input type="hidden" name="{$type}_type" value="{$subtype}"/>
             </xsl:if>
+
             <xsl:for-each select="exslt:node-set($extra_params)/param">
               <input type="hidden" name="{name}" value="{value}"/>
             </xsl:for-each>
-            <input type="hidden" name="filter" value="{filters/term}"/>
-            <input type="hidden" name="filt_id" value="{filters/@id}"/>
-            <select name="bulk_select" onchange="bulk_select_type_form.submit()">
-              <!-- TODO selection by current parameter value + check marks -->
-              <xsl:choose>
-                <xsl:when test="not (/envelope/params/bulk_select != 0)">
-                  <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="0"><xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:choose>
-                <xsl:when test="/envelope/params/bulk_select = '1'">
-                  <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="1"><xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:choose>
-                <xsl:when test="/envelope/params/bulk_select = '2'">
-                  <option value="2" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="2"><xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </select>
-            <xsl:text> </xsl:text>
-            <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Update', 'Action Verb')}" title="{gsa:i18n ('Update', 'Action Verb')}"/>
+
+            <input type="hidden" name="resource_type" value="{$type}"/>
+
+            <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
+            <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
+              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
+            </xsl:if>
+            <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report' or $type = 'asset')">
+              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
+            </xsl:if>
+            <xsl:if test="$type = 'asset' and $subtype = 'host' and gsa:may-op ('create_target')">
+              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
+            </xsl:if>
+            <xsl:if test="$type != 'report'">
+              <input style="margin-right:3px" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.png"/>
+            </xsl:if>
+          </xsl:variable>
+
+          <!-- Resource rows, with extra row if bulk is enabled. -->
+          <xsl:choose>
+            <xsl:when test="$no_bulk">
+              <!-- No bulk, just generate the rows. -->
+              <xsl:apply-templates select="$resources"/>
+            </xsl:when>
+            <xsl:when test="not (/envelope/params/bulk_select = 1)">
+              <!-- Bulk "Apply to page contents" or "Apply to all filtered". -->
+              <xsl:apply-templates select="$resources"/>
+              <tr style="background:#DDDDDD">
+                <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
+                  <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
+                    <xsl:choose>
+                      <xsl:when test="$type = 'asset' and $subtype = 'host'">
+                        <xsl:choose>
+                          <xsl:when test="/envelope/params/bulk_select = 2">
+                            <input type="hidden" name="host_count" value="{$filtered-count}"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <input type="hidden" name="host_count" value="{$count}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:for-each select="$resources">
+                          <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
+                        </xsl:for-each>
+                      </xsl:when>
+                      <xsl:when test="$type = 'info'">
+                        <xsl:for-each select="$resources">
+                          <input type="hidden" name="bulk_selected:{../@id}" value="1"/>
+                        </xsl:for-each>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:for-each select="$resources">
+                          <input type="hidden" name="bulk_selected:{@id}" value="1"/>
+                        </xsl:for-each>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:copy-of select="$bulk-elements"/>
+                  </form>
+                </td>
+              </tr>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- Bulk "Apply to selection" (the page with checkboxes). -->
+              <xsl:apply-templates select="$resources"/>
+              <tr style="background:#DDDDDD">
+                <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
+                  <xsl:choose>
+                    <xsl:when test="$type = 'asset' and $subtype = 'host'">
+                      <input type="hidden" name="host_count" value="0"/>
+                    </xsl:when>
+                  </xsl:choose>
+                  <xsl:copy-of select="$bulk-elements"/>
+                </td>
+              </tr>
+            </xsl:otherwise>
+          </xsl:choose>
+        </table>
+      </xsl:variable>
+
+      <!-- Output the table from the variable. -->
+      <xsl:choose>
+        <xsl:when test="/envelope/params/bulk_select = 1">
+          <!-- Bulk "Apply to selection" (the page with checkboxes). -->
+          <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
+            <xsl:copy-of select="$table"/>
           </form>
-        </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy-of select="$table"/>
+        </xsl:otherwise>
+      </xsl:choose>
 
-        <!-- Bottom line with applied filter and pager. -->
-        <xsl:if test="string-length (filters/term) &gt; 0">
-          <table style="width:100%; margin-bottom:10px">
-            <tr>
-              <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-                <div class="float_right">
-                  <xsl:call-template name="filter-window-pager">
-                    <xsl:with-param name="type" select="$type"/>
-                    <xsl:with-param name="list" select="$resources-summary"/>
-                    <xsl:with-param name="count" select="$count"/>
-                    <xsl:with-param name="filtered_count" select="$filtered-count"/>
-                    <xsl:with-param name="full_count" select="$full-count"/>
-                    <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-                  </xsl:call-template>
-                </div>
-                (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter')"/>:
-                <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </table>
-        </xsl:if>
+      <!-- The bulk dropdown and refresh icon, during bulk selection. -->
+      <xsl:if test="not ($no_bulk)">
+        <form name="bulk_select_type_form" class="small_inline_form" style="margin-top:-23px; margin-right:66px; text-align:right; height:26px"
+              enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+          <xsl:if test="$subtype">
+            <input type="hidden" name="{$type}_type" value="{$subtype}"/>
+          </xsl:if>
+          <xsl:for-each select="exslt:node-set($extra_params)/param">
+            <input type="hidden" name="{name}" value="{value}"/>
+          </xsl:for-each>
+          <input type="hidden" name="filter" value="{filters/term}"/>
+          <input type="hidden" name="filt_id" value="{filters/@id}"/>
+          <select name="bulk_select" onchange="bulk_select_type_form.submit()">
+            <!-- TODO selection by current parameter value + check marks -->
+            <xsl:choose>
+              <xsl:when test="not (/envelope/params/bulk_select != 0)">
+                <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0"><xsl:value-of select="gsa:i18n('Apply to page contents', 'Bulk Action')"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/bulk_select = '1'">
+                <option value="1" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="1"><xsl:value-of select="gsa:i18n('Apply to selection', 'Bulk Action')"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="/envelope/params/bulk_select = '2'">
+                <option value="2" selected="1">&#8730;<xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="2"><xsl:value-of select="gsa:i18n('Apply to all filtered', 'Bulk Action')"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <xsl:text> </xsl:text>
+          <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Update', 'Action Verb')}" title="{gsa:i18n ('Update', 'Action Verb')}"/>
+        </form>
+      </xsl:if>
 
-    </div> <!-- /table-box -->
+      <!-- Bottom line with applied filter and pager. -->
+      <xsl:if test="string-length (filters/term) &gt; 0">
+        <table style="width:100%; margin-bottom:10px">
+          <tr>
+            <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
+              <div class="float_right">
+                <xsl:call-template name="filter-window-pager">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="list" select="$resources-summary"/>
+                  <xsl:with-param name="count" select="$count"/>
+                  <xsl:with-param name="filtered_count" select="$filtered-count"/>
+                  <xsl:with-param name="full_count" select="$full-count"/>
+                  <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+                </xsl:call-template>
+              </div>
+              (<xsl:value-of select="gsa:i18n('Applied filter', 'Filter')"/>:
+              <a class="footnote" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params_string}&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
+                <xsl:value-of select="filters/term"/>
+              </a>)
+            </td>
+          </tr>
+        </table>
+      </xsl:if>
 
-  </div> <!-- /list-window-table -->
+  </div> <!-- /table-box -->
 
   <!-- Wizard. -->
   <xsl:call-template name="wizard"/>
@@ -13191,234 +13183,230 @@ should not have received it.
     </xsl:call-template>
   </div>
 
-  <div class="gb_window">
-    <div class="section-header">
-      <xsl:call-template name="minor-details"/>
-      <h1>
-        <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Targets', 'Targets')}">
-          <img id="big-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
-        </a>
-        <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
-        <xsl:value-of select="name"/>
-        <xsl:text> </xsl:text>
-      </h1>
-    </div>
-
-    <div class="section-box">
-      <table>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
-          <td><xsl:value-of select="comment"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>:</td>
-          <td><xsl:value-of select="hosts"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/>:</td>
-          <td><xsl:value-of select="exclude_hosts"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="reverse_lookup_only = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
-              <xsl:otherwise><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="reverse_lookup_unify = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
-              <xsl:otherwise><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Maximum number of hosts', 'Target')"/>:</td>
-          <td><xsl:value-of select="max_hosts"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="gsa:may-op ('get_port_lists')">
-                <xsl:choose>
-                  <xsl:when test="boolean (port_list/permissions) and count (port_list/permissions/permission) = 0">
-                    <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                    <xsl:text> (</xsl:text>
-                    <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
-                    <xsl:text>: </xsl:text>
-                    <xsl:value-of select="port_list/name"/>
-                    <xsl:text>, </xsl:text>
-                    <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="port_list/@id"/>
-                    <xsl:text>)</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
-                      <xsl:value-of select="port_list/name"/>
-                    </a>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="port_list/name"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target')"/>:</td>
-          <td>
-            <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target')"/>
-          </td>
-        </tr>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (ssh_credential/@id) &gt; 0">
-          <tr>
-            <td valign="top" width="175" colspan="2">
-              <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>:
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/>:</td>
-            <td>
-              <xsl:if test="string-length (ssh_credential/@id) &gt; 0">
-                <xsl:choose>
-                  <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
-                    <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                    <xsl:text> (</xsl:text>
-                    <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
-                    <xsl:text>: </xsl:text>
-                    <xsl:value-of select="ssh_credential/name"/>
-                    <xsl:text>, </xsl:text>
-                    <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="ssh_credential/@id"/>
-                    <xsl:text>)</xsl:text>
-                  </xsl:when>
-                  <xsl:when test="gsa:may-op ('get_credentials')">
-                    <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
-                      <xsl:value-of select="ssh_credential/name"/>
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="ssh_credential/name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="gsa:i18n ('on port', 'Target|Credential')"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="ssh_credential/port"/>
-              </xsl:if>
-            </td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (smb_credential/@id) &gt; 0">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
-                  <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                  <xsl:text> (</xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
-                  <xsl:text>: </xsl:text>
-                  <xsl:value-of select="smb_credential/name"/>
-                  <xsl:text>, </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="smb_credential/@id"/>
-                  <xsl:text>)</xsl:text>
-                </xsl:when>
-                <xsl:when test="gsa:may-op ('get_credentials')">
-                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="smb_credential/name"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="smb_credential/name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="gsa:may-op ('get_credentials') or string-length (esxi_credential/@id) &gt; 0">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
-                  <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                  <xsl:text> (</xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
-                  <xsl:text>: </xsl:text>
-                  <xsl:value-of select="esxi_credential/name"/>
-                  <xsl:text>, </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="esxi_credential/@id"/>
-                  <xsl:text>)</xsl:text>
-                </xsl:when>
-                <xsl:when test="gsa:may-op ('get_credentials')">
-                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="esxi_credential/name"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="esxi_credential/name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </xsl:if>
-      </table>
-    </div>
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Targets', 'Targets')}">
+        <img id="big-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
   </div>
 
-  <div class="gb_window">
-    <div class="section-header">
-      <a href="#"
-         class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Target" data-variable="using-box--collapsed">
-          <img src="/img/fold.png"/>
-      </a>
-      <h3>
-        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Tasks', 'Tasks')}">
-          <img id="small-icon" src="/img/task.svg" border="0" style="margin-right:5px" alt="Tasks"/>
-        </a>
-        <xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>
-        <xsl:text> </xsl:text>
-        <xsl:choose>
-          <xsl:when test="count(tasks/task) != 0">
-            (<xsl:value-of select="count(tasks/task)"/>)
-          </xsl:when>
-          <xsl:otherwise>
-            (<xsl:value-of select="gsa:i18n ('none', 'Targets')"/>)
-          </xsl:otherwise>
-        </xsl:choose>
-      </h3>
-    </div>
-
-    <div class="section-box" id="using-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+        <td><xsl:value-of select="comment"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>:</td>
+        <td><xsl:value-of select="hosts"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/>:</td>
+        <td><xsl:value-of select="exclude_hosts"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="reverse_lookup_only = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="reverse_lookup_unify = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Maximum number of hosts', 'Target')"/>:</td>
+        <td><xsl:value-of select="max_hosts"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="gsa:may-op ('get_port_lists')">
+              <xsl:choose>
+                <xsl:when test="boolean (port_list/permissions) and count (port_list/permissions/permission) = 0">
+                  <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                  <xsl:text> (</xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+                  <xsl:text>: </xsl:text>
+                  <xsl:value-of select="port_list/name"/>
+                  <xsl:text>, </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="port_list/@id"/>
+                  <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="port_list/name"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="port_list/name"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Alive Test', 'Target')"/>:</td>
+        <td>
+          <xsl:value-of select="gsa:i18n (alive_tests/text(), 'Target')"/>
+        </td>
+      </tr>
+      <xsl:if test="gsa:may-op ('get_credentials') or string-length (ssh_credential/@id) &gt; 0">
+        <tr>
+          <td valign="top" width="175" colspan="2">
+            <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>:
+          </td>
         </tr>
-        <xsl:for-each select="tasks/task">
-          <tr class="{gsa:table-row-class(position())}">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/>:</td>
+          <td>
+            <xsl:if test="string-length (ssh_credential/@id) &gt; 0">
+              <xsl:choose>
+                <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
+                  <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                  <xsl:text> (</xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+                  <xsl:text>: </xsl:text>
+                  <xsl:value-of select="ssh_credential/name"/>
+                  <xsl:text>, </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="ssh_credential/@id"/>
+                  <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="ssh_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="ssh_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:i18n ('on port', 'Target|Credential')"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="ssh_credential/port"/>
+            </xsl:if>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="gsa:may-op ('get_credentials') or string-length (smb_credential/@id) &gt; 0">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/>:</td>
+          <td>
             <xsl:choose>
-              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+              <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
+                <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="smb_credential/name"/>
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="smb_credential/@id"/>
+                <xsl:text>)</xsl:text>
+              </xsl:when>
+              <xsl:when test="gsa:may-op ('get_credentials')">
+                <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="smb_credential/name"/>
+                </a>
               </xsl:when>
               <xsl:otherwise>
-                <td>
-                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                    <xsl:value-of select="name"/>
-                  </a>
-                </td>
+                <xsl:value-of select="smb_credential/name"/>
               </xsl:otherwise>
             </xsl:choose>
-          </tr>
-        </xsl:for-each>
-      </table>
-    </div>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="gsa:may-op ('get_credentials') or string-length (esxi_credential/@id) &gt; 0">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
+                <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="esxi_credential/name"/>
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="esxi_credential/@id"/>
+                <xsl:text>)</xsl:text>
+              </xsl:when>
+              <xsl:when test="gsa:may-op ('get_credentials')">
+                <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="esxi_credential/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="esxi_credential/name"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
+    </table>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Target" data-variable="using-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Tasks', 'Tasks')}">
+        <img id="small-icon" src="/img/task.svg" border="0" style="margin-right:5px" alt="Tasks"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) != 0">
+          (<xsl:value-of select="count(tasks/task)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none', 'Targets')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+
+  <div class="section-box" id="using-box">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+      </tr>
+      <xsl:for-each select="tasks/task">
+        <tr class="{gsa:table-row-class(position())}">
+          <xsl:choose>
+            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:value-of select="name"/>
+                </a>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
+        </tr>
+      </xsl:for-each>
+    </table>
   </div>
 
   <xsl:call-template name="user-tags-window">

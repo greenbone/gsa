@@ -1415,6 +1415,7 @@ text-align:right;
 }
 
 .section-header {
+  margin: 10px;
   border-bottom: 2px solid black;
 }
 
@@ -1439,7 +1440,9 @@ text-align:right;
   margin-right: 5px;
 }
 
-#section-box {
+.section-box {
+  margin: 10px;
+  margin-bottom: 20px;
 }
 
 #small-icon {

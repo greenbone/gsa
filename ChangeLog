@@ -1,3 +1,13 @@
+2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Simplify div arrangement to replace/reduce  by the (section-header,section-box) pairs.
+
+	* src/html/classic/css/gsa-style.css: Add a margin to section-header and section-box.
+	Also add some bottom-margin to the section-box to have a nice separation of the sections.
+
+	* src/html/classic/omp.xsl (user-tags-window-checked, resource-permissions-window, list-window): Remove surrounding gb_window, just
+	let the section pairs do the job.
+
 2015-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form)
