@@ -8651,6 +8651,14 @@ should not have received it.
                     </select>
                   </td>
                 </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <label>
+                      <input type="radio" name="event" value="New NVTs arrived"/>
+                      <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
+                    </label>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -9144,7 +9152,14 @@ should not have received it.
                 <tr>
                   <td colspan="2" valign="top">
                     <label>
-                      <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                      <xsl:choose>
+                        <xsl:when test="get_alerts_response/alert/event/text() = 'Task run status changed'">
+                          <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="radio" name="event" value="Task run status changed"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
                       <xsl:text> </xsl:text>
                     </label>
@@ -9190,6 +9205,21 @@ should not have received it.
                         <xsl:with-param name="select-value" select="$eventdata"/>
                       </xsl:call-template>
                     </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <label>
+                      <xsl:choose>
+                        <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
+                          <input type="radio" name="event" value="New NVTs arrived" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="radio" name="event" value="New NVTs arrived"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
+                    </label>
                   </td>
                 </tr>
               </table>
