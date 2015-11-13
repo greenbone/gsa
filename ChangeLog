@@ -1,5 +1,19 @@
 2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Turn Filter section into a toolbar-like compact element.
+
+	* src/html/classic/css/gsa-style.css: Slight vertical adjustment of
+	icon toolbar.
+
+	* src/html/classic/omp.xsl (filter-window-part): Drop the reload icon because
+	the drop down box will always execute the reload automatically. Instead place
+	here the expand icon for the filter details dialog. And prepend "Filter:" to
+	the entire line.
+	(list-window): Drop the entire section header for "filter" and shift the
+	the filter up to the same level as the icon toolbar.
+
+2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Simplify div arrangement to replace/reduce  by the (section-header,section-box) pairs.
 
 	* src/html/classic/css/gsa-style.css: Add a margin to section-header and section-box.

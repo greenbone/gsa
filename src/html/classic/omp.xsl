@@ -1043,11 +1043,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  </xsl:choose>
                </xsl:for-each>
              </select>
-             <input type="image"
-                    name="Switch Filter"
-                    title="{gsa:i18n ('Switch Filter', 'Filter')}"
-                    src="/img/refresh.png"
-                    alt="{gsa:i18n ('Switch', 'Filter')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+             <a href='#' class="toggle-action-icon" data-target="#filterbox" data-name="Filter">
+               <img src="/img/unfold.png" class="expand"
+                    style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+             </a>
            </div>
          </form>
        </xsl:if>
@@ -1068,6 +1067,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <input type="hidden" name="{name}" value="{value}"/>
    </xsl:for-each>
    <div style="padding: 2px;">
+     <b><xsl:value-of select="gsa:i18n ('Filter')"/></b>:
+     <xsl-text> </xsl-text>
      <input type="text" name="filter" size="53"
             value="{$criteria}"
             maxlength="1000"/>
@@ -4501,14 +4502,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
 
-    <div id="list-window-filter">
-      <div class="section-header">
-        <a href='#'
-           class="toggle-action-icon" data-target="#filterbox" data-name="Filter">
-          <img src="/img/unfold.png" class="expand"/>
-        </a>
-        <h3><xsl:value-of select="gsa:i18n ('Filter')"/></h3>
-      </div>
+    <div id="list-window-filter" style="margin-top:-27px">
       <xsl:call-template name="filter-window-part">
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="subtype" select="$subtype"/>
