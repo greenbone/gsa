@@ -4850,7 +4850,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="minor-details">
   <div class="float_right" style="font-size: 10px;">
-    <table style="font-size: 10px;">
+    <table style="font-size: 10px; border-spacing:0px">
       <tr>
         <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
         <td><xsl:value-of select="@id"/></td>

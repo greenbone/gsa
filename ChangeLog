@@ -1,5 +1,14 @@
 2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Make the big icon a bit smaller for a improved harmonic view.
+
+	* src/html/classic/css/gsa-style.css: Decrease sizes of big icon from
+	64 to 50.
+
+	* src/html/classic/omp.xsl (): Decrease spacing to condense the table a bit.
+
+2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Turn Filter section into a toolbar-like compact element.
 
 	* src/html/classic/css/gsa-style.css: Slight vertical adjustment of
