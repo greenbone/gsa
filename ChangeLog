@@ -1,5 +1,11 @@
 2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Changed wording for case of OMP service
+	unavailable to indicate it might only be a temporary problem (which is typcially
+	the case) and not indicate a severe problem.
+
+2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Renamed Charts to Summary and
 	Table to Details.
 
