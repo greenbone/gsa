@@ -4163,6 +4163,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="$detailed_target/esxi_credential/@id != '' and $detailed_target/esxi_credential/@id != $detailed_target/ssh_credential/@id and $detailed_target/esxi_credential/@id != $detailed_target/smb_credential/@id">
           <credential id="{$detailed_target/esxi_credential/@id}"/>
         </xsl:if>
+        <xsl:if test="$detailed_target/snmp_credential/@id != '' and $detailed_target/snmp_credential/@id != $detailed_target/ssh_credential/@id and $detailed_target/snmp_credential/@id != $detailed_target/smb_credential/@id and $detailed_target/snmp_credential/@id != $detailed_target/esxi_credential/@id">
+          <credential id="{$detailed_target/snmp_credential/@id}"/>
+        </xsl:if>
         <xsl:if test="$detailed_target/port_list/@id != ''">
           <port_list id="{$detailed_target/port_list/@id}"/>
         </xsl:if>
@@ -11865,6 +11868,7 @@ should not have received it.
           <input type="hidden" name="ssh_credential_id" value="--"/>
           <input type="hidden" name="smb_credential_id" value="--"/>
           <input type="hidden" name="esxi_credential_id" value="--"/>
+          <input type="hidden" name="snmp_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -12095,6 +12099,17 @@ should not have received it.
                 </select>
               </td>
             </tr>
+            <tr>
+              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
+              <td>
+                <select name="snmp_credential_id">
+                  <option value="--">--</option>
+                  <xsl:apply-templates select="$credentials/credential [type = 'snmp']" mode="select">
+                    <xsl:with-param name="select_id" select="snmp_credential_id"/>
+                  </xsl:apply-templates>
+                </select>
+              </td>
+            </tr>
           </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
@@ -12139,6 +12154,7 @@ should not have received it.
           <input type="hidden" name="ssh_credential_id" value="--"/>
           <input type="hidden" name="smb_credential_id" value="--"/>
           <input type="hidden" name="esxi_credential_id" value="--"/>
+          <input type="hidden" name="snmp_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -12436,6 +12452,34 @@ should not have received it.
                     </select>
                   </td>
                 </tr>
+                <tr>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
+                  <td>
+                    <select name="snmp_credential_id">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/snmp_credential/@id"/>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="get_credentials_response/credential [type = 'snmp']">
+                        <xsl:choose>
+                          <xsl:when test="@id = $credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
               </xsl:if>
             </xsl:when>
             <xsl:otherwise>
@@ -12718,6 +12762,34 @@ should not have received it.
                     </select>
                   </td>
                 </tr>
+                <tr>
+                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
+                  <td>
+                    <select name="snmp_credential_id" disabled="1">
+                      <xsl:variable name="credential_id">
+                        <xsl:value-of select="get_targets_response/target/snmp_credential/@id"/>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($credential_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="get_credentials_response/credential">
+                        <xsl:choose>
+                          <xsl:when test="@id = $credential_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                  </td>
+                </tr>
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
@@ -12842,6 +12914,11 @@ should not have received it.
                   <xsl:with-param name="content" select="'ESXi'"/>
                   <xsl:with-param name="select-value" select="$sort_keyword/value"/>
                 </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'snmp_credential'"/>
+                  <xsl:with-param name="content" select="'SNMP'"/>
+                  <xsl:with-param name="select-value" select="$sort_keyword/value"/>
+                </xsl:call-template>
               </select>
               <xsl:text> </xsl:text>
               <a id="sort_by_credential_asc" style="position:relative; top:3px;" href="#" title="{gsa:i18n ('Ascending', 'Filter')}"><img src="/img/ascending.png"/></a>
@@ -12879,6 +12956,11 @@ should not have received it.
         <name><xsl:value-of select="gsa:i18n('ESXi Credential', 'Target Credential')"/></name>
         <hide_in_table>1</hide_in_table>
         <field>esxi_credential</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('SNMP Credential', 'Target Credential')"/></name>
+        <hide_in_table>1</hide_in_table>
+        <field>snmp_credential</field>
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
@@ -13038,6 +13120,26 @@ should not have received it.
             </td>
           </tr>
         </xsl:if>
+        <xsl:if test="snmp_credential/@id != ''">
+          <tr>
+            <td>SNMP:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="boolean (snmp_credential/permissions) and count (snmp_credential/permissions/permission) = 0">
+                  <xsl:value-of select="snmp_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={snmp_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="snmp_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="snmp_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
     </td>
     <xsl:choose>
@@ -13132,10 +13234,10 @@ should not have received it.
     <td>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
-        <xsl:when test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or port_list/trash = '1'">
+        <xsl:when test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or snmp_credential/trash = '1' or port_list/trash = '1'">
           <xsl:variable name="resources_string">
-            <xsl:if test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
-            <xsl:if test="(ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1') and port_list/trash = '1'">
+            <xsl:if test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or snmp_credential/trash = '1'"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></xsl:if>
+            <xsl:if test="(ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or snmp_credential/trash = '1') and port_list/trash = '1'">
               <xsl:text> </xsl:text><xsl:value-of select="gsa:i18n ('and', 'List Conjunction')"/><xsl:text> </xsl:text>
             </xsl:if>
             <xsl:if test="port_list/trash = '1'"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></xsl:if>
@@ -13353,6 +13455,33 @@ should not have received it.
           </td>
         </tr>
       </xsl:if>
+      <xsl:if test="gsa:may-op ('get_credentials') or string-length (snmp_credential/@id) &gt; 0">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="boolean (snmp_credential/permissions) and count (snmp_credential/permissions/permission) = 0">
+                <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="snmp_credential/name"/>
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="gsa:i18n ('ID', 'Property')"/>: <xsl:value-of select="snmp_credential/@id"/>
+                <xsl:text>)</xsl:text>
+              </xsl:when>
+              <xsl:when test="gsa:may-op ('get_credentials')">
+                <a href="/omp?cmd=get_credential&amp;credential_id={snmp_credential/@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="snmp_credential/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="snmp_credential/name"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
     </table>
   </div>
 
@@ -13422,6 +13551,9 @@ should not have received it.
       </xsl:if>
       <xsl:if test="esxi_credential/@id != '' and esxi_credential/@id != ssh_credential/@id and esxi_credential/@id != smb_credential/@id">
         <credential id="{esxi_credential/@id}"/>
+      </xsl:if>
+      <xsl:if test="snmp_credential/@id != '' and snmp_credential/@id != ssh_credential/@id and snmp_credential/@id != smb_credential/@id and snmp_credential/@id != esxi_credential/@id">
+        <credential id="{snmp_credential/@id}"/>
       </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
@@ -29411,6 +29543,16 @@ var toggleFilter = function(){
                   <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-ESXi-Failure']/value}" style="margin-left:3px;"/>
                 </a>
               </xsl:if>
+              <xsl:if test="detail[name = 'Auth-SNMP-Success']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_ok.png" border="0" title="{detail[name = 'Auth-SNMP-Success']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
+              <xsl:if test="detail[name = 'Auth-SNMP-Failure']">
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}">
+                  <img src="/img/indicator_operation_failed.png" border="0" title="{detail[name = 'Auth-SNMP-Failure']/value}" style="margin-left:3px;"/>
+                </a>
+              </xsl:if>
             </td>
             <td>
               <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
@@ -34251,10 +34393,22 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
+
+              <tr class="even">
+                <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
+                <td>
+                  <xsl:call-template name="get-settings-resource">
+                    <xsl:with-param name="id"
+                                    select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="type" select="'credential'"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_port_lists')">
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34268,7 +34422,7 @@ var toggleFilter = function(){
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_scanners')">
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34280,7 +34434,7 @@ var toggleFilter = function(){
                 </td>
               </tr>
 
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34294,7 +34448,7 @@ var toggleFilter = function(){
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_schedules')">
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34308,7 +34462,7 @@ var toggleFilter = function(){
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_slaves')">
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34322,7 +34476,7 @@ var toggleFilter = function(){
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_targets')">
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-resource">
@@ -34336,7 +34490,7 @@ var toggleFilter = function(){
             </xsl:if>
 
             <xsl:if test="gsa:may-op ('get_filters')">
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34345,7 +34499,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Alerts Filter', 'Alert')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34354,7 +34508,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34363,7 +34517,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Credentials Filter', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34372,7 +34526,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Filters Filter', 'Filter')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34381,7 +34535,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Notes Filter', 'Note')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34390,7 +34544,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Overrides Filter', 'Override')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34399,7 +34553,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Permissions Filter', 'Permission')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34408,7 +34562,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Port Lists Filter', 'Port List')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34417,7 +34571,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Reports Filter', 'Report')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34426,7 +34580,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Report Formats Filter', 'Report Format')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34435,7 +34589,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Results Filter', 'Result')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34444,7 +34598,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Roles Filter', 'Role')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34453,7 +34607,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Schedules Filter', 'Schedule')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34462,7 +34616,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Slaves Filter', 'Slave')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34471,7 +34625,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Tags Filter', 'Tag')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34480,7 +34634,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Targets Filter', 'Target')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34489,7 +34643,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('Tasks Filter', 'Task')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34498,7 +34652,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('CPE Filter', 'CPE')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34507,7 +34661,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('CVE Filter', 'CVE')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34516,7 +34670,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34525,7 +34679,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34534,7 +34688,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34543,7 +34697,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="odd">
+              <tr class="even">
                 <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34552,7 +34706,7 @@ var toggleFilter = function(){
                   </xsl:call-template>
                 </td>
               </tr>
-              <tr class="even">
+              <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
                 <td>
                   <xsl:call-template name="get-settings-filter">
@@ -34859,6 +35013,19 @@ var toggleFilter = function(){
                     <xsl:with-param name="setting" select="'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
+                    <xsl:with-param name="type" select="'credential'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'settings_default:024550b8-868e-4b3c-98bf-99bb732f6a0d'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
                     <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
                   </xsl:call-template>
@@ -35471,6 +35638,7 @@ var toggleFilter = function(){
           <input type="hidden" name="ssh_credential_id" value="--"/>
           <input type="hidden" name="smb_credential_id" value="--"/>
           <input type="hidden" name="esxi_credential_id" value="--"/>
+          <input type="hidden" name="snmp_credential_id" value="--"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->

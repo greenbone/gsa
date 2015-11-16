@@ -1,3 +1,23 @@
+2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add SNMP credentials to targets.
+
+	* src/gsad_omp.c (new_target, create_target_omp, save_target_omp):
+	Handle new snmp_credential_id parameter.
+
+	* src/gsad.c (init_validator): Add param "snmp_credential_id".
+
+	* src/html/classic/omp.xsl (task [details]): Add SNMP credential of
+	target to related resources for permissions.
+	(html-create-target-form, html-edit-target-form, html-targets-table)
+	(target): Add elements for selecting or showing SNMP credential.
+	(target [trash]): Check if SNMP credential is in trash for target
+	restore icon.
+	(target [details]): Add SNMP credential.
+	(report [hosts]): Add indicator icons for SNMP authentication.
+	(get_my_settings, edit_my_settings): Add "Default SNMP Credential".
+	(html-edit-asset-form): Add snmp_credential_id input.
+
 2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Make the big icon a bit smaller for a improved harmonic view.

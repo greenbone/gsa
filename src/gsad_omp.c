@@ -8775,7 +8775,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   gnutls_session_t session;
   int socket;
   gchar *port_list;
-  gchar *ssh_credential, *smb_credential, *esxi_credential;
+  gchar *ssh_credential, *smb_credential, *esxi_credential, *snmp_credential;
   gchar *html, *end;
   const char *filter, *first, *max;
 
@@ -8832,17 +8832,27 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                     g_free (ssh_credential);
                     g_free (smb_credential);)
 
+  PARAM_OR_SETTING (snmp_credential, "snmp_credential_id",
+                    "024550b8-868e-4b3c-98bf-99bb732f6a0d",
+                    openvas_server_close (socket, session);
+                    g_free (port_list);
+                    g_free (ssh_credential);
+                    g_free (smb_credential);
+                    g_free (esxi_credential);)
+
   xml = g_string_new ("<new_target>");
 
   g_string_append_printf (xml,
                           "<port_list_id>%s</port_list_id>"
                           "<ssh_credential_id>%s</ssh_credential_id>"
                           "<smb_credential_id>%s</smb_credential_id>"
-                          "<esxi_credential_id>%s</esxi_credential_id>",
+                          "<esxi_credential_id>%s</esxi_credential_id>"
+                          "<snmp_credential_id>%s</snmp_credential_id>",
                           port_list ? port_list : "",
                           ssh_credential ? ssh_credential : "",
                           smb_credential ? smb_credential : "",
-                          esxi_credential ? esxi_credential : "");
+                          esxi_credential ? esxi_credential : "",
+                          snmp_credential ? snmp_credential : "");
 
   g_free (port_list);
   g_free (ssh_credential);
@@ -8967,11 +8977,12 @@ create_target_omp (credentials_t * credentials, params_t *params,
   gchar *html, *response, *command;
   const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
-  const char *target_esxi_credential, *target_source;
+  const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests, *hosts_filter;
   gchar *ssh_credentials_element, *smb_credentials_element;
-  gchar *esxi_credentials_element, *asset_hosts_element;
+  gchar *esxi_credentials_element, *snmp_credentials_element;
+  gchar *asset_hosts_element;
   gchar* comment_element = NULL;
   entity_t entity;
   GString *xml;
@@ -8988,6 +8999,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "smb_credential_id");
   target_esxi_credential = params_value (params, "esxi_credential_id");
+  target_snmp_credential = params_value (params, "snmp_credential_id");
   alive_tests = params_value (params, "alive_tests");
   hosts_filter = params_value (params, "hosts_filter");
 
@@ -9020,6 +9032,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
     CHECK_PARAM (port, "Create Target", new_target);
   CHECK_PARAM (target_smb_credential, "Create Target", new_target);
   CHECK_PARAM (target_esxi_credential, "Create Target", new_target);
+  CHECK_PARAM (target_snmp_credential, "Create Target", new_target);
   CHECK_PARAM (alive_tests, "Create Target", new_target);
 
   if (comment != NULL)
@@ -9051,6 +9064,13 @@ create_target_omp (credentials_t * credentials, params_t *params,
       g_strdup_printf ("<esxi_credential id=\"%s\"/>",
                        target_esxi_credential);
 
+  if (strcmp (target_snmp_credential, "--") == 0)
+    snmp_credentials_element = g_strdup ("");
+  else
+    snmp_credentials_element =
+      g_strdup_printf ("<snmp_credential id=\"%s\"/>",
+                       target_snmp_credential);
+
   if (strcmp (target_source, "asset_hosts") == 0)
     asset_hosts_element = g_strdup_printf ("<asset_hosts filter=\"%s\"/>",
                                            hosts_filter);
@@ -9080,13 +9100,14 @@ create_target_omp (credentials_t * credentials, params_t *params,
                      alive_tests);
 
   command = g_strdup_printf ("<create_target>"
-                             "%s%s%s%s%s%s"
+                             "%s%s%s%s%s%s%s"
                              "</create_target>",
                              xml->str,
                              comment_element,
                              ssh_credentials_element,
                              smb_credentials_element,
                              esxi_credentials_element,
+                             snmp_credentials_element,
                              asset_hosts_element);
 
   g_string_free (xml, TRUE);
@@ -10569,7 +10590,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
   gchar *html, *response;
   const char *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
-  const char *target_esxi_credential, *target_source;
+  const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
   GString *command;
@@ -10667,12 +10688,14 @@ save_target_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "smb_credential_id");
   target_esxi_credential = params_value (params, "esxi_credential_id");
+  target_snmp_credential = params_value (params, "snmp_credential_id");
 
   CHECK_PARAM (target_source, "Save Target", edit_target);
   CHECK_PARAM (port_list_id, "Save Target", edit_target);
   CHECK_PARAM (target_ssh_credential, "Save Target", edit_target);
   CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
   CHECK_PARAM (target_esxi_credential, "Save Target", edit_target);
+  CHECK_PARAM (target_snmp_credential, "Save Target", edit_target);
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
@@ -10720,7 +10743,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
   {
     int ret;
     gchar *ssh_credentials_element, *smb_credentials_element;
-    gchar *esxi_credentials_element;
+    gchar *esxi_credentials_element, *snmp_credentials_element;
     gchar* comment_element;
     const char *status;
     entity_t entity;
@@ -10754,6 +10777,13 @@ save_target_omp (credentials_t * credentials, params_t *params,
         g_strdup_printf ("<esxi_credential id=\"%s\"/>",
                          target_esxi_credential);
 
+    if (strcmp (target_snmp_credential, "--") == 0)
+      snmp_credentials_element = g_strdup ("");
+    else
+      snmp_credentials_element =
+        g_strdup_printf ("<snmp_credential id=\"%s\"/>",
+                         target_snmp_credential);
+
     command = g_string_new ("");
     xml_string_append (command,
                        "<modify_target target_id=\"%s\">"
@@ -10776,17 +10806,19 @@ save_target_omp (credentials_t * credentials, params_t *params,
                        alive_tests);
 
     g_string_append_printf (command,
-                            "%s%s%s%s"
+                            "%s%s%s%s%s"
                             "</modify_target>",
                             comment_element,
                             ssh_credentials_element,
                             smb_credentials_element,
-                            esxi_credentials_element);
+                            esxi_credentials_element,
+                            snmp_credentials_element);
 
     g_free (comment_element);
     g_free (ssh_credentials_element);
     g_free (smb_credentials_element);
     g_free (esxi_credentials_element);
+    g_free (snmp_credentials_element);
 
     /* Modify the target. */
 
