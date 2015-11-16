@@ -1,5 +1,10 @@
 2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (edit_my_settings): Show only credentials
+	of the correct types in the dropdown lists.
+
+2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add SNMP credentials to targets.
 
 	* src/gsad_omp.c (new_target, create_target_omp, save_target_omp):

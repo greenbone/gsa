@@ -34988,7 +34988,7 @@ var toggleFilter = function(){
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SSH Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential [type = 'up' or type = 'usk']"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -35001,7 +35001,7 @@ var toggleFilter = function(){
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SMB Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential [type = 'up']"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -35014,7 +35014,7 @@ var toggleFilter = function(){
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential [type = 'up']"/>
                   </xsl:call-template>
                 </td>
               </tr>
@@ -35027,7 +35027,7 @@ var toggleFilter = function(){
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential [type = 'snmp']"/>
                   </xsl:call-template>
                 </td>
               </tr>
