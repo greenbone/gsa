@@ -13193,43 +13193,104 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="ssh_credential/trash = '1'">
-          <xsl:value-of select="ssh_credential/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="ssh_credential/name"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="smb_credential/trash = '1'">
-          <xsl:value-of select="smb_credential/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="smb_credential/name"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="esxi_credential/trash = '1'">
-          <xsl:value-of select="esxi_credential/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="esxi_credential/name"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
+      <table>
+        <xsl:if test="ssh_credential/@id != ''">
+          <tr>
+            <td width="35" valign="top">SSH:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="ssh_credential/trash = '1'">
+                  <xsl:value-of select="ssh_credential/name"/>
+                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                </xsl:when>
+                <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
+                  <xsl:value-of select="ssh_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={ssh_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="ssh_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="ssh_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="smb_credential/@id != ''">
+          <tr>
+            <td width="35" valign="top">SMB:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="smb_credential/trash = '1'">
+                  <xsl:value-of select="smb_credential/name"/>
+                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                </xsl:when>
+                <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
+                  <xsl:value-of select="smb_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={smb_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="smb_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="smb_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="esxi_credential/@id != ''">
+          <tr>
+            <td width="35" valign="top">ESXi:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="esxi_credential/trash = '1'">
+                  <xsl:value-of select="esxi_credential/name"/>
+                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                </xsl:when>
+                <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
+                  <xsl:value-of select="esxi_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={esxi_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="esxi_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="esxi_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="snmp_credential/@id != ''">
+          <tr>
+            <td width="35" valign="top">SNMP:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="snmp_credential/trash = '1'">
+                  <xsl:value-of select="snmp_credential/name"/>
+                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                </xsl:when>
+                <xsl:when test="boolean (snmp_credential/permissions) and count (snmp_credential/permissions/permission) = 0">
+                  <xsl:value-of select="snmp_credential/name"/>
+                </xsl:when>
+                <xsl:when test="gsa:may-op ('get_credentials')">
+                  <a href="/omp?cmd=get_credential&amp;credential_id={snmp_credential/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="snmp_credential/name"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="snmp_credential/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+      </table>
     </td>
     <td>
       <xsl:choose>
@@ -32458,17 +32519,12 @@ var toggleFilter = function(){
   <div>
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
-        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
-        <td rowspan="2"><xsl:value-of select="gsa:i18n ('IPs', 'Host')"/></td>
-        <td rowspan="2"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
-        <td colspan="3"><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></td>
-        <td rowspan="2" width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-      </tr>
-      <tr class="gbntablehead2">
-        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
-        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
-        <td style="font-size:10px;"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('IPs', 'Host')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></td>
+        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="target" mode="trash"/>
     </table>

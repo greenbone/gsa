@@ -1,5 +1,11 @@
 2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (target [trash], html-targets-trash-table):
+	Merge credential columns into one as in regular table and add SNMP
+	credential.
+
+2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (edit_my_settings): Show only credentials
 	of the correct types in the dropdown lists.
 
