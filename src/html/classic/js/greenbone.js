@@ -616,4 +616,31 @@
         }
     }
 
+  /* Alert event type selection */
+  window.editAlertUpdateForm = function ()
+    {
+      var type;
+      type = $('input[name="event"]:checked').val();
+
+      switch(type)
+        {
+          case "New NVTs arrived":
+	        /* Conditions. */
+            $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").hide();
+	        /* Methods. */
+            $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").hide();
+	        /* Filter. */
+            $("#report_result_filter_row").hide();
+            break;
+          case "Task run status changed":
+	        /* Conditions. */
+            $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").show();
+	        /* Methods. */
+            $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").show();
+	        /* Filter. */
+            $("#report_result_filter_row").show();
+            break;
+        }
+    }
+
 }(window);

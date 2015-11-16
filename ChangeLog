@@ -1,3 +1,16 @@
+2015-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Hide certain rows on Create Alert and New Alert when the event is "New
+	NVTs arrived".
+
+	* src/html/classic/js/greenbone.js (editAlertUpdateForm): New function.
+
+	* src/html/classic/omp.xsl (condition-field): Add hide arg.
+	(html-create-alert-form, html-edit-alert-form): Add onChange handlers
+	for rows that must hide when "New NVTs arrived" is selected.  Hide the
+	same rows with CSS initially if "New NVTs arrived" is selected
+	initially.
+
 2015-11-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (target [trash], html-targets-trash-table):

@@ -8416,6 +8416,7 @@ should not have received it.
 </xsl:variable>
 
 <xsl:template name="condition-field">
+  <xsl:param name="hide"/>
   <xsl:param name="condition" select="false ()"/>
   <xsl:param name="condition-text">
     <xsl:choose>
@@ -8429,7 +8430,7 @@ should not have received it.
   </xsl:param>
   <xsl:param name="filters"/>
   <table border="0" width="100%">
-    <tr>
+    <tr id="always_row">
       <td colspan="2" valign="top">
         <xsl:choose>
           <xsl:when test="not ($condition)">
@@ -8451,7 +8452,7 @@ should not have received it.
         </xsl:choose>
       </td>
     </tr>
-    <tr>
+    <tr style="{$hide}" id="severity_at_least_row">
       <td colspan="2" valign="top">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="value" select="'Severity at least'"/>
@@ -8470,7 +8471,7 @@ should not have received it.
         </xsl:choose>
       </td>
     </tr>
-    <tr>
+    <tr style="{$hide}" id="severity_changed_row">
       <td colspan="2" valign="top">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
@@ -8497,7 +8498,7 @@ should not have received it.
         </select>
       </td>
     </tr>
-    <tr>
+    <tr style="{$hide}" id="filter_count_at_least_row">
       <td colspan="2" valign="top">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
@@ -8535,7 +8536,7 @@ should not have received it.
         </xsl:call-template>
       </td>
     </tr>
-    <tr>
+    <tr style="{$hide}" id="filter_count_changed_row">
       <td colspan="2" valign="top">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
@@ -8626,7 +8627,8 @@ should not have received it.
                 <tr>
                   <td colspan="2" valign="top">
                     <label>
-                      <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                      <input type="radio" name="event" value="Task run status changed" checked="1"
+                             onChange="editAlertUpdateForm()"/>
                       <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
                       <xsl:text> </xsl:text>
                     </label>
@@ -8643,7 +8645,8 @@ should not have received it.
                 <tr>
                   <td colspan="2" valign="top">
                     <label>
-                      <input type="radio" name="event" value="New NVTs arrived"/>
+                      <input type="radio" name="event" value="New NVTs arrived"
+                             onChange="editAlertUpdateForm()"/>
                       <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
                     </label>
                   </td>
@@ -8659,6 +8662,9 @@ should not have received it.
               </xsl:call-template>
             </td>
           </tr>
+
+          <!-- Method: Email. -->
+
           <tr class="odd">
             <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
             <td colspan="2">
@@ -8781,6 +8787,9 @@ should not have received it.
               </table>
             </td>
           </tr>
+
+          <!-- Method: System Logger. -->
+
           <tr class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
@@ -8801,7 +8810,10 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+
+          <!-- Method: HTTP Get. -->
+
+          <tr id="http_get_row" class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8823,7 +8835,10 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+
+          <!-- Method: Sourcefire Connector. -->
+
+          <tr id="sourcefire_row" class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8861,7 +8876,10 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+
+          <!-- Method: Verinice Connector. -->
+
+          <tr id="verinice_row" class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8927,7 +8945,10 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+
+          <!-- Method: Start task. -->
+
+          <tr id="start_task_row" class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8950,7 +8971,10 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+
+          <!-- Method: Send. -->
+
+          <tr id="send_row" class="odd">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -8987,7 +9011,7 @@ should not have received it.
             </td>
           </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
-            <tr>
+            <tr id="report_result_filter_row">
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td colspan="2">
                 <select name="filter_id">
@@ -9117,6 +9141,17 @@ should not have received it.
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <!-- CSS for hiding rows, when event is 'New NVTs arrived'. -->
+          <xsl:variable name="hide">
+            <xsl:choose>
+              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
+                <xsl:text>display: none</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text></xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <tr class="odd">
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
@@ -9143,10 +9178,12 @@ should not have received it.
                     <label>
                       <xsl:choose>
                         <xsl:when test="get_alerts_response/alert/event/text() = 'Task run status changed'">
-                          <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                          <input type="radio" name="event" value="Task run status changed" checked="1"
+                                 onChange="editAlertUpdateForm()"/>
                         </xsl:when>
                         <xsl:otherwise>
-                          <input type="radio" name="event" value="Task run status changed"/>
+                          <input type="radio" name="event" value="Task run status changed"
+                                 onChange="editAlertUpdateForm()"/>
                         </xsl:otherwise>
                       </xsl:choose>
                       <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
@@ -9201,10 +9238,12 @@ should not have received it.
                     <label>
                       <xsl:choose>
                         <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
-                          <input type="radio" name="event" value="New NVTs arrived" checked="1"/>
+                          <input type="radio" name="event" value="New NVTs arrived" checked="1"
+                                 onChange="editAlertUpdateForm()"/>
                         </xsl:when>
                         <xsl:otherwise>
-                          <input type="radio" name="event" value="New NVTs arrived"/>
+                          <input type="radio" name="event" value="New NVTs arrived"
+                                 onChange="editAlertUpdateForm()"/>
                         </xsl:otherwise>
                       </xsl:choose>
                       <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
@@ -9226,6 +9265,7 @@ should not have received it.
                 <xsl:with-param name="condition"
                                 select="get_alerts_response/alert/condition"/>
                 <xsl:with-param name="filters" select="$filters"/>
+                <xsl:with-param name="hide" select="$hide"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -9416,7 +9456,7 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr style="{$hide}" id="http_get_row" class="odd">
 
             <!-- Method: HTTP Get. -->
 
@@ -9444,7 +9484,7 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="even">
+          <tr style="{$hide}" id="sourcefire_row" class="even">
 
             <!-- Method: Sourcefire Connector. -->
 
@@ -9495,7 +9535,7 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr style="{$hide}" id="verinice_row" class="odd">
 
             <!-- Method: verinice Connector. -->
 
@@ -9566,7 +9606,7 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr style="{$hide}" id="start_task_row" class="odd">
 
             <!-- Method: Start Task. -->
 
@@ -9660,7 +9700,7 @@ should not have received it.
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
-            <tr>
+            <tr id="report_result_filter_row">
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td colspan="2">
                 <select name="filter_id">
