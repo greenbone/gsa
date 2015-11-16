@@ -9700,7 +9700,7 @@ should not have received it.
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
-            <tr id="report_result_filter_row">
+            <tr style="{$hide}" id="report_result_filter_row">
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td colspan="2">
                 <select name="filter_id">

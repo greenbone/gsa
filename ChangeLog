@@ -1,5 +1,10 @@
 2015-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-alert-form): Also hide the filter
+	field when event is "New NVTs arrived".
+
+2015-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Hide certain rows on Create Alert and New Alert when the event is "New
 	NVTs arrived".
 
