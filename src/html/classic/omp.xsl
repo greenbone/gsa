@@ -7668,94 +7668,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="credential" mode="details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Credential Details', 'Credential')"/>
-      <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="cap-type" select="'Credential'"/>
-        <xsl:with-param name="type" select="'credential'"/>
-      </xsl:call-template>
-      <xsl:call-template name="credential-download-icons">
-        <xsl:with-param name="type" select="type"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:call-template name="minor-details"/>
-      <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
-          <td><xsl:value-of select="comment"/></td>
-        </tr>
-        <tr>
-          <td style="vertical-align:top;"><xsl:value-of select="gsa:i18n ('Type', 'Auth Data')"/>:</td>
-          <td>
-            <xsl:value-of select="type"/><br/>
-            <span class="footnote">(<xsl:value-of select="full_type"/>)</span>
-          </td>
-        </tr>
-        <xsl:if test="type != 'cc'">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
-            <td><xsl:value-of select="login"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="type = 'snmp'">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Auth Data')"/>:</td>
-            <td><xsl:value-of select="auth_algorithm"/></td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/>:</td>
-            <td><xsl:value-of select="privacy/algorithm"/></td>
-          </tr>
-        </xsl:if>
-      </table>
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'Credential'"/>
+      <xsl:with-param name="type" select="'credential'"/>
+    </xsl:call-template>
+  </div>
 
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_credentials&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Credentials', 'Credential')}">
+        <img id="big-icon" src="/img/credential.svg" border="0" style="margin-right:5px" alt="Credentials"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+        <td><xsl:value-of select="comment"/></td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top;"><xsl:value-of select="gsa:i18n ('Type', 'Auth Data')"/>:</td>
+        <td>
+          <xsl:value-of select="type"/><br/>
+          <span class="footnote">(<xsl:value-of select="full_type"/>)</span>
+        </td>
+      </tr>
+      <xsl:if test="type != 'cc'">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
+          <td><xsl:value-of select="login"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="type = 'snmp'">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Auth Data')"/>:</td>
+          <td><xsl:value-of select="auth_algorithm"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/>:</td>
+          <td><xsl:value-of select="privacy/algorithm"/></td>
+        </tr>
+      </xsl:if>
+    </table>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#using-box" data-name="Slaves using this Credential" data-variable="using-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Slaves', 'Slave')}">
+        <img id="small-icon" src="/img/slave.svg" border="0" style="margin-right:5px" alt="Slaves"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
-        <xsl:when test="type != 'cc'"></xsl:when>
-        <xsl:when test="count(scanners/scanner) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanners')"/></h1>
+        <xsl:when test="count(slaves/slave) != 0">
+          (<xsl:value-of select="count(slaves/slave)"/>)
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="scanners/scanner">
-              <tr class="{gsa:table-row-class(position())}">
-                <xsl:choose>
-                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <td>
-                      <a href="/omp?cmd=get_scanner&amp;scanner_id={@id}&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Scanner Details', 'Scanner')}">
-                        <xsl:value-of select="name"/>
-                      </a>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </tr>
-            </xsl:for-each>
-          </table>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
+    </h3>
+  </div>
 
-      <xsl:choose>
-        <xsl:when test="type != 'up'"></xsl:when>
-        <xsl:when test="count(slaves/slave) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Slaves')"/></h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/></h1>
+  <div class="section-box" id="using-box">
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -7778,45 +7766,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </tr>
             </xsl:for-each>
           </table>
-        </xsl:otherwise>
-      </xsl:choose>
+  </div>
 
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#using-box2" data-name="Targets using this Credential" data-variable="using-box2--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Targets', 'Targets')}">
+        <img id="small-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Tasks using this Credential', 'Credential')"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
-        <xsl:when test="type = 'cc'"></xsl:when>
-        <xsl:when test="count(targets/target) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential')"/>: <xsl:value-of select="gsa:i18n ('None', 'Targets')"/></h1>
+        <xsl:when test="count(targets/target) != 0">
+          (<xsl:value-of select="count(targets/target)"/>)
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="targets/target">
-              <tr class="{gsa:table-row-class(position())}">
-                <xsl:choose>
-                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <td>
-                      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Target Details', 'Target')}">
-                        <xsl:value-of select="name"/>
-                      </a>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </tr>
-            </xsl:for-each>
-          </table>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </div>
+    </h3>
   </div>
+
+  <div class="section-box" id="using-box2">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+      </tr>
+      <xsl:for-each select="targets/target">
+        <tr class="{gsa:table-row-class(position())}">
+          <xsl:choose>
+            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
+                   title="{gsa:i18n ('Target Details', 'Target')}">
+                  <xsl:value-of select="name"/>
+                </a>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'credential'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'credential'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
