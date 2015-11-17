@@ -13603,7 +13603,7 @@ should not have received it.
           (<xsl:value-of select="count(tasks/task)"/>)
         </xsl:when>
         <xsl:otherwise>
-          (<xsl:value-of select="gsa:i18n ('none', 'Targets')"/>)
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
     </h3>
@@ -24844,95 +24844,137 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="port_list" mode="details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Port List Details', 'Port List')"/>
-      <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="cap-type" select="'Port List'"/>
-        <xsl:with-param name="type" select="'port_list'"/>
-        <xsl:with-param name="noupload" select="false ()"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:call-template name="minor-details"/>
-      <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
-          <td><xsl:value-of select="comment"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Port count', 'Port List')"/>:</td>
-          <td><xsl:value-of select="port_count/all"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('TCP Port count', 'Port List')"/>:</td>
-          <td><xsl:value-of select="port_count/tcp"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('UDP Port count', 'Port List')"/>:</td>
-          <td><xsl:value-of select="port_count/udp"/></td>
-        </tr>
-      </table>
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'Port List'"/>
+      <xsl:with-param name="type" select="'port_list'"/>
+    </xsl:call-template>
+  </div>
 
-      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
-        </tr>
-        <xsl:variable name="id" select="@id"/>
-        <xsl:variable name="in_use" select="in_use"/>
-        <xsl:for-each select="port_ranges/port_range">
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Port Lists', 'Port List')}">
+        <img id="big-icon" src="/img/port_list.svg" border="0" style="margin-right:5px" alt="Port Lists"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
 
-          <tr class="{gsa:table-row-class(position())}">
-            <td><xsl:value-of select="start"/></td>
-            <td><xsl:value-of select="end"/></td>
-            <td><xsl:value-of select="type"/></td>
-          </tr>
-        </xsl:for-each>
-      </table>
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+        <td><xsl:value-of select="comment"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Port count', 'Port List')"/>:</td>
+        <td><xsl:value-of select="port_count/all"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('TCP Port count', 'Port List')"/>:</td>
+        <td><xsl:value-of select="port_count/tcp"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('UDP Port count', 'Port List')"/>:</td>
+        <td><xsl:value-of select="port_count/udp"/></td>
+      </tr>
+    </table>
+  </div>
 
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#portranges-box" data-name="Port Ranges" data-variable="portranges-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
-        <xsl:when test="count(targets/target) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List')"/>: <xsl:value-of select="gsa:i18n ('None', 'Port List')"/></h1>
+        <xsl:when test="count(port_ranges/port_range) != 0">
+          (<xsl:value-of select="count(port_ranges/port_range)"/>)
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="targets/target">
-              <tr class="{gsa:table-row-class(position())}">
-                <xsl:choose>
-                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <td>
-                      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                        <xsl:value-of select="name"/>
-                      </a>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </tr>
-            </xsl:for-each>
-          </table>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </div>
+    </h3>
   </div>
+
+  <div class="section-box" id="portranges-box">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
+      </tr>
+      <xsl:variable name="id" select="@id"/>
+      <xsl:variable name="in_use" select="in_use"/>
+      <xsl:for-each select="port_ranges/port_range">
+
+        <tr class="{gsa:table-row-class(position())}">
+          <td><xsl:value-of select="start"/></td>
+          <td><xsl:value-of select="end"/></td>
+          <td><xsl:value-of select="type"/></td>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#using-box" data-name="Targets using this Port List" data-variable="using-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_taargets&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Targets', 'Targets')}">
+        <img id="small-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(targets/target) != 0">
+          (<xsl:value-of select="count(targets/target)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+
+  <div class="section-box" id="using-box">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+      </tr>
+      <xsl:for-each select="targets/target">
+        <tr class="{gsa:table-row-class(position())}">
+          <xsl:choose>
+            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:value-of select="name"/>
+                </a>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'port_list'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'port_list'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
