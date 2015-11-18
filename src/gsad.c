@@ -1205,7 +1205,7 @@ init_validator ()
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap_connect". */
-  openvas_validator_add (validator, "group",        "^method:(ldap_connect)$");
+  openvas_validator_add (validator, "group",        "^method:(ldap_connect|radius_connect)$");
   openvas_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
@@ -1271,6 +1271,7 @@ init_validator ()
   openvas_validator_add (validator, "ca_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
+  openvas_validator_add (validator, "radiuskey",   "^.{0,40}$");
   openvas_validator_add (validator, "related:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "related:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
@@ -1469,6 +1470,7 @@ init_validator ()
   openvas_validator_alias (validator, "port_range_start",  "number");
   openvas_validator_alias (validator, "pos",               "number");
   openvas_validator_alias (validator, "privacy_password", "lsc_password");
+  openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");

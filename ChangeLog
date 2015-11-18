@@ -1,3 +1,16 @@
+2015-11-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add radius form related parameters.
+
+	* src/gsad_omp.c (save_auth_omp): Adjust to handle RADIUS Authentication
+	form too.
+
+	* src/html/classic/omp.xsl (html-users-table, user): Change LDAP
+	Authentication column to Authentication Type.
+	(group [auth]): Change mode name to ldapauth.
+	(group [radiusauth]): New template.
+	(describe_auth_response [show]): Handle method:radius_connect case too.
+
 2015-11-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (match="credential" mode="details"): Convert

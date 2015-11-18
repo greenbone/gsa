@@ -26261,10 +26261,9 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   int ret;
-  entity_t entity;
-  char *truefalse;
-  gchar *html, *response;
-  const char *ldaphost, *method, *authdn;
+  entity_t entity = NULL;
+  char *html, *response = NULL, *truefalse;
+  const char *method;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -26272,37 +26271,50 @@ save_auth_omp (credentials_t* credentials, params_t *params,
   else
     truefalse = "false";
 
-  ldaphost = params_value (params, "ldaphost");
   method = params_value (params, "group");
-  authdn = params_value (params, "authdn");
+  CHECK_PARAM (method, "Save Authentication", get_users);
+  if (!strcmp (method, "method:ldap_connect"))
+    {
+      const char *ldaphost, *authdn;
+      ldaphost = params_value (params, "ldaphost");
+      authdn = params_value (params, "authdn");
 
-  if (ldaphost == NULL || method == NULL
-      || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
+      CHECK_PARAM (ldaphost, "Save Authentication", get_users);
+      CHECK_PARAM (authdn, "Save Authentication", get_users);
+      /** @warning authdn shall contain a single %s, handle with care. */
+      ret = ompf (credentials, &response, &entity, response_data,
+                  "<modify_auth>"
+                  "<group name=\"%s\">"
+                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                  "</group>"
+                  "</modify_auth>", method, truefalse, ldaphost, authdn);
+    }
+  else if (!strcmp (method, "method:radius_connect"))
+    {
+      const char *radiushost, *radiuskey;
+      radiushost = params_value (params, "radiushost");
+      radiuskey = params_value (params, "radiuskey");
+
+      CHECK_PARAM (radiushost, "Save Authentication", get_users);
+      CHECK_PARAM (radiuskey, "Save Authentication", get_users);
+      /** @warning authdn shall contain a single %s, handle with care. */
+      ret = ompf (credentials, &response, &entity, response_data,
+                  "<modify_auth>"
+                  "<group name=\"%s\">"
+                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"radiushost\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"radiuskey\" value=\"%s\"/>"
+                  "</group>"
+                  "</modify_auth>", method, truefalse, radiushost, radiuskey);
+    }
+  else
     return get_users (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM
                        ("Save Authentication Configuration"),
                       response_data);
 
-  /* Input is valid. Save settings. */
-
-  /** @warning authdn shall contain a single %s, handle with care. */
-  response = NULL;
-  entity = NULL;
-  ret = ompf (credentials,
-              &response,
-              &entity,
-              response_data,
-              "<modify_auth>"
-              "<group name=\"%s\">"
-              "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-              "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-              "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
-              "</group>"
-              "</modify_auth>",
-              method,
-              truefalse,
-              ldaphost,
-              authdn);
   switch (ret)
     {
       case 0:
