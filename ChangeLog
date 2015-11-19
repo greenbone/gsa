@@ -1,3 +1,8 @@
+2015-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* COPYING: Updated locations of minified versions of d3, jQuery and
+	Select2.  Added jQuery UI files.
+
 2015-11-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add radius form related parameters.
