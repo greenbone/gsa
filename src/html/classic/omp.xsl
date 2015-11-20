@@ -14942,45 +14942,47 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Trend', 'Scan Config|NVTs')"/></td>
       </tr>
       <xsl:apply-templates select="families/family"/>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Total', 'Families')"/>: <xsl:value-of select="count(families/family)"/></td>
-        <td>
-          <table>
-            <tr>
-              <td style="margin-right:10px;">
-                <xsl:value-of select="known_nvt_count/text()"/>
-              </td>
-              <td>
-                <div style="margin-left:6px;">
-                  <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/>
-                  <xsl:value-of select="max_nvt_count/text()"/>
-                  <xsl:value-of select="gsa:i18n (' in selected families', 'Scan Config')"/><br/>
-                  <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/>
-                  <xsl:value-of select="sum(../../get_nvt_families_response/families/family/max_nvt_count)"/>
-                  <xsl:value-of select="gsa:i18n (' in total', 'Scan Config')"/>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="nvt_count/growing='1'">
-              <img src="/img/trend_more.png"
-                   alt="{gsa:i18n ('Grows', 'Scan Config')}"
-                   title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
-            </xsl:when>
-            <xsl:when test="nvt_count/growing='0'">
-              <img src="/img/trend_nochange.png"
-                   alt="{gsa:i18n ('Static', 'Scan Config')}"
-                   title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="gsa:i18n ('N/A', 'Value')"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
+      <xsl:if test="count(families/family) > 0">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Total', 'Families')"/>: <xsl:value-of select="count(families/family)"/></td>
+          <td>
+            <table>
+              <tr>
+                <td style="margin-right:10px;">
+                  <xsl:value-of select="known_nvt_count/text()"/>
+                </td>
+                <td>
+                  <div style="margin-left:6px;">
+                    <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/>
+                    <xsl:value-of select="max_nvt_count/text()"/>
+                    <xsl:value-of select="gsa:i18n (' in selected families', 'Scan Config')"/><br/>
+                    <xsl:value-of select="gsa:i18n (' of ', 'Scan Config|NVTs')"/>
+                    <xsl:value-of select="sum(../../get_nvt_families_response/families/family/max_nvt_count)"/>
+                    <xsl:value-of select="gsa:i18n (' in total', 'Scan Config')"/>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="nvt_count/growing='1'">
+                <img src="/img/trend_more.png"
+                     alt="{gsa:i18n ('Grows', 'Scan Config')}"
+                     title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
+              </xsl:when>
+              <xsl:when test="nvt_count/growing='0'">
+                <img src="/img/trend_nochange.png"
+                     alt="{gsa:i18n ('Static', 'Scan Config')}"
+                     title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('N/A', 'Value')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
     </table>
   </div>
 </xsl:template>
@@ -15084,306 +15086,279 @@ should not have received it.
 <!--     CONFIG OVERVIEW -->
 
 <xsl:template name="html-config-table">
- <xsl:variable name="config" select="get_configs_response/config"/>
+  <xsl:variable name="config" select="get_configs_response/config"/>
 
- <div class="gb_window">
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">
-  <xsl:choose>
-    <xsl:when test="edit">
-      <xsl:value-of select="gsa:i18n ('Edit Scan Config', 'Scan Config')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Scan Config'"/>
-        <xsl:with-param name="type" select="'config'"/>
-        <xsl:with-param name="id"
-                        select="$config/@id"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="gsa:i18n ('Scan Config Details', 'Scan Config')"/>
-      <a href="/help/config_details.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
-         class="new-action-icon" data-type="config">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon" data-type="config"
-         title="{gsa:i18n ('Import Scan Config', 'Config')}">
-        <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
-      </a>
+  <div class="toolbar">
+    <a href="/help/config_details.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
+       title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
+       class="new-action-icon" data-type="config">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+    <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       class="upload-action-icon" data-type="config"
+       title="{gsa:i18n ('Import Scan Config', 'Config')}">
+      <img src="/img/upload.png" border="0" style="margin-left:3px;"/>
+    </a>
+    <xsl:choose>
+      <xsl:when test="gsa:may-clone ('config')">
+        <div style="display: inline">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+            <input type="hidden" name="cmd" value="clone"/>
+            <input type="hidden" name="resource_type" value="config"/>
+            <input type="hidden" name="next" value="get_config"/>
+            <input type="hidden" name="id" value="{$config/@id}"/>
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+            <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
+                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+          </form>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <img src="/img/clone_inactive.png"
+             alt="{gsa:i18n ('Clone', 'Action Verb')}"
+             value="Clone"
+             title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
+             style="margin-left:3px;"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
+    </a>
+    <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
       <xsl:choose>
-        <xsl:when test="gsa:may-clone ('config')">
-          <div style="display: inline">
-            <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-              <input type="hidden" name="cmd" value="clone"/>
-              <input type="hidden" name="resource_type" value="config"/>
-              <input type="hidden" name="next" value="get_config"/>
-              <input type="hidden" name="id" value="{$config/@id}"/>
+        <xsl:when test="$config/writable!='0' and $config/in_use='0'">
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'config'"/>
+            <xsl:with-param name="id" select="$config/@id"/>
+            <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
-                     name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
-            </form>
-          </div>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/clone_inactive.png"
-               alt="{gsa:i18n ('Clone', 'Action Verb')}"
-               value="Clone"
-               title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
+          <xsl:variable name="inactive_text">
+            <xsl:choose>
+              <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
+              <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config')"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+               title="{$inactive_text}"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
+      <xsl:choose>
+        <xsl:when test="$config/writable='0'">
+          <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+               title="{gsa:i18n ('Scan Config is not writable', 'Scan Config')}"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             class="edit-action-icon" data-type="config" data-id="{$config/@id}"
+             title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
+            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Export Scan Config as XML', 'Scan Config')}"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
-      <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <xsl:choose>
-          <xsl:when test="$config/writable!='0' and $config/in_use='0'">
-            <xsl:call-template name="trashcan-icon">
-              <xsl:with-param name="type" select="'config'"/>
-              <xsl:with-param name="id" select="$config/@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-                <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:variable name="inactive_text">
-              <xsl:choose>
-                <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
-                <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config')"/></xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
-                 title="{$inactive_text}"
-                 style="margin-left:3px;"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="$config/writable='0'">
-            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
-                 title="{gsa:i18n ('Scan Config is not writable', 'Scan Config')}"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="edit-action-icon" data-type="config" data-id="{$config/@id}"
-               title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
-              <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-            </a>
-          </xsl:otherwise>
-        </xsl:choose>
-        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Export Scan Config as XML', 'Scan Config')}"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-        </a>
-      </div>
-      <xsl:if test="$config/type = 1">
-        <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-          title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
-          <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
-        </a>
-      </xsl:if>
-    </xsl:otherwise>
-  </xsl:choose>
+    </div>
+    <xsl:if test="$config/type = 1">
+      <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
+        <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+      </a>
+    </xsl:if>
   </div>
-  <div class="gb_window_part_content">
 
-    <xsl:choose>
-      <xsl:when test="edit">
-        <form action="" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="save_config"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <input type="hidden" name="config_id" value="{$config/@id}"/>
-          <input type="hidden" name="name" value="{$config/name}"/>
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+          <td><xsl:value-of select="$config/@id"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+          <td><xsl:value-of select="gsa:long-time ($config/creation_time)"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="gsa:long-time ($config/modification_time)"/></td>
+        </tr>
+      </table>
+    </div>
 
-          <table border="0" cellspacing="0" cellpadding="3" width="100%">
-            <tr>
-              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td>
-                <input type="text" name="name" value="{$config/name}" size="30"
-                       maxlength="80"/>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-              <td>
-                <input type="text" name="comment" size="30" maxlength="400"
-                       value="{$config/comment}"/>
-              </td>
-            </tr>
-            <xsl:if test="$config/type = 1">
-              <tr>
-                <td valign="top"><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
-                <td>
-                  <select name="scanner_id">
-                    <xsl:for-each select="get_scanners_response/scanner">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="content" select="name"/>
-                        <xsl:with-param name="value" select="@id"/>
-                        <xsl:with-param name="select-value" select="$config/scanner/@id"/>
-                      </xsl:call-template>
-                    </xsl:for-each>
-                  </select>
-                </td>
-              </tr>
-            </xsl:if>
-          </table>
+    <h1>
+      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
+        <img id="big-icon" src="/img/scanconfig.svg" border="0" style="margin-right:5px" alt="Scan Configs"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
+      <xsl:value-of select="$config/name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
 
-          <xsl:if test="$config/type = 0">
-            <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td><td><xsl:value-of select="$config/comment"/></td>
+      </tr>
+      <xsl:if test="$config/type = 1">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
+          <td>
+            <a href="/omp?cmd=get_scanner&amp;scanner_id={$config/scanner/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Scanner Details', 'Scanner')}">
+              <xsl:value-of select="$config/scanner"/>
+            </a>
+          </td>
+        </tr>
+      </xsl:if>
+    </table>
+  </div>
 
-            <xsl:call-template name="edit-families">
-              <xsl:with-param name="config" select="$config"/>
-              <xsl:with-param
-                name="families"
-                select="get_nvt_families_response/families"/>
-            </xsl:call-template>
-          </xsl:if>
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#nvtfamilies-box" data-name="Network Vulnerability Test Families" data-variable="nvtfamilies-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count($config/families/family) != 0">
+          (<xsl:value-of select="count($config/families/family)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
 
+  <div class="section-box" id="nvtfamilies-box">
+    <xsl:apply-templates select="$config" mode="families"/>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#scannerprefs-box" data-name="Scanner Preferences" data-variable="scannerprefs-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Scanner Preferences', 'Scan Config')}">
+      </a>
+      <xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) != 0">
+          (<xsl:value-of select="count($config/preferences/preference[string-length(nvt)=0])"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+
+  <div class="section-box" id="scannerprefs-box">
+    <xsl:apply-templates select="$config/preferences" mode="scanner"/>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#nvtprefs-box" data-name="NVT Preferences" data-variable="nvtprefs-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')}">
+      </a>
+      <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count($config/preferences/preference[string-length(nvt)>0]) != 0">
+          (<xsl:value-of select="count($config/preferences/preference[string-length(nvt)>0])"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+
+  <div class="section-box" id="nvtprefs-box">
+    <xsl:for-each select="$config/preferences">
+      <xsl:call-template name="preferences">
+        <xsl:with-param name="config_id" select="$config/@id"/>
+        <xsl:with-param name="config_name" select="$config/name"/>
+      </xsl:call-template>
+    </xsl:for-each>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Scan Config" data-variable="using-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Tasks', 'Task')}">
+        <img id="small-icon" src="/img/task.svg" border="0" style="margin-right:5px" alt="Tasks"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Tasks using this Scan Config', 'Scan Config')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count($config/tasks/task) != 0">
+          (<xsl:value-of select="count($config/tasks/task)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+
+  <div class="section-box" id="using-box">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+      </tr>
+      <xsl:for-each select="$config/tasks/task">
+        <tr class="{gsa:table-row-class(position())}">
           <xsl:choose>
-            <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
-              <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanner|Preferences')"/></h1>
-              <xsl:if test="$config/type = 0">
-                <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'NVT|Preferences')"/></h1>
-              </xsl:if>
+            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
             </xsl:when>
             <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/></h1>
-
-              <xsl:apply-templates select="$config/preferences" mode="edit-scanner-details"/>
-
-              <xsl:if test="$config/type = 0">
-                <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
-                <xsl:for-each select="$config/preferences">
-                  <xsl:call-template name="preferences">
-                    <xsl:with-param name="config_id" select="$config/@id"/>
-                    <xsl:with-param name="config_name" select="$config/name"/>
-                    <xsl:with-param name="edit">yes</xsl:with-param>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </xsl:if>
-            </xsl:otherwise>
-          </xsl:choose>
-
-        </form>
-      </xsl:when>
-      <xsl:otherwise>
-        <div class="float_right" style="font-size: 10px;">
-          <table style="font-size: 10px;">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-              <td><xsl:value-of select="$config/@id"/></td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-              <td><xsl:value-of select="gsa:long-time ($config/creation_time)"/></td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-              <td><xsl:value-of select="gsa:long-time ($config/modification_time)"/></td>
-            </tr>
-          </table>
-        </div>
-        <table>
-          <tr>
-            <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-            <td><b><xsl:value-of select="$config/name"/></b></td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td><td><xsl:value-of select="$config/comment"/></td>
-          </tr>
-          <xsl:if test="$config/type = 1">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
               <td>
-                <a href="/omp?cmd=get_scanner&amp;scanner_id={$config/scanner/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Scanner Details', 'Scanner')}">
-                  <xsl:value-of select="$config/scanner"/>
+                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:value-of select="name"/>
                 </a>
               </td>
-            </tr>
-          </xsl:if>
-        </table>
-
-        <br/>
-
-        <xsl:if test="$config/type = 0">
-          <h1>
-            <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config')"/>
-          </h1>
-          <xsl:apply-templates select="$config" mode="families"/>
-        </xsl:if>
-
-        <xsl:choose>
-          <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
-            <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanner|Preferences')"/></h1>
-            <xsl:if test="$config/type = 0">
-              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'NVT|Preferences')"/></h1>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <h1><xsl:value-of select="gsa:i18n ('Scanner Preferences', 'Scan Config')"/></h1>
-            <xsl:apply-templates select="$config/preferences" mode="scanner"/>
-
-            <xsl:if test="$config/type = 0">
-              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
-              <xsl:for-each select="$config/preferences">
-                <xsl:call-template name="preferences">
-                  <xsl:with-param name="config_id" select="$config/@id"/>
-                  <xsl:with-param name="config_name" select="$config/name"/>
-                </xsl:call-template>
-              </xsl:for-each>
-            </xsl:if>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-
-    <xsl:if test="not(edit)"><xsl:choose>
-      <xsl:when test="count($config/tasks/task) = 0">
-        <h1><xsl:value-of select="gsa:i18n ('Tasks using this Config', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Tasks')"/></h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1><xsl:value-of select="gsa:i18n ('Tasks using this Config', 'Scan Config')"/></h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-          </tr>
-          <xsl:for-each select="$config/tasks/task">
-            <tr class="{gsa:table-row-class(position())}">
-              <xsl:choose>
-                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                  <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                </xsl:when>
-                <xsl:otherwise>
-                  <td>
-                    <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                      <xsl:value-of select="name"/>
-                    </a>
-                  </td>
-                </xsl:otherwise>
-              </xsl:choose>
-            </tr>
-          </xsl:for-each>
-        </table>
-      </xsl:otherwise>
-    </xsl:choose></xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </tr>
+      </xsl:for-each>
+    </table>
   </div>
- </div>
- <xsl:choose><xsl:when test="edit"/><xsl:otherwise>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="user_tags" select="$config/user_tags"/>
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), $config/name)"/>
@@ -15400,8 +15375,104 @@ should not have received it.
     <xsl:with-param name="related">
     </xsl:with-param>
   </xsl:call-template>
- </xsl:otherwise></xsl:choose>
 </xsl:template>
+
+<xsl:template name="html-config-table-edit">
+ <xsl:variable name="config" select="get_configs_response/config"/>
+
+ <div class="gb_window">
+  <div class="gb_window_part_left"></div>
+  <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">
+    <xsl:value-of select="gsa:i18n ('Edit Scan Config', 'Scan Config')"/>
+    <xsl:call-template name="edit-header-icons">
+      <xsl:with-param name="cap-type" select="'Scan Config'"/>
+      <xsl:with-param name="type" select="'config'"/>
+      <xsl:with-param name="id"
+                      select="$config/@id"/>
+    </xsl:call-template>
+  </div>
+  <div class="gb_window_part_content">
+    <form action="" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="save_config"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="config_id" value="{$config/@id}"/>
+      <input type="hidden" name="name" value="{$config/name}"/>
+
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td>
+            <input type="text" name="name" value="{$config/name}" size="30"
+                   maxlength="80"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td>
+            <input type="text" name="comment" size="30" maxlength="400"
+                   value="{$config/comment}"/>
+          </td>
+        </tr>
+        <xsl:if test="$config/type = 1">
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
+            <td>
+              <select name="scanner_id">
+                <xsl:for-each select="get_scanners_response/scanner">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="content" select="name"/>
+                    <xsl:with-param name="value" select="@id"/>
+                    <xsl:with-param name="select-value" select="$config/scanner/@id"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+        </xsl:if>
+      </table>
+
+      <xsl:if test="$config/type = 0">
+        <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
+
+        <xsl:call-template name="edit-families">
+          <xsl:with-param name="config" select="$config"/>
+          <xsl:with-param
+            name="families"
+            select="get_nvt_families_response/families"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:choose>
+        <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
+          <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanner|Preferences')"/></h1>
+          <xsl:if test="$config/type = 0">
+            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'NVT|Preferences')"/></h1>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/></h1>
+
+          <xsl:apply-templates select="$config/preferences" mode="edit-scanner-details"/>
+
+          <xsl:if test="$config/type = 0">
+            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
+            <xsl:for-each select="$config/preferences">
+              <xsl:call-template name="preferences">
+                <xsl:with-param name="config_id" select="$config/@id"/>
+                <xsl:with-param name="config_name" select="$config/name"/>
+                <xsl:with-param name="edit">yes</xsl:with-param>
+              </xsl:call-template>
+            </xsl:for-each>
+          </xsl:if>
+        </xsl:otherwise>
+      </xsl:choose>
+    </form>
+  </div>
+ </div>
+</xsl:template>
+
 
 <xsl:template name="html-configs-table">
   <xsl:call-template name="list-window">
@@ -15704,7 +15775,14 @@ should not have received it.
   <xsl:apply-templates select="create_tag_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="modify_tag_response"/>
-  <xsl:call-template name="html-config-table"/>
+  <xsl:choose>
+    <xsl:when test="edit">
+      <xsl:call-template name="html-config-table-edit"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-config-table"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- GET_CONFIG_FAMILY_RESPONSE -->
@@ -25046,7 +25124,7 @@ should not have received it.
         <img src="/img/fold.png"/>
     </a>
     <h3>
-      <a href="/omp?cmd=get_taargets&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
         <img id="small-icon" src="/img/target.svg" border="0" style="margin-right:5px" alt="Targets"/>
       </a>

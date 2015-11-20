@@ -1,3 +1,14 @@
+2015-11-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (match="config" mode="families"): only show
+	last line if there is at least one selection. For example, this
+	is the case for OSP configs.
+	(html-config-table): Convert to new details style. Also removed all handling
+	for "edit" case.
+	(html-config-table-edit): New, all "edit" cases of html-config-table.
+	(get_config_response): Call the template html-config-table-edit for
+	the "edit" case.
+
 2015-11-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Allow modifying credentials of every type.
