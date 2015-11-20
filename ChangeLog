@@ -1,3 +1,17 @@
+2015-11-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow modifying credentials of every type.
+
+	* src/gsad_omp.c (save_credential_omp): Handle params for credential
+	types other than username and password.
+
+	* src/gsad.c (init_validator): Add params "change_community",
+	"change_passphrase", "change_password" and "change_privacy_password".
+
+	* src/html/classic/omp.xsl (html-edit-credential-form): Use a disabled
+	dropdown list to show type (for consistency with "New Credential" form
+	and add elements for the various credential types.
+
 2015-11-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/help.xsl (users.html): Update RADIUS authentication

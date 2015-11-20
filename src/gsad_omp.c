@@ -6456,9 +6456,14 @@ char *
 save_credential_omp (credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  int ret, change_password;
+  int ret, change_password, change_passphrase;
+  int change_community, change_privacy_password;
   gchar *html, *response;
-  const char *credential_id, *name, *comment, *login, *password;
+  const char *credential_id;
+  const char *name, *comment, *login, *password, *passphrase;
+  const char *private_key, *certificate, *community, *privacy_password;
+  const char *auth_algorithm, *privacy_algorithm;
+  GString *command;
   entity_t entity;
 
   credential_id = params_value (params, "credential_id");
@@ -6466,76 +6471,123 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
   password = params_value (params, "password");
+  passphrase = params_value (params, "passphrase");
+  private_key = params_value (params, "private_key");
+  certificate = params_value (params, "certificate");
+  community = params_value (params, "community");
+  privacy_password  = params_value (params, "privacy_password");
+  auth_algorithm  = params_value (params, "auth_algorithm");
+  privacy_algorithm  = params_value (params, "privacy_algorithm");
+  community  = params_value (params, "community");
 
   CHECK_PARAM (credential_id, "Save Credential", edit_credential);
   CHECK_PARAM (name, "Save Credential", edit_credential);
   CHECK_PARAM (comment, "Save Credential", edit_credential);
-  change_password = (params_value (params, "enable") ? 1 : 0);
+  if (params_given (params, "certificate"))
+    CHECK_PARAM (certificate, "Save Credential", edit_credential);
+  if (params_given (params, "private_key"))
+    CHECK_PARAM (private_key, "Save Credential", edit_credential);
+  if (params_given (params, "login"))
+    CHECK_PARAM (login, "Save Credential", edit_credential);
+  if (params_given (params, "auth_algorithm"))
+    CHECK_PARAM (auth_algorithm, "Save Credential", edit_credential);
+  if (params_given (params, "privacy_algorithm"))
+    CHECK_PARAM (privacy_algorithm, "Save Credential", edit_credential);
+
+  change_community = (params_value (params, "change_community") ? 1 : 0);
+  if (change_community)
+    CHECK_PARAM (community, "Save Credential", edit_credential);
+  change_passphrase = (params_value (params, "change_passphrase") ? 1 : 0);
+  if (change_passphrase)
+    CHECK_PARAM (passphrase, "Save Credential", edit_credential);
+  change_password = (params_value (params, "change_password") ? 1 : 0);
   if (change_password)
     CHECK_PARAM (password, "Save Credential", edit_credential);
+  change_privacy_password
+    = (params_value (params, "change_privacy_password") ? 1 : 0);
+  if (change_privacy_password)
+    CHECK_PARAM (privacy_password, "Save Credential", edit_credential);
+
+  /* Prepare command */
+  command = g_string_new ("");
+
+  xml_string_append (command,
+                     "<modify_credential credential_id=\"%s\">"
+                     "<name>%s</name>"
+                     "<comment>%s</comment>",
+                     credential_id,
+                     name,
+                     comment);
+
+  if (auth_algorithm)
+    xml_string_append (command,
+                       "<auth_algorithm>%s</auth_algorithm>",
+                       auth_algorithm);
+
+  if (certificate && strcmp (certificate, ""))
+    xml_string_append (command,
+                       "<certificate>%s</certificate>",
+                       certificate);
+
+  if (change_community)
+    xml_string_append (command,
+                       "<community>%s</community>",
+                       community);
+
+  if (login && strcmp (login, ""))
+    xml_string_append (command,
+                       "<login>%s</login>",
+                       login);
+
+  if (change_password)
+    xml_string_append (command,
+                       "<password>%s</password>",
+                       password);
+
+  if (privacy_algorithm || change_privacy_password)
+    {
+      xml_string_append (command,
+                         "<privacy>");
+      if (privacy_algorithm)
+        xml_string_append (command,
+                           "<algorithm>%s</algorithm>",
+                           privacy_algorithm);
+      if (change_privacy_password)
+        xml_string_append (command,
+                           "<password>%s</password>",
+                           privacy_password);
+      xml_string_append (command,
+                         "</privacy>");
+    }
+
+  if ((private_key && strcmp (private_key, "")) || change_passphrase)
+    {
+      xml_string_append (command,
+                         "<key>");
+      if (change_passphrase)
+        xml_string_append (command,
+                           "<phrase>%s</phrase>",
+                           passphrase);
+      if (private_key)
+        xml_string_append (command,
+                           "<private>%s</private>",
+                           private_key);
+      xml_string_append (command,
+                         "</key>");
+    }
+
+  xml_string_append (command,
+                     "</modify_credential>");
 
   /* Modify the credential. */
   response = NULL;
   entity = NULL;
-  if (login && change_password)
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<modify_credential credential_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "<password>%s</password>"
-                "</modify_credential>",
-                credential_id,
-                name,
-                comment,
-                login,
-                password);
-
-  else if (login)
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<modify_credential credential_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<login>%s</login>"
-                "</modify_credential>",
-                credential_id,
-                name,
-                comment,
-                login);
-
-  else if (change_password)
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<modify_credential credential_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<password>%s</password>"
-                "</modify_credential>",
-                credential_id,
-                name,
-                comment,
-                password);
-
-  else
-    ret = ompf (credentials,
-                &response,
-                &entity,
-                response_data,
-                "<modify_credential credential_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "</modify_credential>",
-                credential_id,
-                name,
-                comment);
+  ret = omp (credentials,
+             &response,
+             &entity,
+             response_data,
+             command->str);
+  g_string_free (command, TRUE);
 
   switch (ret)
     {

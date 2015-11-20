@@ -7449,13 +7449,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
-            <td>
-              <xsl:value-of select="commands_response/get_credentials_response/credential/type"/><br/>
-              <span class="footnote"> (<xsl:value-of select="commands_response/get_credentials_response/credential/full_type"/>)</span>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
@@ -7472,49 +7465,169 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_credentials_response/credential/comment}"/>
             </td>
           </tr>
-          <xsl:if test="$credential_type != 'cc'">
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
+            <td>
+              <select name="base" onChange="newCredentialUpdateForm()" disabled="1">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'up'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="$credential_type"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'usk'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + SSH Key', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="$credential_type"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cc'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Client Certificate', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="$credential_type"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'snmp'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('SNMP', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="$credential_type"/>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <xsl:if test="$credential_type = 'snmp'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
+              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
               <td>
-                <xsl:choose>
-                  <xsl:when test="$credential_type = 'up'">
-                    <input type="text" name="credential_login" size="30" maxlength="400"
-                          value="{commands_response/get_credentials_response/credential/login}"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="text" name="credential_login_off" size="30" maxlength="400"
-                          disabled="1"
-                          value="{commands_response/get_credentials_response/credential/login}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <label>
+                  <input type="checkbox" name="change_community" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                  <br/>
+                </label>
+                <input type="password" autocomplete="off" name="community"
+                       size="30" maxlength="400" value=""/>
               </td>
             </tr>
           </xsl:if>
           <xsl:if test="$credential_type != 'cc'">
             <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
+              <td>
+                <input type="text" name="credential_login" size="30" maxlength="400"
+                       value="{commands_response/get_credentials_response/credential/login}"/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'up' or $credential_type = 'snmp'">
+            <tr>
               <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
               <td>
-                <xsl:choose>
-                  <xsl:when test="$credential_type = 'up'">
-                    <label>
-                      <input type="checkbox" name="enable" value="1"/>
-                      <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                      <br/>
-                    </label>
-                    <input type="password" autocomplete="off" name="password"
-                          size="30" maxlength="400" value=""/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <label>
-                      <input type="checkbox" name="enable_off" value="1"
-                            disabled="1"/>
-                      <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                      <br/>
-                    </label>
-                    <input type="password" name="password" size="30" maxlength="400"
-                          disabled="1" value=""/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <label>
+                  <input type="checkbox" name="change_password" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                  <br/>
+                </label>
+                <input type="password" autocomplete="off" name="password"
+                       size="30" maxlength="400" value=""/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'snmp'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
+              <td>
+                <label>
+                  <input type="checkbox" name="change_privacy_password" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                  <br/>
+                </label>
+                <input type="password" autocomplete="off" name="privacy_password"
+                       size="30" maxlength="400" value=""/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'cc'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
+              <td>
+                <input type="file" name="certificate" size="30"/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'cc' or $credential_type = 'usk'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/></td>
+              <td>
+                <input type="file" name="private_key" size="30"/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'usk'">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
+              <td>
+                <label>
+                  <input type="checkbox" name="change_passphrase" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
+                  <br/>
+                </label>
+                <input type="password" autocomplete="off" name="passphrase"
+                       size="30" maxlength="400" value=""/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'snmp'">
+            <tr>
+              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
+              <td>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="commands_response/get_credentials_response/credential/auth_algorithm = 'md5'">
+                      <input name="auth_algorithm" value="md5" type="radio" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input name="auth_algorithm" value="md5" type="radio"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  MD5
+                </label>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="commands_response/get_credentials_response/credential/auth_algorithm = 'sha1'">
+                      <input name="auth_algorithm" value="sha1" type="radio" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input name="auth_algorithm" value="sha1" type="radio"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  SHA1
+                </label>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="$credential_type = 'snmp'">
+            <tr>
+              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
+              <td>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="commands_response/get_credentials_response/credential/privacy/algorithm = 'aes'">
+                      <input name="privacy_algorithm" value="aes" type="radio" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input name="privacy_algorithm" value="aes" type="radio"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  AES
+                </label>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="commands_response/get_credentials_response/credential/privacy/algorithm = 'des'">
+                      <input name="privacy_algorithm" value="des" type="radio" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input name="privacy_algorithm" value="des" type="radio"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  DES
+                </label>
               </td>
             </tr>
           </xsl:if>
