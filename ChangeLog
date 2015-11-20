@@ -1,3 +1,17 @@
+2015-11-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add auth_method parameter. Remove
+	enable_ldap_connect parameter.
+
+	* src/gsad_omp.c (create_user_omp): Add support for radius_connect
+	authentication method.
+	(save_user_omp): Support RADIUS authentication method. Improve code
+	style.
+
+	* src/html/classic/omp.xsl (html-create-user-form, user)
+	(user [details], user [edit]): Add RADIUS authentication support and
+	adjust interface accordingly.
+
 2015-11-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* COPYING: Updated locations of minified versions of d3, jQuery and

@@ -1143,6 +1143,7 @@ init_validator ()
   openvas_validator_add (validator, "asset_type",   "host|os");
   openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
   openvas_validator_add (validator, "auth_algorithm",   "^(md5)|(sha1)$");
+  openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
@@ -1385,7 +1386,6 @@ init_validator ()
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "dynamic_severity", "boolean");
   openvas_validator_alias (validator, "enable",       "boolean");
-  openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "esc_apply_min_qod", "boolean");

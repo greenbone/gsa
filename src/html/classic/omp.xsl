@@ -33008,31 +33008,29 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <xsl:choose>
-              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-                <td>
-                  <label>
-                    <input type="radio" name="enable_ldap_connect" value="0"/>
-                    <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-                  </label>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                  <br/>
-                  <label>
-                    <input type="radio" name="enable_ldap_connect" value="1" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
-                  </label>
-                </td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-                <td>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td>
+              <label>
+                <input type="radio" name="auth_method" value="0" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
+              </label>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="auth_method" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="auth_method" value="2"/>
+                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+            </td>
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
             <tr>
@@ -33255,18 +33253,19 @@ var toggleFilter = function(){
         </xsl:when>
       </xsl:choose>
     </td>
-    <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-      <td>
-        <xsl:choose>
-          <xsl:when test="sources/source/text() = 'ldap_connect'">
-            <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </xsl:if>
+    <td>
+      <xsl:choose>
+        <xsl:when test="sources/source/text() = 'ldap_connect'">
+          <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+        </xsl:when>
+        <xsl:when test="sources/source/text() = 'radius_connect'">
+          <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
@@ -33402,22 +33401,22 @@ var toggleFilter = function(){
             </xsl:choose>
           </td>
         </tr>
-        <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Authentication Type', 'User')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="sources/source/text() = 'ldap_connect'">
-                  <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </xsl:if>
-
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Authentication Type', 'User')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="sources/source/text() = 'ldap_connect'">
+                <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+              </xsl:when>
+              <xsl:when test="sources/source/text() = 'radius_connect'">
+                <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
       </table>
 
 <!--
@@ -33505,51 +33504,38 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <xsl:choose>
-              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="sources/source/text() = 'ldap_connect'">
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <label>
-                        <input type="radio" name="modify_password" value="0" checked="1"/>
-                        <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
-                      </label>
-                      <br/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <input type="radio" name="modify_password" value="1"/>
-                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                  <br/>
-                  <xsl:choose>
-                    <xsl:when test="sources/source/text() = 'ldap_connect'">
-                      <input type="radio" name="modify_password" value="3" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="modify_password" value="2"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
-                </td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-                <td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
+                <xsl:when test="sources/source/text() = 'radius_connect'"></xsl:when>
+                <xsl:otherwise>
                   <label>
-                    <input type="radio" name="modify_password" value="0" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Use existing value', 'Auth Data|Password')"/>
+                    <input type="radio" name="modify_password" value="0"/>
+                    <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
                   </label>
                   <br/>
-                  <input type="radio" name="modify_password" value="1"/>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
+              <input type="radio" name="modify_password" value="1" checked="1"/>
+              <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="modify_password" value="2"/>
+                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="modify_password" value="3"/>
+                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+            </td>
           </tr>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
