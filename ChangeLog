@@ -1,5 +1,10 @@
 2015-11-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/classic/help.xsl (users.html): Update RADIUS authentication
+	documentation.
+
+2015-11-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Add auth_method parameter. Remove
 	enable_ldap_connect parameter.
 

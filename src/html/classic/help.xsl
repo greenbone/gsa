@@ -2871,20 +2871,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="comment" select="false ()"/>
         </xsl:call-template>
         <tr class="even">
-          <td>Role</td>
-          <td>Shows the role of the user.</td>
+          <td>Roles</td>
+          <td>Shows the roles of the user.</td>
         </tr>
         <tr class="odd">
+          <td>Groups</td>
+          <td>Shows the groups of the user.</td>
+        </tr>
+        <tr class="even">
           <td>Host Access</td>
           <td>Host access rules of the user.</td>
         </tr>
+        <tr class="odd">
+          <td>Authentication Type</td>
+          <td>Local, LDAP or RADIUS</td>
+        </tr>
       </table>
-
-      <p>
-        If per-User-LDAP Authentication is configured, an additional column
-        ("LDAP Authentication") with checkboxes is shown. When the checkbox for
-        a given user is ticked, the user can only log in via the configured LDAP-Server.
-      </p>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'User'"/>
@@ -2987,6 +2989,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         * The password field is optional when this checkbox is ticked.
       </p>
 
+      <p>
+        If RADIUS Authentication is configured, an additional checkbox
+        ("Allow RADIUS Authentication Only") is shown. When ticked, the user can only
+        log in via the configured RADIUS server.
+      </p>
+
       <a name="peruserldapauthentication"></a>
       <h2>LDAP per-User Authentication</h2>
       <p>
@@ -3029,6 +3037,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               %s@mydomain<br/>
               or<br/>
               mydomain\%s</td>
+        </tr>
+      </table>
+
+      <a name="radiusauthentication"></a>
+      <h2>RADIUS Authentication</h2>
+      <p>
+       These settings are only visible if the backend is configured to support
+       RADIUS authentication.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use RADIUS authentication.</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>RADIUS Host</td>
+          <td>Hostname or IP of the RADIUS service. The default 1812 UDP port
+              will be used. </td>
+          <td>radius.example.com</td>
+        </tr>
+        <tr class="odd">
+          <td>Secret Key</td>
+          <td>The RADIUS Secret Key to be used for authentication.</td>
+          <td>testing123</td>
         </tr>
       </table>
     </div>
