@@ -1,5 +1,11 @@
 2015-11-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl (match="task" mode="details", 
+	match="note" mode="details", match="override" mode="details"):
+	Convert to new details style.
+
+2015-11-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (cve-details, cpe-details, ovaldef-details,
 	cert_bund_adv-details, dfn_cert_adv-details, nvt-details):
 	Convert to new details style.
