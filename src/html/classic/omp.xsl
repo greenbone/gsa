@@ -34401,7 +34401,7 @@ var toggleFilter = function(){
               </tr>
               <tr class="odd">
                 <td><xsl:value-of select="gsa:i18n ('Secret Key', 'Group')"/></td>
-                <td><input type="text" name="radiuskey" size="30"
+                <td><input type="password" name="radiuskey" size="30"
                      value="{auth_conf_setting[@key='radiuskey']/@value}"/></td>
               </tr>
             <tr>
