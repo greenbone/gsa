@@ -1,3 +1,10 @@
+2015-11-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (match="filter" mode="details",
+	match="scanner" mode="details", match="slave" mode="details",
+	match="report_format" mode="details", match="tag" mode="details",
+	match="permission" mode="details"): Convert to new details style.
+
 2015-11-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/schedule.svg: New.
