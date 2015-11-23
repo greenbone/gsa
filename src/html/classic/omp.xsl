@@ -27739,82 +27739,85 @@ should not have received it.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Result Details', 'Result')"/>
-      <a href="/help/result_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Result Details', 'Result'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <xsl:choose>
-        <xsl:when test="$delta=0">
-          <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
-             title="{gsa:i18n ('Report', 'Report')}"
+
+  <div class="toolbar">
+    <a href="/help/result_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Result Details', 'Result'))}">
+      <img src="/img/help.png"/>
+    </a>
+    <xsl:choose>
+      <xsl:when test="$delta=0">
+        <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+           title="{gsa:i18n ('Report', 'Report')}"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
+        </a>
+        <div class="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
+          <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Export Result as XML', 'Result')}"
              style="margin-left:3px;">
-            <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
+            <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
           </a>
-          <div class="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
-            <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Export Result as XML', 'Result')}"
-               style="margin-left:3px;">
-              <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-            </a>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
-             title="{gsa:i18n ('Report', 'Report')}"
-             style="margin-left:3px;">
-            <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:call-template name="feedback-icon">
-        <xsl:with-param name="subject" select="concat ('Feedback on NVT &quot;', nvt/name,'&quot; (', nvt/@oid, ')')"/>
-        <xsl:with-param name="body" select="concat ('PLEASE FILL IN YOUR QUESTION OR NOTE HERE.',
-                                                    '&#xA;',
-                                                    'PLEASE REMOVE FROM THE CITED RESULTS BELOW ANY CLASSIFIED DATA.&#xA;',
-                                                    '&#xA;',
-                                                    'NVT:&#xA;',
-                                                    '  OID: ', nvt/@oid, '&#xA;',
-                                                    '  Name: ', nvt/name, '&#xA;',
-                                                    '  Location: ', port, '&#xA;',
-                                                    '&#xA;',
-                                                    'Result:&#xA;',
-                                                    description)"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-            <td><xsl:value-of select="@id"/></td>
-          </tr>
-        </table>
-      </div>
-      <table>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</td>
-          <td>
-            <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}">
-              <xsl:value-of select="$task_name"/>
-            </a>
-          </td>
-        </tr>
-      </table>
-      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-        <xsl:call-template name="result-detailed">
-          <xsl:with-param name="note-buttons">1</xsl:with-param>
-          <xsl:with-param name="override-buttons">1</xsl:with-param>
-          <xsl:with-param name="show-overrides">1</xsl:with-param>
-          <xsl:with-param name="result-details">1</xsl:with-param>
-        </xsl:call-template>
-      </table>
-    </div>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+           title="{gsa:i18n ('Report', 'Report')}"
+           style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('Report', 'Report')}"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="feedback-icon">
+      <xsl:with-param name="subject" select="concat ('Feedback on NVT &quot;', nvt/name,'&quot; (', nvt/@oid, ')')"/>
+      <xsl:with-param name="body" select="concat ('PLEASE FILL IN YOUR QUESTION OR NOTE HERE.',
+                                                  '&#xA;',
+                                                  'PLEASE REMOVE FROM THE CITED RESULTS BELOW ANY CLASSIFIED DATA.&#xA;',
+                                                  '&#xA;',
+                                                  'NVT:&#xA;',
+                                                  '  OID: ', nvt/@oid, '&#xA;',
+                                                  '  Name: ', nvt/name, '&#xA;',
+                                                  '  Location: ', port, '&#xA;',
+                                                  '&#xA;',
+                                                  'Result:&#xA;',
+                                                  description)"/>
+    </xsl:call-template>
   </div>
+
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_results&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Results', 'Result')}">
+        <img id="big-icon" src="/img/result.svg" border="0" style="margin-right:5px" alt="Results"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</td>
+        <td>
+          <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}">
+            <xsl:value-of select="$task_name"/>
+          </a>
+        </td>
+      </tr>
+    </table>
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <xsl:call-template name="result-detailed">
+        <xsl:with-param name="note-buttons">1</xsl:with-param>
+        <xsl:with-param name="override-buttons">1</xsl:with-param>
+        <xsl:with-param name="show-overrides">1</xsl:with-param>
+        <xsl:with-param name="result-details">1</xsl:with-param>
+      </xsl:call-template>
+    </table>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'result'"/>
     <xsl:with-param name="tag_names" select="../../../../get_tags_response"/>
