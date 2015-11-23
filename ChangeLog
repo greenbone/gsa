@@ -1,5 +1,13 @@
 2015-11-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl (cve-details, cpe-details, ovaldef-details,
+	cert_bund_adv-details, dfn_cert_adv-details, nvt-details):
+	Convert to new details style.
+	(match="nvt" mode="details"): Removed ID-box because
+	it is now handle in nvt-details.
+
+2015-11-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (match="user" mode="details",
 	match="group" mode="details", match="role" mode="details"):
 	Convert to new details style.

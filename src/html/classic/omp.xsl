@@ -19804,291 +19804,300 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="cve-details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CVE Details', 'CVE')"/>
-      <a href="/help/cve_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVE', 'CVE'),' (',gsa:i18n('CVE Details', 'CVE'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('CVEs', 'CVE')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="info/cve">
-                  <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="/envelope/params/info_name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Published', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/update_time"/></td>
-          </tr>
-        </table>
-      </div>
+  <div class="toolbar">
+    <a href="/help/cve_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVE', 'CVE'),' (',gsa:i18n('CVE Details', 'CVE'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('CVEs', 'CVE')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
+    </a>
+  </div>
 
-      <table>
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
         <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td>
-            <b>
-              <xsl:choose>
-                <xsl:when test="info/cve">
-                  <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="/envelope/params/info_name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </b>
+            <xsl:choose>
+              <xsl:when test="info/cve">
+                <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="/envelope/params/info_name"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('CWE ID', 'CVE')"/>:</td>
-          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Published', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/update_time"/></td>
         </tr>
       </table>
+    </div>
+    <h1>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
+         title="{gsa:i18n ('CVEs', 'CVE')}">
+        <img id="big-icon" src="/img/cve.svg" border="0" style="margin-right:5px" alt="CVEs"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
 
-      <xsl:choose>
-        <xsl:when test="info/cve">
-          <h1><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h1>
-          <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+        <td>
+          <b>
+            <xsl:choose>
+              <xsl:when test="info/cve">
+                <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="/envelope/params/info_name"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </b>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('CWE ID', 'CVE')"/>:</td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+      </tr>
+    </table>
 
-          <xsl:choose>
-            <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss">
-              <h1>CVSS</h1>
-              <table>
+    <xsl:choose>
+      <xsl:when test="info/cve">
+        <h1><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h1>
+        <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
+
+        <xsl:choose>
+          <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss">
+            <h1>CVSS</h1>
+            <table>
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Base score', 'CVE')"/></td>
+                <td>
+                  <div style="float: left;">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                    </xsl:call-template>
+                  </div>
+                  <xsl:variable name="vector">
+                    <xsl:text>AV:</xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'ADJACENT_NETWORK'">A</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>/AC:<xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'LOW'">L</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'MEDIUM'">M</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'HIGH'">H</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>/Au:<xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'NONE'">N</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'MULTIPLE_INSTANCES'">M</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'SINGLE_INSTANCE'">S</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>/C:<xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'NONE'">N</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'PARTIAL'">P</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'COMPLETE'">C</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>/I:<xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'NONE'">N</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'PARTIAL'">P</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'COMPLETE'">C</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>/A:<xsl:choose>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'NONE'">N</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'PARTIAL'">P</xsl:when>
+                      <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'COMPLETE'">C</xsl:when>
+                      <xsl:otherwise>ERROR</xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
+                  (<a href="/omp?cmd=cvss_calculator&amp;cvss_vector={$vector}&amp;token={/envelope/token}">
+                    <xsl:value-of select="$vector"/>
+                  </a>)
+                </td>
+              </tr>
+              <tr>
+                <td>Access vector</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
+              </tr>
+              <tr>
+                <td>Access Complexity</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
+              </tr>
+              <tr>
+                <td>Authentication</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
+              </tr>
+              <tr>
+                <td>Confidentiality impact</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+              </tr>
+              <tr>
+                <td>Integrity impact</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+              </tr>
+              <tr>
+                <td>Availability impact</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+              </tr>
+              <tr>
+                <td>Source</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+              </tr>
+              <tr>
+                <td>Generated</td>
+                <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
+              </tr>
+            </table>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1>CVSS:
+              <div style="display: inline-block; vertical-align: middle;">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="extra_text" select="'N/A'"/>
+                </xsl:call-template>
+              </div>
+            </h1>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
+            <h1><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'SecInfo|References')"/></h1>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></h1>
+            <table>
+              <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
                 <tr>
-                  <td><xsl:value-of select="gsa:i18n ('Base score', 'CVE')"/></td>
+                  <td><xsl:value-of select="vuln:source/text()"/></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><xsl:value-of select="vuln:reference/text()"/></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><xsl:value-of select="vuln:reference/@href"/></td>
+                </tr>
+              </xsl:for-each>
+            </table>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cve/cert/cert_ref) = 0">
+          </xsl:when>
+          <xsl:otherwise>
+            <h1><xsl:value-of select="gsa:i18n ('CERT Advisories referencing this CVE', 'CVE')"/></h1>
+            <table class="gbntable" cellspacing="2" cellpadding="4">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/></td>
+              </tr>
+              <xsl:for-each select="info/cve/cert/cert_ref">
+                <tr class="{gsa:table-row-class(position())}">
                   <td>
-                    <div style="float: left;">
-                      <xsl:call-template name="severity-bar">
-                        <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
-                      </xsl:call-template>
-                    </div>
-                    <xsl:variable name="vector">
-                      <xsl:text>AV:</xsl:text>
-                      <xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'ADJACENT_NETWORK'">A</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>/AC:<xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'LOW'">L</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'MEDIUM'">M</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'HIGH'">H</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>/Au:<xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'NONE'">N</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'MULTIPLE_INSTANCES'">M</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'SINGLE_INSTANCE'">S</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>/C:<xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'NONE'">N</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'PARTIAL'">P</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'COMPLETE'">C</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>/I:<xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'NONE'">N</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'PARTIAL'">P</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'COMPLETE'">C</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>/A:<xsl:choose>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'NONE'">N</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'PARTIAL'">P</xsl:when>
-                        <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'COMPLETE'">C</xsl:when>
-                        <xsl:otherwise>ERROR</xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:variable>
-                    (<a href="/omp?cmd=cvss_calculator&amp;cvss_vector={$vector}&amp;token={/envelope/token}">
-                      <xsl:value-of select="$vector"/>
-                    </a>)
-                  </td>
-                </tr>
-                <tr>
-                  <td>Access vector</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
-                </tr>
-                <tr>
-                  <td>Access Complexity</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
-                </tr>
-                <tr>
-                  <td>Authentication</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
-                </tr>
-                <tr>
-                  <td>Confidentiality impact</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
-                </tr>
-                <tr>
-                  <td>Integrity impact</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
-                </tr>
-                <tr>
-                  <td>Availability impact</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
-                </tr>
-                <tr>
-                  <td>Source</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
-                </tr>
-                <tr>
-                  <td>Generated</td>
-                  <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
-                </tr>
-              </table>
-            </xsl:when>
-            <xsl:otherwise>
-              <h1>CVSS:
-                <div style="display: inline-block; vertical-align: middle;">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="extra_text" select="'N/A'"/>
-                  </xsl:call-template>
-                </div>
-              </h1>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
-              <h1><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'SecInfo|References')"/></h1>
-            </xsl:when>
-            <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></h1>
-              <table>
-                <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
-                  <tr>
-                    <td><xsl:value-of select="vuln:source/text()"/></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td><xsl:value-of select="vuln:reference/text()"/></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td><xsl:value-of select="vuln:reference/@href"/></td>
-                  </tr>
-                </xsl:for-each>
-              </table>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cve/cert/cert_ref) = 0">
-            </xsl:when>
-            <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('CERT Advisories referencing this CVE', 'CVE')"/></h1>
-              <table class="gbntable" cellspacing="2" cellpadding="4">
-                <tr class="gbntablehead2">
-                  <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-                  <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/></td>
-                </tr>
-                <xsl:for-each select="info/cve/cert/cert_ref">
-                  <tr class="{gsa:table-row-class(position())}">
-                    <td>
-                      <xsl:choose>
-                        <xsl:when test="@type='CERT-Bund'">
-                        <a href="?cmd=get_info&amp;info_type=cert_bund_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                          <xsl:value-of select="name"/>
-                        </a>
-                        </xsl:when>
-                        <xsl:when test="@type='DFN-CERT'">
-                        <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                          <xsl:value-of select="name"/>
-                        </a>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="name"/>
-                          <div class="error"><xsl:value-of select="gsa:i18n ('Unknown CERT type!', 'CVE')"/></div>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </td>
-                    <td><xsl:value-of select="title"/></td>
-                  </tr>
-                </xsl:for-each>
-              </table>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
-              <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE')"/>: <xsl:value-of select="gsa:i18n ('None', 'CVE|Products')"/></h1>
-            </xsl:when>
-            <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE')"/></h1>
-              <table class="gbntable" cellspacing="2" cellpadding="4">
-                <tr class="gbntablehead2">
-                  <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-                </tr>
-                <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
-                  <xsl:sort select="text()"/>
-
-                  <tr class="{gsa:table-row-class(position())}">
-                    <td>
-                      <xsl:call-template name="get_info_cpe_lnk">
-                        <xsl:with-param name="cpe" select="str:decode-uri(text())"/>
-                      </xsl:call-template>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </table>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cve/nvts/nvt) = 0">
-              <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE')"/>: <xsl:value-of select="gsa:i18n ('None', 'NVTs')"/></h1>
-            </xsl:when>
-            <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE')"/></h1>
-              <table class="gbntable" cellspacing="2" cellpadding="4">
-                <tr class="gbntablehead2">
-                  <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-                </tr>
-                <xsl:for-each select="info/cve/nvts/nvt">
-                  <tr class="{gsa:table-row-class(position())}">
-                    <td>
-                      <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={@oid}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                    <xsl:choose>
+                      <xsl:when test="@type='CERT-Bund'">
+                      <a href="?cmd=get_info&amp;info_type=cert_bund_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
                         <xsl:value-of select="name"/>
                       </a>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </table>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h1>
-          <p>
-            <xsl:value-of select="gsa:i18n ('This CVE was not found in the database.  This is not necessarily an error, because the CVE number might have been assigned for the issue, but the CVE not yet published.  Eventually the CVE content will appear in the database.', 'CVE')"/>
-          </p>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
+                      </xsl:when>
+                      <xsl:when test="@type='DFN-CERT'">
+                      <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                        <xsl:value-of select="name"/>
+                      </a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="name"/>
+                        <div class="error"><xsl:value-of select="gsa:i18n ('Unknown CERT type!', 'CVE')"/></div>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </td>
+                  <td><xsl:value-of select="title"/></td>
+                </tr>
+              </xsl:for-each>
+            </table>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
+            <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE')"/>: <xsl:value-of select="gsa:i18n ('None', 'CVE|Products')"/></h1>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE')"/></h1>
+            <table class="gbntable" cellspacing="2" cellpadding="4">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+              </tr>
+              <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
+                <xsl:sort select="text()"/>
+
+                <tr class="{gsa:table-row-class(position())}">
+                  <td>
+                    <xsl:call-template name="get_info_cpe_lnk">
+                      <xsl:with-param name="cpe" select="str:decode-uri(text())"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+              </xsl:for-each>
+            </table>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cve/nvts/nvt) = 0">
+            <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE')"/>: <xsl:value-of select="gsa:i18n ('None', 'NVTs')"/></h1>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE')"/></h1>
+            <table class="gbntable" cellspacing="2" cellpadding="4">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+              </tr>
+              <xsl:for-each select="info/cve/nvts/nvt">
+                <tr class="{gsa:table-row-class(position())}">
+                  <td>
+                    <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={@oid}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                      <xsl:value-of select="name"/>
+                    </a>
+                  </td>
+                </tr>
+              </xsl:for-each>
+            </table>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h1>
+        <p>
+          <xsl:value-of select="gsa:i18n ('This CVE was not found in the database.  This is not necessarily an error, because the CVE number might have been assigned for the issue, but the CVE not yet published.  Eventually the CVE content will appear in the database.', 'CVE')"/>
+        </p>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), info/name)"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
@@ -20100,148 +20109,158 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="cpe-details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CPE Details', 'CPE')"/>
-      <a href="/help/cpe_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CPE', 'CPE'),' (',gsa:i18n('CPE Details', 'CPE'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('CPEs', 'CPE')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
-          <xsl:if test="info/@id != ''">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-              <td><xsl:value-of select="info/@id"/></td>
-            </tr>
-          </xsl:if>
-          <xsl:if test="info/modification_time != ''">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-              <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
-            </tr>
-          </xsl:if>
-          <xsl:if test="info/creation_time != ''">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-              <td><xsl:value-of select="gsa:long-time (info/creation_time)"/></td>
-            </tr>
-          </xsl:if>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/update_time"/></td>
-          </tr>
-        </table>
-      </div>
-      <table>
-        <tr>
-          <xsl:if test="info/name">
-            <td width="100"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-            <td>
-              <b>
-                <xsl:call-template name="cpe-icon">
-                  <xsl:with-param name="cpe" select="info/@id"/>
-                  <xsl:with-param name="hide_other" select="1"/>
-                </xsl:call-template>
-                <xsl:value-of select="info/name"/>
-              </b>
-            </td>
-          </xsl:if>
-        </tr>
-        <xsl:if test="info/cpe/title">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
-            <td><xsl:value-of select="info/cpe/title"/></td>
-          </tr>
-        </xsl:if>
+  <div class="toolbar">
+    <a href="/help/cpe_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CPE', 'CPE'),' (',gsa:i18n('CPE Details', 'CPE'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('CPEs', 'CPE')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
         <xsl:if test="info/@id != ''">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('NVD ID', 'CPE')"/>:</td>
-            <td><xsl:value-of select="info/cpe/nvd_id"/></td>
+            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+            <td><xsl:value-of select="info/@id"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="info/cpe/deprecated_by">
+        <xsl:if test="info/modification_time != ''">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Deprecated by', 'CPE')"/>:</td>
-            <td><xsl:value-of select="info/cpe/deprecated_by"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="info/cpe/update_time">
+        <xsl:if test="info/creation_time != ''">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/cpe/update_time"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+            <td><xsl:value-of select="gsa:long-time (info/creation_time)"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="info/cpe/status != ''">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Status', 'CPE')"/>:</td>
-            <td><xsl:value-of select="info/cpe/status"/></td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="info/cpe != ''">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="info/cpe/max_cvss &gt;= 0.0">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="info/cpe/max_cvss"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </xsl:if>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/update_time"/></td>
+        </tr>
       </table>
-      <xsl:if test="count(info/cpe/title) = 0">
-        <p>
-          <xsl:value-of select="gsa:i18n ('This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.', 'CPE')"/>
-        </p>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="count(details) = 0 or details = '0' or not(info/cpe)"/>
-        <xsl:when test="count(info/cpe/cves/cve) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE')"/>: <xsl:value-of select="gsa:i18n ('None', 'CPE|Vulnerabilities')"/></h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td width="104"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
-            </tr>
-            <xsl:for-each select="info/cpe/cves/cve">
-
-              <tr class="{gsa:table-row-class(position())}">
-                <td>
-                  <xsl:call-template name="get_info_cve_lnk">
-                    <xsl:with-param name="cve" select="cve:entry/@id"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
     </div>
+    <h1>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
+         title="{gsa:i18n ('CPEs', 'CPE')}">
+        <img id="big-icon" src="/img/cpe.svg" border="0" style="margin-right:5px" alt="CPEs"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
   </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <xsl:if test="info/name">
+          <td width="100"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+          <td>
+            <b>
+              <xsl:call-template name="cpe-icon">
+                <xsl:with-param name="cpe" select="info/@id"/>
+                <xsl:with-param name="hide_other" select="1"/>
+              </xsl:call-template>
+              <xsl:value-of select="info/name"/>
+            </b>
+          </td>
+        </xsl:if>
+      </tr>
+      <xsl:if test="info/cpe/title">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
+          <td><xsl:value-of select="info/cpe/title"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="info/@id != ''">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('NVD ID', 'CPE')"/>:</td>
+          <td><xsl:value-of select="info/cpe/nvd_id"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="info/cpe/deprecated_by">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Deprecated by', 'CPE')"/>:</td>
+          <td><xsl:value-of select="info/cpe/deprecated_by"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="info/cpe/update_time">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Last updated', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/cpe/update_time"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="info/cpe/status != ''">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Status', 'CPE')"/>:</td>
+          <td><xsl:value-of select="info/cpe/status"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="info/cpe != ''">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="info/cpe/max_cvss &gt;= 0.0">
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="info/cpe/max_cvss"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
+    </table>
+    <xsl:if test="count(info/cpe/title) = 0">
+      <p>
+        <xsl:value-of select="gsa:i18n ('This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.', 'CPE')"/>
+      </p>
+    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="count(details) = 0 or details = '0' or not(info/cpe)"/>
+      <xsl:when test="count(info/cpe/cves/cve) = 0">
+        <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE')"/>: <xsl:value-of select="gsa:i18n ('None', 'CPE|Vulnerabilities')"/></h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE')"/></h1>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td width="104"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
+          </tr>
+          <xsl:for-each select="info/cpe/cves/cve">
+
+            <tr class="{gsa:table-row-class(position())}">
+              <td>
+                <xsl:call-template name="get_info_cve_lnk">
+                  <xsl:with-param name="cve" select="cve:entry/@id"/>
+                </xsl:call-template>
+              </td>
+              <td>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), info/name)"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
@@ -20253,229 +20272,238 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="ovaldef-details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('OVAL Definition Details', 'OVAL Definition')"/>
-      <a href="/help/ovaldef_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details', 'OVAL Definition'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
-      </a>
+  <div class="toolbar">
+    <a href="/help/ovaldef_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details', 'OVAL Definition'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+          <td>
+            <xsl:value-of select="info/name"/>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/creation_time"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/modification_time"/></td>
+        </tr>
+      </table>
     </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
+    <h1>
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
+         title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}">
+        <img id="big-icon" src="/img/ovaldef.svg" border="0" style="margin-right:5px" alt="OVAL Definitions"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <xsl:choose>
+      <xsl:when test="info/ovaldef">
+        <table>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+            <td width="130px"><b><xsl:value-of select="gsa:i18n ('Name (OVAL ID)', 'OVAL Definition')"/>:</b></td>
+            <td><b><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></b></td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
+            <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Version', 'Property')"/>:</td>
+            <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@version"/></td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Definition class', 'OVAL Definition')"/>:</td>
+            <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>:</td>
             <td>
-              <xsl:value-of select="info/@id"/>
+              <xsl:value-of name="cvss" select="info/ovaldef/cve_refs"/>
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/creation_time"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="info/ovaldef/max_cvss &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="info/ovaldef/max_cvss"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/modification_time"/></td>
+            <xsl:choose>
+            <xsl:when test="info/ovaldef/raw_data/oval_definitions:definition/@deprecated != ''">
+            <td><xsl:value-of select="gsa:i18n ('Deprecated', 'OVAL Definition')"/>:</td>
+            <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@deprecated"/></td>
+            </xsl:when>
+            <xsl:otherwise />
+            </xsl:choose>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('File', 'OVAL Definition')"/>:</td>
+            <td><xsl:value-of select="info/ovaldef/file"/></td>
           </tr>
         </table>
-      </div>
 
-      <xsl:choose>
-        <xsl:when test="info/ovaldef">
-          <table>
-            <tr>
-              <td width="130px"><b><xsl:value-of select="gsa:i18n ('Name (OVAL ID)', 'OVAL Definition')"/>:</b></td>
-              <td><b><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></b></td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
-              <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Version', 'Property')"/>:</td>
-              <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@version"/></td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Definition class', 'OVAL Definition')"/>:</td>
-              <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>:</td>
-              <td>
-                <xsl:value-of name="cvss" select="info/ovaldef/cve_refs"/>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
-              <td>
+        <xsl:choose>
+          <xsl:when test ="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h2>
+            <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Description')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition')"/></h2>
+            <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected">
+              <h3>
+              <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if><xsl:value-of select="gsa:i18n ('Family', 'OVAL Definition')"/>: <xsl:value-of select="./@family"/>
+              </h3>
+              <table class="gbntable" cellspacing="2" cellpadding="4">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+              </tr>
+              <xsl:for-each select="./*">
+
+              <tr class="{gsa:table-row-class(position())}">
+                <td><xsl:value-of select="name()"/></td>
+                <td><xsl:value-of select="text()"/></td>
+              </tr>
+              </xsl:for-each>
+              </table>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|Affected')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition')"/></h2>
+            <ul>
+            <xsl:apply-templates select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria"/>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|Criteria')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></h2>
+            <table class="gbntable" cellspacing="2" cellpadding="4">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Source', 'OVAL Definition')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Ref.ID', 'OVAL Definition')"/></td>
+                <td>URL</td>
+              </tr>
+              <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference">
+
+                <tr class="{gsa:table-row-class(position())}">
+                <td><xsl:value-of select="./@source"/></td>
+                <td>
                 <xsl:choose>
-                  <xsl:when test="info/ovaldef/max_cvss &gt;= 0.0">
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="info/ovaldef/max_cvss"/>
+                  <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cve'">
+                    <xsl:call-template name="get_info_cve_lnk">
+                      <xsl:with-param name="cve" select="./@ref_id"/>
+                      <xsl:with-param name="gsa_token" select="/envelope/token"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cpe'">
+                    <xsl:call-template name="get_info_cpe_lnk">
+                      <xsl:with-param name="cpe" select="str:decode-uri(./@ref_id)"/>
+                      <xsl:with-param name="gsa_token" select="/envelope/token"/>
                     </xsl:call-template>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
-                    </xsl:call-template>
+                    <xsl:value-of select="./@ref_id"/>
                   </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-            <tr>
-              <xsl:choose>
-              <xsl:when test="info/ovaldef/raw_data/oval_definitions:definition/@deprecated != ''">
-              <td><xsl:value-of select="gsa:i18n ('Deprecated', 'OVAL Definition')"/>:</td>
-              <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@deprecated"/></td>
-              </xsl:when>
-              <xsl:otherwise />
-              </xsl:choose>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('File', 'OVAL Definition')"/>:</td>
-              <td><xsl:value-of select="info/ovaldef/file"/></td>
-            </tr>
-          </table>
-
-          <xsl:choose>
-            <xsl:when test ="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h2>
-              <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Description')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition')"/></h2>
-              <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected">
-                <h3>
-                <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if><xsl:value-of select="gsa:i18n ('Family', 'OVAL Definition')"/>: <xsl:value-of select="./@family"/>
-                </h3>
-                <table class="gbntable" cellspacing="2" cellpadding="4">
-                <tr class="gbntablehead2">
-                  <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
-                  <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+                </xsl:choose></td>
+                <td><xsl:value-of select="./@ref_url"/></td>
                 </tr>
-                <xsl:for-each select="./*">
-
-                <tr class="{gsa:table-row-class(position())}">
-                  <td><xsl:value-of select="name()"/></td>
-                  <td><xsl:value-of select="text()"/></td>
-                </tr>
-                </xsl:for-each>
-                </table>
-              </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Affected', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|Affected')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition')"/></h2>
-              <ul>
-              <xsl:apply-templates select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria"/>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Criteria', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|Criteria')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></h2>
-              <table class="gbntable" cellspacing="2" cellpadding="4">
-                <tr class="gbntablehead2">
-                  <td><xsl:value-of select="gsa:i18n ('Source', 'OVAL Definition')"/></td>
-                  <td><xsl:value-of select="gsa:i18n ('Ref.ID', 'OVAL Definition')"/></td>
-                  <td>URL</td>
-                </tr>
-                <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference">
-
-                  <tr class="{gsa:table-row-class(position())}">
-                  <td><xsl:value-of select="./@source"/></td>
-                  <td>
-                  <xsl:choose>
-                    <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cve'">
-                      <xsl:call-template name="get_info_cve_lnk">
-                        <xsl:with-param name="cve" select="./@ref_id"/>
-                        <xsl:with-param name="gsa_token" select="/envelope/token"/>
-                      </xsl:call-template>
-                    </xsl:when>
-                    <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cpe'">
-                      <xsl:call-template name="get_info_cpe_lnk">
-                        <xsl:with-param name="cpe" select="str:decode-uri(./@ref_id)"/>
-                        <xsl:with-param name="gsa_token" select="/envelope/token"/>
-                      </xsl:call-template>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="./@ref_id"/>
-                    </xsl:otherwise>
-                  </xsl:choose></td>
-                  <td><xsl:value-of select="./@ref_url"/></td>
-                  </tr>
-                </xsl:for-each>
-              </table>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'SecInfo|References')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository) > 0">
-            <h2><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition')"/></h2>
-            <p><b><xsl:value-of select="gsa:i18n('Status', 'OVAL Definition')"/>: </b>
-              <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:status"/>
-            </p>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
-              <tr class="gbntablehead2">
-                <td><xsl:value-of select="gsa:i18n ('Status', 'OVAL Definition')"/></td>
-                <td><xsl:value-of select="gsa:i18n ('Date', 'Date')"/></td>
-                <td><xsl:value-of select="gsa:i18n ('Contributors', 'OVAL Definition')"/></td>
-              </tr>
-              <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:dates/*">
-
-              <tr class="{gsa:table-row-class(position())}">
-                <td><xsl:value-of select="name()"/>
-                  <xsl:if test="name() = 'status_change'">
-                    <i> (<xsl:value-of select="text()"/>)</i>
-                  </xsl:if>
-                </td>
-                <td><xsl:value-of select="./@date"/></td>
-                <td>
-                  <xsl:for-each select="./oval_definitions:contributor">
-                  <xsl:value-of select="./text()"/>
-                  <i> (<xsl:value-of select="./@organization"/>)</i><br />
-                  </xsl:for-each>
-                </td>
-              </tr>
               </xsl:for-each>
             </table>
-            </xsl:when>
-            <xsl:otherwise>
-              <h1><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|History')"/></h1>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('OVAL definition not found', 'OVAL Definition')"/></h1>
-          <xsl:value-of select="gsa:i18n ('No OVAL definition with the requested ID could be found in the SCAP database.', 'OVAL Definition')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'SecInfo|References')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository) > 0">
+          <h2><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition')"/></h2>
+          <p><b><xsl:value-of select="gsa:i18n('Status', 'OVAL Definition')"/>: </b>
+            <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:status"/>
+          </p>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Status', 'OVAL Definition')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Date', 'Date')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Contributors', 'OVAL Definition')"/></td>
+            </tr>
+            <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:dates/*">
+
+            <tr class="{gsa:table-row-class(position())}">
+              <td><xsl:value-of select="name()"/>
+                <xsl:if test="name() = 'status_change'">
+                  <i> (<xsl:value-of select="text()"/>)</i>
+                </xsl:if>
+              </td>
+              <td><xsl:value-of select="./@date"/></td>
+              <td>
+                <xsl:for-each select="./oval_definitions:contributor">
+                <xsl:value-of select="./text()"/>
+                <i> (<xsl:value-of select="./@organization"/>)</i><br />
+                </xsl:for-each>
+              </td>
+            </tr>
+            </xsl:for-each>
+          </table>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1><xsl:value-of select="gsa:i18n ('Repository history', 'OVAL Definition')"/>: <xsl:value-of select="gsa:i18n ('None', 'OVAL Definition|History')"/></h1>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1><xsl:value-of select="gsa:i18n ('OVAL definition not found', 'OVAL Definition')"/></h1>
+        <xsl:value-of select="gsa:i18n ('No OVAL definition with the requested ID could be found in the SCAP database.', 'OVAL Definition')"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), info/name)"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
@@ -20509,177 +20537,186 @@ should not have received it.
 
 
 <xsl:template name="cert_bund_adv-details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisory Details', 'CERT-Bund Advisory')"/>
-      <a href="/help/cert_bund_adv_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('CERT-Bund Details', 'CERT-Bund Advisory'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
-      </a>
+  <div class="toolbar">
+    <a href="/help/cert_bund_adv_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('CERT-Bund Details', 'CERT-Bund Advisory'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+          <td>
+            <xsl:value-of select="info/name"/>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/creation_time"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/modification_time"/></td>
+        </tr>
+      </table>
     </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
+    <h1>
+      <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"
+         title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}">
+        <img id="big-icon" src="/img/cert_bund_adv.svg" border="0" style="margin-right:5px" alt="CERT-Bund Advisories"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('CERT-Bund Advisory', 'CERT-Bund Advisory')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <xsl:choose>
+      <xsl:when test="info/cert_bund_adv">
+        <table>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+            <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
             <td>
-              <xsl:value-of select="info/name"/>
+              <b><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Ref_Num"/></b>
+            </td>
+          </tr>
+          <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Version', 'Property')"/>:</td>
+              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Version"/></td>
+            </tr>
+          </xsl:if>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
+            <td>
+              <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Title"/>
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/creation_time"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Software', 'CERT-Bund Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Software"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/modification_time"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Platform', 'CERT-Bund Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Platform"/></td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Effect', 'CERT-Bund Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Effect, 'CERT-Bund Advisory')"/></td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Remote Attack', 'CERT-Bund Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/RemoteAttack, 'CERT-Bund Advisory')"/></td>
+          </tr>
+
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
+            <td valign="top">
+              <xsl:choose>
+                <xsl:when test="info/cert_bund_adv/max_cvss &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="info/cert_bund_adv/max_cvss"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('CERT-Bund risk rating', 'CERT-Bund Advisory')"/>:</td>
+            <td valign=""><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Risk, 'CERT-Bund Advisory')"/></td>
+          </tr>
+
+          <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Reference_Source">
+            <tr>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Reference', 'CERT-Bund Advisory')"/>:</td>
+              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_Source"/></td>
+            </tr>
+          </xsl:if>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Reference URL', 'CERT-Bund Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_URL"/></td>
           </tr>
         </table>
-      </div>
 
-      <xsl:choose>
-        <xsl:when test="info/cert_bund_adv">
-          <table>
-            <tr>
-              <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-              <td>
-                <b><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Ref_Num"/></b>
-              </td>
-            </tr>
-            <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
-              <tr>
-                <td valign="top"><xsl:value-of select="gsa:i18n ('Version', 'Property')"/>:</td>
-                <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Version"/></td>
-              </tr>
-            </xsl:if>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
-              <td>
-                <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Title"/>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Software', 'CERT-Bund Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Software"/></td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Platform', 'CERT-Bund Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Platform"/></td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Effect', 'CERT-Bund Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Effect, 'CERT-Bund Advisory')"/></td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Remote Attack', 'CERT-Bund Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/RemoteAttack, 'CERT-Bund Advisory')"/></td>
-            </tr>
-
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
-              <td valign="top">
-                <xsl:choose>
-                  <xsl:when test="info/cert_bund_adv/max_cvss &gt;= 0.0">
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="info/cert_bund_adv/max_cvss"/>
-                    </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Value')"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('CERT-Bund risk rating', 'CERT-Bund Advisory')"/>:</td>
-              <td valign=""><xsl:value-of select="gsa:i18n (info/cert_bund_adv/raw_data/Advisory/Risk, 'CERT-Bund Advisory')"/></td>
-            </tr>
-
-            <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Reference_Source">
-              <tr>
-                <td valign="top"><xsl:value-of select="gsa:i18n ('Reference', 'CERT-Bund Advisory')"/>:</td>
-                <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_Source"/></td>
-              </tr>
-            </xsl:if>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Reference URL', 'CERT-Bund Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_URL"/></td>
-            </tr>
-          </table>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CategoryTree) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory')"/></h2>
-              <ul>
-                <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CategoryTree">
-                  <li><xsl:value-of select="text()"/></li>
-                </xsl:for-each>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory')"/>: <xsl:value-of select="gsa:i18n ('None', 'CERT-Bund Advisory|Categories')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h2>
-              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock">
-                <p><xsl:value-of select="text()"/></p>
+        <xsl:choose>
+          <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CategoryTree) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory')"/></h2>
+            <ul>
+              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CategoryTree">
+                <li><xsl:value-of select="text()"/></li>
               </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Description')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Categories', 'CERT-Bund Advisory')"/>: <xsl:value-of select="gsa:i18n ('None', 'CERT-Bund Advisory|Categories')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
 
-          <xsl:choose>
-            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CVEList/CVE) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/></h2>
-              <ul>
-              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CVEList/CVE">
-                <li>
-                  <xsl:call-template name="get_info_cve_lnk">
-                    <xsl:with-param name="cve" select="."/>
-                    <xsl:with-param name="gsa_token" select="/envelope/token"/>
-                  </xsl:call-template>
-                </li>
-              </xsl:for-each>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'CVEs')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></h2>
+            <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/TextBlock">
+              <p><xsl:value-of select="text()"/></p>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Description', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Description')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
 
-          <xsl:choose>
-            <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory')"/></h2>
-              <ul>
-              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info">
-                <li><p><b><xsl:value-of select="@Info_Issuer"/>:</b><br/> <xsl:value-of select="@Info_URL"/></p></li>
-              </xsl:for-each>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- hide because the feed is not expected to contain other links -->
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('CERT-Bund advisory not found', 'CERT-Bund Advisory')"/></h1>
-          <xsl:value-of select="gsa:i18n ('No CERT-Bund advisory with the requested ID could be found in the SCAP database.', 'CERT-Bund Advisory')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
+        <xsl:choose>
+          <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/CVEList/CVE) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/></h2>
+            <ul>
+            <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/CVEList/CVE">
+              <li>
+                <xsl:call-template name="get_info_cve_lnk">
+                  <xsl:with-param name="cve" select="."/>
+                  <xsl:with-param name="gsa_token" select="/envelope/token"/>
+                </xsl:call-template>
+              </li>
+            </xsl:for-each>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+          <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>: <xsl:value-of select="gsa:i18n ('None', 'CVEs')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory')"/></h2>
+            <ul>
+            <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info">
+              <li><p><b><xsl:value-of select="@Info_Issuer"/>:</b><br/> <xsl:value-of select="@Info_URL"/></p></li>
+            </xsl:for-each>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- hide because the feed is not expected to contain other links -->
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1><xsl:value-of select="gsa:i18n ('CERT-Bund advisory not found', 'CERT-Bund Advisory')"/></h1>
+        <xsl:value-of select="gsa:i18n ('No CERT-Bund advisory with the requested ID could be found in the SCAP database.', 'CERT-Bund Advisory')"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), info/name)"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
@@ -20692,131 +20729,141 @@ should not have received it.
 
 <xsl:template name="dfn_cert_adv-details">
   <xsl:variable name="token" select="/envelope/token"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisory Details', 'DFN-CERT Advisory')"/>
-      <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details', 'DFN-CERT Advisory'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
-      </a>
+
+  <div class="toolbar">
+    <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details', 'DFN-CERT Advisory'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <div class="float_right" style="font-size: 10px;">
+      <table style="font-size: 10px; border-spacing:0px">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+          <td>
+            <xsl:value-of select="info/name"/>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/creation_time"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+          <td><xsl:value-of select="info/modification_time"/></td>
+        </tr>
+      </table>
     </div>
-    <div class="gb_window_part_content">
-      <div class="float_right" style="font-size: 10px;">
-        <table style="font-size: 10px;">
+    <h1>
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
+         title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}">
+        <img id="big-icon" src="/img/dfn_cert_adv.svg" border="0" style="margin-right:5px" alt="DFN-CERT Advisories"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('DFN-CERT Advisory', 'DFN-CERT Advisory')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <xsl:choose>
+      <xsl:when test="info/dfn_cert_adv">
+        <table>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+            <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
             <td>
-              <xsl:value-of select="info/name"/>
+              <b><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:refnum"/></b>
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/creation_time"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
+            <td>
+              <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/>
+            </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-            <td><xsl:value-of select="info/modification_time"/></td>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Advisory link', 'DFN-CERT Advisory')"/>:</td>
+            <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
+          </tr>
+          <tr>
+            <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
+            <td valign="top">
+              <xsl:choose>
+                <xsl:when test="info/dfn_cert_adv/max_cvss &gt;= 0.0">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="info/dfn_cert_adv/max_cvss"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Severity')"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
           </tr>
         </table>
-      </div>
 
-      <xsl:choose>
-        <xsl:when test="info/dfn_cert_adv">
-          <table>
-            <tr>
-              <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-              <td>
-                <b><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:refnum"/></b>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
-              <td>
-                <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/>
-              </td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Advisory link', 'DFN-CERT Advisory')"/>:</td>
-              <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
-            </tr>
-            <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
-              <td valign="top">
-                <xsl:choose>
-                  <xsl:when test="info/dfn_cert_adv/max_cvss &gt;= 0.0">
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="cvss" select="info/dfn_cert_adv/max_cvss"/>
+        <xsl:choose>
+          <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:summary) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></h2>
+            <p><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/></p>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Summary')"/></h2>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory')"/>:</h2>
+            <ul>
+            <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']">
+              <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
+            </xsl:for-each>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- hide because the feed is not expected to contain other links -->
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/></h2>
+            <ul>
+            <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
+              <xsl:for-each select="str:tokenize (str:replace (text (), 'CVE ', 'CVE-'), ' ')">
+                <xsl:if test="starts-with (text (), 'CVE-') and (string-length (text ()) &gt;= 13) and string (number(substring (text (), 4, 4))) != 'NaN'">
+                  <li>
+                    <xsl:call-template name="get_info_cve_lnk">
+                      <xsl:with-param name="cve" select="."/>
+                      <xsl:with-param name="gsa_token" select="$token"/>
                     </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="severity-bar">
-                      <xsl:with-param name="extra_text" select="gsa:i18n ('N/A', 'Severity')"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-          </table>
-
-          <xsl:choose>
-            <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:summary) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></h2>
-              <p><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/></p>
-            </xsl:when>
-            <xsl:otherwise>
-              <h2><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/>: <xsl:value-of select="gsa:i18n ('None', 'Resource Property|Summary')"/></h2>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Other links', 'DFN-CERT Advisory')"/>:</h2>
-              <ul>
-              <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']">
-                <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
+                  </li>
+                </xsl:if>
               </xsl:for-each>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- hide because the feed is not expected to contain other links -->
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
-              <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/></h2>
-              <ul>
-              <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
-                <xsl:for-each select="str:tokenize (str:replace (text (), 'CVE ', 'CVE-'), ' ')">
-                  <xsl:if test="starts-with (text (), 'CVE-') and (string-length (text ()) &gt;= 13) and string (number(substring (text (), 4, 4))) != 'NaN'">
-                    <li>
-                      <xsl:call-template name="get_info_cve_lnk">
-                        <xsl:with-param name="cve" select="."/>
-                        <xsl:with-param name="gsa_token" select="$token"/>
-                      </xsl:call-template>
-                    </li>
-                  </xsl:if>
-                </xsl:for-each>
-              </xsl:for-each>
-              </ul>
-            </xsl:when>
-            <xsl:otherwise>
-            <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>: None</h2>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('DFN-CERT advisory not found', 'DFN-CERT Advisory')"/></h1>
-          <xsl:value-of select="gsa:i18n ('No DFN-CERT advisory with the requested ID could be found in the SCAP database.', 'DFN-CERT Advisory')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
+            </xsl:for-each>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+          <h2><xsl:value-of select="gsa:i18n ('Referenced CVEs', 'SecInfo')"/>: None</h2>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1><xsl:value-of select="gsa:i18n ('DFN-CERT advisory not found', 'DFN-CERT Advisory')"/></h1>
+        <xsl:value-of select="gsa:i18n ('No DFN-CERT advisory with the requested ID could be found in the SCAP database.', 'DFN-CERT Advisory')"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="title" select="gsa-i18n:strformat (gsa:i18n ('User Tags for &quot;%1&quot;', 'Tag'), info/name)"/>
     <xsl:with-param name="user_tags" select="info/user_tags"/>
@@ -20832,28 +20879,6 @@ should not have received it.
 
 <xsl:template match="nvt" mode="details">
   <xsl:param name="config"/>
-  <div class="float_right" style="font-size: 10px;">
-    <table style="font-size: 10px;">
-      <xsl:if test="@oid != ''">
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-          <td><xsl:value-of select="@oid"/></td>
-        </tr>
-      </xsl:if>
-      <xsl:if test="modification_time != ''">
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
-          <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
-        </tr>
-      </xsl:if>
-      <xsl:if test="creation_time != ''">
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
-          <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
-        </tr>
-      </xsl:if>
-    </table>
-  </div>
   <table>
     <tr><td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
     <xsl:if test="summary != 'NOSUMMARY'">
@@ -21148,41 +21173,73 @@ should not have received it.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <div class="gb_window">
-        <div class="gb_window_part_left"></div>
-        <div class="gb_window_part_right"></div>
-        <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Details', 'NVT')"/>
-          <a href="/help/nvt_details.html?token={/envelope/token}"
-             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
-            <img src="/img/help.png"/>
-          </a>
-          <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
-            <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
-          </a>
-          <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-            <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-               class="new-action-icon" data-type="note" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
-              <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
-            </a>
-            <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-               class="new-action-icon" data-type="override" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
-              <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
-            </a>
-          </div>
-        </div>
-        <div class="gb_window_part_content">
-          <xsl:apply-templates
-            select="$nvts_response/nvt" mode="details"/>
 
-          <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT')"/></h2>
-          <xsl:for-each select="$nvts_response/nvt/preferences">
-            <xsl:call-template name="preferences-details">
-            </xsl:call-template>
-          </xsl:for-each>
+      <div class="toolbar">
+        <a href="/help/nvt_details.html?token={/envelope/token}"
+           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
+          <img src="/img/help.png"/>
+        </a>
+        <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
+          <img src="/img/list.png" border="0" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
+        </a>
+        <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+          <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
+             class="new-action-icon" data-type="note" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
+            <img src="/img/new_note.png" border="0" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+          </a>
+          <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
+             class="new-action-icon" data-type="override" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
+            <img src="/img/new_override.png" border="0" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+          </a>
         </div>
+      </div>
+
+      <div class="section-header">
+        <div class="float_right" style="font-size: 10px;">
+          <table style="font-size: 10px; border-spacing:0px">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+              <td>
+                <xsl:value-of select="info/nvt/@oid"/>
+              </td>
+            </tr>
+            <xsl:if test="info/nvt/modification_time != ''">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+                <td><xsl:value-of select="gsa:long-time (info/nvt/modification_time)"/></td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="info/nvt/creation_time != ''">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+                <td><xsl:value-of select="gsa:long-time (info/nvt/creation_time)"/></td>
+              </tr>
+            </xsl:if>
+          </table>
+        </div>
+        <h1>
+          <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
+             title="{gsa:i18n ('NVTs', 'NVT')}">
+            <img id="big-icon" src="/img/nvt.svg" border="0" style="margin-right:5px" alt="NVTs"/>
+          </a>
+          <xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/>:
+          <xsl:value-of select="name"/>
+          <xsl:text> </xsl:text>
+        </h1>
+      </div>
+     
+      <div class="section-box">
+        <xsl:apply-templates
+          select="$nvts_response/nvt" mode="details"/>
+
+        <h2><xsl:value-of select="gsa:i18n ('Preferences', 'NVT')"/></h2>
+        <xsl:for-each select="$nvts_response/nvt/preferences">
+          <xsl:call-template name="preferences-details">
+          </xsl:call-template>
+        </xsl:for-each>
       </div>
 
       <xsl:call-template name="user-tags-window">
